@@ -12,18 +12,18 @@
 #define SCRATCH (SCRATCH_PRIM_CURSOR_AS(u8))
 
 void DrawWrongWayWarning(void) {
-    register u8 *packet __asm("$16");
-    u8 *next;
+    register SPRT *packet __asm("$16");
+    SPRT *next;
     s32 i;
     s32 x;
     s32 u;
     u8 *ot;
-    u8 *oldPacket;
+    SPRT *oldPacket;
     s32 temp;
     s32 uvOffset;
     u8 *ret;
 
-    next = SCRATCH;
+    next = (SPRT *)SCRATCH;
     i = 0;
     u = 0x48;
     x = 0x6C;
@@ -34,23 +34,23 @@ void DrawWrongWayWarning(void) {
         SetShadeTex(next, 1);
 
         temp = 0x78;
-        *(volatile s16 *)(packet + 0x0A) = temp;
+        packet->y0 = temp;
         __asm__ volatile("" : :);
         uvOffset = (((i & 2) << 3) - (i & 2)) << 2;
         temp = -0x10 - uvOffset;
         uvOffset += 0x10;
-        packet[0x0C] = temp;
+        packet->u0 = temp;
         temp = 0x10;
-        *(s16 *)(packet + 0x12) = temp;
+        packet->h = temp;
         temp = 0x788C;
         oldPacket = packet;
-        *(s16 *)(packet + 0x08) = x;
-        packet[0x0D] = u;
-        *(s16 *)(packet + 0x10) = uvOffset;
-        *(s16 *)(packet + 0x0E) = temp;
+        packet->x0 = x;
+        packet->v0 = u;
+        packet->w = uvOffset;
+        packet->clut = temp;
 
-        packet += 0x14;
-        next += 0x14;
+        packet++;
+        next++;
         u += 0x10;
         x += 0x10;
         ot = g_DrawBuffer;
@@ -58,7 +58,7 @@ void DrawWrongWayWarning(void) {
         AddPrim(ot + 0xCC, oldPacket);
     } while (i < 3);
 
-    ret = GameQueueTileTrans(g_DrawBuffer + 0xCC, next, 0x64, 0x70, 0x78, 0x20, 8, 8, 8);
+    ret = GameQueueTileTrans(g_DrawBuffer + 0xCC, (u8 *)next, 0x64, 0x70, 0x78, 0x20, 8, 8, 8);
     SCRATCH = ret;
     SCRATCH = QueueDrawModePrim(g_DrawBuffer + 0xCC, ret, 9);
 }
@@ -75,7 +75,7 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
     s32 angle = b + rpm * (p->needleAngleMax - b) / 10000;
     s32 cos = rsin(angle);
     s32 sin = rcos(angle);
-    u8 *prim = SCRATCH;
+    POLY_F4 *prim = (POLY_F4 *)SCRATCH;
     s16 *vp;
     s16 *pa;
     s16 *pb;
@@ -84,7 +84,7 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
 
     SetPolyF4(prim);
 
-    vp = (s16 *)(prim + 8);
+    vp = &prim->x0;
     i = 0;
     pb = &g_TachoNeedleQuad[0][1];
     pa = pb - 1;
@@ -95,45 +95,45 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         pa += 2;
     }
 
-    code7 = prim[7];
+    code7 = prim->t.code;
 
     if (type == 1) {
         if (amt > 96) amt = 96;
         g_TachoFaceB = -128 - amt;
         g_TachoFaceG = -128 - amt;
         g_TachoFaceR = -128 - amt;
-        prim[4] = (amt * 32 + base[28] * (96 - amt)) / 96;
-        prim[5] = (amt * 32 + base[29] * (96 - amt)) / 96;
-        prim[6] = (amt * 32 + base[30] * (96 - amt)) / 96;
+        prim->t.r0 = (amt * 32 + base[28] * (96 - amt)) / 96;
+        prim->t.g0 = (amt * 32 + base[29] * (96 - amt)) / 96;
+        prim->t.b0 = (amt * 32 + base[30] * (96 - amt)) / 96;
     } else if (type == 3) {
         amt -= 32;
         if (amt < 0) amt = 0;
         g_TachoFaceB = amt + 32;
         g_TachoFaceG = amt + 32;
         g_TachoFaceR = amt + 32;
-        prim[4] = ((96 - amt) * 32 + base[28] * amt) / 96;
-        prim[5] = ((96 - amt) * 32 + base[29] * amt) / 96;
-        prim[6] = ((96 - amt) * 32 + base[30] * amt) / 96;
+        prim->t.r0 = ((96 - amt) * 32 + base[28] * amt) / 96;
+        prim->t.g0 = ((96 - amt) * 32 + base[29] * amt) / 96;
+        prim->t.b0 = ((96 - amt) * 32 + base[30] * amt) / 96;
         *(s16 *)(g_DrawBuffer + 0x236F2) = 0x33A8;
     } else if (type == 2) {
         *(s16 *)(g_DrawBuffer + 0x236F2) = 0x33E8;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
         g_TachoFaceR = 0x80;
-        *(s32 *)(prim + 4) = *(s32 *)(base + 32);
+        *(s32 *)&prim->t.r0 = *(s32 *)(base + 32);
     } else {
         s16 rv = 0x33A8;
         *(s16 *)(g_DrawBuffer + 0x236F2) = rv;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
         g_TachoFaceR = 0x80;
-        *(s32 *)(prim + 4) = *(s32 *)(base + 28);
+        *(s32 *)&prim->t.r0 = *(s32 *)(base + 28);
     }
 
-    prim[7] = code7;
+    prim->t.code = code7;
     AddPrim(g_DrawBuffer + 0xCC, prim);
-    prim += 24;
-    SCRATCH = prim;
+    prim++;
+    SCRATCH = (u8 *)prim;
 
     {
         s32 x = cx + *(s16 *)(base + 12);
@@ -155,32 +155,32 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
     { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236D8); }
 
     {
-        u8 *q = SCRATCH;
+        TILE *q = (TILE *)SCRATCH;
         u8 *g;
-        u8 *prim;
+        TILE *tile;
         s32 v10;
         SetTile(q);
-        prim = q;
-        *(s16 *)(q + 8) = cx + *(u16 *)(base + 16);
+        tile = q;
+        q->x0 = cx + *(u16 *)(base + 16);
         v10 = cy + *(u16 *)(base + 18);
-        *(s16 *)(q + 12) = 0x10;
-        *(s16 *)(q + 14) = 0x10;
-        q[4] = flash * 223 + 32;
-        q[5] = 0x20;
-        q[6] = 0x20;
+        q->w = 0x10;
+        q->h = 0x10;
+        q->t.r0 = flash * 223 + 32;
+        q->t.g0 = 0x20;
+        q->t.b0 = 0x20;
         g = g_DrawBuffer;
-        *(s16 *)(q + 10) = v10;
-        q += 16;
-        AddPrim(g + 0xCC, prim);
-        SCRATCH = q;
+        q->y0 = v10;
+        q++;
+        AddPrim(g + 0xCC, tile);
+        SCRATCH = (u8 *)q;
     }
 }
 
 void DrawFullscreenFadeTile(s32 color, s32 tpage) {
     u8 *base = g_DrawBuffer;
     u8 *ot = base + 0xCC;
-    u8 *packet;
-    u8 *prim;
+    TILE *packet;
+    TILE *prim;
     s32 height;
 
     if (color < 0) {
@@ -189,27 +189,27 @@ void DrawFullscreenFadeTile(s32 color, s32 tpage) {
         color = 0xFF;
     }
 
-    packet = SCRATCH;
+    packet = (TILE *)SCRATCH;
     SetTile(packet);
     SetSemiTrans(packet, 1);
 
-    *(s16 *)(packet + 0xC) = 0x140;
+    packet->w = 0x140;
     height = 0xF0;
-    *(s16 *)(packet + 0x8) = 0;
-    *(s16 *)(packet + 0xA) = 0;
-    *(s16 *)(packet + 0xE) = height;
-    packet[4] = color;
-    packet[5] = color;
-    packet[6] = color;
+    packet->x0 = 0;
+    packet->y0 = 0;
+    packet->h = height;
+    packet->t.r0 = color;
+    packet->t.g0 = color;
+    packet->t.b0 = color;
 
     prim = packet;
-    packet += 0x10;
+    packet++;
     AddPrim((u32 *)ot, (u32 *)prim);
-    SCRATCH = QueueDrawModePrim(g_DrawBuffer + 0xCC, packet, tpage);
+    SCRATCH = QueueDrawModePrim(g_DrawBuffer + 0xCC, (u8 *)packet, tpage);
 }
 
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
-    register u8 *out asm("$16") = prim;
+    register SPRT_8 *out asm("$16") = (SPRT_8 *)prim;
     s32 xReg = x;
     s32 yReg = y;
     register s32 codeReg asm("$17");
@@ -222,19 +222,19 @@ u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
     SetShadeTex(out, 1);
 
     codeReg <<= 3;
-    out[0xC] = codeReg;
-    out[0xD] = 0x10;
+    out->u0 = codeReg;
+    out->v0 = 0x10;
 
     {
         u8 *ot = g_DrawBuffer;
-        register u8 *oldPrim asm("$5") = out;
+        register SPRT_8 *oldPrim asm("$5") = out;
 
-        *(s16 *)&out[0x8] = xReg;
-        *(s16 *)&out[0xA] = yReg;
-        *(s16 *)&out[0xE] = clutReg;
-        out += 0x10;
+        out->x0 = xReg;
+        out->y0 = yReg;
+        out->clut = clutReg;
+        out++;
         AddPrim(ot + 0xCC, oldPrim);
     }
 
-    return out;
+    return (u8 *)out;
 }

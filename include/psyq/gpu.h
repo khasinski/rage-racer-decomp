@@ -176,6 +176,15 @@ typedef struct SPRT {
     short h;
 } SPRT;
 
+typedef struct SPRT_8 {
+    P_TAG t;
+    short x0;
+    short y0;
+    u_char u0;
+    u_char v0;
+    u_short clut;
+} SPRT_8;
+
 /* Solid rectangle, 0x10 bytes. Built by SetTile. */
 typedef struct TILE {
     P_TAG t;
