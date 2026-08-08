@@ -678,7 +678,7 @@ void SetCarKnockback();
 void StartCarBodyKick();
 void UpdateCarAirborne();
 void UpdateCarBodyKick();
-void UpdateCarBodyRoll();
+void UpdateCarBodyRoll(PlayerCarRuntime *car);
 void UpdateCarCrestHop();
 void UpdateCarTiltCounter();
 s32 UpdateCarTrackState();

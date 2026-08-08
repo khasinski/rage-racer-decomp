@@ -273,50 +273,23 @@ s32 IsCarFacingBackwards(GameCarTrackAngleWindow *window) {
     return (u32)(diff - 0x401) < 0x7FFU;
 }
 
-typedef struct SubB {
-    char _p0[0x1C];
-    s32 x1C;
-    char _p1[0x20];
-    s16 x40;
-} SubB;
-
-typedef struct A {
-    char _a0[0x24];
-    s32 f24;
-    char _a1[0x0C];
-    s32 f34;
-    char _a2[0x0C];
-    s32 f44;
-    char _a3[0x1C];
-    s32 f64;
-    char _a4[0x3C];
-    s32 fA4;
-    char _a5[0x0C];
-    s32 fB4;
-    s16 fB8;
-    char _a6[2];
-    SubB sub;
-} A;
-
 /* The live button mapping; masks 0 and 1 steer, g_MirrorMode swaps them. */
 
 
 /*
  * Steering-lean / body-roll state machine for the car `ctx`: drives the lean
- * (f44) and roll (f64) from the drive-block steer input (sub.x1C), branching on
- * the control mode g_RacePhase (0x41 = player, 0x23 = demo). The local A / SubB
- * typedefs are raw-offset overlays onto the car runtime (drive block at +0xBC)
- * shaped to match; retyping them to GameCarRuntime would break the match.
+ * steering lean and body roll from the drive-block steering input, branching
+ * on the control mode g_RacePhase (0x41 = player, 0x23 = demo).
  */
-void UpdateCarBodyRoll(A *ctx) {
-    SubB *p = &ctx->sub;
+void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
+    GameCarDrive *p = &ctx->drive;
     s16 mode = g_RacePhase;
     s32 v1, a1;
     s32 a0v, r, s2v;
 
     if (mode < 2) {
-        ctx->sub.x1C = 0;
-        ctx->f44 = 0;
+        p->steerPos = 0;
+        ctx->field_44 = 0;
     } else if ((mode < 4) && (g_PlayerAutoSteer == 0)) {
     if (g_PadType == 0x41) {
 
@@ -330,33 +303,33 @@ void UpdateCarBodyRoll(A *ctx) {
 
     if (v1 != 0) {
     a0v = 2;
-    if (ctx->fB8 != 0) a0v = 1;
-    v1 = p->x1C;
-    p->x40 = a0v;
+    if (ctx->facingBackwards != 0) a0v = 1;
+    v1 = p->steerPos;
+    p->unk40 = a0v;
     if (v1 > 0) {
-        p->x1C = 0;
+        p->steerPos = 0;
     } else if (v1 >= -4095) {
-        p->x1C = v1 - 1536;
+        p->steerPos = v1 - 1536;
     }
-    ctx->f64 = ctx->f64 - 6;
+    ctx->field_64 = ctx->field_64 - 6;
     } else if (a1 != 0) {
     a0v = 1;
-    if (ctx->fB8 != 0) a0v = 2;
-    v1 = p->x1C;
-    p->x40 = a0v;
+    if (ctx->facingBackwards != 0) a0v = 2;
+    v1 = p->steerPos;
+    p->unk40 = a0v;
     if (v1 < 0) {
-        p->x1C = 0;
+        p->steerPos = 0;
     } else if (v1 < 4096) {
-        p->x1C = v1 + 1536;
+        p->steerPos = v1 + 1536;
     }
-    ctx->f64 = ctx->f64 + 6;
+    ctx->field_64 = ctx->field_64 + 6;
     } else {
-    p->x40 = 0;
-    p->x1C = p->x1C / 3;
+    p->unk40 = 0;
+    p->steerPos = p->steerPos / 3;
     }
-    ctx->f44 = -p->x1C;
-    if (ctx->f64 != 0) {
-        ctx->f64 = (ctx->f64 * 7) / 8;
+    ctx->field_44 = -p->steerPos;
+    if (ctx->field_64 != 0) {
+        ctx->field_64 = (ctx->field_64 * 7) / 8;
     }
     } else if (g_PadType == 0x23) {
     a1 = ((s32)(g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconMaxTwist];
@@ -364,88 +337,88 @@ void UpdateCarBodyRoll(A *ctx) {
     if (!(a1 >= 0)) {
 
     a0v = 2;
-    if (ctx->fB8 != 0) a0v = 1;
-    v1 = ctx->sub.x1C;
-    ctx->sub.x40 = a0v;
+    if (ctx->facingBackwards != 0) a0v = 1;
+    v1 = p->steerPos;
+    p->unk40 = a0v;
     if (v1 > 0) {
-        ctx->sub.x1C = 0;
-        ctx->f44 = 0;
+        p->steerPos = 0;
+        ctx->field_44 = 0;
     } else if ((a1 - 256) < v1) {
         s32 t;
         if (v1 >= 4097) v1 = 4096;
         t = rcos(v1 / 8);
-        p->x1C = p->x1C - (t / 4);
-        ctx->f44 = ctx->f44 + 1536;
+        p->steerPos = p->steerPos - (t / 4);
+        ctx->field_44 = ctx->field_44 + 1536;
     } else {
-        ctx->sub.x1C = v1 / 3;
+        p->steerPos = v1 / 3;
     }
-    ctx->f64 = ctx->f64 - 6;
+    ctx->field_64 = ctx->field_64 - 6;
     } else if (!(a1 <= 0)) {
     a0v = 1;
-    if (ctx->fB8 != 0) a0v = 2;
-    v1 = ctx->sub.x1C;
-    ctx->sub.x40 = a0v;
+    if (ctx->facingBackwards != 0) a0v = 2;
+    v1 = p->steerPos;
+    p->unk40 = a0v;
     if (v1 < 0) {
-        ctx->sub.x1C = 0;
-        ctx->f44 = 0;
+        p->steerPos = 0;
+        ctx->field_44 = 0;
     } else if (v1 < (a1 + 256)) {
         s32 t;
         s32 c = v1;
         if (v1 < -4096) { v1 = -4096; c = v1; }
         t = rcos(c / 8);
-        p->x1C = p->x1C + (t / 4);
-        ctx->f44 = ctx->f44 - 1536;
+        p->steerPos = p->steerPos + (t / 4);
+        ctx->field_44 = ctx->field_44 - 1536;
     } else {
-        ctx->sub.x1C = v1 / 3;
+        p->steerPos = v1 / 3;
     }
-    ctx->f64 = ctx->f64 + 6;
+    ctx->field_64 = ctx->field_64 + 6;
     } else {
-    ctx->sub.x40 = 0;
-    ctx->f44 = ctx->f44 / 2;
-    ctx->sub.x1C = ctx->sub.x1C / 6;
+    p->unk40 = 0;
+    ctx->field_44 = ctx->field_44 / 2;
+    p->steerPos = p->steerPos / 6;
     }
-    if (ctx->f64 != 0) {
-        ctx->f64 = (ctx->f64 * 7) / 8;
+    if (ctx->field_64 != 0) {
+        ctx->field_64 = (ctx->field_64 * 7) / 8;
     }
     } else {
-    ctx->f64 = 0;
-    ctx->sub.x1C = 0;
+    ctx->field_64 = 0;
+    p->steerPos = 0;
     }
     } else {
     {
-        s32 target = (ctx->fB8 << 11) + 3072;
-        r = GetAngleDelta(ctx->f24, target - ctx->fB4);
+        s32 target = (ctx->facingBackwards << 11) + 3072;
+        r = GetAngleDelta(ctx->field_24, target - ctx->field_B4);
     }
     s2v = r * 32;
-    r = rcos(ctx->f34 * 2);
+    r = rcos(ctx->field_34 * 2);
     a0v = 4096 - r;
-    if (ctx->fA4 < 800) {
+    if (ctx->speed < 800) {
         a0v = a0v * 6;
     } else {
         a0v = a0v * 4;
     }
-    if (ctx->fA4 >= 81) {
-        if (ctx->fB8 != 0) {
-            if (ctx->f34 < 0) a0v = -a0v;
+    if (ctx->speed >= 81) {
+        if (ctx->facingBackwards != 0) {
+            if (ctx->field_34 < 0) a0v = -a0v;
         } else {
-            if (ctx->f34 > 0) a0v = -a0v;
+            if (ctx->field_34 > 0) a0v = -a0v;
         }
         a0v = a0v + s2v;
     } else {
-        p->x1C = 0;
+        p->steerPos = 0;
         a0v = 0;
     }
     if (a0v < -4096) a0v = -4096;
     if (a0v > 4096) a0v = 4096;
-    p->x1C = a0v;
-    ctx->f44 = a0v;
-    ctx->f64 = a0v / 128;
+    p->steerPos = a0v;
+    ctx->field_44 = a0v;
+    ctx->field_64 = a0v / 128;
 
     }
-    v1 = ctx->fA4;
+    v1 = ctx->speed;
     if (v1 < 800) {
-        s32 f = ctx->f64;
-        ctx->f64 = (f * v1) / 800;
+        s32 f = ctx->field_64;
+        ctx->field_64 = (f * v1) / 800;
     }
 }
 
