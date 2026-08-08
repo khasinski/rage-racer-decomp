@@ -169,6 +169,21 @@ typedef struct GameCarRuntime {
     u8 pad16A[0x32];
 } GameCarRuntime;
 
+typedef struct CarCollisionPoint {
+    s16 x;
+    s16 z;
+} CarCollisionPoint;
+
+typedef struct CarHullPoint {
+    u16 x;
+    u16 z;
+} CarHullPoint;
+
+extern CarHullPoint g_PlayerHullPoints[6];
+extern CarHullPoint g_OpponentHullCorners[4];
+extern CarHullPoint g_CarCornerOffsets[4];
+extern CarCollisionPoint g_CarCollisionCorners[4];
+
 /* Per-car runtime state, player in slot 0. Individual slots and single fields
  * also have their own split symbols; see docs/names.md section 3b. */
 extern GameCarRuntime g_Cars[11];
@@ -599,10 +614,6 @@ extern char g_MsgInit5[];
 extern char g_MsgInit6[];
 extern char g_FmtLongLine[];
 extern char g_MsgInitOk[];
-extern u16 g_PlayerHullPointsX[];
-extern u16 g_PlayerHullPointsZ[];
-extern u16 g_OpponentHullCornersX[];
-extern u16 g_OpponentHullCornersZ[];
 extern s16 g_LaunchEnergyThresholds[];
 extern s16 g_RedlineToPeakRpmHalf;
 extern s16 g_PeakToRevLimitRpmHalf;
@@ -610,8 +621,6 @@ extern s16 g_StandingStartState;
 extern s32 g_AttractGridSlots[];
 extern u16 g_BodyColorPrimary[];
 extern u16 g_BodyColorSecondary[];
-extern u16 g_CarCornerOffsetX[];
-extern u16 g_CarCornerOffsetZ[];
 extern u8 g_CarMarkerFlag[];
 extern u8 g_CarMarkerIndex[];
 extern s32 g_CarProgressA;

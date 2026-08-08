@@ -260,8 +260,10 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     arr[0] = -1;
     arr[1] = -1;
     for (i = 1, off = 0; off < 16; off += 4, i++) {
-        sv2.vx = *(u16 *)((u8 *)g_CarCornerOffsetX + off) * 4;
-        sv2.vz = *(u16 *)((u8 *)g_CarCornerOffsetZ + off) * 4;
+        sv2.vx =
+            ((CarHullPoint *)((u8 *)g_CarCornerOffsets + off))->x * 4;
+        sv2.vz =
+            ((CarHullPoint *)((u8 *)g_CarCornerOffsets + off))->z * 4;
         sv2.vy = 0;
         ApplyMatrix(&mA, &sv2, &vout);
         if (arr[0] < vout.x) {
