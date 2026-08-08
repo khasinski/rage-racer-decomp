@@ -33,7 +33,7 @@ void InstallTrackPoints(s32 *trackData) {
         do {
             index = i % limit;
             point = (GameTrackPoint *)((index * sizeof(GameTrackPoint)) + (s32)points);
-            g_TrackLength += point->segmentLength;
+            g_TrackLength += (s16)point->segmentLength;
             i++;
         } while (i < limit);
     }

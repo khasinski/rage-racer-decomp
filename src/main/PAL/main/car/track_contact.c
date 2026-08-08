@@ -6,19 +6,6 @@
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
-typedef struct TrackPointWindow {
-    s32 x;
-    s32 z;
-    s16 y;
-    s16 angle;
-    u8 padC[2];
-    s16 field_E;
-    s16 field_10;
-    s16 field_12;
-    u8 pad14[2];
-    u16 segmentLength;
-} TrackPointWindow;
-
 typedef struct TrackSurfaceCell {
     u16 field_0;
     u8 pad2[6];
@@ -31,12 +18,9 @@ typedef struct TrackSurfaceCell {
 s32 GetTrackSurfaceHeight(TrackSurfaceCell *cell) {
     s32 index;
     s32 nextIndex;
-    TrackPointWindow *base;
-    TrackPointWindow *cur;
-    TrackPointWindow *next;
+    GameTrackPoint *cur;
+    GameTrackPoint *next;
     u32 segmentLengthRaw;
-    s32 curOff;
-    s32 nextOff;
     Matrix mtx;
     s16 vec[4];
     s32 out[3];
@@ -56,10 +40,7 @@ s32 GetTrackSurfaceHeight(TrackSurfaceCell *cell) {
     index = FindTrackSegment(cell, cell->field_30);
     nextIndex = (index + 1) % g_TrackPointCount;
 
-    base = (TrackPointWindow *)g_TrackPoints;
-
-    curOff = (index * 3) << 3;
-    cur = (TrackPointWindow *)(curOff + (s32)base);
+    cur = &g_TrackPoints[index];
 
     argX = cell->field_0;
     curX = (u16)cur->x;
@@ -72,8 +53,7 @@ s32 GetTrackSurfaceHeight(TrackSurfaceCell *cell) {
     vec[2] = argZ - curZ;
 
     angle = cur->angle;
-    nextOff = (nextIndex * 3) << 3;
-    next = (TrackPointWindow *)(nextOff + (s32)base);
+    next = &g_TrackPoints[nextIndex];
     BuildRotMatrixY(&mtx, (0x1000 - angle) & 0xFFF);
 
     ApplyMatrix((s32 *)&mtx, (s32 *)vec, out);

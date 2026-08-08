@@ -57,7 +57,7 @@ while (1) {
             if (cur == wrapped) {
                 break;
             }
-            total += ((GameTrackPoint *)table)[wrapped].segmentLength;
+            total += (s16)((GameTrackPoint *)table)[wrapped].segmentLength;
             }
         } else {
             s32 count;
@@ -74,7 +74,7 @@ while (1) {
                 wrapped = index;
             }
             mod = wrapped % count;
-            total -= ((GameTrackPoint *)table)[mod].segmentLength;
+            total -= (s16)((GameTrackPoint *)table)[mod].segmentLength;
             if (cur == wrapped) {
                 break;
             }
@@ -93,7 +93,7 @@ while (1) {
             do {
                 index++;
                 wrapped = index % count;
-                total -= ((GameTrackPoint *)table)[wrapped].segmentLength;
+                total -= (s16)((GameTrackPoint *)table)[wrapped].segmentLength;
             } while (cur != wrapped);
 
         } else {
@@ -113,7 +113,7 @@ while (1) {
                     break;
                 }
                 mod = mode % count;
-                total += ((GameTrackPoint *)table)[mod].segmentLength;
+                total += (s16)((GameTrackPoint *)table)[mod].segmentLength;
                 index--;
             } while (1);
         }
@@ -168,13 +168,13 @@ void AccumulateLapProgress(GameCarRuntime *car) {
                         if (j < 0) {
                             ir = j + count;
                         }
-                        car->field_68 += array[ir].segmentLength;
+                        car->field_68 += (s16)array[ir].segmentLength;
                     }
                     break;
                 }
                 if (r == fwd) {
                     for (i = 1; i <= n; i++) {
-                        car->field_68 -= array[(car->trackPointIndex + i) % count].segmentLength;
+                        car->field_68 -= (s16)array[(car->trackPointIndex + i) % count].segmentLength;
                     }
                     break;
                 }
@@ -195,7 +195,7 @@ void AccumulateLapProgress(GameCarRuntime *car) {
                 bv = back;
                 if (r == fwd) {
                     for (i = 0; i < n; i++) {
-                        car->field_68 += array[(car->trackPointIndex + i) % count].segmentLength;
+                        car->field_68 += (s16)array[(car->trackPointIndex + i) % count].segmentLength;
                     }
                     break;
                 }
@@ -207,7 +207,7 @@ void AccumulateLapProgress(GameCarRuntime *car) {
                         if (j < 0) {
                             ir = j + count;
                         }
-                        car->field_68 -= array[ir].segmentLength;
+                        car->field_68 -= (s16)array[ir].segmentLength;
                     }
                     break;
                 }

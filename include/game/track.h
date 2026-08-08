@@ -34,7 +34,7 @@ typedef struct GameTrackPoint {
      * are a signed index into g_TrackArcCenters (`(s16)arcRef >> 4`). Bits 2..3
      * are never read. */
     u16 arcRef;
-    s16 segmentLength;
+    u16 segmentLength;
 } GameTrackPoint;
 
 /*
