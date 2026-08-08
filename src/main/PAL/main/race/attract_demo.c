@@ -117,7 +117,6 @@ void UpdateAttractDemoRace(void) {
     u32 value;
     u32 timer;
     s32 index;
-    s32 offset;
 
     g_SceneTimer++;
     if ((u32)g_SceneTimer < 0x3D) {
@@ -147,9 +146,7 @@ void UpdateAttractDemoRace(void) {
     UpdateAttractCars();
 
     index = g_CameraCarIndex;
-    offset = (((((index * 3) * 4) + index) * 8) - index) * 4;
-    RequestTrackTexturePage(
-        ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackSection);
+    RequestTrackTexturePage(g_Cars[index].trackSection);
 
     UpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     DrawCars();
