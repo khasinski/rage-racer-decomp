@@ -28,7 +28,7 @@ void UpdateCarTrackState(void* obj, s32 trackPointIndex, void* clampPair);
  * view[7]=yaw, view[8]=roll). markerClamp is the zeroed clamp record for the
  * track-marker builder UpdateCarTrackState.
  */
-void UpdateFreeLookCamera(s32 arg0, s32 updateMotion) {
+void UpdateFreeLookCamera(s32 mode, s32 updateMotion) {
     s32 *view = &SCRATCH_PRIM_CURSOR_WORD;
     s32 delta[3];
     s32 coords[3];
@@ -154,7 +154,7 @@ extern struct {
     s16 y;
 } g_StartGridSceneryStep[];
 
-void DrawStartGridScenery(s32 arg0) {
+void DrawStartGridScenery(s32 flags) {
     Matrix mtx;
     Vec4 state;
     s32 s1;
@@ -164,12 +164,12 @@ void DrawStartGridScenery(s32 arg0) {
     s32 rem;
     s32 lim;
 
-    if (g_RacePhase < 2 && arg0 >= 0x51) {
+    if (g_RacePhase < 2 && flags >= 0x51) {
         BuildRotMatrixY(&mtx, g_StartGridSceneryAngle[g_RaceSeries]);
         MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
-        if (arg0 - 90 > 0) {
+        if (flags - 90 > 0) {
             state = g_StartGridSceneryPos[g_RaceSeries];
-            s1 = (arg0 - 90) / 3;
+            s1 = (flags - 90) / 3;
             state.x += g_StartGridSceneryStep[g_RaceSeries].x * (s0 = s1 / 15);
             state.z += g_StartGridSceneryStep[g_RaceSeries].y * s0;
             if (g_CourseIndex % 4 == 3) {

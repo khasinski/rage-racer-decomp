@@ -141,13 +141,13 @@ void ClearCarMotionState(GameCarRuntime *car) {
     car->field_9E = 0;
 }
 
-void UpdateCarTiltCounter(GameCarRuntime *arg0) {
+void UpdateCarTiltCounter(GameCarRuntime *car) {
     GameCarRuntime *obj;
     register u8 *ptr asm("$4");
     s32 value;
     register s32 limit asm("$3");
 
-    obj = arg0;
+    obj = car;
 
     ptr = (u8 *)&obj->field_BC;
     if (g_RacePhase < 2) {
@@ -348,21 +348,21 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     carReg->velocityZ = z;
 }
 
-void StartCarBodyKick(s32 arg0, GameCarRuntime *arg1) {
+void StartCarBodyKick(s32 strength, GameCarRuntime *car) {
     GameCarRuntime *obj;
     s32 value;
     s32 temp;
     s32 distance;
 
-    obj = arg1;
+    obj = car;
     value = 1;
-    obj->motionMode = arg0;
+    obj->motionMode = strength;
     switch (0) { default:
-    if (arg0 == value) {
+    if (strength == value) {
     } else {
 
     value = 2;
-    if (arg0 == value) {
+    if (strength == value) {
         break;
     }
 

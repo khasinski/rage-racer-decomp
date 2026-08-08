@@ -6,17 +6,17 @@
 #include "game/track.h"
 #include "psyq/gte.h"
 
-void DrawScriptedScenery(s32 arg0) {
+void DrawScriptedScenery(s32 flags) {
     switch (g_GrandPrixClass % 5) {
     case 0:
-        if (arg0 != 0) {
+        if (flags != 0) {
             UpdateRouteScenery();
         }
         DrawRouteScenery();
         break;
     case 1:
     case 2:
-        if (arg0 != 0) {
+        if (flags != 0) {
             UpdateRouteScenery();
             UpdateFlybyScenery();
         }
@@ -25,7 +25,7 @@ void DrawScriptedScenery(s32 arg0) {
         break;
     case 3:
     case 4:
-        if (arg0 != 0) {
+        if (flags != 0) {
             UpdateRouteScenery();
             UpdateFlybyScenery();
             UpdatePathScenerySound();

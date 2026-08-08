@@ -12,7 +12,7 @@ extern u_short g_SndKeyOnLow;
 extern u_short g_SndKeyOnHigh;
 extern SpuVoice g_SndVoiceState[];
 
-void SpuVmSeqKeyOff(long arg0) {
+void SpuVmSeqKeyOff(long wanted) {
     u_short bits_upper;
     u_short bits_lower;
     u_char voice;
@@ -23,7 +23,7 @@ void SpuVmSeqKeyOff(long arg0) {
 
     voice = 0;
     if (g_SndVoiceCount != 0) {
-        seq_sep = (short)arg0;
+        seq_sep = (short)wanted;
         current = &g_SndCurrentVoice;
         do {
             if (g_SndVoiceState[voice].seq_sep == seq_sep) {

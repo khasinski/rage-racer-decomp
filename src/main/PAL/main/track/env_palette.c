@@ -3,22 +3,22 @@
 /* Local u32 view of g_EnvPaletteTable (render.h types it as u8 *). */
 extern u32 g_EnvPaletteTable;
 
-void SetEnvPaletteTable(u32 arg0) {
-    g_EnvPaletteTable = arg0;
+void SetEnvPaletteTable(u32 table) {
+    g_EnvPaletteTable = table;
 }
 
 void SetFarColor(s32 a, s32 b, s32 c);
 void Intpl(void* in, s32 ir0, void* out);
 
-void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3) {
+void LerpEnvColor(u8 *from, u8 *to, u8 *out, s32 blend) {
     s32 local[3];
     u8 result[4];
 
-    local[0] = arg0[0] << 4;
-    local[1] = arg0[1] << 4;
-    local[2] = arg0[2] << 4;
-    SetFarColor(arg1[0], arg1[1], arg1[2]);
-    Intpl(local, arg3, result);
+    local[0] = from[0] << 4;
+    local[1] = from[1] << 4;
+    local[2] = from[2] << 4;
+    SetFarColor(to[0], to[1], to[2]);
+    Intpl(local, blend, result);
     out[0] = result[0];
     out[1] = result[1];
     out[2] = result[2];

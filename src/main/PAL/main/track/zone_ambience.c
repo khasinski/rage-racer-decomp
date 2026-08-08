@@ -10,7 +10,7 @@ typedef struct UnkFunc80040DB4Entry {
     u16 flags;
 } UnkFunc80040DB4Entry;
 
-void UpdateZoneAmbience(s32 arg0) {
+void UpdateZoneAmbience(s32 zone) {
     s32 position;
     s32 base;
     register s32 mode asm("$4");
@@ -23,7 +23,7 @@ void UpdateZoneAmbience(s32 arg0) {
     register UnkFunc80040DB4Entry *entry asm("$3");
     s32 selector;
 
-    position = arg0;
+    position = zone;
     selector = g_GrandPrixClass;
     entryBaseValue = (s32)g_TrackEventData;
     entryBase = (UnkFunc80040DB4Entry *)(entryBaseValue + 0x1C9C);

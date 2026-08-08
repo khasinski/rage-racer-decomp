@@ -105,24 +105,24 @@ void DrawCourseObjects(void) {
 }
 
 
-u32 GetCellRegion(s32 arg0, s32 arg1) {
-    arg1 = (arg1 * 32) + arg0;
-    return g_TerrainCellGrid[arg1] >> 10;
+u32 GetCellRegion(s32 x, s32 z) {
+    z = (z * 32) + x;
+    return g_TerrainCellGrid[z] >> 10;
 }
 
 
-u32 IsCellVisibleFromRegion(s32 arg0, s32 arg1, s32 arg2) {
-    s32 x = arg0 << 2;
+u32 IsCellVisibleFromRegion(s32 cellX, s32 cellZ, s32 region) {
+    s32 x = cellX << 2;
     s32 y;
     u8 *base;
     u32 mask;
 
-    y = arg1 << 7;
+    y = cellZ << 7;
     base = g_CellVisibilityTable;
     mask = 1;
     y += (s32)base;
     x += y;
-    return (mask << arg2) & *(u32 *)x;
+    return (mask << region) & *(u32 *)x;
 }
 
 typedef struct Scr {
@@ -137,7 +137,7 @@ typedef struct Scr {
 extern Vec4 *g_VisibleCellList;
 void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 
-void BuildVisibleCells(s32 arg0, s32 arg1) {
+void BuildVisibleCells(s32 near, s32 far) {
     Scr *s = (Scr *)&SCRATCH_VIEW_X;
     s32 i;
     s32 j;
@@ -213,7 +213,7 @@ void BuildVisibleCells(s32 arg0, s32 arg1) {
                 vec[1] = (-s->f4) << 2;
                 vec[2] = ((sy << 11) - (s->f8 - center)) << 2;
                 ApplyMatrixLV(SCRATCH_VIEW_MATRIX_GTE, vec, proj);
-                if (proj[2] >= arg0 && arg1 >= proj[2]) {
+                if (proj[2] >= near && far >= proj[2]) {
                     out->x = proj[0];
                     out->y = proj[1];
                     out->z = proj[2];

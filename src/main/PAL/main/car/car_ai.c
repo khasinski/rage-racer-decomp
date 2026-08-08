@@ -178,7 +178,7 @@ break;
     return 0;
 }
 
-void UpdateCarCrestHop(GameCarRuntime *arg0) {
+void UpdateCarCrestHop(GameCarRuntime *car) {
     GameCarRuntime *obj;
     s32 value;
     /* These pins are load-bearing: removing either one changes .text. */
@@ -187,7 +187,7 @@ void UpdateCarCrestHop(GameCarRuntime *arg0) {
     s32 one;
     volatile s32 stack[2];
 
-    obj = arg0;
+    obj = car;
     (void)stack;
 
     if (obj->field_98 != 0) {
@@ -252,7 +252,7 @@ void UpdateCarCrestHop(GameCarRuntime *arg0) {
     obj->field_9E = value;
 }
 
-void UpdateCarSlideAngle(GameCarRuntime *car, s32 arg1) {
+void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
     GameCarRuntime *obj = car;
     s32 temp;
     s32 value;
@@ -263,14 +263,14 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 arg1) {
     switch (0) { default:
     if (*(s32 *)&obj->field_F0 == 0) {
         if (!(obj->field_F4 != 0)) {
-        if (arg1 != 0) {
+        if (carIndex != 0) {
             value = obj->field_A4;
             if (value < 0x3C1) {
                 return;
             }
             scene = g_RaceSeries;
-            arg1 *= value;
-            value = arg1;
+            carIndex *= value;
+            value = carIndex;
             temp = value / 0x320;
             *(s32 *)&obj->field_F0 = temp;
             if (scene != 0) {
@@ -328,7 +328,7 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 arg1) {
     }
 }
 
-void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
+void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
     GameCarRuntime *objReg = obj;
     s32 target;
     u8 *state;
@@ -370,7 +370,7 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 arg1) {
     if (entry[1] < target) {
         goto advance;
     }
-    if (arg1 < 4 && objReg->field_10C == 0) {
+    if (carIndex < 4 && objReg->field_10C == 0) {
         valueRaw = objReg->field_11C;
         if (entry[2] < valueRaw) {
             value = valueRaw;

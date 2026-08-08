@@ -3,17 +3,17 @@
 #include "game/track.h"
 #include "game/audio.h"
 
-void PlayCountdownCues(s32 arg0) {
-    if (arg0 < 0x110) {
-        if (arg0 == 0x79) {
+void PlayCountdownCues(s32 timer) {
+    if (timer < 0x110) {
+        if (timer == 0x79) {
             PlaySoundCue(0x1E);
-        } else if (arg0 == 0x97) {
+        } else if (timer == 0x97) {
             PlaySoundCue(0x1F);
-        } else if (arg0 == 0xB5) {
+        } else if (timer == 0xB5) {
             PlaySoundCue(0x20);
-        } else if (arg0 == 0xD3) {
+        } else if (timer == 0xD3) {
             PlaySoundCue(0x21);
-        } else if ((arg0 == 0x10F) && (g_GrandPrixMode == 1)) {
+        } else if ((timer == 0x10F) && (g_GrandPrixMode == 1)) {
             PlaySoundCue(0x22);
             g_RaceCueDelay = 0x5A;
         }
@@ -40,10 +40,10 @@ void UpdateRivalCueGate(void) {
 extern u32 *g_CourseObjects;
 extern u32 g_CourseObjectCount;
 
-void SetCourseObjects(u32 *arg0) {
+void SetCourseObjects(u32 *table) {
     u32 value;
 
-    value = *arg0;
-    g_CourseObjects = arg0 + 1;
+    value = *table;
+    g_CourseObjects = table + 1;
     g_CourseObjectCount = value;
 }

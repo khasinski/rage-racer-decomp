@@ -621,15 +621,15 @@ block_52:
 extern u32 g_SkyRowBase;
 extern u32 g_EnvScriptLength;
 
-void SetEnvironmentScript(u32 *arg0) {
+void SetEnvironmentScript(u32 *script) {
     u32 value0;
     u32 value1;
 
-    value0 = *arg0;
-    arg0++;
+    value0 = *script;
+    script++;
     g_SkyRowBase = value0;
-    value1 = *arg0;
-    arg0++;
-    g_EnvScriptCues = arg0;
+    value1 = *script;
+    script++;
+    g_EnvScriptCues = script;
     g_EnvScriptLength = value1;
 }

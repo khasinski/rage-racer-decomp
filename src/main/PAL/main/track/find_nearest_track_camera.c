@@ -8,7 +8,7 @@ typedef struct Func80043B18Entry {
 extern u16 g_TrackSectionCount;
 extern Func80043B18Entry *g_TrackCameras;
 
-s32 FindNearestTrackCamera(u8 *arg0, u16 rawValue) {
+s32 FindNearestTrackCamera(u8 *car, u16 rawValue) {
     s32 best;
     Func80043B18Entry *entry;
     s32 index;
@@ -28,7 +28,7 @@ s32 FindNearestTrackCamera(u8 *arg0, u16 rawValue) {
 
     if (dist != -1) {
         tmp = g_TrackSectionCount;
-        target = *(s16 *)(arg0 + 0x78);
+        target = *(s16 *)(car + 0x78);
         tmp <<= 16;
         span = tmp >> 16;
         tmp = (u32)tmp >> 31;

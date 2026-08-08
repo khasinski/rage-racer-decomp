@@ -106,19 +106,19 @@ void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out) {
 
 s32 rsin(s32 arg0);
 s32 rcos(s32 angle);
-void MatrixApplyZRotation(Matrix *mtx, s32 arg1) {
+void MatrixApplyZRotation(Matrix *mtx, s32 degrees) {
     Matrix sp10;
     s32 angle;
     s32 c;
     s32 s;
     s16 s_copy;
 
-    angle = arg1 / 360;
+    angle = degrees / 360;
     c = rcos(angle);
     s = rsin(angle);
     s_copy = s;
 
-    if (arg1 != 0) {
+    if (degrees != 0) {
         sp10.m[0][0] = c;
         sp10.m[0][1] = -s;
         sp10.m[0][2] = 0;

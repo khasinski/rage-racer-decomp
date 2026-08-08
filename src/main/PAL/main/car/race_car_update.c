@@ -763,7 +763,7 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
 
 extern GameRenderObject g_CameraCar;
 
-void SeedFinishCamera(void *arg0) {
+void SeedFinishCamera(void *car) {
     register u32 word0;
     Block16 *src;
     Block16 *dst;
@@ -774,7 +774,7 @@ void SeedFinishCamera(void *arg0) {
     register s32 index asm("$3");
     s32 lastIndex;
 
-    base = arg0;
+    base = car;
     dst = (Block16 *)&g_CameraCar;
     src = (Block16 *)base;
     end = (Block16 *)((u8 *)base + 0x190);

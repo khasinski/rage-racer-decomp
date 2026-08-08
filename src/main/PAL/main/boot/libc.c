@@ -367,34 +367,34 @@ finished:
 #undef args
 }
 
-u8 *LibcMemchr(u8 *arg0, s32 arg1, s32 arg2) {
+u8 *LibcMemchr(u8 *buf, s32 ch, s32 len) {
     switch (0) { default:
-    if (arg0 == 0) {
+    if (buf == 0) {
         return 0;
     }
-    if (arg2 <= 0) {
+    if (len <= 0) {
         return 0;
     }
 
     break;
 
 found:
-    return arg0 - 1;
+    return buf - 1;
 
     }
 
-    arg2--;
-    if (arg2 < 0) {
+    len--;
+    if (len < 0) {
         return 0;
     }
 
-    arg1 &= 0xFF;
+    ch &= 0xFF;
     do {
-        if (*arg0++ == arg1) {
+        if (*buf++ == ch) {
             goto found;
         }
-        arg2--;
-    } while (arg2 >= 0);
+        len--;
+    } while (len >= 0);
 
     return 0;
 }
@@ -413,25 +413,25 @@ void *LibcMemmove(u8 *dest, u8 *src, s32 count) {
     return dest;
 }
 
-s32 LibcStrlen(u8 *arg0) {
+s32 LibcStrlen(u8 *str) {
     s32 count = 0;
 
-    if (arg0 == 0) {
+    if (str == 0) {
         return 0;
     }
 
-    while (*arg0++ != 0) {
+    while (*str++ != 0) {
         count++;
     }
 
     return count;
 }
 
-void LibcPutString(u8 *arg0) {
+void LibcPutString(u8 *str) {
     u8 *ptr;
     s32 value;
 
-    ptr = arg0;
+    ptr = str;
     if (ptr == 0) {
         ptr = g_LibcNullText;
     }
@@ -443,9 +443,9 @@ void LibcPutString(u8 *arg0) {
 
 extern u8 g_LibcCtype[];
 
-void LibcPutChar(s32 arg0) {
+void LibcPutChar(s32 ch) {
     u8 c;
-    s32 value = arg0;
+    s32 value = ch;
 
     c = value;
     switch (0) { default:
@@ -474,11 +474,11 @@ void LibcPutChar(s32 arg0) {
     BiosFileWrite(1, &c, 1);
 }
 
-s32 LibcToUpper(s32 arg0) {
-    u8 value = arg0;
+s32 LibcToUpper(s32 ch) {
+    u8 value = ch;
 
     if (g_LibcCtype[(u8)value] & 2) {
-        value = arg0 - 0x20;
+        value = ch - 0x20;
     }
 
     return (u8)value;

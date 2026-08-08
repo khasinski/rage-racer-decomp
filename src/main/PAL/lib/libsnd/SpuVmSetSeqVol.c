@@ -63,7 +63,7 @@ short arg3;
     return g_SndCurrentSeqSep;
 }
 
-long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) {
+long SpuVmGetSeqVol(long seq_sep, short *volLeft, short *volRight) {
     long index;
     long offset;
     u_char *base;
@@ -71,39 +71,39 @@ long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2) {
     short *status;
 
     status = &g_SndCurrentSeqSep;
-    offset = (arg0 & 0xFF) << 2;
+    offset = (seq_sep & 0xFF) << 2;
     base = *(u_char **)((u_char *)g_SndSeqTable + offset);
-    *status = arg0;
-    index = (arg0 & 0xFF00) >> 8;
+    *status = seq_sep;
+    index = (seq_sep & 0xFF00) >> 8;
 
     ptr = (u_char *)((index * 0xAC) + (long)base);
-    *arg1 = *(u_short *)(ptr + 0x74);
-    *arg2 = *(u_short *)(ptr + 0x76);
+    *volLeft = *(u_short *)(ptr + 0x74);
+    *volRight = *(u_short *)(ptr + 0x76);
     return *status;
 }
 
-short SpuVmGetSeqVolLeft(long arg0) {
+short SpuVmGetSeqVolLeft(long seq_sep) {
     long index;
     long offset;
     u_char *ptr;
 
-    offset = (arg0 & 0xFF) << 2;
+    offset = (seq_sep & 0xFF) << 2;
     ptr = *(u_char **)((u_char *)g_SndSeqTable + offset);
-    g_SndCurrentSeqSep = arg0;
-    index = (arg0 & 0xFF00) >> 8;
+    g_SndCurrentSeqSep = seq_sep;
+    index = (seq_sep & 0xFF00) >> 8;
 
     return *(short *)(ptr + (index * 0xAC) + 0x74);
 }
 
-short SpuVmGetSeqVolRight(long arg0) {
+short SpuVmGetSeqVolRight(long seq_sep) {
     long index;
     long offset;
     u_char *ptr;
 
-    offset = (arg0 & 0xFF) << 2;
+    offset = (seq_sep & 0xFF) << 2;
     ptr = *(u_char **)((u_char *)g_SndSeqTable + offset);
-    g_SndCurrentSeqSep = arg0;
-    index = (arg0 & 0xFF00) >> 8;
+    g_SndCurrentSeqSep = seq_sep;
+    index = (seq_sep & 0xFF00) >> 8;
 
     return *(short *)(ptr + (index * 0xAC) + 0x76);
 }

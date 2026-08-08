@@ -4,13 +4,13 @@
 
 void BuildSpriteFromDesc(u8 *arg0, u8 *arg1);
 
-void BuildRaceHudPrims(s32 arg0) {
+void BuildRaceHudPrims(s32 mode) {
     u8 *cursor;
     s32 col;
     s32 row;
     s32 rowOffset;
 
-    if (arg0 != 0) {
+    if (mode != 0) {
         s32 bufferOffset;
 
         row = 0;

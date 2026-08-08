@@ -17,7 +17,7 @@ extern u8 g_PlayerTrackProgress[];
 #define AVOID_BLOCKED(w) (*(s16 *)((u8 *)(w) + 0x48)) /* ->field_104 */
 #define AVOID_NEARBY(w) (*(u16 *)((u8 *)(w) + 0x50))  /* ->field_10C */
 
-void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
+void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     GameCarAiBlock *state = (GameCarAiBlock *)&car->field_BC;
     s32 acc8 = 0;
     s32 acc9 = 0;
@@ -69,7 +69,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
         if (g_SceneId != 0xC && i == k11) {
             break;
         }
-        if (i == arg1) {
+        if (i == carIndex) {
             continue;
         }
         if (*(s16 *)(block + 8) == -1) { /* g_Cars[i].activeFlag */
@@ -80,7 +80,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
             s32 op = *(s32 *)(base + 0);
             a2 = op + track;
             otherField34 = *(s32 *)(base - 0x3C);
-            if (arg1 < 4) {
+            if (carIndex < 4) {
                 otherA4 = 0;
             } else {
                 otherA4 = *(u16 *)(base + 0x34);
@@ -184,7 +184,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 arg1) {
  */
 extern GameCarRuntime *D_801E40B8[] asm("g_SceneTimer");
 
-void SlowRivalAhead(GameCarRuntime *car, s32 arg1) {
+void SlowRivalAhead(GameCarRuntime *car, s32 carIndex) {
     GameCarRuntime *entry;
     s32 offset;
     s32 pos0Base;
@@ -192,7 +192,7 @@ void SlowRivalAhead(GameCarRuntime *car, s32 arg1) {
     s32 pos1;
     s32 value;
 
-    offset = arg1 * 4;
+    offset = carIndex * 4;
     pos0Base = car->field_68;
     entry = *(GameCarRuntime **)((u8 *)D_801E40B8 + offset);
     pos0 = pos0Base + car->field_6C;

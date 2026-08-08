@@ -2,7 +2,7 @@
 #include "game/render.h"
 #include "game/track.h"
 
-void LoadEnvironmentCue(GameEnvColor *arg0) {
+void LoadEnvironmentCue(GameEnvColor *cue) {
     GameEnvColor *src;
     s32 mode;
     s32 newMode;
@@ -11,7 +11,7 @@ void LoadEnvironmentCue(GameEnvColor *arg0) {
     s32 field28;
     u32 flag;
 
-    src = arg0;
+    src = cue;
     g_EnvFogEnabled = 1;
 
     g_EnvColors[0].to = src[1];

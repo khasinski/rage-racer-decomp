@@ -93,8 +93,8 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
  */
 
 
-void UpdateCarLaunch(GameCarRuntime *arg0) {
-    register GameCarRuntime *car = arg0;
+void UpdateCarLaunch(GameCarRuntime *carArg) {
+    register GameCarRuntime *car = carArg;
     register u8 *r;
     register s32 s4val;
     s32 res;

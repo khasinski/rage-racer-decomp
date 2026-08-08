@@ -32,7 +32,7 @@ typedef struct TrackSurfaceCell {
 
 s32 FindTrackSegment(TrackSurfaceCell *arg0, s32 arg1);
 
-s32 GetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
+s32 GetTrackSurfaceHeight(TrackSurfaceCell *cell) {
     s32 index;
     s32 nextIndex;
     TrackPointWindow *base;
@@ -57,7 +57,7 @@ s32 GetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
     s32 curZ;
     s32 angle;
 
-    index = FindTrackSegment(arg0, arg0->field_30);
+    index = FindTrackSegment(cell, cell->field_30);
     nextIndex = (index + 1) % g_TrackPointCount;
 
     base = (TrackPointWindow *)g_TrackPoints;
@@ -65,12 +65,12 @@ s32 GetTrackSurfaceHeight(TrackSurfaceCell *arg0) {
     curOff = (index * 3) << 3;
     cur = (TrackPointWindow *)(curOff + (s32)base);
 
-    argX = arg0->field_0;
+    argX = cell->field_0;
     curX = (u16)cur->x;
     segmentLengthRaw = cur->segmentLength;
     vec[0] = argX - curX;
 
-    argZ = arg0->field_8;
+    argZ = cell->field_8;
     curZ = (u16)cur->z;
     vec[1] = 0;
     vec[2] = argZ - curZ;

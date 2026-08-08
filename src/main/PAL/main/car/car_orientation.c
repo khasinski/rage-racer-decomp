@@ -375,10 +375,10 @@ void InitPlayerCar(GameCarRuntime *car)
  * delta falls inside the 0x401..0x7FF window (i.e. facing roughly backwards).
  * Uses the 0x19C-stride GameCarTrackAngleWindow view onto the car array.
  */
-s32 IsCarFacingBackwards(GameCarTrackAngleWindow *arg0) {
-    s32 index = arg0->trackPointIndex;
+s32 IsCarFacingBackwards(GameCarTrackAngleWindow *window) {
+    s32 index = window->trackPointIndex;
     s32 complement = 0xC00 - g_TrackPoints[index].angle;
-    s32 diff = (arg0->headingAngle - complement) & 0xFFF;
+    s32 diff = (window->headingAngle - complement) & 0xFFF;
     return (u32)(diff - 0x401) < 0x7FFU;
 }
 

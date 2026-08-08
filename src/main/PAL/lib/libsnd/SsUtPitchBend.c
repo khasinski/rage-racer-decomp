@@ -108,7 +108,7 @@ long SsUtChangePitch(long voice, long vab_id, long program, long old_note, long 
     return ret;
 }
 
-long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5) {
+long SsUtChangeADSR(long voice, long vab_id, long program, long tone, u_short adsr1, u_short adsr2) {
     long ret;
     long tmp;
     long index;
@@ -116,10 +116,10 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     long volOffset;
     long field;
 
-    if ((u_short)arg0 >= 0x18U) {
+    if ((u_short)voice >= 0x18U) {
     } else {
 
-    tmp = arg0 << 16;
+    tmp = voice << 16;
     index = tmp >> 16;
     tmp = index << 1;
     tmp += index;
@@ -128,24 +128,24 @@ long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_
     voiceOffset = tmp << 2;
 
     field = *(short *)((u_char *)g_SndVoiceStateVabId + voiceOffset);
-    if (field != (short)arg1) {
+    if (field != (short)vab_id) {
         ret = -1;
         return ret;
     }
 
     field = *(short *)((u_char *)g_SndVoiceStateProg + voiceOffset);
-    if (field != (short)arg2) {
+    if (field != (short)program) {
         ret = -1;
         return ret;
     }
 
     field = *(short *)((u_char *)g_SndVoiceStateNote + voiceOffset);
-    if (field != (short)arg3) {
+    if (field != (short)tone) {
     } else {
 
     volOffset = index << 3;
-    g_SndVoiceRegs[volOffset + 4] = arg4;
-    g_SndVoiceRegs[volOffset + 5] = arg5;
+    g_SndVoiceRegs[volOffset + 4] = adsr1;
+    g_SndVoiceRegs[volOffset + 5] = adsr2;
     field = g_SndVoiceFlags[index];
     field |= 0x30;
     /* RAW() keeps this store ahead of the return value -- see common.h. */
@@ -180,17 +180,17 @@ short SsUtSetDetVVol(short voice, short left, short right) {
     return -1;
 }
 
-short SsUtGetVVol(short arg0, short *arg1, short *arg2) {
+short SsUtGetVVol(short voice, short *volLeft, short *volRight) {
     short *ptr;
     short left;
     short right;
 
-    if ((u_short)arg0 < 24U) {
-        ptr = &g_SndSpuRegs[arg0 * 8];
+    if ((u_short)voice < 24U) {
+        ptr = &g_SndSpuRegs[voice * 8];
         left = ptr[0];
         right = ptr[1];
-        *arg1 = left / 129;
-        *arg2 = right / 129;
+        *volLeft = left / 129;
+        *volRight = right / 129;
         return 0;
     }
 

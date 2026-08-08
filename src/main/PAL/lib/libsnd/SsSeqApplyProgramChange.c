@@ -15,11 +15,11 @@ extern long g_SndTickResolution;
 
 void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2);
 
-void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2) {
-    SeqStruct *pSeq = &g_SndSeqTable[arg0][arg1];
+void SsSeqSetChannelProgram(short seq, short channel, u_char program) {
+    SeqStruct *pSeq = &g_SndSeqTable[seq][channel];
 
-    if (arg2 != 0x2f) {
-        if (arg2 == 0x51) {
+    if (program != 0x2f) {
+        if (program == 0x51) {
             u_char *p;
             long value;
 
@@ -47,7 +47,7 @@ void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2) {
                 }
             }
 
-            pSeq->delta_value = SsSeqReadDeltaTime(arg0, arg1);
+            pSeq->delta_value = SsSeqReadDeltaTime(seq, channel);
         }
     } else {
         long c = pSeq->unk48 + 1;
@@ -65,19 +65,19 @@ void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2) {
             pSeq->read_pos = pSeq->next_sep_pos;
             pSeq->loop_pos = pSeq->next_sep_pos;
         } else {
-            g_SndSeqTable[arg0][arg1].flags &= ~1;
-            g_SndSeqTable[arg0][arg1].flags &= ~8;
-            g_SndSeqTable[arg0][arg1].flags &= ~2;
-            g_SndSeqTable[arg0][arg1].flags |= 0x200;
-            g_SndSeqTable[arg0][arg1].flags |= 4;
+            g_SndSeqTable[seq][channel].flags &= ~1;
+            g_SndSeqTable[seq][channel].flags &= ~8;
+            g_SndSeqTable[seq][channel].flags &= ~2;
+            g_SndSeqTable[seq][channel].flags |= 0x200;
+            g_SndSeqTable[seq][channel].flags |= 4;
             pSeq->unk2b = 0;
             pSeq->loop_pos = pSeq->next_sep_pos;
             if (pSeq->unk3C != 0xff) {
                 pSeq->unk2b = 0;
                 SsSeqRestartPlayback(pSeq->unk3C, pSeq->unk0);
-                SpuVmSeqKeyOff((arg1 << 8) | arg0);
+                SpuVmSeqKeyOff((channel << 8) | seq);
             }
-            SpuVmSeqKeyOff((arg1 << 8) | arg0);
+            SpuVmSeqKeyOff((channel << 8) | seq);
             pSeq->delta_value = pSeq->tick_period;
         }
     }

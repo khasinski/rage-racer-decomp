@@ -7,7 +7,7 @@
 
 extern GameRenderObject g_CameraCar;
 
-void SeedFinishCameraAlt(void *arg0) {
+void SeedFinishCameraAlt(void *car) {
     register u32 word0 asm("$2");
     u32 word1;
     u32 word2;
@@ -20,12 +20,12 @@ void SeedFinishCameraAlt(void *arg0) {
     register s32 index asm("$3");
     s32 lastIndex;
 
-    /* arg0 is a car runtime block: the copy below moves 0x19C bytes of it into
+    /* car is a car runtime block: the copy below moves 0x19C bytes of it into
      * g_CameraCar, which is a GameRenderObject -- every one of the eleven
      * g_CameraCar* split symbols lands on one of its fields. Storing through
      * the object is what lets the index reads below stay plain: both sides
      * carry the aggregate mark now, so 44a's exemption never fires. */
-    base = arg0;
+    base = car;
     asm("" : "=r"(base) : "0"(base));
     dst = (Block16 *)&g_CameraCar;
     src = (Block16 *)base;

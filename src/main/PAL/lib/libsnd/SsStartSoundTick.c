@@ -9,7 +9,7 @@ extern Callback g_SndPrevVSyncCallback;
 
 long KernelCallbackSlot2Wide(long arg0, Callback arg1) asm("KernelCallbackSlot2");
 
-void SsStartSoundTick(long arg0) {
+void SsStartSoundTick(long mode) {
     long size;
     long channel;
     register u_char *flag asm("$5");
@@ -35,7 +35,7 @@ void SsStartSoundTick(long arg0) {
 
     case 5:
     g_SndTickIrq = 0;
-    if (arg0 == 0) {
+    if (mode == 0) {
         *flag = 1;
         break;
     }
