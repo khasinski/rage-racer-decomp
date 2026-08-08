@@ -32,7 +32,6 @@ extern u32 g_ScratchRenderMode;
 
 extern s16 g_PlayerLap;
 
-void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 tpage) asm("QueueDrawModePrim");
 
 void AddPrim(void *ot, void *prim);
 
@@ -313,7 +312,7 @@ void DrawLapNumber(void) {
         ot = g_DrawBuffer + 0xCC;
         tpage = 9;
         *(u8 **)packet = finalScratch;
-        *(u8 **)packet = GameQueueDrawModePrimWide(ot, finalScratch, tpage);
+        *(u8 **)packet = QueueDrawModePrim(ot, finalScratch, tpage);
     }
 }
 

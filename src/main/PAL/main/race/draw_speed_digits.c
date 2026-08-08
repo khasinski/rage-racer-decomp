@@ -4,7 +4,6 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 
-void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 tpage) asm("QueueDrawModePrim");
 
 void DrawSpeedDigits(s32 x, s32 y, s32 value) {
     u8 **scratch;
@@ -35,5 +34,5 @@ void DrawSpeedDigits(s32 x, s32 y, s32 value) {
     prim = DrawHudDigit(prim, screenX, screenY, hundreds, color);
     prim = DrawHudDigit(prim, screenX + 8, screenY, tens, color);
     prim = DrawHudDigit(prim, screenX + 0x10, screenY, ones, color);
-    *scratch = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, prim, 9);
+    *scratch = QueueDrawModePrim(g_DrawBuffer + 0xCC, prim, 9);
 }
