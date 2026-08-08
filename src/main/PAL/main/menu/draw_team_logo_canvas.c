@@ -53,7 +53,7 @@ extern TeamLogoWord D_8007F934;
 extern TeamLogoWord D_8007F93C;
 extern s32 D_8007F950;
 extern u8 g_PadType;
-extern u16 D_801E6F2C asm("g_TeamLogoCanvas");
+extern u32 g_TeamLogoCanvas[];
 
 extern void LoadImage(void *rect, void *data);
 extern s32 rsin(s32 angle);
@@ -210,7 +210,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     }
 
   }
-  LoadImage(&g_TeamLogoRect, &D_801E6F2C);
+  LoadImage(&g_TeamLogoRect, g_TeamLogoCanvas);
   LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
   LoadImage(&D_8007F95C, D_8009B2A0);
   if (a0v < 0)
@@ -616,7 +616,6 @@ void RampTeamLogoCanvas(s32 stepA, s32 stepB) {
     D_8007F948 = 0x220 - (temp >> 8);
 }
 
-extern u32 g_TeamLogoCanvas[];
 
 void ScrollTeamLogoUp(void) {
     s32 i;
