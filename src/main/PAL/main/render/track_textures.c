@@ -19,7 +19,6 @@ s32 section;
     s32 one;
 
     ret = 0;
-    switch (0) { default:
     if (section >= g_TrackTextureSectionLo) {
         ret = 0x100;
         if (section >= g_TrackTextureSectionHi) {
@@ -27,11 +26,11 @@ s32 section;
         } else {
             one = 1;
             g_TrackTexturePageWanted = one;
-            break;
+            goto texture_page_selected;
         }
     }
     g_TrackTexturePageWanted = 0;
-    }
+texture_page_selected:
     return ret;
 }
 

@@ -352,13 +352,12 @@ void StartCarBodyKick(s32 strength, GameCarRuntime *car) {
     obj = car;
     value = 1;
     obj->motionMode = strength;
-    switch (0) { default:
     if (strength == value) {
     } else {
 
     value = 2;
     if (strength == value) {
-        break;
+        goto angled_body_kick;
     }
 
     return;
@@ -371,7 +370,7 @@ void StartCarBodyKick(s32 strength, GameCarRuntime *car) {
         obj->motionValue = value;
         return;
 
-    }
+angled_body_kick:
     value = InterpolateTrackAngle(obj->trackPointIndex);
     temp = GetAngleDistance(value, obj->field_24);
     if (temp >= 0x401) {

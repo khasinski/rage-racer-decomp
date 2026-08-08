@@ -13,7 +13,6 @@ void DrawSplitTimes(void) {
     s32 threshold;
     s32 finalValue;
 
-    switch (0) { default:
     if (g_SplitTimer >= 0x3C) {
         threshold = 0x927BE;
         value = g_LapTimeMs;
@@ -33,7 +32,7 @@ void DrawSplitTimes(void) {
         threshold = 0x927BE;
         value = g_LastSectorTime;
     } else {
-        break;
+        goto split_current_done;
     }
 
     if (value <= threshold) {
@@ -43,7 +42,7 @@ void DrawSplitTimes(void) {
     }
     DrawTimeValue(0x12, 0x2A, value, tile, 0x3E8);
 
-    }
+split_current_done:
     timeout = 0x3E8;
     DrawTimeValue(0x12, 0x20, g_SplitTargetTime, 0x78CC, timeout);
     DrawSplitDelta(g_SplitSector, g_SplitSign);

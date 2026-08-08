@@ -338,20 +338,19 @@ void DrawEndingScreen(void) {
         }
     }
 
-    switch (0) { default:
     sceneTimer = g_SceneTimer;
     g_AnimTimer = g_AnimTimer + 1;
     if (sceneTimer >= 90) {
         if (g_RacePhase == 0) {
             g_RacePhase = 1;
-            break;
+            goto race_intro_update_done;
         }
     } else {
         if (g_RacePhase == 0) {
             RunRaceIntroCamera((struct Obj *)&g_PlayerCar, sceneTimer);
             g_EndingSceneLatch = 0;
             g_WaypointsCollected = 0;
-            break;
+            goto race_intro_update_done;
         }
     }
     if (g_RacePhase == 1) {
@@ -360,7 +359,7 @@ void DrawEndingScreen(void) {
             g_RacePhase = 2;
         }
     }
-    }
+race_intro_update_done:
 
     if (g_RacePhase < 4) {
         DrawStartCountdown(g_SceneTimer);
