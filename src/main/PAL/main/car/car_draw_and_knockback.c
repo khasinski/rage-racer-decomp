@@ -23,11 +23,11 @@
 
 void BuildStartingGrid(void) {
     GameCarRuntime *entryBase;
-    register s32 *table asm("s3");
+    register RaceGridSlot *table asm("s3");
     s32 i;
     register s16 *flagPtr asm("s1");
     s32 one;
-    s32 *cursor;
+    RaceGridSlot *cursor;
     s32 state;
     u16 track;
 
@@ -46,7 +46,7 @@ void BuildStartingGrid(void) {
             track = *(u16 *)&g_RaceSeries;
             *(s16 *)flagPtr = 0;
             *(s16 *)(flagPtr + 6) = track;
-            if (*cursor >= 0) {
+            if (cursor->value >= 0) {
                 ClearCarMotionState(entryBase);
                 *(s16 *)flagPtr = one;
                 InitRivalCar(entryBase, i, table);
@@ -70,7 +70,7 @@ void BuildStartingGrid(void) {
             track = *(u16 *)&g_RaceSeries;
             *(s16 *)flagPtr = 0;
             *(s16 *)(flagPtr + 6) = track;
-            if (*cursor >= 0) {
+            if (cursor->value >= 0) {
                 ClearCarMotionState(entryBase);
                 *(s16 *)flagPtr = one;
                 InitRivalCar(entryBase, i, table);

@@ -471,7 +471,7 @@ s32 GetWaypointAngle(s32 position) {
     }
 }
 
-void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
+void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     u8 *base;
     s32 sub;
     u8 *p;
@@ -480,7 +480,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     u16 av;
 
     ent->field_B0 = 1;
-    av = *(u16 *)&arr[pos];
+    av = slots[pos].halves.modelId;
     sub = (pos + 1) * 12;
     {
         u8 *baseValue = g_TrackEventData;
@@ -489,7 +489,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     ent->field_8A = 0;
     ent->field_BC = 1;
     ent->field_AE = av;
-    val122 = *(u16 *)&arr[pos];
+    val122 = slots[pos].halves.modelId;
     scene = g_RaceSeries;
     ent->field_122 = val122;
     {
@@ -594,7 +594,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     }
 }
 
-void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
+void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
   s32 pos2_R10;
   s32 idx_R8;
   register u8 *base_R9;
@@ -603,7 +603,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   s32 c;
   u16 w;
   pos2_R10 = pos;
-  idx_R8 = arr[pos2_R10];
+  idx_R8 = slots[pos2_R10].value;
   base_R9 = g_TrackEventData;
   ent2_R7 = ent;
   if (!(idx_R8 < 12))

@@ -495,6 +495,14 @@ typedef struct RivalStartEntry {
     s16 modelId;
 } RivalStartEntry;
 
+typedef union RaceGridSlot {
+    s32 value;
+    struct {
+        u16 modelId;
+        u16 reserved;
+    } halves;
+} RaceGridSlot;
+
 typedef struct RivalAiConfig {
     s16 speed;
     u16 field_126;
@@ -612,7 +620,7 @@ extern s16 g_LaunchEnergyThresholds[];
 extern s16 g_RedlineToPeakRpmHalf;
 extern s16 g_PeakToRevLimitRpmHalf;
 extern s16 g_StandingStartState;
-extern s32 g_AttractGridSlots[];
+extern RaceGridSlot g_AttractGridSlots[];
 extern u16 g_BodyColorPrimary[];
 extern u16 g_BodyColorSecondary[];
 extern s16 g_NegconAccelMask;
@@ -631,7 +639,7 @@ extern volatile u16 g_PaintSlots3StopB[];
 extern volatile u16 g_PaintSlots4Stop[];
 extern s32 g_PlayerTargetRpm;
 extern s16 g_PlayerThrottle;
-extern s32 g_RaceGridSlots[];
+extern RaceGridSlot g_RaceGridSlots[];
 /*
  * The race-intro camera's offset from the keyframe it is easing away from:
  * the three halfwords at 0x8009AFBC.  All three writers take them from one
@@ -658,8 +666,8 @@ void BlendPaintColorThirds(u32 color0, u32 color1);
 void BuildTachoNeedleQuad(void);
 void ClampCarLateralOffset();
 s32 GetCarCrestTrigger(GameCarRuntime* car);
-void InitRivalCar(GameCarRuntime* ent, s32 pos, s32* arr);
-void InitRivalCarAi(GameCarRuntime* ent, s32 pos, s32* arr);
+void InitRivalCar(GameCarRuntime* ent, s32 pos, RaceGridSlot* slots);
+void InitRivalCarAi(GameCarRuntime* ent, s32 pos, RaceGridSlot* slots);
 void RankContenders(void);
 void SeedCarRouteMarkers(void);
 void SlowRivalAhead();
