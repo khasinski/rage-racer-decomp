@@ -328,8 +328,12 @@ extern s32 g_RefSectorTime1;
 extern s32 g_RefSectorTime2;
 extern u16 g_ResultPanelCluts[];
 extern u16 g_ResultPlaceCluts[];
-extern s32 g_ReverbZoneEnd;
-extern s32 g_ReverbZoneStart;
+typedef struct ReverbZone {
+    s32 start;
+    s32 end;
+} ReverbZone;
+
+extern ReverbZone g_ReverbZones[2][2];
 extern s16 g_RivalCueCooldown0;
 extern s16 g_RivalCueCooldown1;
 extern s16 g_RivalCueCooldown2;

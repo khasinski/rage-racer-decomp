@@ -396,7 +396,7 @@ void DrawEndingScreen(void) {
 void ApplyTrackReverbZone(s32 position) {
     s32 result;
     s32 i;
-    register s32 offset;
+    register s32 zone;
     s32 depth;
     register s32 scene;
 
@@ -406,15 +406,15 @@ void ApplyTrackReverbZone(s32 position) {
     }
 
     scene = g_RaceSeries;
-    offset = scene * 16;
+    zone = 0;
     for (i = 0; i < 2; i++) {
-        if (*(s32 *)((u8 *)&g_ReverbZoneStart + offset) < position) {
-            if (position < *(s32 *)((u8 *)&g_ReverbZoneEnd + offset)) {
+        if (g_ReverbZones[scene][zone].start < position) {
+            if (position < g_ReverbZones[scene][zone].end) {
                 result = 0x46;
                 break;
             }
         }
-        offset += 8;
+        zone++;
     }
 
     depth = result;
