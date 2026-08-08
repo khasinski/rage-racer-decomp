@@ -24,7 +24,6 @@
 void SeekEnvironmentScript(s32 targetTime) {
     s32 clock;
     u32 count;
-    s32 offset;
     s32 tailCount;
     s32 nextId;
     s32 duration;
@@ -42,26 +41,22 @@ void SeekEnvironmentScript(s32 targetTime) {
     g_EnvScriptCursor = (GameEnvironmentCue *)targetTime;
     g_EnvScriptClock = clock;
     for (count = 0;
-         (s32)((u32 *)targetTime)[count * 12] != -1;
+         ((GameEnvironmentCue *)targetTime)[count].time != -1;
          count++) {
-        if (clock < (s32)((u32 *)targetTime)[count * 12]) {
+        if (clock < ((GameEnvironmentCue *)targetTime)[count].time) {
             break;
         }
     }
 
     if ((s32)count >= 2) {
-        offset = count * 0x30 - 0x60;
-        offset += (s32)g_EnvScriptCursor;
-        g_EnvScriptCursor = (GameEnvironmentCue *)offset;
+        g_EnvScriptCursor += count - 2;
     } else {
         targetTime = (s32)g_EnvScriptCursor;
         for (tailCount = 0;
-             (s32)((u32 *)targetTime)[(tailCount + 1) * 12] != -1;
+             ((GameEnvironmentCue *)targetTime)[tailCount + 1].time != -1;
              tailCount++) {
         }
-        offset = tailCount * 0x30;
-        offset += (s32)g_EnvScriptCursor;
-        g_EnvScriptCursor = (GameEnvironmentCue *)offset;
+        g_EnvScriptCursor += tailCount;
     }
 
     rgb = (u8 *)g_EnvColors;
@@ -85,7 +80,7 @@ void SeekEnvironmentScript(s32 targetTime) {
     cue = g_EnvScriptCursor;
     duration = cue->duration;
     g_EnvLerpDuration = duration;
-    frame = (u16)g_EnvScriptClock - *(u16 *)cue;
+    frame = (u16)g_EnvScriptClock - (u16)RAW(cue->time);
     g_EnvLerpFrame = frame;
     clampedFrame = frame;
     /* Keep the unclamped store and the call-value copy as distinct lifetimes. */
