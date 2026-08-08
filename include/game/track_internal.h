@@ -67,11 +67,7 @@ extern SceneryMotionKeyframe *g_RouteSceneryKeyframe;
 #endif
 extern GAME_ENV_SCRIPT_LENGTH_TYPE g_EnvScriptLength;
 #undef GAME_ENV_SCRIPT_LENGTH_TYPE
-#ifndef GAME_ENV_SCRIPT_CURSOR_TYPE
-#define GAME_ENV_SCRIPT_CURSOR_TYPE void
-#endif
-extern GAME_ENV_SCRIPT_CURSOR_TYPE *g_EnvScriptCursor;
-#undef GAME_ENV_SCRIPT_CURSOR_TYPE
+extern GameEnvironmentCue *g_EnvScriptCursor;
 
 #ifndef GAME_SKY_ROW_BASE_TYPE
 #define GAME_SKY_ROW_BASE_TYPE s32

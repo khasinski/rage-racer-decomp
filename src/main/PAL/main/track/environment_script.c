@@ -5,7 +5,6 @@
 #include "game/sound.h"
 #include "game/track.h"
 
-#define GAME_ENV_SCRIPT_CURSOR_TYPE GameEnvironmentCue
 #include "game/track_internal.h"
 
 /* The three bytes of the packed slot-0 colour g_EnvColors[0].cur, addressed
@@ -77,7 +76,7 @@ void SeekEnvironmentScript(s32 targetTime) {
     g_EnvColors[8].cur = g_EnvScriptCursor->colors[8];
 
     g_EnvironmentMode = g_EnvScriptCursor->mode;
-    nextId = *(s32 *)((u8 *)g_EnvScriptCursor + 0x30);
+    nextId = RAW(g_EnvScriptCursor[1].time);
     g_EnvScriptCursor = g_EnvScriptCursor + 1;
     if (nextId < 0) {
         g_EnvScriptCursor = (GameEnvironmentCue *)g_EnvScriptCues;
@@ -98,7 +97,7 @@ void SeekEnvironmentScript(s32 targetTime) {
     g_EnvLerpFrame = clampedFrame;
     LoadEnvironmentCue(cue, duration, clampedFrame);
 
-    nextId = *(s32 *)((u8 *)g_EnvScriptCursor + 0x30);
+    nextId = RAW(g_EnvScriptCursor[1].time);
     g_EnvScriptCursor = g_EnvScriptCursor + 1;
     if (nextId < 0) {
         g_EnvScriptCursor = (GameEnvironmentCue *)g_EnvScriptCues;

@@ -5,6 +5,9 @@
 
 #include "game/vector.h"
 
+typedef struct GameEnvironmentCue GameEnvironmentCue;
+
+
 /*
  * One centreline point, 0x18 bytes. `field_10` / `field_12` are the left and
  * right half-widths (SteerCarAlongRoute clamps the lateral offset to
