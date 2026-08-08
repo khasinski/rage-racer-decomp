@@ -255,6 +255,30 @@ extern s32 g_OrbitCameraDistance;
 extern s32 g_OrbitCameraYaw;
 extern s16 g_PathSceneryHalfDelta[3];
 extern s16 g_PathSceneryPosIndex;
+typedef struct PathSceneryPositionKey {
+    s32 x;
+    s32 y;
+    s32 z;
+    u16 loopIndex;
+    u16 reserved;
+    s16 span;
+    s16 rate;
+} PathSceneryPositionKey;
+
+typedef struct PathSceneryRotationKey {
+    s16 x;
+    s16 y;
+    s16 z;
+    u16 loopIndex;
+    s16 span;
+    s16 rate;
+} PathSceneryRotationKey;
+
+typedef union PathSceneryKey {
+    PathSceneryPositionKey position;
+    PathSceneryRotationKey rotation;
+} PathSceneryKey;
+
 extern u8 *g_PathSceneryPosKeys;
 typedef struct PathSceneryCursor {
     s16 phase;
