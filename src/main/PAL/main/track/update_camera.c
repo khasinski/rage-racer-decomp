@@ -57,76 +57,76 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
     s32 *case3Angle;
     s32 *modeAngle;
     s32 *scratch;
-    s32 var_v1_44;
+    s32 cameraMode;
     s32 chaseTargetYaw;
-    s32 temp_a0_272;
-    s32 temp_a1_1117;
-    s32 temp_a1_1227;
-    s32 temp_a1_230;
-    s32 temp_a1_781;
-    s32 temp_a2_1183;
-    s32 temp_a3_1170;
-    s32 temp_a3_1372;
+    s32 yawError;
+    s32 pathBlend;
+    s32 pathYawRelative;
+    s32 speedDamping;
+    s32 toCarX;
+    s32 pathYaw;
+    s32 pathPitch;
+    s32 introNodeOffset;
     s32 squaredX;
     s32 squaredZ;
-    s32 temp_s0_1437;
-    s32 temp_s2_728;
-    s32 temp_t0_1157;
-    s32 temp_t1_1144;
+    s32 orbitNodeOffset;
+    s32 chaseNodeOffset;
+    s32 pathOffsetZ;
+    s32 pathOffsetY;
     s32 camPathOffset;
     s32 camPathAngle;
-    s32 temp_v0_1320;
-    s32 temp_v0_1452;
-    s32 temp_v0_1458;
-    s32 temp_v0_1463;
-    s32 temp_v0_1535;
-    s32 temp_v0_1549;
+    s32 pathDistance;
+    s32 orbitToCarX;
+    s32 orbitToCarY;
+    s32 orbitToCarZ;
+    s32 orbitDx;
+    s32 orbitDz;
     s32 chaseYawDamping;
     s32 chaseYawStepLimit;
     s32 cameraNodeIndex;
-    s32 temp_v0_340;
-    s32 temp_v0_399;
-    s32 temp_v0_466;
+    s32 yawStepAhead;
+    s32 yawStepWrapped;
+    s32 yawStepBehind;
     s32 chaseYawLag;
-    s32 temp_v0_687;
-    s32 temp_v0_845;
-    s32 temp_v0_859;
-    s32 temp_v1_1196;
-    s32 temp_v1_35;
-    u8 temp_v1_40;
+    s32 chaseDistance;
+    s32 chaseDx;
+    s32 chaseDz;
+    s32 pathRoll;
+    s32 previousNodeIndex;
+    u8 nodeChanged;
     s32 chaseCarSpeed;
-    s32 var_a0_1119;
-    s32 var_a0_1132;
-    s32 var_a0_1145;
-    s32 var_a0_1158;
-    s32 var_a0_1171;
-    s32 var_a0_1184;
-    s32 var_a0_1197;
-    s32 var_a1_886;
-    s32 var_s0_879;
-    s32 var_v0_652;
-    s32 var_v0_713;
-    s32 var_v1_549;
-    u8 var_v0_881;
-    void *temp_a0_976;
-    void *temp_s0_1448;
-    void *temp_s2_794;
-    void *temp_v0_732;
-    void *temp_v0_764;
-    void *temp_v0_944;
-    u32 temp_v1_1373;
+    s32 offsetXProduct;
+    s32 offsetYProduct;
+    s32 offsetZProduct;
+    s32 pitchProduct;
+    s32 yawProduct;
+    s32 rollProduct;
+    s32 distProduct;
+    s32 pitchDelta;
+    s32 chaseYaw;
+    s32 screenWidth;
+    s32 negatedAccel;
+    s32 wrappedLag;
+    u8 nextPrevMode;
+    void *pathNode;
+    void *orbitNode;
+    void *chaseNodeAgain;
+    void *chaseNode;
+    void *chaseNodeOffsets;
+    void *prevNode;
+    u32 introNode;
 
     cameraNodeIndex = FindNearestTrackCamera(car);
     scratch = &SCRATCH_PRIM_CURSOR_WORD;
-    temp_v1_35 = g_CameraNodeIndex;
+    previousNodeIndex = g_CameraNodeIndex;
     g_CameraNodeIndex = cameraNodeIndex;
-    temp_v1_40 = cameraNodeIndex != temp_v1_35;
+    nodeChanged = cameraNodeIndex != previousNodeIndex;
     if (cameraModeSel < 2) {
-        var_v1_44 = cameraModeSel;
+        cameraMode = cameraModeSel;
     } else {
-        var_v1_44 = FIELD(((cameraNodeIndex * 0x24) + g_TrackCameras), s16 *, 0x20);
+        cameraMode = FIELD(((cameraNodeIndex * 0x24) + g_TrackCameras), s16 *, 0x20);
     }
-    switch (var_v1_44) {
+    switch (cameraMode) {
     case 0:
         *(Block16 *)&scratch[2] = *(Block16 *)car;
         *(Block16 *)&scratch[6] = *(Block16 *)((u8 *)car + 0x20);
@@ -180,14 +180,14 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
             }
             g_ChaseYawDamping = ((((g_ChaseYawDamping * 8) / 50) + 8) / 10) + 1;
         } else {
-            temp_a1_230 = 0x4E2 - g_ChaseCarSpeed;
-            g_ChaseYawDamping = temp_a1_230;
-        g_ChaseYawDamping = ((((g_ChaseYawDamping * 6 * temp_a1_230) / 2500) - ((temp_a1_230 * 0x46) / 50)) + 0xE0) / 10;
+            speedDamping = 0x4E2 - g_ChaseCarSpeed;
+            g_ChaseYawDamping = speedDamping;
+        g_ChaseYawDamping = ((((g_ChaseYawDamping * 6 * speedDamping) / 2500) - ((speedDamping * 0x46) / 50)) + 0xE0) / 10;
         }
-        temp_a0_272 = g_ChaseTargetYaw - D_8009B1EC;
-        if (temp_a0_272 >= 5) {
-            if (temp_a0_272 >= 0x800) {
-                chaseYawStepLimit = (((0x1000 - temp_a0_272) / 17) * 2) & 0xFFF;
+        yawError = g_ChaseTargetYaw - D_8009B1EC;
+        if (yawError >= 5) {
+            if (yawError >= 0x800) {
+                chaseYawStepLimit = (((0x1000 - yawError) / 17) * 2) & 0xFFF;
                 g_ChaseYawStepLimit = chaseYawStepLimit;
                 if (chaseYawStepLimit >= 0x41) {
                     g_ChaseYawStepLimit = 0x40;
@@ -199,14 +199,14 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
                 g_ChaseYawRampNeg += 8;
                 g_ChaseYawStep = turnAccel;
                 if (turnLimit >= turnAccel) {
-                    var_v0_713 = 0 - turnAccel;
+                    negatedAccel = 0 - turnAccel;
                     goto block_36;
                 }
                 goto block_34;
             }
-            temp_v0_340 = (((g_ChaseTargetYaw - D_8009B1EC) / 17) * 2) & 0xFFF;
-            g_ChaseYawStepLimit = temp_v0_340;
-            if (temp_v0_340 >= 0x41) {
+            yawStepAhead = (((g_ChaseTargetYaw - D_8009B1EC) / 17) * 2) & 0xFFF;
+            g_ChaseYawStepLimit = yawStepAhead;
+            if (yawStepAhead >= 0x41) {
                 g_ChaseYawStepLimit = 0x40;
             }
             turnFactor = g_ChaseYawDamping;
@@ -220,11 +220,11 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
             }
             goto block_30;
         }
-        if (temp_a0_272 < -4) {
-            if (temp_a0_272 < -0x7FF) {
-                temp_v0_399 = (((0x1000 - (D_8009B1EC - g_ChaseTargetYaw)) / 17) * 2) & 0xFFF;
-                g_ChaseYawStepLimit = temp_v0_399;
-                if (temp_v0_399 >= 0x41) {
+        if (yawError < -4) {
+            if (yawError < -0x7FF) {
+                yawStepWrapped = (((0x1000 - (D_8009B1EC - g_ChaseTargetYaw)) / 17) * 2) & 0xFFF;
+                g_ChaseYawStepLimit = yawStepWrapped;
+                if (yawStepWrapped >= 0x41) {
                     g_ChaseYawStepLimit = 0x40;
                 }
                 turnFactor = g_ChaseYawDamping;
@@ -242,9 +242,9 @@ block_30:
                     g_ChaseYawLag = turnAccel;
                 }
             } else {
-                temp_v0_466 = (((D_8009B1EC - g_ChaseTargetYaw) / 17) * 2) & 0xFFF;
-                g_ChaseYawStepLimit = temp_v0_466;
-                if (temp_v0_466 >= 0x41) {
+                yawStepBehind = (((D_8009B1EC - g_ChaseTargetYaw) / 17) * 2) & 0xFFF;
+                g_ChaseYawStepLimit = yawStepBehind;
+                if (yawStepBehind >= 0x41) {
                     g_ChaseYawStepLimit = 0x40;
                 }
                 turnFactor = g_ChaseYawDamping;
@@ -258,9 +258,9 @@ block_34:
                     g_ChaseYawLag = 0 - turnLimit;
                     g_ChaseYawRampNeg = SquareRoot0(turnLimit * turnFactor);
                 } else {
-                    var_v0_713 = 0 - turnAccel;
+                    negatedAccel = 0 - turnAccel;
 block_36:
-                    g_ChaseYawLag = var_v0_713;
+                    g_ChaseYawLag = negatedAccel;
                 }
             }
         } else {
@@ -274,21 +274,21 @@ block_36:
         if (rawAngle < chaseCarSpeed) {
             chaseYawLag = rawAngle - chaseCarSpeed;
             g_ChaseYawLag = chaseYawLag;
-            var_v1_549 = chaseYawLag;
-            if (var_v1_549 < -0x7FF) {
-                var_v1_549 += 0x1000;
+            wrappedLag = chaseYawLag;
+            if (wrappedLag < -0x7FF) {
+                wrappedLag += 0x1000;
             }
             angleState = &g_ChaseYawLag;
-            *angleState = var_v1_549;
+            *angleState = wrappedLag;
         } else {
             chaseYawLag = rawAngle - chaseCarSpeed;
             g_ChaseYawLag = chaseYawLag;
-            var_v1_549 = chaseYawLag;
-            if (var_v1_549 >= 0x800) {
-                var_v1_549 -= 0x1000;
+            wrappedLag = chaseYawLag;
+            if (wrappedLag >= 0x800) {
+                wrappedLag -= 0x1000;
             }
             angleState = &g_ChaseYawLag;
-            *angleState = var_v1_549;
+            *angleState = wrappedLag;
         }
         angleState = (s32 *)&sp88[0];
         BuildRotMatrixY(angleState, 0 - g_ChaseYawLag);
@@ -314,76 +314,76 @@ block_36:
         switch (g_ChaseCameraPreset) {
         case 0:
             sp18[1] = 0x3A;
-            var_v0_652 = 0x118;
+            screenWidth = 0x118;
             goto block_52;
         case 1:
             sp18[1] = 0x59;
-            var_v0_652 = 0x140;
+            screenWidth = 0x140;
             goto block_52;
         case 2:
             sp18[1] = 0x97;
-            var_v0_652 = 0x190;
+            screenWidth = 0x190;
 block_52:
-            sp18[2] = var_v0_652;
+            sp18[2] = screenWidth;
             break;
         }
         ApplyMatrixLV(&sp68[0], &sp18[0], &sp38[0]);
         scratch[2] -= sp38[0];
         scratch[3] -= sp38[1];
         scratch[4] -= sp38[2];
-        temp_v0_687 = SquareRoot0((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
-        sp38[3] = temp_v0_687;
-        scratch[6] = 0x400 - (Atan2(sp38[1] + 0x28, temp_v0_687) & 0xFFF);
+        chaseDistance = SquareRoot0((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
+        sp38[3] = chaseDistance;
+        scratch[6] = 0x400 - (Atan2(sp38[1] + 0x28, chaseDistance) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
         scratch[8] = FIELD(car, s32 *, 0x28) - FIELD(car, s32 *, 0x64);
         if (g_ChaseCameraPreset == 0) {
-            var_v0_713 = scratch[6] - 0x90;
+            negatedAccel = scratch[6] - 0x90;
         } else {
-            var_v0_713 = scratch[6] - 0x60;
+            negatedAccel = scratch[6] - 0x60;
         }
-        scratch[6] = var_v0_713;
+        scratch[6] = negatedAccel;
         g_CameraModePrev = 1;
         break;
     case 2:
-        temp_s2_728 = cameraNodeIndex * 0x24;
-        temp_v0_732 = temp_s2_728 + g_TrackCameras;
-        *(Block16 *)&scratch[2] = *(Block16 *)temp_v0_732;
+        chaseNodeOffset = cameraNodeIndex * 0x24;
+        chaseNode = chaseNodeOffset + g_TrackCameras;
+        *(Block16 *)&scratch[2] = *(Block16 *)chaseNode;
         BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
         BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrixWide(&sp48[0], &spA8[0]);
-        temp_v0_764 = temp_s2_728 + g_TrackCameras;
-        sp18[0] = FIELD(temp_v0_764, s32 *, 0x10);
-        sp18[1] = FIELD(temp_v0_764, s32 *, 0x14);
-        sp18[2] = FIELD(temp_v0_764, s32 *, 0x18) + 0x32;
+        chaseNodeOffsets = chaseNodeOffset + g_TrackCameras;
+        sp18[0] = FIELD(chaseNodeOffsets, s32 *, 0x10);
+        sp18[1] = FIELD(chaseNodeOffsets, s32 *, 0x14);
+        sp18[2] = FIELD(chaseNodeOffsets, s32 *, 0x18) + 0x32;
         ApplyMatrixLV(&spA8[0], &sp18[0], &sp28[0]);
-        temp_a1_781 = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
-        sp38[0] = temp_a1_781;
+        toCarX = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
+        sp38[0] = toCarX;
         sp38[1] = scratch[3] - (FIELD(car, s32 *, 4) + sp28[1]);
-        temp_s2_794 = temp_s2_728 + g_TrackCameras;
+        chaseNodeAgain = chaseNodeOffset + g_TrackCameras;
         sp38[2] = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
-        scratch[2] -= (temp_a1_781 * FIELD(temp_s2_794, s32 *, 0xC)) / 10000;
-        scratch[3] -= (sp38[1] * FIELD(temp_s2_794, s32 *, 0xC)) / 10000;
-        scratch[4] -= (sp38[2] * FIELD(temp_s2_794, s32 *, 0xC)) / 10000;
-        temp_v0_845 = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
-        squaredX = temp_v0_845 * temp_v0_845;
-        sp38[0] = temp_v0_845;
+        scratch[2] -= (toCarX * FIELD(chaseNodeAgain, s32 *, 0xC)) / 10000;
+        scratch[3] -= (sp38[1] * FIELD(chaseNodeAgain, s32 *, 0xC)) / 10000;
+        scratch[4] -= (sp38[2] * FIELD(chaseNodeAgain, s32 *, 0xC)) / 10000;
+        chaseDx = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
+        squaredX = chaseDx * chaseDx;
+        sp38[0] = chaseDx;
         sp38[1] = scratch[3] - (FIELD(car, s32 *, 4) + sp28[1]);
-        temp_v0_859 = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
-        sp38[2] = temp_v0_859;
-        squaredZ = temp_v0_859 * temp_v0_859;
+        chaseDz = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
+        sp38[2] = chaseDz;
+        squaredZ = chaseDz * chaseDz;
         scratch[6] = 0x400 - (Atan2(0 - sp38[1], SquareRoot0(squaredX + squaredZ)) & 0xFFF);
-        var_s0_879 = 0x400 - (Atan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
-        var_v0_881 = 2;
-        scratch[7] = var_s0_879;
+        chaseYaw = 0x400 - (Atan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
+        nextPrevMode = 2;
+        scratch[7] = chaseYaw;
         scratch[8] = 0;
-        g_CameraModePrev = var_v0_881;
+        g_CameraModePrev = nextPrevMode;
         break;
     case 3:
         *(Block16 *)&scratch[2] = *(Block16 *)car;
-        if (((u8)temp_v1_40) || (g_CameraModePrev != 3)) {
+        if (((u8)nodeChanged) || (g_CameraModePrev != 3)) {
             g_CamPathNode = cameraNodeIndex;
             g_CamPathFrame = 0;
             if (g_CameraModePrev == 3) {
@@ -395,31 +395,31 @@ block_52:
                 g_CamPathAngleStart[CAMPATH_ROLL] = g_CamPathAngle[CAMPATH_ROLL];
                 g_CamPathAngleStart[CAMPATH_DIST] = g_CamPathAngle[CAMPATH_DIST];
             } else {
-                temp_v0_944 = (cameraNodeIndex * 0x24) + g_TrackCameras;
-                g_CamPathOffsetStart[0] = FIELD(temp_v0_944, s32 *, 0x10);
-                g_CamPathOffsetStart[1] = FIELD(temp_v0_944, s32 *, 0x14);
-                g_CamPathOffsetStart[2] = FIELD(temp_v0_944, s32 *, 0x18);
-                g_CamPathAngleStart[CAMPATH_PITCH] = FIELD(temp_v0_944, s32 *, 0);
-                g_CamPathAngleStart[CAMPATH_YAW] = FIELD(temp_v0_944, s32 *, 4);
-                g_CamPathAngleStart[CAMPATH_ROLL] = FIELD(temp_v0_944, s32 *, 8);
-                g_CamPathAngleStart[CAMPATH_DIST] = FIELD(temp_v0_944, s32 *, 0xC);
+                prevNode = (cameraNodeIndex * 0x24) + g_TrackCameras;
+                g_CamPathOffsetStart[0] = FIELD(prevNode, s32 *, 0x10);
+                g_CamPathOffsetStart[1] = FIELD(prevNode, s32 *, 0x14);
+                g_CamPathOffsetStart[2] = FIELD(prevNode, s32 *, 0x18);
+                g_CamPathAngleStart[CAMPATH_PITCH] = FIELD(prevNode, s32 *, 0);
+                g_CamPathAngleStart[CAMPATH_YAW] = FIELD(prevNode, s32 *, 4);
+                g_CamPathAngleStart[CAMPATH_ROLL] = FIELD(prevNode, s32 *, 8);
+                g_CamPathAngleStart[CAMPATH_DIST] = FIELD(prevNode, s32 *, 0xC);
             }
-            temp_a0_976 = (g_CamPathNode * 0x24) + g_TrackCameras;
-            g_CamPathOffsetDelta[0] = FIELD(temp_a0_976, s32 *, 0x10) - g_CamPathOffsetStart[0];
-            g_CamPathOffsetDelta[1] = FIELD(temp_a0_976, s32 *, 0x14) - g_CamPathOffsetStart[1];
-            g_CamPathOffsetDelta[2] = FIELD(temp_a0_976, s32 *, 0x18) - g_CamPathOffsetStart[2];
-            var_a1_886 = FIELD(temp_a0_976, s32 *, 0) - g_CamPathAngleStart[CAMPATH_PITCH];
-            temp_a2_1183 = (s32)&g_CamPathAngleDelta[CAMPATH_PITCH];
-            *(s32 *)temp_a2_1183 = var_a1_886;
-            g_CamPathAngleDelta[CAMPATH_YAW] = FIELD(temp_a0_976, s32 *, 4) - g_CamPathAngleStart[CAMPATH_YAW];
-            g_CamPathAngleDelta[CAMPATH_ROLL] = FIELD(temp_a0_976, s32 *, 8) - g_CamPathAngleStart[CAMPATH_ROLL];
-            g_CamPathAngleDelta[CAMPATH_DIST] = FIELD(temp_a0_976, s32 *, 0xC) - g_CamPathAngleStart[CAMPATH_DIST];
-            if (var_a1_886 > 0) {
-                if (var_a1_886 >= 0x800) {
-                    *(s32 *)temp_a2_1183 = var_a1_886 - 0x1000;
+            pathNode = (g_CamPathNode * 0x24) + g_TrackCameras;
+            g_CamPathOffsetDelta[0] = FIELD(pathNode, s32 *, 0x10) - g_CamPathOffsetStart[0];
+            g_CamPathOffsetDelta[1] = FIELD(pathNode, s32 *, 0x14) - g_CamPathOffsetStart[1];
+            g_CamPathOffsetDelta[2] = FIELD(pathNode, s32 *, 0x18) - g_CamPathOffsetStart[2];
+            pitchDelta = FIELD(pathNode, s32 *, 0) - g_CamPathAngleStart[CAMPATH_PITCH];
+            pathYaw = (s32)&g_CamPathAngleDelta[CAMPATH_PITCH];
+            *(s32 *)pathYaw = pitchDelta;
+            g_CamPathAngleDelta[CAMPATH_YAW] = FIELD(pathNode, s32 *, 4) - g_CamPathAngleStart[CAMPATH_YAW];
+            g_CamPathAngleDelta[CAMPATH_ROLL] = FIELD(pathNode, s32 *, 8) - g_CamPathAngleStart[CAMPATH_ROLL];
+            g_CamPathAngleDelta[CAMPATH_DIST] = FIELD(pathNode, s32 *, 0xC) - g_CamPathAngleStart[CAMPATH_DIST];
+            if (pitchDelta > 0) {
+                if (pitchDelta >= 0x800) {
+                    *(s32 *)pathYaw = pitchDelta - 0x1000;
                 }
-            } else if (var_a1_886 < -0x7FF) {
-                *(s32 *)temp_a2_1183 = var_a1_886 + 0x1000;
+            } else if (pitchDelta < -0x7FF) {
+                *(s32 *)pathYaw = pitchDelta + 0x1000;
             }
             case3Angle = &g_CamPathAngleDelta[CAMPATH_YAW];
             if (*case3Angle > 0) {
@@ -440,59 +440,59 @@ block_52:
         } else if (g_CamPathFrame < FIELD(((g_CamPathNode * 0x24) + g_TrackCameras), s32 *, 0x1C)) {
             g_CamPathFrame += 1;
         }
-        temp_a1_1117 = 0x1000 - rcos((s32) (g_CamPathFrame << 0xB) / (s32) FIELD(((g_CamPathNode * 0x24) + g_TrackCameras), s32 *, 0x1C));
-        var_a0_1119 = temp_a1_1117 * g_CamPathOffsetDelta[0];
-        if (var_a0_1119 < 0) {
-            var_a0_1119 += 0x1FFF;
+        pathBlend = 0x1000 - rcos((s32) (g_CamPathFrame << 0xB) / (s32) FIELD(((g_CamPathNode * 0x24) + g_TrackCameras), s32 *, 0x1C));
+        offsetXProduct = pathBlend * g_CamPathOffsetDelta[0];
+        if (offsetXProduct < 0) {
+            offsetXProduct += 0x1FFF;
         }
-        camPathOffset = (var_a0_1119 >> 0xD) + g_CamPathOffsetStart[0];
-        var_a0_1132 = temp_a1_1117 * g_CamPathOffsetDelta[1];
+        camPathOffset = (offsetXProduct >> 0xD) + g_CamPathOffsetStart[0];
+        offsetYProduct = pathBlend * g_CamPathOffsetDelta[1];
         sp18[0] = camPathOffset;
-        if (var_a0_1132 < 0) {
-            var_a0_1132 += 0x1FFF;
+        if (offsetYProduct < 0) {
+            offsetYProduct += 0x1FFF;
         }
-        temp_t1_1144 = (var_a0_1132 >> 0xD) + g_CamPathOffsetStart[1];
-        var_a0_1145 = temp_a1_1117 * g_CamPathOffsetDelta[2];
-        sp18[1] = temp_t1_1144;
-        if (var_a0_1145 < 0) {
-            var_a0_1145 += 0x1FFF;
+        pathOffsetY = (offsetYProduct >> 0xD) + g_CamPathOffsetStart[1];
+        offsetZProduct = pathBlend * g_CamPathOffsetDelta[2];
+        sp18[1] = pathOffsetY;
+        if (offsetZProduct < 0) {
+            offsetZProduct += 0x1FFF;
         }
-        temp_t0_1157 = (var_a0_1145 >> 0xD) + g_CamPathOffsetStart[2];
-        var_a0_1158 = temp_a1_1117 * g_CamPathAngleDelta[CAMPATH_PITCH];
-        sp18[2] = temp_t0_1157;
-        if (var_a0_1158 < 0) {
-            var_a0_1158 += 0x1FFF;
+        pathOffsetZ = (offsetZProduct >> 0xD) + g_CamPathOffsetStart[2];
+        pitchProduct = pathBlend * g_CamPathAngleDelta[CAMPATH_PITCH];
+        sp18[2] = pathOffsetZ;
+        if (pitchProduct < 0) {
+            pitchProduct += 0x1FFF;
         }
-        temp_a3_1170 = (var_a0_1158 >> 0xD) + g_CamPathAngleStart[CAMPATH_PITCH];
-        var_a0_1171 = temp_a1_1117 * g_CamPathAngleDelta[CAMPATH_YAW];
-        sp38[0] = temp_a3_1170;
-        if (var_a0_1171 < 0) {
-            var_a0_1171 += 0x1FFF;
+        pathPitch = (pitchProduct >> 0xD) + g_CamPathAngleStart[CAMPATH_PITCH];
+        yawProduct = pathBlend * g_CamPathAngleDelta[CAMPATH_YAW];
+        sp38[0] = pathPitch;
+        if (yawProduct < 0) {
+            yawProduct += 0x1FFF;
         }
-        temp_a2_1183 = (var_a0_1171 >> 0xD) + g_CamPathAngleStart[CAMPATH_YAW];
-        var_a0_1184 = temp_a1_1117 * g_CamPathAngleDelta[CAMPATH_ROLL];
-        sp38[1] = temp_a2_1183;
-        if (var_a0_1184 < 0) {
-            var_a0_1184 += 0x1FFF;
+        pathYaw = (yawProduct >> 0xD) + g_CamPathAngleStart[CAMPATH_YAW];
+        rollProduct = pathBlend * g_CamPathAngleDelta[CAMPATH_ROLL];
+        sp38[1] = pathYaw;
+        if (rollProduct < 0) {
+            rollProduct += 0x1FFF;
         }
-        temp_v1_1196 = (var_a0_1184 >> 0xD) + g_CamPathAngleStart[CAMPATH_ROLL];
-        var_a0_1197 = temp_a1_1117 * g_CamPathAngleDelta[CAMPATH_DIST];
-        sp38[2] = temp_v1_1196;
-        if (var_a0_1197 < 0) {
-            var_a0_1197 += 0x1FFF;
+        pathRoll = (rollProduct >> 0xD) + g_CamPathAngleStart[CAMPATH_ROLL];
+        distProduct = pathBlend * g_CamPathAngleDelta[CAMPATH_DIST];
+        sp38[2] = pathRoll;
+        if (distProduct < 0) {
+            distProduct += 0x1FFF;
         }
-        g_CamPathAngle[CAMPATH_PITCH] = temp_a3_1170 & 0xFFF;
-        g_CamPathAngle[CAMPATH_YAW] = temp_a2_1183 & 0xFFF;
-        g_CamPathAngle[CAMPATH_ROLL] = temp_v1_1196 & 0xFFF;
+        g_CamPathAngle[CAMPATH_PITCH] = pathPitch & 0xFFF;
+        g_CamPathAngle[CAMPATH_YAW] = pathYaw & 0xFFF;
+        g_CamPathAngle[CAMPATH_ROLL] = pathRoll & 0xFFF;
         g_CamPathOffset[0] = camPathOffset;
-        g_CamPathOffset[1] = temp_t1_1144;
-        g_CamPathOffset[2] = temp_t0_1157;
-        camPathAngle = (var_a0_1197 >> 0xD) + g_CamPathAngleStart[CAMPATH_DIST];
+        g_CamPathOffset[1] = pathOffsetY;
+        g_CamPathOffset[2] = pathOffsetZ;
+        camPathAngle = (distProduct >> 0xD) + g_CamPathAngleStart[CAMPATH_DIST];
         sp38[3] = camPathAngle;
         g_CamPathAngle[CAMPATH_DIST] = camPathAngle;
-        temp_a1_1227 = temp_a2_1183 - FIELD(car, s32 *, 0x24);
-        sp38[1] = temp_a1_1227;
-        BuildRotMatrixY(&sp88[0], temp_a1_1227);
+        pathYawRelative = pathYaw - FIELD(car, s32 *, 0x24);
+        sp38[1] = pathYawRelative;
+        BuildRotMatrixY(&sp88[0], pathYawRelative);
         BuildRotMatrixX(&sp68[0], sp38[0]);
         MulMatrix2(&sp68[0], &sp88[0]);
         BuildRotMatrixZ(&sp68[0], sp38[2]);
@@ -517,9 +517,9 @@ block_52:
         scratch[2] -= sp38[0];
         scratch[3] -= sp38[1];
         scratch[4] -= sp38[2];
-        temp_v0_1320 = SquareRoot0((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
-        sp38[3] = temp_v0_1320;
-        scratch[6] = 0x400 - (Atan2(sp38[1], temp_v0_1320) & 0xFFF);
+        pathDistance = SquareRoot0((sp38[0] * sp38[0]) + (sp38[2] * sp38[2]));
+        sp38[3] = pathDistance;
+        scratch[6] = 0x400 - (Atan2(sp38[1], pathDistance) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
         scratch[8] = 0;
         sp18[0] = 0x1000;
@@ -534,12 +534,12 @@ block_52:
         break;
     case 4:
         case4Base = (u32)g_TrackCameras;
-        temp_a3_1372 = cameraNodeIndex * 0x24;
-        temp_v1_1373 = temp_a3_1372 + case4Base;
-        *(Block16 *)&scratch[2] = *(Block16 *)temp_v1_1373;
-        if (((u8)temp_v1_40) || (g_CameraModePrev != 4)) {
+        introNodeOffset = cameraNodeIndex * 0x24;
+        introNode = introNodeOffset + case4Base;
+        *(Block16 *)&scratch[2] = *(Block16 *)introNode;
+        if (((u8)nodeChanged) || (g_CameraModePrev != 4)) {
             g_CamPathFrame = 0;
-        } else if (g_CamPathFrame < FIELD((temp_a3_1372 + (u32)g_TrackCameras), s32 *, 0x1C)) {
+        } else if (g_CamPathFrame < FIELD((introNodeOffset + (u32)g_TrackCameras), s32 *, 0x1C)) {
             g_CamPathFrame += 1;
         }
         BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
@@ -549,33 +549,33 @@ block_52:
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrixWide(&sp48[0], &spA8[0]);
         sp18[0] = 0;
-        temp_s0_1437 = cameraNodeIndex * 0x24;
-        sp18[1] = FIELD((temp_s0_1437 + (u32)g_TrackCameras), s32 *, 0xC);
+        orbitNodeOffset = cameraNodeIndex * 0x24;
+        sp18[1] = FIELD((orbitNodeOffset + (u32)g_TrackCameras), s32 *, 0xC);
         sp18[2] = 0x32;
         ApplyMatrixLV(&spA8[0], &sp18[0], &sp28[0]);
-        temp_s0_1448 = temp_s0_1437 + g_TrackCameras;
-        temp_v0_1452 = FIELD(temp_s0_1448, s32 *, 0x10) - scratch[2];
-        sp38[0] = temp_v0_1452;
-        temp_v0_1458 = FIELD(temp_s0_1448, s32 *, 0x14) - scratch[3];
-        sp38[1] = temp_v0_1458;
-        temp_v0_1463 = FIELD(temp_s0_1448, s32 *, 0x18) - scratch[4];
-        sp38[2] = temp_v0_1463;
-        scratch[2] += (s32) (temp_v0_1452 * g_CamPathFrame) / (s32) FIELD(temp_s0_1448, s32 *, 0x1C);
-        scratch[3] += (s32) (sp38[1] * g_CamPathFrame) / (s32) FIELD(temp_s0_1448, s32 *, 0x1C);
-        scratch[4] += (s32) (sp38[2] * g_CamPathFrame) / (s32) FIELD(temp_s0_1448, s32 *, 0x1C);
-        temp_v0_1535 = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
-        squaredX = temp_v0_1535 * temp_v0_1535;
-        sp38[0] = temp_v0_1535;
+        orbitNode = orbitNodeOffset + g_TrackCameras;
+        orbitToCarX = FIELD(orbitNode, s32 *, 0x10) - scratch[2];
+        sp38[0] = orbitToCarX;
+        orbitToCarY = FIELD(orbitNode, s32 *, 0x14) - scratch[3];
+        sp38[1] = orbitToCarY;
+        orbitToCarZ = FIELD(orbitNode, s32 *, 0x18) - scratch[4];
+        sp38[2] = orbitToCarZ;
+        scratch[2] += (s32) (orbitToCarX * g_CamPathFrame) / (s32) FIELD(orbitNode, s32 *, 0x1C);
+        scratch[3] += (s32) (sp38[1] * g_CamPathFrame) / (s32) FIELD(orbitNode, s32 *, 0x1C);
+        scratch[4] += (s32) (sp38[2] * g_CamPathFrame) / (s32) FIELD(orbitNode, s32 *, 0x1C);
+        orbitDx = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
+        squaredX = orbitDx * orbitDx;
+        sp38[0] = orbitDx;
         sp38[1] = scratch[3] - (FIELD(car, s32 *, 4) + sp28[1]);
-        temp_v0_1549 = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
-        sp38[2] = temp_v0_1549;
-        squaredZ = temp_v0_1549 * temp_v0_1549;
+        orbitDz = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
+        sp38[2] = orbitDz;
+        squaredZ = orbitDz * orbitDz;
         scratch[6] = 0x400 - (Atan2(0 - sp38[1], SquareRoot0(squaredX + squaredZ)) & 0xFFF);
-        var_s0_879 = 0x400 - (Atan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
-        var_v0_881 = 4;
-        scratch[7] = var_s0_879;
+        chaseYaw = 0x400 - (Atan2(0 - sp38[0], 0 - sp38[2]) & 0xFFF);
+        nextPrevMode = 4;
+        scratch[7] = chaseYaw;
         scratch[8] = 0;
-        g_CameraModePrev = var_v0_881;
+        g_CameraModePrev = nextPrevMode;
         break;
     case 5:
         *(Block16 *)&scratch[2] = *(Block16 *)car;
