@@ -62,9 +62,10 @@ s32 CloseAudioSlot(s32 slot) {
 }
 
 void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
-    s32 voiceOffset = voice * 4;
+    VabSlotVoice *slotVoice = &g_VabSlotVoices[voice];
 
-    SsUtKeyOnV((s16)voice, g_VabIds[(s16)vabSlot], *(s16 *)((u8 *)g_VabSlotVoiceTone + voiceOffset), 0, 0x3C, 0, 0, 0);
+    SsUtKeyOnV((s16)voice, g_VabIds[(s16)vabSlot], slotVoice->tone, 0, 0x3C, 0,
+               0, 0);
 }
 
 void StopDirectVoice(s32 voice) {

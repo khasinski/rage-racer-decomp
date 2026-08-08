@@ -14,6 +14,11 @@ typedef struct EffectCueBank {
     EffectCueProgram programs[2];
 } EffectCueBank;
 
+typedef struct VabSlotVoice {
+    s16 tone;
+    s16 reserved;
+} VabSlotVoice;
+
 
 /*
  * Sound voice work buffer, two regions keyed by hardware voice (0..23).
@@ -180,7 +185,7 @@ extern s32 g_SpecialCueVoiceA;
 extern s32 g_SpecialCueVoiceB;
 extern const s32 g_SpecialVoiceBits[];
 extern s32 g_StereoOutput;
-extern s16 g_VabSlotVoiceTone[];
+extern VabSlotVoice g_VabSlotVoices[10];
 /*
  * SPU addresses for the four VAB slots.  Slots 0..2 are loaded with
  * g_VabIds[slot] / g_VabSpuAddress[slot]; slot 3 is the extra bank, which had
