@@ -21,6 +21,14 @@ typedef struct CarEntry {
     u8 pad6[2];
 } CarEntry;
 
+typedef union CarSlideInput {
+    s32 value;
+    struct {
+        s16 low;
+        s16 high;
+    } halves;
+} CarSlideInput;
+
 typedef struct GameCarRuntime {
     s32 x;
     /* +0x04 32 bits wide, not 16: `lw`/`sw` at nine sites in each of
@@ -105,8 +113,7 @@ typedef struct GameCarRuntime {
     s16 field_E8;
     s16 field_EA;
     s32 field_EC;
-    s16 field_F0;
-    s16 field_F2;
+    CarSlideInput slideInput;
     s32 field_F4;
     s32 field_F8;
     s32 field_FC;
@@ -426,13 +433,15 @@ typedef struct GameCarAiBlock {
     s32 field_D0;   /* +0x14 world velocity z, cos(headingAngle) * field_A4 / 256 */
     u8 pad18[0x18];
     s32 field_EC;   /* +0x30 target angle: field_24 += GetAngleDelta(field_24, this) / 5 */
-    u8 pad34[4];
+    s32 slideInput; /* +0x34 */
     s32 field_F4;   /* +0x38 yaw rate, added to both field_44 and field_24 */
-    u8 pad3C[0xC];
+    u8 pad3C[8];
+    s32 routeIndex; /* +0x44 */
     s16 field_104;  /* set to 1 while another car blocks this one */
     u8 pad4A[6];
     u16 field_10C;  /* count of cars close enough to matter this frame */
-    u8 pad52[0xA];
+    s16 field_10E;
+    u8 pad54[8];
     s32 field_118;  /* grid-seeded target progress (g_TrackLength / 12 steps) */
     u16 field_11C;  /* accumulated steering bias */
     s16 field_11E;  /* steering bias target, +-0x50 */
@@ -446,8 +455,17 @@ typedef struct GameCarAiBlock {
     s16 field_130;  /* speed scale, damped to 98% when boxed in; caps field_A8 */
     s16 field_132;  /* clamped to >= 0x3C */
     s16 field_134;  /* clamped to >= 0 */
-    u8 pad7A[0x66];
+    u8 pad7A[2];
+    u16 markerCounter; /* +0x7C */
+    s16 markerDirection; /* +0x7E */
+    u8 pad80[0x60];
 } GameCarAiBlock;
+
+typedef struct CarAiSpeedKey {
+    s16 progress;
+    u16 pitch;
+    s16 targetSpeeds[4];
+} CarAiSpeedKey;
 
 typedef struct GameCarTrackAngleWindow {
     u8 pad0[0x30];

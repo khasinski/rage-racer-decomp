@@ -241,14 +241,14 @@ void UpdateCarCrestHop(GameCarRuntime *car) {
 
 void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
     GameCarRuntime *obj = car;
+    GameCarAiBlock *ai;
     s32 temp;
     s32 value;
-    u8 *base;
     s32 scene;
 
-    base = (u8 *)&obj->field_BC;
+    ai = (GameCarAiBlock *)&obj->field_BC;
     switch (0) { default:
-    if (*(s32 *)&obj->field_F0 == 0) {
+    if (obj->slideInput.value == 0) {
         if (!(obj->field_F4 != 0)) {
         if (carIndex != 0) {
             value = obj->field_A4;
@@ -259,48 +259,48 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
             carIndex *= value;
             value = carIndex;
             temp = value / 0x320;
-            *(s32 *)&obj->field_F0 = temp;
+            obj->slideInput.value = temp;
             if (scene != 0) {
                 temp = -temp;
-                *(s32 *)&obj->field_F0 = temp;
+                obj->slideInput.value = temp;
             }
             obj->field_F4 = 0;
             return;
         }
         }
-        temp = *(s32 *)(base + 0x34);
+        temp = ai->slideInput;
         if (temp == 0) {
             break;
         }
     }
 
-    value = *(s32 *)(base + 0x34);
+    value = ai->slideInput;
     value = value * 31;
     if (value < 0) {
         value += 0x1F;
     }
     temp = value >> 5;
     value = (u32)value >> 31;
-    *(s32 *)(base + 0x34) = temp;
+    ai->slideInput = temp;
     temp += value;
-    value = *(s32 *)(base + 0x38);
+    value = ai->field_F4;
     temp >>= 1;
     value -= temp;
-    *(s32 *)(base + 0x38) = value;
+    ai->field_F4 = value;
     if (value >= 0x2BC) {
-        *(s32 *)(base + 0x38) = 0x2BC;
+        ai->field_F4 = 0x2BC;
         return;
     }
     temp = value < -0x2BB;
     if (temp != 0) {
         temp = -0x2BC;
-        *(s32 *)(base + 0x38) = temp;
+        ai->field_F4 = temp;
         return;
     }
     return;
 
     }
-    value = *(s32 *)(base + 0x38);
+    value = ai->field_F4;
     if (value != 0) {
         temp = value * 15;
         temp <<= 1;
@@ -308,9 +308,9 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
             temp += 0x1F;
         }
         temp >>= 5;
-        *(s32 *)(base + 0x38) = temp;
+        ai->field_F4 = temp;
         if (temp == 0) {
-            *(s16 *)(base + 0x7E) = 0;
+            ai->markerDirection = 0;
         }
     }
 }
@@ -318,7 +318,7 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
 void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
     GameCarRuntime *objReg = obj;
     s32 target;
-    u8 *state;
+    GameCarAiBlock *state;
     s32 index;
     s32 advanceOffset;
     s32 scene;
@@ -345,11 +345,11 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
     entry = (s16 *)((u8 *)entry + raw);
 
     if (target < 0x20) {
-        state = (u8 *)&objReg->field_BC;
+        state = (GameCarAiBlock *)&objReg->field_BC;
         objReg->routeIndex = 0;
         target = 0;
     } else {
-        state = (u8 *)&objReg->field_BC;
+        state = (GameCarAiBlock *)&objReg->field_BC;
     }
 
     if (target < entry[0]) {
@@ -378,12 +378,12 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
     } else {
 advance:
     {
-        raw = *(s32 *)(state + 0x44);
+        raw = state->routeIndex;
         scene = g_RaceSeries;
         raw++;
         advanceOffset = raw * 3;
         advanceOffset <<= 2;
-        *(s32 *)(state + 0x44) = raw;
+        state->routeIndex = raw;
     }
     raw = scene * 3;
     offset = (raw << 4) - raw;
@@ -392,9 +392,9 @@ advance:
     advanceOffset += offset;
     raw += advanceOffset;
     if (*(s16 *)(raw + 0x84) == -1) {
-        *(s32 *)(state + 0x44) = 0;
+        state->routeIndex = 0;
     }
-    *(s16 *)(state + 0x52) = 0;
+    state->field_10E = 0;
     return;
 
     }
@@ -452,15 +452,15 @@ inner:
     }
 }
 
-void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
-  u8 *p[2];
+void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
+  CarAiSpeedKey *p[2];
   u16 lim[4];
   u16 val[2];
-  register u8 *sub_R9 asm("$9");
+  register GameCarAiBlock *sub_R9 asm("$9");
   s32 rpm;
   s32 g0;
   s32 raw;
-  u8 *tbl;
+  CarAiSpeedKey *tbl;
   s32 f;
   s32 lo_R7;
   s32 hi;
@@ -472,33 +472,33 @@ void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   s32 cnt;
   s32 one;
   int lowValue;
-  raw = *(s32 *)(car + 0x70);
+  raw = car->trackProgress;
   rpm = raw >> 4;
-  g0 = *(s16 *)(car + 0x138);
-  sub_R9 = car + 0xBC;
+  g0 = car->field_138;
+  sub_R9 = (GameCarAiBlock *)&car->field_BC;
   if (rpm < 0x20)
   {
-    *(s16 *)(car + 0x138) = 0;
+    car->field_138 = 0;
   }
   if (g0 < 0)
   {
-    *(s16 *)(car + 0x138) = 0;
+    car->field_138 = 0;
   }
-  tbl = g_TrackEventData + ((g_RaceSeries * 576) + 0x474);
-  p[0] = tbl + (g0 * 12);
-  p[1] = tbl + ((g0 * 12) + 12);
-  lim[0] = *(u16 *)p[0];
-  lim[1] = *(u16 *)p[1];
+  tbl = (CarAiSpeedKey *)(g_TrackEventData + ((g_RaceSeries * 576) + 0x474));
+  p[0] = &tbl[g0];
+  p[1] = &tbl[g0 + 1];
+  lim[0] = p[0]->progress;
+  lim[1] = p[1]->progress;
   if (gear < 4)
   {
-    val[0] = *(u16 *)((p[0] + (gear * 2)) + 4);
-    val[1] = *(u16 *)((p[1] + (gear * 2)) + 4);
+    val[0] = p[0]->targetSpeeds[gear];
+    val[1] = p[1]->targetSpeeds[gear];
   }
   else
   {
     f = 0x55 - gear;
-    val[0] = ((*(s16 *)(p[0] + 0xA)) * f) / 100;
-    val[1] = ((*(s16 *)(p[1] + 0xA)) * f) / 100;
+    val[0] = (p[0]->targetSpeeds[3] * f) / 100;
+    val[1] = (p[1]->targetSpeeds[3] * f) / 100;
   }
   pitch = 0;
   lo_R7 = *(s16 *)(&lim[0]);
@@ -513,7 +513,7 @@ void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
     goto L2_inc;
   }
   range = hi - lo_R7;
-  pitch = *(u16 *)(p[0] + 2);
+  pitch = p[0]->pitch;
   if (!(range > 0))
   {
     range = 1;
@@ -521,34 +521,34 @@ void UpdateCarAiTargetSpeed(u8 *car, s32 gear) {
   d_R3 = rpm - lo_R7;
   v20_R4 = (lowValue = *(s16 *)(&val[0]));
   q = (((*(s16 *)(&val[1])) - lowValue) * d_R3) / range;
-  *(s16 *)(sub_R9 + 0x74) = ((((lowValue + q) * 1168) / 160) * 6) / 100;
+  sub_R9->field_130 = ((((lowValue + q) * 1168) / 160) * 6) / 100;
   break;
   }
   if ((*(s16 *)(&lim[1])) < rpm)
   {
     L2_inc:
-    cnt = *(u16 *)(sub_R9 + 0x7C);
+    cnt = sub_R9->markerCounter;
     d_R3 = 1;
     q = d_R3;
     g0 = q;
-    *(s16 *)(sub_R9 + 0x7E) = g0;
+    sub_R9->markerDirection = g0;
     cnt = cnt + 1;
   }
   else
   {
-    cnt = *(u16 *)(sub_R9 + 0x7C);
+    cnt = sub_R9->markerCounter;
     one = 1;
-    *(s16 *)(sub_R9 + 0x7E) = one;
+    sub_R9->markerDirection = one;
     cnt = cnt - 1;
   }
 
-  *(u16 *)(sub_R9 + 0x7C) = cnt;
+  sub_R9->markerCounter = cnt;
   if (rpm < 0x20)
   {
-    *(u16 *)(sub_R9 + 0x7C) = 0;
+    sub_R9->markerCounter = 0;
   }
   }
-  if ((*(s16 *)(sub_R9 + 0x7E)) != 0)
+  if (sub_R9->markerDirection != 0)
   {
     UpdateCarSlideAngle((GameCarRuntime *)car, (s16) pitch);
   }

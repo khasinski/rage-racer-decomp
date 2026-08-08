@@ -536,7 +536,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
         ent->field_110 = 0;
         ent->field_F4 = 0;
         ent->field_13A = 0;
-        *(s32 *)&ent->field_F0 = 0;
+        ent->slideInput.value = 0;
         ent->field_108 = ent->field_24;
         p = base + (sub + lev * 144);
         ent->field_EC = ent->field_24;
