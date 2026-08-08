@@ -6,7 +6,6 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
-#include "game/vector.h"
 
 s32 QueueSpriteTransWide(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex) asm("GameQueueSpriteTrans");
 s32 GameQueueDrawModePrimWide(s32 ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");

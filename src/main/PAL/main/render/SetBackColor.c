@@ -1,6 +1,5 @@
 #include "common.h"
 #include "psyq/gte_macros.h"
-#include "include_asm.h"
 
 /*
  * GTE COP2 leaf routines after reg03: the fog/colour control writers

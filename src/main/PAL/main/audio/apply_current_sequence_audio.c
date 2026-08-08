@@ -1,7 +1,5 @@
 #include "common.h"
 #include "game/audio.h"
-#include "game/cd.h"
-#include "game/memcard.h"
 
 extern s16 g_SeqHandle;
 extern s16 g_SeqVolume;

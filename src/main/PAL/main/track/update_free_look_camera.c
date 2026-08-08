@@ -1,5 +1,4 @@
 #include "common.h"
-#include "game/menu.h"
 #include "game/race.h"
 #include "game/random.h"
 #include "game/render.h"

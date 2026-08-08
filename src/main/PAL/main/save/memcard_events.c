@@ -1,8 +1,5 @@
 #include "common.h"
-#include "game/audio.h"
-#include "game/cd.h"
 #include "game/memcard.h"
-#include "game/sound.h"
 
 void StartMemoryCardEvents(void) {
     OpenMemoryCardEvents();

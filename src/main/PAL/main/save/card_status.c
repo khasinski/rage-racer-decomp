@@ -1,6 +1,5 @@
 #include "common.h"
 #include "game/memcard.h"
-#include "game/cd.h"
 
 void _card_info(s32 port);
 void CardSeekParam(s32 param) {

@@ -1,5 +1,4 @@
 #include "common.h"
-#include "psyq/gte_macros.h"
 
 /*
  * libgte ApplyMatrix / ApplyMatrixSV (ApplyMatrix / ApplyMatrixSV).

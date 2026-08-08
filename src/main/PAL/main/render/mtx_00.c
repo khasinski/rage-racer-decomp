@@ -1,5 +1,4 @@
 #include "common.h"
-#include "psyq/gte_macros.h"
 
 /*
  * PSY-Q 3.5 libgte object mtx_00.o (LIBGTE.A) as one translation unit.

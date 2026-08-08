@@ -1,5 +1,4 @@
 #include "common.h"
-#include "psyq/gte.h"
 #include "game/render.h"
 
 s32 rsin(s32 angle);

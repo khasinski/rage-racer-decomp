@@ -1,10 +1,8 @@
 #include "common.h"
-#include "psyq/gte.h"
 #include "game/render.h"
 #include "game/state.h"
 #include "game/cd.h"
 #include "game/audio.h"
-#include "game/race.h"
 extern s32 g_StreamReturnScene;
 void CdSync(s32 mode, s32 result);
 s32 CdControl(s32 com, void *param, s32 result);

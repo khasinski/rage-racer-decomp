@@ -2,7 +2,6 @@
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 #include "game/render.h"
-#include "game/menu.h"
 
 void SetDrawTPage(u_char *prim, long dfe, long dtd, long tpage) {
 s32 encoded;

@@ -11,7 +11,6 @@
  * searches for a cleaner shape.
  */
 #include "game/menu.h"
-#include "game/race.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/state.h"

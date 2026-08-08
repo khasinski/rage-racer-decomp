@@ -1,5 +1,4 @@
 #include "common.h"
-#include "game/cd.h"
 #include "game/race.h"
 #include "game/scratchpad.h"
 #include "game/track.h"

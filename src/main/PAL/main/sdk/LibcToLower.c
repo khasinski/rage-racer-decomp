@@ -1,7 +1,6 @@
 #include <sys/types.h>
 
 #include "common.h"
-#include "game/cd.h"
 #include "game/memcard.h"
 
 extern u_char g_LibcCtype[];
