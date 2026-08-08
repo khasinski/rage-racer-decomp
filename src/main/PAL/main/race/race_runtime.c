@@ -353,7 +353,7 @@ void DrawEndingScreen(void) {
     }
     if (g_RacePhase == 1) {
         if ((u32)g_SceneTimer >= 211) {
-            BeginCarStandingStart((u8 *)&g_PlayerCar, sceneTimer);
+            BeginCarStandingStart(&g_PlayerCar, sceneTimer);
             g_RacePhase = 2;
         }
     }
@@ -545,7 +545,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
         ent->field_104 = 0;
         ent->field_C4 = 0;
         ent->field_138 = 0;
-        SeedCarLapProgress((u8 *)ent, *(s16 *)(p + 0x35E));
+        SeedCarLapProgress(ent, *(s16 *)(p + 0x35E));
     }
 
     sub += g_RaceSeries * 144;

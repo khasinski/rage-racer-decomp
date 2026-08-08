@@ -112,6 +112,7 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
 
     res = GetAngleDistance(first24, firstHeading);
     r = (u8 *)car + 188;
+#define drive ((GameCarDrive *)r)
     if (res >= 0x600) {
         car->field_A4 = car->field_A4 * 990 / 1000;
     }
@@ -140,80 +141,80 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
     }
 
     if (res < 0x80 && s4val < 0x800) {
-        *(s32 *)(r + 0x48) -= (0x800 - s4val) * 4000 / 256;
+        drive->unk48 -= (0x800 - s4val) * 4000 / 256;
     }
     if (car->field_A4 < 0x190) {
-        *(s32 *)(r + 0x48) -= (0x190 - car->field_A4) * 100;
+        drive->unk48 -= (0x190 - car->field_A4) * 100;
     }
 
-    if (*(s32 *)(r + 0x48) > 0) {
+    if (drive->unk48 > 0) {
         s32 s2;
 
-        *(s16 *)(r + 0x3E) += 10;
-        if (*(s16 *)(r + 0x3E) >= 100) {
-            *(s16 *)(r + 0x3E) = 100;
+        drive->unk3E += 10;
+        if (drive->unk3E >= 100) {
+            drive->unk3E = 100;
         }
 
-        res = GetAngleDelta(car->field_24, *(s32 *)(r + 0x90)) * 98 / 100;
-        s2 = res * (*(s32 *)(r + 0x4C) + 0x800);
+        res = GetAngleDelta(car->field_24, drive->unk90) * 98 / 100;
+        s2 = res * (drive->unk4C + 0x800);
         res = s2 / 2048;
-        *(s32 *)(r + 0x50) += res * 16;
+        drive->unk50 += res * 16;
 
-        if ((u32)(*(s32 *)(r + 0x1C) + 127) < 255) {
+        if ((u32)(drive->steerPos + 127) < 255) {
             if (GetAngleDistance(car->field_24, car->headingAngle) < 0x200) {
-                *(s32 *)(r + 0x50) = *(s32 *)(r + 0x50) * 31 / 32;
-                *(s32 *)(r + 0x50) =
-                    GetAngleDelta(car->field_24, car->headingAngle) + *(s32 *)(r + 0x50);
+                drive->unk50 = drive->unk50 * 31 / 32;
+                drive->unk50 =
+                    GetAngleDelta(car->field_24, car->headingAngle) + drive->unk50;
             } else if (s4val < 0x800) {
-                *(s32 *)(r + 0x50) = res / 2 + *(s32 *)(r + 0x50);
+                drive->unk50 = res / 2 + drive->unk50;
             }
         }
 
-        if (*(s32 *)(r + 0x50) > 0x3600) {
-            *(s32 *)(r + 0x50) = 0x3600;
+        if (drive->unk50 > 0x3600) {
+            drive->unk50 = 0x3600;
         }
-        if (*(s32 *)(r + 0x50) < -0x3600) {
-            *(s32 *)(r + 0x50) = -0x3600;
+        if (drive->unk50 < -0x3600) {
+            drive->unk50 = -0x3600;
         }
 
-        car->field_24 = *(s32 *)(r + 0x50) / 256 + car->field_24;
-        *(s32 *)(r + 0x48) -= 64;
+        car->field_24 = drive->unk50 / 256 + car->field_24;
+        drive->unk48 -= 64;
 
         res = GetAngleDistance(car->field_24, car->headingAngle);
-        *(s32 *)(r + 0x48) -= res * res / 65536;
-        *(s32 *)(r + 0x48) -= (0x3600 - s4val) / 64;
+        drive->unk48 -= res * res / 65536;
+        drive->unk48 -= (0x3600 - s4val) / 64;
 
         {
             s32 a4 = car->field_A4;
-            s32 half = *(s32 *)(r + 0x8C) / 2;
+            s32 half = drive->unk8C / 2;
             if (a4 < half) {
-                *(s32 *)(r + 0x48) -= (half - a4) / 8;
+                drive->unk48 -= (half - a4) / 8;
             }
         }
 
-        *(s32 *)(r + 0x48) -= *(s16 *)(r + 0xA2) * 4;
-        *(s32 *)(r + 0x48) -= (0x100 - *(s16 *)(r + 0xA0)) * 4;
-        car->field_A4 -= *(s16 *)(r + 0xA2) * 10 / 256;
-        car->field_A4 -= (0x100 - *(s16 *)(r + 0xA0)) * 10 / 256;
+        drive->unk48 -= drive->brakeBtn * 4;
+        drive->unk48 -= (0x100 - drive->accelBtn) * 4;
+        car->field_A4 -= drive->brakeBtn * 10 / 256;
+        car->field_A4 -= (0x100 - drive->accelBtn) * 10 / 256;
     } else {
-        *(s32 *)(r + 0x50) = *(s32 *)(r + 0x50) * 15 / 16;
+        drive->unk50 = drive->unk50 * 15 / 16;
         if (s4val < 0x1000) {
             s32 lo;
             u8 *specBase;
 
             {
-                s32 gain = (100 - (*(s16 *)(r + 0x76) - 1) * 4) * 10000;
-                *(s32 *)(r + 0x94) = gain * car->field_A4 / 100;
+                s32 gain = (100 - (drive->gear - 1) * 4) * 10000;
+                drive->unk94 = gain * car->field_A4 / 100;
             }
-            *(s32 *)(r + 0x60) = GetAngleDelta(car->headingAngle, car->field_24);
-            *(s32 *)(r + 0x58) = car->headingAngle;
+            drive->unk60 = GetAngleDelta(car->headingAngle, car->field_24);
+            drive->unk58 = car->headingAngle;
             car->headingAngle = car->field_24;
 
             {
                 register s32 t;
                 register s32 sq asm("$3");
 
-                t = *(s32 *)(r + 0x60);
+                t = drive->unk60;
                 sq = t;
                 if (t < 0) {
                     sq = -sq;
@@ -224,21 +225,21 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
                     sq = 0x800 - sq;
                     sq = sq * sq;
                 }
-                *(s32 *)(r + 0x5C) = sq * car->field_A4 / 0x100000;
+                drive->unk5C = sq * car->field_A4 / 0x100000;
             }
 
-            *(s32 *)(r + 0x50) = 0;
+            drive->unk50 = 0;
 
             specBase = (u8 *)g_CarSpec;
             lo = car->field_A4 * 0xA0 / 1168 * 10000 /
                  *(s32 *)((u8 *)specBase +
-                          (*(s16 *)(r + 0x76) << 2) + 0xE4);
+                          (drive->gear << 2) + 0xE4);
             {
                 s32 offset;
 
                 asm volatile("" : : : "memory");
-                offset = *(s16 *)(r + 0x76);
-                firstHeading = *(u16 *)(r + 0x78);
+                offset = drive->gear;
+                firstHeading = (u16)drive->unk78;
                 offset <<= 2;
                 asm volatile("" : :);
                 *(s16 *)(r + 0x38) = 0x14;
@@ -249,15 +250,15 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
                 specBase += offset;
             }
             {
-                *(s16 *)(r + 0x2C) =
+                drive->unk2C =
                     lo * *(s32 *)(specBase + 0xCC) / 0x20000;
-                if (*(s16 *)(r + 0x74) == 0) {
-                    *(s16 *)(r + 0x2C) =
-                        *(s16 *)(r + 0x2C) * 985 / 1000;
+                if (drive->manual == 0) {
+                    drive->unk2C =
+                        drive->unk2C * 985 / 1000;
                 }
             }
 
-            if ((u32)((*(u16 *)(r + 0x3C) + 99) & 0xFFFF) < 199) {
+            if ((u32)(((u16)drive->unk3C + 99) & 0xFFFF) < 199) {
                 g_ShiftSoundLevel = 1;
             } else {
                 g_ShiftSoundLevel = 0;
@@ -265,7 +266,7 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
         }
     }
 
-    *(s32 *)(r + 0x90) = car->field_24;
+    drive->unk90 = car->field_24;
     SteerCarToTrackLine(car);
 
     res = GetAngleDistance(car->field_24, car->headingAngle);
@@ -292,8 +293,9 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
 
     sinF24 = rsin(car->field_24);
     cosF24 = rcos(car->field_24);
-    *(s32 *)(r + 0x08) = rsin(car->headingAngle) * car->field_A4 / 256;
-    *(s32 *)(r + 0x10) = rcos(car->headingAngle) * car->field_A4 / 256;
+    drive->accelPos = rsin(car->headingAngle) * car->field_A4 / 256;
+    drive->brakePos = rcos(car->headingAngle) * car->field_A4 / 256;
+#undef drive
 }
 
 /*
@@ -352,7 +354,7 @@ void UpdateCarAirborne(GameCarRuntime *car) {
     r->unk5C = r->unk5C * 31 / 32;
     r->unk60 = r->unk60 * 31 / 32;
 
-    *(s16 *)&r->unk3E = *(s16 *)&r->unk3E * 2 / 3;
+    r->unk3E = r->unk3E * 2 / 3;
     if (r->unk60 >= 1537) {
         car->field_A4 = car->field_A4 * 4 / 5;
     }
@@ -365,7 +367,7 @@ void UpdateCarAirborne(GameCarRuntime *car) {
         r->unk60 = 0;
         r->unk5C = 0;
         r->state98 = 0;
-        *(s16 *)&r->unk3E = 0;
+        r->unk3E = 0;
     }
 }
 
@@ -426,7 +428,7 @@ void UpdateCarStandingStart(GameCarRuntime *car) {
         }
     } else {
         SetIndexedEffectVoice(-1, 0, 0);
-        *(s32 *)((u8 *)car + 0x154) = 0;
+        car->field_154 = 0;
         *(s32 *)&car->field_124 = 0;
         *(s32 *)&car->field_128 = 0;
     }

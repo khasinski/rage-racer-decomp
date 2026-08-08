@@ -585,7 +585,7 @@ void UpdateRaceScene(void) {
         } else {
 update_race:
             if ((g_RacePhase == 1) && ((u32)g_SceneTimer >= 0xD3)) {
-                BeginCarStandingStart((u8 *)&g_PlayerCar, frameValue);
+                BeginCarStandingStart(&g_PlayerCar, frameValue);
                 StartCdAudio();
                 g_RacePhase = 2;
                 g_PauseDebounce = 0x1E;

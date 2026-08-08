@@ -291,7 +291,7 @@ void UpdatePlayerCar(Car *car) {
     {
         s32 base = car->unk24 - 0xC00;
 
-        slip = (base + *(s16 *)((u8 *)g_TrackPoints + car->trackPointIndex * 24 + 10)) & 0xFFF;
+        slip = (base + g_TrackPoints[car->trackPointIndex].angle) & 0xFFF;
     }
     sv2.vx = 0;
     sv2.vz = 0;
@@ -425,7 +425,7 @@ void UpdatePlayerCar(Car *car) {
         car->unk04 += p->unk68;
         UpdateCarBodyKick(car);
     } else {
-        slip = GetAngleDistance(0xC00 - *(s16 *)((u8 *)g_TrackPoints + car->trackPointIndex * 24 + 10),
+        slip = GetAngleDistance(0xC00 - g_TrackPoints[car->trackPointIndex].angle,
                              car->unkA0);
         if (crash != 0) {
             p->unk48 -= 1000;

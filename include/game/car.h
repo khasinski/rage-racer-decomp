@@ -278,7 +278,7 @@ typedef struct GameCarDrive {
     s16 unk38;       /* +0x38 airborne height */
     s16 unk3A;
     s16 unk3C;
-    u16 unk3E;
+    s16 unk3E;
     s16 unk40;
     s16 unk42;
     s32 unk44;       /* +0x44 frames on the ground */
@@ -533,7 +533,7 @@ s32 FindTrackSegment();
 s32 InterpolateTrackAngle();
 s32 IsCarFacingBackwards();
 s32 IsPointInQuad();
-void SeedCarLapProgress();
+void SeedCarLapProgress(GameCarRuntime *car, s32 mode);
 void SetCarKnockback();
 void StartCarBodyKick();
 void UpdateCarAirborne();
@@ -544,7 +544,7 @@ void UpdateCarTiltCounter();
 s32 UpdateCarTrackState();
 s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt);
 s32 DrawPlayerTachometer(void);
-void BeginCarStandingStart(u8 *car, s32 sceneTimer);
+void BeginCarStandingStart(GameCarRuntime *car, s32 sceneTimer);
 void RunRaceIntroCamera(struct Obj *obj, s32 mode);
 void UpdatePlayerCar(struct Car *car);
 

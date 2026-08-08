@@ -71,7 +71,7 @@ void UpdateCarDriving(GameCarRuntime *car) {
         if ((s32) g_LaunchSpeedThresholds[route->unk28].initial < car->field_A4 &&
             route->unk48 > route->unk84) {
             route->state98 = 1;
-            *(s16 *)&route->unk3E = 0;
+            route->unk3E = 0;
             SetIndexedEffectVoice(0, 0, 0);
             t = 1000 - (route->unk88 - 1000) * 8;
             if (t < 1000) {
@@ -90,7 +90,7 @@ void UpdateCarDriving(GameCarRuntime *car) {
                 if ((s32) g_LaunchSpeedThresholds[route->unk28].sustain < car->field_A4 &&
                     route->unk84 < aval) {
                     route->state98 = m9e;
-                    *(s16 *)&route->unk3E = 0;
+                    route->unk3E = 0;
                     SetIndexedEffectVoice(0, 0, 0);
                     route->unk50 = -coords[0];
                     route->unk54 = car->facingBackwards;

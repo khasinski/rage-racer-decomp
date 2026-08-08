@@ -13,14 +13,14 @@
  */
 void ClampCarLateralOffset(GameCarRuntime *car, s32 carIndex) {
     GameCarRuntime *carReg = car;
-    u8 *state;
+    GameCarAiBlock *state;
     s32 current;
     s32 magnitude;
     s32 limit;
     s32 trackIndex;
 
     current = carReg->field_11C;
-    state = (u8 *)&carReg->field_BC;
+    state = (GameCarAiBlock *)&carReg->field_BC;
     magnitude = current;
     if (current < 0) {
         magnitude = -current;
@@ -61,9 +61,9 @@ void ClampCarLateralOffset(GameCarRuntime *car, s32 carIndex) {
 
     if (limit < magnitude) {
         if (current > 0) {
-            *(s16 *)(state + 0x60) = limit;
+            state->field_11C = limit;
         } else {
-            *(s16 *)(state + 0x60) = -limit;
+            state->field_11C = -limit;
         }
     }
 }
