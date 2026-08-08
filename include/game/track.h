@@ -157,9 +157,6 @@ extern u8 g_EnvSpare;
 extern s16 g_EnvSpareFrom;
 extern s16 g_EnvSpareLerp;
 extern s16 g_EnvSpareTo;
-extern s32 g_FlybySceneryRotX;
-extern s32 g_FlybySceneryRotY;
-extern s32 g_FlybySceneryRotZ;
 extern s32 g_PlayerSpeed;
 extern s32 g_PlayerTrackPoint;
 extern s16 g_RaceCueDelay;
@@ -243,11 +240,30 @@ extern u8 g_EnvColor8G;
 extern u8 g_EnvColor8R;
 extern s16 g_EnvLerpFrame;
 extern u8 g_EnvScriptEnabled;
-extern s32 g_FlybySceneryArmed;
-extern s32 g_FlybySceneryFrame;
-extern s16 g_FlybySceneryKeyIndex;
-extern u8 *g_FlybySceneryKeyframe;
-extern s16 g_FlybySceneryLap;
+typedef struct FlybySceneryKeyframe {
+    s16 rotationX;
+    s16 rotationY;
+    s16 rotationZ;
+    s16 duration;
+    s16 speed;
+    s16 reserved;
+} FlybySceneryKeyframe;
+
+typedef struct FlybySceneryState {
+    s32 timer;
+    s32 soundEnabled;
+    s32 keyframeTime;
+    s16 lap;
+    s16 keyframeIndex;
+    Vec4 position;
+    s32 rotationX;
+    s32 rotationY;
+    s32 rotationZ;
+    s32 reserved2C;
+    s32 volume;
+} FlybySceneryState;
+
+extern FlybySceneryKeyframe *g_FlybySceneryKeyframe;
 extern s32 g_FogNear;
 extern s16 g_FreeCameraAngleOffset[];
 extern s32 g_HighClassSceneryYaw;
@@ -330,7 +346,6 @@ void UpdateFreeLookCamera(void *car, s32 updateMotion);
  * header carried them. */
 
 extern Vec4 g_AnimSceneryPos[];
-extern Vec4 g_FlybySceneryPosRec;
 extern SVec g_ShuttlePathAngles[];
 extern Vec4 g_StartGridSceneryPos[];
 extern Vec4 g_StaticSceneryPos;

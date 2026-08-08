@@ -212,7 +212,7 @@ void DrawCourseScenery2(s32 timer, s32 animate) {
 
 void SeedFlybyScenery(void) {
     u8 *base;
-    register u8 *out asm("s1");
+    register FlybySceneryState *out asm("s1");
     s32 count;
     s16 value;
     s32 index;
@@ -226,33 +226,33 @@ void SeedFlybyScenery(void) {
     index = Random15();
     count = g_LapCount;
     value = index % count;
-    out = g_FlybyScenery;
+    out = &g_FlybyScenery;
     value++;
-    g_FlybySceneryLap = value;
+    out->lap = value;
     value = (s16)value;
 
     if (value <= 0) {
-        g_FlybySceneryLap = (u16)g_LapCount - 1;
+        out->lap = (u16)g_LapCount - 1;
     } else {
         cmp = count < value;
         if (cmp != 0) {
-            g_FlybySceneryLap = (u16)g_LapCount;
+            out->lap = (u16)g_LapCount;
         }
     }
 
     scene0 = g_RaceSeries;
-    *(s32 *)(out + 4) = 1;
+    out->soundEnabled = 1;
     scene1 = g_RaceSeries;
-    *(s32 *)(out + 0) = 0;
+    out->timer = 0;
 
     src = (u8 *)((scene0 * 32) + (s32)base);
-    *(Vec4 *)(out + 0x10) = *(Vec4 *)(src + 0x10);
+    out->position = *(Vec4 *)(src + 0x10);
     recordIndex = *(s16 *)((scene1 * 4) + (s32)base + 8);
-    *(s32 *)(out + 0x30) = 0;
+    out->volume = 0;
     index = recordIndex * 3;
     index <<= 2;
     index += 0x50;
-    g_FlybySceneryKeyframe = base + index;
+    g_FlybySceneryKeyframe = (FlybySceneryKeyframe *)(base + index);
 }
 
 /*
@@ -261,8 +261,6 @@ void SeedFlybyScenery(void) {
  * integrating position from a keyframed heading and feeding a distance-attenuated
  * volume to SetPitchedSoundCue. See docs/names.md 1.
  */
-#define KFREC(off) (*(s16 *)(kf + *(s16 *)(state + 0xE) * 12 + (off)))
-
 void UpdateFlybyScenery(void) {
     Matrix mtxY;
     Matrix mtxX;
@@ -270,12 +268,12 @@ void UpdateFlybyScenery(void) {
     s32 step[4];
     s32 delta[4];
     u8 *base;
-    u8 *state;
+    FlybySceneryState *state;
     u8 *src;
     s32 series;
     s32 index;
     s32 recordIndex;
-    u8 *kf;
+    FlybySceneryKeyframe *kf;
     Matrix *mx;
     s32 dt;
     s32 cue;
@@ -287,71 +285,77 @@ void UpdateFlybyScenery(void) {
     s32 dz;
 
     base = g_FlybySceneryData;
-    state = g_FlybyScenery;
+    state = &g_FlybyScenery;
 
-    if (g_PlayerLap == g_FlybySceneryLap) {
+    if (g_PlayerLap == state->lap) {
         series = g_RaceSeries;
         if (g_PlayerTrackSection == *(s16 *)((series * 4) + (s32)base)) {
-            g_FlybySceneryArmed = 1;
-            *(s32 *)(state + 0) = 1;
+            state->soundEnabled = 1;
+            state->timer = 1;
             src = (u8 *)((series * 32) + (s32)base);
-            g_FlybySceneryFrame = 0;
-            g_FlybySceneryLap = 0;
-            g_FlybySceneryKeyIndex = 0;
-            g_FlybySceneryPosRec = *(Vec4 *)(src + 0x10);
-            g_FlybySceneryRotZ = 0;
-            g_FlybySceneryRotY = 0;
-            g_FlybySceneryRotX = 0;
+            state->keyframeTime = 0;
+            state->lap = 0;
+            state->keyframeIndex = 0;
+            state->position = *(Vec4 *)(src + 0x10);
+            state->rotationZ = 0;
+            state->rotationY = 0;
+            state->rotationX = 0;
             recordIndex = *(s16 *)((g_RaceSeries * 4) + (s32)base + 8);
             index = recordIndex * 3;
             index <<= 2;
             index += 0x50;
-            g_FlybySceneryKeyframe = base + index;
+            g_FlybySceneryKeyframe = (FlybySceneryKeyframe *)(base + index);
         }
     }
 
-    if (*(s32 *)(state + 0) > 0) {
-        *(s32 *)(state + 0) = *(s32 *)(state + 0) + 1;
-        *(s32 *)(state + 8) = *(s32 *)(state + 8) + 1;
-        if (*(s32 *)(state + 0) >= 0x1C3) {
-            *(s32 *)(state + 0) = 0;
+    if (state->timer > 0) {
+        state->timer = state->timer + 1;
+        state->keyframeTime = state->keyframeTime + 1;
+        if (state->timer >= 0x1C3) {
+            state->timer = 0;
         }
-        if (*(s16 *)(g_FlybySceneryKeyframe + *(s16 *)(state + 0xE) * 12 + 6) ==
-            *(s32 *)(state + 8)) {
-            *(s16 *)(state + 0xE) = *(s16 *)(state + 0xE) + 1;
-            *(s32 *)(state + 8) = 0;
+        if (g_FlybySceneryKeyframe[state->keyframeIndex].duration ==
+            state->keyframeTime) {
+            state->keyframeIndex = state->keyframeIndex + 1;
+            state->keyframeTime = 0;
         }
-        if (*(s16 *)(g_FlybySceneryKeyframe + *(s16 *)(state + 0xE) * 12 + 6) == -1) {
-            *(s16 *)(state + 0xE) = 0;
+        if (g_FlybySceneryKeyframe[state->keyframeIndex].duration == -1) {
+            state->keyframeIndex = 0;
         }
         kf = g_FlybySceneryKeyframe;
-        *(s32 *)(state + 0x20) =
-            (KFREC(0xC) * *(s32 *)(state + 8) +
-             KFREC(0) * (dt = KFREC(6) - *(s32 *)(state + 8))) / KFREC(6);
-        *(s32 *)(state + 0x24) =
-            (KFREC(0xE) * *(s32 *)(state + 8) + KFREC(2) * dt) / KFREC(6);
-        *(s32 *)(state + 0x28) =
-            (KFREC(0x10) * *(s32 *)(state + 8) + KFREC(4) * dt) / KFREC(6);
+        state->rotationX =
+            (kf[state->keyframeIndex + 1].rotationX * state->keyframeTime +
+             kf[state->keyframeIndex].rotationX *
+                 (dt = kf[state->keyframeIndex].duration - state->keyframeTime)) /
+            kf[state->keyframeIndex].duration;
+        state->rotationY =
+            (kf[state->keyframeIndex + 1].rotationY * state->keyframeTime +
+             kf[state->keyframeIndex].rotationY * dt) /
+            kf[state->keyframeIndex].duration;
+        state->rotationZ =
+            (kf[state->keyframeIndex + 1].rotationZ * state->keyframeTime +
+             kf[state->keyframeIndex].rotationZ * dt) /
+            kf[state->keyframeIndex].duration;
         dir[0] = 0;
         dir[1] = 0;
-        dir[2] = -KFREC(8) * 4;
-        BuildRotMatrixY(&mtxY, 0x800 - *(s32 *)(state + 0x24));
+        dir[2] = -kf[state->keyframeIndex].speed * 4;
+        BuildRotMatrixY(&mtxY, 0x800 - state->rotationY);
         mx = &mtxX;
-        BuildRotMatrixX(mx, *(s32 *)(state + 0x20));
+        BuildRotMatrixX(mx, state->rotationX);
         MulMatrix2(&mtxY, mx);
-        BuildRotMatrixZ(&mtxY, *(s32 *)(state + 0x28));
+        BuildRotMatrixZ(&mtxY, state->rotationZ);
         MulMatrix(mx, &mtxY);
         ApplyMatrix(mx, dir, step);
-        *(s32 *)(state + 0x10) = step[0] / 4 + *(s32 *)(state + 0x10);
-        *(s32 *)(state + 0x14) = step[1] / 4 + *(s32 *)(state + 0x14);
-        *(s32 *)(state + 0x18) = step[2] / 4 + *(s32 *)(state + 0x18);
-        if (*(s32 *)(state + 4) == 1) {
-            delta[0] = dx = g_PlayerCar - *(s32 *)(state + 0x10);
-            delta[1] = dy = g_PlayerCarY - *(s32 *)(state + 0x14);
-            delta[2] = dz = g_PlayerCarZ - *(s32 *)(state + 0x18);
+        state->position.x = step[0] / 4 + state->position.x;
+        state->position.y = step[1] / 4 + state->position.y;
+        state->position.z = step[2] / 4 + state->position.z;
+        if (state->soundEnabled == 1) {
+            delta[0] = dx = g_PlayerCar - state->position.x;
+            delta[1] = dy = g_PlayerCarY - state->position.y;
+            delta[2] = dz = g_PlayerCarZ - state->position.z;
             dist = SquareRoot12(dx * dx / 8 + dy * dy / 16 + dz * dz / 8) >> 12;
             if (dist < 0) {
-                *(s32 *)(state + 4) = 0;
+                state->soundEnabled = 0;
                 dist = 0x74;
             }
             vol = 0x74 - dist;
@@ -362,15 +366,15 @@ void UpdateFlybyScenery(void) {
                 vol = 0;
             }
             pitch = 0x1900;
-            *(s32 *)(state + 0x30) = vol;
+            state->volume = vol;
         } else {
             vol = 0;
-            *(s32 *)(state + 0x30) = 0;
+            state->volume = 0;
             pitch = 0;
         }
     } else {
         vol = 0;
-        *(s32 *)(state + 0x30) = 0;
+        state->volume = 0;
         pitch = 0;
     }
 

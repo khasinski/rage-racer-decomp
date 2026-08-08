@@ -83,11 +83,7 @@ extern GAME_ENV_SCRIPT_CURSOR_TYPE *g_EnvScriptCursor;
 extern GAME_SKY_ROW_BASE_TYPE g_SkyRowBase;
 #undef GAME_SKY_ROW_BASE_TYPE
 
-#ifndef GAME_FLYBY_SCENERY_DECL
-#define GAME_FLYBY_SCENERY_DECL extern u8 g_FlybyScenery[]
-#endif
-GAME_FLYBY_SCENERY_DECL;
-#undef GAME_FLYBY_SCENERY_DECL
+extern FlybySceneryState g_FlybyScenery;
 #ifndef GAME_ENV_PALETTE_DECL
 #define GAME_ENV_PALETTE_DECL extern u8 *g_EnvPaletteTable
 #endif

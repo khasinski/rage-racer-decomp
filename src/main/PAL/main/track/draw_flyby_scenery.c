@@ -1,6 +1,5 @@
 #include "common.h"
 #include "game/render.h"
-#define GAME_FLYBY_SCENERY_DECL extern s32 g_FlybyScenery[]
 #define GAME_ROUTE_SCENERY_QUALIFIER volatile
 #define GAME_ROUTE_KEYFRAME_TYPE u8
 #include "game/track_internal.h"
@@ -14,18 +13,18 @@
 void DrawFlybyScenery(void) {
     Matrix mtx0;
     Matrix mtx1;
-    s32 *state;
+    FlybySceneryState *state;
 
-    state = g_FlybyScenery;
-    if (state[0] > 0) {
-        BuildRotMatrixY(&mtx0, 0x800 - g_FlybySceneryRotY);
-        BuildRotMatrixX(&mtx1, g_FlybySceneryRotX);
+    state = &g_FlybyScenery;
+    if (state->timer > 0) {
+        BuildRotMatrixY(&mtx0, 0x800 - state->rotationY);
+        BuildRotMatrixX(&mtx1, state->rotationX);
         MulMatrix2(&mtx0, &mtx1);
         MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx1);
-        BuildRotMatrixZ(&mtx0, g_FlybySceneryRotZ);
+        BuildRotMatrixZ(&mtx0, state->rotationZ);
         MulMatrix2(&mtx1, &mtx0);
         SelectModelBank(2);
-        SetGteObjectMatrix((void *)0x1F80011C, state + 4, &mtx0);
+        SetGteObjectMatrix((void *)0x1F80011C, &state->position, &mtx0);
         SCRATCH_ENV_MODE4 = 0;
         SubmitModel((void *)SCRATCHPAD_ADDR, g_ModelBankCount < 1);
     }
