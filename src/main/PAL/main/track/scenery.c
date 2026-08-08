@@ -210,22 +210,21 @@ void DrawCourseScenery2(s32 timer, s32 animate) {
 
 
 void SeedFlybyScenery(void) {
-    u8 *base;
-    register FlybySceneryState *out asm("s1");
+    SceneryMotionData *data;
+    FlybySceneryState *out;
     s32 count;
     s16 value;
     s32 index;
     s32 cmp;
     s32 scene0;
     s32 scene1;
-    u8 *src;
     s32 recordIndex;
 
-    base = g_FlybySceneryData;
+    data = (SceneryMotionData *)g_FlybySceneryData;
+    out = &g_FlybyScenery;
     index = Random15();
     count = g_LapCount;
     value = index % count;
-    out = &g_FlybyScenery;
     value++;
     out->lap = value;
     value = (s16)value;
@@ -244,14 +243,10 @@ void SeedFlybyScenery(void) {
     scene1 = g_RaceSeries;
     out->timer = 0;
 
-    src = (u8 *)((scene0 * 32) + (s32)base);
-    out->position = *(Vec4 *)(src + 0x10);
-    recordIndex = *(s16 *)((scene1 * 4) + (s32)base + 8);
+    out->position = (scene0 + data->start)->position;
+    recordIndex = (scene1 + data->firstKeyframe)[0][0];
     out->volume = 0;
-    index = recordIndex * 3;
-    index <<= 2;
-    index += 0x50;
-    g_FlybySceneryKeyframe = (SceneryMotionKeyframe *)(base + index);
+    g_FlybySceneryKeyframe = &data->keyframes[recordIndex];
 }
 
 /*
@@ -266,11 +261,9 @@ void UpdateFlybyScenery(void) {
     s16 dir[4];
     s32 step[4];
     s32 delta[4];
-    u8 *base;
+    SceneryMotionData *data;
     FlybySceneryState *state;
-    u8 *src;
     s32 series;
-    s32 index;
     s32 recordIndex;
     SceneryMotionKeyframe *kf;
     Matrix *mx;
@@ -283,27 +276,23 @@ void UpdateFlybyScenery(void) {
     s32 dy;
     s32 dz;
 
-    base = g_FlybySceneryData;
+    data = (SceneryMotionData *)g_FlybySceneryData;
     state = &g_FlybyScenery;
 
     if (g_PlayerCar.lap == state->lap) {
         series = g_RaceSeries;
-        if (g_PlayerCar.trackSection == *(s16 *)((series * 4) + (s32)base)) {
+        if (g_PlayerCar.trackSection == (series + data->triggerSection)[0][0]) {
             state->soundEnabled = 1;
             state->timer = 1;
-            src = (u8 *)((series * 32) + (s32)base);
             state->keyframeTime = 0;
             state->lap = 0;
             state->keyframeIndex = 0;
-            state->position = *(Vec4 *)(src + 0x10);
+            state->position = (series + data->start)->position;
             state->rotationZ = 0;
             state->rotationY = 0;
             state->rotationX = 0;
-            recordIndex = *(s16 *)((g_RaceSeries * 4) + (s32)base + 8);
-            index = recordIndex * 3;
-            index <<= 2;
-            index += 0x50;
-            g_FlybySceneryKeyframe = (SceneryMotionKeyframe *)(base + index);
+            recordIndex = (g_RaceSeries + data->firstKeyframe)[0][0];
+            g_FlybySceneryKeyframe = &data->keyframes[recordIndex];
         }
     }
 
