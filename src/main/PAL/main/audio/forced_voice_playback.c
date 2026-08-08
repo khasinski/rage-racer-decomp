@@ -169,11 +169,12 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
             voiceArg = voicePacked >> 16;
             left = g_VabIds[0];
             right = *(s16 *)toneBase;
-            keyTone = *(s16 *)((u8 *)&g_EffectVoices[0].tone + offset);
+            keyTone =
+                (s16)((EffectVoice *)((u8 *)g_EffectVoices + offset))->tone;
             raw = 0x3C;
             SsUtKeyOnV(voiceArg, left, right, keyTone, raw, 0, 0, 0);
 
-            scale = *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset);
+            scale = ((EffectVoice *)((u8 *)g_EffectVoices + offset))->volume;
             asm volatile("" : : "r"(scale));
             raw = g_SoundScale.scale;
             raw = scale * raw;
@@ -293,4 +294,3 @@ void ForceAllEffectVoicesEnabled(s32 enabled) {
     ForcePitchEffectVoicesEnabled(enabled);
     ForceSoundSlotVoicePlayback(enabled);
 }
-

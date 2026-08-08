@@ -168,19 +168,16 @@ void InitEffectVoiceRuntime(void) {
         s32 i;
         s32 neg;
         s32 value;
-        s32 offset;
 
         i = 0;
         neg = -1;
         value = 0x1E00;
-        offset = 0;
         for (; i < 4; i++) {
-            *(s32 *)((u8 *)&g_EffectVoices[0].state + offset) = neg;
-            *(s32 *)((u8 *)&g_EffectVoices[0].note + offset) = neg;
-            *(s32 *)((u8 *)&g_EffectVoices[0].tone + offset) = neg;
-            *(s32 *)((u8 *)&g_EffectVoices[0].pitch + offset) = value;
-            *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset) = 0;
-            offset += 0x14;
+            g_EffectVoices[i].state = neg;
+            g_EffectVoices[i].note = neg;
+            g_EffectVoices[i].tone = neg;
+            g_EffectVoices[i].pitch = value;
+            g_EffectVoices[i].volume = 0;
         }
     }
 
@@ -282,4 +279,3 @@ void ForcePanVoiceEnabled(s32 enabled) {
         SsUtKeyOffV(0x15);
     }
 }
-

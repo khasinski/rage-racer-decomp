@@ -40,13 +40,11 @@ extern MusicChannel g_MusicChannels[];
 /* Effect voice, 4 elements for hardware voices 10..13. SetPitchedSoundCue walks it
  * with a pointer to `.state`. */
 typedef struct EffectVoice {
-    s16 note;      /* +0x00 note/detune base  (g_EffectVoices) */
-    s16 unk02;     /* +0x02                                */
-    s16 tone;      /* +0x04 tone              (g_EffectVoiceTone) */
-    s16 unk06;     /* +0x06                                */
-    s32 state;     /* +0x08 state 0/1/2/-1    (g_EffectVoiceState) */
-    s32 pitch;     /* +0x0C pitch             (g_EffectVoicePitch) */
-    s32 volume;    /* +0x10 volume            (g_EffectVoiceVolume) */
+    s32 note;      /* +0x00 note/detune base */
+    s32 tone;      /* +0x04 tone */
+    s32 state;     /* +0x08 state 0/1/2/-1 */
+    s32 pitch;     /* +0x0C pitch */
+    s32 volume;    /* +0x10 volume */
 } EffectVoice; /* sizeof 0x14 */
 
 extern EffectVoice g_EffectVoices[];

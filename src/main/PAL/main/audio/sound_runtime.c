@@ -86,12 +86,12 @@ void ResetSoundState(void) {
             value = 0x1E00;
             offset = 0;
             for (; i < 4; i++) {
-                *(s32 *)((u8 *)&g_EffectVoices[0].state + offset) = neg;
-                *(s32 *)((u8 *)&g_EffectVoices[0].note + offset) = neg;
-                *(s32 *)((u8 *)&g_EffectVoices[0].tone + offset) = neg;
-                *(s32 *)((u8 *)&g_EffectVoices[0].pitch + offset) = value;
-                *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset) = 0;
-                offset += 0x14;
+                ((EffectVoice *)((u8 *)g_EffectVoices + offset))->state = neg;
+                ((EffectVoice *)((u8 *)g_EffectVoices + offset))->note = neg;
+                ((EffectVoice *)((u8 *)g_EffectVoices + offset))->tone = neg;
+                ((EffectVoice *)((u8 *)g_EffectVoices + offset))->pitch = value;
+                ((EffectVoice *)((u8 *)g_EffectVoices + offset))->volume = 0;
+                offset += sizeof(EffectVoice);
             }
         }
 
