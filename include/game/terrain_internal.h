@@ -2,6 +2,7 @@
 #define GAME_TERRAIN_INTERNAL_H
 
 #include "common.h"
+#include "game/render.h"
 
 typedef union SkyUV {
     struct {
@@ -46,22 +47,6 @@ typedef struct SkyCVec {
     u8 b;
     u8 cd;
 } SkyCVec;
-
-typedef union GameEnvColor {
-    u32 rgb;
-    struct {
-        u8 r;
-        u8 g;
-        u8 b;
-        u8 unused;
-    } bytes;
-} GameEnvColor;
-
-typedef struct GameEnvColorSlot {
-    GameEnvColor cur;
-    GameEnvColor from;
-    GameEnvColor to;
-} GameEnvColorSlot;
 
 extern SkyTileUV g_SkyTileUV[];
 extern GameEnvColor g_EnvColor1Red;

@@ -800,8 +800,14 @@ void SetGteObjectMatrix();
 /* One packed RGB triple of that timeline. The block starts at 0x801E3FB6, i.e.
  * 2 mod 4, so every word in it is half-aligned and must be declared packed --
  * the compiler emits lwl/lwr, not lw. */
-typedef struct GameEnvColor {
+typedef union GameEnvColor {
     u32 rgb __attribute__((packed));
+    struct {
+        u8 r;
+        u8 g;
+        u8 b;
+        u8 unused;
+    } bytes;
 } GameEnvColor;
 
 struct GameEnvironmentCue {
