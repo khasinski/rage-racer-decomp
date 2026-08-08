@@ -352,7 +352,6 @@ void UpdateRecordEntry(void) {
     case 1: {
         u8 *timeName;
         u8 *timeRecordBase;
-        u8 *rankingRecordBase;
         u8 *record;
         s32 previous;
         u16 buttons;
@@ -403,12 +402,10 @@ void UpdateRecordEntry(void) {
             DrawNameEntryCursor(g_NameEntryCursor, g_RankingInsertRow);
         }
         i = 0;
-        rankingRecordBase = (u8 *)g_RankingRecords;
         do {
-            record = (u8 *)((((g_CourseIndex * 5) + g_RankingInsertRow) * 0x10) +
-                            (g_GrandPrixSeries * 0x140) +
-                            (s32)rankingRecordBase + i);
-            *record = g_NameEntryCharset[g_RankingNameCodes[i]];
+            g_RankingRecords[g_GrandPrixSeries][g_CourseIndex]
+                            [g_RankingInsertRow].driverName[i] =
+                g_NameEntryCharset[g_RankingNameCodes[i]];
             i++;
         } while (i < 6);
         DrawRankingPanel((u8 *)0);
@@ -439,8 +436,6 @@ void UpdateRecordEntry(void) {
         break;
 
     case 4: {
-        u8 *recordBase;
-        u8 *record;
         s32 previous;
         u16 buttons;
 
@@ -475,11 +470,10 @@ void UpdateRecordEntry(void) {
             DrawNameEntryCursor(g_NameEntryCursor, g_TimeRecordInsertRow);
         }
         i = 0;
-        recordBase = (u8 *)g_TimeRecords;
         do {
-            record = (u8 *)((((g_CourseIndex * 5) + g_TimeRecordInsertRow) * 0x10) +
-                            (g_GrandPrixSeries * 0x140) + (s32)recordBase + i);
-            *record = g_NameEntryCharset[g_TimeRecordNameCodes[i]];
+            g_TimeRecords[g_GrandPrixSeries][g_CourseIndex]
+                         [g_TimeRecordInsertRow].driverName[i] =
+                g_NameEntryCharset[g_TimeRecordNameCodes[i]];
             i++;
         } while (i < 6);
         DrawTimeRecordPanel((u8 *)0);
