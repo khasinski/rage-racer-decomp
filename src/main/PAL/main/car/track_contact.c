@@ -3,6 +3,7 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/car.h"
+#include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
@@ -145,111 +146,109 @@ void ResetCarTrackState(GameCarRuntime *car) {
     s32 rotated;
     s16 curveMode;
     u16 segmentLength;
-    void *point;
-    void *nextPoint;
-    void *arcCenter;
-    void *spad;
+    GameTrackPoint *point;
+    GameTrackPoint *nextPoint;
+    GameTrackArcCenter *arcCenter;
+    CarTrackScratch *spad;
 
-    *(s32 *)0x1F800158 = 0;
+    spad = CAR_TRACK_SCRATCH;
+    spad->field_3C = 0;
     trackPointIndex = FIELD(car, s32 *, 0x30);
     nextPointIndex = (trackPointIndex + 1) % *(s32 *)0x8009E6A8;
     pointsBase = *(s32 *)0x8009E688;
-    spad = (void *)0x1F80011C;
-    point = (void *)((trackPointIndex * 0x18) + pointsBase);
-    segmentLength = FIELD(point, u16 *, 0x16);
-    FIELD(spad, u16 *, 0x96) = segmentLength;
-    nextPoint = (void *)((nextPointIndex * 0x18) + pointsBase);
+    point = (GameTrackPoint *)((trackPointIndex * 0x18) + pointsBase);
+    segmentLength = point->segmentLength;
+    spad->segmentLength = segmentLength;
+    nextPoint = (GameTrackPoint *)((nextPointIndex * 0x18) + pointsBase);
     if ((s32)((u32)segmentLength << 0x10) <= 0) {
-        FIELD(spad, u16 *, 0x96) = 1U;
+        spad->segmentLength = 1U;
     }
-    FIELD(spad, u16 *, 0x90) = FIELD(point, u16 *, 0xA);
-    arcIndex = (s32)((u32)FIELD(point, u16 *, 0x14) << 0x10) >> 0x14;
-    FIELD(spad, s16 *, 0x7A) = (s16)arcIndex;
-    curveMode = FIELD(point, u16 *, 0x14) & 3;
-    FIELD(spad, s16 *, 0x78) = curveMode;
+    spad->heading = (u16)point->angle;
+    arcIndex = (s32)((u32)point->arcRef << 0x10) >> 0x14;
+    spad->arcIndex = (s16)arcIndex;
+    curveMode = point->arcRef & 3;
+    spad->curveMode = curveMode;
     if (curveMode != 0) {
-        arcCenter = (void *)((arcIndex * 0xC) + *(s32 *)0x8019C7D0);
-        arcCenterX = FIELD(arcCenter, s32 *, 0);
-        FIELD(spad, s32 *, 0) = arcCenterX;
-        arcCenterZ = FIELD(arcCenter, s32 *, 4);
-        FIELD(spad, s32 *, 0x04) = arcCenterZ;
+        arcCenter = (GameTrackArcCenter *)((arcIndex * 0xC) + *(s32 *)0x8019C7D0);
+        arcCenterX = arcCenter->x;
+        spad->arcCenterX = arcCenterX;
+        arcCenterZ = arcCenter->z;
+        spad->arcCenterZ = arcCenterZ;
         carToCenterX = FIELD(car, s32 *, 0) - arcCenterX;
-        FIELD(spad, s32 *, 0x08) = carToCenterX;
+        spad->carToCenterX = carToCenterX;
         carToCenterZ = FIELD(car, s32 *, 8) - arcCenterZ;
-        FIELD(spad, s32 *, 0x0C) = carToCenterZ;
-        FIELD(spad, s16 *, 0x7E) = Atan2(carToCenterX, carToCenterZ) & 0xFFF;
-        pointToCenterX = FIELD(point, s32 *, 0);
-        centerX = FIELD(spad, s32 *, 0);
-        centerZ = FIELD(spad, s32 *, 0x04);
+        spad->carToCenterZ = carToCenterZ;
+        spad->sweptAngle = Atan2(carToCenterX, carToCenterZ) & 0xFFF;
+        pointToCenterX = point->x;
+        centerX = spad->arcCenterX;
+        centerZ = spad->arcCenterZ;
         pointToCenterX -= centerX;
-        FIELD(spad, s32 *, 0x24) = pointToCenterX;
-        pointToCenterZ = FIELD(point, s32 *, 4) - centerZ;
-        FIELD(spad, s32 *, 0x2C) = pointToCenterZ;
-        FIELD(spad, s32 *, 0x28) = FIELD(nextPoint, s32 *, 0) - centerX;
-        FIELD(spad, s32 *, 0x30) = FIELD(nextPoint, s32 *, 4) - centerZ;
-        FIELD(spad, s16 *, 0x80) = Atan2(pointToCenterX, pointToCenterZ) & 0xFFF;
-        FIELD(spad, s16 *, 0x82) =
-            Atan2(FIELD(spad, s32 *, 0x28), FIELD(spad, s32 *, 0x30)) & 0xFFF;
-        cosCarAngle = rcos(FIELD(spad, s16 *, 0x7E));
-        carRadius = (cosCarAngle * FIELD(spad, s32 *, 0x08)) +
-                 (rsin(FIELD(spad, s16 *, 0x7E)) * FIELD(spad, s32 *, 0x0C));
+        spad->pointToCenterX = pointToCenterX;
+        pointToCenterZ = point->z - centerZ;
+        spad->pointToCenterZ = pointToCenterZ;
+        spad->nextPointToCenterX = nextPoint->x - centerX;
+        spad->nextPointToCenterZ = nextPoint->z - centerZ;
+        spad->pointAngle = Atan2(pointToCenterX, pointToCenterZ) & 0xFFF;
+        spad->nextPointAngle = Atan2(spad->nextPointToCenterX, spad->nextPointToCenterZ) & 0xFFF;
+        cosCarAngle = rcos(spad->sweptAngle);
+        carRadius = (cosCarAngle * spad->carToCenterX) +
+                 (rsin(spad->sweptAngle) * spad->carToCenterZ);
         if (carRadius < 0) {
             carRadius += 0xFFF;
         }
-        FIELD(spad, s32 *, 0x10) = carRadius >> 0xC;
-        cosPointAngle = rcos(FIELD(spad, s16 *, 0x80));
-        pointRadius = (cosPointAngle * FIELD(spad, s32 *, 0x24)) +
-                   (rsin(FIELD(spad, s16 *, 0x80)) * FIELD(spad, s32 *, 0x2C));
+        spad->carRadius.value = carRadius >> 0xC;
+        cosPointAngle = rcos(spad->pointAngle);
+        pointRadius = (cosPointAngle * spad->pointToCenterX) +
+                   (rsin(spad->pointAngle) * spad->pointToCenterZ);
         if (pointRadius < 0) {
             pointRadius += 0xFFF;
         }
-        FIELD(spad, s32 *, 0x14) = pointRadius >> 0xC;
-        cosNextAngle = rcos(FIELD(spad, s16 *, 0x82));
-        nextRadius = (cosNextAngle * FIELD(spad, s32 *, 0x28)) +
-                   (rsin(FIELD(spad, s16 *, 0x82)) * FIELD(spad, s32 *, 0x30));
+        spad->pointRadius.value = pointRadius >> 0xC;
+        cosNextAngle = rcos(spad->nextPointAngle);
+        nextRadius = (cosNextAngle * spad->nextPointToCenterX) +
+                   (rsin(spad->nextPointAngle) * spad->nextPointToCenterZ);
         if (nextRadius < 0) {
             nextRadius += 0xFFF;
         }
-        FIELD(spad, s32 *, 0x18) = nextRadius >> 0xC;
-        FIELD(spad, s16 *, 0x7C) =
-            GetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x82));
-        if (FIELD(spad, s16 *, 0x7C) <= 0) {
-            FIELD(spad, s16 *, 0x7C) = 1;
+        spad->nextPointRadius.value = nextRadius >> 0xC;
+        spad->arcSpan = GetAngleDistance(spad->pointAngle, spad->nextPointAngle);
+        if (spad->arcSpan <= 0) {
+            spad->arcSpan = 1;
         }
         sweptAngle =
-            GetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x7E));
-        arcAngle = FIELD(spad, s16 *, 0x7C);
-        FIELD(spad, s16 *, 0x7E) = sweptAngle;
-        FIELD(spad, s32 *, 0x14) =
-            (s32)(((s16)sweptAngle * FIELD(spad, s32 *, 0x14)) +
-                  ((arcAngle - (s16)sweptAngle) * FIELD(spad, s32 *, 0x18))) /
+            GetAngleDistance(spad->pointAngle, spad->sweptAngle);
+        arcAngle = spad->arcSpan;
+        spad->sweptAngle = sweptAngle;
+        spad->pointRadius.value =
+            (s32)(((s16)sweptAngle * spad->pointRadius.value) +
+                  ((arcAngle - (s16)sweptAngle) * spad->nextPointRadius.value)) /
             arcAngle;
-        arcLateral = (s16)(FIELD(spad, u16 *, 0x10) - FIELD(spad, u16 *, 0x14));
-        if (FIELD(spad, s16 *, 0x78) == 2) {
+        arcLateral = (s16)(spad->carRadius.half.low - spad->pointRadius.half.low);
+        if (spad->curveMode == 2) {
             arcLateral = 0 - arcLateral;
         }
-        FIELD(spad, s16 *, 0x84) = arcLateral;
+        spad->arcLateral = arcLateral;
         {
-            headingAngle = FIELD(nextPoint, s16 *, 0xA);
-            pointHeading = FIELD(point, s16 *, 0xA);
+            headingAngle = nextPoint->angle;
+            pointHeading = point->angle;
             if ((headingAngle - pointHeading) >= 0x801) {
-                swept = FIELD(spad, s16 *, 0x7E);
-                arcSpan = FIELD(spad, s16 *, 0x7C);
-                FIELD(spad, s16 *, 0x90) =
+                swept = spad->sweptAngle;
+                arcSpan = spad->arcSpan;
+                spad->heading =
                     (s16)((((headingAngle - 0x1000) * swept) +
                            (pointHeading * (arcSpan - swept))) /
                           arcSpan);
             } else if ((pointHeading - headingAngle) >= 0x801) {
-                swept = FIELD(spad, s16 *, 0x7E);
-                arcSpan = FIELD(spad, s16 *, 0x7C);
-                FIELD(spad, s16 *, 0x90) =
+                swept = spad->sweptAngle;
+                arcSpan = spad->arcSpan;
+                spad->heading =
                     (s16)(((headingAngle * swept) +
                            ((pointHeading - 0x1000) * (arcSpan - swept))) /
                           arcSpan);
             } else {
-                swept = FIELD(spad, s16 *, 0x7E);
-                arcSpan = FIELD(spad, s16 *, 0x7C);
-                FIELD(spad, s16 *, 0x90) =
+                swept = spad->sweptAngle;
+                arcSpan = spad->arcSpan;
+                spad->heading =
                     (s16)(((headingAngle * swept) +
                            (pointHeading * (arcSpan - swept))) /
                           arcSpan);
@@ -257,15 +256,13 @@ void ResetCarTrackState(GameCarRuntime *car) {
         }
     }
 
-    FIELD(spad, u16 *, 0x60) =
-        (u16)(((u16)FIELD(car, s32 *, 0) - (u16)FIELD(point, s32 *, 0)) * 4);
-    headingAngle = FIELD(spad, s16 *, 0x90);
-    FIELD(spad, s16 *, 0x64) =
-        (s16)(((u16)FIELD(car, s32 *, 8) - (u16)FIELD(point, s32 *, 4)) * 4);
-    FIELD(spad, s16 *, 0x62) = 0;
+    spad->offsetX = (u16)(((u16)FIELD(car, s32 *, 0) - (u16)point->x) * 4);
+    headingAngle = spad->heading;
+    spad->offsetZ = (s16)(((u16)FIELD(car, s32 *, 8) - (u16)point->z) * 4);
+    spad->field_62 = 0;
     cosHeading = rcos(headingAngle);
-    rotated = (cosHeading * (s16)FIELD(spad, u16 *, 0x60)) +
-             (rsin(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
+    rotated = (cosHeading * (s16)spad->offsetX) +
+             (rsin(spad->heading) * spad->offsetZ);
     if (rotated < 0) {
         rotated += 0xFFF;
     }
@@ -275,34 +272,34 @@ void ResetCarTrackState(GameCarRuntime *car) {
      * The non-clamping path does not consume the lateral component. GCC 2.6.3
      * removes its mflo/add/round/shift but leaves the two HI/LO-setting mults.
      */
-    sinHeading = rsin(FIELD(spad, s16 *, 0x90));
-    rotated = ((0 - sinHeading) * (s16)FIELD(spad, u16 *, 0x60)) +
-             (rcos(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
+    sinHeading = rsin(spad->heading);
+    rotated = ((0 - sinHeading) * (s16)spad->offsetX) +
+             (rcos(spad->heading) * spad->offsetZ);
     if (rotated < 0) {
         rotated += 0xFFF;
     }
     lateralOffset = rotated >> 0xE;
 
-    if (FIELD(spad, s16 *, 0x96) < alongSegment) {
-        alongSegment = FIELD(spad, s16 *, 0x96);
+    if ((s16)spad->segmentLength < alongSegment) {
+        alongSegment = (s16)spad->segmentLength;
     } else if (alongSegment < 0) {
         alongSegment = 0;
     }
-    segLenA = FIELD(spad, s16 *, 0x96);
-    edgeHeight = ((FIELD(nextPoint, s16 *, 0x12) * alongSegment) +
-               (FIELD(point, s16 *, 0x12) * (segLenA - alongSegment))) /
+    segLenA = (s16)spad->segmentLength;
+    edgeHeight = ((nextPoint->field_12 * alongSegment) +
+               (point->field_12 * (segLenA - alongSegment))) /
               segLenA;
-    FIELD(spad, s16 *, 0x88) = (s16)edgeHeight;
+    spad->field_88 = (s16)edgeHeight;
     useProgress = *(s32 *)0x801E408C;
-    segLenB = FIELD(spad, s16 *, 0x96);
+    segLenB = (s16)spad->segmentLength;
     {
         s32 widthSum;
         s32 remainingLength;
 
-        widthSum = FIELD(nextPoint, s16 *, 0x10) * alongSegment;
+        widthSum = nextPoint->field_10 * alongSegment;
         remainingLength = segLenB - alongSegment;
-        widthSum += FIELD(point, s16 *, 0x10) * remainingLength;
-        FIELD(spad, s16 *, 0x8A) = (s16)(widthSum / segLenB);
+        widthSum += point->field_10 * remainingLength;
+        spad->field_8A = (s16)(widthSum / segLenB);
     }
     {
         u32 outputProgress;
@@ -310,55 +307,55 @@ void ResetCarTrackState(GameCarRuntime *car) {
         if (useProgress != 0) {
             outputProgress = alongSegment;
         } else {
-            outputProgress = FIELD(spad, s16 *, 0x96) - alongSegment;
+            outputProgress = (s16)spad->segmentLength - alongSegment;
         }
         FIELD(car, s32 *, 0x6C) = outputProgress;
     }
-    segLenC = FIELD(spad, s16 *, 0x96);
-    FIELD(spad, s16 *, 0x8E) =
-        (s16)(((FIELD(nextPoint, s16 *, 0xE) * alongSegment) +
-               (FIELD(point, s16 *, 0xE) * (segLenC - alongSegment))) /
+    segLenC = (s16)spad->segmentLength;
+    spad->field_8E =
+        (s16)(((nextPoint->field_E * alongSegment) +
+               (point->field_E * (segLenC - alongSegment))) /
               segLenC);
     {
         s16 angle;
 
         angle = (u16)FIELD(car, s32 *, 0x24);
         angle -= 0xC00;
-        FIELD(spad, s16 *, 0x8C) = angle + FIELD(spad, u16 *, 0x90);
+        spad->field_8C = angle + (u16)spad->heading;
     }
-    segLenD = FIELD(spad, s16 *, 0x96);
-    FIELD(spad, s16 *, 0x92) =
-        (s16)(((FIELD(nextPoint, s16 *, 0xC) * alongSegment) +
-               (FIELD(point, s16 *, 0xC) * (segLenD - alongSegment))) /
+    segLenD = (s16)spad->segmentLength;
+    spad->field_92 =
+        (s16)(((nextPoint->field_C * alongSegment) +
+               (point->field_C * (segLenD - alongSegment))) /
               segLenD);
-    trackWidth = (u16)FIELD(spad, s16 *, 0x8A) + (u16)FIELD(spad, s16 *, 0x88);
-    FIELD(spad, s16 *, 0x86) = trackWidth;
+    trackWidth = (u16)spad->field_8A + (u16)spad->field_88;
+    spad->field_86 = trackWidth;
     nextCamber = Atan2(
         (s32)trackWidth,
-        (s32)(FIELD(nextPoint, s16 *, 0xE) * trackWidth) >> 7);
-    trackWidthCopy = FIELD(spad, s16 *, 0x86);
+        (s32)(nextPoint->field_E * trackWidth) >> 7);
+    trackWidthCopy = spad->field_86;
     secondResult = Atan2(
         (s32)trackWidthCopy,
-        (s32)(FIELD(point, s16 *, 0xE) * trackWidthCopy) >> 7);
-    segLenE = FIELD(spad, s16 *, 0x96);
-    FIELD(spad, s16 *, 0x94) =
+        (s32)(point->field_E * trackWidthCopy) >> 7);
+    segLenE = (s16)spad->segmentLength;
+    spad->field_94 =
         (s16)(((nextCamber * alongSegment) +
                (secondResult * (segLenE - alongSegment))) /
               segLenE);
-    FIELD(spad, s32 *, 0x38) = rcos(FIELD(spad, s16 *, 0x8C));
+    spad->field_38 = rcos(spad->field_8C);
     {
         s32 firstProduct;
         s32 sinValue;
         s32 secondProduct;
 
-        sinValue = rsin(FIELD(spad, s16 *, 0x8C));
-        FIELD(spad, s32 *, 0x34) = sinValue;
-        firstProduct = FIELD(spad, s16 *, 0x92) * FIELD(spad, s32 *, 0x38);
+        sinValue = rsin(spad->field_8C);
+        spad->field_34 = sinValue;
+        firstProduct = spad->field_92 * spad->field_38;
         if (firstProduct < 0) {
             firstProduct += 0xFFF;
         }
         firstProduct >>= 0xC;
-        secondProduct = FIELD(spad, s16 *, 0x94) * sinValue;
+        secondProduct = spad->field_94 * sinValue;
         if (secondProduct < 0) {
             secondProduct += 0xFFF;
         }
@@ -371,11 +368,11 @@ void ResetCarTrackState(GameCarRuntime *car) {
             s32 firstProduct;
 
             firstProduct =
-                (0 - FIELD(spad, s32 *, 0x38)) * FIELD(spad, s16 *, 0x94);
+                (0 - spad->field_38) * spad->field_94;
             if (firstProduct < 0) {
                 firstProduct += 0xFFF;
             }
-            lateralProduct = FIELD(spad, s16 *, 0x92) * FIELD(spad, s32 *, 0x34);
+            lateralProduct = spad->field_92 * spad->field_34;
             firstComponent = firstProduct >> 0xC;
         }
         if (lateralProduct < 0) {
@@ -392,7 +389,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
             combinedComponent = firstComponent + (lateralProduct >> 0xC);
             FIELD(car, s32 *, 0x58) = combinedComponent;
             FIELD(car, s32 *, 0x54) = FIELD(car, s32 *, 0x24);
-            FIELD(car, s32 *, 0xB4) = FIELD(spad, s16 *, 0x90);
+            FIELD(car, s32 *, 0xB4) = spad->heading;
             FIELD(car, s32 *, 0x74) = FIELD(car, s32 *, 0x70);
             FIELD(car, s32 *, 0x70) = progress;
             if (progress < 0) {

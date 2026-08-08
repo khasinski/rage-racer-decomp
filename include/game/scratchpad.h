@@ -35,6 +35,59 @@ typedef struct GameScratchpadRenderState {
     s16 y1;
 } GameScratchpadRenderState;
 
+typedef union CarTrackRadius {
+    s32 value;
+    struct {
+        u16 low;
+        u16 high;
+    } half;
+} CarTrackRadius;
+
+typedef struct CarTrackScratch {
+    s32 arcCenterX;
+    s32 arcCenterZ;
+    s32 carToCenterX;
+    s32 carToCenterZ;
+    CarTrackRadius carRadius;
+    CarTrackRadius pointRadius;
+    CarTrackRadius nextPointRadius;
+    u8 pad1C[8];
+    s32 pointToCenterX;
+    s32 nextPointToCenterX;
+    s32 pointToCenterZ;
+    s32 nextPointToCenterZ;
+    s32 field_34;
+    s32 field_38;
+    s32 field_3C;
+    u8 pad40[0x20];
+    u16 offsetX;
+    s16 field_62;
+    s16 offsetZ;
+    s16 field_66;
+    s32 field_68;
+    s32 field_6C;
+    s32 field_70;
+    s32 field_74;
+    s16 curveMode;
+    s16 arcIndex;
+    s16 arcSpan;
+    s16 sweptAngle;
+    s16 pointAngle;
+    s16 nextPointAngle;
+    s16 arcLateral;
+    s16 field_86;
+    s16 field_88;
+    s16 field_8A;
+    s16 field_8C;
+    s16 field_8E;
+    s16 heading;
+    s16 field_92;
+    s16 field_94;
+    u16 segmentLength;
+} CarTrackScratch;
+
+#define CAR_TRACK_SCRATCH ((CarTrackScratch *)0x1F80011C)
+
 #define SCRATCHPAD_ADDR 0x1F800000
 #define SCRATCHPAD ((GameScratchpadRenderState *)SCRATCHPAD_ADDR)
 
