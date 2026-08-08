@@ -12,7 +12,6 @@
 void SetSprt(u8 *prim);
 void SetShadeTex(u8 *prim, s32 enabled);
 void AddPrim(void *ot, void *prim);
-void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 tpage) asm("QueueDrawModePrim");
 
 void DrawWrongWayWarning(void) {
     register u8 *packet __asm("$16");
@@ -63,7 +62,7 @@ void DrawWrongWayWarning(void) {
 
     ret = GameQueueTileTrans(g_DrawBuffer + 0xCC, next, 0x64, 0x70, 0x78, 0x20, 8, 8, 8);
     SCRATCH = ret;
-    SCRATCH = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, ret, 9);
+    SCRATCH = QueueDrawModePrim(g_DrawBuffer + 0xCC, ret, 9);
 }
 
 s32 rsin(s32 angle);
@@ -184,7 +183,6 @@ void DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
 }
 
 void SetSemiTrans(u8 *prim, s32 enabled);
-void *GameQueueDrawModePrimWide(void *ot, void *packet, s32 tpage);
 
 void DrawFullscreenFadeTile(s32 color, s32 tpage) {
     u8 *base = g_DrawBuffer;
@@ -215,7 +213,7 @@ void DrawFullscreenFadeTile(s32 color, s32 tpage) {
     prim = packet;
     packet += 0x10;
     AddPrim((u32 *)ot, (u32 *)prim);
-    SCRATCH = GameQueueDrawModePrimWide(g_DrawBuffer + 0xCC, packet, tpage);
+    SCRATCH = QueueDrawModePrim(g_DrawBuffer + 0xCC, packet, tpage);
 }
 
 void SetSprt8(u8 *prim);

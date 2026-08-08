@@ -62,7 +62,6 @@ void EnterTitleScreen(void) {
     DrawPressStartPrompt();
 }
 
-void *GameQueueDrawModePrimWide(void* ot, void* prim, s32 tpage) asm("QueueDrawModePrim");
 
 void DrawTitleFadeOverlay(s32 brightness) {
     void *current;
@@ -77,12 +76,11 @@ void DrawTitleFadeOverlay(s32 brightness) {
     scratch = &SCRATCH_PRIM_CURSOR_AS(void);
     current = *scratch;
     next = GameQueueTileTrans(base, current, 0, 0x18, 0x140, 0xC0, color, color, color);
-    *scratch = GameQueueDrawModePrimWide(base, next, 0x29);
+    *scratch = QueueDrawModePrim(base, next, 0x29);
 }
 
 s32 rsin(s32 angle);
 void *QueueShadedSpriteNine(void* ot, void* prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex, s32 intensity) asm("GameQueueShadedSprite");
-void *GameQueueDrawModePrimWide(void *ot, void *prim, s32 tpage);
 
 void DrawPressStartPrompt(void) {
     void **scratch;
@@ -104,7 +102,7 @@ void DrawPressStartPrompt(void) {
     base += 0xCC;
     next = *scratch;
     next = QueueShadedSpriteNine(base, next, 0x68, 0xC8, 0x70, 0x10, 0x70, 0xA0, 0x7E84, frame);
-    *scratch = GameQueueDrawModePrimWide(base, next, 0x39);
+    *scratch = QueueDrawModePrim(base, next, 0x39);
 }
 
 
