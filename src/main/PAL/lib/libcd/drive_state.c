@@ -1,13 +1,6 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-u_long DeliverEvent[4] __attribute__((section(".text"))) = {
-    0x240A00B0,
-    0x01400008,
-    0x24090007,
-    0,
-};
-
 extern u_char g_CdStatusByte;
 
 /* CdStatus: returns the last cached CD drive status byte. */
