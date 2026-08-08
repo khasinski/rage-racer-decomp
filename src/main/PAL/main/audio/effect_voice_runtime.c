@@ -155,11 +155,10 @@ void UpdateIndexedEffectVoice(void) {
     register s32 voice asm("$4");
 
     raw = g_IndexedEffectIndexPrev;
-    switch (0) { default:
     if (raw < 0) {
         index = g_IndexedEffectIndex;
         if (index < 0) {
-            break;
+            goto indexed_effect_done;
         }
             raw = (index * 3) << 2;
             StartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
@@ -219,7 +218,7 @@ void UpdateIndexedEffectVoice(void) {
         SsUtChangePitch(voice, left, right, 0x3C, 0, raw, fine);
     }
 
-    }
+indexed_effect_done:
     g_IndexedEffectIndexPrev = g_IndexedEffectIndex;
 }
 
@@ -276,7 +275,6 @@ void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
     }
 
     if ((left <= 0) && (right <= 0)) {
-        switch (0) { default:
         left = g_MusicChannels[0].left;
         right = 0;
         if (left < 0) {
@@ -295,7 +293,7 @@ void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
             if (left == g_SoundModes[1].slots[0].left) {
                 currentB = g_MusicChannels[1].left;
                 matchValue = g_SoundModes[1].slots[1].left;
-                break;
+                goto compare_mode_match;
             }
         } else {
             if (left == g_SoundModes[2].slots[0].left) {
@@ -307,11 +305,11 @@ void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
             if (left == g_SoundModes[3].slots[0].left) {
                 currentB = g_MusicChannels[1].left;
                 matchValue = g_SoundModes[3].slots[1].left;
-                break;
+                goto compare_mode_match;
             }
         }
         goto after_match;
-        }
+compare_mode_match:
         if (!(currentB != matchValue)) {
 found_match:
         right = 1;
