@@ -45,6 +45,21 @@ typedef struct GameSaveHeaderRow {
     u32 checksum;
 } GameSaveHeaderRow;
 
+typedef struct SavedCarSetup {
+    u8 modelVariant;
+    u8 tireCompound;
+    u8 transmission;
+    u8 paintColor1;
+    u8 paintColor2;
+    u8 enabled;
+    u8 reserved[2];
+} SavedCarSetup;
+
+typedef struct SavedClassRecord {
+    s16 grade;
+    s16 clears;
+} SavedClassRecord;
+
 /*
  * The 0x1000-byte memory-card payload: a flat dump of live globals, named per
  * field below. checksum = ~sum(u16[0..0x7FE]). Written by StoreSaveStateBlock, read
@@ -65,37 +80,37 @@ typedef struct GameSaveHeaderRow {
  * against this struct, so only the directory filename identifies the region.
  */
 typedef struct GameSaveBlock {
-    u16 unk00;             /* g_PadMappingIndex */
-    u16 unk02;             /* g_NegconMappingIndex */
-    u16 unk04;             /* g_NegconSteerNeutral */
-    u16 unk06;             /* g_NegconSteerPlay */
-    u16 unk08;             /* g_NegconNeutralI */
-    u16 unk0A;             /* g_NegconNeutralII */
-    u16 unk0C;             /* g_NegconNeutralL */
-    u16 unk0E;             /* g_NegconMaxTwist */
-    s32 gpFile1[5];        /* +0x10 g_GrandPrixSave, GameRaceProgress: course,
+    u16 padMappingIndex;
+    u16 negconMappingIndex;
+    u16 negconSteerNeutral;
+    u16 negconSteerPlay;
+    u16 negconNeutralI;
+    u16 negconNeutralII;
+    u16 negconNeutralL;
+    u16 negconMaxTwist;
+    s32 grandPrixProgress[5]; /* +0x10 g_GrandPrixSave, GameRaceProgress: course,
                               carIndex, classIndex, maxClassReached, money */
-    s32 gpFile2[5];        /* +0x24 g_ExtraGrandPrixSave, same five fields */
-    s32 timeAttack[5];     /* +0x38 g_TimeAttackSave; this slot reuses the
+    s32 extraGrandPrixProgress[5]; /* +0x24 g_ExtraGrandPrixSave */
+    s32 timeAttackProgress[5]; /* +0x38 g_TimeAttackSave; this slot reuses the
                               money word for g_GrandPrixSeries */
     u16 bgmSelection;             /* +0x4C g_BgmSelection */
     u16 advancedUnlocked;  /* +0x4E g_AdvancedSeriesUnlocked */
     s32 maxClassReached[2];/* +0x50 g_MaxClassReached */
-    u8 carTables[3][0x68]; /* +0x58 the three CarEntry tables, 13 rows of 8 */
-    u16 classRecords[0x16];      /* +0x190 g_ClassRecords */
-    u16 unlockFlags[0x10];      /* +0x1BC g_TeamLogoClut */
-    u16 teamLogoCanvas[0x400];     /* +0x1DC g_TeamLogoCanvas, the 0x800-byte scroll/VRAM buffer */
-    s32 ghostSamplesA[0x10];      /* +0x9DC g_BestLapTimes, [2][4] pairs on an 8-byte stride */
-    s32 ghostSamplesB[0x10];      /* +0xA1C g_BestTotalTimes, same shape */
-    s32 rankRecords[2][4][5][4]; /* +0xA5C g_RankingRecords ranking rows */
+    SavedCarSetup carSetup[3][13];
+    SavedClassRecord classRecords[11];
+    u16 teamLogoClut[16];
+    u16 teamLogoCanvas[0x400];
+    s32 bestLapTimes[2][4][2];
+    s32 bestTotalTimes[2][4][2];
+    s32 rankingRecords[2][4][5][4];
     s32 timeRecords[2][4][5][4]; /* +0xCDC g_TimeRecords time rows */
-    s32 classTotals[2][4][3];   /* +0xF5C g_BestSectorTimes */
+    s32 bestSectorTimes[2][4][3];
     s32 bgmVolume;            /* +0xFBC g_BgmVolumeSetting, clamped to 0..0xF on load */
     s32 sfxVolume;            /* +0xFC0 g_SfxVolumeSetting, clamped to 0..0xF on load */
     s32 monoOutput;            /* +0xFC4 g_MonoOutput, forced to 0/1 on load */
-    u8 courseProgress1[8]; /* +0xFC8 g_GrandPrixCourseProgress */
-    u8 courseProgress2[8]; /* +0xFD0 g_ExtraGrandPrixCourseProgress */
-    u8 padFD8[0x24];
+    u8 grandPrixCourseProgress[8];
+    u8 extraGrandPrixCourseProgress[8];
+    u8 reserved[0x24];
     u32 checksum;          /* +0xFFC */
 } GameSaveBlock;
 
@@ -246,7 +261,7 @@ s32 DrawShadowedTile(s32 base, s32 prim, s32 a, s32 b);
 void InitCARD(s32 padEnable);
 s32 PollMemoryCardStatus(s32 a, s32 b);
 void StartCARD(void);
-void StoreSaveStateBlock(u8 *rowBytes);
+void StoreSaveStateBlock(u8 *block);
 void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow);
 
 /* Declared identically by 1 translation units before this
