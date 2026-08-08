@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/car.h"
 #include "psyq/gpu.h"
 #include "game/state.h"
 #include "game/random.h"
@@ -171,10 +172,12 @@ s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
         candidate = random % 11;
 
         offset = (((((current * 3) * 4) + current) * 8) - current) * 4;
-        first = SelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
+        first = SelectTrackTexturePage(
+            ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackSection);
 
         offset = (((((candidate * 3) * 4) + candidate) * 8) - candidate) * 4;
-        if (first == SelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset])) {
+        if (first == SelectTrackTexturePage(
+                         ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackSection)) {
             return candidate;
         }
     }
@@ -195,10 +198,12 @@ s32 CycleAttractCameraCar(s32 mask, s32 current) {
         candidate = random % 4;
 
         offset = (((((current * 3) * 4) + current) * 8) - current) * 4;
-        first = SelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
+        first = SelectTrackTexturePage(
+            ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackSection);
 
         offset = (((((candidate * 3) * 4) + candidate) * 8) - candidate) * 4;
-        if (first == SelectTrackTexturePage(*(s16 *)&g_CarTrackSection[offset])) {
+        if (first == SelectTrackTexturePage(
+                         ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackSection)) {
             return candidate;
         }
     }

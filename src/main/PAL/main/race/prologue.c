@@ -235,7 +235,7 @@ void UpdatePrologue(void) {
 
         UpdateAttractCars();
 
-        RequestTrackTexturePage(*(s16 *)&g_CarTrackSection[(((((g_CameraCarIndex * 3) * 4) + g_CameraCarIndex) * 8) - g_CameraCarIndex) * 4]);
+        RequestTrackTexturePage(g_Cars[g_CameraCarIndex].trackSection);
 
         UpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
         UpdateEnvironment();

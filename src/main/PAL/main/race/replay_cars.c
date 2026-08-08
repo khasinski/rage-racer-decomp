@@ -39,7 +39,8 @@ void SeedReplayCars(void) {
     ResetCarTrackState(primary);
 
     if (g_GrandPrixMode == 1) {
-        g_Car0TrackPoint = FindTrackSegment(secondary, g_Car0TrackPoint);
+        g_Cars[0].trackPointIndex =
+            FindTrackSegment(secondary, g_Cars[0].trackPointIndex);
         SeedCarLapProgress(secondary, 1);
         AccumulateLapProgress(secondary);
         ResetCarTrackState(secondary);

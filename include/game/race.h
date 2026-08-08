@@ -277,7 +277,6 @@ extern char g_CaptionRanking2[];
 extern u8 g_CaptionTotalMoney[];
 extern char g_CaptionTotalTime[];
 extern char g_CaptionTotalTime2[];
-extern s32 g_Car0TrackPoint;
 extern s32 g_CarClassNames[];
 extern s32 g_CarNames[];
 extern s16 g_ChanceDigits[];

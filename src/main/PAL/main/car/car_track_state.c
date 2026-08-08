@@ -356,12 +356,12 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         if (*(s32 *)0x801E408C != 0)
         {
             finalAngle = g_TrackLength - obj->trackProgress;
-            obj->field_78 = (s16)(finalAngle >> 8);
+            obj->trackSection = (s16)(finalAngle >> 8);
         }
         else
         {
             finalAngle = obj->trackProgress;
-            obj->field_78 = (s16)(finalAngle >> 8);
+            obj->trackSection = (s16)(finalAngle >> 8);
         }
     }
     return spad->field_3C;

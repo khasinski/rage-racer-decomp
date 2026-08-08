@@ -383,10 +383,10 @@ void ResetCarTrackState(GameCarRuntime *car) {
 
         if (*(s32 *)0x801E408C != 0) {
             finalAngle = g_TrackLength - car->trackProgress;
-            car->field_78 = (s16)(finalAngle >> 8);
+            car->trackSection = (s16)(finalAngle >> 8);
         } else {
             finalAngle = car->trackProgress;
-            car->field_78 = (s16)(finalAngle >> 8);
+            car->trackSection = (s16)(finalAngle >> 8);
         }
     }
 }

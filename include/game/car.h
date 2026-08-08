@@ -73,7 +73,7 @@ typedef struct GameCarRuntime {
     s32 field_6C;
     s32 trackProgress;
     s32 previousTrackProgress;
-    s16 field_78;
+    s16 trackSection;
     s16 field_7A;
     s16 velocityX;
     s16 velocityZ;
@@ -169,6 +169,13 @@ typedef struct GameCarRuntime {
     u8 pad16A[0x32];
 } GameCarRuntime;
 
+typedef struct CarProgressWindow {
+    s32 field_6C;
+    u8 reserved[0x3C];
+    s16 activeFlag;
+    u8 trailing[0x15A];
+} CarProgressWindow;
+
 typedef struct CarCollisionPoint {
     s16 x;
     s16 z;
@@ -187,13 +194,6 @@ extern CarCollisionPoint g_CarCollisionCorners[4];
 /* Per-car runtime state, player in slot 0. Individual slots and single fields
  * also have their own split symbols; see docs/names.md section 3b. */
 extern GameCarRuntime g_Cars[11];
-
-typedef struct GameCarRuntimeProgressWindow {
-    s32 field_6C;
-    u8 pad4[0x3C];
-    s16 activeFlag;
-    u8 pad42[0x15A];
-} GameCarRuntimeProgressWindow;
 
 /* The four contenders ordered by race progress (`field_68 + field_6C`), best
  * first; re-sorted every frame by RankContenders to rubber-band the AI. */
@@ -621,7 +621,6 @@ extern s16 g_StandingStartState;
 extern s32 g_AttractGridSlots[];
 extern u16 g_BodyColorPrimary[];
 extern u16 g_BodyColorSecondary[];
-extern s32 g_CarProgressA;
 extern s16 g_NegconAccelMask;
 extern s16 g_NegconAnalogI;
 extern s16 g_NegconAnalogII;

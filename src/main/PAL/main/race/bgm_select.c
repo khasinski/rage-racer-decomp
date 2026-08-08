@@ -167,7 +167,7 @@ void UpdateBgmSelect(void) {
     g_AnimTimer = g_AnimTimer + 1;
     g_CameraCarIndex = CycleBgmSelectCameraCar(0xff, g_CameraCarIndex);
     UpdateAttractCars();
-    RequestTrackTexturePage(g_Cars[g_CameraCarIndex].field_78);
+    RequestTrackTexturePage(g_Cars[g_CameraCarIndex].trackSection);
     UpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     DrawCars();
     UpdateEnvironment();

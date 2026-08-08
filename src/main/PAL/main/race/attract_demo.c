@@ -148,7 +148,8 @@ void UpdateAttractDemoRace(void) {
 
     index = g_CameraCarIndex;
     offset = (((((index * 3) * 4) + index) * 8) - index) * 4;
-    RequestTrackTexturePage(*(s16 *)&g_CarTrackSection[offset]);
+    RequestTrackTexturePage(
+        ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackSection);
 
     UpdateCamera(g_CameraViewMode, &g_Cars[g_CameraCarIndex]);
     DrawCars();

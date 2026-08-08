@@ -910,7 +910,6 @@ extern s16 g_PlayerCarAssetIndex;
 extern Matrix g_MirrorViewMatrix;
 extern u8 g_ReplayFrameBuffer;
 extern u8 g_CarModelByCourse[][11];
-extern u8 g_CarTrackSection[];
 extern s32 g_FmvFrameHeight;
 extern s32 g_FmvFrameWidth;
 extern s32 g_FmvState;
