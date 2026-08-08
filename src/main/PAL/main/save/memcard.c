@@ -11,8 +11,6 @@ extern s32 g_McStatusResult;
 extern s32 g_McPollStatus;
 extern char g_FmtCardDevice[];
 
-/* sprintf: every caller declares its own arity; keep it prototypeless. */
-void LibcSprintf();
 void _card_info(s32 chan);
 void _card_load(s32 chan);
 
@@ -162,7 +160,7 @@ s32 FormatMemoryCard(s32 port, s32 slot) {
     char device[8];
     s32 status;
 
-    LibcSprintf(device, g_FmtCardDevice, port, slot);
+    sprintf(device, g_FmtCardDevice, port, slot);
     ClearMemoryCardSwEvents();
     BiosFormatDevice(device);
     status = WaitMemoryCardSwEvent();
@@ -420,7 +418,7 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
     block[1] = 'C';
     block[2] = 0x11;
     block[3] = 1;
-    LibcSprintf(block + 4, g_FmtString, title);
+    sprintf(block + 4, g_FmtString, title);
 
     tileRow = iconTile / 20;
     iconRect = &g_SaveIconRect;
@@ -1351,7 +1349,7 @@ s32 CountMemoryCardFiles(s32 port, s32 slot) {
     s32 count;
 
     count = 0;
-    LibcSprintf(path, g_FmtCardWildcard, port, slot);
+    sprintf(path, g_FmtCardWildcard, port, slot);
     entry = g_McDirEntries;
 
     if (BiosFirstFile(path, entry) == entry) {
@@ -1421,7 +1419,7 @@ void *FormatSaveElapsedTime(void *dst, u32 seconds) {
     u32 totalMinutes = seconds / 3600;
     u32 totalSeconds = seconds / 60;
 
-    LibcSprintf(dst, g_FmtPlayTime, hours, totalMinutes - (hours * 60), totalSeconds - (totalMinutes * 60));
+    sprintf(dst, g_FmtPlayTime, hours, totalMinutes - (hours * 60), totalSeconds - (totalMinutes * 60));
     return (u8 *)dst + 2;
 }
 
@@ -1465,7 +1463,7 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
         if (flags_reg % 2) {
             s32 i;
 
-            LibcSprintf(text, g_FmtSaveRow, row_bit);
+            sprintf(text, g_FmtSaveRow, row_bit);
             DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
 
             for (i = 0; i < row[0]; i++) {
@@ -1474,30 +1472,30 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
             while (i < 7) {
                 text_ptr[i++] = ' ';
             }
-            LibcSprintf(text + 6, g_FmtSaveRowTail);
+            sprintf(text + 6, g_FmtSaveRowTail);
             DrawLargeTextWide(0x68, y, text, 0x7F, color, color, width, height);
             DrawLargeTextWide(0xB0, y, FormatSaveElapsedTime(text, *(s32 *)(row + 8)), 0x7F, color, color, width, height);
         } else if (flags_reg & 0x10000) {
-            LibcSprintf(text, g_FmtSaveRow, row_bit);
+            sprintf(text, g_FmtSaveRow, row_bit);
             DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
             DrawLargeTextWide(0x88, y, g_McSlotLabelError, 0x7F, color, color, width, height);
         } else if (g_McFreeBlocks == 0) {
             if (g_McMenuPage == 0) {
-                LibcSprintf(text, g_FmtSaveRowEmpty, row_bit);
+                sprintf(text, g_FmtSaveRowEmpty, row_bit);
                 DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
             } else if (g_McMenuRowCursor == 0) {
-                LibcSprintf(text, g_FmtSaveRowEmpty, row_bit);
+                sprintf(text, g_FmtSaveRowEmpty, row_bit);
                 DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
             } else {
-                LibcSprintf(text, g_FmtSaveRow, row_bit);
+                sprintf(text, g_FmtSaveRow, row_bit);
                 DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
                 DrawLargeTextWide(0x90, y, g_McSlotLabelNoFile, 0x7F, color, color, width, height);
             }
         } else if (g_McMenuPage == 0) {
-            LibcSprintf(text, g_FmtSaveRowEmpty, row_bit);
+            sprintf(text, g_FmtSaveRowEmpty, row_bit);
             DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
         } else {
-            LibcSprintf(text, g_FmtSaveRow, row_bit);
+            sprintf(text, g_FmtSaveRow, row_bit);
             DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
             DrawLargeTextWide(0x90, y, g_McSlotLabels + (g_McMenuRowCursor * 10), 0x7F, color, color, width, height);
         }

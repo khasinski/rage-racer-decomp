@@ -10,7 +10,6 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-void LibcSprintf(void *dst, void *fmt, ...);
 s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 extern volatile s32 g_RaceTotalTime;
 extern s32 g_RankingTimes;
@@ -92,7 +91,7 @@ void DrawRankingPanel(u8 *slideX) {
         text[3] = 0x2F;
         FormatLapTime(&text[4], g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].raceTime);
         xOrField = g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].carIndex;
-        LibcSprintf(&text[0xC], g_FmtRecordName,
+        sprintf(&text[0xC], g_FmtRecordName,
                       &g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex],
                       g_CarClassNames[xOrField]);
         color = 0x78CC;
@@ -100,7 +99,7 @@ void DrawRankingPanel(u8 *slideX) {
             color = 0x780F;
         }
         DrawText8x8(panel + 0x14, destination, text, color);
-        LibcSprintf(text, g_FmtCarName, g_CarNames[xOrField]);
+        sprintf(text, g_FmtCarName, g_CarNames[xOrField]);
         DrawText8x8(panel + 0x2C, scoreOrX, text, color);
         destination += 0x14;
         scoreOrX += 0x14;
@@ -133,7 +132,7 @@ void DrawTimeRecordPanel(u8 *s5) {
         FormatLapTime(&text[4], g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].raceTime);
 
         idx = g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2].carIndex;
-        LibcSprintf(&text[0xC], g_FmtRecordName,
+        sprintf(&text[0xC], g_FmtRecordName,
                       &g_TimeRecords[g_GrandPrixSeries][g_CourseIndex][s2], g_CarClassNames[idx]);
 
         color = 0x78CC;
@@ -142,7 +141,7 @@ void DrawTimeRecordPanel(u8 *s5) {
         }
         DrawText8x8(s5 + 0x14, s3, text, color);
 
-        LibcSprintf(text, g_FmtCarName, g_CarNames[idx]);
+        sprintf(text, g_FmtCarName, g_CarNames[idx]);
 
         DrawText8x8(s5 + 0x2C, s4, text, color);
         s3 += 0x14;

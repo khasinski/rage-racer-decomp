@@ -136,7 +136,6 @@ extern s32 g_BestLapTimes[][4][2];
 
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g,
                    s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags) asm("DrawSprite");
-void LibcSprintf(void *dst, void *fmt, s32 v);
 
 /* The ROUND screen: course name, round number and either the prize lines or the best times. */
 void DrawRoundScreen(void) {
@@ -151,7 +150,7 @@ void DrawRoundScreen(void) {
 
     col = UpdateRoundScreenFade(1);
     if (g_GrandPrixMode != 0) {
-        LibcSprintf(buf, D_80010C30, g_GrandPrixRound);
+        sprintf(buf, D_80010C30, g_GrandPrixRound);
         GameDrawProportionalTextShaded(0x5e, 0x68, buf, 0x7812, col);
         y0 = 0x78;
     } else {
@@ -162,11 +161,11 @@ void DrawRoundScreen(void) {
     col = UpdateRoundScreenFade(2);
     if (g_GrandPrixMode != 0) {
         GameDrawProportionalTextShaded(0x80, 0x88, D_80010C40, 0x7812, col);
-        LibcSprintf(buf, D_80010C44, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][0]);
+        sprintf(buf, D_80010C44, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][0]);
         GameDrawProportionalTextShaded(0x56, 0x98, buf, 0x7812, col);
-        LibcSprintf(buf, D_80010C50, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][1]);
+        sprintf(buf, D_80010C50, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][1]);
         GameDrawProportionalTextShaded(0x56, 0xa4, buf, 0x7812, col);
-        LibcSprintf(buf, D_80010C5C, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][2]);
+        sprintf(buf, D_80010C5C, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][2]);
         GameDrawProportionalTextShaded(0x56, 0xb0, buf, 0x7812, col);
     } else {
         GameDrawProportionalTextShaded(0x62, 0x7c, D_80010C68, 0x7812, col);
@@ -201,7 +200,7 @@ void DrawBgmSelector(void) {
     p = AddTilePrim(ot, p, 0xf, 0xcb, 0x122, 0xe, 0xff, 0xff, 0xff);
     *scr = p;
 
-    LibcSprintf(buf, D_80010D2C, g_BgmSelection);
+    sprintf(buf, D_80010D2C, g_BgmSelection);
     x = (g_BgmSelection == 0xa) ? 0x74 : 0x78;
     DrawText8x8(x, 0xce, buf, 0x78cc);
     DrawText8x8(0x90, 0xce, g_BgmTrackNames[g_BgmSelection], 0x78cc);

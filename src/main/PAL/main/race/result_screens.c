@@ -46,7 +46,6 @@ extern s32 g_BestTotalTimes[][4][2];
 extern GrandPrixIntroLayout g_ResultPlaceSprites[];
 extern GrandPrixIntroPosition g_ClassPlaceBarSizes[];
 
-void LibcSprintf(void *dst, void *fmt, ...);
 
 void DrawSeriesClearedWash(s32 x, s32 y) {
     void *ot;
@@ -277,11 +276,11 @@ void DrawGrandprixIntro(void) {
         current = g_GrandPrixClass;
         classNumber = current + 1;
         name = g_GrandPrixNames[g_GrandPrixSeries ? current + 6 : current];
-        LibcSprintf(text, g_FmtClassGrandPrix, classNumber, name);
+        sprintf(text, g_FmtClassGrandPrix, classNumber, name);
     }
     DrawText8x8Trans(0x10, 0x34, text, 0x78CC);
 
-    LibcSprintf(text, g_FmtRoundIn, g_GrandPrixRound);
+    sprintf(text, g_FmtRoundIn, g_GrandPrixRound);
     DrawText8x8Trans(0x10, 0x3C, text, 0x78CC);
 
     {

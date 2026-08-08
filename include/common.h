@@ -50,5 +50,6 @@ typedef float f32;
  */
 /* Stubbed out: does nothing and returns 1. */
 s32 DebugPrintf();
+s32 sprintf(u8 *dest, u8 *format, ...);
 
 #endif

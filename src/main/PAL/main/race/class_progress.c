@@ -7,7 +7,6 @@
 #include "game/sound.h"
 #include "game/render.h"
 
-void LibcSprintf(void *dst, void *fmt, s32 val);
 extern s32 g_CourseProgress;
 extern ScoreRecord g_ClassRecords[];
 extern ScoreRecord g_ClassClears[];
@@ -19,14 +18,14 @@ void DrawPrizeMoneyPanel(u8 *s0) {
         g_RaceProgress->money = 0x3B9AC9FF;
     }
     DrawProportionalText(0x10, s0 + 128, g_CaptionPrizeMoney, 0x7812);
-    LibcSprintf(sp, g_FmtMoney, g_PrizeAmount);
+    sprintf(sp, g_FmtMoney, g_PrizeAmount);
     DrawProportionalText(0x12, s0 + 140, sp, 0x7812);
     DrawProportionalText(0x10, s0 + 160, g_CaptionTotalMoney, 0x7812);
-    LibcSprintf(sp, g_FmtMoney, g_RaceProgress->money);
+    sprintf(sp, g_FmtMoney, g_RaceProgress->money);
     DrawProportionalText(0x12, s0 + 172, sp, 0x7812);
     if (g_ClassPromoted != 0) {
         DrawProportionalText(0x10, s0 + 192, g_CaptionPromotionBonus, 0x7812);
-        LibcSprintf(sp, g_FmtMoney, g_PromotionBonus);
+        sprintf(sp, g_FmtMoney, g_PromotionBonus);
         DrawProportionalText(0x12, s0 + 204, sp, 0x7812);
     }
 }

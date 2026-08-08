@@ -439,7 +439,7 @@ extern const char D_80011920[4];
 extern const char D_80011924[4];
 extern const char D_80011928[4];
 extern const char D_8001192C[8];
-/* "%d": the only format string the menu code passes to LibcSprintf. */
+/* "%d": the only format string the menu code passes to sprintf. */
 extern u8 g_FormatDecimal[];
 extern s32 D_8007C744;
 extern u8 D_8007C7CC[];

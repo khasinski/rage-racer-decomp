@@ -105,7 +105,7 @@ SysEnqIntRP = SysEnqIntRPStub;
 .L80055050_main = CanSelectNextCourse + 0x19C8;
 .L80056060_main = func_80055FDC + 0x84;
 .L80059B54_main = UpdateCarListCursor + 0x834;
-.L800635D0_main = LibcSprintf + 0x2E0;
+.L800635D0_main = sprintf + 0x2E0;
 .L80070740_main = SsSeqApplyNrpn + 0x94;
 .L8007082C_main = SsSeqApplyNrpn + 0x180;
 

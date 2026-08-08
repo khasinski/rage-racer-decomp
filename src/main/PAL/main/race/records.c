@@ -11,7 +11,6 @@ extern u16 g_RankingCars;
 extern s32 g_TimeRecords;
 extern u16 g_TimeRecordCars;
 extern s32 g_BestSectorTimes;
-void LibcSprintf(void *dst, void *fmt, s32 minutes, s32 seconds, s32 millis);
 
 void InitRecordTables(void) {
     register s32 r2 asm("$2");
@@ -186,7 +185,7 @@ void *FormatLapTime(void *dst, s32 value) {
     s32 seconds = ticks - (minutes * 60);
     s32 fraction = value - (ticks * 1000);
 
-    LibcSprintf(dst, g_FmtLapTime, minutes, seconds, fraction);
+    sprintf(dst, g_FmtLapTime, minutes, seconds, fraction);
     return dst;
 }
 

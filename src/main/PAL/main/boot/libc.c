@@ -53,7 +53,7 @@ extern LibcFormatSpec g_LibcDefaultFormat;
 })
 #define LIBC_LOCAL_ZERO ({ s32 zero = '0'; zero; })
 
-s32 LibcSprintf(u8 *dest, u8 *format, ...) {
+s32 sprintf(u8 *dest, u8 *format, ...) {
     LibcFormatWork work;
     u8 *argState[2];
 #define args argState[0]
