@@ -45,7 +45,7 @@ void SeedRouteScenery(void) {
     g_RouteSceneryClock = 1;
 
     series0 = g_RaceSeries;
-    data = (SceneryMotionData *)g_RouteSceneryData;
+    data = g_RouteSceneryData;
     series1 = g_RaceSeries;
     *(Vec4 *)&g_RouteSceneryX = (series0 + data->start)->position;
 

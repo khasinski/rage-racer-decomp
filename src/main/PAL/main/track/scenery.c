@@ -220,7 +220,7 @@ void SeedFlybyScenery(void) {
     s32 scene1;
     s32 recordIndex;
 
-    data = (SceneryMotionData *)g_FlybySceneryData;
+    data = g_FlybySceneryData;
     out = &g_FlybyScenery;
     index = Random15();
     count = g_LapCount;
@@ -276,7 +276,7 @@ void UpdateFlybyScenery(void) {
     s32 dy;
     s32 dz;
 
-    data = (SceneryMotionData *)g_FlybySceneryData;
+    data = g_FlybySceneryData;
     state = &g_FlybyScenery;
 
     if (g_PlayerCar.lap == state->lap) {

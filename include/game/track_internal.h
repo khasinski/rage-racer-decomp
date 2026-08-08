@@ -47,9 +47,9 @@ extern u8 *g_TrackEventData;
 #ifndef GAME_SCENERY_DATA_QUALIFIER
 #define GAME_SCENERY_DATA_QUALIFIER
 #endif
-extern u8 *GAME_SCENERY_DATA_QUALIFIER g_RouteSceneryData;
+extern SceneryMotionData *GAME_SCENERY_DATA_QUALIFIER g_RouteSceneryData;
 extern u8 *GAME_SCENERY_DATA_QUALIFIER g_PathSceneryRotData;
-extern u8 *GAME_SCENERY_DATA_QUALIFIER g_FlybySceneryData;
+extern SceneryMotionData *GAME_SCENERY_DATA_QUALIFIER g_FlybySceneryData;
 extern u8 *GAME_SCENERY_DATA_QUALIFIER g_PathSceneryPosData;
 #undef GAME_SCENERY_DATA_QUALIFIER
 

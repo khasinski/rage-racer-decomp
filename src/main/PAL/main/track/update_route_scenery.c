@@ -23,7 +23,7 @@ void UpdateRouteScenery(void) {
 
     cnt = &g_RouteSceneryClock;
     c = *cnt;
-    base = (SceneryMotionData *)g_RouteSceneryData;
+    base = g_RouteSceneryData;
     if (c <= 0) {
         return;
     }
