@@ -136,8 +136,6 @@ void EndMirrorPass(void) {
     scratch->matrix = D_8009AF00;
 }
 
-s32 GameQueueDrawModePrimWide(u8* ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
-
 u8 *DrawMirrorFrame(u8 *packet) {
     u8 *otArg;
     u8 *prim;
@@ -147,7 +145,7 @@ u8 *DrawMirrorFrame(u8 *packet) {
     s32 colorIndex;
     s32 paletteIndex;
     s32 color;
-    s32 next;
+    u8 *next;
 
     base = g_DrawBuffer;
     ot = base + 0xD0;
@@ -171,8 +169,8 @@ u8 *DrawMirrorFrame(u8 *packet) {
     paletteIndex = colorIndex * 3;
     base2 = g_DrawBuffer;
     ot = base2 + 0xBD0;
-    next = (s32)GameQueueSprite(ot, packet, 0x56, g_MirrorPanelY, D_8007C73A[paletteIndex], 8, D_8007C738[paletteIndex], D_8007C739[paletteIndex], 0x7800);
-    return (u8 *)GameQueueDrawModePrimWide(ot, next, 9);
+    next = GameQueueSprite(ot, packet, 0x56, g_MirrorPanelY, D_8007C73A[paletteIndex], 8, D_8007C738[paletteIndex], D_8007C739[paletteIndex], 0x7800);
+    return QueueDrawModePrim(ot, next, 9);
 }
 
 
