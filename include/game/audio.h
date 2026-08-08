@@ -3,6 +3,17 @@
 
 #include "common.h"
 
+typedef struct EffectCueProgram {
+    s32 note;
+    s32 tone;
+} EffectCueProgram;
+
+typedef struct EffectCueBank {
+    s32 voiceCount;
+    s32 volumeScale;
+    EffectCueProgram programs[2];
+} EffectCueBank;
+
 
 /*
  * Sound voice work buffer, two regions keyed by hardware voice (0..23).
@@ -124,13 +135,6 @@ s32 GetOwnedCarAssetIndex(s32 model);
  * header carried them. */
 
 extern s32 g_SpecialVoiceBits4;
-extern const s32 g_EffectCue0VolScale;
-extern const s32 g_EffectCue0ProgA;
-extern const s32 g_EffectCue0ProgB;
-extern const s32 g_EffectCue1ProgA;
-extern const s32 g_EffectCue1ProgB;
-extern const s32 g_EffectCue2ProgA;
-extern const s32 g_EffectCue2ProgB;
 extern const char g_MsgTooManyVoices[];
 extern u8 g_MusicChannelTone[];
 extern s32 g_MusicChannelMode;
@@ -141,7 +145,7 @@ extern s32 g_ActiveSpecialCue;
 extern s32 g_AudioLoadSlot;
 extern s32 g_AudioSlotMask;
 extern s32 g_CarSoundVolumeScales[];
-extern const s32 g_EffectCueTable[];
+extern const EffectCueBank g_EffectCueTable[3];
 extern s32 g_EngineSoundBank;
 extern s32 g_EngineSoundPosition;
 extern s32 g_ExtraVabLoaded;
