@@ -5,6 +5,7 @@
 #include "game/vector.h"
 
 #include "game/scratchpad.h"
+#include "psyq/gpu.h"
 #include "psyq/gte.h"
 
 /*
@@ -921,7 +922,7 @@ extern char g_FmtGpuSetGraphDebug[];
 extern char g_GpuTraceDrawOTag[];
 extern char g_GpuTracePutDrawEnv[];
 extern char g_GpuTraceDrawOTagEnv[];
-extern s16 g_TrackTextureRowRectY;
+extern Rect g_TrackTextureRowRect;
 extern u8 g_CarMirrorBadgeStyles[];
 extern u8 g_MirrorBadgeTexU[];
 extern u8 g_MirrorBadgeTexV[];

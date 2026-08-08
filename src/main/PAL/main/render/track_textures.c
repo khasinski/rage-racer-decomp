@@ -37,8 +37,8 @@ texture_page_selected:
 void SwapTrackTexturePageNow(void) {
     s32 buffer[0xE0];
     s32 page = 0;
-    s16 *rectY = &g_TrackTextureRowRectY;
-    Rect *rect = (Rect *)((u8 *)&g_TrackTextureRowRectY - 2);
+    s16 *rectY = &g_TrackTextureRowRect.y;
+    Rect *rect = &g_TrackTextureRowRect;
     u8 **basePtr = &g_TrackTextureShadow;
     s32 value;
     s32 *src;
@@ -111,18 +111,17 @@ void SwapTrackTextureRow(void) {
     s32 copyOffset;
     s32 index;
 
-    rectY = &g_TrackTextureRowRectY;
+    rectY = &g_TrackTextureRowRect.y;
     *rectY = (u16)g_TrackTextureCursorRow + 0x100;
     one = 1;
     value = one - g_TrackTextureShadowPage[g_TrackTextureCursorRow];
     if (g_TrackTextureShadowPage[g_TrackTextureCursorRow] == g_TrackTexturePageWanted) {
-        rectY = (s16 *)((u8 *)rectY - 2);
-        rect = (Rect *)rectY;
+        rect = &g_TrackTextureRowRect;
         StoreImage(rect, buffer);
         DrawSync(0);
 
         index = g_TrackTextureCursorRow;
-        rect = (Rect *)rectY;
+        rect = &g_TrackTextureRowRect;
         basePtr = &g_TrackTextureShadow;
         LoadImage(rect, *basePtr + (((index * 7) << 7)));
         DrawSync(0);
