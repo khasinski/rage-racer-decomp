@@ -62,8 +62,8 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
     s32 arcIndex;
     s32 arcCenterX;
     s32 centerX;
-    s32 unusedA;
-    s32 unusedB;
+    s32 leftLimit;
+    s32 rightLimit;
     s32 forwardProduct;
     s32 lateralProduct;
     s32 lateralOffset;
@@ -215,11 +215,11 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
     segLenB = FIELD(spad, s16 *, 0x96);
     edgeHeight = (s32) ((FIELD(nextPoint, s16 *, 0x12) * alongSegment) + (FIELD(point, s16 *, 0x12) * (segLenB - alongSegment))) / segLenB;
     FIELD(spad, s16 *, 0x88) = (s16) edgeHeight;
-    unusedA = FIELD(spad, s16 *, 0x8A) + FIELD(clampPair, s16 *, 2);
+    leftLimit = FIELD(spad, s16 *, 0x8A) + FIELD(clampPair, s16 *, 2);
     clampSource = spad + 0x40;
-    if (lateralOffset < (0 - unusedA))
+    if (lateralOffset < (0 - leftLimit))
     {
-        lateralOffset += unusedA;
+        lateralOffset += leftLimit;
         FIELD(spad, u16 *, 0x60) = 0U;
         FIELD(spad, s16 *, 0x62) = 0;
         FIELD(spad, s16 *, 0x64) = lateralOffset;
@@ -236,10 +236,10 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
     }
     else
     {
-    unusedB = (s16) edgeHeight - FIELD(clampPair, s16 *, 0);
-    if (unusedB < lateralOffset)
+    rightLimit = (s16) edgeHeight - FIELD(clampPair, s16 *, 0);
+    if (rightLimit < lateralOffset)
     {
-        lateralOffset -= unusedB;
+        lateralOffset -= rightLimit;
         FIELD(spad, u16 *, 0x60) = 0U;
         FIELD(spad, s16 *, 0x62) = 0;
         FIELD(spad, s16 *, 0x64) = lateralOffset;
