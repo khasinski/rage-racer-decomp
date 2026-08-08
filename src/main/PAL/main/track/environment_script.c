@@ -7,11 +7,6 @@
 
 #include "game/track_internal.h"
 
-/* The three bytes of the packed slot-0 colour g_EnvColors[0].cur, addressed
- * individually because SetFarColor takes R, G and B separately. The cast is
- * what the byte view costs: render.h is included here, so this TU cannot
- * redeclare g_EnvColors as u8[] under a second name. g_EnvSpare is the fourth,
- * unused byte of the same word. */
 #define ENV_FOG_RGB ((u8 *)g_EnvColors)
 
 /* LerpEnvColor works in bytes, so the eight lerps below address the slots

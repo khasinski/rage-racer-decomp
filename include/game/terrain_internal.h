@@ -2,7 +2,7 @@
 #define GAME_TERRAIN_INTERNAL_H
 
 #include "common.h"
-#include "game/render.h"
+#include "game/environment.h"
 
 typedef union SkyUV {
     struct {

@@ -2,6 +2,7 @@
 #define GAME_RENDER_H
 
 #include "common.h"
+#include "game/environment.h"
 #include "game/vector.h"
 
 #include "game/scratchpad.h"
@@ -800,34 +801,9 @@ void SetGteObjectMatrix();
 /* One packed RGB triple of that timeline. The block starts at 0x801E3FB6, i.e.
  * 2 mod 4, so every word in it is half-aligned and must be declared packed --
  * the compiler emits lwl/lwr, not lw. */
-typedef union GameEnvColor {
-    u32 rgb __attribute__((packed));
-    struct {
-        u8 r;
-        u8 g;
-        u8 b;
-        u8 unused;
-    } bytes;
-} GameEnvColor;
-
-struct GameEnvironmentCue {
-    s32 time;
-    GameEnvColor colors[9];
-    u16 duration;
-    u16 field_2A;
-    u16 mode;
-    u16 field_2E;
-};
-
 /* One timeline slot: the live colour and the pair it is being lerped between.
  * LoadEnvironmentCue rolls `cur` into `from` and the cue's value into `to`;
  * UpdateEnvironment walks `cur` across over g_EnvLerpDuration frames. */
-typedef struct GameEnvColorSlot {
-    GameEnvColor cur;
-    GameEnvColor from;
-    GameEnvColor to;
-} GameEnvColorSlot;
-
 /* The nine slots. [0] is the GTE far/fog colour (SetFarColor takes its three
  * bytes; g_EnvSpare is its unused fourth byte), [1..8] the sky-gradient bands.
  * Only six are lerped on a given course: [5]/[6] and [7]/[8] are alternates
