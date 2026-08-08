@@ -290,6 +290,7 @@ void DrawMenuCarView(void);
 /* Draw and input halves of the logo painter. The canvas D_801E6F2C is a 64x64
  * 4bpp bitmap with its own 16-entry CLUT at g_TeamLogoClut. */
 extern u16 g_TeamLogoClut[16];
+extern TeamLogoCanvas g_TeamLogoCanvas;
 void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep);
 void UpdateTeamLogoCanvas(void);
 

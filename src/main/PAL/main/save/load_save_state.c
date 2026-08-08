@@ -153,7 +153,7 @@ s32 LoadSaveStateBlock(u8 *block) {
             u8 *src;
 
             i = 0;
-            dst = g_TeamLogoCanvas;
+            dst = g_TeamLogoCanvas.halfwords;
             src = base;
             for (; i < 0x400; i++) {
                 *dst++ = *(u16 *)(src + 0x1DC);
@@ -315,7 +315,7 @@ s32 LoadSaveStateBlock(u8 *block) {
 
     LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
     ApplyAudioSettings();
-    LoadImage(&g_TeamLogoRect, g_TeamLogoCanvas);
+    LoadImage(&g_TeamLogoRect, &g_TeamLogoCanvas);
     LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
     return 1;
 }

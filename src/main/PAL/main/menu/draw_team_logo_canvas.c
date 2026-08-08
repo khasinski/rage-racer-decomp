@@ -122,7 +122,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     }
 
   }
-  LoadImage(&g_TeamLogoRect, g_TeamLogoCanvas);
+  LoadImage(&g_TeamLogoRect, &g_TeamLogoCanvas);
   LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
   LoadImage(&g_TeamLogoFadedClutRect, g_TeamLogoFadedClut);
   if (a0v < 0)
@@ -554,7 +554,7 @@ void ScrollTeamLogoUp(void) {
 
     PlaySoundCue(1);
 
-    base = g_TeamLogoCanvas;
+    base = g_TeamLogoCanvas.words[0];
     for (i = 0; i < 8; i++) {
         saved[i] = base[i];
     }
@@ -579,7 +579,7 @@ void ScrollTeamLogoDown(void) {
 
     i = 0;
     stackPtr = saved;
-    base = g_TeamLogoCanvas;
+    base = g_TeamLogoCanvas.words[0];
     cursor = base;
     do {
         value = cursor[0x1F8];
@@ -631,7 +631,7 @@ void ScrollTeamLogoLeft(void) {
 
     row = 0;
     savePtr = saved;
-    base = g_TeamLogoCanvas;
+    base = g_TeamLogoCanvas.words[0];
     cursor = base;
     do {
         value = *cursor;
@@ -689,7 +689,7 @@ void ScrollTeamLogoRight(void) {
 
     row = 0;
     savePtr = saved;
-    base = g_TeamLogoCanvas;
+    base = g_TeamLogoCanvas.words[0];
     cursor = base;
     do {
         u32 last = cursor[7];
@@ -743,7 +743,7 @@ void FlipTeamLogoVertical(void) {
     u32 *base;
 
     PlaySoundCue(8);
-    base = g_TeamLogoCanvas;
+    base = g_TeamLogoCanvas.words[0];
     i = 0;
     mirror = 0x3F;
     do {

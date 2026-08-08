@@ -21,6 +21,12 @@ typedef struct TeamLogoSample {
     u16 canvas[64][16];
 } TeamLogoSample;
 
+typedef union TeamLogoCanvas {
+    u8 bytes[0x800];
+    u16 halfwords[0x400];
+    u32 words[64][8];
+} TeamLogoCanvas;
+
 typedef struct PaintColorTable {
     Rgb colors[18];
 } PaintColorTable;

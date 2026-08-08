@@ -30,16 +30,13 @@ extern CourseProgressState g_GrandPrixCourseProgress;
 extern CourseProgressState g_ExtraGrandPrixCourseProgress;
 extern CourseProgressState *g_CourseProgress;
 extern GAME_SAVE_BGM_TYPE g_BgmSelection;
-#ifndef GAME_TEAM_LOGO_CANVAS_DECL
-#define GAME_TEAM_LOGO_CANVAS_DECL extern u16 g_TeamLogoCanvas[0x400]
-#endif
 #ifndef GAME_TEAM_LOGO_RECT_DECL
 #define GAME_TEAM_LOGO_RECT_DECL extern Rect g_TeamLogoRect
 #endif
 #ifndef GAME_TEAM_LOGO_CLUT_RECT_DECL
 #define GAME_TEAM_LOGO_CLUT_RECT_DECL extern Rect g_TeamLogoClutRect
 #endif
-GAME_TEAM_LOGO_CANVAS_DECL;
+extern TeamLogoCanvas g_TeamLogoCanvas;
 GAME_TEAM_LOGO_RECT_DECL;
 GAME_TEAM_LOGO_CLUT_RECT_DECL;
 #ifndef GAME_BEST_LAP_DECL
@@ -60,7 +57,6 @@ GAME_BEST_SECTOR_DECL;
 #undef GAME_BEST_TOTAL_DECL
 #undef GAME_BEST_LAP_DECL
 #undef GAME_BEST_SECTOR_DECL
-#undef GAME_TEAM_LOGO_CANVAS_DECL
 #undef GAME_TEAM_LOGO_RECT_DECL
 #undef GAME_TEAM_LOGO_CLUT_RECT_DECL
 

@@ -59,7 +59,7 @@ void LoadBootAssets(void) {
 
             UploadImageAsset(g_AssetLoadCursor);
             StoreImage(&g_TeamLogoClutRect, g_TeamLogoClut);
-            StoreImage(&g_TeamLogoRect, g_TeamLogoCanvas);
+            StoreImage(&g_TeamLogoRect, &g_TeamLogoCanvas);
             DrawSync(0);
             assetBase = g_AssetLoadCursor;
             g_TeamLogoClut[0] = 0;

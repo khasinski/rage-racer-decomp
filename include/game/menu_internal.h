@@ -10,7 +10,7 @@ extern s32 g_PaintPalettePulsePhase;
 extern s32 g_MenuAltLayout;
 extern s32 g_OwnedCarCounterSlide;
 extern u16 g_TeamLogoClut[16];
-extern u32 g_TeamLogoCanvas[];
+extern TeamLogoCanvas g_TeamLogoCanvas;
 extern u8 g_TeamLogoExpertMode;
 extern s32 g_TeamLogoCursorY;
 extern s32 g_TeamLogoViewY;

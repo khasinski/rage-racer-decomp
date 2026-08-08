@@ -133,7 +133,7 @@ void StoreSaveStateBlock(u8 *block) {
             u8 *dst;
 
             count = 0;
-            src = g_TeamLogoCanvas;
+            src = g_TeamLogoCanvas.halfwords;
             dst = block;
             for (; count < 0x400; count++) {
                 *(u16 *)(dst + 0x1DC) = *src++;

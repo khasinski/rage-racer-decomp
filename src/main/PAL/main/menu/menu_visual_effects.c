@@ -32,7 +32,7 @@ void FlipTeamLogoHorizontal(void) {
 
     PlaySoundCue(8);
 
-    base = g_TeamLogoCanvas;
+    base = g_TeamLogoCanvas.words[0];
     row = 0;
     lastWord = 7;
     do {
@@ -100,7 +100,7 @@ void RotateTeamLogoCcw(void) {
 
     PlaySoundCue(8);
 
-    base = g_TeamLogoCanvas;
+    base = g_TeamLogoCanvas.words[0];
     i = 0;
     limit = 7;
     do {
@@ -183,7 +183,7 @@ void RotateTeamLogoCw(void) {
     PlaySoundCue(8);
 
     i = 0;
-    base = g_TeamLogoCanvas;
+    base = g_TeamLogoCanvas.words[0];
     rowBase = base;
     do {
         j = 0;
@@ -492,7 +492,7 @@ void UpdateTeamLogoCanvas(void) {
                             s32 q;
                             s32 rem;
 
-                            p = (u16 *)g_TeamLogoCanvas;
+                            p = g_TeamLogoCanvas.halfwords;
                             sum = g_TeamLogoViewX + g_TeamLogoCursorX + plotColumn;
                             adj = sum;
                             row = (g_TeamLogoViewY + g_TeamLogoCursorY + plotRow) * 0x10;
@@ -533,7 +533,7 @@ void UpdateTeamLogoCanvas(void) {
                             s32 rem;
 
                             sum = g_TeamLogoViewX + g_TeamLogoCursorX + eraseColumn;
-                            p = (u16 *)g_TeamLogoCanvas;
+                            p = g_TeamLogoCanvas.halfwords;
                             adj = sum;
                             row = g_TeamLogoViewY + g_TeamLogoCursorY + eraseRow;
                             row *= 0x10;
@@ -669,7 +669,7 @@ void UpdateTeamLogoCanvas(void) {
         }
         if ((g_PadPressed & 2) && (g_TeamLogoExpertMode != 0)) {
             PlaySoundCue(4);
-            canvasWord = (u16 *)g_TeamLogoCanvas;
+            canvasWord = g_TeamLogoCanvas.halfwords;
             cursorX = g_TeamLogoViewX + g_TeamLogoCursorX;
             pixelX = cursorX;
             rowWords = (g_TeamLogoViewY + g_TeamLogoCursorY) * 0x10;

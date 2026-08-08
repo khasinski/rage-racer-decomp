@@ -7,7 +7,6 @@
 #define GAME_MENU_SCRIPT_TYPE u8
 #include "game/menu_scripts_internal.h"
 #include "game/player_car_internal.h"
-#define GAME_TEAM_LOGO_CANVAS_DECL extern u8 g_TeamLogoCanvas[]
 #define GAME_TEAM_LOGO_RECT_DECL extern u8 g_TeamLogoRect[]
 #define GAME_TEAM_LOGO_CLUT_RECT_DECL extern u8 g_TeamLogoClutRect[]
 #include "game/save_internal.h"
@@ -78,7 +77,7 @@ void EnterCourseSelectScreen(void) {
         g_TimeAttackPlateStep = -1;
     }
 
-    LoadImage(g_TeamLogoRect, g_TeamLogoCanvas);
+    LoadImage(g_TeamLogoRect, &g_TeamLogoCanvas);
     LoadImage(g_TeamLogoClutRect, g_TeamLogoClut);
     UploadTeamNameTexture(g_TeamNameChars, g_TeamNameLength);
 }

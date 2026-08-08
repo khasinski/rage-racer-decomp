@@ -88,7 +88,7 @@ void ComposeSampleTeamLogo(s32 character, s32 background)
         } while (index < 16);
     }
 
-    dst = g_TeamLogoCanvas;
+    dst = g_TeamLogoCanvas.halfwords;
     outer = 0;
     src0 = &g_TeamLogoSampleData[row0].canvas[0][0];
     src = &g_TeamLogoSampleData[row1].canvas[0][0];
