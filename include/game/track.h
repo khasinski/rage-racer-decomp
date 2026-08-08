@@ -301,7 +301,7 @@ typedef struct PathSceneryRotationData {
     PathSceneryRotationKey keys[1];
 } PathSceneryRotationData;
 
-extern u8 *g_PathSceneryPosKeys;
+extern PathSceneryPositionKey *g_PathSceneryPosKeys;
 typedef struct PathSceneryCursor {
     s16 phase;
     s16 otherPhase;
@@ -315,10 +315,9 @@ typedef struct PathSceneryCursor {
 extern u16 g_PathSceneryPosPhase;
 extern u16 g_PathSceneryPosRate;
 extern s16 g_PathSceneryPosSpan;
-extern u16 g_PathSceneryRotFrameU;
 extern s16 g_PathSceneryRotHalfDelta[3];
 extern s16 g_PathSceneryRotIndex;
-extern u8 *g_PathSceneryRotKeys;
+extern PathSceneryRotationKey *g_PathSceneryRotKeys;
 extern u16 g_PathSceneryRotPhase;
 extern u16 g_PathSceneryRotRate;
 extern s16 g_PathSceneryRotSpan;

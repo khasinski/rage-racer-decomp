@@ -709,7 +709,6 @@ D_801E4DA0 = 0x801E4DA0; // size:0x8
 g_ClassWinCount = 0x801E4DA8; // size:0x4
 g_GrandPrixMode = 0x801E4DAC; // size:0x4
 g_PathSceneryClock = 0x801E4DB0; // size:0x2
-g_PathSceneryRotFrameU = 0x801E4DB2; // size:0x2
 D_801E4DB4 = 0x801E4DB4; // size:0x2
 D_801E4DB6 = 0x801E4DB6; // size:0x2
 g_PathSceneryX = 0x801E4DB8; // size:0x4
