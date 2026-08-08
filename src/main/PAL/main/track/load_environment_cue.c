@@ -31,19 +31,19 @@ void LoadEnvironmentCue(GameEnvironmentCue *cue) {
     g_EnvColors[8].to = cue->colors[8];
     g_EnvColors[8].from = g_EnvColors[8].cur;
 
-    field28 = *(u16 *)((u8 *)cue + 0x28);
+    field28 = RAW(cue->duration);
     mode = g_EnvironmentMode;
     g_EnvLerpDuration = field28;
-    newMode = *(u16 *)((u8 *)cue + 0x2C);
+    newMode = RAW(cue->mode);
     g_EnvironmentMode = newMode;
-    flag = *(u16 *)((u8 *)cue + 0x2E);
+    flag = RAW(cue->spareTarget);
     g_EnvironmentModePrev = mode;
     g_EnvSpareLerp = ((flag >> 15) ^ 1);
     compareMode = 4;
 
     if (g_EnvSpareLerp != 0) {
         g_EnvSpareFrom = g_EnvSpare;
-        g_EnvSpareTo = RAW(cue->field_2E);
+        g_EnvSpareTo = RAW(cue->spareTarget);
     }
 
     signedMode = (s16)newMode;

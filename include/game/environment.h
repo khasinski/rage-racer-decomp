@@ -19,9 +19,9 @@ struct GameEnvironmentCue {
     s32 time;
     GameEnvColor colors[9];
     u16 duration;
-    u16 field_2A;
+    u16 reserved2A;
     u16 mode;
-    u16 field_2E;
+    u16 spareTarget;
 };
 
 typedef struct GameEnvColorSlot {
