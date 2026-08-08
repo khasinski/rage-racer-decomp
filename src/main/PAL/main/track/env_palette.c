@@ -7,16 +7,17 @@ void SetEnvPaletteTable(void *table) {
 }
 
 
-void LerpEnvColor(u8 *from, u8 *to, u8 *out, s32 blend) {
+void LerpEnvColor(GameEnvColor *from, GameEnvColor *to, GameEnvColor *out,
+                  s32 blend) {
     s32 local[3];
     u8 result[4];
 
-    local[0] = from[0] << 4;
-    local[1] = from[1] << 4;
-    local[2] = from[2] << 4;
-    SetFarColor(to[0], to[1], to[2]);
+    local[0] = from->bytes.r << 4;
+    local[1] = from->bytes.g << 4;
+    local[2] = from->bytes.b << 4;
+    SetFarColor(to->bytes.r, to->bytes.g, to->bytes.b);
     Intpl(local, blend, result);
-    out[0] = result[0];
-    out[1] = result[1];
-    out[2] = result[2];
+    out->bytes.r = result[0];
+    out->bytes.g = result[1];
+    out->bytes.b = result[2];
 }
