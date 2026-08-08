@@ -31,7 +31,7 @@ extern u8 *g_TrackCameras;
 
 /*
  * Camera-mode state machine: `cameraModeSel` selects among the camera behaviours
- * (chase / bumper / replay-orbit / intro-pan, etc.); `arg1` is the followed
+ * (chase / bumper / replay-orbit / intro-pan, etc.); `car` is the followed
  * render/target object. Positions the eye and fills the scratchpad view state
  * (view[2..8]) with matrix/atan2/sqrt math, then submits via DrawPlayerCarModel.
  * Field accesses use the FIELD(base,type,offset) raw-offset macro to stay

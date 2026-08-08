@@ -220,10 +220,10 @@ s32 rcos(s32 angle);
  * Collision / boundary response: sets the car's knock-back motion vector
  * (velocityX / velocityZ, motionTimer, motionActive) from a push direction and
  * speed derived per `mode` (0 / 2 / 4 select different angle+speed math from
- * arg1/arg2). Register-pinned, goto-structured decompilation; do not restructure.
+ * x/z). Register-pinned, goto-structured decompilation; do not restructure.
  */
 
-s32 InterpolateTrackAngle(s32 arg0);
+s32 InterpolateTrackAngle(s32 index);
 
 void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
     GameCarRuntime *carReg;

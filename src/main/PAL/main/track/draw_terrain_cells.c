@@ -7,7 +7,7 @@
 
 extern s32 g_VisibleCellList;
 void BuildVisibleCells(s32 near, s32 far);
-void SubmitTerrainCells(s32 arg0, s32 arg1, s32 arg2);
+void SubmitTerrainCells(s32 ctx, s32 cells, s32 count);
 
 void DrawTerrainCells(void) {
     BuildVisibleCells(-12288, 0x14000);

@@ -229,15 +229,15 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
         register void *ptr;
         register s32 g;
         register s32 b;
-        register s32 arg3;
+        register s32 smallWidth;
         s32 small_height;
 
         ptr = base + 0x70;
         g = 0x56;
         b = 0x12;
-        arg3 = 0x94;
+        smallWidth = 0x94;
         small_height = 0x24;
-        SetDefDrawEnv((DrawEnv *)ptr, g, b, arg3, small_height);
+        SetDefDrawEnv((DrawEnv *)ptr, g, b, smallWidth, small_height);
         SetDefDrawEnv((DrawEnv *)D_801C0690, 0x56, 0x102, 0x94, small_height);
     }
 

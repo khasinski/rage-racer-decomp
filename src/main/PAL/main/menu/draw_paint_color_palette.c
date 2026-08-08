@@ -115,23 +115,23 @@ extern s32 D_8007FB2C;
 
 void GameDrawSpriteWide(void* ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags) asm("DrawSprite");
 
-void DrawOwnedCarCounter(s32 arg0, s32 arg1) {
-    s32 count;
+void DrawOwnedCarCounter(s32 owned, s32 step) {
+    s32 ownedCount;
     s32 a1v;
     void *ot;
     s32 v0, v1, t, t2;
     s16 y;
 
-    count = arg0;
+    ownedCount = owned;
     ot = SCRATCH_OT_BASE;
-    a1v = arg1;
+    a1v = step;
 
-    if (count == 0) {
+    if (ownedCount == 0) {
         D_8007FB2C = 0;
         return;
     }
-    if (count < 0) {
-        v0 = count + D_8007FB2C;
+    if (ownedCount < 0) {
+        v0 = ownedCount + D_8007FB2C;
         D_8007FB2C = v0;
         if (v0 < 0) {
             D_8007FB2C = 0;
@@ -152,8 +152,8 @@ void DrawOwnedCarCounter(s32 arg0, s32 arg1) {
         GameDrawSpriteWide(ot, 0x7C, y, 0x8, 0x10, 0x8C, 0xDC, 0, 0, 0, 0x259, 1, 1, 0x3B);
         GameDrawMenuButton(0, (s16)t2, 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);
     }
-    if (count > 0) {
-        v0 = count + D_8007FB2C;
+    if (ownedCount > 0) {
+        v0 = ownedCount + D_8007FB2C;
         D_8007FB2C = v0;
         if (v0 >= 0x1A) {
             D_8007FB2C = 0x19;

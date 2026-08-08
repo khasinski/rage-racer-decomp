@@ -6,11 +6,11 @@ extern long g_CdCommandNeedsSetloc[];
 extern long g_CdSyncCallback;
 extern u_char g_CdStatusByte;
 
-long CD_cw(long arg0, void *arg1, long arg2, long arg3);
+long CD_cw(long com, void *param, long result, long mode);
 
 /*
- * Core CD command sender with retry: issues command `arg0` (low byte) with the
- * parameter bytes at `arg1` and result flags `arg2`, retrying up to 3 times.
+ * Core CD command sender with retry: issues command `com` (low byte) with the
+ * parameter bytes at `param` and result flags `result`, retrying up to 3 times.
  * Saves/restores the CD mode g_CdSyncCallback around the call. Heavily register-
  * pinned to match; the C identifiers may be renamed but the asm("$N") pins and
  * offsets must not change.
@@ -18,7 +18,7 @@ long CD_cw(long arg0, void *arg1, long arg2, long arg3);
 long CdControl(long com, void *param, long result);
 long CdControl(long com, void *param, long result) {
     void *arg;
-    long arg2Reg;
+    long resultReg;
     register long cmd asm("$20");
     long retries;
     long command;
@@ -29,7 +29,7 @@ long CdControl(long com, void *param, long result) {
     long status;
 
     arg = param;
-    arg2Reg = result;
+    resultReg = result;
     cmd = com;
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
@@ -49,13 +49,13 @@ long CdControl(long com, void *param, long result) {
         }
 
         if (arg != 0 && *commandState != 0) {
-            if (CD_cw(2, arg, arg2Reg, 0) != 0) {
+            if (CD_cw(2, arg, resultReg, 0) != 0) {
                 continue;
             }
         }
 
         g_CdSyncCallback = savedMode;
-        if (CD_cw((u8)cmd, arg, arg2Reg, 0) == 0) {
+        if (CD_cw((u8)cmd, arg, resultReg, 0) == 0) {
             goto done;
         }
 
@@ -120,11 +120,11 @@ done:
 }
 
 
-long CD_sync(long arg0, long arg1);
+long CD_sync(long mode, long result);
 
 long CdControlB(long com, void *param, long result) {
     void *arg;
-    long arg2Reg;
+    long resultReg;
     register long cmd asm("$20");
     long retries;
     long command;
@@ -136,7 +136,7 @@ long CdControlB(long com, void *param, long result) {
     long zero;
 
     arg = param;
-    arg2Reg = result;
+    resultReg = result;
     cmd = com;
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;
@@ -156,13 +156,13 @@ long CdControlB(long com, void *param, long result) {
         }
 
         if (arg != 0 && *commandState != 0) {
-            if (CD_cw(2, arg, arg2Reg, 0) != 0) {
+            if (CD_cw(2, arg, resultReg, 0) != 0) {
                 continue;
             }
         }
 
         g_CdSyncCallback = savedMode;
-        if (CD_cw((u8)cmd, arg, arg2Reg, 0) == 0) {
+        if (CD_cw((u8)cmd, arg, resultReg, 0) == 0) {
             status = 0;
             goto done;
         }
@@ -175,7 +175,7 @@ long CdControlB(long com, void *param, long result) {
 done:
     zero = 0;
     if (status == 0) {
-        status = CD_sync(zero, arg2Reg) == 2;
+        status = CD_sync(zero, resultReg) == 2;
     } else {
         status = 0;
     }

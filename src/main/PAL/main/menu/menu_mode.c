@@ -11,7 +11,7 @@
 
 void GameDrawTexturedQuadWide() asm("GameDrawTexturedQuad");
 
-void DrawMenuAltPanel(s32 arg0, s32 arg1) {
+void DrawMenuAltPanel(s32 stepA, s32 stepB) {
     s32 step0;
     s32 step1;
     void *scratch;
@@ -25,8 +25,8 @@ void DrawMenuAltPanel(s32 arg0, s32 arg1) {
     s32 callX;
 
     scratch = SCRATCH_OT_BASE;
-    step0 = arg0;
-    step1 = arg1;
+    step0 = stepA;
+    step1 = stepB;
 
     if (step0 == 0 && step1 == 0) {
         D_8007FB40 = step0;
@@ -236,9 +236,9 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     }
 }
 
-void DrawTimeAttackPlate(s32 arg0) {
+void DrawTimeAttackPlate(s32 stepArg) {
     void *scratch = SCRATCH_OT_BASE;
-    s32 step = arg0;
+    s32 step = stepArg;
     s32 value;
     s32 renderValue;
     s32 y0;

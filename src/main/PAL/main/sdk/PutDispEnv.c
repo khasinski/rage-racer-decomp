@@ -33,7 +33,7 @@ extern GfxState g_GpuFuncs;
 extern char D_80013614[];
 extern Cache g_DispEnvCache;
 
-long get_dx(void *arg0);
+long get_dx(void *env);
 void *MemCopy(void *dst, void *src, long count);
 
 /* libgpu PutDispEnv: GP1(05h/06h/07h/08h) from a 0x14-byte DISPENV.

@@ -61,7 +61,7 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     }
 }
 
-void *QueueDrawModePrim(void *ot, void *prim, s32 arg2);
+void *QueueDrawModePrim(void *ot, void *prim, s32 tpage);
 
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u16 u0, u16 v0, u8 r, u8 g, u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags) {
     SPRT *prim;

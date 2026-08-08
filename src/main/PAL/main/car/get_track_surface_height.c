@@ -30,7 +30,7 @@ typedef struct TrackSurfaceCell {
     s32 field_30;
 } TrackSurfaceCell;
 
-s32 FindTrackSegment(TrackSurfaceCell *arg0, s32 arg1);
+s32 FindTrackSegment(TrackSurfaceCell *cell, s32 index);
 
 s32 GetTrackSurfaceHeight(TrackSurfaceCell *cell) {
     s32 index;

@@ -16,7 +16,7 @@ void CdDefaultSyncCallback(void);
 void CdDefaultReadyCallback(void);
 void CdDefaultReadCallback(void);
 void DeliverEvent(u_long event, long spec);
-void CdReadCallback(void *arg0);
+void CdReadCallback(void *callback);
 
 long CdGetToc2(long maxTracks, u_char *out) {
     u_char *fmt;

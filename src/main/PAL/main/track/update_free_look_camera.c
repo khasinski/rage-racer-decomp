@@ -15,13 +15,13 @@ extern GameRenderObject g_CameraCar;
 
 s32 rsin(s32 angle);
 s32 rcos(s32 angle);
-void AccumulateLapProgress(void *arg0);
+void AccumulateLapProgress(void *car);
 void UpdateCarTrackState(void* obj, s32 trackPointIndex, void* clampPair);
 
 /*
  * Fuller sibling of UpdateFinishCamera: camera track-follower with bob/shake. Aims
  * the eye object g_CameraCar at a look-ahead centre-line point, and when
- * updateMotion (arg1) is set, ramps the follow distance and applies the shake
+ * updateMotion is set, ramps the follow distance and applies the shake
  * offsets g_FreeCameraAngleOffset[] driven by the input bits in g_PadHeld. Builds and
  * transposes the view rotation matrices, projects the eye-forward point, and
  * writes the scratchpad view state (view[2..4]=eye XYZ, view[6]=pitch,

@@ -31,7 +31,7 @@ extern volatile long g_CdReadExpectedSector;
 extern volatile long g_CdReadSavedSyncCallback;
 extern volatile long g_CdReadSavedReadyCallback;
 void CdGetSector2(void *dst, long words);
-long CdPosToInt_Local(void *arg0);
+long CdPosToInt_Local(void *loc);
 void LibcPutString(void *str);
 long CdControl(long com, long param, long result);
 long CdStatus(void);

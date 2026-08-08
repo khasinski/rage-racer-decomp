@@ -7,18 +7,18 @@ void GameDrawSpriteWide(void *ot, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 
                    s32 g, s32 b, s32 clut, s32 shadeTex, s32 semiTrans,
                    s32 flags) asm("DrawSprite");
 /* The bottom-right plate: grade digit, manufacturer sprite and model-name sprite. */
-void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
+void DrawCarNamePlate(s32 step, s32 model, s32 grade) {
     void *ot;
     u32 idx;
     u32 shade;
 
     ot = (u8 *)SCRATCH_OT_BASE_AS(void) + 4;
-    if (arg0 == 0) {
+    if (step == 0) {
         g_CarNamePlateFade = 0;
         return;
     }
-    if (arg0 < 0) {
-        g_CarNamePlateFade += arg0;
+    if (step < 0) {
+        g_CarNamePlateFade += step;
         if (g_CarNamePlateFade < 0) {
             g_CarNamePlateFade = 0;
         }
@@ -28,7 +28,7 @@ void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
     GameDrawSpriteWide(ot, 0x100, 0x168, 0x20, 0x10, 0x7C, 0x7C, (u8)shade,
                   (u8)shade, (u8)shade, 0x244, 0, 1, 0x3B);
 
-    idx = (GetCarUnlockLevel(arg1) + arg2) & 0xFFFF;
+    idx = (GetCarUnlockLevel(model) + grade) & 0xFFFF;
     if (idx >= 5) {
         GameDrawSpriteWide(ot, 0x11F, 0x168, 8, 0x10, 0x38, 0x28, (u8)shade,
                       (u8)shade, (u8)shade, 0x244, 0, 1, 0x3B);
@@ -38,7 +38,7 @@ void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
                       0x3B);
     }
 
-    switch (arg1) {
+    switch (model) {
     case 0:
     case 1:
     case 2:
@@ -68,7 +68,7 @@ void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
         break;
     }
 
-    switch (arg1) {
+    switch (model) {
     case 0:
         GameDrawSpriteWide(ot, 0xFC, 0x188, 0x2A, 0x10, 0xA, 0x30, (u8)shade,
                       (u8)shade, (u8)shade, 0x244, 0, 1, 0x3E);
@@ -123,8 +123,8 @@ void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2) {
         break;
     }
 
-    if (arg0 > 0) {
-        g_CarNamePlateFade += arg0;
+    if (step > 0) {
+        g_CarNamePlateFade += step;
         if (g_CarNamePlateFade >= 509) {
             g_CarNamePlateFade = 508;
         }

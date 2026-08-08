@@ -23,16 +23,16 @@ void LibcMemcpy(char *dst, u_char *src, long n);
 /* Fills the 64-entry file cache from one ISO directory, converting each
  * record's extent to a CdlLOC. Owns its three "CD_cachefile: ..." messages. */
 long CD_cachefile(long dir);
-long CD_cachefile(long arg0)
+long CD_cachefile(long dir)
 {
   u_char *p;
   long i;
   u_long lba;
-  if (arg0 == g_CdCachedDir)
+  if (dir == g_CdCachedDir)
   {
     return 1;
   }
-  if (cd_read(1, D_8009C0F0[arg0].f0, g_CdSectorBuf) != 1)
+  if (cd_read(1, D_8009C0F0[dir].f0, g_CdSectorBuf) != 1)
   {
     if (g_CdDebugLevel > 0)
     {
@@ -62,7 +62,7 @@ long CD_cachefile(long arg0)
     }
   }
 
-  g_CdCachedDir = arg0;
+  g_CdCachedDir = dir;
   if (0x40 > i)
   {
     g_CdFileCache[i].name[0] = 0;

@@ -11,17 +11,17 @@
  * with no argument at all (the original relied on whatever was left in $4), so
  * the unit must not expose a prototype for it.
  */
-s32 SelectTrackTexturePage(arg0)
-s32 arg0;
+s32 SelectTrackTexturePage(section)
+s32 section;
 {
     s32 ret;
     s32 one;
 
     ret = 0;
     switch (0) { default:
-    if (arg0 >= g_TrackTextureSectionLo) {
+    if (section >= g_TrackTextureSectionLo) {
         ret = 0x100;
-        if (arg0 >= g_TrackTextureSectionHi) {
+        if (section >= g_TrackTextureSectionHi) {
             ret = 0;
         } else {
             one = 1;

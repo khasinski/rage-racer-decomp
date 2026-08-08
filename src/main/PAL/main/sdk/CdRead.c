@@ -15,7 +15,7 @@ extern u_char g_DrawModeEnv[];
 void SetSprt(u_char *prim);
 void AddPrim(void *ot, void *prim);
 void *SetDrawMode(void *prim, long a, long b, long c, void *d);
-long AddTilePrim(long arg0, long arg1, long arg2, long arg3, long arg4, long arg5, long arg6, long arg7, long arg8);
+long AddTilePrim(long ot, long prim, long x, long y, long w, long h, long r, long g, long b);
 
 long CdRead(long sectors, void *buf, long readMode) {
     long savedArg0;

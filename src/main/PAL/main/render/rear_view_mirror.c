@@ -176,7 +176,7 @@ u8 *DrawMirrorFrame(u8 *packet) {
 }
 
 
-void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2);
+void SubmitTerrainCells(void *ctx, s32 cells, s32 count);
 
 void DrawRearViewMirror(s32 mode) {
     u8 **scratch;

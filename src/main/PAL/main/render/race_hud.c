@@ -141,13 +141,13 @@ void DrawLapTimes(void) {
 }
 
 void DrawTimeRemaining(s32 time) {
-    s32 arg3 = 0x78CC;
+    s32 clutIndex = 0x78CC;
 
     if (time < 0x5DC) {
-        arg3 = 0x7811;
+        clutIndex = 0x7811;
     }
 
-    DrawMinuteSecondTime(0xE, 0xD2, time, arg3);
+    DrawMinuteSecondTime(0xE, 0xD2, time, clutIndex);
 }
 
 /* The two race-position digits, from g_RacePosition; the tens digit is

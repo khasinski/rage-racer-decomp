@@ -144,13 +144,13 @@ void ApplyAudioSettings(void) {
     }
 }
 
-void ResetProgressSlot(void *arg0, s32 *arg1) {
+void ResetProgressSlot(void *slot, s32 *progress) {
     CarEntry *dst;
     CarEntry *src;
     s32 i;
 
     i = 0;
-    dst = arg0;
+    dst = slot;
     src = g_SaveDefaults;
     do {
         *dst = *src;
@@ -158,11 +158,11 @@ void ResetProgressSlot(void *arg0, s32 *arg1) {
         i++;
     } while (src++, i < 13);
 
-    arg1[1] = 3;
-    arg1[0] = 0;
-    arg1[2] = 0;
-    arg1[3] = -1;
-    arg1[4] = 0;
+    progress[1] = 3;
+    progress[0] = 0;
+    progress[2] = 0;
+    progress[3] = -1;
+    progress[4] = 0;
 }
 
 void ResetCourseProgress(s32 mode) {

@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/menu.h"
 #include "game/scratchpad.h"
-void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 arg5, s32 color, s32 arg7,
-                   s32 arg8);
+void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b,
+                   s32 alpha);
 
 void DrawSprite(void *ot, s16 x0, s16 y0, s16 x1, u16 y1, u8 u0, u8 v0, u8 r, u8 g,
                    u8 b, u16 clutX, s32 shadeTex, s32 semiTrans, u32 flags);
@@ -12,7 +12,7 @@ s32 rsin(s32 angle);
 void DrawLogoSprite() asm("DrawSprite");
 void DrawLogoRect() asm("DrawSolidRect");
 
-void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
+void DrawLogoSamplePanel(s32 step, s32 sample) {
     void *ot = SCRATCH_OT_BASE_AS(void);
     s32 idx;
     u32 t;
@@ -21,12 +21,12 @@ void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
     s32 xoff;
     s32 xc = 0xA2;
 
-    if (arg0 == 0) {
+    if (step == 0) {
         D_8007FB24 = 0;
         return;
     }
-    if (arg0 < 0) {
-        D_8007FB24 += arg0;
+    if (step < 0) {
+        D_8007FB24 += step;
         if (D_8007FB24 < 0) {
             D_8007FB24 = 0;
         }
@@ -38,8 +38,8 @@ void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
         }
         t = (u32) - (idx * 960) >> 5;
         y = t + 494;
-        DrawSprite(ot, 0xDA, y, 8, 0x10, (arg1 / 10) << 3, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
-        DrawSprite(ot, 0xE2, y, 8, 0x10, (arg1 % 10) << 3, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+        DrawSprite(ot, 0xDA, y, 8, 0x10, (sample / 10) << 3, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
+        DrawSprite(ot, 0xE2, y, 8, 0x10, (sample % 10) << 3, 0x18, 0, 0, 0, 0x244, 1, 1, 0x3B);
         DrawSprite(ot, 0xA2, y, 4, 0x10, 0x78, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
         DrawSprite(ot, 0xA8, y, 0x34, 0x10, 0x7C, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
         DrawSprite(ot, 0xEA, y, 4, 0x10, 0xB0, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
@@ -53,8 +53,8 @@ void DrawLogoSamplePanel(s32 arg0, s32 arg1) {
 
         DrawRectOutline(ot, (s16)(xc - 24), (s16)((u16)y + 32), 0x7A, 0x14, 0xB4, 0xB4, 0xB4, 0xFF);
     }
-    if (arg0 > 0) {
-        D_8007FB24 += arg0;
+    if (step > 0) {
+        D_8007FB24 += step;
         if (D_8007FB24 >= 6) {
             D_8007FB24 = 5;
         }

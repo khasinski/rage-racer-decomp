@@ -2,14 +2,14 @@
 #include "game/memcard.h"
 #include "game/cd.h"
 
-void _card_info(s32 arg0);
+void _card_info(s32 port);
 void CardSeekParam(s32 param) {
     ClearMemoryCardHwEvents(param);
     _card_info((u8)param);
     WaitMemoryCardHwEvent();
 }
 
-s32 _card_load(s32 arg0);
+s32 _card_load(s32 port);
 
 s32 CardReadStatusPair(s32 high, s32 low) {
     s32 cmd;

@@ -7,7 +7,7 @@ extern u_short g_VramWidth[];
 extern u_short g_VramHeight[];
 extern u_long g_ClearImagePacket[];
 
-u_long _param(long arg0);
+u_long _param(long index);
 void Gpu_StartDmaTransfer(void *packet);
 
 long Gpu_ClearImage(short *env, u_long rgb) {

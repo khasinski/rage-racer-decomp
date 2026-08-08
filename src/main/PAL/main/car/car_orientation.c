@@ -526,8 +526,8 @@ void UpdateCarBodyRoll(A *ctx) {
     }
     } else {
     {
-        s32 arg1 = (ctx->fB8 << 11) + 3072;
-        r = GetAngleDelta(ctx->f24, arg1 - ctx->fB4);
+        s32 target = (ctx->fB8 << 11) + 3072;
+        r = GetAngleDelta(ctx->f24, target - ctx->fB4);
     }
     s2v = r * 32;
     r = rcos(ctx->f34 * 2);

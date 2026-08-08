@@ -112,7 +112,7 @@ Rec *DsSearchFile(Rec *out, char *path) {
     return 0;
 }
 
-long LibcStrncmp(long arg0,long arg1,long arg2);
+long LibcStrncmp(long lhs, long rhs, long len);
 
 long CD_namecmp(long lhs, long rhs) {
     return LibcStrncmp(lhs, rhs, 0xC) == 0;

@@ -102,12 +102,12 @@ void EnterRoundScreen(void) {
     }
 }
 
-s32 UpdateRoundScreenFade(s32 arg0) {
+s32 UpdateRoundScreenFade(s32 stage) {
     s32 value;
     s32 ret;
 
     if (g_SceneId == 10) {
-        value = (g_SceneTimer * 4) - g_RoundScreenFadeDelays[arg0];
+        value = (g_SceneTimer * 4) - g_RoundScreenFadeDelays[stage];
     } else {
         value = g_FadeLevel;
         if (value > 0) {

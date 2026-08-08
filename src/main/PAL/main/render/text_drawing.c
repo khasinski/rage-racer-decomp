@@ -266,10 +266,10 @@ void GameDrawSpriteWide(
     s32 g,
     s32 b,
     s32 clut,
-    s32 arg11,
-    s32 arg12,
+    s32 shadeTex,
+    s32 semiTrans,
     s32 flags);
-void *QueueDrawModePrim(void *ot, void *prim, s32 count);
+void *QueueDrawModePrim(void *ot, void *prim, s32 tpage);
 
 s32 GameDrawNumber(
     s32 x,
@@ -398,7 +398,7 @@ s32 GameDrawNumber(
 extern u8 D_8007F6E8[];
 extern s32 D_8007FB00;
 
-void *QueueDrawModePrim(void *arg0, void *arg1, s32 arg2);
+void *QueueDrawModePrim(void *ot, void *prim, s32 tpage);
 
 void DrawBitPatternOverlay(s32 pattern) {
     void *ot = SCRATCH_OT_BASE_AS(void);

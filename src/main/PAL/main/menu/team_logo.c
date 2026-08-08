@@ -49,8 +49,8 @@ static inline u16 *TeamLogoClutAddress(
 }
 
 /* Builds g_TeamLogoCanvas and its CLUT from one sample character and one sample background. */
-void ComposeSampleTeamLogo(s32 arg0, s32 arg1);
-void ComposeSampleTeamLogo(s32 arg0, s32 arg1)
+void ComposeSampleTeamLogo(s32 character, s32 background);
+void ComposeSampleTeamLogo(s32 character, s32 background)
 {
     s32 index;
     u16 *clutDst0;
@@ -66,13 +66,13 @@ void ComposeSampleTeamLogo(s32 arg0, s32 arg1)
     u16 value;
     u16 fill;
 
-    row1 = arg1 / 2 + 10;
-    arg1 &= 1;
+    row1 = background / 2 + 10;
+    background &= 1;
     index = 1;
     clutDst0 = g_TeamLogoSwatches;
-    row0 = arg0 / 2;
-    arg0 = TeamLogoParity(arg0);
-    src = TeamLogoPaletteAddress(g_TeamLogoSampleData, row0, arg0) + 1;
+    row0 = character / 2;
+    character = TeamLogoParity(character);
+    src = TeamLogoPaletteAddress(g_TeamLogoSampleData, row0, character) + 1;
 
     do {
         *clutDst0++ = *src++;
@@ -82,7 +82,7 @@ void ComposeSampleTeamLogo(s32 arg0, s32 arg1)
     if (index < 16) {
         clutDst1 = &g_TeamLogoClut[index];
         src = TeamLogoClutAddress(
-            g_TeamLogoSampleData, row1, arg1, index);
+            g_TeamLogoSampleData, row1, background, index);
 
         do {
             *clutDst1++ = *src++;

@@ -39,7 +39,7 @@ u_long g_BiosCallStubs[20] __attribute__((section(".text"))) = {
     0,
 };
 
-void _card_write(long arg0, long arg1, long arg2);
+void _card_write(long port, long block, long src);
 void _new_card(long port);
 
 /* libcard, but declared in game/memcard.h, so it keeps common.h's typedefs. */

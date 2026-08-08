@@ -10,11 +10,11 @@ s32 AddTilePrim(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s3
 void DrawMenuCursorArrow(s32 a, s32 b);
 void DrawOptionHintBar(s32 a);
 void DrawSpriteString(s32 x, s32 y, s32 str, s32 clutIndex);
-s32 GameQueueSprite(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
+s32 GameQueueSprite(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex);
 s32 QueueDrawModePrimWide(s32 ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 
-void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
-void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
+void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow);
+void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow)
 {
     s32 base = ((s32) g_DrawBuffer) + 0xCC;
     s32 *scratch = &SCRATCH_PRIM_CURSOR_WORD;
@@ -23,10 +23,10 @@ void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     s32 y;
 
     next = GameQueueSpriteTrans(base, *scratch, 0x24, 0x38, 0x20, 0x18, 0xA0, 0x90, 0x7F40);
-    if (arg1 != 0) {
+    if (variant != 0) {
         next = GameQueueSpriteTrans(base, next, 0x24, 0x58, 0x24, 0x18, 0xCC, 0x90, 0x7F40);
     }
-    if (arg1 != 0) {
+    if (variant != 0) {
         y = 0x78;
     } else {
         y = 0x58;
@@ -36,8 +36,8 @@ void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
     next = GameQueueSpriteTrans(base, next, 0x68, 0xB8, 0x34, 0x10, 0x10, 0xC8, 0x7F40);
     next = GameQueueSpriteTrans(base, next, 0xB0, 0xB8, 0x14, 0x10, 0x44, 0xC8, 0x7F40);
     *scratch = next;
-    DrawMenuCursorArrow(0x14, (arg2 * 32) + 0x38);
-    DrawOptionHintBar(arg1 + 5);
+    DrawMenuCursorArrow(0x14, (cursor * 32) + 0x38);
+    DrawOptionHintBar(variant + 5);
     DrawPadTypeHint();
 
     base = ((s32) g_DrawBuffer) + 0xD8;
@@ -47,14 +47,14 @@ void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)
         next = DrawShadowedTile(base, next, 0x3E, 0xD0 + i * 0x30);
     }
 
-    if (arg0 != 0) {
-        next = AddTilePrim(base, next, 0x3C, ((arg3 * 3) << 4) + 0xCC, 0xC8, 0x28, 0x89, 0xFF, 0x76);
+    if (showBar != 0) {
+        next = AddTilePrim(base, next, 0x3C, ((barRow * 3) << 4) + 0xCC, 0xC8, 0x28, 0x89, 0xFF, 0x76);
     }
     next = AddTilePrim(base, next, 0, 0, 0x140, 0xF0, 0x85, 0x15, 0xE);
     SCRATCH_PRIM_CURSOR_WORD = next;
 }
 
-void DrawMemoryCardMessage(s32 arg0) {
+void DrawMemoryCardMessage(s32 message) {
     s32 index;
     s32 *entry;
     s32 x;
@@ -66,7 +66,7 @@ void DrawMemoryCardMessage(s32 arg0) {
     s32 base;
     s32 delta;
 
-    index = arg0;
+    index = message;
     entry = g_McMessageRows[index];
     x = 0x60;
     y = 0x40;
