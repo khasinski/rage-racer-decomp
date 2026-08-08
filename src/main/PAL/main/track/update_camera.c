@@ -10,8 +10,6 @@
 #include "game/vector.h"
 #include "psyq/gte.h"
 
-#define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
-
 /* Mode-3 camera path: the eye is eased from one track-camera node to the next
  * over `node->duration` frames. Each of offset (a local xyz applied through the
  * car's matrix) and orientation (pitch/yaw/roll/distance) keeps a start value,
@@ -285,7 +283,7 @@ block_36:
         BuildRotMatrixX(&sp68[0], -0x80);
         MulMatrix2(&sp68[0], &sp88[0]);
         g_ChaseYawPrev = g_ChaseYaw;
-        BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
+        BuildRotMatrixY(&sp48[0], *(s32 *)((u8 *)car + 0x24));
         BuildRotMatrixX(&sp68[0], car->angleX);
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], car->angleZ);
