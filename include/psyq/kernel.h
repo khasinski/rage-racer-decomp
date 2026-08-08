@@ -125,6 +125,14 @@ extern u_long *g_Timer1ModeReg;
 extern void *g_VSyncCallbacks[];
 extern long g_VSyncCountBase;
 extern volatile long *g_VSyncGpuStat;
+typedef struct DirEntry {
+    char name[20];
+    s32 attributes;
+    s32 size;
+    struct DirEntry *next;
+    char system[8];
+} DirEntry;
+
 extern volatile long g_VSyncTimerBase;
 
 #endif

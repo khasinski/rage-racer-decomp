@@ -282,7 +282,7 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
 
 s32 CountMemoryCardFiles(s32 port, s32 slot) {
     char path[0x20];
-    void *entry;
+    DirEntry *entry;
     void *ret;
     s32 count;
 
@@ -293,11 +293,10 @@ s32 CountMemoryCardFiles(s32 port, s32 slot) {
     if (BiosFirstFile(path, entry) == entry) {
         do {
             count++;
-            entry = (char *)entry + 0x28;
+            entry++;
             ret = BiosNextFile(entry);
         } while (ret == entry);
     }
 
     return count;
 }
-

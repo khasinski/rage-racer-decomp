@@ -6,18 +6,18 @@ s32 CalculateMemoryCardFreeBlocks(s32 port) {
     u8 scratch[8];
     s32 i;
     s32 sum;
-    u8 *ptr;
+    DirEntry *ptr;
     s32 value;
 
     i = 0;
     sum = 0;
 
     if (port > 0) {
-        ptr = (u8 *)g_McDirEntries;
+        ptr = g_McDirEntries;
         do {
-            value = *(s32 *)(ptr + 0x18);
+            value = ptr->size;
             sum += value;
-            ptr += 0x28;
+            ptr++;
         } while (++i < port);
     }
 
@@ -49,13 +49,13 @@ s32 RefreshMemoryCardSaveStatus(s32 slot, GameSaveHeaderRow *header) {
 
 /* sprintf: every caller declares its own arity; keep it prototypeless. */
 
-void *FormatSaveElapsedTime(void *dst, u32 seconds) {
+char *FormatSaveElapsedTime(char *dst, u32 seconds) {
     u32 hours = seconds / 216000;
     u32 totalMinutes = seconds / 3600;
     u32 totalSeconds = seconds / 60;
 
     sprintf(dst, g_FmtPlayTime, hours, totalMinutes - (hours * 60), totalSeconds - (totalMinutes * 60));
-    return (u8 *)dst + 2;
+    return dst + 2;
 }
 
 void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex) {
@@ -69,4 +69,3 @@ void DrawMemoryCardHelpPrompt(s32 page) {
     DrawText8x8(0x50, 0x28, &g_McHelpText[i], 0x78CC);
     DrawText8x8(0x50, 0x40, &g_McHelpText[i + 0x1E], 0x78CC);
 }
-

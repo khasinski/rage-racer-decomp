@@ -4,6 +4,7 @@
 #include "common.h"
 
 #include "psyq/gpu.h"
+#include "psyq/kernel.h"
 
 /*
  * g_McMenuPhase picks the prompt drawn under the slot list; 0 draws none, and
@@ -145,7 +146,7 @@ s32 CalculateMemoryCardFreeBlocks(s32 fileCount);
 s32 RefreshMemoryCardSaveStatus(
     s32 unused,
     GameSaveHeaderRow *headers);
-void *FormatSaveElapsedTime(void *dst, u32 ticks);
+char *FormatSaveElapsedTime(char *dst, u32 ticks);
 void DrawMemoryCardMessageLine(s32 unused, s32 messageIndex);
 void DrawMemoryCardHelpPrompt(s32 promptIndex);
 void DrawMemoryCardSaveRows(
@@ -214,7 +215,7 @@ extern s32 g_McActionTimer;
 extern s32 g_McCardFileCount;
 extern s32 g_McCardOkFrames;
 extern s32 g_McConfirmChoice;
-extern char g_McDirEntries[];
+extern DirEntry g_McDirEntries[];
 extern s32 g_McDrawEnabled;
 extern s32 g_McErrorCountdown;
 extern s32 g_McErrorPending;
