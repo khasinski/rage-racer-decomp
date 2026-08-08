@@ -182,8 +182,6 @@ void BuildTileStrips(void) {
     } while (bufferIndex < 2);
 }
 
-s32 GameQueueDrawModePrimWide(
-    s32 ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 void AddPrimsWide(void *ot, void *first, void *last) asm("AddPrims");
 
 void DrawStartCountdown(s32 sceneTimer) {
@@ -291,9 +289,8 @@ void DrawStartCountdown(s32 sceneTimer) {
     }
 
     cursor = SCRATCH_PRIM_CURSOR_WORD;
-    backdrop =
-        (u8 *)GameQueueDrawModePrimWide(
-            (s32)(g_DrawBuffer + 0xD0), cursor, 9);
+    backdrop = QueueDrawModePrim(
+        g_DrawBuffer + 0xD0, (u8 *)cursor, 9);
     pattern = g_CountdownBoardOffset;
     SCRATCH_PRIM_CURSOR_AS(u8) = backdrop;
     cursor = (s32)GameQueueTexturePacketWide(
@@ -362,8 +359,8 @@ void DrawStartCountdown(s32 sceneTimer) {
     }
 
     SCRATCH_PRIM_CURSOR_WORD = cursor;
-    cursor = GameQueueDrawModePrimWide(
-        (s32)(g_DrawBuffer + 0xD0), cursor, 0xC);
+    cursor = (s32)QueueDrawModePrim(
+        g_DrawBuffer + 0xD0, (u8 *)cursor, 0xC);
     SCRATCH_PRIM_CURSOR_WORD = cursor;
 
     if (phase > 0) {

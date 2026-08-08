@@ -21,7 +21,6 @@ extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 color, s32 tpage);
 void RequestTrackDataAssets(void);
 s32 GameQueueTileTransWide(u8 *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
-s32 GameQueueDrawModePrimWide(u8 *ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 extern u32 g_CameraViewMode;
 extern UnkEventPair g_PrologueCameraCuts[];
 void RequestTrackTexturePage(s32 trackSection);
@@ -193,7 +192,7 @@ void DrawPrologueText(void) {
         blue = (blueScale / 0x100) + 0x40;
 
         next = GameQueueTileTransWide(ptr, prim, 0, 0, 0x140, 0xF0, fadeLevel, green, blue);
-        *scratch = GameQueueDrawModePrimWide(ptr, next, 0x49);
+        *scratch = (s32)QueueDrawModePrim(ptr, (u8 *)next, 0x49);
     }
 }
 

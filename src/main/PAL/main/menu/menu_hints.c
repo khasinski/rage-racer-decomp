@@ -3,7 +3,6 @@
 #include "game/scratchpad.h"
 
 s32 GameQueueSpriteTrans(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex);
-s32 GameQueueDrawModePrimWide(s32 ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 extern u8 * volatile g_DrawBuffer;
 extern u8 g_PadType;
 
@@ -17,7 +16,7 @@ void DrawMenuCursorArrow(s32 x, s32 y) {
     base += 0xCC;
     scratchValue = *scratch;
     prim = GameQueueSpriteTrans((s32)base, scratchValue, x, y, 0xC, 0x18, 0xE0, 0x48, 0x7F40);
-    *scratch = GameQueueDrawModePrimWide((s32)base, prim, 0x3F);
+    *scratch = (s32)QueueDrawModePrim(base, (u8 *)prim, 0x3F);
 }
 
 /* The bottom hint bar: a left arrow, the caption `variant` selects, and a
@@ -54,7 +53,7 @@ void DrawOptionHintBar(s32 variant) {
     }
 
     prim = GameQueueSpriteTrans(base, prim, x, 0x180, 0xC, 0x18, 0xEC, 0x78, 0x7F40);
-    SCRATCH_PRIM_CURSOR_WORD = GameQueueDrawModePrimWide(base, prim, 0x3F);
+    SCRATCH_PRIM_CURSOR_WORD = (s32)QueueDrawModePrim((void *)base, (u8 *)prim, 0x3F);
 }
 
 /* Two glyphs plus a label naming the connected pad; caches the last valid g_PadType. */
@@ -92,5 +91,5 @@ void DrawPadTypeHint(void) {
     prim = GameQueueSpriteTrans(base, prim, 0x7A, 0x1A0, w, h, u, v, clutIndex);
     prim = GameQueueSpriteTrans(base, prim, 0x92, 0x1A0, w, h, u + 8, v, clutIndex);
     prim = GameQueueSpriteTrans(base, prim, 0x58, 0x1A0, 0x90, h, 0, v, clutIndex);
-    SCRATCH_PRIM_CURSOR_WORD = GameQueueDrawModePrimWide(base, prim, 0x3F);
+    SCRATCH_PRIM_CURSOR_WORD = (s32)QueueDrawModePrim((void *)base, (u8 *)prim, 0x3F);
 }

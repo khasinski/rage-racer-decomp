@@ -11,7 +11,6 @@ void DrawMenuCursorArrow(s32 a, s32 b);
 void DrawOptionHintBar(s32 a);
 void DrawSpriteString(s32 x, s32 y, s32 str, s32 clutIndex);
 s32 GameQueueSprite(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex);
-s32 QueueDrawModePrimWide(s32 ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 
 void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow);
 void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow)
@@ -99,9 +98,9 @@ void DrawMemoryCardMessage(s32 message) {
     delta = index - 0x10;
     if ((u32)delta < 2 || index == 0x12) {
         next = GameQueueSprite(base, next, x, y, 0x6C, 0x18, 0, delta * 0x18, 0x7F81);
-        next = QueueDrawModePrimWide(base, next, 0x3F);
+        next = (s32)QueueDrawModePrim((void *)base, (u8 *)next, 0x3F);
     } else {
-        next = QueueDrawModePrimWide(base, next, 0x3D);
+        next = (s32)QueueDrawModePrim((void *)base, (u8 *)next, 0x3D);
     }
     SCRATCH_PRIM_CURSOR_WORD = next;
 }

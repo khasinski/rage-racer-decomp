@@ -177,7 +177,6 @@ void DrawRoundScreen(void) {
     }
 }
 
-s32 GameQueueDrawModePrimWide(void *ot, s32 p, s32 a) asm("QueueDrawModePrim");
 s32 AddTilePrim(void *ot, s32 p, s32 a, s32 b, s32 c, s32 d, s32 e, s32 f, s32 g);
 
 /* The BGM row: the selection number and the track title from g_BgmTrackNames. */
@@ -193,7 +192,7 @@ void DrawBgmSelector(void) {
     x = (g_BgmSelection == 0xa) ? 0x6c : 0x70;
     p = (s32)GameQueueSprite(ot, p, x, 0xce, 8, 8, 0x84, 0xc4, 0x7812);
     p = (s32)GameQueueSprite(ot, p, (g_BgmSelection == 0xa) ? 0x84 : 0x80, 0xce, 8, 8, 0x8c, 0xc4, 0x7812);
-    p = GameQueueDrawModePrimWide(ot, p, 0x29);
+    p = (s32)QueueDrawModePrim(ot, (u8 *)p, 0x29);
     p = AddTilePrim(ot, p, 0x10, 0xcc, 0x5b, 0xc, 0x85, 0x15, 0xe);
     p = AddTilePrim(ot, p, 0x6c, 0xcc, 0x1f, 0xc, 0x40, 0x40, 0x40);
     p = AddTilePrim(ot, p, 0x8c, 0xcc, 0xa4, 0xc, 0, 0, 0);

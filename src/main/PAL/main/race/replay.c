@@ -16,7 +16,6 @@ extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar;
 extern u8 *g_EnvScriptClock;
-s32 GameQueueDrawModePrimWide(s32 base, s32 next, s32 code) asm("QueueDrawModePrim");
 
 void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *rivalObj) {
     s32 index;
@@ -212,6 +211,6 @@ void DrawReplayBadge(void) {
         value = *scratch;
         base = (s32)g_DrawBuffer + 0xCC;
         next = (s32)GameQueueSprite(base, value, 0x10, 0x10, 0x48, 0x10, 0, 0x68, 0x780D);
-        *scratch = GameQueueDrawModePrimWide(base, next, 9);
+        *scratch = (s32)QueueDrawModePrim((void *)base, (u8 *)next, 9);
     }
 }

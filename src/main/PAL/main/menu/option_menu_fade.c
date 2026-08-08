@@ -5,7 +5,6 @@
 #include "game/state.h"
 
 s32 GameQueueTileTransWide(u8* ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
-s32 GameQueueDrawModePrimWide(u8* ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 /* The 0x140x0x1E0 twin of DrawFullscreenFadeTile, for the 480-line setup scene. */
 void DrawFullscreenFadeTile480(s32 color, s32 tpage);
 
@@ -29,7 +28,7 @@ void DrawFullscreenFadeTile480(s32 color, s32 tpage) {
     scratch = &SCRATCH_PRIM_CURSOR_WORD;
     scratchValue = *scratch;
     next = GameQueueTileTransWide(base, scratchValue, 0, 0, width, height, color, color, color);
-    *scratch = GameQueueDrawModePrimWide(base, next, tpage);
+    *scratch = (s32)QueueDrawModePrim(base, (u8 *)next, tpage);
 }
 
 /* Arms the fade-out that leaves the setup menu for scene `scene`. */

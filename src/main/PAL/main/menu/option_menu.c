@@ -8,7 +8,6 @@
 #include "game/state.h"
 
 s32 QueueSpriteTransWide(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex) asm("GameQueueSpriteTrans");
-s32 GameQueueDrawModePrimWide(s32 ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 void DrawMenuCursorArrow(s32 x, s32 y);
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
@@ -35,7 +34,7 @@ void DrawOptionRootMenu(void) {
     tmp = QueueSpriteTransWide((s32)base, tmp, 0x24, 0xF4, 0x5C, h18, 0x74, 0x60, color);
     tmp = QueueSpriteTransWide((s32)base, tmp, 0x24, 0x114, 0x64, h18, 0, 0x78, color);
     tmp = QueueSpriteTransWide((s32)base, tmp, 0x24, 0x134, 0x1C, h18, 0xD0, 0x60, color);
-    tmp = GameQueueDrawModePrimWide((s32)base, tmp, 0x3F);
+    tmp = (s32)QueueDrawModePrim(base, (u8 *)tmp, 0x3F);
 
     state = g_GameMode;
     *scratch = tmp;
@@ -147,7 +146,7 @@ void DrawClassRecordDetail(void) {
                          (s16)((s16)g_ClassRecords[idx].clears / 10) << 3, 0x18, 0x7F40);
     next = QueueSpriteTransWide(base, next, x + 108, y + 0x28, 8, 0x10,
                          (s16)((s16)g_ClassRecords[idx].clears % 10) << 3, 0x18, 0x7F40);
-    next = GameQueueDrawModePrimWide(base, next, 0x3B);
+    next = (s32)QueueDrawModePrim((void *)base, (u8 *)next, 0x3B);
     next = AddTilePrim(base, next, x + 78, y + 47, 0x14, 2, 0xFF, 0xFF, 0xFF);
     next = AddTilePrim(base, next, x, y, 0x7C, 0x1E, 0, 0, 0);
     next = AddTilePrim(base, next, x, y + 32, 0x7C, 0x1E, 0, 0, 0);
@@ -194,8 +193,8 @@ void DrawClassRecordGrid(void) {
         }
     }
 
-    next = GameQueueDrawModePrimWide(base, next, 0x3E);
-    next = GameQueueDrawModePrimWide(base + 4, next, 0x3C);
+    next = (s32)QueueDrawModePrim((void *)base, (u8 *)next, 0x3E);
+    next = (s32)QueueDrawModePrim((void *)(base + 4), (u8 *)next, 0x3C);
     SCRATCH_PRIM_CURSOR_WORD = next;
     DrawOptionHintBar(0);
 }
@@ -290,7 +289,7 @@ void DrawVolumeBar(s32 level, s32 y) {
 
     next = QueueSpriteTransWide(base, SCRATCH_PRIM_CURSOR_WORD, 0x4E, b + 0xA, 0x10, 0xC, 0xB4, 0xC4, 0x7F40);
     next = QueueSpriteTransWide(base, next, 0xE4, b + 0xA, 0x10, 0xC, 0xC4, 0xC4, 0x7F40);
-    next = GameQueueDrawModePrimWide(base, next, 0x3A);
+    next = (s32)QueueDrawModePrim((void *)base, (u8 *)next, 0x3A);
     c = 0x46;
     i = 0;
     if (i <= level) {
@@ -300,7 +299,7 @@ void DrawVolumeBar(s32 level, s32 y) {
             i++;
         } while (i <= level);
     }
-    next = GameQueueDrawModePrimWide(base, next, 0x39);
+    next = (s32)QueueDrawModePrim((void *)base, (u8 *)next, 0x39);
     next = AddTilePrim(base, next, c | 1, b + 2, 0xB2, 0x1C, 0, 0, 0);
     SCRATCH_PRIM_CURSOR_WORD = AddTilePrim(base, next, c, b, 0xB4, 0x20, 0xFF, 0xFF, 0xFF);
 }
