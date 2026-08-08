@@ -454,8 +454,8 @@ inner:
 
 void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
   CarAiSpeedKey *p[2];
-  u16 lim[4];
-  u16 val[2];
+  s16 lim[4];
+  s16 val[2];
   register GameCarAiBlock *sub_R9 asm("$9");
   s32 rpm;
   s32 g0;
@@ -501,12 +501,12 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
     val[1] = (p[1]->targetSpeeds[3] * f) / 100;
   }
   pitch = 0;
-  lo_R7 = *(s16 *)(&lim[0]);
+  lo_R7 = lim[0];
   switch (0) { default:
   if (rpm < lo_R7)
   {
   } else {
-  hi = *(s16 *)(&lim[1]);
+  hi = lim[1];
   one = hi;
   if (one < rpm)
   {
@@ -519,12 +519,12 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
     range = 1;
   }
   d_R3 = rpm - lo_R7;
-  v20_R4 = (lowValue = *(s16 *)(&val[0]));
-  q = (((*(s16 *)(&val[1])) - lowValue) * d_R3) / range;
+  v20_R4 = (lowValue = val[0]);
+  q = ((val[1] - lowValue) * d_R3) / range;
   sub_R9->field_130 = ((((lowValue + q) * 1168) / 160) * 6) / 100;
   break;
   }
-  if ((*(s16 *)(&lim[1])) < rpm)
+  if (lim[1] < rpm)
   {
     L2_inc:
     cnt = sub_R9->markerCounter;
