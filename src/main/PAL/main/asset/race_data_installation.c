@@ -35,7 +35,7 @@ void InstallTrackEventData(u8 *eventData) {
     callArg = g_MsgEventOk;
     offset0 = (s32)(base + offset0);
     base += offset1;
-    g_PathSceneryPosData = (u8 *)offset0;
-    g_PathSceneryRotData = base;
+    g_PathSceneryPosData = (PathSceneryPositionData *)offset0;
+    g_PathSceneryRotData = (PathSceneryRotationData *)base;
     printf(callArg);
 }

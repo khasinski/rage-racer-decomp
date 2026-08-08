@@ -58,22 +58,24 @@ void DrawScriptedScenery(s32 flags) {
  */
 void InitPathScenery(void) {
     s32 lev;
-    u8 *tblA;
-    u8 *tblB;
+    PathSceneryPositionData *tblA;
+    PathSceneryRotationData *tblB;
     s32 ia;
     s32 ib;
 
     lev = g_RaceSeries;
     tblA = g_PathSceneryPosData;
     tblB = g_PathSceneryRotData;
-    ia = *(s16 *)(tblA + (lev * 2));
-    ib = *(s16 *)(tblB + (lev * 2));
+    ia = RAW(tblA->firstKey[lev]);
+    ib = RAW(tblB->firstKey[lev]);
     g_PathSceneryClock.rotFrame = 0;
     g_PathSceneryClock.posFrame = 0;
-    g_PathSceneryPosKeys = tblA;
-    g_PathSceneryPosKeys = g_PathSceneryPosKeys + ((ia * 20) + 4);
-    g_PathSceneryRotKeys = tblB;
-    g_PathSceneryRotKeys = g_PathSceneryRotKeys + ((ib * 12) + 4);
+    g_PathSceneryPosKeys = (u8 *)tblA;
+    g_PathSceneryPosKeys =
+        (u8 *)&((PathSceneryPositionData *)g_PathSceneryPosKeys)->keys[ia];
+    g_PathSceneryRotKeys = (u8 *)tblB;
+    g_PathSceneryRotKeys =
+        (u8 *)&((PathSceneryRotationData *)g_PathSceneryRotKeys)->keys[ib];
     g_PathSceneryX = *(Block16 *)g_PathSceneryPosKeys;
 
     {
@@ -87,13 +89,17 @@ void InitPathScenery(void) {
         g_PathSceneryRot = *(SVec *)copySrc;
         g_PathSceneryPosPhase = 0;
         g_PathSceneryRotPhase = 0;
-        g_PathSceneryPosSpan = *(u16 *)(entryA + 0x10);
+        g_PathSceneryPosSpan =
+            RAW(((PathSceneryPositionKey *)entryA)->span);
         entryB = g_PathSceneryRotKeys;
-        g_PathSceneryRotSpan = *(u16 *)(entryB + 0x8);
-        g_PathSceneryPosRate = *(u16 *)(entryA + 0x12);
-        g_PathSceneryRotRate = *(u16 *)(entryB + 0xA);
+        g_PathSceneryRotSpan =
+            RAW(((PathSceneryRotationKey *)entryB)->span);
+        g_PathSceneryPosRate =
+            RAW(((PathSceneryPositionKey *)entryA)->rate);
+        g_PathSceneryRotRate =
+            RAW(((PathSceneryRotationKey *)entryB)->rate);
 
-        sv = *(s16 *)(entryA + 0x12);
+        sv = RAW(((PathSceneryPositionKey *)entryA)->rate);
         if (sv < 0) {
             sv = -sv;
             g_PathSceneryPosRate = sv;
@@ -112,7 +118,7 @@ void InitPathScenery(void) {
         s16 sv;
 
         entryB = g_PathSceneryRotKeys;
-        sv = *(s16 *)(entryB + 0xA);
+        sv = RAW(((PathSceneryRotationKey *)entryB)->rate);
         if (sv < 0) {
             sv = -sv;
             g_PathSceneryRotRate = sv;
@@ -133,13 +139,25 @@ void InitPathScenery(void) {
         g_PathSceneryVolume = 0;
         g_PathSceneryPosIndex = 0;
         g_PathSceneryRotIndex = 0;
-        g_PathSceneryHalfDelta[0] = (*(s32 *)(entry + 0x14) - *(s32 *)(entry + 0x0)) / 2;
-        g_PathSceneryHalfDelta[1] = (*(s32 *)(entry + 0x18) - *(s32 *)(entry + 0x4)) / 2;
-        g_PathSceneryHalfDelta[2] = (*(s32 *)(entry + 0x1C) - *(s32 *)(entry + 0x8)) / 2;
+        g_PathSceneryHalfDelta[0] =
+            (RAW(((PathSceneryPositionKey *)entry)[1].x) -
+             RAW(((PathSceneryPositionKey *)entry)[0].x)) / 2;
+        g_PathSceneryHalfDelta[1] =
+            (RAW(((PathSceneryPositionKey *)entry)[1].y) -
+             RAW(((PathSceneryPositionKey *)entry)[0].y)) / 2;
+        g_PathSceneryHalfDelta[2] =
+            (RAW(((PathSceneryPositionKey *)entry)[1].z) -
+             RAW(((PathSceneryPositionKey *)entry)[0].z)) / 2;
         entry = g_PathSceneryRotKeys;
-        g_PathSceneryRotHalfDelta[0] = (*(s16 *)(entry + 0xC) - *(s16 *)(entry + 0x0)) / 2;
-        g_PathSceneryRotHalfDelta[1] = (*(s16 *)(entry + 0xE) - *(s16 *)(entry + 0x2)) / 2;
-        g_PathSceneryRotHalfDelta[2] = (*(s16 *)(entry + 0x10) - *(s16 *)(entry + 0x4)) / 2;
+        g_PathSceneryRotHalfDelta[0] =
+            (RAW(((PathSceneryRotationKey *)entry)[1].x) -
+             RAW(((PathSceneryRotationKey *)entry)[0].x)) / 2;
+        g_PathSceneryRotHalfDelta[1] =
+            (RAW(((PathSceneryRotationKey *)entry)[1].y) -
+             RAW(((PathSceneryRotationKey *)entry)[0].y)) / 2;
+        g_PathSceneryRotHalfDelta[2] =
+            (RAW(((PathSceneryRotationKey *)entry)[1].z) -
+             RAW(((PathSceneryRotationKey *)entry)[0].z)) / 2;
     }
 }
 

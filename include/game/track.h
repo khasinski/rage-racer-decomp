@@ -291,6 +291,16 @@ typedef union PathSceneryKey {
     PathSceneryRotationKey rotation;
 } PathSceneryKey;
 
+typedef struct PathSceneryPositionData {
+    s16 firstKey[2];
+    PathSceneryPositionKey keys[1];
+} PathSceneryPositionData;
+
+typedef struct PathSceneryRotationData {
+    s16 firstKey[2];
+    PathSceneryRotationKey keys[1];
+} PathSceneryRotationData;
+
 extern u8 *g_PathSceneryPosKeys;
 typedef struct PathSceneryCursor {
     s16 phase;
