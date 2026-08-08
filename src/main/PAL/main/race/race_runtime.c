@@ -511,7 +511,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
         idx = ent->trackPointIndex;
         acc = 0xC00;
         levShift = lev << 11;
-        angle = *(s16 *)((u8 *)g_TrackPoints + idx * 24 + 0xA);
+        angle = g_TrackPoints[idx].angle;
         acc -= levShift;
         ent->field_24 = (acc - angle) & 0xFFF;
 
