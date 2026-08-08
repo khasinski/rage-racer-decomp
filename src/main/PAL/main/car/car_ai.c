@@ -502,7 +502,6 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
   }
   pitch = 0;
   lo_R7 = lim[0];
-  switch (0) { default:
   if (rpm < lo_R7)
   {
   } else {
@@ -522,7 +521,7 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
   v20_R4 = (lowValue = val[0]);
   q = ((val[1] - lowValue) * d_R3) / range;
   sub_R9->field_130 = ((((lowValue + q) * 1168) / 160) * 6) / 100;
-  break;
+  goto target_speed_done;
   }
   if (lim[1] < rpm)
   {
@@ -547,7 +546,7 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
   {
     sub_R9->markerCounter = 0;
   }
-  }
+target_speed_done:
   if (sub_R9->markerDirection != 0)
   {
     UpdateCarSlideAngle((GameCarRuntime *)car, (s16) pitch);
