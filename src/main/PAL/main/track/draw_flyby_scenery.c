@@ -34,32 +34,28 @@ void DrawFlybyScenery(void) {
  * and the frame count since the seed. */
 
 void SeedRouteScenery(void) {
-    register s32 index0 asm("$2");
-    s32 index1;
-    u8 *base;
+    s32 series0;
+    s32 series1;
+    SceneryMotionData *data;
+    SceneryMotionKeyframe *keyframe;
+    s32 keyframeIndex;
     s32 value;
 
     g_RouteSceneryArmed = 1;
     g_RouteSceneryClock = 1;
 
-    index0 = g_RaceSeries;
-    base = g_RouteSceneryData;
-    index1 = g_RaceSeries;
-    index0 = (index0 * 32) + (s32)base;
-    *(Vec4 *)&g_RouteSceneryX = *(Vec4 *)((u8 *)index0 + 0x10);
+    series0 = g_RaceSeries;
+    data = (SceneryMotionData *)g_RouteSceneryData;
+    series1 = g_RaceSeries;
+    *(Vec4 *)&g_RouteSceneryX = (series0 + data->start)->position;
 
-    index1 = index1 << 2;
-    index1 = index1 + (s32)base;
-    g_RouteSceneryKeyIndex = 0;
-    g_RouteSceneryFrame = 0;
+    keyframeIndex = (series1 + data->firstKeyframe)[0]
+        [(g_RouteSceneryKeyIndex = 0, g_RouteSceneryFrame = 0, 0)];
+    keyframe = &data->keyframes[keyframeIndex];
 
-    index1 = *(s16 *)(index1 + 8);
-    value = ((index1 * 3) << 2) + 0x50;
-    base += value;
-
-    g_RouteSceneryRotX = *(s16 *)(base + 0);
-    g_RouteSceneryRotY = *(s16 *)(base + 2);
-    value = *(s16 *)(base + 4);
-    g_RouteSceneryKeyframe = (SceneryMotionKeyframe *)base;
+    g_RouteSceneryRotX = RAW(keyframe->rotationX);
+    g_RouteSceneryRotY = RAW(keyframe->rotationY);
+    value = RAW(keyframe->rotationZ);
+    g_RouteSceneryKeyframe = keyframe;
     g_RouteSceneryRotZ = value;
 }
