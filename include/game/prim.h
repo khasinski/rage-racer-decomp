@@ -15,7 +15,4 @@ u8 *AddTilePrim(
     s32 g,
     s32 b);
 
-#define AddTilePrimWord(ot, prim, x, y, w, h, r, g, b) \
-    ((s32)AddTilePrim((void *)(ot), (u8 *)(prim), (x), (y), (w), (h), (r), (g), (b)))
-
 #endif

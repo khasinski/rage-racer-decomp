@@ -145,11 +145,11 @@ void DrawTimeRecordPanel(u8 *s5) {
 }
 
 void DrawNameEntryCursor(s32 charIndex, s32 row) {
-    s32 *scratch;
+    u8 **scratch;
 
     if (g_AnimTimer & 8) {
-        scratch = &SCRATCH_PRIM_CURSOR_WORD;
-        *scratch = AddTilePrimWord(
+        scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
+        *scratch = AddTilePrim(
             g_DrawBuffer + 0xCC,
             *scratch,
             (charIndex * 8) + 0x7C,

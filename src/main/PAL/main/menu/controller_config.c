@@ -139,16 +139,16 @@ void UpdateControllerConfigScreen(void) {
  * inside a white border, both drawn into the 0xD0 sub-buffer of the current
  * draw buffer from the shared scratchpad packet cursor. */
 void DrawNegconNeutralScreen(void) {
-    s32 *cursor = &SCRATCH_PRIM_CURSOR_WORD;
-    s32 ot;
-    s32 prim;
+    u8 **cursor = &SCRATCH_PRIM_CURSOR_AS(u8);
+    u8 *ot;
+    u8 *prim;
 
     DrawSpriteString(0x18, 0x30, g_MsgNegconUntwistedLine1, 0x7F81);
     DrawSpriteString(0x18, 0x48, g_MsgNegconUntwistedLine2, 0x7F81);
-    ot = (s32)(g_DrawBuffer + 0xD0);
+    ot = g_DrawBuffer + 0xD0;
     prim = *cursor;
-    prim = AddTilePrimWord(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
-    *cursor = AddTilePrimWord(ot, prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
+    prim = AddTilePrim(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
+    *cursor = AddTilePrim(ot, prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
 }
 
 /*

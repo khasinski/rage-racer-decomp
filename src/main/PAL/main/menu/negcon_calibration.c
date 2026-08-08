@@ -42,10 +42,8 @@ void DrawNegconSteerPlayScreen(void) {
     prim = GameQueueSpriteTrans(
         ot, prim, 0x88, 0x30, 0xC, 0x18, 0x6C, 0x30, 0x7F81);
     prim = QueueDrawModePrim(ot, prim, 0x3F);
-    prim = (u8 *)AddTilePrimWord(
-        (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
-    prim = (u8 *)AddTilePrimWord(
-        (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
+    prim = AddTilePrim(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
+    prim = AddTilePrim(ot, prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
     span = ((g_NegconPlayPercent[g_NegconSteerPlay] << 7) / 100) * 2;
     y = 230 - span;
     prim = GameQueueLine(ot, prim, 0x94, y, 0xA8, y, 0x20, 0x40, 0xFF);
@@ -132,10 +130,9 @@ void DrawNegconMaxTwistScreen(void) {
         ot, prim, xoff + 0x88, 0x30, w, 0x18, g_NegconMaxTwist * 24, 0x30, 0x7F81);
     prim = GameQueueSpriteTrans(ot, prim, 0xAC, 0x30, 4, 0x18, 0x78, 0x30, 0x7F81);
     prim = QueueDrawModePrim(ot, prim, 0x3F);
-    prim = (u8 *)AddTilePrimWord(
-        (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
-    SCRATCH_PRIM_CURSOR_WORD = AddTilePrimWord(
-        (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
+    prim = AddTilePrim(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
+    SCRATCH_PRIM_CURSOR_AS(u8) =
+        AddTilePrim(ot, prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
 }
 
 /*
