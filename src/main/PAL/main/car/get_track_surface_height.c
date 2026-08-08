@@ -423,7 +423,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
 extern GameSpriteDesc g_TachoNeedleSprite;
 
 void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src);
-void SetDrawModeWide(u8 *arg0, s32 arg1, s32 arg2, u16 arg3, void *arg4) asm("SetDrawMode");
+void SetDrawModeWide(u8* pkt, s32 dfe, s32 dtd, u16 tpage, void* window) asm("SetDrawMode");
 
 /*
  * Rebuilds the tachometer needle quad from the car spec block. The spec is

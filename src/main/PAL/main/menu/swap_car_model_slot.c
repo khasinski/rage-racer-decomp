@@ -18,7 +18,7 @@ void SwapCarModelSlot(void) {
     InstallCarModelSlot();
 }
 
-s32 GameQueueTileTransWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueTileTrans");
+s32 GameQueueTileTransWide(void* ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
 
 void DrawCarSlotHighlight(s32 arg0) {
     s32 *scratch = &SCRATCH_PRIM_CURSOR_WORD;

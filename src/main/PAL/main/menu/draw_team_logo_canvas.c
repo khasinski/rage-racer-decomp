@@ -93,26 +93,8 @@ extern void DrawLine(
 extern void GameDrawNumber(
     s16 x, s32 y, s16 flags, s32 value, u8 r, u8 g, u8 b, s32 clut, s32 primitiveCount);
 
-void GameDrawSolidRectWide(
-    void *arg0,
-    s32 arg1,
-    s32 arg2,
-    s32 arg3,
-    s32 arg4,
-    s32 arg5,
-    s32 arg6,
-    s32 arg7,
-    s32 arg8) asm("DrawSolidRect");
-void func_80047024_prepared(
-    s32 arg0,
-    s16 arg1,
-    s16 arg2,
-    s16 arg3,
-    s16 arg4,
-    u8 arg5,
-    u8 arg6,
-    u8 arg7,
-    u8 arg8) asm("DrawSolidRect");
+void GameDrawSolidRectWide(void* ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 alpha) asm("DrawSolidRect");
+void func_80047024_prepared(s32 ot, s16 x0, s16 y0, s16 x1, s16 y1, u8 r, u8 g, u8 b, u8 alpha) asm("DrawSolidRect");
 
 void DrawTeamLogoCanvasFade(s32 delta) {
     u8 *scratch;

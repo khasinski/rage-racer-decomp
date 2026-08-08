@@ -664,8 +664,7 @@ s32 DrawCustomizeScreen(s32 step) {
 }
 
 extern u8 *D_8019C794;
-void GameDrawMenuButtonWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
-                   s32 a7, s32 a8, s32 a9, void *a10) asm("GameDrawMenuButton");
+void GameDrawMenuButtonWide(s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 flags, s32 textX, s32 textY, void* caption) asm("GameDrawMenuButton");
 
 void UpdateCustomizeScreen(void) {
     void *ot;

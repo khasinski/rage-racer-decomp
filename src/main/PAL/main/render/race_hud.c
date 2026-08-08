@@ -4,7 +4,7 @@
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
-void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
+void *GameQueueDrawModePrimWide(void* ot, void* prim, s32 tpage) asm("QueueDrawModePrim");
 
 void DrawRaceHudLabels(s32 mode) {
     s32 count;

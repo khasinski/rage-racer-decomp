@@ -136,7 +136,7 @@ void EndMirrorPass(void) {
     scratch->matrix = D_8009AF00;
 }
 
-s32 GameQueueDrawModePrimWide(u8 *arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
+s32 GameQueueDrawModePrimWide(u8* ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 
 u8 *DrawMirrorFrame(u8 *packet) {
     u8 *otArg;

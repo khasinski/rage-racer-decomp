@@ -10,12 +10,12 @@
 #include "game/track.h"
 #include "psyq/gpu.h"
 
-s32 QueueSpriteTransWide(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueSpriteTrans");
+s32 QueueSpriteTransWide(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex) asm("GameQueueSpriteTrans");
 void DrawOptionHintBar(s32 variant);
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
 s32 AddTilePrim(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-s32 QueueLineWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8) asm("GameQueueLine");
+s32 QueueLineWide(void* ot, s32 prim, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b) asm("GameQueueLine");
 extern s32 g_CameraViewMode;
 extern s32 *g_CamRow;
 void InitRenderState(s32 otShift);

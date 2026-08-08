@@ -11,7 +11,7 @@ extern s16 g_ClassRecords[];
 extern volatile s32 g_ClassWinCount;
 extern void *g_CourseProgress;
 void DrawFullscreenFadeTile(s32 color, s32 tpage);
-void GameDrawSpriteWide(void *ot, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7, s32 a8, s32 a9, s32 a10, s32 a11, s32 a12, s32 a13) asm("DrawSprite");
+void GameDrawSpriteWide(void* ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0, s32 r, s32 g, s32 b, s32 clutX, s32 shadeTex, s32 semiTrans, s32 flags) asm("DrawSprite");
 void DrawRaceEndBanner(s32 level);
 
 void UpdateBgmTrackCount(void) {

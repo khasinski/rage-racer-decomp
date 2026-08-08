@@ -14,8 +14,7 @@ void RequestCarModel(s32 carIndex);
 void UploadTeamNameTexture(void *str, s32 len);
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
-void GameDrawMenuButtonWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6,
-                   s32 a7, s32 a8, s32 a9, void *a10) asm("GameDrawMenuButton");
+void GameDrawMenuButtonWide(s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 flags, s32 textX, s32 textY, void* caption) asm("GameDrawMenuButton");
 void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight);
 
 void UpdateCarShopScreen(void) {

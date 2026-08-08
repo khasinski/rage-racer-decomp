@@ -11,7 +11,7 @@ void DrawMenuCursorArrow(s32 a, s32 b);
 void DrawOptionHintBar(s32 a);
 void DrawSpriteString(s32 x, s32 y, s32 str, s32 clutIndex);
 s32 GameQueueSprite(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6, s32 arg7, s32 arg8);
-s32 QueueDrawModePrimWide(s32 arg0, s32 arg1, s32 arg2) asm("QueueDrawModePrim");
+s32 QueueDrawModePrimWide(s32 ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 
 void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
 void DrawMemoryCardScreen(s32 arg0, s32 arg1, s32 arg2, s32 arg3)

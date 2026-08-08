@@ -14,7 +14,7 @@ u_long GetODE(void) {
     return ret >> 31;
 }
 
-u_long Gpu_BuildDisplayMode(long arg0, long arg1, u_long arg2) asm("_get_mode");
+u_long Gpu_BuildDisplayMode(long dfe, long dtd, u_long tpage) asm("_get_mode");
 u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long Gpu_BuildDrawOffsetCmd(long x, long y);

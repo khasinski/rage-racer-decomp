@@ -685,9 +685,9 @@ loop:
     }
 }
 
-void DrawLargeTextWide(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) asm("DrawLargeText");
-void drawSmallText(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7) asm("DrawSmallText");
-void GameDrawSolidRectWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 a5, s32 a6, s32 a7, s32 a8) asm("DrawSolidRect");
+void DrawLargeTextWide(s32 x0, s32 y, s32 str0, s32 color, s32 g, s32 b, s32 clut, s32 flags) asm("DrawLargeText");
+void drawSmallText(s32 x0, s32 y, s32 str0, s32 color, s32 g, s32 b, s32 clut, s32 flags) asm("DrawSmallText");
+void GameDrawSolidRectWide(void* ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 alpha) asm("DrawSolidRect");
 
 void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
                    u8 r, u8 g, u8 b,
