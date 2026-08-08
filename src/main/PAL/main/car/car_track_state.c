@@ -23,277 +23,277 @@ extern u8 g_PlayerCar;
  * Returns the boundary/skid response code.
  */
 s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
-    s32 temp_a0;
+    s32 headingAngle;
     s32 secondResult;
-    s16 temp_a0_10;
-    s16 temp_a0_11;
-    s16 temp_a0_12;
-    s16 temp_a0_5;
-    s16 temp_a0_6;
-    s16 temp_a0_7;
-    s16 temp_a0_8;
-    s16 temp_a0_9;
-    s32 temp_a1_3;
-    s16 temp_a1_4;
-    s16 temp_v0;
-    s32 temp_v0_4;
-    s32 temp_v1_5;
-    s32 var_a0_2;
-    s32 var_a1_2;
-    s32 temp_a0_2;
-    s32 temp_a0_3;
-    s32 temp_a0_4;
-    s32 temp_a1;
-    s32 temp_a1_2;
+    s16 segLenE;
+    s16 trackWidth;
+    s16 trackWidthCopy;
+    s16 arcSpan;
+    s16 segLenA;
+    s16 segLenB;
+    s16 segLenC;
+    s16 segLenD;
+    s32 arcAngle;
+    s16 segLenF;
+    s16 curveMode;
+    s32 sweptAngle;
+    s32 swept;
+    s32 arcLateral;
+    s32 pointHeading;
+    s32 pointsBase;
+    s32 carToCenterX;
+    s32 pointToCenterX;
+    s32 carToCenterZ;
+    s32 pointToCenterZ;
     s32 trackLength;
-    s32 temp_a2_2;
-    s32 temp_a3;
-    s32 temp_hi;
-    s32 temp_hi_2;
-    s32 temp_lo;
-    s32 temp_lo_2;
-    s32 temp_s0;
-    s32 temp_s0_2;
-    s32 temp_s0_3;
-    s32 temp_s0_4;
-    s32 temp_s0_5;
-    s32 temp_s0_7;
-    s32 temp_v0_3;
-    s32 temp_v1_2;
-    s32 temp_v1_3;
-    s32 temp_v1_4;
-    s32 temp_v1_6;
-    s32 temp_v1_7;
-    s32 var_a0_3;
-    s32 var_a1;
-    s32 var_a2;
-    s32 var_s3;
-    s32 var_v0;
-    s32 var_v0_2;
-    s32 var_v0_3;
-    s32 var_v1;
-    u16 temp_v1;
-    void *temp_s0_6;
-    void *temp_s4;
-    void *temp_s6;
-    void *temp_v0_2;
+    s32 centerZ;
+    s32 forwardComponent;
+    s32 lapProgress;
+    s32 nextPointIndex;
+    s32 edgeHeight;
+    s32 surfaceHeight;
+    s32 cosCarAngle;
+    s32 cosPointAngle;
+    s32 cosNextAngle;
+    s32 cosHeading;
+    s32 sinHeading;
+    s32 nextCamber;
+    s32 arcCenterZ;
+    s32 arcIndex;
+    s32 arcCenterX;
+    s32 centerX;
+    s32 unusedA;
+    s32 unusedB;
+    s32 forwardProduct;
+    s32 lateralProduct;
+    s32 lateralOffset;
+    s32 alongSegment;
+    s32 carRadius;
+    s32 pointRadius;
+    s32 nextRadius;
+    s32 rotated;
+    u16 segmentLength;
+    void *clampSource;
+    void *point;
+    void *nextPoint;
+    void *arcCenter;
     void *spad;
 
-    temp_hi_2 = (trackPointIndex + 1) % *(s32 *)0x8009E6A8;
-    temp_a0_2 = *(s32 *)0x8009E688;
+    nextPointIndex = (trackPointIndex + 1) % *(s32 *)0x8009E6A8;
+    pointsBase = *(s32 *)0x8009E688;
     spad = (void *)0x1F80011C;
     *(s32 *)0x1F800158 = 0;
-    temp_s4 = (void *)((trackPointIndex * 0x18) + temp_a0_2);
-    temp_v1 = FIELD(temp_s4, u16 *, 0x16);
-    FIELD(spad, u16 *, 0x96) = temp_v1;
-    temp_s6 = (void *)((temp_hi_2 * 0x18) + temp_a0_2);
-    if ((s32) ((u32) temp_v1 << 0x10) <= 0)
+    point = (void *)((trackPointIndex * 0x18) + pointsBase);
+    segmentLength = FIELD(point, u16 *, 0x16);
+    FIELD(spad, u16 *, 0x96) = segmentLength;
+    nextPoint = (void *)((nextPointIndex * 0x18) + pointsBase);
+    if ((s32) ((u32) segmentLength << 0x10) <= 0)
     {
         FIELD(spad, u16 *, 0x96) = 1U;
     }
-    FIELD(spad, u16 *, 0x90) = FIELD(temp_s4, u16 *, 0xA);
-    temp_v1_2 = (s32) ((u32) FIELD(temp_s4, u16 *, 0x14) << 0x10) >> 0x14;
-    FIELD(spad, s16 *, 0x7A) = (s16) temp_v1_2;
-    temp_v0 = FIELD(temp_s4, u16 *, 0x14) & 3;
-    FIELD(spad, s16 *, 0x78) = temp_v0;
-    if (temp_v0 != 0)
+    FIELD(spad, u16 *, 0x90) = FIELD(point, u16 *, 0xA);
+    arcIndex = (s32) ((u32) FIELD(point, u16 *, 0x14) << 0x10) >> 0x14;
+    FIELD(spad, s16 *, 0x7A) = (s16) arcIndex;
+    curveMode = FIELD(point, u16 *, 0x14) & 3;
+    FIELD(spad, s16 *, 0x78) = curveMode;
+    if (curveMode != 0)
     {
-        temp_v0_2 = (void *)((temp_v1_2 * 0xC) + *(s32 *)0x8019C7D0);
-        temp_v1_3 = FIELD(temp_v0_2, s32 *, 0);
-        FIELD(spad, s32 *, 0) = temp_v1_3;
-        temp_v0_3 = FIELD(temp_v0_2, s32 *, 4);
-        FIELD(spad, s32 *, 0x04) = temp_v0_3;
-        temp_a0_3 = FIELD(obj, s32 *, 0) - temp_v1_3;
-        FIELD(spad, s32 *, 0x08) = temp_a0_3;
-        temp_a1 = FIELD(obj, s32 *, 8) - temp_v0_3;
-        FIELD(spad, s32 *, 0x0C) = temp_a1;
-        FIELD(spad, s16 *, 0x7E) = Atan2(temp_a0_3, temp_a1) & 0xFFF;
-        temp_a0_4 = FIELD(temp_s4, s32 *, 0);
-        temp_v1_4 = FIELD(spad, s32 *, 0);
-        temp_a2_2 = FIELD(spad, s32 *, 0x04);
-        temp_a0_4 -= temp_v1_4;
-        FIELD(spad, s32 *, 0x24) = temp_a0_4;
-        temp_a1_2 = FIELD(temp_s4, s32 *, 4) - temp_a2_2;
-        FIELD(spad, s32 *, 0x2C) = temp_a1_2;
-        FIELD(spad, s32 *, 0x28) = FIELD(temp_s6, s32 *, 0) - temp_v1_4;
-        FIELD(spad, s32 *, 0x30) = FIELD(temp_s6, s32 *, 4) - temp_a2_2;
-        FIELD(spad, s16 *, 0x80) = Atan2(temp_a0_4, temp_a1_2) & 0xFFF;
+        arcCenter = (void *)((arcIndex * 0xC) + *(s32 *)0x8019C7D0);
+        arcCenterX = FIELD(arcCenter, s32 *, 0);
+        FIELD(spad, s32 *, 0) = arcCenterX;
+        arcCenterZ = FIELD(arcCenter, s32 *, 4);
+        FIELD(spad, s32 *, 0x04) = arcCenterZ;
+        carToCenterX = FIELD(obj, s32 *, 0) - arcCenterX;
+        FIELD(spad, s32 *, 0x08) = carToCenterX;
+        carToCenterZ = FIELD(obj, s32 *, 8) - arcCenterZ;
+        FIELD(spad, s32 *, 0x0C) = carToCenterZ;
+        FIELD(spad, s16 *, 0x7E) = Atan2(carToCenterX, carToCenterZ) & 0xFFF;
+        pointToCenterX = FIELD(point, s32 *, 0);
+        centerX = FIELD(spad, s32 *, 0);
+        centerZ = FIELD(spad, s32 *, 0x04);
+        pointToCenterX -= centerX;
+        FIELD(spad, s32 *, 0x24) = pointToCenterX;
+        pointToCenterZ = FIELD(point, s32 *, 4) - centerZ;
+        FIELD(spad, s32 *, 0x2C) = pointToCenterZ;
+        FIELD(spad, s32 *, 0x28) = FIELD(nextPoint, s32 *, 0) - centerX;
+        FIELD(spad, s32 *, 0x30) = FIELD(nextPoint, s32 *, 4) - centerZ;
+        FIELD(spad, s16 *, 0x80) = Atan2(pointToCenterX, pointToCenterZ) & 0xFFF;
         FIELD(spad, s16 *, 0x82) = Atan2(FIELD(spad, s32 *, 0x28), FIELD(spad, s32 *, 0x30)) & 0xFFF;
-        temp_s0 = rcos(FIELD(spad, s16 *, 0x7E));
-        var_v0 = (temp_s0 * FIELD(spad, s32 *, 0x08)) + (rsin(FIELD(spad, s16 *, 0x7E)) * FIELD(spad, s32 *, 0x0C));
-        if (var_v0 < 0)
+        cosCarAngle = rcos(FIELD(spad, s16 *, 0x7E));
+        carRadius = (cosCarAngle * FIELD(spad, s32 *, 0x08)) + (rsin(FIELD(spad, s16 *, 0x7E)) * FIELD(spad, s32 *, 0x0C));
+        if (carRadius < 0)
         {
-            var_v0 += 0xFFF;
+            carRadius += 0xFFF;
         }
-        FIELD(spad, s32 *, 0x10) = var_v0 >> 0xC;
-        temp_s0_2 = rcos(FIELD(spad, s16 *, 0x80));
-        var_v0_2 = (temp_s0_2 * FIELD(spad, s32 *, 0x24)) + (rsin(FIELD(spad, s16 *, 0x80)) * FIELD(spad, s32 *, 0x2C));
-        if (var_v0_2 < 0)
+        FIELD(spad, s32 *, 0x10) = carRadius >> 0xC;
+        cosPointAngle = rcos(FIELD(spad, s16 *, 0x80));
+        pointRadius = (cosPointAngle * FIELD(spad, s32 *, 0x24)) + (rsin(FIELD(spad, s16 *, 0x80)) * FIELD(spad, s32 *, 0x2C));
+        if (pointRadius < 0)
         {
-            var_v0_2 += 0xFFF;
+            pointRadius += 0xFFF;
         }
-        FIELD(spad, s32 *, 0x14) = var_v0_2 >> 0xC;
-        temp_s0_3 = rcos(FIELD(spad, s16 *, 0x82));
-        var_v0_3 = (temp_s0_3 * FIELD(spad, s32 *, 0x28)) + (rsin(FIELD(spad, s16 *, 0x82)) * FIELD(spad, s32 *, 0x30));
-        if (var_v0_3 < 0)
+        FIELD(spad, s32 *, 0x14) = pointRadius >> 0xC;
+        cosNextAngle = rcos(FIELD(spad, s16 *, 0x82));
+        nextRadius = (cosNextAngle * FIELD(spad, s32 *, 0x28)) + (rsin(FIELD(spad, s16 *, 0x82)) * FIELD(spad, s32 *, 0x30));
+        if (nextRadius < 0)
         {
-            var_v0_3 += 0xFFF;
+            nextRadius += 0xFFF;
         }
-        FIELD(spad, s32 *, 0x18) = var_v0_3 >> 0xC;
+        FIELD(spad, s32 *, 0x18) = nextRadius >> 0xC;
         FIELD(spad, s16 *, 0x7C) = GetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x82));
-        temp_v0_4 = GetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x7E));
-        temp_a1_3 = FIELD(spad, s16 *, 0x7C);
-        FIELD(spad, s16 *, 0x7E) = temp_v0_4;
+        sweptAngle = GetAngleDistance(FIELD(spad, s16 *, 0x80), FIELD(spad, s16 *, 0x7E));
+        arcAngle = FIELD(spad, s16 *, 0x7C);
+        FIELD(spad, s16 *, 0x7E) = sweptAngle;
         {
             s32 interpolated;
 
-            if (temp_a1_3 <= 0)
+            if (arcAngle <= 0)
             {
                 interpolated = FIELD(spad, s32 *, 0x14);
                 FIELD(spad, s16 *, 0x7C) = 1;
             }
             else
             {
-                interpolated = (s32) ((s32) (((s16) temp_v0_4 * FIELD(spad, s32 *, 0x14)) + ((temp_a1_3 - (s16) temp_v0_4) * FIELD(spad, s32 *, 0x18))) / temp_a1_3);
+                interpolated = (s32) ((s32) (((s16) sweptAngle * FIELD(spad, s32 *, 0x14)) + ((arcAngle - (s16) sweptAngle) * FIELD(spad, s32 *, 0x18))) / arcAngle);
             }
             *(s32 *)0x1F800130 = interpolated;
         }
-        var_a0_2 = (s16) (FIELD(spad, u16 *, 0x10) - FIELD(spad, u16 *, 0x14));
+        arcLateral = (s16) (FIELD(spad, u16 *, 0x10) - FIELD(spad, u16 *, 0x14));
         if (FIELD(spad, s16 *, 0x78) == 2)
         {
-            var_a0_2 = 0 - var_a0_2;
+            arcLateral = 0 - arcLateral;
         }
-        FIELD(spad, s16 *, 0x84) = var_a0_2;
+        FIELD(spad, s16 *, 0x84) = arcLateral;
         {
-            temp_a0 = FIELD(temp_s6, s16 *, 0xA);
-            var_a1_2 = FIELD(temp_s4, s16 *, 0xA);
-            if ((temp_a0 - var_a1_2) >= 0x801)
+            headingAngle = FIELD(nextPoint, s16 *, 0xA);
+            pointHeading = FIELD(point, s16 *, 0xA);
+            if ((headingAngle - pointHeading) >= 0x801)
             {
-                temp_v1_5 = FIELD(spad, s16 *, 0x7E);
-                temp_a0_5 = FIELD(spad, s16 *, 0x7C);
-                FIELD(spad, s16 *, 0x90) = (s16) ((s32) (((temp_a0 - 0x1000) * temp_v1_5) + (var_a1_2 * (temp_a0_5 - temp_v1_5))) / temp_a0_5);
+                swept = FIELD(spad, s16 *, 0x7E);
+                arcSpan = FIELD(spad, s16 *, 0x7C);
+                FIELD(spad, s16 *, 0x90) = (s16) ((s32) (((headingAngle - 0x1000) * swept) + (pointHeading * (arcSpan - swept))) / arcSpan);
             }
-            else if ((var_a1_2 - temp_a0) >= 0x801)
+            else if ((pointHeading - headingAngle) >= 0x801)
             {
-                temp_v1_5 = FIELD(spad, s16 *, 0x7E);
-                temp_a0_5 = FIELD(spad, s16 *, 0x7C);
-                FIELD(spad, s16 *, 0x90) = (s16) ((s32) ((temp_a0 * temp_v1_5) + ((var_a1_2 - 0x1000) * (temp_a0_5 - temp_v1_5))) / temp_a0_5);
+                swept = FIELD(spad, s16 *, 0x7E);
+                arcSpan = FIELD(spad, s16 *, 0x7C);
+                FIELD(spad, s16 *, 0x90) = (s16) ((s32) ((headingAngle * swept) + ((pointHeading - 0x1000) * (arcSpan - swept))) / arcSpan);
             }
             else
             {
-                temp_v1_5 = FIELD(spad, s16 *, 0x7E);
-                temp_a0_5 = FIELD(spad, s16 *, 0x7C);
-                FIELD(spad, s16 *, 0x90) = (s16) ((s32) ((temp_a0 * temp_v1_5) + (var_a1_2 * (temp_a0_5 - temp_v1_5))) / temp_a0_5);
+                swept = FIELD(spad, s16 *, 0x7E);
+                arcSpan = FIELD(spad, s16 *, 0x7C);
+                FIELD(spad, s16 *, 0x90) = (s16) ((s32) ((headingAngle * swept) + (pointHeading * (arcSpan - swept))) / arcSpan);
             }
         }
     }
 
-    FIELD(spad, u16 *, 0x60) = (u16) (((u16) FIELD(obj, s32 *, 0) - (u16) FIELD(temp_s4, s32 *, 0)) * 4);
-    temp_a0 = FIELD(spad, s16 *, 0x90);
-    FIELD(spad, s16 *, 0x64) = (s16) (((u16) FIELD(obj, s32 *, 8) - (u16) FIELD(temp_s4, s32 *, 4)) * 4);
+    FIELD(spad, u16 *, 0x60) = (u16) (((u16) FIELD(obj, s32 *, 0) - (u16) FIELD(point, s32 *, 0)) * 4);
+    headingAngle = FIELD(spad, s16 *, 0x90);
+    FIELD(spad, s16 *, 0x64) = (s16) (((u16) FIELD(obj, s32 *, 8) - (u16) FIELD(point, s32 *, 4)) * 4);
     FIELD(spad, s16 *, 0x62) = 0;
-    temp_s0_4 = rcos(temp_a0);
-    var_v1 = (temp_s0_4 * (s16) FIELD(spad, u16 *, 0x60)) + (rsin(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
-    if (var_v1 < 0)
+    cosHeading = rcos(headingAngle);
+    rotated = (cosHeading * (s16) FIELD(spad, u16 *, 0x60)) + (rsin(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
+    if (rotated < 0)
     {
-        var_v1 += 0xFFF;
+        rotated += 0xFFF;
     }
-    var_s3 = var_v1 >> 0xE;
-    temp_s0_5 = rsin(FIELD(spad, s16 *, 0x90));
-    var_v1 = ((0 - temp_s0_5) * (s16) FIELD(spad, u16 *, 0x60)) + (rcos(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
-    if (var_v1 < 0)
+    alongSegment = rotated >> 0xE;
+    sinHeading = rsin(FIELD(spad, s16 *, 0x90));
+    rotated = ((0 - sinHeading) * (s16) FIELD(spad, u16 *, 0x60)) + (rcos(FIELD(spad, s16 *, 0x90)) * FIELD(spad, s16 *, 0x64));
+    if (rotated < 0)
     {
-        var_v1 += 0xFFF;
+        rotated += 0xFFF;
     }
-    var_a2 = var_v1 >> 0xE;
+    lateralOffset = rotated >> 0xE;
     if (FIELD(spad, s16 *, 0x78) != 0)
     {
-        var_a2 = (s32) FIELD(spad, s16 *, 0x84);
+        lateralOffset = (s32) FIELD(spad, s16 *, 0x84);
     }
-    temp_a0_6 = FIELD(spad, s16 *, 0x96);
-    FIELD(spad, s16 *, 0x8A) = (s16) ((s32) ((FIELD(temp_s6, s16 *, 0x10) * var_s3) + (FIELD(temp_s4, s16 *, 0x10) * (temp_a0_6 - var_s3))) / temp_a0_6);
-    temp_a0_7 = FIELD(spad, s16 *, 0x96);
-    temp_lo = (s32) ((FIELD(temp_s6, s16 *, 0x12) * var_s3) + (FIELD(temp_s4, s16 *, 0x12) * (temp_a0_7 - var_s3))) / temp_a0_7;
-    FIELD(spad, s16 *, 0x88) = (s16) temp_lo;
-    temp_v1_6 = FIELD(spad, s16 *, 0x8A) + FIELD(clampPair, s16 *, 2);
-    temp_s0_6 = spad + 0x40;
-    if (var_a2 < (0 - temp_v1_6))
+    segLenA = FIELD(spad, s16 *, 0x96);
+    FIELD(spad, s16 *, 0x8A) = (s16) ((s32) ((FIELD(nextPoint, s16 *, 0x10) * alongSegment) + (FIELD(point, s16 *, 0x10) * (segLenA - alongSegment))) / segLenA);
+    segLenB = FIELD(spad, s16 *, 0x96);
+    edgeHeight = (s32) ((FIELD(nextPoint, s16 *, 0x12) * alongSegment) + (FIELD(point, s16 *, 0x12) * (segLenB - alongSegment))) / segLenB;
+    FIELD(spad, s16 *, 0x88) = (s16) edgeHeight;
+    unusedA = FIELD(spad, s16 *, 0x8A) + FIELD(clampPair, s16 *, 2);
+    clampSource = spad + 0x40;
+    if (lateralOffset < (0 - unusedA))
     {
-        var_a2 += temp_v1_6;
+        lateralOffset += unusedA;
         FIELD(spad, u16 *, 0x60) = 0U;
         FIELD(spad, s16 *, 0x62) = 0;
-        FIELD(spad, s16 *, 0x64) = var_a2;
-        BuildRotMatrixY(temp_s0_6, FIELD(spad, s16 *, 0x90));
-        ApplyMatrix(temp_s0_6, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
+        FIELD(spad, s16 *, 0x64) = lateralOffset;
+        BuildRotMatrixY(clampSource, FIELD(spad, s16 *, 0x90));
+        ApplyMatrix(clampSource, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
         if (obj == &g_PlayerCar)
         {
             SetCarKnockback(obj, FIELD(spad, s32 *, 0x68), FIELD(spad, s32 *, 0x70), FIELD(clampPair, s16 *, 6));
         }
         FIELD(obj, s32 *, 0) = (s32) (FIELD(obj, s32 *, 0) - FIELD(spad, s32 *, 0x68));
         FIELD(obj, s32 *, 8) = (s32) (FIELD(obj, s32 *, 8) - FIELD(spad, s32 *, 0x70));
-        var_a2 = -FIELD(spad, s16 *, 0x8A) - FIELD(clampPair, s16 *, 2);
+        lateralOffset = -FIELD(spad, s16 *, 0x8A) - FIELD(clampPair, s16 *, 2);
         FIELD(spad, s32 *, 0x3C) = FIELD(clampPair, s16 *, 6);
     }
     else
     {
-    temp_v1_7 = (s16) temp_lo - FIELD(clampPair, s16 *, 0);
-    if (temp_v1_7 < var_a2)
+    unusedB = (s16) edgeHeight - FIELD(clampPair, s16 *, 0);
+    if (unusedB < lateralOffset)
     {
-        var_a2 -= temp_v1_7;
+        lateralOffset -= unusedB;
         FIELD(spad, u16 *, 0x60) = 0U;
         FIELD(spad, s16 *, 0x62) = 0;
-        FIELD(spad, s16 *, 0x64) = var_a2;
-        BuildRotMatrixY(temp_s0_6, FIELD(spad, s16 *, 0x90));
-        ApplyMatrix(temp_s0_6, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
+        FIELD(spad, s16 *, 0x64) = lateralOffset;
+        BuildRotMatrixY(clampSource, FIELD(spad, s16 *, 0x90));
+        ApplyMatrix(clampSource, (void *)((u8 *)spad + 0x60), (void *)((u8 *)spad + 0x68));
         if (obj == &g_PlayerCar)
         {
             SetCarKnockback(obj, FIELD(spad, s32 *, 0x68), FIELD(spad, s32 *, 0x70), FIELD(clampPair, s16 *, 4));
         }
         FIELD(obj, s32 *, 0) = (s32) (FIELD(obj, s32 *, 0) - FIELD(spad, s32 *, 0x68));
         FIELD(obj, s32 *, 8) = (s32) (FIELD(obj, s32 *, 8) - FIELD(spad, s32 *, 0x70));
-        var_a2 = FIELD(spad, s16 *, 0x88) - FIELD(clampPair, s16 *, 0);
+        lateralOffset = FIELD(spad, s16 *, 0x88) - FIELD(clampPair, s16 *, 0);
         FIELD(spad, s32 *, 0x3C) = (s32) FIELD(clampPair, s16 *, 4);
     }
     }
-    if (FIELD(spad, s16 *, 0x96) < var_s3)
+    if (FIELD(spad, s16 *, 0x96) < alongSegment)
     {
-        var_s3 = FIELD(spad, s16 *, 0x96);
+        alongSegment = FIELD(spad, s16 *, 0x96);
     }
-    else if (var_s3 < 0)
+    else if (alongSegment < 0)
     {
-        var_s3 = 0;
+        alongSegment = 0;
     }
-    FIELD(obj, s32 *, 0x38) = (s32) ((s32) (var_s3 << 0xA) / (s16) FIELD(spad, s16 *, 0x96));
-    if (var_a2 < 0)
+    FIELD(obj, s32 *, 0x38) = (s32) ((s32) (alongSegment << 0xA) / (s16) FIELD(spad, s16 *, 0x96));
+    if (lateralOffset < 0)
     {
-        FIELD(obj, s32 *, 0x3C) = (var_a2 * 0x400) / FIELD(spad, s16 *, 0x8A);
+        FIELD(obj, s32 *, 0x3C) = (lateralOffset * 0x400) / FIELD(spad, s16 *, 0x8A);
     }
     else
     {
-        FIELD(obj, s32 *, 0x3C) = (var_a2 * 0x400) / FIELD(spad, s16 *, 0x88);
+        FIELD(obj, s32 *, 0x3C) = (lateralOffset * 0x400) / FIELD(spad, s16 *, 0x88);
     }
     {
         u32 outputProgress;
         s32 useProgress;
 
         useProgress = *(s32 *)0x801E408C;
-        FIELD(obj, s32 *, 0x34) = var_a2;
+        FIELD(obj, s32 *, 0x34) = lateralOffset;
         if (useProgress != 0)
         {
-            outputProgress = var_s3;
+            outputProgress = alongSegment;
         }
         else
         {
-            outputProgress = FIELD(spad, s16 *, 0x96) - var_s3;
+            outputProgress = FIELD(spad, s16 *, 0x96) - alongSegment;
         }
         FIELD(obj, s32 *, 0x6C) = outputProgress;
     }
-    temp_a0_8 = FIELD(spad, s16 *, 0x96);
-    FIELD(spad, s16 *, 0x8E) = (s16) ((s32) ((FIELD(temp_s6, s16 *, 0xE) * var_s3) + (FIELD(temp_s4, s16 *, 0xE) * (temp_a0_8 - var_s3))) / temp_a0_8);
-    temp_a0_9 = FIELD(spad, s16 *, 0x96);
-    temp_lo_2 = (s32) ((FIELD(temp_s6, s16 *, 8) * var_s3) + (FIELD(temp_s4, s16 *, 8) * (temp_a0_9 - var_s3))) / temp_a0_9;
-    FIELD(obj, s32 *, 4) = temp_lo_2;
-    FIELD(obj, s32 *, 4) = (s32) (((s32) (FIELD(spad, s16 *, 0x8E) * var_a2) >> 7) + temp_lo_2);
+    segLenC = FIELD(spad, s16 *, 0x96);
+    FIELD(spad, s16 *, 0x8E) = (s16) ((s32) ((FIELD(nextPoint, s16 *, 0xE) * alongSegment) + (FIELD(point, s16 *, 0xE) * (segLenC - alongSegment))) / segLenC);
+    segLenD = FIELD(spad, s16 *, 0x96);
+    surfaceHeight = (s32) ((FIELD(nextPoint, s16 *, 8) * alongSegment) + (FIELD(point, s16 *, 8) * (segLenD - alongSegment))) / segLenD;
+    FIELD(obj, s32 *, 4) = surfaceHeight;
+    FIELD(obj, s32 *, 4) = (s32) (((s32) (FIELD(spad, s16 *, 0x8E) * lateralOffset) >> 7) + surfaceHeight);
     {
         s16 angle;
 
@@ -301,15 +301,15 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         angle -= 0xC00;
         FIELD(spad, s16 *, 0x8C) = angle + FIELD(spad, u16 *, 0x90);
     }
-    temp_a0_10 = FIELD(spad, s16 *, 0x96);
-    FIELD(spad, s16 *, 0x92) = (s16) ((s32) ((FIELD(temp_s6, s16 *, 0xC) * var_s3) + (FIELD(temp_s4, s16 *, 0xC) * (temp_a0_10 - var_s3))) / temp_a0_10);
-    temp_a0_11 = (u16) FIELD(spad, s16 *, 0x88) + (u16) FIELD(spad, s16 *, 0x8A);
-    FIELD(spad, s16 *, 0x86) = temp_a0_11;
-    temp_s0_7 = Atan2((s32) temp_a0_11, (s32) (FIELD(temp_s6, s16 *, 0xE) * temp_a0_11) >> 7);
-    temp_a0_12 = FIELD(spad, s16 *, 0x86);
-    secondResult = Atan2((s32) temp_a0_12, (s32) (FIELD(temp_s4, s16 *, 0xE) * temp_a0_12) >> 7);
-    temp_a1_4 = FIELD(spad, s16 *, 0x96);
-    FIELD(spad, s16 *, 0x94) = (s16) ((s32) ((temp_s0_7 * var_s3) + (secondResult * (temp_a1_4 - var_s3))) / temp_a1_4);
+    segLenE = FIELD(spad, s16 *, 0x96);
+    FIELD(spad, s16 *, 0x92) = (s16) ((s32) ((FIELD(nextPoint, s16 *, 0xC) * alongSegment) + (FIELD(point, s16 *, 0xC) * (segLenE - alongSegment))) / segLenE);
+    trackWidth = (u16) FIELD(spad, s16 *, 0x88) + (u16) FIELD(spad, s16 *, 0x8A);
+    FIELD(spad, s16 *, 0x86) = trackWidth;
+    nextCamber = Atan2((s32) trackWidth, (s32) (FIELD(nextPoint, s16 *, 0xE) * trackWidth) >> 7);
+    trackWidthCopy = FIELD(spad, s16 *, 0x86);
+    secondResult = Atan2((s32) trackWidthCopy, (s32) (FIELD(point, s16 *, 0xE) * trackWidthCopy) >> 7);
+    segLenF = FIELD(spad, s16 *, 0x96);
+    FIELD(spad, s16 *, 0x94) = (s16) ((s32) ((nextCamber * alongSegment) + (secondResult * (segLenF - alongSegment))) / segLenF);
     FIELD(spad, s32 *, 0x38) = rcos(FIELD(spad, s16 *, 0x8C));
     {
         s32 firstProduct;
@@ -331,26 +331,26 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         }
         FIELD(obj, s32 *, 0x20) = firstProduct + (secondProduct >> 0xC);
     }
-    var_a0_3 = (0 - FIELD(spad, s32 *, 0x38)) * FIELD(spad, s16 *, 0x94);
-    if (var_a0_3 < 0)
+    forwardProduct = (0 - FIELD(spad, s32 *, 0x38)) * FIELD(spad, s16 *, 0x94);
+    if (forwardProduct < 0)
     {
-        var_a0_3 += 0xFFF;
+        forwardProduct += 0xFFF;
     }
-    var_a1 = FIELD(spad, s16 *, 0x92) * FIELD(spad, s32 *, 0x34);
-    temp_a3 = var_a0_3 >> 0xC;
-    if (var_a1 < 0)
+    lateralProduct = FIELD(spad, s16 *, 0x92) * FIELD(spad, s32 *, 0x34);
+    forwardComponent = forwardProduct >> 0xC;
+    if (lateralProduct < 0)
     {
-        var_a1 += 0xFFF;
+        lateralProduct += 0xFFF;
     }
     trackLength = g_TrackLength;
-    temp_hi = (s32) (FIELD(obj, s32 *, 0x68) + FIELD(obj, s32 *, 0x6C)) % trackLength;
-    FIELD(obj, s32 *, 0x28) = (s32) (temp_a3 + (var_a1 >> 0xC));
+    lapProgress = (s32) (FIELD(obj, s32 *, 0x68) + FIELD(obj, s32 *, 0x6C)) % trackLength;
+    FIELD(obj, s32 *, 0x28) = (s32) (forwardComponent + (lateralProduct >> 0xC));
     FIELD(obj, s32 *, 0xB4) = (s32) FIELD(spad, s16 *, 0x90);
     FIELD(obj, s32 *, 0x74) = (s32) FIELD(obj, s32 *, 0x70);
-    FIELD(obj, s32 *, 0x70) = temp_hi;
-    if (temp_hi < 0)
+    FIELD(obj, s32 *, 0x70) = lapProgress;
+    if (lapProgress < 0)
     {
-        FIELD(obj, s32 *, 0x70) = (s32) (temp_hi + trackLength);
+        FIELD(obj, s32 *, 0x70) = (s32) (lapProgress + trackLength);
     }
     {
         s32 finalAngle;
