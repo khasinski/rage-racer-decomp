@@ -689,21 +689,21 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
   playerGrid[2][3].y = (playerGrid[3][2].y = (playerOutline[2].y + playerOutline[3].y) / 2);
   playerGrid[0][3].x = (playerGrid[1][2].x = (playerGrid[2][1].x = (playerGrid[3][0].x = (playerOutline[4].x + playerOutline[5].x) / 2)));
   playerGrid[0][3].y = (playerGrid[1][2].y = (playerGrid[2][1].y = (playerGrid[3][0].y = (playerOutline[4].y + playerOutline[5].y) / 2)));
-  playerProgress = *(s32 *)(((u8 *)car) + 0x70);
+  playerProgress = car->trackProgress;
   index = 0;
   pointWalk = (u8 *)(&rotation);
   context = (CollisionContext *)pointWalk;
-  playerTrackOffset = *(s32 *)(((u8 *)car) + 0x34);
-  playerX = *(s32 *)(((u8 *)car) + 0x04);
-  for (; index < 11; index++, opponent = (GameCarRuntime *)(((u8 *)opponent) + 0x19C))
+  playerTrackOffset = car->field_34;
+  playerX = car->y;
+  for (; index < 11; index++, opponent++)
   {
-    if ((*(s16 *)(((u8 *)opponent) + 0xAC)) != (-1))
+    if (opponent->activeFlag != -1)
     {
       s32 aDist;
-      *(s16 *)(((u8 *)opponent) + 0x8A) = 0;
-      progressDelta = ((s32) (((*(s32 *)(((u8 *)opponent) + 0x70)) + g_TrackLength) - playerProgress)) % ((s32) g_TrackLength);
-      opponentX = *(s32 *)(((u8 *)opponent) + 0x04);
-      trackDelta = (*(s32 *)(((u8 *)opponent) + 0x34)) - playerTrackOffset;
+      opponent->field_8A = 0;
+      progressDelta = (opponent->trackProgress + g_TrackLength - playerProgress) % g_TrackLength;
+      opponentX = opponent->y;
+      trackDelta = opponent->field_34 - playerTrackOffset;
       if (trackDelta < 0)
       {
         trackDelta = -trackDelta;
@@ -713,7 +713,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
       {
         aDist = -aDist;
       }
-      if (((*(s16 *)(((u8 *)opponent) + 0x98)) == (*(s16 *)(((u8 *)car) + 0x98))) || (aDist < 0x1A))
+      if ((opponent->field_98 == car->field_98) || (aDist < 0x1A))
       {
         if (((trackDelta < 0x64) && ((progressDelta < 0xC8) || ((g_TrackLength - 0xC8) < progressDelta))) && (aDist < 0x3C))
         {
@@ -866,22 +866,22 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     PlaySoundCue(sid);
   }
 
-  trackDelta = (*(s32 *)(((u8 *)car) + 0x34)) - (*(s32 *)(((u8 *)opponent) + 0x34));
+  trackDelta = car->field_34 - opponent->field_34;
   g_GripLossTimer = 0;
   ((CollisionContext *) &rotation)->trackDelta = trackDelta;
   if (collisionRegion < 3)
   {
-    if ((*(s16 *)(((u8 *)car) + 0xB8)) != g_RaceSeries)
+    if (car->facingBackwards != g_RaceSeries)
     {
-      *(s32 *)(((u8 *)car) + 0x150) = 0;
-      *(s32 *)(((u8 *)car) + 0xA8) = 0;
+      car->field_150 = 0;
+      car->field_A8 = 0;
     }
     else
     {
-      *(s32 *)(((u8 *)car) + 0xA8) = (*(s32 *)(((u8 *)car) + 0xA8)) / 2;
-      *(s32 *)(((u8 *)car) + 0x150) = ((*(s32 *)(((u8 *)car) + 0x150)) * 0x50) / 100;
+      car->field_A8 = car->field_A8 / 2;
+      car->field_150 = (car->field_150 * 0x50) / 100;
     }
-    if (((*(s32 *)(((u8 *)car) + 0xA4)) - (*(s32 *)(((u8 *)opponent) + 0xA4))) >= 0x191)
+    if ((car->field_A4 - opponent->field_A4) >= 0x191)
     {
       g_GripLossTimer = 0x1E;
     }
@@ -897,14 +897,14 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
       vz = (s16) ((*(u16 *)(((u8 *)opponent) + 0xD0)) - (*(u16 *)(((u8 *)car) + 0xCC)));
       velocityDelta.y = vz / 0x20;
     }
-    if ((((*(s16 *)(((u8 *)car) + 0xB8)) != g_RaceSeries) && ((*(s32 *)(((u8 *)car) + 0xA4)) >= 0x51)) && (g_WrongWayTimer >= 0xA))
+    if (((car->facingBackwards != g_RaceSeries) && (car->field_A4 >= 0x51)) && (g_WrongWayTimer >= 0xA))
     {
       SetCarKnockback(opponent, 0, 0, 4);
       SetCarKnockback(car, 0, 0, 4);
     }
     else
     {
-      if ((*(s32 *)(((u8 *)car) + 0xA4)) >= 0x29)
+      if (car->field_A4 >= 0x29)
       {
         SetCarKnockback(car, 0, 0, 4);
       }
@@ -919,16 +919,16 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
   {
     s32 vx;
     s32 vz;
-    *(s32 *)(((u8 *)opponent) + 0xA4) = (*(s32 *)(((u8 *)opponent) + 0xA4)) / 2;
-    *(s32 *)(((u8 *)opponent) + 0xA8) = (*(s32 *)(((u8 *)opponent) + 0xA8)) / 2;
-    *(s16 *)(((u8 *)opponent) + 0x12E) = *(u16 *)(((u8 *)opponent) + 0x12A);
+    opponent->field_A4 = opponent->field_A4 / 2;
+    opponent->field_A8 = opponent->field_A8 / 2;
+    opponent->field_12E = opponent->field_12A;
     vx = (s16) ((*(u16 *)(((u8 *)opponent) + 0xC8)) - (*(u16 *)(((u8 *)car) + 0xC4)));
     velocityDelta.x = vx / 0x20;
     vz = (s16) ((*(u16 *)(((u8 *)opponent) + 0xD0)) - (*(u16 *)(((u8 *)car) + 0xCC)));
     velocityDelta.y = vz / 0x20;
     velocityDelta.x = velocityDelta.x - (*(u16 *)(((u8 *)opponent) + 0x7C));
     velocityDelta.y = velocityDelta.y - (*(u16 *)(((u8 *)opponent) + 0x7E));
-    if ((((*(s16 *)(((u8 *)car) + 0xB8)) != g_RaceSeries) && ((*(s32 *)(((u8 *)car) + 0xA4)) >= 0x51)) && (g_WrongWayTimer >= 0xA))
+    if (((car->facingBackwards != g_RaceSeries) && (car->field_A4 >= 0x51)) && (g_WrongWayTimer >= 0xA))
     {
       SetCarKnockback(opponent, 0, 0, 4);
       SetCarKnockback(car, 0, 0, 4);
@@ -939,6 +939,6 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
       SetCarKnockback(opponent, 0, 0, 4);
     }
   }
-  *(s16 *)(((u8 *)opponent) + 0x8A) = 1;
+  opponent->field_8A = 1;
   return collisionRegion;
 }
