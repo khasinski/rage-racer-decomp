@@ -751,6 +751,15 @@ typedef struct GameEnvColor {
     u32 rgb __attribute__((packed));
 } GameEnvColor;
 
+typedef struct GameEnvironmentCue {
+    s32 time;
+    GameEnvColor colors[9];
+    u16 duration;
+    u16 field_2A;
+    u16 mode;
+    u16 field_2E;
+} GameEnvironmentCue;
+
 /* One timeline slot: the live colour and the pair it is being lerped between.
  * LoadEnvironmentCue rolls `cur` into `from` and the cue's value into `to`;
  * UpdateEnvironment walks `cur` across over g_EnvLerpDuration frames. */

@@ -5,16 +5,7 @@
 #include "game/sound.h"
 #include "game/track.h"
 
-typedef struct Cmd {
-    s32 id;
-    GameEnvColor colors[9];
-    u16 duration;
-    u16 unk2A;
-    u16 mode;
-    u16 unk2E;
-} Cmd;
-
-#define GAME_ENV_SCRIPT_CURSOR_TYPE Cmd
+#define GAME_ENV_SCRIPT_CURSOR_TYPE GameEnvironmentCue
 #include "game/track_internal.h"
 
 /* The three bytes of the packed slot-0 colour g_EnvColors[0].cur, addressed
@@ -42,14 +33,14 @@ void SeekEnvironmentScript(s32 targetTime) {
     s32 clampedFrame;
     s32 signedFrame;
     s32 fog;
-    Cmd *cue;
+    GameEnvironmentCue *cue;
     u8 *rgb;
     s16 *fogOut;
     s16 *fogTarget;
 
     clock = (targetTime + g_EnvScriptLength) % g_EnvScriptLength;
     targetTime = (s32)g_EnvScriptCues;
-    g_EnvScriptCursor = (Cmd *)targetTime;
+    g_EnvScriptCursor = (GameEnvironmentCue *)targetTime;
     g_EnvScriptClock = clock;
     for (count = 0;
          (s32)((u32 *)targetTime)[count * 12] != -1;
@@ -62,7 +53,7 @@ void SeekEnvironmentScript(s32 targetTime) {
     if ((s32)count >= 2) {
         offset = count * 0x30 - 0x60;
         offset += (s32)g_EnvScriptCursor;
-        g_EnvScriptCursor = (Cmd *)offset;
+        g_EnvScriptCursor = (GameEnvironmentCue *)offset;
     } else {
         targetTime = (s32)g_EnvScriptCursor;
         for (tailCount = 0;
@@ -71,34 +62,25 @@ void SeekEnvironmentScript(s32 targetTime) {
         }
         offset = tailCount * 0x30;
         offset += (s32)g_EnvScriptCursor;
-        g_EnvScriptCursor = (Cmd *)offset;
+        g_EnvScriptCursor = (GameEnvironmentCue *)offset;
     }
 
     rgb = (u8 *)g_EnvColors;
-    g_EnvColors[0].cur =
-        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x04);
-    g_EnvColors[1].cur =
-        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x08);
-    g_EnvColors[2].cur =
-        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x0C);
-    g_EnvColors[3].cur =
-        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x10);
-    g_EnvColors[4].cur =
-        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x14);
-    g_EnvColors[5].cur =
-        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x18);
-    g_EnvColors[6].cur =
-        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x1C);
-    g_EnvColors[7].cur =
-        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x20);
-    g_EnvColors[8].cur =
-        *(GameEnvColor *)((u8 *)g_EnvScriptCursor + 0x24);
+    g_EnvColors[0].cur = g_EnvScriptCursor->colors[0];
+    g_EnvColors[1].cur = g_EnvScriptCursor->colors[1];
+    g_EnvColors[2].cur = g_EnvScriptCursor->colors[2];
+    g_EnvColors[3].cur = g_EnvScriptCursor->colors[3];
+    g_EnvColors[4].cur = g_EnvScriptCursor->colors[4];
+    g_EnvColors[5].cur = g_EnvScriptCursor->colors[5];
+    g_EnvColors[6].cur = g_EnvScriptCursor->colors[6];
+    g_EnvColors[7].cur = g_EnvScriptCursor->colors[7];
+    g_EnvColors[8].cur = g_EnvScriptCursor->colors[8];
 
     g_EnvironmentMode = g_EnvScriptCursor->mode;
     nextId = *(s32 *)((u8 *)g_EnvScriptCursor + 0x30);
     g_EnvScriptCursor = g_EnvScriptCursor + 1;
     if (nextId < 0) {
-        g_EnvScriptCursor = (Cmd *)g_EnvScriptCues;
+        g_EnvScriptCursor = (GameEnvironmentCue *)g_EnvScriptCues;
     }
 
     cue = g_EnvScriptCursor;
@@ -119,7 +101,7 @@ void SeekEnvironmentScript(s32 targetTime) {
     nextId = *(s32 *)((u8 *)g_EnvScriptCursor + 0x30);
     g_EnvScriptCursor = g_EnvScriptCursor + 1;
     if (nextId < 0) {
-        g_EnvScriptCursor = (Cmd *)g_EnvScriptCues;
+        g_EnvScriptCursor = (GameEnvironmentCue *)g_EnvScriptCues;
     }
 
     fogOut = (s16 *)((u8 *)&g_EnvColors[0].from - 6);
@@ -158,7 +140,7 @@ void UpdateEnvironment(void) {
     s32 frac;
     u8 *p1;
     u8 *p2;
-    Cmd *cur;
+    GameEnvironmentCue *cur;
     u8 *pp;
 
     if (g_EnvScriptEnabled == 0) {
@@ -166,12 +148,12 @@ void UpdateEnvironment(void) {
     }
 
     cur = g_EnvScriptCursor;
-    if (cur->id == g_EnvScriptClock) {
+    if (cur->time == g_EnvScriptClock) {
         g_EnvLerpFrame = 0;
         g_EnvScriptCursor = cur + 1;
         LoadEnvironmentCue(cur);
-        if (g_EnvScriptCursor->id < 0) {
-            g_EnvScriptCursor = (Cmd *)g_EnvScriptCues;
+        if (g_EnvScriptCursor->time < 0) {
+            g_EnvScriptCursor = (GameEnvironmentCue *)g_EnvScriptCues;
         }
     }
 
