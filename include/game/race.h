@@ -312,9 +312,13 @@ extern s16 g_PlayerGear;
 extern s32 g_PlayerVelocity[];
 extern s32 g_PrizeMoney3rd[][6][3];
 extern s32 g_PrologueCutIndex;
-extern s32 g_PrologueLineText[];
-extern s16 g_PrologueLineX[];
-extern s16 g_PrologueLineY[];
+typedef struct PrologueLine {
+    s16 x;
+    s16 y;
+    const u8 *text;
+} PrologueLine;
+
+extern PrologueLine g_PrologueLines[14];
 extern s32 g_PromotionBonusTable[];
 extern char g_RaceOptionMarquee[4][40];
 extern s32 g_RaceOptionPulseAngle;
