@@ -11,7 +11,6 @@ extern void DrawPlayerCarModel(void *);
 extern s32 rcos(s32);
 extern s32 SquareRoot0(s32);
 extern void *ApplyMatrixLV(void *, void *, void *);
-extern void *TransposeMatrixWide(void *, void *) asm("TransposeMatrix");
 /* Mode-3 camera path: the eye is eased from one track-camera node to the next
  * over `node->duration` frames. Each of offset (a local xyz applied through the
  * car's matrix) and orientation (pitch/yaw/roll/distance) keeps a start value,
@@ -300,9 +299,9 @@ block_36:
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
-        TransposeMatrixWide(&sp48[0], &spA8[0]);
+        TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         MulMatrix2(angleState, &sp48[0]);
-        TransposeMatrixWide(&sp48[0], &sp68[0]);
+        TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&sp68[0]);
         sp18[1] = -0x3C;
         sp18[0] = 0;
         sp18[2] = 0x32;
@@ -353,7 +352,7 @@ block_52:
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
-        TransposeMatrixWide(&sp48[0], &spA8[0]);
+        TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         chaseNodeOffsets = chaseNodeOffset + g_TrackCameras;
         sp18[0] = FIELD(chaseNodeOffsets, s32 *, 0x10);
         sp18[1] = FIELD(chaseNodeOffsets, s32 *, 0x14);
@@ -502,9 +501,9 @@ block_52:
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
-        TransposeMatrixWide(&sp48[0], &spA8[0]);
+        TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
-        TransposeMatrixWide(&sp48[0], &sp68[0]);
+        TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&sp68[0]);
         sp18[2] += 0x32;
         ApplyMatrixLV(&spA8[0], &sp18[0], &sp38[0]);
         sp28[0] = 0;
@@ -527,7 +526,7 @@ block_52:
         sp18[2] = 0;
         BuildRotMatrixY(&sp88[0], 0 - scratch[7]);
         ApplyMatrixLV(&sp88[0], &sp18[0], &sp28[0]);
-        TransposeMatrixWide(&sp68[0], &sp88[0]);
+        TransposeMatrix((Matrix *)&sp68[0], (Matrix *)&sp88[0]);
         ApplyMatrixLV(&sp88[0], &sp28[0], &sp18[0]);
         scratch[8] = 0x400 - (Atan2(sp18[1], sp18[0]) & 0xFFF);
         g_CameraModePrev = 3;
@@ -547,7 +546,7 @@ block_52:
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
-        TransposeMatrixWide(&sp48[0], &spA8[0]);
+        TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         sp18[0] = 0;
         orbitNodeOffset = cameraNodeIndex * 0x24;
         sp18[1] = FIELD((orbitNodeOffset + (u32)g_TrackCameras), s32 *, 0xC);
@@ -585,9 +584,9 @@ block_52:
         MulMatrix2(&sp68[0], &sp48[0]);
         BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
-        TransposeMatrixWide(&sp48[0], &spA8[0]);
+        TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
-        TransposeMatrixWide(&sp48[0], &sp68[0]);
+        TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&sp68[0]);
         sp18[0] = 0;
         sp18[1] = 0;
         sp18[2] = 0x32;

@@ -14,7 +14,7 @@ u_long GetODE(void) {
     return ret >> 31;
 }
 
-u_long Gpu_BuildDisplayMode(long dfe, long dtd, u_long tpage) asm("_get_mode");
+u_long _get_mode(long dfe, long dtd, u_long tpage);
 u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long Gpu_BuildDrawOffsetCmd(long x, long y);
@@ -52,7 +52,7 @@ void SetDrawStp(DrawPacket *pkt, long ofs, u_long stp) {
 
 void SetDrawMode(DrawPacket *pkt, long dfe, long dtd, u_short tpage, void *window) {
     pkt->code = 2;
-    pkt->x0y0 = Gpu_BuildDisplayMode(dfe, dtd, tpage);
+    pkt->x0y0 = _get_mode(dfe, dtd, tpage);
     pkt->x1y1 = Gpu_BuildTexWindowCmd(window);
 }
 
@@ -72,7 +72,6 @@ typedef struct DrawEnvPacketSource {
     u_char b0;
 } DrawEnvPacketSource;
 
-u_long Gpu_BuildDrawModeCmd(long dfe, long dtd, u_long tpage) asm("_get_mode");
 
 void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) {
     DrawEnvPacketSource *src = env;
@@ -88,7 +87,7 @@ void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) {
         (short)(src->clip.w + src->clip.x - 1),
         (short)(src->clip.y + src->clip.h - 1));
     out[3] = Gpu_BuildDrawOffsetCmd(src->ofs[0], src->ofs[1]);
-    out[4] = Gpu_BuildDrawModeCmd(src->dfe, src->dtd, src->tpage);
+    out[4] = _get_mode(src->dfe, src->dtd, src->tpage);
     out[5] = Gpu_BuildTexWindowCmd(&src->tw);
     out[6] = 0xE6000000;
 
