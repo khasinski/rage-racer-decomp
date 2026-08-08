@@ -23,8 +23,6 @@ extern s32 g_PlayerTrackProgress;
 extern u8 g_TeamLogoClutRect[];
 extern u8 g_TeamLogoRect[];
 extern u8 g_TeamLogoCanvas[];
-void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight);
-void UploadTeamNameTexture(void *str, s32 len);
 
 /* g_MenuScreenUpdate[0]: waits for the car-select assets, then opens screen 1. */
 void EnterCourseSelectScreen(void) {
@@ -427,9 +425,6 @@ s32 CanSelectNextCourse(void) {
 }
 
 extern u8 *D_8019C764;
-void DrawBrowseArrows(s32, s32, s32, s32);
-void DrawMenuLightBurst(s32 arg);
-void DrawOwnedCarCounter(s32 count, s32 step);
 void UpdateCourseSelectScreen(void) {
     void *ot;
     u8 *hdr;

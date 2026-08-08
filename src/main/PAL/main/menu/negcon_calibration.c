@@ -11,7 +11,6 @@ extern NegconUvTemplate D_80010070;
 /* The 0..3 steering-play setting this screen edits. */
 extern s16 g_NegconSteerPlay;
 
-void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex);
 
 /* Local wide-parameter views; see GameQueueSprite.c / SetGteLightMatrix.c. */
 s32 AddTilePrim(
@@ -70,7 +69,6 @@ void DrawNegconSteerPlayScreen(void) {
 
 extern u8 g_PadType;
 
-void DrawOptionHintBar(s32 variant);
 
 /*
  * Game mode 10: pick the steering play with left/right, confirm with

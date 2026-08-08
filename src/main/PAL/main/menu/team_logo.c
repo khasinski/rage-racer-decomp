@@ -49,7 +49,6 @@ static inline u16 *TeamLogoClutAddress(
 }
 
 /* Builds g_TeamLogoCanvas and its CLUT from one sample character and one sample background. */
-void ComposeSampleTeamLogo(s32 character, s32 background);
 void ComposeSampleTeamLogo(s32 character, s32 background)
 {
     s32 index;

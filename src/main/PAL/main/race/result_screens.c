@@ -32,9 +32,6 @@ typedef union {
 extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar;
-void DrawFullscreenFadeTile(s32 color, s32 tpage);
-void UpdateCamera(s32 cameraMode, void *car);
-void DrawTerrainCellsWide(void);
 void SetTrackTexturePageNow(s32 trackSection);
 void ApplyReplayFrame(s32 subframe, void *playerObj, void *rivalObj);
 s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);

@@ -39,7 +39,6 @@ extern SwModelPose D_8009E6D4 asm("g_PlayerCar");
 
 s32 GetCarAssetIndex(s32 model, s32 grade);
 void *ApplyMatrixLV(void *m, void *v0, void *v1);
-void DrawPlayerCarModel(void *obj);
 
 void DrawMenuCarView(void) {
     Matrix mtxA;

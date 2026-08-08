@@ -10,7 +10,6 @@
 extern s32 g_CourseProgress;
 extern ScoreRecord g_ClassRecords[];
 extern ScoreRecord g_ClassClears[];
-void ResetProgressSlot(s32 carTable, s32 progress);
 
 void DrawPrizeMoneyPanel(u8 *s0) {
     u8 sp[16];

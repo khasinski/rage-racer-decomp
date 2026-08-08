@@ -247,6 +247,14 @@ s32 GetAngleDistance();
  */
 void SetupDisplay240(s32 r, s32 g, s32 b);
 void SetupDisplay480(s32 r, s32 g, s32 b);
+void InitRenderState(s32 otShift);
+void DrawFullscreenFadeTile(s32 color, s32 tpage);
+void DrawFullscreenFadeTile480(s32 color, s32 tpage);
+void DrawTerrainCellsWide(void);
+void RequestTrackTexturePage();
+void UpdateCamera();
+void DrawPlayerCarModel();
+void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 
 /*
  * Model banks. SelectModelBank points the scratchpad bank cursor

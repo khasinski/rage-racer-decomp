@@ -13,9 +13,7 @@ extern u8 g_PlayerCar[];
 
 extern s32 g_PlayerTrackProgress;
 
-void RequestTrackTexturePage(s32 trackSection);
 
-void DrawFullscreenFadeTile(s32 color, s32 tpage);
 
 void GetTrackZoneBlend(s32 trackProgress);
 

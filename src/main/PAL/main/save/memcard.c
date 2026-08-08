@@ -1571,7 +1571,6 @@ u16 PollMenuBackInput(void) {
     return *state & 0x90;
 }
 
-void DrawFullscreenFadeTile480(s32 level, s32 tpage);
 
 void DrawMenuFadeOverlay(s32 level) {
     DrawFullscreenFadeTile480(level, 0x40);

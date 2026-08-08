@@ -35,9 +35,7 @@ extern s16 g_PlayerLap;
 
 extern s32 g_PlayerTrackProgress;
 
-void DrawFullscreenFadeTile(s32 a, s32 b);
 
-void DrawRaceEndBanner(s32 a);
 
 void ExitRaceScene(s32 a);
 
@@ -47,9 +45,7 @@ void RunRaceIntroCamera(void *a);
 
 void UpdatePlayerCar(void *a);
 
-void UpdateCamera(s32 a, void *b);
 
-void RequestTrackTexturePage(s32 a);
 
 void DrawCourseScenery(s32 a, s32 b, s32 c);
 

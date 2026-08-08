@@ -12,4 +12,18 @@ typedef struct FmvDecodeContext {
 
 extern FmvDecodeContext g_FmvDecodeContext asm("g_FmvVlcBuffers");
 
+void StartFmvPlayback();
+void InitFmvContext();
+void OpenFmvStream();
+s32 PresentFmvFrame();
+void StartStreamRead();
+void WaitFmvDecode();
+void DecDCTout(volatile u32 *out, s32 words);
+void DecDCToutCallback(s32 callback);
+s32 StGetBackloc(void *loc);
+void StSetRing(s32 base, s32 sectors);
+void StSetStream(s32 mode, s32 startFrame, s32 endFrame, s32 doneCallback, s32 errorCallback);
+void StCdInterrupt(void);
+void StUnSetRing(void);
+
 #endif

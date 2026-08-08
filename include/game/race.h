@@ -99,6 +99,7 @@ s32 CanSelectNextCourse(void);
  * "2" / "1" / "GO" dot-matrix board from D_8007DDC0[1..4] plus the six start
  * lamps. See docs/names.md 1. */
 void DrawStartCountdown(s32 sceneTimer);
+void DrawRaceEndBanner(s32 level);
 
 /*
  * Per-course records, all in the memory-card save block. Per-file types.

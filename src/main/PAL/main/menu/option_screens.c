@@ -10,16 +10,13 @@
 #include "game/track.h"
 #include "psyq/gpu.h"
 
-void DrawOptionHintBar(s32 variant);
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
 s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 extern s32 g_CameraViewMode;
 extern s32 *g_CamRow;
-void InitRenderState(s32 otShift);
 void SetTrackTexturePageNow(s32 page);
 extern u8 g_TextNowLoading[];
-void DrawFullscreenFadeTile(s32 color, s32 tpage);
 void RequestTrackDataAssets(void);
 
 /* g_GameModeHandlers[5]: left/right edits the selected audio setting, cancel restores it. */

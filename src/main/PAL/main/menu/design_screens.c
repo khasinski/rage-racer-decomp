@@ -6,9 +6,6 @@
 #include "game/render.h"
 #include "game/state.h"
 
-extern void ComposeSampleTeamLogo(s32, s32);
-extern void RampTeamLogoCanvas(s32, s32);
-extern void DrawLogoSamplePanel(s32, s32);
 
 void UpdateLogoSampleScreen(void) {
     s32 v0;
@@ -183,7 +180,6 @@ s32 DrawTeamNameScreen(s32 step) {
     return D_8009B2E0;
 }
 
-void UploadTeamNameTexture(void *a, s32 b);
 
 void UpdateTeamNameScreen(void) {
     u16 pad;
@@ -303,7 +299,6 @@ s32 DrawPaintColorScreen(s32 step) {
     return D_8009B2E4;
 }
 
-void DrawBrowseArrows(s32, s32, s32, s32);
 
 void UpdatePaintColorScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;

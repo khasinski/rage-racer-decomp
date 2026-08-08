@@ -35,7 +35,6 @@ extern s32 g_RaceTotalTime;
 
 extern s32 g_RankingTimes[][4][20];
 
-void DrawFullscreenFadeTile(s32 color, s32 tpage);
 
 void ExitRaceScene(s32 sceneId);
 
@@ -43,7 +42,6 @@ extern s32 g_CameraViewMode;
 
 extern u8 *g_CamRow;
 
-void InitRenderState(s32);
 
 void SetTrackTexturePageNow(s32);
 
@@ -73,9 +71,7 @@ static __inline__ void GameDebugLapResult(
     }
 }
 
-void RequestTrackTexturePage(s32 trackSection);
 
-void DrawRaceEndBanner(s32 fade);
 
 void BeginCarStandingStart(void *car, s32 sceneTimer);
 
@@ -91,7 +87,6 @@ void UpdateTrackEventSound(s32 trackSection);
 
 void PlayCountdownCues(s32 sceneTimer);
 
-void UpdateCamera(s32 cameraModeSel, void *car);
 
 s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
     s32 value;

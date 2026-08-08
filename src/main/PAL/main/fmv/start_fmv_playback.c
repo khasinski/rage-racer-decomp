@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/fmv.h"
 #include "game/asset.h"
 #include "game/state.h"
 #include "psyq/gpu.h"
@@ -8,10 +9,6 @@
 
 extern volatile u8 g_FmvVlcBuffers;
 
-void InitFmvContext(volatile void *ctx, s32 width, s32 height, s32 x, s32 y);
-void OpenFmvStream(void (*callback)(void));
-s32 PresentFmvFrame(volatile void *ctx);
-void StartStreamRead(s32 loc);
 
 void StartFmvPlayback(s32 bufferBase) {
     s32 fail;

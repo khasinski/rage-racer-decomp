@@ -10,9 +10,6 @@ extern u8 *g_CarModelAsset;
 
 extern u8 *D_8019CB00;
 
-void RequestCarModel(s32 carIndex);
-void UploadTeamNameTexture(void *str, s32 len);
-void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight);
 
 void UpdateCarShopScreen(void) {
     void *ot;

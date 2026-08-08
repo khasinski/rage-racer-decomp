@@ -317,8 +317,6 @@ extern void *D_8019C794;
 extern void *D_8019CB00;
 extern void *D_801E4188;
 
-void InitRenderState(s32);
-void DrawMenuLightBurst(s32);
 
 void InitMenuMode(void) {
     GameRaceProgress *p;

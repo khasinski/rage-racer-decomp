@@ -7,14 +7,11 @@
 #include "game/scratchpad.h"
 #include "game/state.h"
 
-void DrawMenuCursorArrow(s32 x, s32 y);
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
 extern ScoreRecord g_ClassRecords[];
 extern ClassRecordSprite D_8007D5D4[];
-void StartOptionMenuExit(s32 scene);
 s32 AddTilePrim(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
-void DrawOptionHintBar(s32 variant);
 
 void DrawOptionRootMenu(void) {
     u8 *base = g_DrawBuffer;

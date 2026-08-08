@@ -4,7 +4,6 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-void DrawRaceEndBanner(s32 level);
 
 /* Scene 34: the still shown after the ending FMV. Fades in, waits 300
  * frames or a confirm press, fades out and returns to scene 2. */

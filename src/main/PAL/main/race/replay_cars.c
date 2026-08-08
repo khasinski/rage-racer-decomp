@@ -15,7 +15,6 @@ void AccumulateLapProgress(void *car);
 
 s32 FindTrackSegment(void *car, s32 idx);
 
-void RequestTrackTexturePage(s32 trackSection);
 
 typedef struct TrackZone {
     s32 start;
@@ -32,7 +31,6 @@ extern s32 g_BestSectorTimes[][4][3];
 
 extern s32 g_BestTotalTimes[][4][2];
 
-void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor);
 
 void SeedReplayCars(void) {
     void *primary;

@@ -1,13 +1,10 @@
 #include "common.h"
+#include "game/fmv.h"
 #include "game/asset.h"
 #include "psyq/gpu.h"
 #include "game/render.h"
 
 extern s32 g_FmvRingBuffer;
-void DecDCToutCallback(s32 callback);
-void StSetRing(s32 base, s32 sectors);
-void StSetStream(s32 mode, s32 startFrame, s32 endFrame, s32 doneCallback, s32 errorCallback);
-s32 StartStreamRead(s32 loc);
 void OpenFmvStream(s32 callback) {
     DecDCTReset(0);
     DecDCToutCallback(callback);
@@ -20,8 +17,6 @@ extern Rect g_FmvStripRects[];
 extern volatile s32 g_FmvStripIndex;
 extern s32 g_StInterruptPending;
 
-void DecDCTout(volatile u32 *out, s32 words);
-void StCdInterrupt(void);
 
 void UploadFmvSlice(void) {
     Rect rect;

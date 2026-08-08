@@ -20,10 +20,6 @@ extern u8 g_BgmShuffleOrder[];
 void AdvanceBgmShuffleBag(s32 track);
 extern u32 g_StreamReturnScene;
 extern u32 g_CameraViewMode;
-void DrawFullscreenFadeTile(s32 color, u32 tpage);
-void RequestTrackTexturePage(s32 trackSection);
-void UpdateCamera(u32 cameraMode, GameCarRuntime *car);
-void DrawTerrainCellsWide(void);
 
 void UpdateBgmSelectScene(void) {
     void (*func)(void);

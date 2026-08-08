@@ -11,7 +11,6 @@
 extern u8 *g_CarModelAsset;
 
 
-void DrawMenuLightBurst(s32 arg);
 
 void UpdateRankingScreen(void) {
     s32 state;
@@ -299,10 +298,8 @@ void EnterCarSelectScreen(void) {
 extern u8 *D_801E40B4;
 extern u8 *g_CourseProgress;
 
-void RequestCarModel(s32 carIndex);
 void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight)
 ;
-void DrawOwnedCarCounter(s32 step, s32 count);
 
 void UpdateCarSelectScreen(void) {
     s32 mode;

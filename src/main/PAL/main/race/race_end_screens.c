@@ -10,8 +10,6 @@
 extern s16 g_ClassRecords[];
 extern volatile s32 g_ClassWinCount;
 extern void *g_CourseProgress;
-void DrawFullscreenFadeTile(s32 color, s32 tpage);
-void DrawRaceEndBanner(s32 level);
 
 void UpdateBgmTrackCount(void) {
     s32 offset;

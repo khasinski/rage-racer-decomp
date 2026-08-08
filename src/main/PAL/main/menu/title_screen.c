@@ -234,8 +234,6 @@ extern s32 g_ExtraGrandPrixCars;
 extern s32 g_ExtraGrandPrixCourseProgress;
 extern s32 g_TimeAttackCars;
 
-extern void ShuffleBgmOrder(void);
-extern void RequestOptionScreenAssets(void);
 
 void UpdateMainMenuInput(void) {
     volatile u16 *flagp = &g_PadPressed;

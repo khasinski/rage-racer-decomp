@@ -13,7 +13,6 @@
 #include "psyq/snd.h"
 
 void SetGraphDebug(s32 level);
-void InitRenderState(s32 otShift);
 
 extern s32 g_ScreenOffsetY;
 extern s32 g_ScreenOffsetX;

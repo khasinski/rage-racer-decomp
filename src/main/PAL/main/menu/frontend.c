@@ -11,7 +11,6 @@
 #include "psyq/cd.h"
 #include "psyq/gpu.h"
 
-void DrawFullscreenFadeTile(s32 color, s32 tpage);
 
 void UpdateMainMenuExit(void) {
     s32 value;

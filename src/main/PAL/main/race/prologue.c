@@ -18,13 +18,9 @@ extern u32 g_StreamReturnScene;
 extern void (*g_AttractDemoSteps[])(void);
 extern s32 g_PrologueStep;
 extern u8 g_TextNowLoading[];
-void DrawFullscreenFadeTile(s32 color, s32 tpage);
 void RequestTrackDataAssets(void);
 extern u32 g_CameraViewMode;
 extern UnkEventPair g_PrologueCameraCuts[];
-void RequestTrackTexturePage(s32 trackSection);
-void UpdateCamera(u32 cameraMode, GameCarRuntime *car);
-void DrawTerrainCellsWide(void);
 
 void UpdateAttractDemoScene(void) {
     g_AttractDemoSteps[g_AttractDemoStep]();

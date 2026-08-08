@@ -7,7 +7,6 @@
 #include "game/sound.h"
 #include "game/car.h"
 
-void DrawFullscreenFadeTile(s32, s32);
 void DrawPrizeMoneyPanel(s32);
 extern CarEntry g_SaveDefaults[];
 extern s16 g_ClassRecords;
@@ -17,8 +16,6 @@ extern u8 g_ExtraGrandPrixCourseProgress;
 extern u8 g_GrandPrixCourseProgress;
 extern u8 *g_CourseProgress;
 extern s32 g_BgmSelection;
-void ResetProgressSlot(void *slot, s32 *out);
-void ShuffleBgmOrder(void);
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
 void UpdatePrizeMoneyScreen(void) {

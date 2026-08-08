@@ -11,14 +11,8 @@
 
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
-void ShuffleBgmOrder(void);
 extern s32 g_CameraViewMode;
 void AdvanceBgmShuffleBag(u32 track);
-void DrawFullscreenFadeTile(s32 color, s32 tpage);
-void RequestOptionScreenAssets(void);
-void RequestTrackTexturePage(s32 trackSection);
-void UpdateCamera(s32 cameraMode, void *car);
-void DrawTerrainCellsWide(void);
 
 void DrawBgmSelectBar(void) {
     u8 *base;

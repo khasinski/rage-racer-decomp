@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/fmv.h"
 
 extern u32 g_FmvRingBuffer;
 extern u32 g_FmvVlcBuffer0;

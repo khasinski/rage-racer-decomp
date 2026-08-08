@@ -18,7 +18,6 @@ extern s32 g_RankingTimes;
  * g_TimeRecordTimes / g_TimeRecordCars the same pair of g_TimeRecords. */
 extern u16 g_RankingCars[];
 extern u16 g_TimeRecordCars[];
-void DrawFullscreenFadeTile(s32 color, s32 tpage);
 void CdSync(s32 mode, s32 result);
 s32 CdControl(s32 com, void *param, s32 result);
 

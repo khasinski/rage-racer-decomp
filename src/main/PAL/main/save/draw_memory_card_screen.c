@@ -7,9 +7,6 @@
 extern u8 *volatile g_DrawBuffer;
 u8 *GameQueueSpriteTrans(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex);
 s32 AddTilePrim(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
-void DrawMenuCursorArrow(s32 a, s32 b);
-void DrawOptionHintBar(s32 a);
-void DrawSpriteString(s32 x, s32 y, s32 str, s32 clutIndex);
 s32 GameQueueSprite(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex);
 
 void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow);

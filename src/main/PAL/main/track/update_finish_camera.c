@@ -11,7 +11,6 @@ s32 rsin(s32 angle);
 s32 rcos(s32 angle);
 void AccumulateLapProgress(void *car);
 void UpdateCarTrackState(void* obj, s32 trackPointIndex, void* clampPair);
-void DrawPlayerCarModel(GameRenderObject *obj);
 
 /*
  * Camera track-follower: advances a look-ahead track point, aims the eye object

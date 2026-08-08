@@ -7,7 +7,6 @@
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
-extern void DrawPlayerCarModel(void *);
 extern s32 rcos(s32);
 extern s32 SquareRoot0(s32);
 extern void *ApplyMatrixLV(void *, void *, void *);

@@ -79,7 +79,6 @@ s32 DrawDesignModeScreen(s32 step) {
     return D_8009B2D4;
 }
 
-void RampTeamLogoCanvas(s32 a, s32 b);
 
 void UpdateDesignModeScreen(void) {
     s32 sel;

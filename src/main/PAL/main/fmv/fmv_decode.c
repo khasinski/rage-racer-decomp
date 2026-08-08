@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/fmv.h"
 #include "game/asset.h"
 #include "game/state.h"
 #include "psyq/gpu.h"
@@ -8,11 +9,6 @@
 extern volatile u32 *g_FmvVlcBuffers[];
 extern s32 g_FmvStripIndex;
 
-void DecDCTout(volatile u32 *out, s32 words);
-s32 PresentFmvFrame(volatile void *ctx);
-s32 StGetBackloc(void *loc);
-void StartStreamRead(void *loc);
-void WaitFmvDecode(volatile void *ctx, s32 unused);
 
 void DecodeFmvFrame(void) {
     s32 value;
@@ -47,8 +43,6 @@ void DecodeFmvFrame(void) {
 }
 
 extern s32 g_StreamReturnScene;
-void DecDCToutCallback(s32 callback);
-void StUnSetRing(void);
 void EndFmv(void) {
     DecDCToutCallback(0);
     StUnSetRing();

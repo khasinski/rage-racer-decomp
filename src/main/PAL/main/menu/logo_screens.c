@@ -18,8 +18,6 @@
 
 extern Rect g_TeamLogoClutRect;
 
-void RampTeamLogoCanvas(s32 from, s32 to);
-void DrawLogoSamplePanel(s32 step, s32 sample);
 
 void UpdateTeamLogoScreen(void)
 {

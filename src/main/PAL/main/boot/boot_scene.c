@@ -9,7 +9,6 @@
 #include "psyq/gte.h"
 
 extern Matrix g_SceneLightMatrix;
-void InitRenderState(s32 otShift);
 
 void DrawBootLogo(void) {
     u8 *base;

@@ -11,7 +11,6 @@ extern u8 g_PadType;
 extern s16 g_PadMappingIndex;
 extern s16 g_NegconMappingIndex;
 
-void DrawOptionHintBar(s32 variant);
 
 /*
  * Game mode 7's screen: either the "no controller" banner, or the two nudge
@@ -135,7 +134,6 @@ void UpdateControllerConfigScreen(void) {
     DrawControllerSetupScene(0);
 }
 
-void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex);
 s32 AddTilePrim(
     s32 ot,
     s32 prim,
