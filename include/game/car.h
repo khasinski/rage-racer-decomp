@@ -305,8 +305,7 @@ typedef struct GameCarDrive {
     s32 unk60;       /* +0x60 yaw offset */
     s32 unk64;
     s32 unk68;
-    s16 unk6C;
-    s16 unk6E;
+    s32 unk6C;
     s16 unk70;
     s16 unk72;
     s16 manual;      /* +0x74 */

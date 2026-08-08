@@ -74,9 +74,9 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->trackProgress = 0;
   printf((u8 *)g_MsgHTbl);
   startData += g_RaceSeries * 0x90;
-  player->trackPointIndex = *(s16 *)(startData + 0x35C);
-  player->x = *(s32 *)(startData + 0x354);
-  player->z = *(s32 *)(startData + 0x358);
+  player->trackPointIndex = ((RivalStartEntry *)(startData + 0x354))->trackPointIndex;
+  player->x = ((RivalStartEntry *)(startData + 0x354))->x;
+  player->z = ((RivalStartEntry *)(startData + 0x354))->z;
   player->y = 0;
   player->trackPointIndex = FindTrackSegment(car, player->trackPointIndex);
   player->field_20 = 0;
@@ -125,7 +125,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->drive.unk44 = 0;
   player->drive.unk48 = 0;
   player->drive.unk68 = 0;
-  *(s32 *)&player->drive.unk6C = 0;
+  player->drive.unk6C = 0;
   player->drive.gear = 1;
   player->drive.unk78 = 0;
   player->drive.unk80 = 0;
