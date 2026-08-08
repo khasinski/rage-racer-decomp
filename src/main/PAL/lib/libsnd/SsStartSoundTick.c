@@ -7,7 +7,6 @@ typedef void (*Callback)(void);
 extern Callback g_SndTickCallback;
 extern Callback g_SndPrevVSyncCallback;
 
-long KernelCallbackSlot2Wide(long index, Callback callback) asm("KernelCallbackSlot2");
 
 void SsStartSoundTick(long mode) {
     long size;
@@ -91,7 +90,7 @@ void SsStartSoundTick(long mode) {
 
         mode = g_SndTickIrq;
         if (mode == 0) {
-            g_SndPrevVSyncCallback = (Callback)KernelCallbackSlot2Wide(0, 0);
+            g_SndPrevVSyncCallback = (Callback)KernelCallbackSlot2(0, 0);
             mode = g_SndTickIrq;
             callback = SsSoundTickCallback;
         } else {
@@ -100,7 +99,7 @@ void SsStartSoundTick(long mode) {
                 callback = g_SndTickCallback;
             }
         }
-        KernelCallbackSlot2Wide(mode, callback);
+        KernelCallbackSlot2(mode, callback);
     }
 
     }

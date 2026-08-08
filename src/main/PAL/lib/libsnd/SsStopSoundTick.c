@@ -6,7 +6,6 @@ typedef void (*Callback)(void);
 
 extern Callback g_SndPrevVSyncCallback;
 
-long KernelCallbackSlot2Wide(long index, Callback callback) asm("KernelCallbackSlot2");
 
 void SsStopSoundTick(void) {
     if (g_SndNoTickFlag == 0) {
@@ -17,10 +16,10 @@ void SsStopSoundTick(void) {
             VSyncCallback(0);
             g_SndTickUsesVSync = 0;
         } else if (g_SndTickIrq == 0) {
-            KernelCallbackSlot2Wide(0, g_SndPrevVSyncCallback);
+            KernelCallbackSlot2(0, g_SndPrevVSyncCallback);
             g_SndPrevVSyncCallback = 0;
         } else {
-            KernelCallbackSlot2Wide(6, 0);
+            KernelCallbackSlot2(6, 0);
         }
 
         ExitCriticalSection();

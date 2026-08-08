@@ -92,8 +92,8 @@ void KernelCallbackSlot3(void) {
     ((CallbackTable *)g_IntrRpNode)->callback();
 }
 
-void KernelCallbackSlot2(void) {
-    g_IntrRpNode[2]();
+long KernelCallbackSlot2(void) {
+    return ((long (*)())g_IntrRpNode[2])();
 }
 
 void DMACallback(long spec, long callback) {

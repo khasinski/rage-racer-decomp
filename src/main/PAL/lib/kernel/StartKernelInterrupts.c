@@ -22,10 +22,6 @@ void *StartKernelInterrupts(void) {
     return state;
 }
 
-void RegisterKernelCallback(long slot, void *callback) asm("KernelCallbackSlot2");
-void *setIntrVSyncAddress(void) asm("setIntrVSync");
-void *setIntrDMAAddress(void) asm("setIntrDMA");
-
 void clearKernelInterruptState(u_long *dst, long count) {
     volatile long unused;
     long i = count - 1;
@@ -97,9 +93,9 @@ void *startIntrVSync(void) {
     *g_Timer1ModeReg = 0x107;
     g_VSyncCount = 0;
     clearIntrVSyncCallbacks((u_long *)g_VSyncCallbacks, 8);
-    RegisterKernelCallback(0, intrVSyncDispatcher);
+    KernelCallbackSlot2(0, intrVSyncDispatcher);
 
-    return setIntrVSyncAddress;
+    return setIntrVSync;
 }
 
 void intrVSyncDispatcher(void) {
@@ -148,9 +144,9 @@ void clearIntrVSyncCallbacks(u_long *dst, long count) {
 void *startIntrDMA(void) {
     clearIntrDMACallbacks(g_DmaCallbacks, 8);
     *g_DmaIrqControl = 0;
-    RegisterKernelCallback(3, intrDMADispatcher);
+    KernelCallbackSlot2(3, intrDMADispatcher);
 
-    return setIntrDMAAddress;
+    return setIntrDMA;
 }
 
 void intrDMADispatcher(void) {
