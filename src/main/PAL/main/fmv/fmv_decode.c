@@ -10,11 +10,11 @@
 extern volatile u32 *g_FmvVlcBuffers[];
 extern s32 g_FmvStripIndex;
 
-void DecDCTout(volatile u32 *arg0, s32 arg1);
-s32 PresentFmvFrame(volatile void *arg0);
-s32 StGetBackloc(void *arg0);
-void StartStreamRead(void *arg0);
-void WaitFmvDecode(volatile void *arg0, s32 arg1);
+void DecDCTout(volatile u32 *out, s32 words);
+s32 PresentFmvFrame(volatile void *ctx);
+s32 StGetBackloc(void *loc);
+void StartStreamRead(void *loc);
+void WaitFmvDecode(volatile void *ctx, s32 unused);
 
 void DecodeFmvFrame(void) {
     s32 value;
@@ -49,7 +49,7 @@ void DecodeFmvFrame(void) {
 }
 
 extern s32 g_StreamReturnScene;
-void DecDCToutCallback(s32 arg0);
+void DecDCToutCallback(s32 callback);
 void StUnSetRing(void);
 void EndFmv(void) {
     DecDCToutCallback(0);
@@ -67,7 +67,7 @@ extern volatile u16 g_DispEnv1X;
 extern volatile u16 g_DispEnv1Y;
 extern volatile u32 g_FrameParity;
 
-void InitFmvContext(void *arg0, s32 arg1, s32 arg2) {
+void InitFmvContext(void *ctx, s32 width, s32 height) {
     volatile u32 *words;
     volatile u16 *halves;
     u32 word0;
@@ -80,8 +80,8 @@ void InitFmvContext(void *arg0, s32 arg1, s32 arg2) {
     u32 word28;
     u16 half22;
 
-    words = arg0;
-    halves = arg0;
+    words = ctx;
+    halves = ctx;
     word0 = g_FmvVlcBuffer0;
     word1 = g_FmvVlcBuffer1;
     word3 = g_FmvStripBuffer0;
@@ -100,10 +100,10 @@ void InitFmvContext(void *arg0, s32 arg1, s32 arg2) {
     halves[0x10] = half20;
     word28 = g_FrameParity;
     half22 = g_DispEnv1Y;
-    halves[0x16] = arg1;
-    halves[0x17] = arg2;
+    halves[0x16] = width;
+    halves[0x17] = height;
     words[0xD] = 0;
     words[0xA] = word28;
     halves[0x18] = 0x18;
-    ((u16 *)arg0)[0x11] = half22;
+    ((u16 *)ctx)[0x11] = half22;
 }

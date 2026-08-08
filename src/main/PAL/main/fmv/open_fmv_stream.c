@@ -4,13 +4,13 @@
 #include "game/render.h"
 
 extern s32 g_FmvRingBuffer;
-void DecDCToutCallback(s32 arg0);
-void StSetRing(s32 arg0, s32 arg1);
-void StSetStream(s32 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-s32 StartStreamRead(s32 arg0);
-void OpenFmvStream(s32 arg0) {
+void DecDCToutCallback(s32 callback);
+void StSetRing(s32 base, s32 sectors);
+void StSetStream(s32 mode, s32 startFrame, s32 endFrame, s32 doneCallback, s32 errorCallback);
+s32 StartStreamRead(s32 loc);
+void OpenFmvStream(s32 callback) {
     DecDCTReset(0);
-    DecDCToutCallback(arg0);
+    DecDCToutCallback(callback);
     StSetRing(g_FmvRingBuffer, 0x20);
     StSetStream(1, 1, -1, 0, 0);
     StartStreamRead((s32)g_StreamLoc);
@@ -20,7 +20,7 @@ extern Rect g_FmvStripRects[];
 extern volatile s32 g_FmvStripIndex;
 extern s32 g_StInterruptPending;
 
-void DecDCTout(volatile u32 *arg0, s32 arg1);
+void DecDCTout(volatile u32 *out, s32 words);
 void StCdInterrupt(void);
 
 void UploadFmvSlice(void) {

@@ -27,14 +27,14 @@ extern u32 g_ReplayBufferWrapped;
 extern s32 g_ReplayPlayerModel;
 extern s32 g_ReplayRivalModel;
 
-s32 PresentFmvFrame(s32 *arg0) {
+s32 PresentFmvFrame(s32 *ctx) {
     void *p;
     s32 retry;
     for (retry = 1; retry != 0; retry--) {
-        p = GetFmvFrame(arg0);
+        p = GetFmvFrame(ctx);
         if (p != 0) {
-            arg0[2] = (arg0[2] == 0);
-            MdecUnpackStatus(p, arg0[arg0[2]]);
+            ctx[2] = (ctx[2] == 0);
+            MdecUnpackStatus(p, ctx[ctx[2]]);
             return StFreeRing(p);
         }
     }
@@ -116,30 +116,30 @@ void *GetFmvFrame(s32 *ctx) {
     return ret;
 }
 
-void WaitFmvDecode(FmvDisplayState *arg0) {
+void WaitFmvDecode(FmvDisplayState *state) {
     volatile s32 timeout = 0x800000;
     s32 one;
     u16 x;
 
-    if (arg0->field_34 == 0) {
+    if (state->field_34 == 0) {
         one = 1;
         do {
             timeout = timeout - 1;
             if (timeout == 0) {
                 DebugPrintf(g_MsgFmvDecodeTimeout);
-                arg0->field_34 = one;
-                arg0->field_28 = arg0->field_28 < 1U;
-                x = ((FmvDisplayState *)((u8 *)arg0 + (arg0->field_28 << 3)))->field_18;
-                arg0->field_2C = x;
-                arg0->field_2E = ((FmvDisplayState *)((u8 *)arg0 + (arg0->field_28 << 3)))->field_1A;
+                state->field_34 = one;
+                state->field_28 = state->field_28 < 1U;
+                x = ((FmvDisplayState *)((u8 *)state + (state->field_28 << 3)))->field_18;
+                state->field_2C = x;
+                state->field_2E = ((FmvDisplayState *)((u8 *)state + (state->field_28 << 3)))->field_1A;
             }
-        } while (arg0->field_34 == 0);
+        } while (state->field_34 == 0);
     }
 
-    arg0->field_34 = 0;
+    state->field_34 = 0;
 }
 
-void StartStreamRead(void *arg0) {
+void StartStreamRead(void *loc) {
     u8 byte;
 
 outer:
@@ -160,7 +160,7 @@ pollFirst:
     }
 
 send:
-    while (CdControl(0x15, arg0, 0) == 0) {
+    while (CdControl(0x15, loc, 0) == 0) {
     }
 
 pollNext:

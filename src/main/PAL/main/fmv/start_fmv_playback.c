@@ -9,12 +9,12 @@
 
 extern volatile u8 g_FmvVlcBuffers;
 
-void InitFmvContext(volatile void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4);
-void OpenFmvStream(void (*arg0)(void));
-s32 PresentFmvFrame(volatile void *arg0);
-void StartStreamRead(s32 arg0);
+void InitFmvContext(volatile void *ctx, s32 width, s32 height, s32 x, s32 y);
+void OpenFmvStream(void (*callback)(void));
+s32 PresentFmvFrame(volatile void *ctx);
+void StartStreamRead(s32 loc);
 
-void StartFmvPlayback(s32 arg0) {
+void StartFmvPlayback(s32 bufferBase) {
     s32 fail;
     char frame_pad[8];
 
@@ -27,7 +27,7 @@ void StartFmvPlayback(s32 arg0) {
     g_DrawEnv0Dither = 0;
     g_DispEnv1Rgb24 = 1;
     g_DispEnv0Rgb24 = 1;
-    SetupFmvBuffers(arg0);
+    SetupFmvBuffers(bufferBase);
     {
         volatile void *buf = &g_FmvVlcBuffers;
         InitFmvContext(buf, 0, 0x18, 0, 0x108);

@@ -6,10 +6,10 @@
 #include "game/audio.h"
 #include "game/race.h"
 extern s32 g_StreamReturnScene;
-void CdSync(s32 arg0, s32 arg1);
+void CdSync(s32 mode, s32 result);
 s32 CdControl(s32 com, void *param, s32 result);
 extern u32 g_AssetBase;
-void StartFmvPlayback(u32 arg0);
+void StartFmvPlayback(u32 bufferBase);
 
 void BeginFmv(s32 returnScene) {
     CloseLoadedAudioSlots();
