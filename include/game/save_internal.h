@@ -26,18 +26,9 @@ extern ClassClearView g_ClassClears[11];
 #define GAME_CLASS_WIN_COUNT_QUALIFIER
 #endif
 extern GAME_CLASS_WIN_COUNT_QUALIFIER s32 g_ClassWinCount;
-#ifndef GAME_GRAND_PRIX_PROGRESS_DECL
-#define GAME_GRAND_PRIX_PROGRESS_DECL extern u8 g_GrandPrixCourseProgress[8]
-#endif
-#ifndef GAME_EXTRA_GRAND_PRIX_PROGRESS_DECL
-#define GAME_EXTRA_GRAND_PRIX_PROGRESS_DECL extern u8 g_ExtraGrandPrixCourseProgress[8]
-#endif
-GAME_GRAND_PRIX_PROGRESS_DECL;
-GAME_EXTRA_GRAND_PRIX_PROGRESS_DECL;
-#ifndef GAME_COURSE_PROGRESS_TYPE
-#define GAME_COURSE_PROGRESS_TYPE u8
-#endif
-extern GAME_COURSE_PROGRESS_TYPE *g_CourseProgress;
+extern CourseProgressState g_GrandPrixCourseProgress;
+extern CourseProgressState g_ExtraGrandPrixCourseProgress;
+extern CourseProgressState *g_CourseProgress;
 extern GAME_SAVE_BGM_TYPE g_BgmSelection;
 #ifndef GAME_TEAM_LOGO_CANVAS_DECL
 #define GAME_TEAM_LOGO_CANVAS_DECL extern u16 g_TeamLogoCanvas[0x400]
@@ -69,9 +60,6 @@ GAME_BEST_SECTOR_DECL;
 #undef GAME_BEST_TOTAL_DECL
 #undef GAME_BEST_LAP_DECL
 #undef GAME_BEST_SECTOR_DECL
-#undef GAME_GRAND_PRIX_PROGRESS_DECL
-#undef GAME_EXTRA_GRAND_PRIX_PROGRESS_DECL
-#undef GAME_COURSE_PROGRESS_TYPE
 #undef GAME_TEAM_LOGO_CANVAS_DECL
 #undef GAME_TEAM_LOGO_RECT_DECL
 #undef GAME_TEAM_LOGO_CLUT_RECT_DECL

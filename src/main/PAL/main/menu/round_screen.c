@@ -91,7 +91,7 @@ void EnterRoundScreen(void) {
         g_GrandPrixRound = 0;
 
         if (count != 0) {
-            ptr = g_CourseProgress;
+            ptr = g_CourseProgress->bestPlace;
             end = (u8 *)(count + (s32)ptr);
             do {
                 if (*ptr != 0) {
@@ -101,7 +101,7 @@ void EnterRoundScreen(void) {
             } while ((s32)ptr < (s32)end);
         }
 
-        if (g_CourseProgress[g_CourseIndex] == 0) {
+        if (g_CourseProgress->bestPlace[g_CourseIndex] == 0) {
             g_GrandPrixRound++;
         }
     }

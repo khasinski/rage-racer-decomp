@@ -11,7 +11,6 @@
 #include "game/render.h"
 #define GAME_CAM_ROW_TYPE CamRow
 #include "game/render_internal.h"
-#define GAME_COURSE_PROGRESS_TYPE CourseProgressState
 #include "game/save_internal.h"
 #define GAME_REF_SECTOR_DECL extern s32 g_RefSectorTimes
 #include "game/race_internal.h"

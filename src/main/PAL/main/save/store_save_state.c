@@ -269,8 +269,8 @@ void StoreSaveStateBlock(u8 *block) {
         ((GameSaveBlock *)block)->bgmVolume = bgmVolume;
         ((GameSaveBlock *)block)->sfxVolume = sfxVolume;
         ((GameSaveBlock *)block)->monoOutput = monoOutput;
-        memcpy(((GameSaveBlock *)block)->grandPrixCourseProgress, g_GrandPrixCourseProgress, 8);
-        memcpy(((GameSaveBlock *)block)->extraGrandPrixCourseProgress, g_ExtraGrandPrixCourseProgress, 8);
+        memcpy(((GameSaveBlock *)block)->grandPrixCourseProgress, &g_GrandPrixCourseProgress, 8);
+        memcpy(((GameSaveBlock *)block)->extraGrandPrixCourseProgress, &g_ExtraGrandPrixCourseProgress, 8);
 
         for (; count < 0x7FE; count++) {
             checksum += *checksumSrc++;

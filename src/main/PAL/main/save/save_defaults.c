@@ -28,7 +28,7 @@ void ResetProgressSlot(void *slot, s32 *progress) {
 }
 
 void ResetCourseProgress(s32 mode) {
-    u8 *ptr = g_CourseProgress;
+    u8 *ptr = g_CourseProgress->bestPlace;
 
     *(s16 *)(ptr + 6) = 5;
     ptr[3] = 0;
@@ -37,10 +37,10 @@ void ResetCourseProgress(s32 mode) {
     ptr[0] = 0;
 
     if (mode < 2) {
-        g_CourseProgress[3] = 0xFF;
+        g_CourseProgress->bestPlace[3] = 0xFF;
     }
 
-    *(s16 *)(g_CourseProgress + 4) = 0;
+    g_CourseProgress->unlockPending = 0;
 }
 
 void InitSaveDefaults(void) {
@@ -77,9 +77,9 @@ void InitSaveDefaults(void) {
     ResetProgressSlot(&g_GrandPrixCars, (s32 *)&g_GrandPrixSave);
     ResetProgressSlot(&g_ExtraGrandPrixCars, (s32 *)&g_ExtraGrandPrixSave);
 
-    g_CourseProgress = g_ExtraGrandPrixCourseProgress;
+    g_CourseProgress = &g_ExtraGrandPrixCourseProgress;
     ResetCourseProgress(0);
-    g_CourseProgress = g_GrandPrixCourseProgress;
+    g_CourseProgress = &g_GrandPrixCourseProgress;
     ResetCourseProgress(0);
 
     g_MaxClassReached[1] = 0;

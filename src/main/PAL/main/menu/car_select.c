@@ -607,7 +607,7 @@ void UpdateCarSelectScreen(void) {
             g_MenuViewOffsetTarget = 0;
             g_CourseCardSpin = largeValue;
             g_MenuCourseModelIndex = course;
-            g_CourseCardPendingGrade = g_CourseProgress[course & 3];
+            g_CourseCardPendingGrade = g_CourseProgress->bestPlace[course & 3];
             DrawTimeAttackPlate(0);
             if (g_CourseIndex >= 4) {
                 g_TimeAttackPlateStep = one;

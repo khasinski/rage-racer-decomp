@@ -13,9 +13,6 @@
 #include "game/random.h"
 #include "game/render.h"
 #include "game/fmv_internal.h"
-#define GAME_COURSE_PROGRESS_TYPE s32
-#define GAME_GRAND_PRIX_PROGRESS_DECL extern s32 g_GrandPrixCourseProgress
-#define GAME_EXTRA_GRAND_PRIX_PROGRESS_DECL extern s32 g_ExtraGrandPrixCourseProgress
 #include "game/save_internal.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"

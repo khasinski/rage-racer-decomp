@@ -76,7 +76,7 @@ void DrawRaceEndPrompt(void) {
 
     DrawProportionalText(0x76, 0xB8, g_TextChance, 0x7812);
 
-    index = *(s16 *)((u8 *)g_CourseProgress + 6);
+    index = g_CourseProgress->retriesRemaining;
     DrawProportionalText(0xBE, 0xB8, &g_ChanceDigits[index], 0x7812);
 
     DrawText8x8(0x58, 0xD0, g_TextPressStart, 0x78CC);
@@ -87,7 +87,7 @@ void UpdateLostRaceScreen(void) {
     s32 timer;
     s32 old;
     s32 current;
-    u8 *ptr;
+    CourseProgressState *ptr;
     u16 value;
 
     timer = g_SceneTimer;
@@ -109,9 +109,9 @@ void UpdateLostRaceScreen(void) {
                 RequestSelectBgmAssets();
             }
             ptr = g_CourseProgress;
-            value = *(u16 *)(ptr + 6);
+            value = ptr->retriesRemaining;
             g_SceneTimer = 0;
-            *(u16 *)(ptr + 6) = value - 1;
+            ptr->retriesRemaining = value - 1;
         }
     } else {
         timer += 2;

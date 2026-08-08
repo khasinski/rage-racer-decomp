@@ -8,9 +8,9 @@ s32 ComputeClassGrade(void) {
     u8 *end;
     u8 extra;
 
-    ptr = g_CourseProgress;
+    ptr = g_CourseProgress->bestPlace;
     value = 0;
-    if (*(s16 *)(ptr + 4) != 0) {
+    if (g_CourseProgress->unlockPending != 0) {
         return 0;
     }
 
@@ -19,7 +19,7 @@ s32 ComputeClassGrade(void) {
         value += *ptr++;
     } while ((s32)ptr < (s32)end);
 
-    extra = g_CourseProgress[3];
+    extra = g_CourseProgress->bestPlace[3];
     if (extra == 0xFF) {
         value++;
     } else {

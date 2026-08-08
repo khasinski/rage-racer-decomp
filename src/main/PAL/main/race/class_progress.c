@@ -37,7 +37,7 @@ void CommitClassProgress(void) {
     s32 value;
     s32 *state;
 
-    slots = (u8 *)(g_CourseProgress + g_CourseIndex);
+    slots = &g_CourseProgress->bestPlace[g_CourseIndex];
     g_ClassClearFanfareTimer = 0;
 
     if (*slots == 0 || g_RacePosition < *slots) {
@@ -47,7 +47,7 @@ void CommitClassProgress(void) {
     value = GetCarUnlockLevel(g_PlayerCarIndex);
     slot_count = 4;
     if (g_GrandPrixClass < value) {
-        *(s16 *)(g_CourseProgress + 4) = 1;
+        g_CourseProgress->unlockPending = 1;
     }
 
     if (g_GrandPrixClass < 2) {
@@ -56,7 +56,7 @@ void CommitClassProgress(void) {
 
     filled = 0;
     for (i = 0; i < slot_count; i++) {
-        if (((u8 *)g_CourseProgress)[i] != 0) {
+        if (g_CourseProgress->bestPlace[i] != 0) {
             filled++;
         }
     }

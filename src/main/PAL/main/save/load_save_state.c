@@ -310,8 +310,8 @@ s32 LoadSaveStateBlock(u8 *block) {
     }
 
     /* g_GrandPrixCourseProgress / g_ExtraGrandPrixCourseProgress unaligned copies */
-    memcpy(g_GrandPrixCourseProgress, ((GameSaveBlock *)base)->grandPrixCourseProgress, 8);
-    memcpy(g_ExtraGrandPrixCourseProgress, ((GameSaveBlock *)base)->extraGrandPrixCourseProgress, 8);
+    memcpy(&g_GrandPrixCourseProgress, ((GameSaveBlock *)base)->grandPrixCourseProgress, 8);
+    memcpy(&g_ExtraGrandPrixCourseProgress, ((GameSaveBlock *)base)->extraGrandPrixCourseProgress, 8);
 
     LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
     ApplyAudioSettings();

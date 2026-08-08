@@ -492,7 +492,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 0x7E,
                 8,
                 8,
-                *(s16 *)(g_CourseProgress + 6) * 8,
+                g_CourseProgress->retriesRemaining * 8,
                 0,
                 0x78CC);
             prim = GameQueueSprite(

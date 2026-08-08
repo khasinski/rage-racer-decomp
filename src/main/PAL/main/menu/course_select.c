@@ -53,7 +53,7 @@ void EnterCourseSelectScreen(void) {
     mode = g_CourseIndex;
     eight = 8;
     g_MenuViewSpin = eight;
-    table = g_CourseProgress;
+    table = g_CourseProgress->bestPlace;
     largeValue |= 0x4000;
     g_UiScriptProgress = 0;
     g_PlayerCar.x = 0;
@@ -483,7 +483,7 @@ void UpdateCourseSelectScreen(void) {
                         g_CourseCardSpin = (g_CourseCardSpin - lt) + 0x1F4000;
                         g_CourseIndex = llap;
                         g_MenuPendingCourseIndex = llap;
-                        g_CourseCardPendingGrade = g_CourseProgress[llap & 3];
+                        g_CourseCardPendingGrade = g_CourseProgress->bestPlace[llap & 3];
                         g_TimeAttackPlateStep = (llap < 4) ? -1 : 1;
                     }
                     }
@@ -516,7 +516,7 @@ void UpdateCourseSelectScreen(void) {
                             g_CourseIndex = llap;
                             g_MenuPendingCourseIndex = llap;
                             g_MenuViewAngle = lu;
-                            g_CourseCardPendingGrade = g_CourseProgress[llap & 3];
+                            g_CourseCardPendingGrade = g_CourseProgress->bestPlace[llap & 3];
                             g_TimeAttackPlateStep = (llap < 4) ? -1 : 1;
                         }
                     }
@@ -687,7 +687,7 @@ void UpdateCourseSelectScreen(void) {
                         g_CourseCardSpin = 0;
                         g_CourseIndex = g_CourseIndex & ~3;
                         g_MenuCourseModelIndex = g_CourseIndex;
-                        g_CourseCardPendingGrade = g_CourseProgress[0];
+                        g_CourseCardPendingGrade = g_CourseProgress->bestPlace[0];
                     }
                     RunTimedDrawScript(g_CourseSelectModalScript, &g_UiScriptProgress2, 1);
                     DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
