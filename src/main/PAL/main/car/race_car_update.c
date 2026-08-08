@@ -662,8 +662,6 @@ typedef struct Obj {
 
 extern KE *g_RaceIntroCameraCursor;
 
-s32 rcos(s32 angle);
-s32 rsin(s32 angle);
 void DrawPlayerCarModel(void *obj);
 void DrawFullscreenFadeTile(s32 color, s32 tpage);
 void UpdateCamera(void *obj, s32 mode);

@@ -8,7 +8,6 @@ s32 GameQueueTileTransWide(u8* ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, 
 s32 GameQueueDrawModePrimWide(u8* ot, s32 prim, s32 tpage) asm("QueueDrawModePrim");
 /* The 0x140x0x1E0 twin of DrawFullscreenFadeTile, for the 480-line setup scene. */
 void DrawFullscreenFadeTile480(s32 color, s32 tpage);
-void DrawFullscreenFadeTile480(s32 color, s32 tpage);
 
 void DrawFullscreenFadeTile480(s32 color, s32 tpage) {
     u8 *base;

@@ -1357,7 +1357,6 @@ s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR) {
     return result;
 }
 
-s32 SpuGetKeyStatus(s32 bit);
 
 s32 StartSingleSpecialCue(s32 cue, s32 volume) {
     s32 result = -1;
