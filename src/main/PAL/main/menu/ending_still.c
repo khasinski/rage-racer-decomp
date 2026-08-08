@@ -37,17 +37,17 @@ void DrawEndingStill(void) {
     u8 *base;
     s32 clut;
     s32 height;
-    volatile s32 *scratch;
-    s32 next;
+    u8 *volatile *scratch;
+    u8 *next;
 
     base = g_DrawBuffer + 0xCC;
     height = 0xF0;
     clut = 0x3FDB;
-    scratch = (volatile s32 *)SCRATCHPAD_ADDR;
+    scratch = (u8 *volatile *)SCRATCHPAD_ADDR;
 
     next = *scratch;
-    next = (s32)GameQueueSprite(base, next, 0, 0, 0x100, height, 0, 0, clut);
-    next = (s32)QueueDrawModePrim(base, (u8 *)next, 6);
-    next = (s32)GameQueueSprite(base, next, 0x100, 0, 0x40, height, 0, 0, clut);
-    *scratch = (s32)QueueDrawModePrim(base, (u8 *)next, 7);
+    next = GameQueueSprite(base, next, 0, 0, 0x100, height, 0, 0, clut);
+    next = QueueDrawModePrim(base, next, 6);
+    next = GameQueueSprite(base, next, 0x100, 0, 0x40, height, 0, 0, clut);
+    *scratch = QueueDrawModePrim(base, next, 7);
 }

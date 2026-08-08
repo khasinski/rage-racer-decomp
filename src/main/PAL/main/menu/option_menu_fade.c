@@ -9,11 +9,11 @@
 
 void DrawFullscreenFadeTile480(s32 color, s32 tpage) {
     u8 *base;
-    s32 *scratch;
-    s32 next;
+    u8 **scratch;
+    u8 *next;
     s32 width;
     s32 height;
-    s32 scratchValue;
+    u8 *scratchValue;
 
     base = g_DrawBuffer + 0xCC;
     if (color < 0) {
@@ -24,10 +24,10 @@ void DrawFullscreenFadeTile480(s32 color, s32 tpage) {
 
     width = 0x140;
     height = 0x1E0;
-    scratch = &SCRATCH_PRIM_CURSOR_WORD;
+    scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
     scratchValue = *scratch;
-    next = (s32)GameQueueTileTrans(base, (u8 *)scratchValue, 0, 0, width, height, color, color, color);
-    *scratch = (s32)QueueDrawModePrim(base, (u8 *)next, tpage);
+    next = GameQueueTileTrans(base, scratchValue, 0, 0, width, height, color, color, color);
+    *scratch = QueueDrawModePrim(base, next, tpage);
 }
 
 /* Arms the fade-out that leaves the setup menu for scene `scene`. */
