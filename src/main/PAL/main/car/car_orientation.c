@@ -141,7 +141,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->drive.gearDisp = 1;
   player->drive.unk3C = 0;
   g_ShiftTargetRpm = 0;
-  drive = (GameCarDrive *)(((u8 *)car) + (divisor = 0xBC));
+  drive = &car->drive;
   printf(g_MsgInit0);
   carSpec = g_CarSpec;
   if (carSpec->topGear < 6)
