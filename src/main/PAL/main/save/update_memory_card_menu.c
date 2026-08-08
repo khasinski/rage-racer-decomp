@@ -17,7 +17,6 @@ void UpdateMemoryCardMenu(void) {
     s32 mcue;
     s32 mslot;
 
-    switch (0) { default:
     if (g_SceneTimer == two) {
         SetDispMask(1);
     }
@@ -27,7 +26,7 @@ void UpdateMemoryCardMenu(void) {
         if (step < 0) {
             g_McFadeLevel = g_McFadeLevel + g_McFadeStep;
             fadeBusy = 1;
-            if (g_McFadeLevel > 0) break;
+            if (g_McFadeLevel > 0) goto fade_update_done;
             g_McFadeStep = 0;
             g_McFadeLevel = 0;
 
@@ -35,20 +34,19 @@ void UpdateMemoryCardMenu(void) {
             g_McActionBusy = 1;
             g_McFadeLevel = g_McFadeLevel + g_McFadeStep;
             fadeBusy = 1;
-            if (g_McFadeLevel < 0xFF) break;
+            if (g_McFadeLevel < 0xFF) goto fade_update_done;
             g_McFadeStep = 0;
             g_McFadeLevel = 0;
             g_McActionBusy = 0;
             g_SceneId = two;
         } else {
-            break;
+            goto fade_update_done;
         }
         fadeBusy = 1;
     }
-    }
+fade_update_done:
     DrawMenuFadeOverlay(g_McFadeLevel);
 
-    switch (0) { default:
     {
     s32 cur = g_SceneTimer;
     if ((u32) cur < 5) {
@@ -70,7 +68,7 @@ void UpdateMemoryCardMenu(void) {
         g_McActionBusy = 0;
         g_McDrawEnabled = 1;
         }
-        break;
+        goto menu_state_update_done;
     }
 
     /* state >= 5: active-menu entry */
@@ -79,9 +77,8 @@ void UpdateMemoryCardMenu(void) {
         g_SceneTimer = nx;
     }
     }
-    switch (0) { default:
     if (!(g_McActionBusy == 0)) {
-    if (g_McErrorPending == 0) break;
+    if (g_McErrorPending == 0) goto L_sw2;
 
     }
     {
@@ -108,7 +105,6 @@ void UpdateMemoryCardMenu(void) {
         g_McNoCardTicks = 0;
         g_McMenuSubState = c;
         g_McMenuSelection = sd;
-    }
     }
 
 L_sw2:
@@ -193,13 +189,12 @@ L_sw2:
         s32 *s0 = &g_McSlotCursor;
         s32 a0;
         s32 nv;
-        switch (0) { default:
         AdjustMenuSelectionHorizontal(s0, 0, 2);
         if (!(g_McSaveMode == 0)) {
         a0 = g_McSlotUsedMask;
         if (!((a0 % 8) == 0)) {
         g_McMenuPhase = MC_PROMPT_SELECT_LOAD;
-        if ((g_PadPressed & PAD_CONFIRM) == 0) break;
+        if ((g_PadPressed & PAD_CONFIRM) == 0) goto slot_prompt_done;
         if (!(((a0 >> *s0) & 1) == 0)) {
         PlaySoundCue(2);
         g_McConfirmChoice = 0;
@@ -211,13 +206,13 @@ L_sw2:
         goto L_b475;
         }
         g_McMenuPhase = MC_PROMPT_NO_DATA;
-        if ((g_PadPressed & PAD_CONFIRM) == 0) break;
+        if ((g_PadPressed & PAD_CONFIRM) == 0) goto slot_prompt_done;
         } else {
         if (g_McFreeBlocks != 0) goto L_b448;
         a0 = g_McSlotUsedMask;
         if (!((a0 % 8) == 0)) {
         g_McMenuPhase = MC_PROMPT_SELECT_SAVE;
-        if ((g_PadPressed & PAD_CONFIRM) == 0) break;
+        if ((g_PadPressed & PAD_CONFIRM) == 0) goto slot_prompt_done;
         if (!(((a0 >> *s0) & 1) == 0)) {
         PlaySoundCue(2);
         g_McConfirmChoice = 0;
@@ -233,11 +228,11 @@ L_sw2:
         }
         PlaySoundCue(5);
         g_McMenuPage = 0;
-        break;
+        goto slot_prompt_done;
     L_b439:
         if (!((PollMenuBackInput() & 0xFFFF) == 0)) {
         g_McMenuPage = 0;
-        break;
+        goto slot_prompt_done;
     L_b448:
         g_McMenuPhase = MC_PROMPT_SELECT_SAVE;
         if (!((g_PadPressed & PAD_CONFIRM) == 0)) {
@@ -254,7 +249,7 @@ L_sw2:
         g_McActionState = nv;
         }
         }
-        }
+slot_prompt_done:
         if ((PollMenuBackInput() & 0xFFFF) == 0) break;
         g_McMenuPage = 0;
         break;
@@ -1023,7 +1018,7 @@ L_b1280:
 
     }
     }
-    }
+menu_state_update_done:
     if (g_McDrawEnabled != 0) {
         DrawMemoryCardScreen(g_McMenuPage, g_McFromLoadMenu, g_McMenuRowCursor, g_McSlotCursor);
         if (g_McMenuPhase != 0) {
