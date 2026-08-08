@@ -67,9 +67,9 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
     SCRATCH_PRIM_CURSOR_AS(u_char) = next + 0xC;
 }
 
-void DrawShadowedTile(long x, long y, long w, long h) {
-    long temp;
+u8 *DrawShadowedTile(void *ot, u8 *prim, s32 x, s32 y) {
+    u8 *next;
 
-    temp = (long)AddTilePrim((void *)x, (void *)y, w + 1, h + 2, 0xC2, 0x1C, 0, 0, 0);
-    AddTilePrim((void *)x, (void *)temp, w, h, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
+    next = AddTilePrim(ot, prim, x + 1, y + 2, 0xC2, 0x1C, 0, 0, 0);
+    return AddTilePrim(ot, next, x, y, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
 }

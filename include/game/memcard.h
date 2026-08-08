@@ -264,7 +264,6 @@ extern char g_SaveTitleSjis[];
 
 void BiosBuInit(void);
 void DrawMemoryCardMessage(s32 message);
-s32 DrawShadowedTile(s32 base, s32 prim, s32 a, s32 b);
 void InitCARD(s32 padEnable);
 s32 PollMemoryCardStatus(s32 a, s32 b);
 void StartCARD(void);

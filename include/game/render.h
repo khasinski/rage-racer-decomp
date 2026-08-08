@@ -630,6 +630,7 @@ u8 *GameQueueSpriteTrans(
     s32 u,
     s32 v,
     s32 clutIndex);
+u8 *DrawShadowedTile(void *ot, u8 *prim, s32 x, s32 y);
 /* TILE, 16 bytes. */
 u8 *GameQueueTileTrans(
     void *ot,
