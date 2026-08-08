@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "psyq/snd.h"
 
 extern u_char *g_SndSeqTable[];
@@ -61,11 +62,11 @@ long SsSeqParseHeader(long slot, long vabId, long data) {
     s->read_pos = seqBytes + 8;
     if (seqBytes[7] == 1) {
     } else {
-    DebugPrintf(g_MsgSeqNotSeqData);
+    printf((u8 *)g_MsgSeqNotSeqData);
     return -1;
     }
     } else {
-    DebugPrintf(g_MsgSeqOldFormat);
+    printf((u8 *)g_MsgSeqOldFormat);
     return 0;
     }
 

@@ -1,4 +1,5 @@
 #include "psyq/kernel.h"
+#include <stdio.h>
 
 typedef void (*Callback2)(long, long);
 
@@ -63,7 +64,7 @@ void waitVSync(long target, long timeoutFrames) {
     if (g_VSyncCount < target) {
         do {
             if (--timeout == -1) {
-                LibcPutString(D_80013B2C);
+                puts(D_80013B2C);
                 ChangeClearRCnt(0);
                 ChangeClearInterruptMask(3, 0);
                 break;

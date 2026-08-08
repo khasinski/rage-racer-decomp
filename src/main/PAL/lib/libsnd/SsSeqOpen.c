@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdio.h>
 
 #include "common.h"
 
@@ -13,7 +14,7 @@ long SsSeqOpen(long seq_data, long vab_id) {
 
     used = g_SndSeqOpenMask;
     if (used == -1) {
-        DebugPrintf(g_MsgSeqTableFull);
+        printf((u8 *)g_MsgSeqTableFull);
         return -1;
     }
 

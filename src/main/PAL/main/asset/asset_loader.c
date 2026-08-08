@@ -7,6 +7,7 @@
  * sat in track/ until 2026-08-03.
  */
 #include "common.h"
+#include <stdio.h>
 #include "game/state.h"
 #include "game/asset.h"
 #include "psyq/cd.h"
@@ -48,7 +49,7 @@ s32 LoadAsset(s32 assetIndex, void *dst) {
 
     switch (g_CdLoadPhase) {
     case 0:
-        DebugPrintf(g_MsgNowLoading, g_AssetPaths[assetIndex], dst);
+        printf((u8 *)g_MsgNowLoading, g_AssetPaths[assetIndex], dst);
         if (CdSync(1, 0) != 0) {
             g_CdLoadPhase = 1;
         }
@@ -84,12 +85,12 @@ s32 LoadAsset(s32 assetIndex, void *dst) {
 
     case 5:
         size = (g_AssetCdEntries[assetIndex].size >> 2) << 2;
-        DebugPrintf(g_MsgReadBytes, size);
+        printf((u8 *)g_MsgReadBytes, size);
         g_CdLoadPhase = 0;
         return size;
 
     case 6:
-        DebugPrintf(g_MsgFileReadError, g_AssetPaths[assetIndex], dst);
+        printf((u8 *)g_MsgFileReadError, g_AssetPaths[assetIndex], dst);
         g_CdLoadPhase = 0;
         break;
     }
@@ -103,13 +104,7 @@ void LoadAssetBlocking(s32 assetIndex, void *dst) {
 }
 
 void LoadDiscArchiveIndex(void) {
-    /* PSY-Q's CdlFILE, which this tree has no typedef for: the 24-byte record
-     * DsSearchFile fills in (location, size, name). Only the location is read. */
-    struct {
-        CdlLOC pos;
-        u32 size;
-        char name[16];
-    } file;
+    CdlFILE file;
     s32 sectors;
     s32 base;
     s32 i;
@@ -118,9 +113,9 @@ void LoadDiscArchiveIndex(void) {
     GameCdLoadEntry *dst;
     GameCdLoadEntry *stream;
 
-    DebugPrintf(g_MsgNowLoading, g_PathRageBin, g_LoadBuffer);
-    if (DsSearchFile(&file.pos, g_PathRageBin) == 0) {
-        DebugPrintf(g_MsgFileNotFound, g_PathRageBin);
+    printf((u8 *)g_MsgNowLoading, g_PathRageBin, g_LoadBuffer);
+    if (DsSearchFile(&file, (char *)g_PathRageBin) == 0) {
+        printf((u8 *)g_MsgFileNotFound, g_PathRageBin);
     }
 
     sectors = 1;
@@ -132,7 +127,7 @@ void LoadDiscArchiveIndex(void) {
         } while (status > 0);
     } while (status != 0);
 
-    DebugPrintf(g_MsgReadSectors, sectors);
+    printf((u8 *)g_MsgReadSectors, sectors);
     base = CdPosToInt_Local(&file.pos);
     src = g_LoadBuffer;
     dst = g_AssetCdEntries;
@@ -143,11 +138,11 @@ void LoadDiscArchiveIndex(void) {
         dst++;
     }
 
-    DebugPrintf(g_MsgNowSearching, g_PathRageStr);
-    if (DsSearchFile(&file.pos, g_PathRageStr) == 0) {
-        DebugPrintf(g_MsgFileNotFound, g_PathRageStr);
+    printf((u8 *)g_MsgNowSearching, g_PathRageStr);
+    if (DsSearchFile(&file, (char *)g_PathRageStr) == 0) {
+        printf((u8 *)g_MsgFileNotFound, g_PathRageStr);
     } else {
-        DebugPrintf(g_MsgSearchOk);
+        printf((u8 *)g_MsgSearchOk);
     }
 
     base = CdPosToInt_Local(&file.pos);

@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdio.h>
 
 #include "common.h"
 #include "psyq/cd.h"
@@ -37,7 +38,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
     }
 
     if (g_CdDebugLevel >= 2) {
-        DebugPrintf(D_80013678, firstTrack, lastTrack);
+        printf((u8 *)D_80013678, firstTrack, lastTrack);
     }
 
     command[0] = 0;
@@ -57,7 +58,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
             command[0] = ((firstTrack / 10) << 4) + (firstTrack % 10);
             if (CdControlB(0x14, command, response) == 0) {
     if (g_CdDebugLevel != 0) {
-        DebugPrintf(D_800136A4);
+        printf((u8 *)D_800136A4);
     }
     CdSyncCallback(oldHandler);
     return 0;
@@ -86,7 +87,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
                 fmt = D_80013688;
                 first = entry[0];
                 second = entry[1];
-                DebugPrintf(fmt, first, second);
+                printf((u8 *)fmt, first, second);
                 entry += 4;
                 count++;
             } while (count <= (long)ptr);
@@ -99,7 +100,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
     }
     }
     if (g_CdDebugLevel != 0) {
-        DebugPrintf(D_800136A4);
+        printf((u8 *)D_800136A4);
     }
     CdSyncCallback(oldHandler);
     return 0;
@@ -112,7 +113,7 @@ long CdInit(void) {
     while (CD_init(1) != 1) {
         retries--;
         if (retries == -1) {
-            DebugPrintf(D_800136B8);
+            printf((u8 *)D_800136B8);
             return 0;
         }
     }

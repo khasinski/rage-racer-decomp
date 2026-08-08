@@ -1,4 +1,5 @@
 #include "psyq/kernel.h"
+#include <stdio.h>
 
 void *StartKernelInterrupts(void) {
     u_short *state;
@@ -198,9 +199,9 @@ void intrDMADispatcher(void) {
 
     if (((*g_DmaIrqControl & 0xFF000000) == 0x80000000) || ((*g_DmaIrqControl & 0x8000) != 0)) {
         fmt = D_80013BA8;
-        DebugPrintf(fmt, *g_DmaIrqControl);
+        printf((u8 *)fmt, *g_DmaIrqControl);
         for (i = 0; i < 7; i++) {
-            DebugPrintf(D_80013BC4, i, g_DmaChannelRegs[i * 4]);
+            printf((u8 *)D_80013BC4, i, g_DmaChannelRegs[i * 4]);
         }
     }
 }

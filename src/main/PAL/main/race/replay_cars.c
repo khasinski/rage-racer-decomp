@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "game/race.h"
 #include "game/state.h"
 #include "game/track.h"
@@ -174,7 +175,7 @@ void ExitRaceScene(s32 sceneId) {
     if (g_SceneId == 6) {
         RequestSelectBgmAssets();
     }
-    DebugPrintf(&g_MsgGameExit);
+    printf((u8 *)&g_MsgGameExit);
 }
 
 void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {

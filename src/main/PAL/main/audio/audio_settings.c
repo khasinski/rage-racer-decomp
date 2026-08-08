@@ -1,0 +1,75 @@
+#include "common.h"
+#include "game/audio.h"
+#include "game/cd.h"
+#include "game/sound.h"
+#include "psyq/snd.h"
+
+void SetEffectVolumeScale(s32 scale) {
+    if (scale >= 0) {
+        if (scale >= 0x81) {
+            scale = 0x80;
+        }
+    } else {
+        scale = 0;
+    }
+    g_SoundScale.scale = scale;
+}
+
+void SetLoadedTableVolumeScale(s32 scale) {
+    if (scale >= 0) {
+        if (scale >= 0x81) {
+            scale = 0x80;
+        }
+    } else {
+        scale = 0;
+    }
+    g_SoundSlotVolumeScale = scale;
+}
+
+void SetSequenceVolumeSetting(s32 setting) {
+    u32 adjusted;
+    s32 value;
+
+    value = setting;
+    if (value >= 0) {
+        adjusted = setting;
+        adjusted++;
+        adjusted--;
+        setting = adjusted;
+        if (setting >= 0x10) {
+            setting = 0xF;
+        }
+    } else {
+        setting = 0;
+    }
+
+    value = setting;
+    SetCdVolumeSetting(setting);
+    SetSequenceVolumeScale(value);
+}
+
+/* Set the effect master volume scale (g_SoundScale.scale) from a
+ * 0..15 level, mapping it onto the 0..0x80 fixed-point scale used by the
+ * effect-voice volume math. */
+void SetEffectVolumeSetting(s32 level) {
+    if (level >= 0) {
+        if (level >= 0x10) {
+            level = 0xF;
+        }
+    } else {
+        level = 0;
+    }
+    g_SoundScale.scale = (level << 7) / 15;
+}
+
+void SetStereoOutput(void) { g_StereoOutput = 1; SetCdMixPreset(0); SsSetStereo(); }
+
+void SetMonoOutput(void) { g_StereoOutput = 0; SetCdMixPreset(1); SsSetMono(); }
+
+u32 GetLoadedAudioStep(void) {
+    return g_EngineSoundMaxRpm;
+}
+
+s32 GetActiveAudioSlots(void) {
+    return g_AudioSlotMask;
+}

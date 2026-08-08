@@ -1,18 +1,12 @@
 #include "common.h"
-#include "game/random.h"
-#include "psyq/kernel.h"
+#include <stdio.h>
+#include <string.h>
 #include "game/state.h"
-
-extern s32 g_RandomSeed;
-
-void SeedRandom(s32 seed) {
-    g_RandomSeed = seed;
-}
 
 /*
  * PSY-Q libc sprintf: the whole formatter, with no vsprintf split. Identified by
- * its %X / %x digit tables at g_LibcUpperDigits / g_LibcLowerDigits and by its LibcMemchr /
- * LibcMemmove / LibcStrlen callees.
+ * its %X / %x digit tables at g_LibcUpperDigits / g_LibcLowerDigits and by its memchr /
+ * memmove / strlen callees.
  */
 typedef union LibcFormatHeader {
     u32 flags;
@@ -311,9 +305,9 @@ hexadecimal:
                     count = work.spec.precision;
                 }
             } else if (!(work.spec.header.flags & LIBC_PRECISION)) {
-                count = LibcStrlen(src);
+                count = strlen(src);
             } else {
-                end = LibcMemchr(src, 0, work.spec.precision);
+                end = memchr(src, 0, work.spec.precision);
                 if (end != 0) {
                     count = end - src;
                 } else {
@@ -349,7 +343,7 @@ hexadecimal:
             }
         }
 
-        LibcMemmove(dest + length, src, count);
+        memmove(dest + length, src, count);
         length += count;
 
         if (count < work.spec.width) {
@@ -365,121 +359,4 @@ finished:
     dest[length] = 0;
     return length;
 #undef args
-}
-
-u8 *LibcMemchr(u8 *buf, s32 ch, s32 len) {
-    switch (0) { default:
-    if (buf == 0) {
-        return 0;
-    }
-    if (len <= 0) {
-        return 0;
-    }
-
-    break;
-
-found:
-    return buf - 1;
-
-    }
-
-    len--;
-    if (len < 0) {
-        return 0;
-    }
-
-    ch &= 0xFF;
-    do {
-        if (*buf++ == ch) {
-            goto found;
-        }
-        len--;
-    } while (len >= 0);
-
-    return 0;
-}
-
-void *LibcMemmove(u8 *dest, u8 *src, s32 count) {
-    if (dest >= src) {
-        while (count-- > 0) {
-            dest[count] = src[count];
-        }
-    } else {
-        while (count-- > 0) {
-            *dest++ = *src++;
-        }
-    }
-
-    return dest;
-}
-
-s32 LibcStrlen(u8 *str) {
-    s32 count = 0;
-
-    if (str == 0) {
-        return 0;
-    }
-
-    while (*str++ != 0) {
-        count++;
-    }
-
-    return count;
-}
-
-void LibcPutString(u8 *str) {
-    u8 *ptr;
-    s32 value;
-
-    ptr = str;
-    if (ptr == 0) {
-        ptr = g_LibcNullText;
-    }
-
-    while (value = *ptr++, value != 0) {
-        LibcPutChar(value);
-    }
-}
-
-extern u8 g_LibcCtype[];
-
-void LibcPutChar(s32 ch) {
-    u8 c;
-    s32 value = ch;
-
-    c = value;
-    switch (0) { default:
-    value = c;
-    if (!(value == 9)) {
-    if (value != 10) {
-    } else {
-
-    LibcPutChar(13);
-    g_LibcOutColumn = 0;
-    break;
-
-    }
-    } else {
-    do {
-        LibcPutChar(0x20);
-    } while ((g_LibcOutColumn % 8) != 0);
-    return;
-    }
-
-    if (g_LibcCtype[value] & 0x97) {
-        g_LibcOutColumn++;
-    }
-
-    }
-    BiosFileWrite(1, &c, 1);
-}
-
-s32 LibcToUpper(s32 ch) {
-    u8 value = ch;
-
-    if (g_LibcCtype[(u8)value] & 2) {
-        value = ch - 0x20;
-    }
-
-    return (u8)value;
 }

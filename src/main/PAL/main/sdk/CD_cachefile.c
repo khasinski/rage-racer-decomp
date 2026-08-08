@@ -1,4 +1,6 @@
 #include <sys/types.h>
+#include <stdio.h>
+#include <string.h>
 #include "common.h"
 #include "psyq/cd.h"
 typedef struct 
@@ -33,13 +35,13 @@ long CD_cachefile(long dir)
   {
     if (g_CdDebugLevel > 0)
     {
-      DebugPrintf(D_80013A94);
+      printf((u8 *)D_80013A94);
     }
     return -1;
   }
   if (g_CdDebugLevel >= 2)
   {
-    DebugPrintf(D_80013AB4);
+    printf((u8 *)D_80013AB4);
   }
   i = 0;
   p = g_CdSectorBuf;
@@ -50,7 +52,7 @@ long CD_cachefile(long dir)
       break;
     }
     __builtin_memcpy(&lba, p + 2, 4);
- do { CdIntToPos(lba & 0xFFFFFFFFFFFFFFFFu, &g_CdFileCache[i].pos); __builtin_memcpy(&g_CdFileCache[i].size, p + 0xA, 4); switch (i) { case 0: *(u_short *)g_CdFileCache[0].name = D_80013AD0; break; case 1: { long hi = D_80013AD4; long lo = D_80013AD6; *(short *)g_CdFileCache[1].name = hi; *(volatile u_char *)&g_CdFileCache[1].name[2] = lo; break; } default: LibcMemcpy(g_CdFileCache[i].name, p + 0x21, p[0x20]); g_CdFileCache[i].name[p[0x20]] = 0; break; } if (g_CdDebugLevel >= 2) { DebugPrintf(D_80013AD8, g_CdFileCache[i].pos.minute, g_CdFileCache[i].pos.second, g_CdFileCache[i].pos.sector, g_CdFileCache[i].size, g_CdFileCache[i].name); } } while (0);
+ do { CdIntToPos(lba & 0xFFFFFFFFFFFFFFFFu, &g_CdFileCache[i].pos); __builtin_memcpy(&g_CdFileCache[i].size, p + 0xA, 4); switch (i) { case 0: *(u_short *)g_CdFileCache[0].name = D_80013AD0; break; case 1: { long hi = D_80013AD4; long lo = D_80013AD6; *(short *)g_CdFileCache[1].name = hi; *(volatile u_char *)&g_CdFileCache[1].name[2] = lo; break; } default: memcpy(g_CdFileCache[i].name, p + 0x21, p[0x20]); g_CdFileCache[i].name[p[0x20]] = 0; break; } if (g_CdDebugLevel >= 2) { printf((u8 *)D_80013AD8, g_CdFileCache[i].pos.minute, g_CdFileCache[i].pos.second, g_CdFileCache[i].pos.sector, g_CdFileCache[i].size, g_CdFileCache[i].name); } } while (0);
     p = p + (*p);
     i++;
     if (i >= 0x40)
@@ -66,7 +68,7 @@ long CD_cachefile(long dir)
   }
   if (2 <= g_CdDebugLevel)
   {
-    DebugPrintf(D_80013AF4, i);
+    printf((u8 *)D_80013AF4, i);
   }
   return 1;
 }

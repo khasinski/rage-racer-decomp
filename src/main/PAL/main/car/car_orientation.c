@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "game/vector.h"
 #include "game/track.h"
 #include "game/car.h"
@@ -146,7 +147,7 @@ void InitPlayerCar(GameCarRuntime *car)
   s32 bandSpeed;
   player = (GamePlayerCarInit *)car;
   startData = g_TrackEventData;
-  DebugPrintf(D_800113B0);
+  printf((u8 *)D_800113B0);
   value = g_GrandPrixSeries;
   g_RacePhase = 2;
   g_RaceSeries = value & 1;
@@ -176,7 +177,7 @@ void InitPlayerCar(GameCarRuntime *car)
   player->field_68 = 0;
   player->field_6C = 0;
   player->trackProgress = 0;
-  DebugPrintf(D_800113BC);
+  printf((u8 *)D_800113BC);
   startData += g_RaceSeries * 0x90;
   player->trackPointIndex = *(s16 *)(startData + 0x35C);
   player->x = *(s32 *)(startData + 0x354);
@@ -246,7 +247,7 @@ void InitPlayerCar(GameCarRuntime *car)
   player->fF8 = 0;
   g_ShiftTargetRpm = 0;
   drive = (GameCarDrive *)(((u8 *)car) + (divisor = 0xBC));
-  DebugPrintf(D_800113C4);
+  printf((u8 *)D_800113C4);
   carSpec = g_PlayerCarInitSpec;
   if (carSpec->topGear < 6)
   {
@@ -260,7 +261,7 @@ void InitPlayerCar(GameCarRuntime *car)
     carSpec->topGear = 6;
   }
   drive->unk8C = (g_PlayerCarInitSpec->f15C * 0x490) / 160;
-  DebugPrintf(D_800113CC);
+  printf((u8 *)D_800113CC);
   j = 0;
   for (i = 0; i < 16; i++)
   {
@@ -278,8 +279,8 @@ void InitPlayerCar(GameCarRuntime *car)
   revLimitPtr = &g_PlayerCarInitSpec->revLimit;
   D_801E6F1A = ((*revLimitPtr) - ((s16) peakRpm)) / 2;
   g_PeakOutputRpm = peakRpm;
-  DebugPrintf(D_800113D4);
-  DebugPrintf(D_800113DC, g_PlayerCarInitSpec->topGear);
+  printf((u8 *)D_800113D4);
+  printf((u8 *)D_800113DC, g_PlayerCarInitSpec->topGear);
   for (j = 0; j < 6; j++)
   {
     scaledGearRatio = (g_PlayerCarInitSpec->fE8[j] * 0x490) / 160;
@@ -298,7 +299,7 @@ void InitPlayerCar(GameCarRuntime *car)
   {
     g_PlayerCarInitSpec->f112 = 1;
   }
-  DebugPrintf(D_800113E0);
+  printf((u8 *)D_800113E0);
   curveSpec = g_PlayerCarInitSpec;
   accelBand = g_TorqueLossBandEnd;
   speedBandOffset = 0;
@@ -334,10 +335,10 @@ void InitPlayerCar(GameCarRuntime *car)
     torqueBand++;
   }
   while (speedBandOffset < 20);
-  DebugPrintf(D_800113E8);
+  printf((u8 *)D_800113E8);
   drive->unk84 = D_8007DAD4[drive->unk28 % 5] * 0xE;
   drive->unk88 = g_PlayerCarInitSpec->f108;
-  DebugPrintf(D_800113F0);
+  printf((u8 *)D_800113F0);
   player->field_98 = 0;
   drive->unk9E = 0;
   drive->unk9C = 0;
@@ -359,9 +360,9 @@ void InitPlayerCar(GameCarRuntime *car)
   g_GripLossTimer = 0;
   g_WrongWayTimer = 0;
   D_8019C9AC = 0;
-  DebugPrintf(D_800113F8);
-  DebugPrintf(D_80011400, player->field_68);
-  DebugPrintf(D_80011408);
+  printf((u8 *)D_800113F8);
+  printf((u8 *)D_80011400, player->field_68);
+  printf((u8 *)D_80011408);
 }
 
 /*

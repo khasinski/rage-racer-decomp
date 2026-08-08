@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "game/screens.h"
 #include "game/race.h"
 #include "game/render.h"

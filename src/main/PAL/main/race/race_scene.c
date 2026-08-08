@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "game/audio.h"
 #include "game/car.h"
 #include "game/cd.h"
@@ -52,7 +53,7 @@ extern u8 g_PadType;
 /*
  * Optional trace for the state returned by the lap/finish update. A null
  * format disables it; otherwise the six named values are the complete
- * DebugPrintf argument list.
+ * printf argument list.
  */
 static __inline__ void GameDebugLapResult(
     char *format,
@@ -64,7 +65,7 @@ static __inline__ void GameDebugLapResult(
     s32 fadeTimer)
 {
     if (format != 0) {
-        DebugPrintf(
+        printf((u8 *)
             format, result, progress, mode, lapCount, racePhase, fadeTimer);
     }
 }
@@ -425,7 +426,7 @@ void EnterRaceScene(void) {
     g_SceneId = 12;
     g_FrameSyncThreshold = 0x180;
     DrawRoundScreen();
-    DebugPrintf(g_MsgGame0Ok);
+    printf((u8 *)g_MsgGame0Ok);
 
     (void)pad;
 }

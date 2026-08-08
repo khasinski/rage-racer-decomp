@@ -105,7 +105,7 @@ long CD_initvol(void);
 void CD_flush(void);
 long CD_getsector2(long madr, u_long size);
 long CD_vol(CdlATV *vol);
-long DsSearchFile(void *file, void *name);
+CdlFILE *DsSearchFile(CdlFILE *file, char *name);
 long DS_searchdir(long type, u_char *name);
 void StClearRing(void);
 long StGetBackloc(CdlLOC *loc);

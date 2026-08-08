@@ -1,4 +1,6 @@
 #include "common.h"
+#include <stdio.h>
+#include <string.h>
 #include "psyq/cd.h"
 
 typedef struct W4 {
@@ -23,7 +25,7 @@ extern const char D_80013A70[];
  * signature, follows it to the path/directory sector, then walks the packed
  * variable-length records (record length in *p, name at p+8) copying each into
  * an Entry (index, header word, flags, name). Returns 1 on success, 0 on error.
- * g_CdDebugLevel is the debug-verbosity level gating the DebugPrintf logging.
+ * g_CdDebugLevel is the debug-verbosity level gating the printf logging.
  */
 /* Rebuilds the ISO path-table cache after a disc change: reads the primary
  * volume descriptor at sector 16, checks "CD001", then parses up to 128
@@ -37,26 +39,26 @@ long CD_newmedia(void) {
     r = cd_read(1, 16, g_CdSectorBuf);
     if (r != 1) {
         if (g_CdDebugLevel > 0) {
-            DebugPrintf(D_800139B4);
+            printf((u8 *)D_800139B4);
         }
         return 0;
     }
-    if (LibcStrncmp(&g_CdSectorBuf[1], D_800139E0, 5) != 0) {
+    if (strncmp((u8 *)&g_CdSectorBuf[1], (u8 *)D_800139E0, 5) != 0) {
         if (g_CdDebugLevel > 0) {
-            DebugPrintf(D_800139E8);
+            printf((u8 *)D_800139E8);
         }
         return 0;
     }
     hdr = g_CdRootDirLba;
     if (cd_read(1, *(long *)&hdr, g_CdSectorBuf) != r) {
         if (g_CdDebugLevel > 0) {
-            DebugPrintf(D_80013A18, *(long *)&hdr);
+            printf((u8 *)D_80013A18, *(long *)&hdr);
         }
         return 0;
     }
     p = g_CdSectorBuf;
     if (g_CdDebugLevel >= 2) {
-        DebugPrintf(D_80013A3C);
+        printf((u8 *)D_80013A3C);
     }
     i = 0;
     while (p < &g_CdSectorBuf[0x800]) {
@@ -68,13 +70,13 @@ long CD_newmedia(void) {
         *(W4 *)&g_CdPathTable[i].lba = *(W4 *)(p + 2);
         g_CdPathTable[i].parent_number = *(u_char *)(p + 6);
         g_CdPathTable[i].number = i + 1;
-        LibcMemcpy(g_CdPathTable[i].name, p + 8, *p);
+        memcpy(g_CdPathTable[i].name, p + 8, *p);
         g_CdPathTable[i].name[*p] = 0;
         n = *p;
         d = (n & 1) + 8;
         p += n + d;
         if (g_CdDebugLevel >= 2) {
-            DebugPrintf(D_80013A5C, g_CdPathTable[i].lba.sector,
+            printf((u8 *)D_80013A5C, g_CdPathTable[i].lba.sector,
                           g_CdPathTable[i].number, g_CdPathTable[i].parent_number,
                           g_CdPathTable[i].name);
         }
@@ -88,7 +90,7 @@ long CD_newmedia(void) {
     }
     g_CdCachedDir = 0;
     if (g_CdDebugLevel >= 2) {
-        DebugPrintf(D_80013A70, i);
+        printf((u8 *)D_80013A70, i);
     }
     return 1;
 }
@@ -104,7 +106,7 @@ long DS_searchdir(long type, u_char *name) {
     while (i < 0x80) {
         entryType = *(long *)((u_char *)D_8009C118 + offset);
         if (entryType != 0) {
-            if (entryType == type && LibcStrcmp(name, entryName) == 0) {
+            if (entryType == type && strcmp((u8 *)name, (u8 *)entryName) == 0) {
                 return i + 1;
             }
 

@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdio.h>
 
 #include "common.h"
 #include "psyq/cd.h"
@@ -28,8 +29,8 @@ static inline void setAlarm(char *name) {
 static inline long getAlarm(void) {
     if (g_CdTimeoutDeadline.deadline < VSync(-1) ||
         g_CdTimeoutDeadline.count++ > 0x3C0000) {
-        LibcPutString(D_80013814);
-        DebugPrintf(D_80013824, g_CdTimeoutDeadline.name, g_CdCommandNames[g_CdLastCommand],
+        puts(D_80013814);
+        printf((u8 *)D_80013824, g_CdTimeoutDeadline.name, g_CdCommandNames[g_CdLastCommand],
                       g_CdIntrNames[g_CdSyncStatus.sync], g_CdIntrNames[g_CdSyncStatus.ready]);
         CD_flush();
         return -1;
@@ -46,12 +47,12 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
     u_char *source;
 
     if (g_CdDebugLevel >= 2) {
-        DebugPrintf(D_800138B0, g_CdCommandNames[command]);
+        printf((u8 *)D_800138B0, g_CdCommandNames[command]);
     }
 
     if (g_CdCommandParamCount[command] != 0 && params == 0) {
         if (g_CdDebugLevel > 0) {
-            DebugPrintf(D_800138B8, g_CdCommandNames[command]);
+            printf((u8 *)D_800138B8, g_CdCommandNames[command]);
         }
         return -2;
     }

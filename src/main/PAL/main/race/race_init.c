@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "game/track.h"
 #include "game/car.h"
 #include "game/race.h"
@@ -15,7 +16,7 @@ extern u8 *volatile g_PathSceneryPosData;
 
 
 void InstallResourceData(void) {
-    DebugPrintf(g_MsgResOk);
+    printf((u8 *)g_MsgResOk);
 }
 
 void SetCarSpec(u32 spec) {
@@ -43,21 +44,21 @@ void InstallTrackEventData(u8 *eventData) {
     base += offset1;
     g_PathSceneryPosData = (u8 *)offset0;
     g_PathSceneryRotData = base;
-    DebugPrintf(callArg);
+    printf((u8 *)callArg);
 }
 
 void InitSoundSystem(void) {
     if (InitSoundWithVab() != 0) {
-        DebugPrintf(&g_MsgSoundError);
+        printf((u8 *)&g_MsgSoundError);
     }
-    DebugPrintf(&g_MsgInitSoundOk);
+    printf((u8 *)&g_MsgInitSoundOk);
 }
 
 void InitEngineSound(void) {
     LoadExtraVabSlotWithTable();
     SetEffectVoicesEnabled(1);
     SetReverbPreset(2, 0, 0);
-    DebugPrintf(&g_MsgInitEngineOk);
+    printf((u8 *)&g_MsgInitEngineOk);
 }
 
 /* PAL runs at 25 fps, so a frame is 40 ms. `millis` is the sub-frame remainder

@@ -43,17 +43,4 @@ typedef float f32;
 
 #define RAW(x) (*(__typeof__(x) *)((s32)&(x)))
 
-/*
- * The one trace/printf entry point (0x8001674C). Every surviving PSY-Q debug
- * format string in the image is passed to it, from libgpu, libcd, libspu and
- * the game alike, which is what labels most of the arguments in this repo.
- */
-/* Stubbed out: does nothing and returns 1. */
-s32 DebugPrintf();
-s32 sprintf(u8 *dest, u8 *format, ...);
-void LibcPutString();
-void LibcMemcpy();
-long LibcStrncmp();
-long LibcStrcmp();
-
 #endif

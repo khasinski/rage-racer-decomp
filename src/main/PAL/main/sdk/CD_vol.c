@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "psyq/cd.h"
 
 extern long g_CdSyncCallback;
@@ -87,8 +88,8 @@ void CD_initintr(void) {
 }
 
 long CdResetState(void) {
-    LibcPutString(D_80013904);
-    DebugPrintf(D_80013910, g_CdDebugInfo);
+    puts(D_80013904);
+    printf((u8 *)D_80013910, g_CdDebugInfo);
 
     g_CdLastCommand = 0;
     g_CdModeByte = 0;

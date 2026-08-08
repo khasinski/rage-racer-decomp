@@ -16,7 +16,7 @@ void BuildCdTrackTable(void) {
     CdlLOC *toc;
     s32 i;
     CdlLOC *tocDst;
-    u8 *file;
+    CdlFILE *file;
     s32 count;
 
     toc = g_CdTrackLocs;
@@ -32,14 +32,14 @@ void BuildCdTrackTable(void) {
     }
 
     i = 2;
-    file = g_CdSearchFile;
+    file = (CdlFILE *)g_CdSearchFile;
     tocDst = g_CdBgmTrackLocs;
     toc = (CdlLOC *)g_CdAudioFileNames;
     do {
-        if (DsSearchFile(file, *(void **)toc) == 0) {
+        if (DsSearchFile(file, *(char **)toc) == 0) {
             break;
         }
-        *tocDst = *(CdlLOC *)file;
+        *tocDst = file->pos;
         tocDst++;
 
         i++;

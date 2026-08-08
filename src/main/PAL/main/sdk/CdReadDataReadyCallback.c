@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdio.h>
 
 #include "common.h"
 #include "game/state.h"
@@ -39,7 +40,7 @@ void CdReadDataReadyCallback(u_char intr, long result) {
             if (g_CdReadSectorWords == 0x200) {
                 CdGetSector2(buf, 3);
                 if (CdPosToInt_Local(buf) != g_CdReadExpectedSector) {
-                    LibcPutString(&D_800111C4);
+                    puts(&D_800111C4);
                     *p = -1;
                 }
             }
@@ -87,7 +88,7 @@ long CdReadRetry(long mode) {
     CdReadyCallback(0);
     if (CdStatus() & 0x10) {
         if ((VSync(-1) & 0x3F) == 0) {
-            LibcPutString(&D_800111DC);
+            puts(&D_800111DC);
         }
         CdControlF(1, 0);
         {
@@ -98,7 +99,7 @@ long CdReadRetry(long mode) {
         return g_CdReadRemaining;
     }
     if (mode != 0) {
-        LibcPutString(&D_800111F4);
+        puts(&D_800111F4);
         CdControl(9, 0, 0);
         if (CdControl(2, CdLastPos(), 0) == 0) {
             long value = -1;

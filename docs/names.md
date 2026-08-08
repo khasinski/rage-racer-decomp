@@ -220,7 +220,7 @@ table shifts on R1|R2 / L1|L2, the NeGcon table on Down / Up.
 | `UpdateRaceCars` | 0x8003B0D4 | 671 | Race variant of the rival-car driver: ~10 sequential passes over `GameCarRuntime[11]`. Called from the race scene only when `g_RacePhase >= 2 && g_GrandPrixMode != 0`. Owns the three race-only passes func_8003A728 / func_8003A974 / func_8003A6A4 and time-slices cars 4..10 on `(i & 1) == (g_AnimTimer & 1)`. |
 | `UpdateAttractCars` | 0x8003BB50 | 622 | Attract/replay variant of the same driver, called by the three non-interactive 3D scenes (func_80025C58, func_80026570 — which writes `g_SceneId = 0x1E` — and func_80026AE0). No player to budget for, so every car runs every frame; additionally wraps `car->field_68` modulo `g_TrackLength`. |
 | `UpdateCarLaunch` | 0x80030030 | 505 | Car motion-state handler for `state98 == 1`, the one-frame takeoff of a jump. func_8002A810 dispatches `car + 0xBC + 0x98` over func_8002F690 (state 0, which also arms state 1), this, func_80030814 (state 2, airborne) and func_80030BC4. Turns the launch spin seeded in route+0x50 into clamped yaw, recomputes revs / tacho / world velocity, then sets route+0x38 = 0x14 and route+0x98 = 2. **Was described here as an "engine-sound update"** — the func_8005C104 call is 12 of 505 words and is a house idiom shared with the sibling handlers. |
-| `InitPlayerCar` | 0x8002C478 | 548 | Race-entry init for the player object: `g_RacePhase = 2`, `g_RaceSeries`, clear the runtime block, seat the car at the start pose from `g_TrackEventData + series * 0x90 + 0x354`, and build the speed/gear lookup tables `D_801E8884` (0x40 per gear), `D_801E4114`, `D_801E4154` from `g_CarSpec`. Its own DebugPrintf labels are `init_car`, `h_tbl`, `init0`, `init1`, `init1b`, `init2`, `init4`..`init6`, `init_ok`. **Was described here as a "track-geometry sample builder"**; `g_TrackPoints` is touched once, to seat the car. |
+| `InitPlayerCar` | 0x8002C478 | 548 | Race-entry init for the player object: `g_RacePhase = 2`, `g_RaceSeries`, clear the runtime block, seat the car at the start pose from `g_TrackEventData + series * 0x90 + 0x354`, and build the speed/gear lookup tables `D_801E8884` (0x40 per gear), `D_801E4114`, `D_801E4154` from `g_CarSpec`. Its own `printf` labels are `init_car`, `h_tbl`, `init0`, `init1`, `init1b`, `init2`, `init4`..`init6`, `init_ok`. **Was described here as a "track-geometry sample builder"**; `g_TrackPoints` is touched once, to seat the car. |
 | `ResetCarTrackState` | 0x80032280 | 596 | The non-clamping twin of matched func_80031298: recomputes a car's track-relative placement (segment interpolation, progress modulo `g_TrackLength`, road heading and grade) from `car->trackPointIndex`, with none of func_80031298's boundary clamp or collision push, and writes the reference orientation triple at +0x50/0x54/0x58 rather than the live +0x20. All four call sites are the init/reset paths in func_80034F74. **Was described here as a "marker or sprite builder"**; it builds no primitives. |
 
 ### Animated course scenery with sound (see also 5b)
@@ -281,7 +281,7 @@ variant).
 ### SDK library
 | Name | Addr | Words | Status | Purpose |
 |---|---|---:|---|---|
-| `LibcSprintf` | 0x800632F0 | 535 | [INCLUDE_ASM] | PSY-Q libc `sprintf`, the whole formatter with no `vsprintf` split — all ~30 call sites pass varargs directly and nothing wraps it. Digit tables `"0123456789ABCDEF"` at `D_800131E4` and `"0123456789abcdef"` at `D_800131F8`; callees are the matched `LibcMemchr` / `LibcMemmove` / `LibcStrlen`. |
+| `sprintf` | 0x800632F0 | 535 | [INCLUDE_ASM] | PSY-Q libc `sprintf`, the whole formatter with no `vsprintf` split — all ~30 call sites pass varargs directly and nothing wraps it. Digit tables `"0123456789ABCDEF"` at `D_800131E4` and `"0123456789abcdef"` at `D_800131F8`; callees are the matched `memchr` / `memmove` / `strlen`. |
 | `TransposeMatrix` | 0x80069CC8 | 46 | matched C | libgte `TransposeMatrix(m0, m1)`: transposes only the 3×3 rotation part and returns `m1`. Sits next to `RotMatrix` (func_80069D18) and all nine callers are inside func_80043BCC. Body is decompiled with register pinning; the file also carries func_80069D18 as raw asm. |
 | `SsSeqApplyDataEntry` | 0x8007010C | 360 | [INCLUDE_ASM] | Named in section 17d. libsnd internal, so the name is descriptive rather than a recovered Sony symbol. Behaviourally it is the MIDI **Control Change #6 (Data Entry MSB)** handler: func_8006F1E0 routes status 0xB0 to func_8006F5F4, whose `case 6:` is this. It applies the pending RPN/NRPN to the channel's VAB program by rewriting the `VagAtr` of every tone — `SsUtGetProgAtr` for the tone count, then per tone `SsUtGetVagAtr` → mutate → `SsUtSetVagAtr` — with the field chosen by `SeqStruct + 0x13`: 0 → +0x0C/+0x0D (`pbmin`/`pbmax`, i.e. RPN 0 pitch-bend sensitivity), 1 → +0x05 (`shift`), 2 → +0x04 (`center`), all gated on `play_mode == 0`. **Was described here as the "libsnd sequence tick/step"** — that is `SsSeqCalledTbyT` at 0x800731CC. |
 | **GTE geometry/command engine** | 0x80027FF4–0x8002A2CC | ~2.6k | [proteza] | Hand-written scratchpad-`0x1F800000` GTE dispatch engine: custom calling convention (state in t0/t6-t9/a2), multiple mid-routine entry points, heavy COP2. 25 funcs incl. func_80027FF4 (75), func_80028120 (469), func_80028874 (248), func_800298B0 (360), func_80029FD8 (144), func_8002A2CC (249). |
@@ -1346,7 +1346,7 @@ func_80069728 / func_800696C8.
 
 | Name | Addr | Files | Evidence |
 |---|---|---:|---|
-| `DebugPrintf` | 0x8001674C | 31 | The single trace/printf entry point; every surviving PSY-Q format string in the image is passed to it, from libgpu, libcd, libspu and the game alike. The file was already named for it; only the call sites were still on the raw symbol. |
+| `printf` | 0x8001674C | 31 | The single trace/printf entry point; every surviving PSY-Q format string in the image is passed to it, from libgpu, libcd, libspu and the game alike. |
 | `BuildRotMatrixY` | 0x8001A530 | 24 | Fills `m[0][0]=c, m[0][2]=-s, m[1][1]=0x1000, m[2][0]=s, m[2][2]=c` from rsin/rcos of a 12-bit angle — the Y rotation. Siblings differ only in which row/column holds the identity. |
 | `BuildRotMatrixZ` | 0x8001A4C0 | 13 | Same shape with `m[2][2] = 0x1000`. |
 | `BuildRotMatrixX` | 0x8001A5A0 | 12 | Same shape with `m[0][0] = 0x1000`. |
@@ -1963,7 +1963,7 @@ objdump -d build/PAL/main.elf | grep -cE 'jal[ \t]+8003cdf4 '
   (`func_80031E98`)** have zero references.
 - **`InitSoundSystem` (`func_80034E88`)** and **`InitEngineSound`
   (`func_80034ED0`)** have zero references; they are named with certainty
-  anyway, because their own `DebugPrintf` strings are `"sound error\n"`,
+  anyway, because their own `printf` strings are `"sound error\n"`,
   `"init_sound ok\n"` and `"init_engine ok\n"`.
 
 The names are kept: the code is in the ROM and has to be read by someone.
@@ -2566,11 +2566,11 @@ stubs with no caller and nothing to name them from.
   instead of the full register spill, then `FlushCache` (A0 44h) and
   `ExitCriticalSection`. Descriptive name, new `Gte_` prefix by analogy with
   `Gpu_`; no Sony symbol is claimed.
-* **`CD_namecmp` (func_8006C53C) / `LibcStrncmp` (func_8006CC8C)** — the 12-byte
+* **`CD_namecmp` (func_8006C53C) / `strncmp` (func_8006CC8C)** — the 12-byte
   filename compare `DsSearchFile` runs over the 64-entry `CdlFILE` cache
   `CD_cachefile` fills, and the null-safe `strncmp` under it. Descriptive names
   in libcd's existing `CD_*` style; not Sony symbols. (This entry proposed
-  `CD_strncmp` for the second one; the tree spells it `LibcStrncmp`, in three
+  `CD_strncmp` for the second one; the tree spells it `strncmp`, in three
   files, alongside the other `Libc*` runtime routines.)
 * **`CD_dmastart` (func_8006DB74)** — spins on the channel's CHCR busy bit,
   prints `"DMA STATUS ERROR %x\n"` on timeout, then programs MADR/BCR/CHCR. All
@@ -6142,7 +6142,7 @@ per-file alias hides and a single symbol_addrs entry cannot.
 `undefined_syms_manual.txt` defines two mid-function entry points relative to
 a symbol, and both symbols were address-spelled: they now read
 `.L800479F0_main = DrawLargeText + 0x98;` and
-`.L800635D0_main = LibcSprintf + 0x2E0;`. And a bss rename is not visible to
+`.L800635D0_main = sprintf + 0x2E0;`. And a bss rename is not visible to
 the link until `make split` regenerates the bss labels — an incremental
 `make build` after renaming a `sym.bss.main.txt` entry fails with an undefined
 reference and says nothing about why.
@@ -6155,14 +6155,14 @@ The five functions that load a VAB — `InitSoundWithVab`, `StartAudioSlotLoad`,
 
     g_VabIds[slot] = SsVabOpenHeadSticky(header, -1, g_VabSpuAddress[slot]);
     vabId = g_VabIds[slot];
-    if (vabId == -1) { DebugPrintf(...); BiosExit(1); }
+    if (vabId == -1) { printf(...); BiosExit(1); }
     g_VabIds[slot] = SsVabTransBody(body, vabId);
-    if (g_VabIds[slot] == -1) { DebugPrintf(...); BiosExit(1); }
+    if (g_VabIds[slot] == -1) { printf(...); BiosExit(1); }
 
 Retail keeps `vabId` in `a1` across the failure block, so that the value is
 already in place as `SsVabTransBody`'s second argument. `a1` is call-clobbered,
 so gcc can only put it there if it believes the value is not live across
-`DebugPrintf` and `BiosExit`. It believes that exactly when `BiosExit` is
+`printf` and `BiosExit`. It believes that exactly when `BiosExit` is
 declared `__attribute__((noreturn))`, which it is: the linker script binds it
 to `g_BiosCallStubs`, the BIOS `exit()`. Every reconstruction before this one
 had gcc thinking control came back from `BiosExit` and falling through into the

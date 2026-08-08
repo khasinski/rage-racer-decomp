@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "game/prim.h"
 #include "game/asset.h"
 #include "game/audio.h"

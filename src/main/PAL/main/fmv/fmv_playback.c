@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "game/render.h"
 #include "psyq/cd.h"
 #include "game/race.h"
@@ -126,7 +127,7 @@ void WaitFmvDecode(FmvDisplayState *state) {
         do {
             timeout = timeout - 1;
             if (timeout == 0) {
-                DebugPrintf(g_MsgFmvDecodeTimeout);
+                printf((u8 *)g_MsgFmvDecodeTimeout);
                 state->field_34 = one;
                 state->field_28 = state->field_28 < 1U;
                 x = ((FmvDisplayState *)((u8 *)state + (state->field_28 << 3)))->field_18;

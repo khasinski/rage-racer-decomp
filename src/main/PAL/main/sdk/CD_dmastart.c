@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdio.h>
 
 #include "common.h"
 
@@ -25,7 +26,7 @@ void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal
     i = 0;
     while (*(volatile u_long *)(0x1F801088 + (ch << 4)) & 0x01000000) {
         if (i == 0x10000) {
-            DebugPrintf(D_80013B14, *(volatile u_long *)(0x1F801088 + (ch << 4)));
+            printf((u8 *)D_80013B14, *(volatile u_long *)(0x1F801088 + (ch << 4)));
             break;
         }
         i++;

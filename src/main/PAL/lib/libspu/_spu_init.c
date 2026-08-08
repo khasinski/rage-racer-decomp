@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdio.h>
 
 #include "common.h"
 #include "psyq/spu.h"
@@ -39,7 +40,7 @@ long _spu_init(long resetMode) {
             waitCount = g_SpuWaitCount + 1;
             g_SpuWaitCount = waitCount;
             if (waitCount > 5000) {
-                DebugPrintf(g_SpuTimeoutFmt, g_SpuTimeoutMsgReset);
+                printf((u8 *)g_SpuTimeoutFmt, g_SpuTimeoutMsgReset);
                 break;
             }
         } while (g_SpuRegBase->regs.spuStat & 0x7FF);

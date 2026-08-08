@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdio.h>
 
 #include "common.h"
 
@@ -45,7 +46,7 @@ void _spu_writeByIO(u_short *addr, u_long size) {
             g_SpuWaitCount = 0;
             while (g_SpuRegBase[0xD7] & 0x400) {
                 if (++g_SpuWaitCount >= 5001) {
-                    DebugPrintf(g_SpuTimeoutFmt, g_SpuTimeoutMsgWrdy);
+                    printf((u8 *)g_SpuTimeoutFmt, g_SpuTimeoutMsgWrdy);
                     break;
                 }
             }
@@ -63,7 +64,7 @@ void _spu_writeByIO(u_short *addr, u_long size) {
     g_SpuWaitCount = 0;
     while ((g_SpuRegBase[0xD7] & 0x7ff) != saved) {
         if (++g_SpuWaitCount >= 5001) {
-            DebugPrintf(g_SpuTimeoutFmt, g_SpuTimeoutMsgDmaf);
+            printf((u8 *)g_SpuTimeoutFmt, g_SpuTimeoutMsgDmaf);
             break;
         }
     }

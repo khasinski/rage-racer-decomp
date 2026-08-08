@@ -1,7 +1,6 @@
 #include <sys/types.h>
 
 #include "common.h"
-#include "game/random.h"
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -86,16 +85,3 @@ u_long BiosNextFile[4] __attribute__((section(".text"))) = {
     0x24090043,
     0,
 };
-
-extern u32 g_RandomSeed;
-
-/* The game's own PRNG, not SDK code: it keeps common.h's typedefs to agree
- * with its declaration in game/random.h. */
-s32 Random15(void) {
-    u32 value = g_RandomSeed;
-
-    value *= 0x41C64E6D;
-    value += 0x3039;
-    g_RandomSeed = value;
-    return (value >> 0x10) & 0x7FFF;
-}

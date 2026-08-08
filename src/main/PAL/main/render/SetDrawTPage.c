@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 #include "game/render.h"
@@ -118,7 +119,7 @@ void ResetGraph(s32 mode) {
     maskedMode = mode & 7;
     if ((maskedMode == 0) || (maskedMode == 3)) {
         graphState = g_GraphType;
-        DebugPrintf(D_80013478, g_GpuJumpTable, graphState);
+        printf((u8 *)D_80013478, g_GpuJumpTable, graphState);
         MemFill(graphState, 0, 0x80);
         KernelCallbackSlot3();
         GPU_cw((void *)((u32)g_GpuFuncs & 0xFFFFFF));

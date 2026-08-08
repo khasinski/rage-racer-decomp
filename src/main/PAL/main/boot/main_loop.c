@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "game/asset.h"
 #include "game/audio.h"
 #include "game/cd.h"
@@ -136,14 +137,4 @@ void MainLoop(void) {
         UpdatePadState();
         g_FrameCounter = g_FrameCounter + 1;
     }
-}
-
-/*
- * Stubbed-out debug printf: returns 1 and does nothing. Left un-prototyped
- * because callers pass anything from one to seven arguments. The format
- * strings they pass survive in the binary and were the key to naming much of
- * the game (see docs/names.md).
- */
-s32 DebugPrintf() {
-    return 1;
 }

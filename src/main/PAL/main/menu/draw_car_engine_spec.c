@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "game/menu.h"
 #include "game/render.h"
 #include "game/scratchpad.h"

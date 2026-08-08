@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdio.h>
 
 #include "common.h"
 #include "psyq/cd.h"
@@ -95,9 +96,9 @@ long CdReadInterruptStatus(void) {
     }
 
     if (mode == 5) {
-        LibcPutString(&D_80013840);
+        puts(&D_80013840);
         if (g_CdDebugLevel > 0) {
-            DebugPrintf(&D_8001384C, g_CdCommandNames[g_CdLastCommand], g_CdStatusByte, g_CdErrorByte);
+            printf((u8 *)&D_8001384C, g_CdCommandNames[g_CdLastCommand], g_CdStatusByte, g_CdErrorByte);
         }
     }
 
@@ -153,8 +154,8 @@ long CdReadInterruptStatus(void) {
         return 6;
     }
     default:
-        LibcPutString(&D_80013868);
-        DebugPrintf(&D_8001387C, mode);
+        puts(&D_80013868);
+        printf((u8 *)&D_8001387C, mode);
         break;
     }
     return 0;

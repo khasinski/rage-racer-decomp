@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdio.h>
 
 #include "common.h"
 #include "psyq/cd.h"
@@ -33,8 +34,8 @@ long CD_datasync(long arg) {
     do {
         long status;
         if (VSync(-1) > g_CdTimeoutDeadline || g_CdTimeoutCounter++ > 0x3C0000) {
-            LibcPutString(D_80013814);
-            DebugPrintf(D_80013824,
+            puts(D_80013814);
+            printf((u8 *)D_80013824,
                             ((CdAlarm *)&g_CdTimeoutDeadline)->name,
                             b60[g_CdLastCommand],
                             bE0[b318[0]],

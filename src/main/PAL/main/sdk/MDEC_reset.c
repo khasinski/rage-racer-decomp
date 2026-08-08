@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <stdio.h>
 
 #include "common.h"
 #include "psyq/cd.h"
@@ -34,7 +35,7 @@ void MDEC_reset(long mode) {
     return;
 
     }
-    DebugPrintf(D_800132C8);
+    printf((u8 *)D_800132C8);
 }
 
 void MDEC_in(volatile u_long *buf, long words) {
@@ -89,10 +90,10 @@ long MDEC_timeout(u_char *name) {
     u_long status;
     register long ret;
 
-    DebugPrintf(D_80013364, name);
+    printf((u8 *)D_80013364, name);
     status = *g_MdecCtrlReg;
-    DebugPrintf(D_80013304, (*g_MdecInDmaChcr >> 24) & 1, (*g_MdecOutDmaChcr >> 24) & 1, *g_MdecInDmaMadr, *g_MdecOutDmaMadr);
-    DebugPrintf(D_8001332C,
+    printf((u8 *)D_80013304, (*g_MdecInDmaChcr >> 24) & 1, (*g_MdecOutDmaChcr >> 24) & 1, *g_MdecInDmaMadr, *g_MdecOutDmaMadr);
+    printf((u8 *)D_8001332C,
                   (~status >> 31) & 1,
                   (status >> 30) & 1,
                   (status >> 29) & 1,

@@ -1,4 +1,5 @@
 #include "common.h"
+#include <stdio.h>
 #include "game/fmv.h"
 #include "game/asset.h"
 #include "game/state.h"
@@ -24,7 +25,7 @@ void DecodeFmvFrame(void) {
 
     while (PresentFmvFrame(g_FmvVlcBuffers) == -1) {
         value = StGetBackloc(streamLoc);
-        DebugPrintf(g_MsgFmvSector, value);
+        printf((u8 *)g_MsgFmvSector, value);
         if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
             StartStreamRead(g_StreamLoc);
         } else {
