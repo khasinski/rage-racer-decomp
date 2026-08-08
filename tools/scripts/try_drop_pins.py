@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Drop `register T x asm("$N")` hints that the compiler no longer needs.
+"""Drop explicit MIPS register hints that the compiler no longer needs.
 
 A pin forces one local into one hardware register. Most were added while a
 function was being matched and stopped carrying their weight once the
@@ -20,7 +20,8 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from objverify import ROOT, compile_one, snapshot, try_edit
 
-PIN = re.compile(r'^(?P<indent>\s*)register\s+(?P<decl>.+?)\s+asm\("\$\d+"\)'
+REGISTER = r'(?:\$\d+|zero|at|v[01]|a[0-3]|t[0-9]|s[0-8]|k[01]|gp|sp|fp|ra)'
+PIN = re.compile(r'^(?P<indent>\s*)register\s+(?P<decl>.+?)\s+asm\("' + REGISTER + r'"\)'
                  r'(?P<tail>\s*(?:=[^;]*)?;)\s*$', re.MULTILINE)
 
 
@@ -34,10 +35,10 @@ def main(argv):
             continue
         original = src.read_text()
 
-        pins = list(PIN.finditer(original))
-        print('%s: %d pin(s)' % (name, len(pins)))
+        print('%s: %d pin(s)' % (name, len(PIN.findall(original))))
         text = original
-        for index in range(len(pins)):
+        index = 0
+        while True:
             attempt = list(PIN.finditer(text))
             if index >= len(attempt):
                 break
@@ -50,6 +51,7 @@ def main(argv):
                 print('  dropped: %s' % m.group(0).strip())
             else:
                 kept += 1
+                index += 1
                 print('  load-bearing: %s' % m.group(0).strip())
         src.write_text(text)
         compile_one(src)

@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-"""Try to remove the `"memory"` clobbers that pin store order in matched code.
+"""Try to remove empty asms that constrain matched code.
 
-Each one was added to stop gcc 2.6.3 reordering a store past a load. Many stop
-being needed once the surrounding code is spelled differently - most often when
-a neighbouring `p->field` becomes a raw cast, which changes what the compiler
-believes may alias - so none of them should be assumed necessary.
+These constraints pin scheduling, register allocation, or memory ordering.
+Many stop being needed once the surrounding code is spelled differently, so
+none of them should be assumed necessary.
 
-Two removals are tried per barrier, weakest first: drop just the "memory"
-clobber (keeping any operands, which may still be doing the work), then drop
-the whole statement. The first that leaves the object's code and data identical
-wins.
+For barriers with a "memory" clobber, two removals are tried, weakest first:
+drop just the clobber (keeping any operands), then drop the whole statement.
+Other empty asms are tried as whole statements. The first edit that leaves the
+object's code and data identical wins.
 
 Usage: try_drop_barriers.py <file.c>...
 """
@@ -23,7 +22,9 @@ from objverify import ROOT, compile_one, snapshot, try_edit
 
 BARRIER = re.compile(
     r'^(?P<indent>[ \t]*)(?:__asm__|asm)\s*(?:volatile|__volatile__)?\s*'
-    r'\((?P<body>[^;]*?"memory"[^;]*?)\)\s*;[ \t]*\n', re.M)
+    r'\(\s*""(?P<body>(?:(?!\n[ \t]*\n)[^;])*?)\)'
+    r'(?P<ending>\s*;[ \t]*(?:/\*[^\n]*?\*/[ \t]*)?(?:\\[ \t]*)?\n|[ \t]*\\[ \t]*\n)',
+    re.M)
 
 
 def without_clobber(statement):
@@ -58,11 +59,12 @@ def main(argv):
             m = matches[index]
             statement = m.group(0)
             relaxed = without_clobber(statement.rstrip().rstrip(';'))
+            continuation = '\\\n' if statement.rstrip().endswith('\\') else ''
 
             attempts = []
             if relaxed is not None:
                 attempts.append(('clobber', '%s;\n' % relaxed))
-            attempts.append(('statement', ''))
+            attempts.append(('statement', m.group('indent') + continuation))
 
             for label, replacement in attempts:
                 candidate = text[:m.start()] + replacement + text[m.end():]
