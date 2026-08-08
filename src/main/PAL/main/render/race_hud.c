@@ -100,7 +100,7 @@ void DrawLapTimes(void) {
     }
 
     i = 0;
-    activeIndex = D_8009E836;
+    activeIndex = g_HudLapHighlightRow;
     if (g_LapCount > 0) {
         baseOffset = 0x236F8;
         primOffset = 0;

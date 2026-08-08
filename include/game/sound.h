@@ -28,11 +28,11 @@ extern SoundScale g_SoundScale;
  * halves. Reset to left=right=-1, mode=1, vols=0. */
 typedef struct MusicChannel {
     s32 left;      /* +0x00 current left/tone value (g_MusicChannels) */
-    s32 right;     /* +0x04 current right value     (D_801E6D04) */
-    s32 mode;      /* +0x08 state/mode 0/1/2/-1      (D_801E6D08) */
+    s32 right;     /* +0x04 current right value     (g_MusicChannelTone) */
+    s32 mode;      /* +0x08 state/mode 0/1/2/-1      (g_MusicChannelMode) */
     s32 reserved;  /* +0x0C unused                              */
-    s32 volLeft;   /* +0x10 scaled left volume       (D_801E6D10) */
-    s32 volRight;  /* +0x14 scaled right volume      (D_801E6D14) */
+    s32 volLeft;   /* +0x10 scaled left volume       (g_MusicChannelVolLeft) */
+    s32 volRight;  /* +0x14 scaled right volume      (g_MusicChannelVolRight) */
 } MusicChannel; /* sizeof 0x18 */
 
 extern MusicChannel g_MusicChannels[];
@@ -53,7 +53,7 @@ extern EffectVoice g_EffectVoices[];
 
 /* Scalar control block at 0x6D80. Retail addresses these individually by
  * symbol, never base+index, so they stay independent externs. */
-extern s32 D_801E6D80; /* +0x00 */
+extern s32 g_ReverbType; /* +0x00 */
 extern s32 g_ReverbDepthL; /* reverb depth left  */
 extern s32 g_ReverbDepthR; /* reverb depth right */
 /* Per-frame step added to g_ReverbDepthL/R by UpdateSequenceFadeOut; -3
@@ -71,14 +71,14 @@ extern s32 g_PrizeCountStep; /* +0x20 */
 extern s16 D_801E6DA4[]; /* +0x24 s16 table */
 
 /* Per-slot engine tone, one entry per bank; a slot is re-cued when its two
- * banks disagree. The old g_SoundSlotToneBank1 symbol (D_80082F2A) is [i][1]
+ * banks disagree. The old g_SoundSlotToneBank1 symbol (g_SoundSlotToneBank1) is [i][1]
  * of this table. Six slots. */
 extern s16 g_SoundSlotTone[][2];
 
 /*
  * Indexed effect table in rodata at g_IndexedEffects: three entries, twelve bytes
  * each, selected by SetIndexedEffectVoice (index clamped to 0..2). The old
- * g_IndexedEffectVolumes symbol (D_800126B4) is g_IndexedEffects + 8, the third word
+ * g_IndexedEffectVolumes symbol (g_IndexedEffectBaseVolumes) is g_IndexedEffects + 8, the third word
  * of the same element, which is why both were indexed by the same i * 12.
  * Retail data: { 14, 0, 64 }, { 14, 0, 64 }, { 16, 0, 90 }.
  */

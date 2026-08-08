@@ -11,7 +11,7 @@
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
 extern ScoreRecord g_ClassRecords[];
-extern ClassRecordSprite D_8007D5D4[];
+extern ClassRecordSprite g_ClassRecordCellSprites[];
 
 void DrawOptionRootMenu(void) {
     u8 *base = g_DrawBuffer;
@@ -119,7 +119,7 @@ void DrawClassRecordDetail(void) {
 
     if (g_GameMode == 3) {
         next = AddTilePrimWord(raw + 0xD4, next,
-                             D_8007D5A8[idx].vx - 2, D_8007D5A8[idx].vy - 4,
+                             g_ClassRecordCellPoints[idx].vx - 2, g_ClassRecordCellPoints[idx].vy - 4,
                              0x24, 0x58, 0x89, 0xFF, 0x76);
     }
     next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0xBC, 0x40, 0x18, 0x10, 0, 0x6C, 0x7F40);
@@ -132,8 +132,8 @@ void DrawClassRecordDetail(void) {
         }
     } else {
         next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0xE4, 0x40,
-                             D_8007D658[idx].b, 0x10,
-                             D_8007D658[idx].r, D_8007D658[idx].g, 0x7F40);
+                             g_ClassRecordNameSprites[idx].b, 0x10,
+                             g_ClassRecordNameSprites[idx].r, g_ClassRecordNameSprites[idx].g, 0x7F40);
     }
 
     next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), x | 8, y + 0x28, 0x44, 0x10, 0x1C, 0x6C, 0x7F40);
@@ -164,21 +164,21 @@ void DrawClassRecordGrid(void) {
     next = SCRATCH_PRIM_CURSOR_WORD;
 
     for (i = 0; i < 11; i++) {
-        x = D_8007D5A8[i].vx;
-        y = D_8007D5A8[i].vy;
+        x = g_ClassRecordCellPoints[i].vx;
+        y = g_ClassRecordCellPoints[i].vy;
         flag = g_ClassRecords[i].place;
         switch (flag) {
         case 1:
             next = (s32)GameQueueSprite(base, next, x, y, 0x20, 0x50,
-                                 D_8007D5D4[i].u1, D_8007D5D4[i].v1, D_8007D5D4[i].clut1);
+                                 g_ClassRecordCellSprites[i].u1, g_ClassRecordCellSprites[i].v1, g_ClassRecordCellSprites[i].clut1);
             break;
         case 2:
             next = (s32)GameQueueSprite(base, next, x, y, 0x20, 0x50,
-                                 D_8007D5D4[i].u2, D_8007D5D4[i].v2, D_8007D5D4[i].clut2);
+                                 g_ClassRecordCellSprites[i].u2, g_ClassRecordCellSprites[i].v2, g_ClassRecordCellSprites[i].clut2);
             break;
         case 3:
             next = (s32)GameQueueSprite(base, next, x, y, 0x20, 0x50,
-                                 D_8007D5D4[i].u2, D_8007D5D4[i].v2, D_8007D5D4[i].clut3);
+                                 g_ClassRecordCellSprites[i].u2, g_ClassRecordCellSprites[i].v2, g_ClassRecordCellSprites[i].clut3);
             break;
         }
         if (g_ClassRecords[i].place <= 0) {

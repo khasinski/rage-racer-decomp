@@ -106,7 +106,7 @@ void UpdateTitleAttract(void) {
     next = GameQueueShadedSprite(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
     *(void **)scratch = GameQueueShadedTexturedRect(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
-extern u32 D_801E8260;
+extern u32 g_FrontendIdleTimer;
 
 
 void UpdateFrontend(void) {
@@ -134,7 +134,7 @@ void UpdateFrontend(void) {
     if (state < 0x1cc) {
         g_SceneTimer = state + 1;
     } else {
-        if (!(g_FrontendState == 3) && !(D_8007C744 % 2)) {
+        if (!(g_FrontendState == 3) && !(g_AttractCycleCount % 2)) {
         if (state == 0x1cc) {
             g_GrandPrixSeries = 0;
             g_GrandPrixClass = (Random15() & 0xfff) % 5;
@@ -169,17 +169,17 @@ void UpdateFrontend(void) {
 
     g_FrontendDrawHandlers[g_FrontendState]();
 
-    if (D_801E8260 < 900) {
-        D_801E8260++;
+    if (g_FrontendIdleTimer < 900) {
+        g_FrontendIdleTimer++;
     } else {
-        if (D_8007C744 % 2) {
+        if (g_AttractCycleCount % 2) {
             BeginIntroFmv(3);
-            D_8007C744++;
+            g_AttractCycleCount++;
         } else {
             if (g_SceneTimer == 0x1cf) {
                 g_GrandPrixMode = 1;
                 g_SceneId = 0x1d;
-                D_8007C744++;
+                g_AttractCycleCount++;
             }
         }
     }
@@ -217,7 +217,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
     base = (u8 *)g_FrameContexts;
     height = 0xF0;
     SetDefDrawEnv((DrawEnv *)base, 0, 0, 0x140, height);
-    SetDefDrawEnv((DrawEnv *)D_801C0620, 0, 0xF0, 0x140, height);
+    SetDefDrawEnv((DrawEnv *)g_DrawEnv1, 0, 0xF0, 0x140, height);
     SetDefDispEnv(base + 0x5C, 0, 0xF0, 0x140, height);
     SetDefDispEnv(g_DispEnv1X, 0, 0, 0x140, height);
 
@@ -234,7 +234,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
         smallWidth = 0x94;
         small_height = 0x24;
         SetDefDrawEnv((DrawEnv *)ptr, g, b, smallWidth, small_height);
-        SetDefDrawEnv((DrawEnv *)D_801C0690, 0x56, 0x102, 0x94, small_height);
+        SetDefDrawEnv((DrawEnv *)g_MirrorDrawEnv1, 0x56, 0x102, 0x94, small_height);
     }
 
     i = 0;
@@ -286,7 +286,7 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
 
     height = 0x1E0;
     SetDefDrawEnv((DrawEnv *)base, 0, 0, 0x140, height);
-    SetDefDrawEnv((DrawEnv *)D_801C0620, 0, 0, 0x140, height);
+    SetDefDrawEnv((DrawEnv *)g_DrawEnv1, 0, 0, 0x140, height);
     SetDefDispEnv(base + 0x5C, 0, 0, 0x140, height);
     SetDefDispEnv(g_DispEnv1X, 0, 0, 0x140, height);
 

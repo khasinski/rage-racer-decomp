@@ -5,7 +5,7 @@
 #include "game/render.h"
 #include "game/state.h"
 
-extern DesignModeCellMask D_80011BD4;
+extern DesignModeCellMask g_DesignModeCellMask;
 
 
 s32 DrawDesignModeScreen(s32 step) {
@@ -19,36 +19,36 @@ s32 DrawDesignModeScreen(s32 step) {
     s32 column;
 
     ot = (void *)(*(u32 *)&SCRATCH_OT_BASE + 4);
-    mask = D_80011BD4;
+    mask = g_DesignModeCellMask;
 
     if (step == 0) {
-        D_8009B2D4 = 0;
+        g_DesignModeScreenFade = 0;
         return;
     }
 
     if (step > 0) {
         s32 updated;
 
-        updated = D_8009B2D4 + step;
-        D_8009B2D4 = updated;
+        updated = g_DesignModeScreenFade + step;
+        g_DesignModeScreenFade = updated;
         if (updated >= MENU_FADE_COMPLETE) {
-            D_8009B2D4 = MENU_FADE_MAX;
+            g_DesignModeScreenFade = MENU_FADE_MAX;
         }
         offset = 0;
     } else {
         s32 updated;
 
-        updated = D_8009B2D4 + step;
-        D_8009B2D4 = updated;
+        updated = g_DesignModeScreenFade + step;
+        g_DesignModeScreenFade = updated;
         if (updated < 0) {
-            D_8009B2D4 = 0;
+            g_DesignModeScreenFade = 0;
         }
-        limit = MENU_FADE_MAX - D_8009B2D4;
+        limit = MENU_FADE_MAX - g_DesignModeScreenFade;
         offset = (u32)(limit * limit) / 2048;
     }
 
     y = 0xB0 - (s16)offset;
-    intensity = (u32)D_8009B2D4 / MENU_FADE_INTENSITY_DIVISOR;
+    intensity = (u32)g_DesignModeScreenFade / MENU_FADE_INTENSITY_DIVISOR;
 
     DrawSprite(ot, 0xB4, y, 0x18, 0xC, 0x94, 0xDC,
                   (u8)intensity, (u8)intensity, (u8)intensity,
@@ -76,7 +76,7 @@ s32 DrawDesignModeScreen(s32 step) {
         }
     }
 
-    return D_8009B2D4;
+    return g_DesignModeScreenFade;
 }
 
 
@@ -87,10 +87,10 @@ void UpdateDesignModeScreen(void) {
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     DrawMenuCarView();
     if (GameMenuBusy == 0) {
-        RunTimedDrawScript(&D_800828EC, &g_UiScriptProgress2, -1);
+        RunTimedDrawScript(&g_DesignModeDeniedScript, &g_UiScriptProgress2, -1);
         RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
         DrawFadingMenuSprites(g_UiScriptProgress, 3, g_DesignModeOption);
-        RunTimedDrawScript(&D_80081B54, &g_UiScriptProgress, 0);
+        RunTimedDrawScript(&g_DesignModeScript, &g_UiScriptProgress, 0);
         if (RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) != 0) {
             g_MenuOverlayPattern = -1;
             if (g_PadPressed & PAD_UP) {
@@ -134,19 +134,19 @@ void UpdateDesignModeScreen(void) {
             }
         }
     } else if (GameMenuBusy < 0) {
-        RunTimedDrawScript(&D_800828EC, &g_UiScriptProgress2, 0);
+        RunTimedDrawScript(&g_DesignModeDeniedScript, &g_UiScriptProgress2, 0);
         if (RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 1) != 0) {
             edge = g_PadPressed;
             if (edge & PAD_CONFIRM) GameMenuBusy = 0;
             if (edge & PAD_CANCEL) GameMenuBusy = 0;
         }
         DrawFadingMenuSprites(g_UiScriptProgress, 3, g_DesignModeOption);
-        RunTimedDrawScript(&D_80081B54, &g_UiScriptProgress, 0);
+        RunTimedDrawScript(&g_DesignModeScript, &g_UiScriptProgress, 0);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
     } else {
         g_MenuHandlerIndex = -1;
         g_MenuHandlerIndex2 = 6;
-        RunTimedDrawScript(&D_80081B54, &g_UiScriptProgress, -1);
+        RunTimedDrawScript(&g_DesignModeScript, &g_UiScriptProgress, -1);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
         DrawFadingMenuSprites(g_UiScriptProgress, 3, g_DesignModeOption);
         if (g_UiScriptProgress <= 0) {
@@ -192,23 +192,23 @@ s32 DrawTeamLogoScreen(s32 step) {
     s32 value;
 
     if (step == 0) {
-        D_8009B2D8 = 0;
+        g_TeamLogoScreenFade = 0;
         return;
     }
 
     if (step > 0) {
-        value = step + D_8009B2D8;
-        D_8009B2D8 = value;
+        value = step + g_TeamLogoScreenFade;
+        g_TeamLogoScreenFade = value;
         if (value >= MENU_FADE_COMPLETE) {
-            D_8009B2D8 = MENU_FADE_MAX;
+            g_TeamLogoScreenFade = MENU_FADE_MAX;
         }
     } else {
-        value = step + D_8009B2D8;
-        D_8009B2D8 = value;
+        value = step + g_TeamLogoScreenFade;
+        g_TeamLogoScreenFade = value;
         if (value < 0) {
-            D_8009B2D8 = 0;
+            g_TeamLogoScreenFade = 0;
         }
     }
 
-    return D_8009B2D8;
+    return g_TeamLogoScreenFade;
 }

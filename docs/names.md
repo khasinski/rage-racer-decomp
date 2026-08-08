@@ -246,17 +246,17 @@ Note that `EffectVoice`/`MusicChannel` +0x00/+0x04 are the VAB **program** and
 | Name | Addr | Words | Purpose |
 |---|---|---:|---|
 | `DrawSkyBackground` | 0x800418D4 | 1211 | The sky/horizon backdrop, drawn by every scene that has a horizon. A 4 × 8 sweep emits the visible half of a 16-segment panorama cylinder as POLY_FT4s, uv rows from `D_8007F510 + 8 * D_8007F470[…]` indexed by `(yaw >> 7) + j`, linked at OT + 0xAFC; the gradient bands underneath are shaded between successive colour slots with the same `g_CourseIndex == 2 ? slots 5,6 : slots 7,8` split func_80045CD4 uses. Yaw and roll are negated when `g_MirrorMode` disagrees with the scratchpad flag at 0x1F800068. **Was described here as a "HUD/billboard primitive builder".** |
-| `DrawTeamLogoCanvas` | 0x8004A248 | 1435 | Draw half of the logo painter (largest non-SDK function). `(0, 0)` resets both panel accumulators `D_8007FB0C` / `D_8007FB10`; otherwise they ramp and gate the outer panel (12 slide steps) and the paint sub-panel. Uploads the 64×64 4bpp canvas `D_801E6F2C`, its raw CLUT `D_801E444C`, and a copy scaled by the fade level `D_8009B298` whose entry 0 is three phase-shifted sines of `D_8009B288` (the colour-cycling cursor), then emits the frame, the zoomed canvas, the 1:1 preview, the swatch boxes and the crosshair. |
+| `DrawTeamLogoCanvas` | 0x8004A248 | 1435 | Draw half of the logo painter (largest non-SDK function). `(0, 0)` resets both panel accumulators `g_TeamLogoPanelStep` / `g_TeamLogoEditorStep`; otherwise they ramp and gate the outer panel (12 slide steps) and the paint sub-panel. Uploads the 64×64 4bpp canvas `D_801E6F2C`, its raw CLUT `D_801E444C`, and a copy scaled by the fade level `g_TeamLogoFadeLevel` whose entry 0 is three phase-shifted sines of `g_TeamLogoColorCycleAngle` (the colour-cycling cursor), then emits the frame, the zoomed canvas, the 1:1 preview, the swatch boxes and the crosshair. |
 | `UpdateTeamLogoCanvas` | 0x8004C0D8 | 894 | Input half of the same widget, called from the PAINT branch of `UpdateTeamLogoScreen`. Plots with Circle held — replaces the nibble at `(u16 *)D_801E6F2C + (y << 4) + (x >> 2)` over a `g_TeamLogoBrushSize`-sized brush — and maps the d-pad through the auto-repeat timer `g_TeamLogoDpadRepeatTimer` onto the scroll/flip/rotate helpers func_8004B9B8..func_8004BF48. Holding all four shoulder buttons and pressing Select toggles `g_TeamLogoExpertMode`, a hidden palette editor over the 5-bit channels of the selected CLUT entry. **Was described here as a "4bpp texture / palette editor debug tool"** — it is the shipped feature. |
 | `DrawRankingTable` | 0x8004D384 | 1017 | The five record rows, called three times from `UpdateRankingScreen` as `(accumulator, step, table)`. Reads the `S22` records from `D_801E7744` (ranking) or `D_8019CB78` (time) and draws the place number, its suffix from the `"ST"/"ND"/"RD"/"TH"` table at `g_MsgOrdinalSt`, the holder's name and the row background. Sole caller of `FormatLapTime` in the image. |
 | `DrawCourseSelectScreen` | 0x8005290C | 849 | Slot 1 of the overlay table `g_MenuScreenDraw`, i.e. the fade/transition overlay of the **COURSE SELECT** screen: scroll accumulator `D_8009B2C0`, wave/colour offsets, sprite/number draws. |
 | `UpdateCarSelectScreen` | 0x8005568C | 783 | Slot 4 of `g_MenuScreenUpdate`, the **CAR SELECT** hub (race start / customize / car shop / engineer shop / course select); a jump-table switch on `GameMenuBusy` picks the exit — a race, or screens 5 / 11 / 12 / 1. |
-| `DrawCarSpecGraph` | 0x800496F0 | 675 | The car performance bar chart, drawn obliquely: 45°-recession floor lines plus four bars at `x = 0x66 + 12i`, each a front face with a lightened top (+0x40) and darkened right (−0x40) face and a semi-transparent drop shadow, over the four violet colours at `D_80011870`. Bars 0..2 ease towards the car asset's spec bytes +0x0B/0x0C/0x0D, bar 3 towards one of 10/30/50/70/90 selected by the tire grade. func_8005ACA0 calls it every menu frame, but its `step` argument `D_8009B324` only leaves 0 on entry to and exit from CUSTOMIZE, so it is only visible there. **Was described here as a "debug palette/gradient UI renderer".** |
+| `DrawCarSpecGraph` | 0x800496F0 | 675 | The car performance bar chart, drawn obliquely: 45°-recession floor lines plus four bars at `x = 0x66 + 12i`, each a front face with a lightened top (+0x40) and darkened right (−0x40) face and a semi-transparent drop shadow, over the four violet colours at `D_80011870`. Bars 0..2 ease towards the car asset's spec bytes +0x0B/0x0C/0x0D, bar 3 towards one of 10/30/50/70/90 selected by the tire grade. func_8005ACA0 calls it every menu frame, but its `step` argument `g_CarSpecGraphStep` only leaves 0 on entry to and exit from CUSTOMIZE, so it is only visible there. **Was described here as a "debug palette/gradient UI renderer".** |
 | `DrawTeamNameEntry` | 0x8004E724 | 585 | The whole **TEAM NAME** widget: the 4×11 grid of 8px glyph cells at `x = 0x56 + 12*col` wiping in as `D_8007FB28` climbs to 25, the cursor cell redrawn with flags 0x5B, the pulsing highlight box (green channel from `rcos(D_8009B28C += 96)`), the 12×24 caret while `g_TeamNameLength < 6`, and the typed `g_TeamNameChars`. Grid cell 10 is a gap, hence the `index >= 11 ? index - 1` glyph fixup. **Was described here as a "HUD/standings renderer".** |
 | `DrawRaceOptionMenu` | 0x8003479C | 396 | The in-race option/pause overlay, drawn by both in-race scene handlers after they clamp the cursor `D_801E414C` against `2 - g_GrandPrixMode` and decrement `g_SceneTimer` to freeze the scene; `cursorRow` steps the 64×11 highlight outline 10 pixels per row. `"  RAGE RACER GE"` is not a title — it is the first 0x14-byte half of one entry in the 4 × 0x28 marquee table at `D_8007DF34` (`"  RAGE RACER GETS YOU GOING!  "` twice, `"   KICK BACK AND CHILL OUT!   "`, `"    SLASH THOSE RECORDS!     "`), selected by `g_SceneTimer & 3`, scrolled by the two accumulators `D_8007DF30`/`D_8007DF32` and clipped to (114, 138, 92, 12). **Was named `GameDrawTitleScreen` in screens.h; that alias is retired.** |
-| `DrawMenuCarView` | 0x8005131C | 396 | The 3D car view behind screens 3, 4, 5, 6, 10, 11, 12. Installs the menu view matrix from `D_80082D6C`, eases `g_MenuViewOffset` / `g_MenuViewAngle` (angle wraps modulo 600000), and on arrival with no load pending flips the two-slot model double buffer `D_8009E87C` and commits `D_8009B378` into `D_8009B374`. Then submits **two** models: the car through the render object at `D_8009E6D4`, and fixed model 14 (the showroom floor) with the OT cursor bumped 0x78. L2/R2 nudge the tilt `D_8009E718` within ±6144; L1/R1 nudge `D_801E8268` within ±64. |
+| `DrawMenuCarView` | 0x8005131C | 396 | The 3D car view behind screens 3, 4, 5, 6, 10, 11, 12. Installs the menu view matrix from `D_80082D6C`, eases `g_MenuViewOffset` / `g_MenuViewAngle` (angle wraps modulo 600000), and on arrival with no load pending flips the two-slot model double buffer `D_8009E87C` and commits `D_8009B378` into `D_8009B374`. Then submits **two** models: the car through the render object at `D_8009E6D4`, and fixed model 14 (the showroom floor) with the OT cursor bumped 0x78. L2/R2 nudge the tilt `g_PlayerSteerAngle` within ±6144; L1/R1 nudge `D_801E8268` within ±64. |
 | `DrawCarEngineSpec` | 0x80052158 | 376 | The two engine spec lines, `MAX POWER <n> ps / <n> rpm` at `y = 0xCC - yOffset` and `MAX TORQUE <n>.<n> kgm / <n> rpm` at `0xDA - yOffset`, each number through `sprintf("%d")` with `x` advanced 6 per digit; values are the car asset header fields +0x10/0x12 and +0x14/0x15/0x16. Its third argument is loaded and discarded. Shared by the id 5 / 11 / 12 draw halves. |
-| `DrawStartCountdown` | 0x8003425C | 336 | The race-start signal gantry, live for `105 <= g_SceneTimer < 300` behind a `g_RacePhase < 4` guard. `phase = (t - 90) / 30` selects one of the 32×16 dot-matrix bitmaps `D_8007DDC0[1..4]` — they read **"3", "2", "1", "GO"** — stamped bit by bit onto 512 TILE prims of stride 0x10, each cell taking one of the four `code \| rgb` words at `D_8007DF1C` (code 0x60 = TILE; red on/off then blue on/off), with the band `7 - t' < row < t' + 8` inverted so each digit wipes open. Phase 0 flashes every cell. Underneath: two 96×24 backings and a 3×2 array of 32×24 start lamps whose column `phase - 1` brightens over 16 frames; `D_8007DF18` then slides the board off at −16 a frame. **Was described here as a "debug colour-grid renderer".** |
+| `DrawStartCountdown` | 0x8003425C | 336 | The race-start signal gantry, live for `105 <= g_SceneTimer < 300` behind a `g_RacePhase < 4` guard. `phase = (t - 90) / 30` selects one of the 32×16 dot-matrix bitmaps `g_CountdownGlyphTable[1..4]` — they read **"3", "2", "1", "GO"** — stamped bit by bit onto 512 TILE prims of stride 0x10, each cell taking one of the four `code \| rgb` words at `D_8007DF1C` (code 0x60 = TILE; red on/off then blue on/off), with the band `7 - t' < row < t' + 8` inverted so each digit wipes open. Phase 0 flashes every cell. Underneath: two 96×24 backings and a 3×2 array of 32×24 start lamps whose column `phase - 1` brightens over 16 frames; `D_8007DF18` then slides the board off at −16 a frame. **Was described here as a "debug colour-grid renderer".** |
 | `SeekEnvironmentScript` | 0x800458CC | 258 | Jumps the environment colour timeline to `time`: wraps modulo `D_8019C774`, walks the 0x30-stride cue list at `D_801E42F4` for the record containing it, backs up two records (wrapping to the tail), publishes that record's nine RGB words into the colour slots, sets the lerp numerator/denominator, applies one frame, enables the script unless `g_GrandPrixClass >= 5`, and programs `SetFarColor(slot 0)` + `SetFogNear(D_8009B24C, 320)`. Two of its callers pass the current position minus 1800 or 3000 frames, i.e. a rewind. **Was described here as writing "packed words into the `D_801E3FBx` framebuffer-head block"** — see the colour-slot layout below. |
 
 The block the last two share is nine 12-byte colour slots at
@@ -452,7 +452,7 @@ Second naming pass (race / car / menu / CD state, all still byte-neutral):
 | 0x801E6E74 | `g_RacePhase` | race.h | Race phase: 0 pre-start (physics frozen), 1 countdown, 2 racing, 4/5 finished, 7 goal/retire, 8 aborted. |
 | 0x801E4034 | `g_SeriesSelection` | race.h | Series/save-file the title menu picked (0 first, 1 advanced); `InitMenuMode` copies it into `g_GrandPrixSeries`. |
 | 0x8019CAC0 | `g_AdvancedSeriesUnlocked` | race.h | Set by func_800206B8 after the last class of the first series; gates title-menu entry 1 and widens func_80053688's course limit from 2-3 to 6-7. Saved at save+0x4E. |
-| 0x801E772C | `g_MaxClassReached[2]` | race.h | Highest class reached per series/save file (`[1]` is the old `D_801E7730`). Unlocks courses and bounds the attract-demo class roll. Saved at save+0x50. |
+| 0x801E772C | `g_MaxClassReached[2]` | race.h | Highest class reached per series/save file (`[1]` is the old `g_MaxClassReachedAdvanced`). Unlocks courses and bounds the attract-demo class roll. Saved at save+0x50. |
 | 0x8019CACC | `g_MirrorMode` | race.h | Mirror mode, armed by the held `0x80C` pad combination as the race scene starts. Swaps the two steering masks and negates body roll (func_8002CD4C), swaps the stereo pan arguments (func_80040ADC / func_8004087C) and selects the mirrored sound cue (func_8002DEFC). |
 | 0x801E40D8 | `g_TrackLength` | track.h | Total lap distance: func_8002A6B0 sums every `segmentLength` into it. |
 | 0x801E4150 | `g_TrackEventData` | track.h | Base of the course's event/marker block, installed by func_80034E04 (which logs `"event ok"`). `*(s32 *)` is the walk start index; func_80038FF0 reads 8-entry 0x40-byte marker rows at `+ g_RaceSeries * 576 + 0x474`. |
@@ -462,7 +462,7 @@ Second naming pass (race / car / menu / CD state, all still byte-neutral):
 | 0x8019C9F8 | `g_MenuScreen` | menu.h | Menu-mode screen id; see section 3a for the id -> screen map. |
 | 0x80082EB8 | `g_MenuScreenUpdate[]` | menu.h | The per-screen state-machine table `func_8005ACA0` dispatches with `g_MenuScreen`. |
 | 0x80082EF0 | `g_MenuScreenDraw[]` | menu.h | The parallel fade/overlay table, dispatched with `g_MenuHandlerIndex` / `g_MenuHandlerIndex2`. |
-| 0x8009B344 | `g_MenuHandlerIndex2` | menu.h | Second slot into `g_MenuScreenDraw`, run with `-10`; result kept in `D_8009B348`. |
+| 0x8009B344 | `g_MenuHandlerIndex2` | menu.h | Second slot into `g_MenuScreenDraw`, run with `-10`; result kept in `g_MenuOutgoingScreenProgress`. |
 | 0x801E4184 | `g_TitleMenuSelection` | menu.h | Title-menu cursor 0..4 (two Grand Prix files, Time Attack, attract demo, options); entry 1 is skipped until `g_AdvancedSeriesUnlocked`. |
 | 0x801E436A | `g_PadHeld` | menu.h | Buttons held this frame — `+0x02` of the pad block at 0x801E4368, computed as `~(raw[0] << 8 \| raw[1])`, with `+0x04` the previous frame and `g_PadPressed` = `held & ~previous`. |
 | 0x8009B34C / 0x8009B350 | `g_MenuViewAngle` / `…Target` | menu.h | Eased current/target rotation angle of the 3D menu view, in 1/1000 units; the carousel wraps at 500000 per entry. |
@@ -577,17 +577,17 @@ durable fact and the C spellings follow from them.
 |---:|---|---|---|---|
 | 0 | `EnterCourseSelectScreen` (0x80052778) | – | – | menu-mode bootstrap; falls straight into id 1 |
 | 1 | `UpdateCourseSelectScreen` (0x80053730) | `DrawCourseSelectScreen` | (`D_8009B2F0`, shared) | **COURSE SELECT** (TIME ATTACK header in TA mode) |
-| 2 | `UpdateRankingScreen` (0x80054D10) | `DrawRankingScreen` (0x80054C84) | `D_8009B2C4` | **RANKING** — total time / lap time / exit |
+| 2 | `UpdateRankingScreen` (0x80054D10) | `DrawRankingScreen` (0x80054C84) | `g_RankingScrollState` | **RANKING** — total time / lap time / exit |
 | 3 | `EnterCarSelectScreen` (0x80055618) | – | – | one-frame bridge into id 4 |
-| 4 | `UpdateCarSelectScreen` | `DrawCarSelectScreen` (0x800551BC) | `D_8009B2CC` | **CAR SELECT** — race start / customize / car shop / engineer shop / course select |
-| 5 | `UpdateCustomizeScreen` (0x800563A0) | `DrawCustomizeScreen` (0x800562C8) | `D_8009B2D0` | **CUSTOMIZE** — tire / transmission / exit |
-| 6 | `UpdateDesignModeScreen` (0x80057198) | `DrawDesignModeScreen` (0x80056E64) | `D_8009B2D4` | **DESIGN MODE** — logo / name / color / exit |
-| 7 | `UpdateTeamLogoScreen` (0x80057748) | `DrawTeamLogoScreen` (0x800576BC) | `D_8009B2D8` | **TEAM LOGO** — sample / paint / exit |
-| 8 | `UpdateLogoSampleScreen` (0x800580C8) | `DrawLogoSampleScreen` (0x8005803C) | `D_8009B2DC` | **TEAM LOGO** (sample picker) — character / background / exit |
-| 9 | `UpdateTeamNameScreen` (0x8005873C) | `DrawTeamNameScreen` (0x800586B0) | `D_8009B2E0` | **TEAM NAME** — 4x11 character grid, 0x2A = BS, 0x2B = ED |
-| 10 | `UpdatePaintColorScreen` (0x80058C14) | `DrawPaintColorScreen` (0x80058B88) | `D_8009B2E4` | **PAINT COLOR** — body color 1 / body color 2 / exit |
-| 11 | `UpdateCarShopScreen` (0x80059558) | `DrawCarShopScreen` (0x80059248) | `D_8009B2E8` | **SHOP** (car shop) — buy / exit |
-| 12 | `UpdateEngineerShopScreen` (0x8005A3A4) | `DrawEngineerShopScreen` (0x8005A2CC) | `D_8009B2EC` | **SHOP** (engineer shop) — tune-up / exit |
+| 4 | `UpdateCarSelectScreen` | `DrawCarSelectScreen` (0x800551BC) | `g_CarSelectFadeAccum` | **CAR SELECT** — race start / customize / car shop / engineer shop / course select |
+| 5 | `UpdateCustomizeScreen` (0x800563A0) | `DrawCustomizeScreen` (0x800562C8) | `g_CustomizeFadeAccum` | **CUSTOMIZE** — tire / transmission / exit |
+| 6 | `UpdateDesignModeScreen` (0x80057198) | `DrawDesignModeScreen` (0x80056E64) | `g_DesignModeScreenFade` | **DESIGN MODE** — logo / name / color / exit |
+| 7 | `UpdateTeamLogoScreen` (0x80057748) | `DrawTeamLogoScreen` (0x800576BC) | `g_TeamLogoScreenFade` | **TEAM LOGO** — sample / paint / exit |
+| 8 | `UpdateLogoSampleScreen` (0x800580C8) | `DrawLogoSampleScreen` (0x8005803C) | `g_LogoSampleScreenFade` | **TEAM LOGO** (sample picker) — character / background / exit |
+| 9 | `UpdateTeamNameScreen` (0x8005873C) | `DrawTeamNameScreen` (0x800586B0) | `g_TeamNameScreenProgress` | **TEAM NAME** — 4x11 character grid, 0x2A = BS, 0x2B = ED |
+| 10 | `UpdatePaintColorScreen` (0x80058C14) | `DrawPaintColorScreen` (0x80058B88) | `g_PaintColorScreenProgress` | **PAINT COLOR** — body color 1 / body color 2 / exit |
+| 11 | `UpdateCarShopScreen` (0x80059558) | `DrawCarShopScreen` (0x80059248) | `g_CarShopScreenProgress` | **SHOP** (car shop) — buy / exit |
+| 12 | `UpdateEngineerShopScreen` (0x8005A3A4) | `DrawEngineerShopScreen` (0x8005A2CC) | `g_EngineSpecStep` | **SHOP** (engineer shop) — tune-up / exit |
 | 13 | (NULL) | – | – | unused |
 
 Ids 6..12 are the GRAND PRIX-only design/shop subtree; TIME ATTACK only reaches
@@ -619,7 +619,7 @@ in `D_80082EF0`: `DrawCarSpecGraph` (called unconditionally by
 `UpdateMenuMode` (func_8005ACA0) every frame, but only visible on
 CUSTOMIZE — see section 1), `func_8004CF30`
 (brightness overlay used by ids 1/3/4/5), `func_800509C4` (counter in
-`D_8007FB4C`) and `DrawCarEngineSpec` (the engine spec lines shared by the
+`g_TimeAttackPlateProgress`) and `DrawCarEngineSpec` (the engine spec lines shared by the
 id 5/11/12 draw halves).
 
 ---
@@ -681,7 +681,7 @@ some conversions had to keep one or two accesses raw.
 
 The corollary is a cheap trick that *does* work: addressing a field through
 another symbol at a fixed offset (`&D_801E6D00[0].mode + offset` instead of
-`D_801E6D08 + offset`) changes only the relocation's displacement, and the
+`g_MusicChannelMode + offset`) changes only the relocation's displacement, and the
 linker resolves it to the identical instruction word as long as the two symbols
 share a `%hi`. The unlinked `.o` diff shows `sw v,8(at)` where retail has
 `sw v,0(at)`, and `make check` still passes.
@@ -761,7 +761,7 @@ dispatches the current screen through `g_GameModeHandlers` (indexed by
 exclusive per frame.
 
 **Pad button mapping (was in `state.h`).** `LoadPadButtonMapping` copies one
-8-entry row of button bitmasks out of `D_8007C0A8` and one out of `D_8007C128`
+8-entry row of button bitmasks out of `D_8007C0A8` and one out of `g_NegconSteerDeadZone`
 into `D_801E4B60` / `D_801E4B70`; `ApplyPadButtonMapping` re-applies it from
 the two saved selections. The controller-config and NeGcon calibration screens
 are `g_GameModeHandlers` entries 7..11, identified by the strings they draw:
@@ -796,9 +796,9 @@ packs. `func_80017BD4` logs each load as `"Now Loading [%s]->[0x%08x] ..."`.
 **Sound work-area provenance (was in `sound.h`).** The 0x801E6D00 layout was
 reconstructed from the retail disassembly (base loaded as `lui rX,0x801e` plus a
 decimal offset from 27904) and cross-checked against every C file that casts
-these symbols. Retired symbol equivalences: `D_801E6D08 ==
+these symbols. Retired symbol equivalences: `g_MusicChannelMode ==
 D_801E6D00[0].mode`, `D_801E6D18 == D_801E6D00[1].left`, `D_801E6D38/3C/40 ==
-D_801E6D30[0].state/pitch/volume`, `D_801E6D44/58/6C == D_801E6D30[1..3].note`.
+D_801E6D30[0].state/pitch/volume`, `g_EffectVoice1Prog/58/6C == D_801E6D30[1..3].note`.
 
 **`g_SceneTimer` signedness (was in `state.h`).** Four translation units need an
 unsigned load and carry their own `extern u32 g_SceneTimer asm("D_801E40B8");`,
@@ -1201,7 +1201,7 @@ Two mechanical traps worth recording for the next pass:
   is 0, so the plate never draws in the shipped build. Same reasoning that left
   `D_8009B338` unnamed in round 2.
 * **`D_801E4BC8` (5 files)** - swapped in lockstep with `g_VisibleCellMask`
-  (main view `-> &D_8009EC94`, mirror `-> &D_8009E888`) and walked 64 times while
+  (main view `-> &g_MainVisibleCellList`, mirror `-> &g_MirrorVisibleCellList`) and walked 64 times while
   the bitmask is rebuilt, then DMA'd to scratchpad with count `0x40`. The role is
   clear but the 16-byte element is still four unidentified words, so no name.
 * **`D_801E4028` (2 files)** - see 12a.
@@ -1326,7 +1326,7 @@ verified with `make check VERSION=PAL` staying at
 | Name | Addr | Files | Evidence |
 |---|---|---:|---|
 | `MulMatrix2` | 0x80069568 | 21 | Loads m0 into the GTE rotation control registers (`ctc2 $0..$4`), pushes each column of m1 through `MVMVA` (`cop2 0x486012`: mx=rotation, v=V0, cv=none, sf=12) and stores the three result columns **back into m1**, returning m1. That destination is what separates it from `MulMatrix`/`MulMatrix0`. |
-| `SetDispMask` | 0x80065860 | 18 | Its own trace string at `D_80013520` is `"SetDispMask(%d)...\n"`. Body issues GP1(03h): `0x03000000` when enabling, `0x03000001` when disabling, and clears the 0x14-byte cached DISPENV on disable. |
+| `SetDispMask` | 0x80065860 | 18 | Its own trace string at `g_MsgGpuSetDispMask` is `"SetDispMask(%d)...\n"`. Body issues GP1(03h): `0x03000000` when enabling, `0x03000001` when disabling, and clears the 0x14-byte cached DISPENV on disable. |
 | `ApplyMatrix` | 0x80069678 | 11 | Same `MVMVA` as the multiply family, but with a single vector: `lwc2 $0/$1` load an SVECTOR from arg1 and `swc2 $25/$26/$27` store MAC1..3 into the VECTOR at arg2. Callers confirm the widths (`SVec` in, `LVec` out in func_80031E98). |
 | `SsUtKeyOnV` | 0x80077C7C | 10 | Eight arguments `(voice, vabId, prog, tone, note, fine, volL, volR)`; rejects `voice >= 24` and an unknown program with -1, stamps the libsnd utility sep number `0x21` into the current-voice record `D_801E4BD0`, derives volume/pan from the two volumes, copies the ProgAtr/VagAtr fields and returns the voice number. Call sites pass note 0x3C. |
 | `MulMatrix` | 0x80069458 | 9 | Instruction-for-instruction identical to `MulMatrix2` except that the four result stores target `a0` and the return is `a0` — the in-place form. |
@@ -1357,7 +1357,7 @@ func_80069728 / func_800696C8.
 | `StartCdVolumeFade` | 0x80042CCC | 10 | Sets the remaining frame count of the CD-DA volume fade, clamped to +/-0xFFF; callers pass 1, 8, 30, 60, 120, 250 frames. |
 | `UploadImageAsset` | 0x8001A3C0 | 10 | Walks the chain of `GameImageBlock` records in a loaded image asset and hands each to func_8001A2E0, which `LoadImage`s it into VRAM. |
 | `SubmitCourseModel` | 0x800296B4 | 9 | Hand-written GTE engine entry point. Reads the **course** object bank pointer from scratchpad 0x1F800048 (the one func_80017A6C installs, stride 12 bytes, size `g_CourseModelCount`), indexes it by arg1 and interprets the model's opcode list through `jtbl_8007DA54`. Every caller clamps arg1 against `g_CourseModelCount` with a fallback of 1. |
-| `SetCameraRotMatrix` | 0x8001A610 | 9 | Composes Y*X*Z from the scratchpad camera angles at 0x1F800018 / 0x1C / 0x20 into the scratchpad matrix 0x1F800028 and installs it with `SetRotMatrix`; `D_8019CB18` receives the same product pre-multiplied by a 180-degree Y turn. |
+| `SetCameraRotMatrix` | 0x8001A610 | 9 | Composes Y*X*Z from the scratchpad camera angles at 0x1F800018 / 0x1C / 0x20 into the scratchpad matrix 0x1F800028 and installs it with `SetRotMatrix`; `g_MirrorViewMatrix` receives the same product pre-multiplied by a 180-degree Y turn. |
 | `DrawCourseObjects` | 0x8004123C | 9 | The per-frame loop over the world object array `D_801E4B2C` (`D_801E4BBC` entries): sector-bitmask cull, Z rotation, GTE transform, shade/semi-trans mode word, then `SubmitCourseModel` / `...2`. |
 | `AddTilePrim` | 0x80032F34 | 8 | `SetTile` + `AddPrim` on a caller-supplied 0x10-byte packet, returning the advanced cursor. Declared per translation unit rather than in a header: callers disagree on whether `ot`/`prim` are pointers or `s32`. |
 | `UpdateCamera` | 0x80043BCC | 8 | The camera-mode state machine (already documented in-file). Also per-TU, for the same reason. |
@@ -1612,7 +1612,7 @@ what makes "apply", not "init", the right verb. `SetEffectVolumeSetting`
 > still raw.
 
 - `func_800271EC`, `func_80026570`, `func_80026AE0` and `func_80026920`, plus
-  their handler tables D_8007D778 / D_8007D6B8 / D_8007D6D0, are attract- and
+  their handler tables g_PrologueSteps / D_8007D6B8 / D_8007D6D0, are attract- and
   replay-sequence drivers. The dynamic trace proposed `UpdateRaceScene` and
   `GameDrawRaceSceneSubsystems` for the last two, but reading them shows they
   are per-sequence step functions with hard-coded frame thresholds, not a race
@@ -1621,7 +1621,7 @@ what makes "apply", not "init", the right verb. `SetEffectVolumeSetting`
 - `func_80017AD0` registers a 0x800 + 0x1000 + table triple out of the `.2ND`
   pack; what the first two blocks are is not established.
 - `func_8004B8B4` clamps two globals (0x40..0x100 and 0..0x100) and derives
-  D_8007F948 from the second; it has one caller and nothing else reads them.
+  g_TeamLogoZoomSpan from the second; it has one caller and nothing else reads them.
 - `func_8004B5C8`, `func_8004B6CC`, `func_8004B764`, `func_8004B7F8`,
   `func_8004CBE4`, `func_8004CC14` and `func_8004CC44` draw UI widgets but are
   reached only through tables, so which panel each belongs to is unproven.
@@ -1991,8 +1991,8 @@ The names are kept: the code is in the ROM and has to be read by someone.
 - **`func_8003D6E8`** has an empty body. Positionally it is the first of the
   five scenery seeders `EnterRaceScene` calls in a row, but there is no
   side effect to name it from.
-- **`g_EngineRpmSnapshot`, `D_801E8A4C`, `D_8019C998`, `D_801E4D84`** are each written but
-  never read anywhere in the image (`D_8019C998` is read but only ever written
+- **`g_EngineRpmSnapshot`, `g_StandingStartState`, `g_DriveBoostTimer`, `D_801E4D84`** are each written but
+  never read anywhere in the image (`g_DriveBoostTimer` is read but only ever written
   zero). Naming them would be inventing a feature. **`D_801E4FB4` was in this
   list and should not have been:** it is read at `0x8002B840` inside
   `UpdateCarDrivetrain` as `drag = v^2 / (g_CarSpec->unk110 * 1000 /
@@ -2055,11 +2055,11 @@ so the descriptive name was used.
 
 | Name | Addr | String |
 |---|---|---|
-| `SetGraphQueue` | 0x80065738 | `D_800134F0` = `"SetGrapQue(%d)...\n"` (the SDK's own typo) |
+| `SetGraphQueue` | 0x80065738 | `g_MsgGpuSetGraphQueue` = `"SetGrapQue(%d)...\n"` (the SDK's own typo) |
 | `ResetGraph` | 0x80065460 | `g_FmtGpuResetGraphTrace` `"ResetGraph:jtb=%08x,env=%08x\n"` + `g_FmtGpuResetGraph` `"ResetGraph(%d)...\n"` |
-| `PutDispEnv` | 0x800660AC | `D_80013614` = `"PutDispEnv(%08x)...\n"` |
-| `PutDrawEnv` | 0x80065ED4 | `D_800135E0` = `"PutDrawEnv(%08x)...\n"` |
-| `DrawOTagEnv` | 0x80065F98 | `D_800135F8` = `"DrawOTagEnv(%08x,&08x)...\n"` |
+| `PutDispEnv` | 0x800660AC | `g_FmtGpuPutDispEnv` = `"PutDispEnv(%08x)...\n"` |
+| `PutDrawEnv` | 0x80065ED4 | `g_GpuTracePutDrawEnv` = `"PutDrawEnv(%08x)...\n"` |
+| `DrawOTagEnv` | 0x80065F98 | `g_GpuTraceDrawOTagEnv` = `"DrawOTagEnv(%08x,&08x)...\n"` |
 
 **Correction:** `func_80065E00` was declared `PutDispEnv` in `psyq/gpu.h`. It is
 not — the string above proves `PutDispEnv` is func_800660AC. func_80065E00 is
@@ -2085,7 +2085,7 @@ libcd's internals identify themselves the same way `CD_sync` / `CD_ready` /
 
 | Name | Addr | Evidence |
 |---|---|---|
-| `CD_datasync` | 0x8006BF00 | stores `D_8001391C = "CD_datasync"` into the `D_8009BB10` slot its own `"%s:(%s) Sync=%s, Ready=%s\n"` timeout message prints |
+| `CD_datasync` | 0x8006BF00 | stores `g_MsgCdDataSync = "CD_datasync"` into the `g_CdTimeoutName` slot its own `"%s:(%s) Sync=%s, Ready=%s\n"` timeout message prints |
 | `CD_newmedia` | 0x8006C560 | owns all four `"CD_newmedia: ..."` messages; reads the PVD at sector 16, checks `"CD001"` and parses the path table |
 | `CD_cachefile` | 0x8006C8E4 | owns all three `"CD_cachefile: ..."` messages; fills the 64-entry file cache from one directory |
 | `cd_read` | 0x8006CB88 | `CD_newmedia`'s own error text is `"Read error in cd_read(PVD)"`; lowercase because it is a static |
@@ -2615,14 +2615,14 @@ sets. A tunnel would show as a short window, a course split as one near half the
 lap. The code is agnostic, so no name asserts either.
 
 **`render/func_8001A980.c` is the rear-view mirror**, and every number agrees:
-`BeginMirrorPass` (func_8001A9A8) installs `D_8019CB18` — which section 7
+`BeginMirrorPass` (func_8001A9A8) installs `g_MirrorViewMatrix` — which section 7
 already documents as the camera matrix pre-multiplied by a 180° Y turn — sets
 `SetGeomOffset(0xA0, 0x24)` / `SetGeomScreen(0xC0)`, and clips to a 148 × 36
 window centred on x = 320, mirrored into the second `DRAWENV` of both frame
 contexts so the panel can slide in from above. `EndMirrorPass` (func_8001ABD8)
 is its exact inverse. `DrawMirrorFrame` (func_8001ACE4) draws a 152 × 40 black
 `TILE` — a 2-pixel border exactly bounding the viewport — plus one 8-px sprite
-picked by car model through `D_8007C728[13]` into four styles. `DrawRearViewMirror`
+picked by car model through `g_CarMirrorBadgeStyles[13]` into four styles. `DrawRearViewMirror`
 (func_8001ADF4) runs the whole pass: unlock at `g_SceneTimer >= 0x169` (361 frames,
 after the countdown), slide `g_MirrorPanelY`, then sky, frame, terrain, course
 objects and cars into the mirror viewport. `ResetMirrorState` (func_8001A980)
@@ -2673,7 +2673,7 @@ func_8001D530) blank and refill a 12-word × 8-line VRAM strip at (0x282, 0x37)
 from `g_TeamNameChars` / `g_TeamNameLength`; the start x of `0x288 - len` centres
 up to six 8-pixel glyphs, which is exactly `g_TeamNameLength`'s cap.
 `RampTeamLogoCanvas` (func_8004B8B4) is the parameter ramp feeding
-`DrawTeamLogoCanvas` — it drives `D_8009B298`, already documented in section 1
+`DrawTeamLogoCanvas` — it drives `g_TeamLogoFadeLevel`, already documented in section 1
 as that function's fade level.
 
 `boot/`: **`_start` (0x800630B4)** is the executable entry — the PS-EXE header's
@@ -2740,12 +2740,12 @@ happened to place in the middle of the game text. They must not be "fixed" into
   `lib/libsnd/func_8006F90C_8006FA44.c`, `lib/libsnd/func_80070A1C.c` and
   `lib/libsnd/func_800771AC.c`.
 * **`func_800271EC`** (19 words, scene-table slot 32) keeps section 13h's ruling:
-  it is a per-sequence step driver dispatching `D_8007D778[g_PrologueStep]`
+  it is a per-sequence step driver dispatching `g_PrologueSteps[g_PrologueStep]`
   (`D_801E4178`, named since), and the four steps are not identified. Its unit is named after the libcd `cdread.c`
   statics that dominate it, which is what section 14c already decided about the
   file's placement.
 * **`func_8004A17C`** (51 words, in `menu/draw_team_logo_canvas.c`) has **no
-  caller anywhere**, and its two globals `D_8009B280` / `D_8009B284` are
+  caller anywhere**, and its two globals `g_MenuCurtainFade` / `g_MenuCurtainShade` are
   referenced nowhere else in the image. It ramps a level and draws a 248×480
   semi-transparent grey curtain at (72, 0). Dead code with a private accumulator:
   no feature can be attributed to it.
@@ -2758,7 +2758,7 @@ happened to place in the middle of the game text. They must not be "fixed" into
   live caller is `UpdateCarShopScreen`. But *what its two unfolding textured
   plates depict* is not proven: plate A is gated on `g_CarModelAsset[8]`, an
   undocumented car-asset-header byte, and **plate B never opens in the shipped
-  build** — `D_8009B330` is only ever assigned −1 or 0, never a positive step.
+  build** — `g_MenuAltPanelStep2` is only ever assigned −1 or 0, never a positive step.
   Any content-bearing name would be a guess.
 * **`func_800509C4`** (86 words) draws a 48×24 plate at (76, 215) that unfolds
   only in TIME ATTACK COURSE SELECT and only while the course series index is
@@ -2928,7 +2928,7 @@ alias-collision check 19a asks for (one name per address, one address per name).
 
 ### 18d. Judgement calls, and the readings they beat
 
-* **`D_8009B1EC` left raw although its whole block is named.** The slot carries
+* **`g_ChaseYawPrev` left raw although its whole block is named.** The slot carries
   the mode-3 camera path's *yaw delta* and the mode-1 chase camera's *previous
   yaw*. Both roles are live, in the same function, and no name is honest for
   both, so the block has a hole and a comment saying why. Aliasing one address
@@ -3002,14 +3002,14 @@ alias-collision check 19a asks for (one name per address, one address per name).
 | symbol | why |
 |---|---|
 | ~~`D_8019C768`~~ | **DISPROVEN — it is named.** This row said "section 12d; unchanged". It is `g_FrameSyncThreshold` (12d) and carries that name in 13 files. |
-| `D_8009B1EC` | two live roles in one slot — see 18d |
+| `g_ChaseYawPrev` | two live roles in one slot — see 18d |
 | `D_801E40B8` | already named `g_SceneTimer`; used only as `g_RankedCars - 1` |
 | `D_8019CB38` / `D_8019CB3A` | referenced from `%hi`/`%lo` inline asm (12c). Since named `g_PaintBlendShade0` / `…1` for the *C* uses in the same file; the inline-asm references still spell them raw, which is the point of the entry. |
 | `D_801E6DA4` | referenced from a `LA_ORDERED` inline asm — see 18e |
 | `g_PlayerAutoSteer` | both writes in the image store zero, so the one reader (skip the pad, freeze the steering) can never fire |
-| `D_8019C998` | same shape: initialised to zero, only ever decremented |
-| `g_EngineRpmSnapshot`, `D_801E4248`, `D_801E4CF8`, `D_801E4D84`, `D_801E433C`, `D_801E3F60`, `D_801E8A4C` | written, never read anywhere in the image |
-| `D_8009EC88` | its only reader is the guard on its own write, so it has no effect — and it lives in the unreachable waypoint mode (15f) |
+| `g_DriveBoostTimer` | same shape: initialised to zero, only ever decremented |
+| `g_EngineRpmSnapshot`, `D_801E4248`, `D_801E4CF8`, `D_801E4D84`, `g_RouteSceneryArmed`, `g_CameraCarSeedYaw`, `g_StandingStartState` | written, never read anywhere in the image |
+| `g_EndingSceneLatch` | its only reader is the guard on its own write, so it has no effect — and it lives in the unreachable waypoint mode (15f) |
 
 ## 19. Front-end globals pass (`menu/ save/ asset/ cd/ fmv/ audio/ pad/ boot/`)
 
@@ -3242,16 +3242,16 @@ way to keep both the type and the compile.
 
 ### 19h. Left raw on purpose
 
-* **`D_8009B33C`, and its neighbours in the menu-mode block.** Written `0` by
+* **`g_CarShopUnlockAll`, and its neighbours in the menu-mode block.** Written `0` by
   `InitMenuMode` and *never* written anything else in the whole image (four
   references, one store, three loads), so the branches it guards in
   `UpdateRankingScreen` and `UpdateLogoSampleScreen` are unreachable in
   retail. Exactly the reasoning that left `D_8009B338` and `D_8009B31C` raw in
   rounds 2 and 3.
 * **The seven per-screen "secondary timed-draw script" pointers**
-  (`D_8019C764`, `D_801E40B4`, `D_8019C794`, `D_801E8A44`, `D_8009F0B0`,
-  `D_8019CB00`, `D_801E4188`). `InitMenuMode` seeds all seven to
-  `&D_80082568` and each is then repointed by exactly one screen handler at a
+  (`g_CourseSelectModalScript`, `g_CarSelectPopupScript`, `g_CustomizePopupScript`, `g_TeamLogoSubPanelScript`, `g_LogoSampleSubPanelScript`,
+  `g_CarShopModalScript`, `g_EngineerShopModalScript`). `InitMenuMode` seeds all seven to
+  `&g_UiEmptyScript` and each is then repointed by exactly one screen handler at a
   different script table. The mechanism is certain; which *panel* each one draws
   is not, because the tables are `RunTimedDrawScript` records whose contents
   are sprite rows, so a name would assert artwork this repo cannot see.
@@ -3264,10 +3264,10 @@ way to keep both the type and the compile.
 * ~~**`D_8019CA00`** is read by `UploadFmvSlice` but is libds state owned by
   `sdk/CdRead2.c`; 12e's rule keeps SDK globals raw.~~ **Overtaken:** section 23
   dropped 12e's rule and named it `g_StInterruptPending`.
-* **`D_801E4D14`, `D_8019CB10`** — written by `InitSubsystems` and otherwise
+* **`g_PadValidateCountdown`, `g_PadErrorHoldBits`** — written by `InitSubsystems` and otherwise
   touched only inside `UpdatePadState`, which is still `INCLUDE_ASM`. There
   is nothing to read them against until that unit is decompiled.
-* **`D_8019C86C` / `D_8009EC94`** (the main-view visible-cell mask and list that
+* **`g_MainVisibleCellMask` / `g_MainVisibleCellList`** (the main-view visible-cell mask and list that
   `InitRenderState` points `g_VisibleCellMask` / `g_VisibleCellList` at) are
   referenced from `asset/` but belong to `track/` and `render/`. Left for the
   pass that owns those directories, so the two agents cannot coin different
@@ -3330,7 +3330,7 @@ about *why* these held where others did not:
   `X`/`Y` halves.
 
 `g_CamPathAngleDelta[CAMPATH_YAW]` incidentally closes the hole section 18d
-left open. `D_8009B1EC` carries the mode-3 camera path's yaw delta *and* the
+left open. `g_ChaseYawPrev` carries the mode-3 camera path's yaw delta *and* the
 mode-1 chase camera's previous yaw, and 18d left the whole slot raw because no
 single name is honest for both. The array names only the mode-3 role, which is
 the honest half; the mode-1 code keeps the raw spelling, and the two now sit
@@ -4546,13 +4546,13 @@ watchdog stamps, expected sector, and the two saved libcd callbacks). libds adds
 
 - Every symbol in the `%hi`/`%lo` and `LA_ORDERED` set: renaming one compiles
   clean and fails only at link.
-- `D_8009A710`, `D_8009AB98`, `D_8009ABB4` (libspu), `D_8009A569` (libsnd):
-  written zero and never read anywhere in the image. `D_8009ABB4` is shaped like
+- `D_8009A710`, `g_SpuInTransfer`, `g_SpuIrqCallback` (libspu), `g_SndTickHalfRate` (libsnd):
+  written zero and never read anywhere in the image. `g_SpuIrqCallback` is shaped like
   `SpuSetIRQCallback`'s slot but this build has no call site to prove it.
 - The field aliases inside `g_SndVoiceState`, `g_SndCurrentAttr`,
   `g_CdPathTable` and `g_DispEnvCache`: they are struct members reached through
   their own labels, and naming them separately would fight the struct.
-- The auto-vol / auto-pan ramp words `D_8009E0D6..DE` and `D_8009E0E2..EA`, the
+- The auto-vol / auto-pan ramp words `g_SndVoiceStateVolStep..DE` and `D_8009E0E2..EA`, the
   libds ring cursors `D_801E6C74` / `D_801E6C84`, and the `StSetStream`
   end-of-stream callback `D_8019C9A0`: every remaining reader is inside
   `StCdInterrupt` / `SpuVmAutoVol`, which are still assembly, so the roles are
@@ -6593,7 +6593,7 @@ in `CD_flush`, `*mask = pending` in `StartKernelInterrupts`. A five-variant
 trailing store) reproduces this exactly: only the `volatile` spelling leaves
 the slot empty.
 
-The two pointers involved, `D_80099360` and `D_8009936C`, are initialised in
+The two pointers involved, `g_StreamCdReg0` and `g_StreamCdReg3`, are initialised in
 `.data` to 0x1F801800 and 0x1F801803 — the CD-ROM index and response registers,
 the same MMIO that `g_CdReg0` and `g_CdReg3` already point at, and those two
 are already declared `extern volatile u_char *` in `include/psyq/cd.h`. So the
@@ -6620,8 +6620,8 @@ invites checking it. Each of the four commits was still put through the full
 
 The pointer table at `asm/PAL/main/data/main/6BE64.data.s` (`dlabel
 g_AssetPaths`, 135 words) is stored back-to-front: entry 0 is
-`D_8001008C + 0xA40` and entry 134 is `D_8001008C + 0x10`. Resolving each word
-against the string blob in `000800_main.rodata.s`, with `D_8001008C` at
+`g_MsgNegconMaxTwist + 0xA40` and entry 134 is `g_MsgNegconMaxTwist + 0x10`. Resolving each word
+against the string blob in `000800_main.rodata.s`, with `g_MsgNegconMaxTwist` at
 `0x8001008C`, gives the whole table:
 
 | index | contents |

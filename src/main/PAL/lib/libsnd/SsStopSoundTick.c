@@ -9,7 +9,7 @@ extern Callback g_SndPrevVSyncCallback;
 
 void SsStopSoundTick(void) {
     if (g_SndNoTickFlag == 0) {
-        D_8009A569 = 0;
+        g_SndTickHalfRate = 0;
         EnterCriticalSection();
 
         if (g_SndTickUsesVSync != 0) {

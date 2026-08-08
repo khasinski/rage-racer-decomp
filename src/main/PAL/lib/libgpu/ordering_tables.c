@@ -9,19 +9,19 @@ extern u8 g_GraphDebug;
 
 void DrawOTag(void *ot) {
     if (g_GraphDebug >= 2) {
-        GPU_printf(D_800135CC, ot);
+        GPU_printf(g_GpuTraceDrawOTag, ot);
     }
     g_GpuFuncs->send(g_GpuFuncs->sendList, ot, 0, 0);
 }
 
-/* Named from its own trace string D_800135E0, "PutDrawEnv(%08x)...". */
+/* Named from its own trace string g_GpuTracePutDrawEnv, "PutDrawEnv(%08x)...". */
 void *PutDrawEnv(void *env) {
     u8 *debug = &g_GraphDebug;
     void *prim = env;
     void *tag;
 
     if (*debug >= 2) {
-        GPU_printf(D_800135E0, prim);
+        GPU_printf(g_GpuTracePutDrawEnv, prim);
     }
 
     tag = (u8 *)prim + 0x1C;
@@ -48,7 +48,7 @@ void *DrawOTagEnv(void *ot, void *env) {
     void *tag;
 
     if (*debug >= 2) {
-        GPU_printf(D_800135F8, src, prim);
+        GPU_printf(g_GpuTraceDrawOTagEnv, src, prim);
     }
 
     tag = (u8 *)prim + 0x1C;

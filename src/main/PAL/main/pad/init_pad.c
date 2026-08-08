@@ -82,25 +82,25 @@ void UpdatePadState(void) {
     if (raw[0] != 0) {
         v = 1;
         g_PadErrorState = v;
-        D_801E4D14 = 0x22;
-        D_8019CB10 |= 0x10;
+        g_PadValidateCountdown = 0x22;
+        g_PadErrorHoldBits |= 0x10;
     } else {
-        if (D_801E4D14 != 0) {
-            D_801E4D14 = D_801E4D14 - 1;
+        if (g_PadValidateCountdown != 0) {
+            g_PadValidateCountdown = g_PadValidateCountdown - 1;
             if (g_PadBufferType == 0x23) {
                 mask = ~(g_PadBufferButtonsLow | (g_PadBufferButtonsHigh << 8));
                 if (!(((mask & 0x5000) != 0x5000) && ((mask & 0xA000) != 0xA000) &&
                     ((mask & 0x1C4) == 0))) {
                     v = 2;
         g_PadErrorState = v;
-        D_801E4D14 = 0x22;
-        D_8019CB10 |= 0x10;
+        g_PadValidateCountdown = 0x22;
+        g_PadErrorHoldBits |= 0x10;
                 }
             }
         }
     }
-    D_8019CB10 = D_8019CB10 >> 1;
-    if (D_8019CB10 != 0) {
+    g_PadErrorHoldBits = g_PadErrorHoldBits >> 1;
+    if (g_PadErrorHoldBits != 0) {
         raw[1] = 0;
         pad->type = 0;
     } else {
@@ -177,7 +177,7 @@ void UpdatePadState(void) {
     neutral = g_NegconSteerNeutral + 0x80;
     d = pad->twist - neutral;
     if (d > 0) {
-        r = d - D_8007C128[g_NegconSteerPlay][0];
+        r = d - g_NegconSteerDeadZone[g_NegconSteerPlay][0];
         if (r < 0) {
             r = 0;
         }
@@ -186,7 +186,7 @@ void UpdatePadState(void) {
             r = c1;
         }
     } else {
-        r = d + D_8007C128[g_NegconSteerPlay][0];
+        r = d + g_NegconSteerDeadZone[g_NegconSteerPlay][0];
         if (r > 0) {
             r = 0;
         }

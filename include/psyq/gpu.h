@@ -382,7 +382,7 @@ long GetGraphType(void);
 long GetGraphDebug(void);
 /* GP1(03h) display enable: 0 blanks the screen (and clears the cached
  * DISPENV), non-zero shows it. Named from its own "SetDispMask(%d)..." trace
- * string at D_80013520. */
+ * string at g_MsgGpuSetDispMask. */
 void SetDispMask(long mask);
 
 /* libgpu-internal byte fill helper. */

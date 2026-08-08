@@ -19,7 +19,7 @@ void TickSequenceAudio(void) {
     }
 }
 
-extern u8 D_801E8AFC;
+extern u8 g_ReplayFrameBuffer;
 
 
 s32 IsSpuTransferDone(void) {
@@ -27,7 +27,7 @@ s32 IsSpuTransferDone(void) {
     s32 value0;
     s32 value1;
 
-    base = &D_801E8AFC;
+    base = &g_ReplayFrameBuffer;
     value1 = SpuTransferStatus(base, 0);
     value1 = (value1 << 9) + (s32)base;
     value0 = *(s16 *)(value1 + 0x800);
@@ -160,14 +160,14 @@ void SetReverbPreset(s32 type, s32 left, s32 right) {
     SsUtReverbOff();
 
     if ((u32)(type - 1) < 9) {
-        D_801E6D80 = type;
+        g_ReverbType = type;
         g_ReverbDepthL = left;
         g_ReverbDepthR = right;
         SsUtSetReverbType((s16)type);
         SsUtReverbOn();
         SetReverbDepth(left, right);
     } else {
-        D_801E6D80 = 0;
+        g_ReverbType = 0;
         g_ReverbDepthR = 0;
         g_ReverbDepthL = 0;
     }

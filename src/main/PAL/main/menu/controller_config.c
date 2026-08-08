@@ -39,9 +39,9 @@ void DrawControllerConfigScreen(void) {
     rightLit = selection != 0;
     if (g_PadErrorState != 0) {
         if (g_PadErrorState == 1) {
-            DrawProportionalText(0x3A, 0xEA, D_80010000, 0x7812);
+            DrawProportionalText(0x3A, 0xEA, g_MsgInsertController, 0x7812);
         } else {
-            DrawProportionalText(0x40, 0xEA, D_80010014, 0x7812);
+            DrawProportionalText(0x40, 0xEA, g_MsgControllerError, 0x7812);
         }
     } else {
         ot = g_DrawBuffer + 0xCC;
@@ -144,8 +144,8 @@ void DrawNegconNeutralScreen(void) {
     s32 ot;
     s32 prim;
 
-    DrawSpriteString(0x18, 0x30, D_80010028, 0x7F81);
-    DrawSpriteString(0x18, 0x48, D_8001004C, 0x7F81);
+    DrawSpriteString(0x18, 0x30, g_MsgNegconUntwistedLine1, 0x7F81);
+    DrawSpriteString(0x18, 0x48, g_MsgNegconUntwistedLine2, 0x7F81);
     ot = (s32)(g_DrawBuffer + 0xD0);
     prim = *cursor;
     prim = AddTilePrimWord(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);

@@ -25,7 +25,7 @@ void *InitKernelInterrupts(void) {
         intrDispatch();
     }
 
-    state = D_8009946C;
+    state = g_IntrJmpBufSp;
     asm("" : "=r"(state) : "0"(state));
     *(u_long *)state = (long)state + 0xFDC;
     HookEntryInt(state - 2);

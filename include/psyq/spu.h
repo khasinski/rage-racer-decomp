@@ -200,8 +200,8 @@ extern long g_SpuWaitCount;
  * header carried them. */
 
 extern long D_8009A710;
-extern u_short D_8009A766;
-extern long D_8009AB98;
+extern u_short g_SpuVoiceCenterNoteLast;
+extern long g_SpuInTransfer;
 extern long _spu_AllocBlockNum;
 extern long _spu_AllocLastNum;
 extern long g_SpuDmaBlockCount;
@@ -219,6 +219,6 @@ extern char g_SpuTimeoutMsgReset[];
 extern u_char g_SpuTimeoutMsgWrdy[];
 extern long g_SpuZeroBuf[];
 extern void (*volatile g_SpuTransferCallback)(void);
-extern void (*volatile D_8009ABB4)(void);
+extern void (*volatile g_SpuIrqCallback)(void);
 
 #endif

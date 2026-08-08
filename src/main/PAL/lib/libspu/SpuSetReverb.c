@@ -1,7 +1,7 @@
 #include "common.h"
 #include "psyq/spu.h"
 
-extern volatile long D_8009A718;
+extern volatile long g_SpuRevState;
 extern SpuCommonRegs *g_SpuRegBase;
 
 long SpuSetReverb(long on_off) {
@@ -10,26 +10,26 @@ long SpuSetReverb(long on_off) {
     if (on_off != 0) {
         if (on_off == 1) {
         } else {
-        return D_8009A718;
+        return g_SpuRevState;
         }
     } else {
 
     cnt = g_SpuRegBase->spuCnt;
-    D_8009A718 = 0;
+    g_SpuRevState = 0;
     g_SpuRegBase->spuCnt = cnt & 0xFF7F;
-    return D_8009A718;
+    return g_SpuRevState;
     }
 
     if (g_SpuRevReserveWa != on_off && _SpuIsInAllocateArea_(g_SpuRevWorkAreaAddr) != 0) {
         cnt = g_SpuRegBase->spuCnt;
-        D_8009A718 = 0;
+        g_SpuRevState = 0;
         g_SpuRegBase->spuCnt = cnt & 0xFF7F;
-        return D_8009A718;
+        return g_SpuRevState;
     }
 
     cnt = g_SpuRegBase->spuCnt;
-    D_8009A718 = on_off;
+    g_SpuRevState = on_off;
     g_SpuRegBase->spuCnt = cnt | 0x80;
 
-    return D_8009A718;
+    return g_SpuRevState;
 }

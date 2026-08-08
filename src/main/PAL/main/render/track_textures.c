@@ -37,8 +37,8 @@ s32 section;
 void SwapTrackTexturePageNow(void) {
     s32 buffer[0xE0];
     s32 page = 0;
-    s16 *rectY = &D_8007C70A;
-    Rect *rect = (Rect *)((u8 *)&D_8007C70A - 2);
+    s16 *rectY = &g_TrackTextureRowRectY;
+    Rect *rect = (Rect *)((u8 *)&g_TrackTextureRowRectY - 2);
     u8 **basePtr = &g_TrackTextureShadow;
     s32 value;
     s32 *src;
@@ -47,8 +47,8 @@ void SwapTrackTexturePageNow(void) {
 
     do {
         *rectY = page + 0x100;
-        value = 1 - D_801E4BF8[page];
-        if (D_801E4BF8[page] == g_TrackTexturePageWanted) {
+        value = 1 - g_TrackTextureShadowPage[page];
+        if (g_TrackTextureShadowPage[page] == g_TrackTexturePageWanted) {
             StoreImage(rect, buffer);
             DrawSync(0);
             LoadImage(rect, *basePtr + (((page * 7) << 7)));
@@ -62,7 +62,7 @@ void SwapTrackTexturePageNow(void) {
                 count++;
             } while (count < 0xE0);
 
-            D_801E4BF8[page] = value;
+            g_TrackTextureShadowPage[page] = value;
         }
         page++;
     } while (page < 0x100);
@@ -80,7 +80,7 @@ void SetTrackTexturePageNow(s32 trackSection) {
 void ResetTrackTextureSwap(void) {
     s32 value = 1;
     s32 i = 0xFF;
-    u8 *ptr = &D_801E4CF7;
+    u8 *ptr = &g_TrackTextureShadowPageLast;
 
     do {
         *ptr = value;
@@ -111,11 +111,11 @@ void SwapTrackTextureRow(void) {
     s32 copyOffset;
     s32 index;
 
-    rectY = &D_8007C70A;
+    rectY = &g_TrackTextureRowRectY;
     *rectY = (u16)g_TrackTextureCursorRow + 0x100;
     one = 1;
-    value = one - D_801E4BF8[g_TrackTextureCursorRow];
-    if (D_801E4BF8[g_TrackTextureCursorRow] == g_TrackTexturePageWanted) {
+    value = one - g_TrackTextureShadowPage[g_TrackTextureCursorRow];
+    if (g_TrackTextureShadowPage[g_TrackTextureCursorRow] == g_TrackTexturePageWanted) {
         rectY = (s16 *)((u8 *)rectY - 2);
         rect = (Rect *)rectY;
         StoreImage(rect, buffer);
@@ -137,7 +137,7 @@ void SwapTrackTextureRow(void) {
             count++;
         } while (count < 0xE0);
 
-        D_801E4BF8[g_TrackTextureCursorRow] = value;
+        g_TrackTextureShadowPage[g_TrackTextureCursorRow] = value;
     }
 }
 

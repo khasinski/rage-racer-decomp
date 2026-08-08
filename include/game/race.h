@@ -55,7 +55,7 @@ extern s16 g_SeriesSelection;
  * cleared). Saved at save+0x4E; gates title-menu entry 1. */
 extern s16 g_AdvancedSeriesUnlocked;
 
-/* Highest class reached per series/save file ([1] is the old D_801E7730).
+/* Highest class reached per series/save file ([1] is the old g_MaxClassReachedAdvanced).
  * Unlocks courses and bounds the attract-demo class roll. Saved at save+0x50. */
 extern s32 g_MaxClassReached[2];
 
@@ -97,7 +97,7 @@ typedef struct GameRaceRanking {
 s32 CanSelectNextCourse(void);
 
 /* The race-start signal gantry, live for 105 <= g_SceneTimer < 300: the "3" /
- * "2" / "1" / "GO" dot-matrix board from D_8007DDC0[1..4] plus the six start
+ * "2" / "1" / "GO" dot-matrix board from g_CountdownGlyphTable[1..4] plus the six start
  * lamps. See docs/names.md 1. */
 void DrawStartCountdown(s32 sceneTimer);
 void DrawRaceEndBanner(s32 level);
@@ -249,7 +249,7 @@ void UpdateZoneAmbience(s32 zone);
 /* Declared identically by 153 translation units before this
  * header carried them. */
 
-extern s16 D_8009EC88;
+extern s16 g_EndingSceneLatch;
 extern s32 D_801E4248;
 extern s16 D_801E4CF8;
 extern s16 g_AttractTitleDelays[];

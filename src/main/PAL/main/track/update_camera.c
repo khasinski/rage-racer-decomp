@@ -158,12 +158,12 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
         previousMode = g_CameraModePrev;
         g_ChaseTargetYaw = chaseTargetYaw;
         if (previousMode == 1) {
-            modeAngle = &D_8009B1EC;
+            modeAngle = &g_ChaseYawPrev;
             *modeAngle &= 0xFFF;
             g_ChaseYawRampNeg &= 0xFFF;
             g_ChaseYawRampPos &= 0xFFF;
         } else {
-            D_8009B1EC = chaseTargetYaw;
+            g_ChaseYawPrev = chaseTargetYaw;
             g_ChaseYawRampNeg = 0;
             g_ChaseYawRampPos = 0;
         }
@@ -179,7 +179,7 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
             g_ChaseYawDamping = speedDamping;
         g_ChaseYawDamping = ((((g_ChaseYawDamping * 6 * speedDamping) / 2500) - ((speedDamping * 0x46) / 50)) + 0xE0) / 10;
         }
-        yawError = g_ChaseTargetYaw - D_8009B1EC;
+        yawError = g_ChaseTargetYaw - g_ChaseYawPrev;
         if (yawError >= 5) {
             if (yawError >= 0x800) {
                 chaseYawStepLimit = (((0x1000 - yawError) / 17) * 2) & 0xFFF;
@@ -199,7 +199,7 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
                 }
                 goto block_34;
             }
-            yawStepAhead = (((g_ChaseTargetYaw - D_8009B1EC) / 17) * 2) & 0xFFF;
+            yawStepAhead = (((g_ChaseTargetYaw - g_ChaseYawPrev) / 17) * 2) & 0xFFF;
             g_ChaseYawStepLimit = yawStepAhead;
             if (yawStepAhead >= 0x41) {
                 g_ChaseYawStepLimit = 0x40;
@@ -217,7 +217,7 @@ void UpdateCamera(s32 cameraModeSel, void *car) {
         }
         if (yawError < -4) {
             if (yawError < -0x7FF) {
-                yawStepWrapped = (((0x1000 - (D_8009B1EC - g_ChaseTargetYaw)) / 17) * 2) & 0xFFF;
+                yawStepWrapped = (((0x1000 - (g_ChaseYawPrev - g_ChaseTargetYaw)) / 17) * 2) & 0xFFF;
                 g_ChaseYawStepLimit = yawStepWrapped;
                 if (yawStepWrapped >= 0x41) {
                     g_ChaseYawStepLimit = 0x40;
@@ -237,7 +237,7 @@ block_30:
                     g_ChaseYawLag = turnAccel;
                 }
             } else {
-                yawStepBehind = (((D_8009B1EC - g_ChaseTargetYaw) / 17) * 2) & 0xFFF;
+                yawStepBehind = (((g_ChaseYawPrev - g_ChaseTargetYaw) / 17) * 2) & 0xFFF;
                 g_ChaseYawStepLimit = yawStepBehind;
                 if (yawStepBehind >= 0x41) {
                     g_ChaseYawStepLimit = 0x40;
@@ -264,7 +264,7 @@ block_36:
             g_ChaseYawRampPos = 0;
         }
         rawAngle = g_ChaseTargetYaw;
-        chaseCarSpeed = (D_8009B1EC + g_ChaseYawLag) & 0xFFF;
+        chaseCarSpeed = (g_ChaseYawPrev + g_ChaseYawLag) & 0xFFF;
         g_ChaseYaw = chaseCarSpeed;
         if (rawAngle < chaseCarSpeed) {
             chaseYawLag = rawAngle - chaseCarSpeed;
@@ -289,7 +289,7 @@ block_36:
         BuildRotMatrixY(angleState, 0 - g_ChaseYawLag);
         BuildRotMatrixX(&sp68[0], -0x80);
         MulMatrix2(&sp68[0], &sp88[0]);
-        D_8009B1EC = g_ChaseYaw;
+        g_ChaseYawPrev = g_ChaseYaw;
         BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
         BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);

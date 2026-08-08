@@ -8,7 +8,7 @@ void SpuQuit(void) {
         g_SpuIsStarted = 0;
         EnterCriticalSection();
         g_SpuTransferCallback = 0;
-        D_8009ABB4 = 0;
+        g_SpuIrqCallback = 0;
         _SpuDataCallback(0);
         CloseEvent(g_SpuTransferEvent);
         DisableEvent(g_SpuTransferEvent);

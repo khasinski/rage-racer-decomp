@@ -7,7 +7,7 @@
 #include "game/state.h"
 
 /* Copied into a local solely to preserve the retail code shape. */
-extern NegconUvTemplate D_80010070;
+extern NegconUvTemplate g_NegconSteerPlayUvQuad;
 
 /* The 0..3 steering-play setting this screen edits. */
 extern s16 g_NegconSteerPlay;
@@ -28,8 +28,8 @@ void DrawNegconSteerPlayScreen(void) {
     s32 span;
     s32 y;
 
-    unused = D_80010070;
-    DrawSpriteString(0x18, 0x30, D_80010078, 0x7F81);
+    unused = g_NegconSteerPlayUvQuad;
+    DrawSpriteString(0x18, 0x30, g_MsgNegconSteerPlay, 0x7F81);
     ot = g_DrawBuffer + 0xCC;
     prim = SCRATCH_PRIM_CURSOR_AS(u8);
     prim = DrawLeftArrow(ot, prim, 0x28, 0xE0, g_NegconSteerPlay != 0);
@@ -100,7 +100,7 @@ void UpdateNegconSteerPlayScreen(void) {
     DrawControllerSetupScene(1);
 }
 
-extern NegconUvTemplate D_80010084;
+extern NegconUvTemplate g_NegconMaxTwistUvQuad;
 
 /* The 0..3 maximum-twist setting this screen edits. */
 extern s16 g_NegconMaxTwist;
@@ -117,8 +117,8 @@ void DrawNegconMaxTwistScreen(void) {
     s32 xoff;
     s32 w;
 
-    unused = D_80010084;
-    DrawSpriteString(0x18, 0x30, D_8001008C, 0x7F81);
+    unused = g_NegconMaxTwistUvQuad;
+    DrawSpriteString(0x18, 0x30, g_MsgNegconMaxTwist, 0x7F81);
     ot = g_DrawBuffer + 0xCC;
     prim = SCRATCH_PRIM_CURSOR_AS(u8);
     prim = DrawLeftArrow(ot, prim, 0x28, 0xE0, g_NegconMaxTwist != 0);

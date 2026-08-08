@@ -9,7 +9,7 @@ typedef struct Glyph {
     u16 w;
 } Glyph;
 
-extern Glyph D_8007F984[];
+extern Glyph g_SmallFontGlyphs[];
 
 
 void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
@@ -99,9 +99,9 @@ void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
             }
         }
 
-        w = fixed ? 6 : D_8007F984[idx].w;
-        u0 = fixed ? (idx % 42) * 6 : D_8007F984[idx].u;
-        v0 = fixed ? (idx / 42) * 12 : D_8007F984[idx].v;
+        w = fixed ? 6 : g_SmallFontGlyphs[idx].w;
+        u0 = fixed ? (idx % 42) * 6 : g_SmallFontGlyphs[idx].u;
+        v0 = fixed ? (idx / 42) * 12 : g_SmallFontGlyphs[idx].v;
 
         DrawSprite(
             (u8 *)ot + 4,
@@ -133,7 +133,7 @@ void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
     }
 }
 
-extern Glyph D_8007FA3C[];
+extern Glyph g_LargeFontGlyphs[];
 
 
 void DrawLargeText(x0, y, str0, color, g, b, clut, flags)
@@ -214,9 +214,9 @@ void DrawLargeText(x0, y, str0, color, g, b, clut, flags)
             }
         }
 
-        w = fixed ? 8 : D_8007FA3C[idx].w;
-        u0 = fixed ? (idx % 32) * 8 : D_8007FA3C[idx].u;
-        v0 = fixed ? (idx / 32) * 16 + 24 : D_8007FA3C[idx].v;
+        w = fixed ? 8 : g_LargeFontGlyphs[idx].w;
+        u0 = fixed ? (idx % 32) * 8 : g_LargeFontGlyphs[idx].u;
+        v0 = fixed ? (idx / 32) * 16 + 24 : g_LargeFontGlyphs[idx].v;
 
         DrawSprite(
             (u8 *)ot + 4,
@@ -361,13 +361,13 @@ s32 GameDrawNumber(x, y, flags, value, r, g, b, clut, primitiveCount)
     return drawn;
 }
 
-extern u8 D_8007F6E8[];
-extern s32 D_8007FB00;
+extern u8 g_MenuOverlayPatternTable[];
+extern s32 g_MenuOverlayPatternAnimOffset;
 
 
 void DrawBitPatternOverlay(s32 pattern) {
     void *ot = SCRATCH_OT_BASE_AS(void);
-    u8 *row = D_8007F6E8;
+    u8 *row = g_MenuOverlayPatternTable;
     s32 y;
     s32 outer;
     s32 one;
@@ -381,15 +381,15 @@ void DrawBitPatternOverlay(s32 pattern) {
 
     if (pattern < 0) {
         if ((g_AnimTimer % 6U) == 0) {
-            D_8007FB00 += 8;
+            g_MenuOverlayPatternAnimOffset += 8;
         }
 
-        offset = D_8007FB00;
-        offset += (s32)D_8007F6E8;
+        offset = g_MenuOverlayPatternAnimOffset;
+        offset += (s32)g_MenuOverlayPatternTable;
         if (*(u8 *)(offset + 7) != 0) {
-            D_8007FB00 = 0x10;
+            g_MenuOverlayPatternAnimOffset = 0x10;
         }
-        row = (u8 *)(D_8007FB00 + (s32)D_8007F6E8);
+        row = (u8 *)(g_MenuOverlayPatternAnimOffset + (s32)g_MenuOverlayPatternTable);
     } else {
         row += (pattern - 1) * 8;
     }

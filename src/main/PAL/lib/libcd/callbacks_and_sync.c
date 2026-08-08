@@ -5,7 +5,7 @@ extern long g_CdSyncCallback;
 extern long g_CdReadyCallback;
 extern char *g_CdCommandNames[];
 extern char *g_CdIntrNames[];
-extern u_char D_800136D0[];
+extern u_char g_MsgCdNone[];
 
 void CdFlush(void) {
     CD_flush();
@@ -21,7 +21,7 @@ long CdSetDebug(long level) {
 char *CdComstr(long cmd) {
     cmd &= 0xFF;
     if ((u_long)cmd >= 0x1C) {
-        return (char *)D_800136D0;
+        return (char *)g_MsgCdNone;
     }
     return g_CdCommandNames[cmd];
 }
@@ -29,7 +29,7 @@ char *CdComstr(long cmd) {
 char *CdIntstr(long intr) {
     intr &= 0xFF;
     if ((u_long)intr >= 7) {
-        return (char *)D_800136D0;
+        return (char *)g_MsgCdNone;
     }
     return g_CdIntrNames[intr];
 }

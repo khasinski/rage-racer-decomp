@@ -5,9 +5,9 @@
 #include "psyq/cd_internal.h"
 #include "psyq/kernel.h"
 
-extern u_char D_800111C4;
-extern u_char D_800111DC;
-extern u_char D_800111F4;
+extern u_char g_MsgCdReadSectorError;
+extern u_char g_MsgCdReadShellOpen;
+extern u_char g_MsgCdReadRetry;
 extern volatile long g_CdReadSectorCount;
 extern volatile long g_CdReadBuffer;
 extern volatile long g_CdReadMode;
@@ -30,7 +30,7 @@ void CdReadDataReadyCallback(u_char intr, long result) {
             if (g_CdReadSectorWords == 0x200) {
                 CdGetSector2(buf, 3);
                 if (CdPosToInt_Local(buf) != g_CdReadExpectedSector) {
-                    puts(&D_800111C4);
+                    puts(&g_MsgCdReadSectorError);
                     *p = -1;
                 }
             }
@@ -78,7 +78,7 @@ long CdReadRetry(long mode) {
     CdReadyCallback(0);
     if (CdStatus() & 0x10) {
         if ((VSync(-1) & 0x3F) == 0) {
-            puts(&D_800111DC);
+            puts(&g_MsgCdReadShellOpen);
         }
         CdControlF(1, 0);
         {
@@ -89,7 +89,7 @@ long CdReadRetry(long mode) {
         return g_CdReadRemaining;
     }
     if (mode != 0) {
-        puts(&D_800111F4);
+        puts(&g_MsgCdReadRetry);
         CdControl(9, 0, 0);
         if (CdControl(2, CdLastPos(), 0) == 0) {
             long value = -1;

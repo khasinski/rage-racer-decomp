@@ -346,7 +346,7 @@ void InitPlayerCar(GameCarRuntime *car)
   g_EngineRpm = 0;
   g_EngineRpmSnapshot = 0;
   g_StandingStartSpin = 0;
-  D_8019C998 = 0;
+  g_DriveBoostTimer = 0;
   if (drive->manual != 0)
   {
     g_HudGlyphClut = 0x7800;

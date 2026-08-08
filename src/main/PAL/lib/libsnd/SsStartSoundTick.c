@@ -24,7 +24,7 @@ void SsStartSoundTick(long mode) {
     *flag = 0;
     state = g_SndTickMode;
     g_SndTickIrq = 6;
-    D_8009A569 = 0;
+    g_SndTickHalfRate = 0;
     g_SndPrevVSyncCallback = 0;
 
     switch (state) {
@@ -95,7 +95,7 @@ void SsStartSoundTick(long mode) {
             callback = SsSoundTickCallback;
         } else {
             callback = SsSoundTickVSyncCallback;
-            if (D_8009A569 == 0) {
+            if (g_SndTickHalfRate == 0) {
                 callback = g_SndTickCallback;
             }
         }

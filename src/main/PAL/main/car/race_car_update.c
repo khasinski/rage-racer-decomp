@@ -802,6 +802,6 @@ void SeedFinishCamera(void *car) {
     index += 0xC00;
     index -= point->angle;
     g_CameraCar.headingAngle = index;
-    D_801E3F60 = index;
+    g_CameraCarSeedYaw = index;
     g_CameraCar.angleY = index;
 }

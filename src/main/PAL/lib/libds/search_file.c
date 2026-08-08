@@ -8,12 +8,12 @@ extern long g_CdShellOpenCount;
 extern long g_CdDebugLevel;
 extern CdlFILE g_CdFileCache[64];
 
-extern const char D_80013928[];
-extern const char D_80013944[];
-extern const char D_8001395C[];
-extern const char D_80013978[];
-extern const char D_80013998[];
-extern const char D_800139A4[];
+extern const char g_FmtCdPathLevelError[];
+extern const char g_FmtCdDirNotFound[];
+extern const char g_MsgCdDiscError[];
+extern const char g_FmtCdSearching[];
+extern const char g_FmtCdFileFound[];
+extern const char g_FmtCdFileNotFound[];
 
 CdlFILE *DsSearchFile(CdlFILE *out, char *path) {
     char buf[32];
@@ -60,25 +60,25 @@ CdlFILE *DsSearchFile(CdlFILE *out, char *path) {
     }
     if (n >= 8) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)D_80013928, path, n);
+            printf((u8 *)g_FmtCdPathLevelError, path, n);
         }
         return 0;
     }
     if (buf[0] == 0) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)D_80013944, path);
+            printf((u8 *)g_FmtCdDirNotFound, path);
         }
         return 0;
     }
     *b = 0;
     if (CD_cachefile(type) == 0) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)D_8001395C);
+            printf((u8 *)g_MsgCdDiscError);
         }
         return 0;
     }
     if (g_CdDebugLevel >= 2) {
-        printf((u8 *)D_80013978, buf);
+        printf((u8 *)g_FmtCdSearching, buf);
     }
     {
         char *base = g_CdFileCache[0].name;
@@ -91,7 +91,7 @@ CdlFILE *DsSearchFile(CdlFILE *out, char *path) {
         }
         if (CD_namecmp(nm, buf)) {
             if (g_CdDebugLevel >= 2) {
-                printf((u8 *)D_80013998, buf);
+                printf((u8 *)g_FmtCdFileFound, buf);
             }
             *out = *rec;
             return rec;
@@ -100,7 +100,7 @@ CdlFILE *DsSearchFile(CdlFILE *out, char *path) {
         nm += 24;
     }
     if (g_CdDebugLevel > 0) {
-        printf((u8 *)D_800139A4, buf);
+        printf((u8 *)g_FmtCdFileNotFound, buf);
     }
     return 0;
 }

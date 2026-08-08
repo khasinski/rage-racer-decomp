@@ -158,7 +158,7 @@ void SsSeqSetChannelParam14(long seq, long sep, u_char value);
 /* Declared identically by 80 translation units before this
  * header carried them. */
 
-extern u_char D_8009A569;
+extern u_char g_SndTickHalfRate;
 extern u_char g_SndCurrentPriority;
 extern u_char g_SndCurrentProgActual;
 extern u_char g_SndCurrentTone;

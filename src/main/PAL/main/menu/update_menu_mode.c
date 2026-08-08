@@ -34,11 +34,11 @@ void UpdateMenuMode(void) {
         g_MenuScreenDraw[g_MenuHandlerIndex](0x14);
     }
     if (g_MenuHandlerIndex2 > 0) {
-        D_8009B348 = g_MenuScreenDraw[g_MenuHandlerIndex2](-10);
+        g_MenuOutgoingScreenProgress = g_MenuScreenDraw[g_MenuHandlerIndex2](-10);
     }
     g_MenuScreenUpdate[g_MenuScreen]();
 
-    DrawCarSpecGraph(D_8009B324, g_CarTable[(g_MenuScreen == MENU_SCREEN_CAR_SHOP) ? g_CarListCursor : g_PlayerCarIndex].tireCompound);
+    DrawCarSpecGraph(g_CarSpecGraphStep, g_CarTable[(g_MenuScreen == MENU_SCREEN_CAR_SHOP) ? g_CarListCursor : g_PlayerCarIndex].tireCompound);
 
     {
         register s32 flag asm("$6");

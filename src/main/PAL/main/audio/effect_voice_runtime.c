@@ -385,7 +385,7 @@ after_match:
              * indexed form but reads channel[0].mode through its own symbol.
              * Spelling the read as g_MusicChannels[0].mode costs an
              * instruction, with or without RAW() on either side. */
-            CHANNEL(cue).mode = D_801E6D08;
+            CHANNEL(cue).mode = g_MusicChannelMode;
         }
 
         flag = g_StereoOutput;

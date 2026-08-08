@@ -5,11 +5,11 @@
 #include "psyq/snd.h"
 
 extern volatile u_char g_SndVoiceStateAutoVol[];
-extern volatile u_char D_8009E0D6[];
-extern volatile u_char D_8009E0D8[];
-extern volatile u_char D_8009E0DA[];
-extern volatile u_char D_8009E0DC[];
-extern volatile u_char D_8009E0DE[];
+extern volatile u_char g_SndVoiceStateVolStep[];
+extern volatile u_char g_SndVoiceStateVolCounter[];
+extern volatile u_char g_SndVoiceStateVolCounterReload[];
+extern volatile u_char g_SndVoiceStateStartVol[];
+extern volatile u_char g_SndVoiceStateEndVol[];
 
 /* The three identity asms and the one on stepArg are load-bearing: each keeps
  * the local copy a distinct pseudo from the parameter it was taken from, so
@@ -42,8 +42,8 @@ void SpuVmAutoVol(long voiceArg, long startArg, long targetArg, long stepArg) {
     {
     long offset = (short)voiceArg * 52;
     *(volatile short *)(g_SndVoiceStateAutoVol + offset) = 1;
-    *(volatile short *)(D_8009E0DC + offset) = start;
-    *(volatile short *)(D_8009E0DE + offset) = target;
+    *(volatile short *)(g_SndVoiceStateStartVol + offset) = start;
+    *(volatile short *)(g_SndVoiceStateEndVol + offset) = target;
     }
 
     __asm__ ("" : "=r"(stepArg) : "0"(stepArg));
@@ -63,9 +63,9 @@ small:
     long quotient;
     quotient = (short)step / ((short)start - (short)target);
     offset = (short)voice * 52;
-    *(volatile short *)(D_8009E0D6 + offset) = 1;
-    *(volatile short *)(D_8009E0D8 + offset) = quotient;
-    *(volatile short *)(D_8009E0DA + offset) = quotient;
+    *(volatile short *)(g_SndVoiceStateVolStep + offset) = 1;
+    *(volatile short *)(g_SndVoiceStateVolCounter + offset) = quotient;
+    *(volatile short *)(g_SndVoiceStateVolCounterReload + offset) = quotient;
     return;
     }
 
@@ -77,8 +77,8 @@ big:
     quotient -= (short)target;
     quotient /= (short)step;
     offset = (short)voice * 52;
-    *(volatile short *)(D_8009E0D8 + offset) = 0;
-    *(volatile short *)(D_8009E0D6 + offset) = quotient;
+    *(volatile short *)(g_SndVoiceStateVolCounter + offset) = 0;
+    *(volatile short *)(g_SndVoiceStateVolStep + offset) = quotient;
     }
 }
 
@@ -249,12 +249,12 @@ big:
 }
 
 extern u_short g_SndVoiceRegsVolRight[];
-extern u_char D_801E4BD4;
-extern u_char D_801E4BD5;
-extern u_char D_801E4BDA;
-extern u_char D_801E4BDB;
-extern u_char D_801E4BDD;
-extern u_char D_801E4BDE;
+extern u_char g_SndCurrentVolume;
+extern u_char g_SndCurrentPan;
+extern u_char g_SndCurrentMasterVolume;
+extern u_char g_SndCurrentMasterPan;
+extern u_char g_SndCurrentToneVolume;
+extern u_char g_SndCurrentTonePan;
 
 void SpuVmAutoPanTick(long voice) {
     long stack[6];
@@ -329,17 +329,17 @@ void SpuVmAutoPanTick(long voice) {
     long mixed;
 
     base = (u_char *)g_SndCurrentVabHeader;
-    D_801E4BD5 = envelope;
+    g_SndCurrentPan = envelope;
     level = base[0x18];
-    masterVolume = D_801E4BD4;
+    masterVolume = g_SndCurrentVolume;
     scaledLevel = level * 16383;
     limit = masterVolume * scaledLevel;
     limit = limit / 16129;
-    limit = limit * D_801E4BDA;
-    limit = limit * D_801E4BDD;
+    limit = limit * g_SndCurrentMasterVolume;
+    limit = limit * g_SndCurrentToneVolume;
     limit = (u_long)limit / 16129U;
 
-    pan = D_801E4BDE;
+    pan = g_SndCurrentTonePan;
     left = limit;
     if (pan < 0x40) {
         asm("" : "=r"(limit) : "0"(limit));
@@ -351,7 +351,7 @@ void SpuVmAutoPanTick(long voice) {
         left = ((u_long)(left * (0x7F - pan))) >> 6;
     }
 
-    pan = D_801E4BDB;
+    pan = g_SndCurrentMasterPan;
     if (pan < 0x40) {
         mixed = (u_short)right * pan;
         if (mixed < 0) {

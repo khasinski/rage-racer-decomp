@@ -57,7 +57,7 @@ void BuildRotMatrixX(Matrix *mtx, s32 angle) {
     mtx->m[2][2] = c;
 }
 
-extern Matrix D_8019CB18;
+extern Matrix g_MirrorViewMatrix;
 
 
 void SetCameraRotMatrix(void) {
@@ -70,7 +70,7 @@ void SetCameraRotMatrix(void) {
     BuildRotMatrixZ(&mtx, SCRATCH_VIEW_ANGLE_Z);
     MulMatrix2(&mtx, scratch);
     BuildRotMatrixY(&mtx, 0x800);
-    MulMatrix0(&mtx, scratch, &D_8019CB18);
+    MulMatrix0(&mtx, scratch, &g_MirrorViewMatrix);
     SetRotMatrix(scratch);
 }
 

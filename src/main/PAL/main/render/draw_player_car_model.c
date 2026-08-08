@@ -162,7 +162,7 @@ void DrawCar(GameRenderObject *obj) {
     s16 *lod;
 
     model = g_CarModelByCourse[g_CourseIndex][((GameRenderSourcePoint *)obj)->field_AE];
-    lod = D_8007D380[model];
+    lod = g_CarModelBankTable[model];
     obj->y -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;
     obj->field_60 -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;
 

@@ -2,7 +2,7 @@
 #include "psyq/cd.h"
 
 extern volatile u_long *g_ComDelayReg;
-extern long D_800992E4;
+extern long g_CdTestParamCount;
 
 extern CdCallback g_CdSyncCallback;
 extern CdCallback g_CdReadyCallback;
@@ -45,7 +45,7 @@ long CD_getsector2(long madr, u_long size) {
 }
 
 void CdSetSectorParam(long words) {
-    D_800992E4 = words;
+    g_CdTestParamCount = words;
 }
 
 void CdDispatchInterrupts(void) {

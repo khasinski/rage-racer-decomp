@@ -57,18 +57,18 @@ void EnterCourseSelectScreen(void) {
     g_PlayerCar = 0;
     g_PlayerCarY = 0;
     g_PlayerCarZ = 0;
-    D_8009E6F4 = 0;
-    D_8009E6F8 = 0;
-    D_8009E6FC = 0;
+    g_PlayerCarAngleX = 0;
+    g_PlayerCarAngleY = 0;
+    g_PlayerCarAngleZ = 0;
     g_PlayerTrackProgress = 0;
-    D_8009E718 = 0;
-    D_8009E71C = 0;
+    g_PlayerSteerAngle = 0;
+    g_PlayerCarWheelAngle = 0;
     g_MenuViewAngleTarget = 0x7A120;
     g_MenuViewAngle = initValue;
     g_MenuViewOffsetTarget = 0;
-    D_8009B360 = largeValue;
-    D_8009B364 = 0;
-    D_8009B368 = table[mode & 3];
+    g_CourseCardSpin = largeValue;
+    g_CourseCardSpinTarget = 0;
+    g_CourseCardPendingGrade = table[mode & 3];
 
     if (mode >= 4) {
         g_TimeAttackPlateStep = one;
@@ -424,7 +424,7 @@ s32 CanSelectNextCourse(void) {
     return g_CourseIndex < limit;
 }
 
-extern u8 *D_8019C764;
+extern u8 *g_CourseSelectModalScript;
 void UpdateCourseSelectScreen(void) {
     void *ot;
     u8 *hdr;
@@ -441,20 +441,20 @@ void UpdateCourseSelectScreen(void) {
     ot = SCRATCH_OT_BASE_AS(void);
     g_MenuAltLayout = g_MenuAltLayoutSetting;
     if (g_GrandPrixMode != 0) {
-        FlipCourseCard(&D_8009B364, &D_8009B360, &D_8009B368);
+        FlipCourseCard(&g_CourseCardSpinTarget, &g_CourseCardSpin, &g_CourseCardPendingGrade);
     } else {
         DrawTimeAttackPlate(g_TimeAttackPlateStep);
     }
     DrawCarNamePlate(g_CarNamePlateStep, g_MenuPlateCarIndex, 0);
     DrawMenuCourseView();
-    hdr = &D_80081818;
+    hdr = &g_CourseSelectTimeAttackScript;
     if (g_GrandPrixMode != 0) {
-        hdr = &D_800817A0;
+        hdr = &g_CourseSelectGpScript;
     }
     state = GameMenuBusy;
     if (state == 0) {
         g_MenuHintBarStep = 1;
-        RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, -1);
+        RunTimedDrawScript(g_CourseSelectModalScript, &g_UiScriptProgress2, -1);
         res = CanSelectPrevCourse();
         DrawBrowseArrows(1, 1, res, CanSelectNextCourse());
         DrawFadingMenuSprites(g_UiScriptProgress, 2, g_CourseSelectOption);
@@ -484,16 +484,16 @@ void UpdateCourseSelectScreen(void) {
                         lu = g_MenuViewAngle;
                         llap = g_CourseIndex;
                         lprev = g_MenuViewAngleTarget;
-                        lt = D_8009B364;
+                        lt = g_CourseCardSpinTarget;
                         g_MenuViewAngleTarget = 0;
                         g_CourseSwapDelay = 0;
                         g_MenuCourseModelIndex = llap;
                         llap = llap - 1;
                         g_MenuViewAngle = (lu - lprev) + 0x7A120;
-                        D_8009B360 = (D_8009B360 - lt) + 0x1F4000;
+                        g_CourseCardSpin = (g_CourseCardSpin - lt) + 0x1F4000;
                         g_CourseIndex = llap;
                         g_MenuPendingCourseIndex = llap;
-                        D_8009B368 = g_CourseProgress[llap & 3];
+                        g_CourseCardPendingGrade = g_CourseProgress[llap & 3];
                         g_TimeAttackPlateStep = (llap < 4) ? -1 : 1;
                     }
                     }
@@ -515,18 +515,18 @@ void UpdateCourseSelectScreen(void) {
                             llap = g_CourseIndex;
                             lprev = g_MenuViewAngleTarget;
                             lt = g_MenuViewAngle;
-                            lbase = D_8009B364;
+                            lbase = g_CourseCardSpinTarget;
                             g_MenuViewAngleTarget = 0xF4240;
                             g_CourseSwapDelay = 0;
                             g_MenuCourseModelIndex = llap;
                             llap = llap + 1;
                             lprev = lprev - lt;
                             lu = lu - lprev;
-                            D_8009B360 = (D_8009B360 - lbase) + 0x1F4000;
+                            g_CourseCardSpin = (g_CourseCardSpin - lbase) + 0x1F4000;
                             g_CourseIndex = llap;
                             g_MenuPendingCourseIndex = llap;
                             g_MenuViewAngle = lu;
-                            D_8009B368 = g_CourseProgress[llap & 3];
+                            g_CourseCardPendingGrade = g_CourseProgress[llap & 3];
                             g_TimeAttackPlateStep = (llap < 4) ? -1 : 1;
                         }
                     }
@@ -540,8 +540,8 @@ void UpdateCourseSelectScreen(void) {
                     g_MenuOverlayPattern = 1;
                     g_TimeAttackPlateStep = -1;
                     g_MenuViewOffsetTarget = 0x3D090;
-                    D_8009B368 = 0;
-                    D_8009B360 = (D_8009B360 - D_8009B364) + 0x1F4000;
+                    g_CourseCardPendingGrade = 0;
+                    g_CourseCardSpin = (g_CourseCardSpin - g_CourseCardSpinTarget) + 0x1F4000;
                 } else if (sel == 2) {
                     if (g_GrandPrixMode != 0) {
                         u16 hv;
@@ -550,7 +550,7 @@ void UpdateCourseSelectScreen(void) {
                         if (g_GrandPrixClass < 5) {
                             hv = (u16)g_GrandPrixSeries;
                         }
-                        D_8019C764 = &D_80082604;
+                        g_CourseSelectModalScript = &g_CourseSelectSavePromptScript;
                         GameMenuBusy = -1;
                         g_GrandPrixSeries = hv;
                         g_UiScriptProgress2 = 0;
@@ -562,14 +562,14 @@ void UpdateCourseSelectScreen(void) {
                         g_TimeAttackPlateStep = -1;
                         g_MenuViewOffsetTarget = 0x3D090;
                         GameMenuBusy = sel;
-                        D_8009B368 = 0;
+                        g_CourseCardPendingGrade = 0;
                         g_GrandPrixSeries = g_CourseIndex >> 2;
-                        D_8009B360 = (D_8009B360 - D_8009B364) + 0x1F4000;
+                        g_CourseCardSpin = (g_CourseCardSpin - g_CourseCardSpinTarget) + 0x1F4000;
                     }
                 } else {
                     PlaySoundCue(2);
                     if (g_GrandPrixMode != 0) {
-                        D_8019C764 = &D_800825A4;
+                        g_CourseSelectModalScript = &g_MenuDialogPanelLowerScript;
                         GameMenuBusy = -2;
                         g_UiScriptProgress2 = 0;
                         g_MenuSubCursor = g_GrandPrixClass;
@@ -584,9 +584,9 @@ void UpdateCourseSelectScreen(void) {
     } else if (state < 0) {
         if (state == -1) {
             u16 *pad;
-            RunTimedDrawScript(&D_800827FC, &g_UiScriptProgress2, 0);
+            RunTimedDrawScript(&g_CourseSelectSavePromptBanner, &g_UiScriptProgress2, 0);
             RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
-            if (RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1) != 0) {
+            if (RunTimedDrawScript(g_CourseSelectModalScript, &g_UiScriptProgress2, 1) != 0) {
                 if (g_PadPressed & PAD_CONFIRM) {
                     PlaySoundCue((g_MenuSubCursor != 0) ? 2 : 3);
                     GameMenuBusy = -3;
@@ -613,14 +613,14 @@ void UpdateCourseSelectScreen(void) {
             }
         } else if (state == -2) {
             u16 *pad;
-            if (RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1) != 0) {
+            if (RunTimedDrawScript(g_CourseSelectModalScript, &g_UiScriptProgress2, 1) != 0) {
                 if (g_PadPressed & PAD_CONFIRM) {
                     PlaySoundCue(2);
                     if (g_MenuSubCursor == g_GrandPrixClass) {
                         GameMenuBusy = 0;
                     } else {
                         GameMenuBusy = -5;
-                        D_8009B310 = 0;
+                        g_ClassChangeApplied = 0;
                         g_MenuConfirmTimer = 0x23;
                         DrawClassChangeCurtain(0);
                     }
@@ -648,22 +648,22 @@ void UpdateCourseSelectScreen(void) {
         } else if (state == -3) {
             cnt = g_MenuConfirmTimer;
             if (cnt <= 0) {
-                RunTimedDrawScript(&D_800827FC, &g_UiScriptProgress2, -1);
+                RunTimedDrawScript(&g_CourseSelectSavePromptBanner, &g_UiScriptProgress2, -1);
                 RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
-                RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 0);
+                RunTimedDrawScript(g_CourseSelectModalScript, &g_UiScriptProgress2, 0);
                 if (g_UiScriptProgress2 <= 0) {
                     StartSequenceFadeOut();
                     GameMenuBusy = (g_MenuSubCursor != 0) ? 4 : 2;
                     g_MenuHintBarStep = -1;
                     g_MenuViewOffsetTarget = 0x3D090;
-                    D_8009B368 = 0;
-                    D_8009B360 = (D_8009B360 - D_8009B364) + 0x1F4000;
+                    g_CourseCardPendingGrade = 0;
+                    g_CourseCardSpin = (g_CourseCardSpin - g_CourseCardSpinTarget) + 0x1F4000;
                 }
             } else {
                 g_MenuConfirmTimer = cnt - 1;
-                RunTimedDrawScript(&D_800827FC, &g_UiScriptProgress2, 0);
+                RunTimedDrawScript(&g_CourseSelectSavePromptBanner, &g_UiScriptProgress2, 0);
                 RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
-                RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
+                RunTimedDrawScript(g_CourseSelectModalScript, &g_UiScriptProgress2, 1);
                 DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xB8 : 0xDA, 0x8C, 0x20, 0x20, 1);
                 DrawSprite(ot, 0xC0, 0x94, 0x10, 0x10, 0x9D, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 DrawSprite(ot, 0xE3, 0x94, 0x10, 0x10, 0xAD, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -671,35 +671,35 @@ void UpdateCourseSelectScreen(void) {
                 GameDrawMenuButton(0xDA, 0x8C, 0x20, 0x20, 0x1E, 0x4E, 0x95, 0, 0, 0, (s32)&g_MenuBlankCaption);
             }
         } else if (state == -4) {
-            RunTimedDrawScript(&D_800827FC, &g_UiScriptProgress2, -1);
+            RunTimedDrawScript(&g_CourseSelectSavePromptBanner, &g_UiScriptProgress2, -1);
             RunTimedDrawScript(&g_UiChromeScript2, &g_UiScriptProgress2, 0);
-            RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 0);
+            RunTimedDrawScript(g_CourseSelectModalScript, &g_UiScriptProgress2, 0);
             if (g_UiScriptProgress2 <= 0) {
                 GameMenuBusy = 0;
             }
         } else if (state == -5) {
             cnt = g_MenuConfirmTimer;
             if (cnt <= 0) {
-                if (D_8009B310 != 0) {
+                if (g_ClassChangeApplied != 0) {
                     if (DrawClassChangeCurtain(-1) == 0) {
                         GameMenuBusy = 0;
                         g_UiScriptProgress2 = 0;
                     }
                 } else {
                     if (DrawClassChangeCurtain(1) >= 0x19) {
-                        D_8009B310 = 1;
+                        g_ClassChangeApplied = 1;
                         g_GrandPrixClass = g_MenuSubCursor;
                         ResetCourseProgress(g_MenuSubCursor);
                         g_MenuViewAngle = 0x7A120;
                         g_MenuViewAngleTarget = 0x7A120;
                         g_CourseSelectOption = 0;
                         g_MenuPendingCourseIndex = -1;
-                        D_8009B360 = 0;
+                        g_CourseCardSpin = 0;
                         g_CourseIndex = g_CourseIndex & ~3;
                         g_MenuCourseModelIndex = g_CourseIndex;
-                        D_8009B368 = g_CourseProgress[0];
+                        g_CourseCardPendingGrade = g_CourseProgress[0];
                     }
-                    RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
+                    RunTimedDrawScript(g_CourseSelectModalScript, &g_UiScriptProgress2, 1);
                     DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
                     for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                         DrawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -709,7 +709,7 @@ void UpdateCourseSelectScreen(void) {
                 }
             } else {
                 g_MenuConfirmTimer = cnt - 1;
-                RunTimedDrawScript(D_8019C764, &g_UiScriptProgress2, 1);
+                RunTimedDrawScript(g_CourseSelectModalScript, &g_UiScriptProgress2, 1);
                 DrawMenuCursorBox(0xB8, g_MenuSubCursor * 0x1E + 0x6C, 0x38, 0x20, 1);
                 for (i = 0; i < g_RaceProgress->maxClassReached + 1; i++) {
                     DrawSprite(ot, 0xC0, i * 0x1E + 0x74, 0x1A, 0x10, 0x60, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3B);
@@ -751,7 +751,7 @@ void UpdateCourseSelectScreen(void) {
                 }
                 break;
             case 2:
-                if ((D_8009B348 <= 0) && (g_MenuViewOffset > 0x3D08F)) {
+                if ((g_MenuOutgoingScreenProgress <= 0) && (g_MenuViewOffset > 0x3D08F)) {
                     s32 raw;
                     s32 d;
                     s32 lapc;
@@ -783,7 +783,7 @@ void UpdateCourseSelectScreen(void) {
                 GameMenuBusy = 0;
                 break;
             case 4:
-                if ((D_8009B348 <= 0) && (g_MenuViewOffset > 0x3D08F)) {
+                if ((g_MenuOutgoingScreenProgress <= 0) && (g_MenuViewOffset > 0x3D08F)) {
                     s32 raw;
                     s32 d;
                     s32 lapc;
@@ -819,23 +819,23 @@ s32 DrawRankingScreen(s32 step) {
     s32 value;
 
     if (step == 0) {
-        D_8009B2C4 = 0;
+        g_RankingScrollState = 0;
         return;
     }
 
     if (step > 0) {
-        value = step + D_8009B2C4;
-        D_8009B2C4 = value;
+        value = step + g_RankingScrollState;
+        g_RankingScrollState = value;
         if (value >= 0x1FD) {
-            D_8009B2C4 = 0x1FC;
+            g_RankingScrollState = 0x1FC;
         }
     } else {
-        value = step + D_8009B2C4;
-        D_8009B2C4 = value;
+        value = step + g_RankingScrollState;
+        g_RankingScrollState = value;
         if (value < 0) {
-            D_8009B2C4 = 0;
+            g_RankingScrollState = 0;
         }
     }
 
-    return D_8009B2C4;
+    return g_RankingScrollState;
 }

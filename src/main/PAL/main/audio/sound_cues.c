@@ -49,7 +49,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
             s32 resetIndex;
 
             resetIndex = 0;
-            if ((D_801E6D30 >= 0) || (D_801E6D44 >= 0)) {
+            if ((D_801E6D30 >= 0) || (g_EffectVoice1Prog >= 0)) {
                 count = g_EffectCueTable[0];
                 if (count > 0) {
                     active = 1;
@@ -69,8 +69,8 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                 }
             }
         } else {
-            if ((D_801E6D30 == D_80012738) &&
-                (D_801E6D44 == D_80012740)) {
+            if ((D_801E6D30 == g_EffectCue0ProgA) &&
+                (g_EffectVoice1Prog == g_EffectCue0ProgB)) {
                 *g_EffectVoiceState = 2;
             } else {
                 *g_EffectVoiceState = 0;
@@ -90,7 +90,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     if (i != 0) {
                         *(s32 *)((u8 *)g_EffectVoiceState + off) = *stateBase;
                     }
-                    scaleValue = *(s32 *)((u8 *)&D_80012734 + loopTblOff);
+                    scaleValue = *(s32 *)((u8 *)&g_EffectCue0VolScale + loopTblOff);
                     scaled = volume * scaleValue;
                     cueValue = p->cue;
                     *(s32 *)((u8 *)&D_801E6D30 + off) = cueValue;
@@ -112,15 +112,15 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     case 1:
     case 2:
         if (volume <= 0) {
-            hasActiveVoice = D_801E6D58 >= 0;
+            hasActiveVoice = g_EffectVoice2Prog >= 0;
             ok = 0;
-            if (hasActiveVoice || (D_801E6D6C >= 0)) {
+            if (hasActiveVoice || (g_EffectVoice3Prog >= 0)) {
                 if (bank == 1) {
-                    if (D_801E6D58 == D_80012750) {
-                        ok = D_801E6D6C == D_80012758;
+                    if (g_EffectVoice2Prog == g_EffectCue1ProgA) {
+                        ok = g_EffectVoice3Prog == g_EffectCue1ProgB;
                     }
-                } else if ((bank == 2) && (D_801E6D58 == D_80012768) &&
-                           (D_801E6D6C == D_80012770)) {
+                } else if ((bank == 2) && (g_EffectVoice2Prog == g_EffectCue2ProgA) &&
+                           (g_EffectVoice3Prog == g_EffectCue2ProgB)) {
                     ok = 1;
                 }
                 if (ok != 0) {
@@ -146,14 +146,14 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
             }
         } else {
             compareOff = bank * 0x18;
-            if ((D_801E6D58 ==
-                 *(s32 *)((u8 *)&D_80012738 + compareOff)) &&
-                (D_801E6D6C ==
-                 *(s32 *)((u8 *)&D_80012740 + compareOff))) {
-                D_801E6D60 = 2;
+            if ((g_EffectVoice2Prog ==
+                 *(s32 *)((u8 *)&g_EffectCue0ProgA + compareOff)) &&
+                (g_EffectVoice3Prog ==
+                 *(s32 *)((u8 *)&g_EffectCue0ProgB + compareOff))) {
+                g_EffectVoice2State = 2;
                 tblOff = bank * 2;
             } else {
-                D_801E6D60 = 0;
+                g_EffectVoice2State = 0;
                 tblOff = bank * 2;
             }
             tblOff = (tblOff + bank) * 8;
@@ -162,7 +162,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
             count = *(s32 *)((u8 *)g_EffectCueTable + tblOff);
             i = 0;
             if (count > i) {
-                stateBase = &D_801E6D60;
+                stateBase = &g_EffectVoice2State;
                 loopCount = count;
                 tableBase = g_EffectCueTable;
                 loopTblOff = tblOff;
@@ -172,7 +172,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     if (i != 0) {
                         *(s32 *)((u8 *)g_EffectVoiceState + off) = *stateBase;
                     }
-                    scaleValue = *(s32 *)((u8 *)&D_80012734 + loopTblOff);
+                    scaleValue = *(s32 *)((u8 *)&g_EffectCue0VolScale + loopTblOff);
                     scaled = volume * scaleValue;
                     cueValue = p->cue;
                     *(s32 *)((u8 *)&D_801E6D30 + off) = cueValue;
@@ -368,7 +368,7 @@ s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR) {
     }
 
     if (result < 0) {
-        printf((u8 *)D_80012778);
+        printf((u8 *)g_MsgTooManyVoices);
         return -1;
     }
     return result;
@@ -468,7 +468,7 @@ s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
     }
     sy = volumeRight >> 7;
 
-    if ((SpuGetKeyStatus(D_80011C84) == 0) || (id == 0x3D) || (id == 0x2B)) {
+    if ((SpuGetKeyStatus(g_SpecialVoiceBits4) == 0) || (id == 0x3D) || (id == 0x2B)) {
         result = (s16)SsUtKeyOnV(
             0x16,
             g_VabIds[pan],

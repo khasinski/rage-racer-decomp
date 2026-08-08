@@ -10,7 +10,7 @@ void BeginCarStandingStart(u8 *car, s32 sceneTimer) {
     s16 index;
 
     value = ((g_EngineRpm - g_PeakOutputRpm) * 10000) / g_CarSpec->revLimit;
-    D_801E8A4C = 0;
+    g_StandingStartState = 0;
 
     if (value < 0) {
         value = g_EngineRpm - 1000;

@@ -45,7 +45,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
             alpha = 0x60;
         }
     } else {
-        angle = D_8009B268;
+        angle = g_TireSliderPulsePhase;
         color = rsin(angle % 0x1000);
         if (color < 0) {
             color += 0x3F;
@@ -93,7 +93,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     DrawFlatTriangle(ot, 0xB9, 0x87, 0xF7, 0x48, 0xF7, 0x87, 0x1E, 0x8E, 0x95, zero, 0x80);
     DrawSolidRect(ot, 0xB8, 0x48, 0x40, 0x40, 0x95, 0x25, 0x1E, 0xFF);
 
-    D_8009B268 += 0x60;
+    g_TireSliderPulsePhase += 0x60;
 }
 
 /* The two side browse arrows, each lit only when that direction has somewhere to go. */
@@ -142,10 +142,10 @@ void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
         }
 
         leftX = (((u32)(phase * 0x250)) >> 5) + 0xFFE7;
-        wave = rsin(D_8009B26C % 0x1000);
+        wave = rsin(g_BrowseArrowsPulsePhase % 0x1000);
         intensity = (wave / 64) - intensityBias;
         leftEdge = leftX - halfWidth;
-        D_8009B26C += 0x60;
+        g_BrowseArrowsPulsePhase += 0x60;
         callY = y;
         flags = 0x19;
 

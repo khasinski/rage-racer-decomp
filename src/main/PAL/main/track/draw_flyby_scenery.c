@@ -42,7 +42,7 @@ void SeedRouteScenery(void) {
     u8 *base;
     s32 value;
 
-    D_801E433C = 1;
+    g_RouteSceneryArmed = 1;
     g_RouteSceneryClock = 1;
 
     index0 = g_RaceSeries;

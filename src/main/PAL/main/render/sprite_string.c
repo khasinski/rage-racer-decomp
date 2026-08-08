@@ -6,9 +6,9 @@
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
-extern u_char D_8007D7BC[];
-extern u_char D_8007D7BD[];
-extern u_char D_8007D87C[];
+extern u_char g_SpriteFontU[];
+extern u_char g_SpriteFontV[];
+extern u_char g_SpriteFontWidth[];
 extern u_char g_DrawModeEnv[];
 
 typedef struct CdReadSprite {
@@ -38,8 +38,8 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
     sr = str;
     next = SCRATCH_PRIM_CURSOR_AS(u_char);
     if (*sr != 0) {
-        tableA = D_8007D7BC;
-        tableB = D_8007D7BD;
+        tableA = g_SpriteFontU;
+        tableB = g_SpriteFontV;
         packet = (CdReadSprite *)next;
         do {
             idx = *sr++ - 0x20;
@@ -54,7 +54,7 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
                 packet->y = y;
                 packet->u = ga;
                 packet->v = gb;
-                w = D_8007D87C[idx];
+                w = g_SpriteFontWidth[idx];
                 packet->h = 0x18;
                 otv = g_DrawBuffer;
                 packet->clut = clutIndex;
@@ -62,7 +62,7 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
                 packet++;
                 AddPrim(otv + 0xCC, oldPacket);
             }
-            x += D_8007D87C[idx];
+            x += g_SpriteFontWidth[idx];
         } while (*sr != 0);
     }
     SetDrawMode((DrawPacket *)next, 0, 1, 0x1D, g_DrawModeEnv);

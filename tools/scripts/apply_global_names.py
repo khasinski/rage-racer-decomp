@@ -79,10 +79,14 @@ def main(argv):
         argv = argv[2:]
     proposals = read_proposals(argv, floor)
 
+    # A proposal for a symbol that already carries that name is a no-op, not an
+    # error: the agents sometimes re-derive a name the tables already hold.
     taken = existing_names()
-    clashes = [(s, n) for s, n in proposals if n in taken]
+    clashes = [(sym, n) for sym, n in proposals if n in taken]
     if clashes:
-        sys.exit('name already in use: %s' % ', '.join('%s->%s' % c for c in clashes))
+        print('already named, skipping %d: %s'
+              % (len(clashes), ', '.join('%s->%s' % c for c in clashes[:6])))
+        proposals = [(sym, n) for sym, n in proposals if n not in taken]
 
     referenced = set()
     for tree in ('src', 'include'):

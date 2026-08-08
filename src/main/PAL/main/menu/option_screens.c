@@ -182,10 +182,10 @@ void UpdateScreenAdjustScreen(void) {
         }
     }
 
-    D_8019CE9C = g_ScreenOffsetEditX;
-    D_8019CE9E = g_ScreenOffsetEditY + 29;
-    D_801C0684 = g_ScreenOffsetEditX;
-    D_801C0686 = g_ScreenOffsetEditY + 29;
+    g_DispEnv0ScreenX = g_ScreenOffsetEditX;
+    g_DispEnv0ScreenY = g_ScreenOffsetEditY + 29;
+    g_DispEnv1ScreenX = g_ScreenOffsetEditX;
+    g_DispEnv1ScreenY = g_ScreenOffsetEditY + 29;
 }
 
 void DrawOptionSceneOverlay(void) {

@@ -29,7 +29,7 @@ long _spu_init(long resetMode) {
     g_SpuRegBase->regs.mainVol.right = 0;
     g_SpuRegBase->regs.spuCnt = 0;
     g_SpuTransferByIo = 0;
-    D_8009AB98 = 0;
+    g_SpuInTransfer = 0;
     g_SpuTransferStartAddr = 0;
     SPU_INIT_DELAY();
     g_SpuRegBase->regs.mainVol.left = 0;
@@ -98,6 +98,6 @@ long _spu_init(long resetMode) {
     g_SpuTransferCompleted = 1;
     g_SpuRegBase->regs.spuCnt = 0xC000;
     g_SpuTransferCallback = 0;
-    D_8009ABB4 = 0;
+    g_SpuIrqCallback = 0;
     return 0;
 }

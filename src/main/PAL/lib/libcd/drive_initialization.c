@@ -7,8 +7,8 @@ extern long g_CdReadyCallback;
 extern long g_CdStatusByte;
 extern long g_CdErrorByte;
 extern volatile u_long *g_ComDelayReg;
-extern u_char D_80013904[];
-extern u_char D_80013910[];
+extern u_char g_MsgCdInit[];
+extern u_char g_MsgCdInitAddr[];
 
 extern volatile CdIntr g_CdSyncStatus;
 
@@ -88,8 +88,8 @@ void CD_initintr(void) {
 }
 
 long CdResetState(void) {
-    puts(D_80013904);
-    printf((u8 *)D_80013910, g_CdDebugInfo);
+    puts(g_MsgCdInit);
+    printf((u8 *)g_MsgCdInitAddr, g_CdDebugInfo);
 
     g_CdLastCommand = 0;
     g_CdModeByte = 0;

@@ -32,7 +32,7 @@ void DrawRaceOptionMenu(s32 cursorRow);
 void EnterTitleScreen(void);
 
 /* The pulsing "PRESS START" sprite: a 112x16 cell at (0x68, 0xC8), brightness
- * from rsin(g_AnimTimer * 96). Also drains D_801E6F28. */
+ * from rsin(g_AnimTimer * 96). Also drains g_TitleFadeLevel. */
 void DrawPressStartPrompt(void);
 
 /* Frontend state 0: hold on the title screen until Start is pressed. */

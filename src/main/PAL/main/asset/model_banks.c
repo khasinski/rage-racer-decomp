@@ -7,8 +7,8 @@
 #include "game/track.h"
 #include "psyq/gpu.h"
 
-extern u8 D_8019C86C;
-extern u8 D_8009EC94;
+extern u8 g_MainVisibleCellMask;
+extern u8 g_MainVisibleCellList;
 extern void *g_CarModelAsset;
 /* Kept local: this unit only stores an address into them, while track/ and
  * render/ read them as u32[] rows, Vec4[] entries and plain s32, four
@@ -36,11 +36,11 @@ void InitRenderState(s32 otShift) {
     SCRATCH_GT4_CODE = POLY_GT4_CODE;
     SCRATCH_CLIP_X1 = SCREEN_WIDTH;
     SCRATCH_CLIP_Y1 = SCREEN_HEIGHT;
-    g_VisibleCellMask = &D_8019C86C;
+    g_VisibleCellMask = &g_MainVisibleCellMask;
     SCRATCH_OT_SHIFT = otShift;
     SCRATCH_CLIP_X0 = 0;
     SCRATCH_CLIP_Y0 = 0;
-    g_VisibleCellList = &D_8009EC94;
+    g_VisibleCellList = &g_MainVisibleCellList;
     SCRATCH_MIRROR = g_MirrorMode;
 }
 
@@ -140,7 +140,7 @@ void InstallTerrainCellData(s32 *base) {
     ptr = base + 2;
     count = base[0];
     SCRATCH_CELL_TABLE = (s32)ptr;
-    D_801E4144 = count;
+    g_TerrainCellCount = count;
     SCRATCH_CELL_FACES = (s32)((u8 *)base + base[1]);
     for (i = 0; i < count; i++) {
         *ptr = (s32)((u8 *)base + *ptr);

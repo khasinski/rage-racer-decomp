@@ -535,7 +535,7 @@ loop_body:
 
     return 0;
 }
-extern TimedDrawCommand D_80082520[];
+extern TimedDrawCommand g_MenuRowScript[];
 
 
 void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
@@ -563,9 +563,9 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     s32 limit;
     s32 packed;
 
-    shapePtr = (u8 *)D_80082520[0].shape;
-    elapsed = progress - D_80082520[0].time;
-    motionPtr = (u8 *)D_80082520[0].motion;
+    shapePtr = (u8 *)g_MenuRowScript[0].shape;
+    elapsed = progress - g_MenuRowScript[0].time;
+    motionPtr = (u8 *)g_MenuRowScript[0].motion;
     ot = SCRATCH_OT_BASE_AS(void);
     countReg = count;
     packed = *(s32 *)(motionPtr + 0x10);
@@ -580,7 +580,7 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
         elapsed = limit;
     }
 
-    D_8009B250[slot] = 0x1FC;
+    g_MenuRowFlashLevels[slot] = 0x1FC;
 
     if (packed & 0x8000) {
         value = packed | 0xFFFF0000;
@@ -608,12 +608,12 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     }
 
     offset = i * 2;
-    basePtr = D_80082520;
+    basePtr = g_MenuRowScript;
     offset = (offset + i) << 2;
     cmd = (TimedDrawCommand *)((u8 *)basePtr + offset);
 
 loop:
-    basePtr = D_8009B250;
+    basePtr = g_MenuRowFlashLevels;
     offset = i * 4;
     timer = (s32 *)((u8 *)basePtr + offset);
 
@@ -714,7 +714,7 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
             color = 0x60;
         }
     } else {
-        counter = D_8009B264;
+        counter = g_MenuCursorPulsePhase;
         counter = rsin(counter % 4096);
         color = (counter / 64) - 0x41;
     }
@@ -732,5 +732,5 @@ void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
         white);
     DrawRectOutline(
         ot, (s16)savedX0, (s16)savedY0, (s16)savedX1, (s16)(savedY1 + 0), 0, (u8)color, 0, white);
-    D_8009B264 += 0x60;
+    g_MenuCursorPulsePhase += 0x60;
 }

@@ -53,8 +53,8 @@ void InitSubsystems(void) {
     g_NegconNeutralL = 0;
     g_NegconMaxTwist = 0;
     g_PadErrorState = 0;
-    D_801E4D14 = 0x21;
-    D_8019CB10 = 0;
+    g_PadValidateCountdown = 0x21;
+    g_PadErrorHoldBits = 0;
     g_MirrorMode = 0;
     ResetReplayFrameCounts();
     ApplyPadButtonMapping();

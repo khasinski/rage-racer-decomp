@@ -29,7 +29,7 @@ extern char *g_AssetPaths[];
 /*
  * Index of the first entry of each variable-size family in that table. Read off
  * g_AssetPaths itself (asm/PAL/main/data/main/6BE64.data.s, resolved against the
- * string blob at D_8001008C) and cross-checked against the 135-entry RAGE.BIN
+ * string blob at g_MsgNegconMaxTwist) and cross-checked against the 135-entry RAGE.BIN
  * index on the retail PAL disc; see docs/names.md 45.
  *
  * ROUND_SCREEN: [0x4A] = "\DATA\GP0.TMS". Six screens per series, the sixth
@@ -233,8 +233,8 @@ s32 GetCarAssetIndex(s32 model, s32 grade);
 /* Declared identically by 19 translation units before this
  * header carried them. */
 
-extern s32 D_8019C708;
-extern s32 D_801E4144;
+extern s32 g_StreamSectorLimit;
+extern s32 g_TerrainCellCount;
 extern u32 g_CarImageRect;
 extern void *g_CarImageSlots[];
 extern void *g_CarModelSlots[];

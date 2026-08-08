@@ -13,10 +13,10 @@ extern volatile CdIntr g_CdSyncStatus;
 extern u_char g_CdSyncResult[];
 extern u_char g_CdReadyResult[];
 extern long g_CdTimeoutDeadline;
-extern char *D_8009BB10;
-extern char D_80013814[];
-extern char D_80013824[];
-extern char D_8001389C[];
+extern char *g_CdTimeoutName;
+extern char g_MsgCdTimeout[];
+extern char g_FmtCdTimeoutState[];
+extern char g_MsgCdSyncName[];
 
 static __inline__ void copy8(u_char *dst, u_char *src) {
     register u_char *dstReg asm("$5");
@@ -57,13 +57,13 @@ long CD_sync(long mode, u_char *result) {
     intr = &g_CdSyncStatus;
     ready = (u_char *)&intr->ready;
     g_CdTimeoutCounter = 0;
-    D_8009BB10 = D_8001389C;
+    g_CdTimeoutName = g_MsgCdSyncName;
 
     for (;;) {
         if (g_CdTimeoutDeadline < VSync(-1) ||
             g_CdTimeoutCounter++ > 0x3C0000) {
-            puts(D_80013814);
-            printf((u8 *)D_80013824, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
+            puts(g_MsgCdTimeout);
+            printf((u8 *)g_FmtCdTimeoutState, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
                           g_CdCommandNames[g_CdLastCommand],
                           statusNames[intr->sync], statusNames[intr->ready]);
             CD_flush();

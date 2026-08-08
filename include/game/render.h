@@ -224,7 +224,7 @@ void BuildRotMatrixX(void *mtx, s32 angle);
 /*
  * Composes Y*X*Z from the scratchpad camera angles (0x1F800018 / 0x1C / 0x20)
  * into the scratchpad matrix at 0x1F800028 and installs it with SetRotMatrix;
- * D_8019CB18 gets the same matrix pre-multiplied by a 180-degree Y turn.
+ * g_MirrorViewMatrix gets the same matrix pre-multiplied by a 180-degree Y turn.
  */
 void SetCameraRotMatrix(void);
 /*
@@ -429,8 +429,8 @@ void SetDrawClipRect(
 
 /*
  * Text and number output, both built on DrawSprite. The two fonts differ
- * only in cell size and glyph table: small = 6x12 (D_8007F984), large = 8x16
- * (D_8007FA3C). Bit 0x80 of `flags` selects fixed-width cells instead of the
+ * only in cell size and glyph table: small = 6x12 (g_SmallFontGlyphs), large = 8x16
+ * (g_LargeFontGlyphs). Bit 0x80 of `flags` selects fixed-width cells instead of the
  * per-glyph widths in the table.
  */
 void DrawSmallText(
@@ -464,7 +464,7 @@ s32 GameDrawNumber(
     s32 b,
     s32 clutIndex,
     s32 primitiveCount);
-/* Blits an 8x6 bit pattern from D_8007F6E8 as 4x8 blocks; negative argument
+/* Blits an 8x6 bit pattern from g_MenuOverlayPatternTable as 4x8 blocks; negative argument
  * animates through the table. */
 void DrawBitPatternOverlay(s32 pattern);
 
@@ -797,13 +797,13 @@ extern s32 g_IsEnvironmentMode4;
  * header carried them. */
 
 extern char g_FmtGpuTPage[];
-extern s16 D_8007D380[][2];
+extern s16 g_CarModelBankTable[][2];
 extern s16 D_80092B08[];
 extern s16 D_80093308[];
 extern s16 D_80093B08[];
-extern s16 D_8009E782;
-extern Matrix D_8019CB18;
-extern u8 D_801E8AFC;
+extern s16 g_PlayerCarAssetIndex;
+extern Matrix g_MirrorViewMatrix;
+extern u8 g_ReplayFrameBuffer;
 extern u8 g_CarModelByCourse[][11];
 extern u8 g_CarTrackSection[];
 extern s32 g_FmvFrameHeight;
@@ -854,30 +854,30 @@ extern char g_FmtGpuResetGraphTrace[];
 extern char g_FmtGpuResetGraph[];
 extern char g_FmtGpuSetGraphReverse[];
 extern char g_FmtGpuSetGraphDebug[];
-extern char D_800135CC[];
-extern char D_800135E0[];
-extern char D_800135F8[];
-extern s16 D_8007C70A;
-extern u8 D_8007C728[];
-extern u8 D_8007C738[];
-extern u8 D_8007C739[];
-extern u8 D_8007C73A[];
-extern u8 D_8007DAF4[];
-extern u8 D_8007DBE4[];
-extern Matrix D_8009AF00;
-extern s32 D_8009B250[];
-extern s32 D_8009B264;
-extern s16 D_8009E836;
-extern s32 D_8009E888;
-extern s32 D_8019C7E4;
-extern s16 D_8019CEAA;
-extern s16 D_8019CEAE;
-extern u8 D_801C0504[];
-extern u8 D_801C0618[];
-extern s16 D_801C0692;
-extern s16 D_801C0696;
-extern u8 D_801E4BF8[];
-extern u8 D_801E4CF7;
+extern char g_GpuTraceDrawOTag[];
+extern char g_GpuTracePutDrawEnv[];
+extern char g_GpuTraceDrawOTagEnv[];
+extern s16 g_TrackTextureRowRectY;
+extern u8 g_CarMirrorBadgeStyles[];
+extern u8 g_MirrorBadgeTexU[];
+extern u8 g_MirrorBadgeTexV[];
+extern u8 g_MirrorBadgeWidths[];
+extern u8 g_RaceHudSpriteDescsGp[];
+extern u8 g_RaceHudSpriteDescsTimeTrial[];
+extern Matrix g_CameraMatrixSaved;
+extern s32 g_MenuRowFlashLevels[];
+extern s32 g_MenuCursorPulsePhase;
+extern s16 g_HudLapHighlightRow;
+extern s32 g_MirrorVisibleCellList;
+extern s32 g_MirrorVisibleCellMask;
+extern s16 g_MirrorDrawEnv0ClipY;
+extern s16 g_MirrorDrawEnv0ClipH;
+extern u8 g_TachoNeedlePrim0PageA[];
+extern u8 g_RaceHudSprite11U0[];
+extern s16 g_MirrorDrawEnv1ClipY;
+extern s16 g_MirrorDrawEnv1ClipH;
+extern u8 g_TrackTextureShadowPage[];
+extern u8 g_TrackTextureShadowPageLast;
 extern s16 g_AtanTable[];
 extern volatile s32 g_CameraPathKey;
 extern s32 g_CameraPathNextKey;

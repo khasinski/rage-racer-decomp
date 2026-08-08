@@ -57,7 +57,7 @@ Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
  *
  * Symbol:   func_80069D18 = RotMatrix (PSY-Q libgte; Sony's Run-Time Library
  *           Reference, 8-140). Builds a rotation MATRIX from an SVECTOR of
- *           Euler angles using the packed cos/sin table at D_80094FAC (cos in
+ *           Euler angles using the packed cos/sin table at g_RCosSinTable (cos in
  *           the high halfword, sin in the low halfword; sin negated for
  *           negative angles).
  * Reason:   hand-written PSY-Q libgte SDK assembly, not compiler C.

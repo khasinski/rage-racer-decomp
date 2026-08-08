@@ -8,7 +8,7 @@
  * $gp, $sp and $fp, hands the memory left over to InitHeap and calls main.
  * The labels that follow it are callable BIOS A0/B0 stubs whose register
  * protocol cannot be expressed as normal C, plus the four-word stack-top
- * table at D_80063160 that the entry code indexes.
+ * table at g_BootStackTopTable that the entry code indexes.
  *
  * This block used to be a `u32[]` placed in .text with __attribute__.  That
  * spelling froze the image: an array of literal words carries no relocations,

@@ -13,48 +13,48 @@ void UpdateLogoSampleScreen(void) {
     s32 pl;
 
     g_MenuAltLayout = 0;
-    ComposeSampleTeamLogo(D_80082EA4, D_80082EA8);
+    ComposeSampleTeamLogo(g_LogoSampleCharIndex, g_LogoSampleBackIndex);
     DrawTeamLogoCanvas(1, 0);
     v0 = GameMenuBusy;
     if (v0 == 0) {
         RampTeamLogoCanvas(-10, 0);
-        DrawLogoSamplePanel(-1, D_80082EB0 + 1);
-        RunTimedDrawScript(D_8009F0B0, &g_UiScriptProgress2, -1);
-        DrawFadingMenuSprites(g_UiScriptProgress, 2, D_8019C770);
-        RunTimedDrawScript(&D_80081CA4, &g_UiScriptProgress, 0);
+        DrawLogoSamplePanel(-1, g_LogoSampleSavedIndex + 1);
+        RunTimedDrawScript(g_LogoSampleSubPanelScript, &g_UiScriptProgress2, -1);
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, g_LogoSampleCursor);
+        RunTimedDrawScript(&g_LogoSampleScreenScript, &g_UiScriptProgress, 0);
         if (RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) return;
         if (g_UiScriptProgress2 > 0) return;
         g_MenuOverlayPattern = -1;
         if (g_PadPressed & PAD_UP) {
             s32 n, c;
             PlaySoundCue(1);
-            c = D_8019C770;
+            c = g_LogoSampleCursor;
             n = 2;
             if (c > 0) n = c - 1;
-            D_8019C770 = n;
+            g_LogoSampleCursor = n;
         }
         if (g_PadPressed & PAD_DOWN) {
             s32 n, c;
             PlaySoundCue(1);
-            c = D_8019C770;
+            c = g_LogoSampleCursor;
             n = 0;
             if (c < 2) n = c + 1;
-            D_8019C770 = n;
+            g_LogoSampleCursor = n;
         }
         if (g_PadPressed & PAD_CONFIRM) {
-            pl = D_8019C770;
+            pl = g_LogoSampleCursor;
             if (pl == 0) {
                 PlaySoundCue(2);
                 GameMenuBusy = -1;
                 g_UiScriptProgress2 = 0;
-                D_8009F0B0 = &D_80082634;
-                D_80082EB0 = D_80082EA4;
+                g_LogoSampleSubPanelScript = &g_MenuRow0MarkerScript;
+                g_LogoSampleSavedIndex = g_LogoSampleCharIndex;
             } else if (pl == 1) {
                 PlaySoundCue(2);
                 GameMenuBusy = -2;
                 g_UiScriptProgress2 = 0;
-                D_8009F0B0 = &D_80082664;
-                D_80082EB0 = D_80082EA8;
+                g_LogoSampleSubPanelScript = &g_MenuRow1MarkerScript;
+                g_LogoSampleSavedIndex = g_LogoSampleBackIndex;
             } else if (pl == 2) {
                 PlaySoundCue(3);
                 GameMenuBusy = 1;
@@ -71,71 +71,71 @@ void UpdateLogoSampleScreen(void) {
     if (v0 < 0) {
         RampTeamLogoCanvas(10, 0);
         if (GameMenuBusy == -1) {
-            if (RunTimedDrawScript(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
+            if (RunTimedDrawScript(g_LogoSampleSubPanelScript, &g_UiScriptProgress2, 1) != 0) {
                 u16 *p = &g_PadPressed;
                 if (*p & 0x860) {
                     PlaySoundCue(2);
                     GameMenuBusy = 0;
-                    D_80082EB0 = D_80082EA4;
+                    g_LogoSampleSavedIndex = g_LogoSampleCharIndex;
                 }
                 if (*p & 0x90) {
                     PlaySoundCue(3);
                     GameMenuBusy = 0;
-                    D_80082EA4 = D_80082EB0;
+                    g_LogoSampleCharIndex = g_LogoSampleSavedIndex;
                 }
                 if (*p & 0x8000) {
                     s32 n, c;
                     PlaySoundCue(1);
-                    c = D_80082EA4;
+                    c = g_LogoSampleCharIndex;
                     n = 0x13;
                     if (c > 0) n = c - 1;
-                    D_80082EA4 = n;
+                    g_LogoSampleCharIndex = n;
                 }
                 if (g_PadPressed & PAD_RIGHT) {
                     s32 n, c;
                     PlaySoundCue(1);
-                    c = D_80082EA4;
+                    c = g_LogoSampleCharIndex;
                     n = 0;
                     if (c < 19) n = c + 1;
-                    D_80082EA4 = n;
+                    g_LogoSampleCharIndex = n;
                 }
             }
-            t = D_80082EA4;
+            t = g_LogoSampleCharIndex;
         } else {
-            if (RunTimedDrawScript(D_8009F0B0, &g_UiScriptProgress2, 1) != 0) {
+            if (RunTimedDrawScript(g_LogoSampleSubPanelScript, &g_UiScriptProgress2, 1) != 0) {
                 u16 *p = &g_PadPressed;
                 if (*p & 0x860) {
                     PlaySoundCue(2);
                     GameMenuBusy = 0;
-                    D_80082EB0 = D_80082EA8;
+                    g_LogoSampleSavedIndex = g_LogoSampleBackIndex;
                 }
                 if (*p & 0x90) {
                     PlaySoundCue(3);
                     GameMenuBusy = 0;
-                    D_80082EA8 = D_80082EB0;
+                    g_LogoSampleBackIndex = g_LogoSampleSavedIndex;
                 }
                 if (*p & 0x8000) {
                     s32 n, c;
                     PlaySoundCue(1);
-                    c = D_80082EA8;
+                    c = g_LogoSampleBackIndex;
                     n = 0x13;
                     if (c > 0) n = c - 1;
-                    D_80082EA8 = n;
+                    g_LogoSampleBackIndex = n;
                 }
                 if (g_PadPressed & PAD_RIGHT) {
                     s32 n, c;
                     PlaySoundCue(1);
-                    c = D_80082EA8;
+                    c = g_LogoSampleBackIndex;
                     n = 0;
                     if (c < 19) n = c + 1;
-                    D_80082EA8 = n;
+                    g_LogoSampleBackIndex = n;
                 }
             }
-            t = D_80082EA8;
+            t = g_LogoSampleBackIndex;
         }
         DrawLogoSamplePanel(1, t + 1);
-        DrawFadingMenuSprites(g_UiScriptProgress, 2, D_8019C770);
-        RunTimedDrawScript(&D_80081CA4, &g_UiScriptProgress, 0);
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, g_LogoSampleCursor);
+        RunTimedDrawScript(&g_LogoSampleScreenScript, &g_UiScriptProgress, 0);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
     }
@@ -143,13 +143,13 @@ void UpdateLogoSampleScreen(void) {
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 8;
     DrawLogoSamplePanel(-1, 0);
-    RunTimedDrawScript(&D_80081CA4, &g_UiScriptProgress, -1);
+    RunTimedDrawScript(&g_LogoSampleScreenScript, &g_UiScriptProgress, -1);
     RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
-    DrawFadingMenuSprites(g_UiScriptProgress, 2, D_8019C770);
+    DrawFadingMenuSprites(g_UiScriptProgress, 2, g_LogoSampleCursor);
     if (g_UiScriptProgress <= 0) {
         g_MenuScreen = 7;
         g_MenuHandlerIndex = 7;
-        D_8019C770 = 0;
+        g_LogoSampleCursor = 0;
         g_UiScriptProgress = 0;
         GameMenuBusy = 0;
     }
@@ -159,25 +159,25 @@ s32 DrawTeamNameScreen(s32 step) {
     s32 value;
 
     if (step == 0) {
-        D_8009B2E0 = 0;
+        g_TeamNameScreenProgress = 0;
         return;
     }
 
     if (step > 0) {
-        value = step + D_8009B2E0;
-        D_8009B2E0 = value;
+        value = step + g_TeamNameScreenProgress;
+        g_TeamNameScreenProgress = value;
         if (value >= 0x1FD) {
-            D_8009B2E0 = 0x1FC;
+            g_TeamNameScreenProgress = 0x1FC;
         }
     } else {
-        value = step + D_8009B2E0;
-        D_8009B2E0 = value;
+        value = step + g_TeamNameScreenProgress;
+        g_TeamNameScreenProgress = value;
         if (value < 0) {
-            D_8009B2E0 = 0;
+            g_TeamNameScreenProgress = 0;
         }
     }
 
-    return D_8009B2E0;
+    return g_TeamNameScreenProgress;
 }
 
 
@@ -190,7 +190,7 @@ void UpdateTeamNameScreen(void) {
     if (!(GameMenuBusy != 0)) {
 
     DrawTeamNameEntry(1, GameMenuCursor);
-    if (RunTimedDrawScript(&D_80081D34, &g_UiScriptProgress, 1) == 0) return;
+    if (RunTimedDrawScript(&g_TeamNameScreenScript, &g_UiScriptProgress, 1) == 0) return;
     g_MenuOverlayPattern = -1;
 
     if (g_TeamNameLength < 6) {
@@ -263,7 +263,7 @@ pop:
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 9;
     DrawTeamNameEntry(-1, GameMenuCursor);
-    RunTimedDrawScript(&D_80081D34, &g_UiScriptProgress, -1);
+    RunTimedDrawScript(&g_TeamNameScreenScript, &g_UiScriptProgress, -1);
     if (g_UiScriptProgress > 0) return;
     if (0x3D08F < g_MenuViewOffset) {
         g_MenuScreen = 6;
@@ -278,25 +278,25 @@ s32 DrawPaintColorScreen(s32 step) {
     s32 value;
 
     if (step == 0) {
-        D_8009B2E4 = 0;
+        g_PaintColorScreenProgress = 0;
         return;
     }
 
     if (step > 0) {
-        value = step + D_8009B2E4;
-        D_8009B2E4 = value;
+        value = step + g_PaintColorScreenProgress;
+        g_PaintColorScreenProgress = value;
         if (value >= 0x1FD) {
-            D_8009B2E4 = 0x1FC;
+            g_PaintColorScreenProgress = 0x1FC;
         }
     } else {
-        value = step + D_8009B2E4;
-        D_8009B2E4 = value;
+        value = step + g_PaintColorScreenProgress;
+        g_PaintColorScreenProgress = value;
         if (value < 0) {
-            D_8009B2E4 = 0;
+            g_PaintColorScreenProgress = 0;
         }
     }
 
-    return D_8009B2E4;
+    return g_PaintColorScreenProgress;
 }
 
 
@@ -305,10 +305,10 @@ void UpdatePaintColorScreen(void) {
     DrawMenuCarView();
 
     if (GameMenuBusy == 0) {
-        DrawPaintColorPalette(&g_UiScriptProgress2, -1, D_80082EB4);
+        DrawPaintColorPalette(&g_UiScriptProgress2, -1, g_PaintColorIndex);
         DrawBrowseArrows(-1, 0, 1, 1);
-        DrawFadingMenuSprites(g_UiScriptProgress, 2, D_801F17A0);
-        RunTimedDrawScript(&D_80082010, &g_UiScriptProgress, 0);
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, g_PaintColorCursor);
+        RunTimedDrawScript(&g_PaintColorScreenScript, &g_UiScriptProgress, 0);
         if (RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1) == 0) {
             return;
         }
@@ -318,29 +318,29 @@ void UpdatePaintColorScreen(void) {
         g_MenuOverlayPattern = -1;
         if (g_PadPressed & PAD_UP) {
             PlaySoundCue(1);
-            D_801F17A0 = D_801F17A0 > 0 ? D_801F17A0 - 1 : 2;
+            g_PaintColorCursor = g_PaintColorCursor > 0 ? g_PaintColorCursor - 1 : 2;
         }
         if (g_PadPressed & PAD_DOWN) {
             PlaySoundCue(1);
-            D_801F17A0 = D_801F17A0 < 2 ? D_801F17A0 + 1 : 0;
+            g_PaintColorCursor = g_PaintColorCursor < 2 ? g_PaintColorCursor + 1 : 0;
         }
         {
             u16 f = g_PadPressed;
             if (f & 0x860) {
-                s32 sel = D_801F17A0;
+                s32 sel = g_PaintColorCursor;
                 s32 val;
                 if (sel == 0) {
                     PlaySoundCue(2);
                     val = g_CarTable[g_PlayerCarIndex].paintColor1;
                     GameMenuBusy = -1;
                     g_UiScriptProgress2 = 0;
-                    D_80082EB4 = val;
+                    g_PaintColorIndex = val;
                 } else if (sel == 1) {
                     PlaySoundCue(2);
                     val = g_CarTable[g_PlayerCarIndex].paintColor2;
                     GameMenuBusy = -2;
                     g_UiScriptProgress2 = 0;
-                    D_80082EB4 = val;
+                    g_PaintColorIndex = val;
                 } else if (sel == 2) {
                     PlaySoundCue(3);
                     GameMenuBusy = 1;
@@ -358,64 +358,64 @@ void UpdatePaintColorScreen(void) {
     }
 
     if (GameMenuBusy < 0) {
-        if (DrawPaintColorPalette(&g_UiScriptProgress2, 1, D_80082EB4) != 0) {
+        if (DrawPaintColorPalette(&g_UiScriptProgress2, 1, g_PaintColorIndex) != 0) {
             if (g_PadPressedRepeat & PAD_LEFT) {
                 PlaySoundCue(1);
-                D_80082EB4 = D_80082EB4 > 0 ? D_80082EB4 - 1 : 0x11;
+                g_PaintColorIndex = g_PaintColorIndex > 0 ? g_PaintColorIndex - 1 : 0x11;
             }
             if (g_PadPressedRepeat & PAD_RIGHT) {
                 PlaySoundCue(1);
-                D_80082EB4 = D_80082EB4 < 17 ? D_80082EB4 + 1 : 0;
+                g_PaintColorIndex = g_PaintColorIndex < 17 ? g_PaintColorIndex + 1 : 0;
             }
             if (GameMenuBusy == -1) {
                 u16 *btn = &g_PadPressed;
                 if (*btn & 0x860) {
                     PlaySoundCue(2);
-                    g_CarTable[g_PlayerCarIndex].paintColor1 = D_80082EB4;
-                    g_TimeAttackCars[g_PlayerCarIndex].paintColor1 = D_80082EB4;
+                    g_CarTable[g_PlayerCarIndex].paintColor1 = g_PaintColorIndex;
+                    g_TimeAttackCars[g_PlayerCarIndex].paintColor1 = g_PaintColorIndex;
                     g_TimeAttackCars[g_PlayerCarIndex].paintColor2 = g_CarTable[g_PlayerCarIndex].paintColor2;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
                     PlaySoundCue(3);
-                    D_80082EB4 = g_CarTable[g_PlayerCarIndex].paintColor1;
+                    g_PaintColorIndex = g_CarTable[g_PlayerCarIndex].paintColor1;
                     GameMenuBusy = 0;
                 }
-                SetBodyColor1(D_80082EB4);
+                SetBodyColor1(g_PaintColorIndex);
             } else {
                 u16 *btn = &g_PadPressed;
                 if (*btn & 0x860) {
                     PlaySoundCue(2);
-                    g_CarTable[g_PlayerCarIndex].paintColor2 = D_80082EB4;
+                    g_CarTable[g_PlayerCarIndex].paintColor2 = g_PaintColorIndex;
                     g_TimeAttackCars[g_PlayerCarIndex].paintColor1 = g_CarTable[g_PlayerCarIndex].paintColor1;
-                    g_TimeAttackCars[g_PlayerCarIndex].paintColor2 = D_80082EB4;
+                    g_TimeAttackCars[g_PlayerCarIndex].paintColor2 = g_PaintColorIndex;
                     GameMenuBusy = 0;
                 }
                 if (*btn & 0x90) {
                     PlaySoundCue(3);
-                    D_80082EB4 = g_CarTable[g_PlayerCarIndex].paintColor2;
+                    g_PaintColorIndex = g_CarTable[g_PlayerCarIndex].paintColor2;
                     GameMenuBusy = 0;
                 }
-                SetBodyColor2(D_80082EB4);
+                SetBodyColor2(g_PaintColorIndex);
             }
         }
 
         DrawBrowseArrows(1, 0, 1, 1);
-        DrawFadingMenuSprites(g_UiScriptProgress, 2, D_801F17A0);
-        RunTimedDrawScript(&D_80082010, &g_UiScriptProgress, 0);
+        DrawFadingMenuSprites(g_UiScriptProgress, 2, g_PaintColorCursor);
+        RunTimedDrawScript(&g_PaintColorScreenScript, &g_UiScriptProgress, 0);
         RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 1);
         return;
     }
 
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = 10;
-    RunTimedDrawScript(&D_80082010, &g_UiScriptProgress, -1);
+    RunTimedDrawScript(&g_PaintColorScreenScript, &g_UiScriptProgress, -1);
     RunTimedDrawScript(&g_UiChromeScript, &g_UiScriptProgress, 0);
-    DrawFadingMenuSprites(g_UiScriptProgress, 2, D_801F17A0);
+    DrawFadingMenuSprites(g_UiScriptProgress, 2, g_PaintColorCursor);
     if (g_UiScriptProgress <= 0) {
         g_MenuScreen = 6;
         g_MenuHandlerIndex = 6;
-        D_801F17A0 = 0;
+        g_PaintColorCursor = 0;
         g_UiScriptProgress = 0;
         GameMenuBusy = 0;
     }
@@ -429,25 +429,25 @@ s32 DrawCarShopScreen(s32 step) {
     s32 channel;
 
     if (step == 0) {
-        D_8009B2E8 = 0;
+        g_CarShopScreenProgress = 0;
         return;
     }
 
     if (step > 0) {
-        value = D_8009B2E8 + step;
-        D_8009B2E8 = value;
+        value = g_CarShopScreenProgress + step;
+        g_CarShopScreenProgress = value;
         if (value >= 0x1FD) {
-            D_8009B2E8 = 0x1FC;
+            g_CarShopScreenProgress = 0x1FC;
         }
         value = 0;
     } else {
-        value = D_8009B2E8 + step;
-        D_8009B2E8 = value;
+        value = g_CarShopScreenProgress + step;
+        g_CarShopScreenProgress = value;
         if (value < 0) {
-            D_8009B2E8 = 0;
+            g_CarShopScreenProgress = 0;
         }
 
-        value = D_8009B2E8;
+        value = g_CarShopScreenProgress;
         limit = 0x1FC;
         limit -= value;
         value = (u32)(limit * limit) >> 0xB;
@@ -456,18 +456,18 @@ s32 DrawCarShopScreen(s32 step) {
     amount = value << 16;
     amount >>= 16;
     limit = g_PlayerCarIndex;
-    phase = (u8)((u32)D_8009B2E8 / 4);
+    phase = (u8)((u32)g_CarShopScreenProgress / 4);
     channel = limit;
     DrawCarEngineSpec(amount, phase, channel);
 
-    return D_8009B2E8;
+    return g_CarShopScreenProgress;
 }
 void UpdateCarListCursor(void) {
     s32 index;
     CarEntry *entry;
 
     switch (0) { default:
-    if (D_8009B33C != 0) {
+    if (g_CarShopUnlockAll != 0) {
         g_PrevOwnedCarIndex = -1;
         index = g_CarListCursor - 1;
         if (index >= 0) {
@@ -513,7 +513,7 @@ void UpdateCarListCursor(void) {
     }
 
     }
-    if (D_8009B33C != 0) {
+    if (g_CarShopUnlockAll != 0) {
         g_NextOwnedCarIndex = -1;
         index = g_CarListCursor + 1;
         if (index < 13) {

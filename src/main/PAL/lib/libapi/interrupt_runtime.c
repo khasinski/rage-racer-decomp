@@ -198,10 +198,10 @@ void intrDMADispatcher(void) {
     }
 
     if (((*g_DmaIrqControl & 0xFF000000) == 0x80000000) || ((*g_DmaIrqControl & 0x8000) != 0)) {
-        fmt = D_80013BA8;
+        fmt = g_MsgDmaBusError;
         printf((u8 *)fmt, *g_DmaIrqControl);
         for (i = 0; i < 7; i++) {
-            printf((u8 *)D_80013BC4, i, g_DmaChannelRegs[i * 4]);
+            printf((u8 *)g_FmtDmaMadr, i, g_DmaChannelRegs[i * 4]);
         }
     }
 }
@@ -277,11 +277,11 @@ void clearIntrDMACallbacks(u_long *dst, long count) {
 long SetDMAInterruptState(long state) {
     long value;
 
-    value = D_8009A51C;
-    D_8009A51C = state;
+    value = g_DmaInterruptState;
+    g_DmaInterruptState = state;
     return value;
 }
 
 long GetDMAInterruptState(void) {
-    return D_8009A51C;
+    return g_DmaInterruptState;
 }

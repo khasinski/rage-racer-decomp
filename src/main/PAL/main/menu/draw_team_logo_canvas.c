@@ -36,26 +36,26 @@ void DrawTeamLogoCanvasFade(s32 delta) {
 
     scratch = SCRATCH_OT_BASE_AS(u8);
     if (delta > 0) {
-        value = D_8009B280;
+        value = g_MenuCurtainFade;
         sum = delta + value;
         value = sum;
-        D_8009B280 = value;
+        g_MenuCurtainFade = value;
         if (0xFFFF < value) {
-            D_8009B280 = 0xFFFF;
+            g_MenuCurtainFade = 0xFFFF;
         }
     } else {
-        value = D_8009B280;
+        value = g_MenuCurtainFade;
         sum = delta + value;
         value = sum;
-        D_8009B280 = value;
+        g_MenuCurtainFade = value;
         if (value < 0) {
-            D_8009B280 = 0;
+            g_MenuCurtainFade = 0;
         }
     }
 
     limit = 0x1E0;
-    D_8009B284 = D_8009B280 >> 8;
-    alpha = D_8009B284;
+    g_MenuCurtainShade = g_MenuCurtainFade >> 8;
+    alpha = g_MenuCurtainShade;
     DrawSolidRect(scratch + 0x18, 0x48, 0, 0xF8, limit, alpha, alpha, alpha, 0x40);
 }
 
@@ -91,15 +91,15 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
   ot = SCRATCH_OT_BASE_WORD;
   if (panelStep == 0)
   {
-    D_8007FB0C = 0;
-    D_8007FB10 = 0;
+    g_TeamLogoPanelStep = 0;
+    g_TeamLogoEditorStep = 0;
     return;
   }
   g_TeamLogoClut[0] = 0x8000;
-  g_TeamLogoClut[0] |= ((rsin(D_8009B288 % 0x1000) / 128) + 0x20) >> 3;
-  ang = D_8009B288 + 0x55;
+  g_TeamLogoClut[0] |= ((rsin(g_TeamLogoColorCycleAngle % 0x1000) / 128) + 0x20) >> 3;
+  ang = g_TeamLogoColorCycleAngle + 0x55;
   g_TeamLogoClut[0] |= (((rsin(ang % 0x1000) / 128) + 0x20) >> 3) << 5;
-  ang = D_8009B288 + 0xAA;
+  ang = g_TeamLogoColorCycleAngle + 0xAA;
   d = rsin(ang % 0x1000);
   i = 0;
   if (d < 0)
@@ -112,10 +112,10 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     u16 k8;
     k8 = 0x8000;
     g_TeamLogoClut[0] |= (((d >> 7) + 0x20) >> 3) << 10;
-    D_8009B2A0[0] = g_TeamLogoClut[0];
-    dst = D_8009B2A0;
-    D_8009B288 += 0x20;
-    mul = D_8009B298;
+    g_TeamLogoFadedClut[0] = g_TeamLogoClut[0];
+    dst = g_TeamLogoFadedClut;
+    g_TeamLogoColorCycleAngle += 0x20;
+    mul = g_TeamLogoFadeLevel;
     loop16:
     {
       u16 *src = &g_TeamLogoClut[i];
@@ -143,24 +143,24 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
   }
   LoadImage(&g_TeamLogoRect, g_TeamLogoCanvas);
   LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
-  LoadImage(&D_8007F95C, D_8009B2A0);
+  LoadImage(&g_TeamLogoFadedClutRect, g_TeamLogoFadedClut);
   if (a0v < 0)
   {
-    D_8007FB0C = a0v + D_8007FB0C;
-    if (D_8007FB0C < 0)
+    g_TeamLogoPanelStep = a0v + g_TeamLogoPanelStep;
+    if (g_TeamLogoPanelStep < 0)
     {
-      D_8007FB0C = 0;
+      g_TeamLogoPanelStep = 0;
     }
   }
   if (a1v < 0)
   {
-    D_8007FB10 = a1v + D_8007FB10;
-    if (D_8007FB10 < 0)
+    g_TeamLogoEditorStep = a1v + g_TeamLogoEditorStep;
+    if (g_TeamLogoEditorStep < 0)
     {
-      D_8007FB10 = 0;
+      g_TeamLogoEditorStep = 0;
     }
   }
-  d = D_8007FB0C - 0xA;
+  d = g_TeamLogoPanelStep - 0xA;
   if (d >= 0)
   {
     s32 sy2;
@@ -186,14 +186,14 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     ff = 0xFF;
     DrawRectOutline((void *)ot, (s16)drawX, (s16)sy, (s16)0x82, 0x104, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)ff);
     kreg = sy;
-    if (D_8009B29C >= 0x100)
+    if (g_TeamLogoZoomLevel >= 0x100)
     {
       if (g_TeamLogoPaletteMode == 0)
       {
         s32 syOffset;
         register s32 angleSource;
         register s32 angleValue;
-        angleSource = D_8009B288;
+        angleSource = g_TeamLogoColorCycleAngle;
         secondaryValue = g_TeamLogoCursorX.value;
         angleValue = angleSource * 2;
         drawValue = angleValue;
@@ -215,14 +215,14 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       }
     }
     sx = (s16) kreg;
-    x2 = ((s16) x0) - (D_8007F948 < 0x220);
-    if (D_8007F948 < 0x220)
+    x2 = ((s16) x0) - (g_TeamLogoZoomSpan < 0x220);
+    if (g_TeamLogoZoomSpan < 0x220)
     {
       sx -= 2;
     }
     w1 = sx + 0x110;
     x88 = x2 + 0x88;
-    delta = 0x220 - D_8007F948;
+    delta = 0x220 - g_TeamLogoZoomSpan;
     scaleDelta = (delta * g_TeamLogoViewX.value) / 272;
     phaseValue = (g_TeamLogoRect.tx * 4) - 1;
     drawValue = phaseValue + scaleDelta;
@@ -232,9 +232,9 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     gyTemp = texY + scaleDelta;
     phaseValue = gyTemp;
     gy = phaseValue;
-    gx2 = drawValue + (D_8007F948 / 8);
+    gx2 = drawValue + (g_TeamLogoZoomSpan / 8);
     asm("" : : "r"(scaleDelta));
-    gy2 = phaseValue + (D_8007F948 / 8);
+    gy2 = phaseValue + (g_TeamLogoZoomSpan / 8);
     clut = (g_TeamLogoRect.ty >> 4) & 0x10;
     clut |= (g_TeamLogoRect.tx & 0x3FF) >> 6;
     SetDrawClipRect((void *)ot, (s16)0, (s16)0, (s16)0x140, (s16)0x1E0);
@@ -245,7 +245,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
                          (u8)0x7F, (u8)0x7F, (u8)0x7F, 0x27F, 1, 0, clut);
     SetDrawClipRect((void *)ot, (s16)(x0 + 1), (s16)(kreg + 2), (s16)0x80, (s16)0x100);
   }
-  d = D_8007FB0C - 0xE;
+  d = g_TeamLogoPanelStep - 0xE;
   if (d >= 0)
   {
     register s32 sy asm("$16");
@@ -263,11 +263,11 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     ff = 0xFF;
     DrawRectOutline((void *)ot, (s16)0x2F, (s16)sy, (s16)0x42, 0x84, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)ff);
     kreg = sy;
-    if ((D_8009B29C >= 0x100) && (g_TeamLogoGuideMode != 0))
+    if ((g_TeamLogoZoomLevel >= 0x100) && (g_TeamLogoGuideMode != 0))
     {
       x1 = g_TeamLogoViewX.lo + 0x30;
       y1 = sy + ((g_TeamLogoViewY * 2) + 2);
-      clut = (rsin((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
+      clut = (rsin((g_TeamLogoColorCycleAngle * 2) % 0x1000) / 64) - 0x41;
       if (g_TeamLogoGuideMode == 2)
       {
         s16 ya;
@@ -330,7 +330,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
                          pal & 0xFFFF, 1, 0, clut);
     SetDrawClipRect((void *)ot, (s16)(x0 + 1), (s16)(kreg + 2), (s16)0x40, (s16)0x80);
   }
-  d = D_8007FB10 - 8;
+  d = g_TeamLogoEditorStep - 8;
   if (d >= 0)
   {
     s32 j;
@@ -349,7 +349,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     if (g_TeamLogoPaletteMode == 1)
     {
       s32 panelAng;
-      panelAng = D_8009B288 * 2;
+      panelAng = g_TeamLogoColorCycleAngle * 2;
       clut = (rsin(panelAng % 0x1000) / 64) - 0x41;
       DrawRectOutline((void *)ot, (s16)x1, (s16)y1, (s16)0xD, 0x1A, 0, (u8)clut, 0, (u8)0xFF);
     }
@@ -428,7 +428,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       }
     }
   }
-  d = D_8007FB10 - 7;
+  d = g_TeamLogoEditorStep - 7;
   if (d >= 0)
   {
     if (d >= 7)
@@ -438,7 +438,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     DrawSprite((void *)ot, (s16)((((u32)(d * 0x250)) >> 5) + 0xFFA1), (s16)0xC0, (s16)0x61, (s16)0x32,
                (u8)0x90, (u8)0xC0, 0, 0, 0, 0x1F5, 1, 0, 0x1D);
   }
-  d = D_8007FB10 - 8;
+  d = g_TeamLogoEditorStep - 8;
   if ((d >= 0) && (g_TeamLogoExpertMode != 0))
   {
     s16 sy;
@@ -461,7 +461,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     sy = (syBase * 0x30) + 0xD9;
     if (g_TeamLogoPaletteMode == 1)
     {
-      clut = (rsin((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
+      clut = (rsin((g_TeamLogoColorCycleAngle * 2) % 0x1000) / 64) - 0x41;
       DrawRectOutline((void *)ot, (s16)x0, (s16)sy, (s16)0x12, 0x15, 0, (u8)clut, 0, (u8)0xFF);
     }
     yA8 = (s16) (kreg + 0x14);
@@ -509,18 +509,18 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
   }
   if (a0v > 0)
   {
-    D_8007FB0C = a0v + D_8007FB0C;
-    if (D_8007FB0C >= 0x1A)
+    g_TeamLogoPanelStep = a0v + g_TeamLogoPanelStep;
+    if (g_TeamLogoPanelStep >= 0x1A)
     {
-      D_8007FB0C = 0x19;
+      g_TeamLogoPanelStep = 0x19;
     }
   }
   if (a1v > 0)
   {
-    D_8007FB10 = a1v + D_8007FB10;
-    if (D_8007FB10 >= 0x11)
+    g_TeamLogoEditorStep = a1v + g_TeamLogoEditorStep;
+    if (g_TeamLogoEditorStep >= 0x11)
     {
-      D_8007FB10 = 0x10;
+      g_TeamLogoEditorStep = 0x10;
     }
   }
 }
@@ -530,39 +530,39 @@ void RampTeamLogoCanvas(s32 stepA, s32 stepB) {
     s32 y;
 
     if (stepA > 0) {
-        temp = stepA + D_8009B298;
-        D_8009B298 = temp;
+        temp = stepA + g_TeamLogoFadeLevel;
+        g_TeamLogoFadeLevel = temp;
         if (temp >= 0x101) {
-            D_8009B298 = 0x100;
+            g_TeamLogoFadeLevel = 0x100;
         }
     } else {
-        temp = stepA + D_8009B298;
-        D_8009B298 = temp;
+        temp = stepA + g_TeamLogoFadeLevel;
+        g_TeamLogoFadeLevel = temp;
         if (temp < 0x40) {
-            D_8009B298 = 0x40;
+            g_TeamLogoFadeLevel = 0x40;
         }
     }
 
     if (stepB > 0) {
-        temp = stepB + D_8009B29C;
-        D_8009B29C = temp;
+        temp = stepB + g_TeamLogoZoomLevel;
+        g_TeamLogoZoomLevel = temp;
         if (temp >= 0x101) {
-            D_8009B29C = 0x100;
+            g_TeamLogoZoomLevel = 0x100;
         }
     } else {
-        temp = stepB + D_8009B29C;
-        D_8009B29C = temp;
+        temp = stepB + g_TeamLogoZoomLevel;
+        g_TeamLogoZoomLevel = temp;
         if (temp < 0) {
-            D_8009B29C = 0;
+            g_TeamLogoZoomLevel = 0;
         }
     }
 
-    y = D_8009B29C;
+    y = g_TeamLogoZoomLevel;
     temp = (y * 17) << 4;
     if (temp < 0) {
         temp += 0xFF;
     }
-    D_8007F948 = 0x220 - (temp >> 8);
+    g_TeamLogoZoomSpan = 0x220 - (temp >> 8);
 }
 
 

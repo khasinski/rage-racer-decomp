@@ -7,7 +7,7 @@ void ClearTeamNameTexture(void) {
     sp[1] = 0x37;
     sp[2] = 0xC;
     sp[3] = 8;
-    LoadImage((Rect *)sp, &D_8007D24C);
+    LoadImage((Rect *)sp, &g_TeamNameBlankTile);
 }
 
 void UploadTeamNameTexture(u8 *str, s32 len) {
@@ -18,7 +18,7 @@ void UploadTeamNameTexture(u8 *str, s32 len) {
     sp[2] = 2;
     sp[3] = 8;
     while (len > 0) {
-        LoadImage((Rect *)sp, &D_8007C7CC[*str++ << 5]);
+        LoadImage((Rect *)sp, &g_TeamNameFontGlyphs[*str++ << 5]);
         sp[0] += 2;
         len--;
     }

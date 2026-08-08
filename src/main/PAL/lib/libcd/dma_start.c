@@ -6,7 +6,7 @@
 extern volatile u_char *D_800993D0;
 extern volatile u_long *g_DmaDpcr;
 extern u_char *g_DmaDicr;
-extern char D_80013B14[];
+extern char g_MsgDmaStatusError[];
 
 
 /*
@@ -26,7 +26,7 @@ void CD_dmastart(long ch, u_long madr, u_long count, u_long size, u_long chcrVal
     i = 0;
     while (*(volatile u_long *)(0x1F801088 + (ch << 4)) & 0x01000000) {
         if (i == 0x10000) {
-            printf((u8 *)D_80013B14, *(volatile u_long *)(0x1F801088 + (ch << 4)));
+            printf((u8 *)g_MsgDmaStatusError, *(volatile u_long *)(0x1F801088 + (ch << 4)));
             break;
         }
         i++;

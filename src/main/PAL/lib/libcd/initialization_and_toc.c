@@ -6,10 +6,10 @@
 #include "psyq/kernel.h"
 
 extern long g_CdDebugLevel;
-extern u_char D_80013678[];
-extern u_char D_80013688[];
-extern u_char D_800136A4[];
-extern u_char D_800136B8[];
+extern u_char g_MsgCdTrackRange[];
+extern u_char g_MsgCdGetToc2Entry[];
+extern u_char g_MsgCdGetToc2Error[];
+extern u_char g_MsgCdInitFailed[];
 
 long CdGetToc2(long maxTracks, u_char *out) {
     u_char *fmt;
@@ -38,7 +38,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
     }
 
     if (g_CdDebugLevel >= 2) {
-        printf((u8 *)D_80013678, firstTrack, lastTrack);
+        printf((u8 *)g_MsgCdTrackRange, firstTrack, lastTrack);
     }
 
     command[0] = 0;
@@ -58,7 +58,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
             command[0] = ((firstTrack / 10) << 4) + (firstTrack % 10);
             if (CdControlB(0x14, command, response) == 0) {
     if (g_CdDebugLevel != 0) {
-        printf((u8 *)D_800136A4);
+        printf((u8 *)g_MsgCdGetToc2Error);
     }
     CdSyncCallback(oldHandler);
     return 0;
@@ -84,7 +84,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
             count = 0;
             entry = toc;
             do {
-                fmt = D_80013688;
+                fmt = g_MsgCdGetToc2Entry;
                 first = entry[0];
                 second = entry[1];
                 printf((u8 *)fmt, first, second);
@@ -100,7 +100,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
     }
     }
     if (g_CdDebugLevel != 0) {
-        printf((u8 *)D_800136A4);
+        printf((u8 *)g_MsgCdGetToc2Error);
     }
     CdSyncCallback(oldHandler);
     return 0;
@@ -113,7 +113,7 @@ long CdInit(void) {
     while (CD_init(1) != 1) {
         retries--;
         if (retries == -1) {
-            printf((u8 *)D_800136B8);
+            printf((u8 *)g_MsgCdInitFailed);
             return 0;
         }
     }

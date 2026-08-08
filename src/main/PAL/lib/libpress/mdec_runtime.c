@@ -4,12 +4,12 @@
 #include "common.h"
 #include "psyq/cd.h"
 
-extern u_char D_800132C8[];
-extern u_char D_800132E4[];
-extern u_char D_800132F4[];
-extern u_char D_80013304[];
-extern u_char D_8001332C[];
-extern u_char D_80013364[];
+extern u_char g_FmtMdecBadOption[];
+extern u_char g_MsgMdecInSync[];
+extern u_char g_MsgMdecOutSync[];
+extern u_char g_FmtMdecTimeoutDma[];
+extern u_char g_FmtMdecTimeoutStatus[];
+extern u_char g_FmtMdecTimeout[];
 
 void MDEC_reset(long mode) {
     register long option asm("$5") = mode;
@@ -35,7 +35,7 @@ void MDEC_reset(long mode) {
     return;
 
     }
-    printf((u8 *)D_800132C8);
+    printf((u8 *)g_FmtMdecBadOption);
 }
 
 void MDEC_in(volatile u_long *buf, long words) {
@@ -63,7 +63,7 @@ long MDEC_in_sync(void) {
     if (*g_MdecCtrlReg & 0x20000000) {
         do {
             if (--timeout == -1) {
-                MDEC_timeout(D_800132E4);
+                MDEC_timeout(g_MsgMdecInSync);
                 return -1;
             }
         } while (*g_MdecCtrlReg & 0x20000000);
@@ -78,7 +78,7 @@ long MDEC_out_sync(void) {
     if (*g_MdecOutDmaChcr & 0x01000000) {
         do {
             if (--timeout == -1) {
-                MDEC_timeout(D_800132F4);
+                MDEC_timeout(g_MsgMdecOutSync);
                 return -1;
             }
         } while (*g_MdecOutDmaChcr & 0x01000000);
@@ -90,10 +90,10 @@ long MDEC_timeout(u_char *name) {
     u_long status;
     register long ret;
 
-    printf((u8 *)D_80013364, name);
+    printf((u8 *)g_FmtMdecTimeout, name);
     status = *g_MdecCtrlReg;
-    printf((u8 *)D_80013304, (*g_MdecInDmaChcr >> 24) & 1, (*g_MdecOutDmaChcr >> 24) & 1, *g_MdecInDmaMadr, *g_MdecOutDmaMadr);
-    printf((u8 *)D_8001332C,
+    printf((u8 *)g_FmtMdecTimeoutDma, (*g_MdecInDmaChcr >> 24) & 1, (*g_MdecOutDmaChcr >> 24) & 1, *g_MdecInDmaMadr, *g_MdecOutDmaMadr);
+    printf((u8 *)g_FmtMdecTimeoutStatus,
                   (~status >> 31) & 1,
                   (status >> 30) & 1,
                   (status >> 29) & 1,
@@ -116,7 +116,7 @@ long MDEC_timeout(u_char *name) {
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  *
- * Symbol:   D_80064554  (0x54D54, 13 words)
+ * Symbol:   g_MdecVlcBufferSize  (0x54D54, 13 words)
  * Reason:   a mutable data word embedded in .text immediately followed by the
  *           function code that reads/writes it via its own absolute address
  *           (t0 = 0x80064554; lw/sw 0(t0)). The leading word (init 0x00FFFFFF)
@@ -131,7 +131,7 @@ long MDEC_timeout(u_char *name) {
  * Revisit:  only if a linker/section arrangement can reproduce the exact layout.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libpress/mdec_runtime", D_80064554);
+INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libpress/mdec_runtime", g_MdecVlcBufferSize);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -145,7 +145,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libpress/mdec_runtime", D_80064554);
  *           (0x0401....) - the traditional/SN MIPS assembler encoding; the
  *           bundled GNU as emits `beq $zero,$zero`. (3) No stack frame / custom
  *           ABI: all working regs loaded from and stored to a global state
- *           struct at D_800648C8 - a resumable state machine, not the C ABI.
+ *           struct at g_MdecVlcResumeState - a resumable state machine, not the C ABI.
  *           (4) Signed `add` for pointer/index math where GCC emits `addu`.
  *           (5) hand `.set noreorder` delay-slot packing.
  * Revisit:  only with proof it was compiler-generated C.

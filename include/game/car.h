@@ -400,7 +400,7 @@ void UpdateCarLaunch();
 /* Declared identically by 58 translation units before this
  * header carried them. */
 
-extern s32 D_8019C998;
+extern s32 g_DriveBoostTimer;
 extern s32 g_EngineRpmSnapshot;
 extern s32 g_AutoShiftCooldown;
 extern u8 *g_CarModelBuffer;
@@ -459,7 +459,7 @@ extern u16 g_OpponentHullCornersZ[];
 extern s16 g_LaunchEnergyThresholds[];
 extern s16 g_RedlineToPeakRpmHalf;
 extern s16 g_PeakToRevLimitRpmHalf;
-extern s16 D_801E8A4C;
+extern s16 g_StandingStartState;
 extern s32 g_AttractGridSlots[];
 extern u16 g_BodyColorPrimary[];
 extern u16 g_BodyColorSecondary[];

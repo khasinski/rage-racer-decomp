@@ -11,13 +11,13 @@ extern u_char g_CdSectorBuf[];
 extern W4 g_CdRootDirLba;
 extern CdlDIR g_CdPathTable[];
 
-extern const char D_800139B4[];
-extern const char D_800139E0[];
-extern const char D_800139E8[];
-extern const char D_80013A18[];
-extern const char D_80013A3C[];
-extern const char D_80013A5C[];
-extern const char D_80013A70[];
+extern const char g_MsgCdPvdReadError[];
+extern const char g_CdVolumeSignature[];
+extern const char g_MsgCdPvdFormatError[];
+extern const char g_MsgCdPathTableReadError[];
+extern const char g_MsgCdSearchingDir[];
+extern const char g_FmtCdPathEntry[];
+extern const char g_MsgCdDirEntriesFound[];
 
 /*
  * Reads and parses the disc's directory into the Entry table g_CdPathTable[128].
@@ -39,26 +39,26 @@ long CD_newmedia(void) {
     r = cd_read(1, 16, g_CdSectorBuf);
     if (r != 1) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)D_800139B4);
+            printf((u8 *)g_MsgCdPvdReadError);
         }
         return 0;
     }
-    if (strncmp((u8 *)&g_CdSectorBuf[1], (u8 *)D_800139E0, 5) != 0) {
+    if (strncmp((u8 *)&g_CdSectorBuf[1], (u8 *)g_CdVolumeSignature, 5) != 0) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)D_800139E8);
+            printf((u8 *)g_MsgCdPvdFormatError);
         }
         return 0;
     }
     hdr = g_CdRootDirLba;
     if (cd_read(1, *(long *)&hdr, g_CdSectorBuf) != r) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)D_80013A18, *(long *)&hdr);
+            printf((u8 *)g_MsgCdPathTableReadError, *(long *)&hdr);
         }
         return 0;
     }
     p = g_CdSectorBuf;
     if (g_CdDebugLevel >= 2) {
-        printf((u8 *)D_80013A3C);
+        printf((u8 *)g_MsgCdSearchingDir);
     }
     i = 0;
     while (p < &g_CdSectorBuf[0x800]) {
@@ -76,7 +76,7 @@ long CD_newmedia(void) {
         d = (n & 1) + 8;
         p += n + d;
         if (g_CdDebugLevel >= 2) {
-            printf((u8 *)D_80013A5C, g_CdPathTable[i].lba.sector,
+            printf((u8 *)g_FmtCdPathEntry, g_CdPathTable[i].lba.sector,
                           g_CdPathTable[i].number, g_CdPathTable[i].parent_number,
                           g_CdPathTable[i].name);
         }
@@ -90,12 +90,12 @@ long CD_newmedia(void) {
     }
     g_CdCachedDir = 0;
     if (g_CdDebugLevel >= 2) {
-        printf((u8 *)D_80013A70, i);
+        printf((u8 *)g_MsgCdDirEntriesFound, i);
     }
     return 1;
 }
 
-extern volatile long D_8009C118[];
+extern volatile long g_CdPathEntryParentDir[];
 
 long DS_searchdir(long type, u_char *name) {
     long i = 0;
@@ -104,7 +104,7 @@ long DS_searchdir(long type, u_char *name) {
     long entryType;
 
     while (i < 0x80) {
-        entryType = *(long *)((u_char *)D_8009C118 + offset);
+        entryType = *(long *)((u_char *)g_CdPathEntryParentDir + offset);
         if (entryType != 0) {
             if (entryType == type && strcmp((u8 *)name, (u8 *)entryName) == 0) {
                 return i + 1;

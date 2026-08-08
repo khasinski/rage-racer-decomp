@@ -90,7 +90,7 @@ void BeginIntroFmv(s32 returnScene) {
     sectors = g_StreamCdEntries[0].size;
     g_StreamLoc = &g_StreamCdEntries[0];
     g_StreamSectorCount = sectors;
-    D_8019C708 = sectors * 2;
+    g_StreamSectorLimit = sectors * 2;
 }
 
 void BeginClassFmv(s32 returnScene) {
@@ -109,7 +109,7 @@ void BeginClassFmv(s32 returnScene) {
     sectors = g_StreamCdEntries[index].size;
     g_StreamLoc = &g_StreamCdEntries[index];
     g_StreamSectorCount = sectors;
-    D_8019C708 = sectors * 2;
+    g_StreamSectorLimit = sectors * 2;
 }
 
 void BeginEndingFmv(s32 returnScene) {
@@ -120,7 +120,7 @@ void BeginEndingFmv(s32 returnScene) {
     sectors = g_StreamCdEntries[10].size;
     g_StreamLoc = &g_StreamCdEntries[10];
     g_StreamSectorCount = sectors;
-    D_8019C708 = sectors * 4;
+    g_StreamSectorLimit = sectors * 4;
 }
 
 void ServiceAssetLoad(void) {

@@ -15,7 +15,7 @@ void intrDispatch(void) {
 
     state = g_IntrState;
     if (state[0] == 0) {
-        printf((u8 *)D_80013B70, *g_IrqStatus);
+        printf((u8 *)g_MsgUnexpectedInterrupt, *g_IrqStatus);
         ReturnFromException();
     }
     g_IntrInDispatch = 1;
@@ -46,7 +46,7 @@ void intrDispatch(void) {
         c = g_IntrStuckCount;
         g_IntrStuckCount = c + 1;
         if (c >= 0x801) {
-            printf((u8 *)D_80013B8C, *g_IrqStatus, *g_IrqMask);
+            printf((u8 *)g_MsgIntrTimeout, *g_IrqStatus, *g_IrqMask);
             g_IntrStuckCount = 0;
             *g_IrqStatus = 0;
         }

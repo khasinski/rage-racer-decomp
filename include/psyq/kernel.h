@@ -104,13 +104,13 @@ extern volatile long g_VSyncCount;
 /* Declared identically by 20 translation units before this
  * header carried them. */
 
-extern char D_80013B2C[];
-extern u_char D_80013B70[];
-extern u_char D_80013B8C[];
-extern u_char D_80013BA8[];
-extern u_char D_80013BC4[];
-extern u_short D_8009946C[];
-extern long D_8009A51C;
+extern char g_MsgVSyncTimeout[];
+extern u_char g_MsgUnexpectedInterrupt[];
+extern u_char g_MsgIntrTimeout[];
+extern u_char g_MsgDmaBusError[];
+extern u_char g_FmtDmaMadr[];
+extern u_short g_IntrJmpBufSp[];
+extern long g_DmaInterruptState;
 extern u_long g_DmaCallbacks[];
 extern u_long *g_DmaChannelRegs;
 extern volatile u_long *g_DmaIrqControl;

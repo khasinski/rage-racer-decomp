@@ -10,8 +10,8 @@ extern s32 g_ReplayPlayerModel;
 extern s32 g_ReplayRivalModel;
 
 void ResetReplayFrameCounts(void) {
-    g_ReplayFramesGp = &D_801E8AFC;
-    g_ReplayFramesTimeAttack = &D_801E8AFC;
+    g_ReplayFramesGp = &g_ReplayFrameBuffer;
+    g_ReplayFramesTimeAttack = &g_ReplayFrameBuffer;
 }
 
 void ResetReplayWriteCursor(void) {
@@ -38,7 +38,7 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
     s32 odd;
     u32 first;
 
-    current = D_8009E782;
+    current = g_PlayerCarAssetIndex;
     src2 = (GameRenderSourcePoint *)srcB;
     sourceField_AE = src2->field_AE;
     g_ReplayPlayerModel = current;
@@ -83,7 +83,7 @@ void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
     GameRenderSourcePoint *src;
     u32 first;
 
-    g_ReplayPlayerModel = D_8009E782;
+    g_ReplayPlayerModel = g_PlayerCarAssetIndex;
     if (pointIndex % 2) {
         return;
     }

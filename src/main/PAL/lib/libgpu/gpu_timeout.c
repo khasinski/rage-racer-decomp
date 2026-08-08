@@ -14,8 +14,8 @@ extern volatile long g_GpuQueueReadIdx;
 extern long g_GpuResetIntrMask;
 extern long g_GpuTimeoutDeadline;
 extern long g_GpuTimeoutPolls;
-extern char D_8001362C[];
-extern char D_80013660[];
+extern char g_MsgGpuTimeout[];
+extern char g_MsgGpuTimeoutCallback[];
 
 
 long Gpu_CheckTimeout(void) {
@@ -40,10 +40,10 @@ long Gpu_CheckTimeout(void) {
     (void)*gp1ForLog;
     pending = g_GpuQueueWriteIdx;
     gpuTail = g_GpuQueueReadIdx;
-    printf((u8 *)D_8001362C, (pending - gpuTail) & 0x3F, *gp1ForLog, *g_GpuDmaChcr, *g_GpuDmaMadr);
+    printf((u8 *)g_MsgGpuTimeout, (pending - gpuTail) & 0x3F, *gp1ForLog, *g_GpuDmaChcr, *g_GpuDmaMadr);
     dc = g_GpuLastCb;
     asm("" : "=r"(dc) : "0"(dc));
-    printf((u8 *)D_80013660, *dc, g_GpuLastCbArg, g_GpuLastCbData);
+    printf((u8 *)g_MsgGpuTimeoutCallback, *dc, g_GpuLastCbArg, g_GpuLastCbData);
 
     intrMask = SetIntrMask(0);
     g_GpuQueueReadIdx = 0;

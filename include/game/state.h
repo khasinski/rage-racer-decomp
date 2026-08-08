@@ -2,7 +2,7 @@
 #define GAME_STATE_H
 
 extern void (*g_SceneHandlers[])(void);
-extern void (*D_8007D778[])(void);
+extern void (*g_PrologueSteps[])(void);
 
 #include "common.h"
 #include "game/vector.h"
@@ -78,7 +78,7 @@ void MainLoop(void);
 void InitSubsystems(void);
 
 /* Controller layer. GameInitPad hands the BIOS the two 0x28-byte buffers at
- * g_PadBuffers / D_801E4064. UpdatePadState maintains the held / previous /
+ * g_PadBuffers / g_Pad2Buffer. UpdatePadState maintains the held / previous /
  * newly-pressed halfwords in the block at g_PadState. */
 void GameInitPad(void);
 void UpdatePadState(void);
@@ -178,8 +178,8 @@ void ResetCourseProgress(s32 mode);
 /* Declared identically by 42 translation units before this
  * header carried them. */
 
-extern s32 D_8019CB10;
-extern s32 D_801E4D14;
+extern s32 g_PadErrorHoldBits;
+extern s32 g_PadValidateCountdown;
 extern s32 g_ControllerSceneAngleX;
 extern s32 g_ControllerSceneAngleY;
 extern s32 g_FrameSyncThreshold;
@@ -196,7 +196,7 @@ void RestartMemoryCard(void);
 /* Declared identically by 38 translation units before this
  * header carried them. */
 
-extern u16 D_8007C128[][2];
+extern u16 g_NegconSteerDeadZone[][2];
 extern s32 g_BootLogoHoldTimer;
 extern s32 g_BootLogoState;
 extern s32 g_BootLogoTimer;

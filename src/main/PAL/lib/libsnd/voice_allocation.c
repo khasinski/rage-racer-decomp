@@ -7,7 +7,7 @@
 
 extern u_char g_SndVoiceCount;
 extern u_char g_SndVoiceState[];
-extern u_char D_8009E0D0[];
+extern u_char g_SndVoiceStatePriority[];
 
 u_char SpuVmAlloc(long unused) {
     u_char candidates;
@@ -35,13 +35,13 @@ u_char SpuVmAlloc(long unused) {
             break;
         }
         offset = (u_char)voice * 52;
-        if (*(short *)&D_8009E0D0[offset] < threshold) {
-            threshold = *(short *)&D_8009E0D0[offset];
+        if (*(short *)&g_SndVoiceStatePriority[offset] < threshold) {
+            threshold = *(short *)&g_SndVoiceStatePriority[offset];
             candidate = voice;
             bestPitch = *(u_short *)&g_SndVoiceStateEnvx[offset];
             bestAge = *(u_short *)&g_SndVoiceStateAge[offset];
             candidates = 1;
-        } else if (*(short *)&D_8009E0D0[offset] == threshold) {
+        } else if (*(short *)&g_SndVoiceStatePriority[offset] == threshold) {
             candidates += 1;
             if (*(u_short *)&g_SndVoiceStateEnvx[offset] < bestPitch) {
                 bestAge = *(u_short *)&g_SndVoiceStateAge[offset];
@@ -90,7 +90,7 @@ u_char SpuVmAlloc(long unused) {
             selectedIndex = (u_char)selected;
             selectedOffset = selectedIndex * 52;
             *(u_short *)&g_SndVoiceStateAge[selectedOffset] = 0;
-            *(u_short *)&D_8009E0D0[selectedOffset] = g_SndCurrentPriority;
+            *(u_short *)&g_SndVoiceStatePriority[selectedOffset] = g_SndCurrentPriority;
             if (g_SndVoiceStateStatus[selectedOffset] == 2) {
                 SpuSetNoiseVoice(0, 0xFFFFFF);
             }
@@ -101,13 +101,13 @@ u_char SpuVmAlloc(long unused) {
 }
 
 extern u_char *g_SndCurrentVabHeader;
-extern u_char D_801E4BD4;
-extern u_char D_801E4BDA;
-extern u_char D_801E4BDD;
-extern u_char D_801E4BDB;
-extern u_char D_801E4BD5;
-extern u_char D_801E4BDE;
-extern u_char D_801E4BE4;
+extern u_char g_SndCurrentVolume;
+extern u_char g_SndCurrentMasterVolume;
+extern u_char g_SndCurrentToneVolume;
+extern u_char g_SndCurrentMasterPan;
+extern u_char g_SndCurrentPan;
+extern u_char g_SndCurrentTonePan;
+extern u_char g_SndCurrentToneMode;
 extern u_short g_SndCurrentSeqSep;
 extern short g_SndCurrentVoice;
 extern short g_SndMonoMode;
@@ -134,8 +134,8 @@ void SpuVmScaleVabVolume(long vabId, long val) {
     long tA, F0;
 
     tA = g_SndCurrentVabHeader[0x18] * 16383;
-    a2v = D_801E4BD4 * tA / 16129;
-    a3v = a2v * D_801E4BDA * D_801E4BDD / 16129;
+    a2v = g_SndCurrentVolume * tA / 16129;
+    a3v = a2v * g_SndCurrentMasterVolume * g_SndCurrentToneVolume / 16129;
 
     F0 = g_SndCurrentVoice;
     vidx = F0 * 8;
@@ -156,7 +156,7 @@ void SpuVmScaleVabVolume(long vabId, long val) {
         a3v = a3v * *(u_short *)(base + 118) / 127;
     }
 
-    kx = D_801E4BDE;
+    kx = g_SndCurrentTonePan;
     if (kx < 64) {
         a1v = a3v * kx / 63;
     } else {
@@ -164,14 +164,14 @@ void SpuVmScaleVabVolume(long vabId, long val) {
         a1v = a3v;
     }
 
-    kx = D_801E4BDB;
+    kx = g_SndCurrentMasterPan;
     if (kx < 64) {
         a1v = a1v * kx / 63;
     } else {
         a2v = a2v * (127 - kx) / 63;
     }
 
-    kx = D_801E4BD5;
+    kx = g_SndCurrentPan;
     if (kx < 64) {
         a1v = a1v * kx / 63;
     } else {
@@ -209,7 +209,7 @@ void SpuVmScaleVabVolume(long vabId, long val) {
         }
     }
 
-    if (D_801E4BE4 & 4) {
+    if (g_SndCurrentToneMode & 4) {
         g_SndReverbOnLow = a2v | g_SndReverbOnLow;
         g_SndReverbOnHigh = a1v | g_SndReverbOnHigh;
     } else {
@@ -228,9 +228,9 @@ void SpuVmScaleVabVolume(long vabId, long val) {
 extern u_short g_SndDamper;
 extern u_long g_SndCurrentProgTable;
 extern volatile u_long g_SndCurrentToneTable;
-extern u_short D_801E4BE8;
-extern short D_801E4BEC;
-extern short D_801E4BEE;
+extern u_short g_SndCurrentVag;
+extern short g_SndCurrentVoiceRegOffset;
+extern short g_SndCurrentToneIndex;
 
 void SpuVmRebuildVoiceTable(void) {
     long i;
@@ -244,14 +244,14 @@ void SpuVmRebuildVoiceTable(void) {
     u_char stackPad[8];
 
     i = 0;
-    packedVoicePtr = &D_801E4BEC;
+    packedVoicePtr = &g_SndCurrentVoiceRegOffset;
     voicePtr = packedVoicePtr - 1;
     bit = 1;
     voice = g_SndCurrentVoice;
     mask = g_SndVoiceSilenceHistory;
 
     *packedVoicePtr = voice * 8;
-    D_801E4BEE = (g_SndCurrentProgActual * 16) + g_SndCurrentTone;
+    g_SndCurrentToneIndex = (g_SndCurrentProgActual * 16) + g_SndCurrentTone;
     *(u_short *)&g_SndVoiceRegs[0x19E + (voice * 0x34)] = 0x7FFF;
 
     do {
@@ -264,7 +264,7 @@ void SpuVmRebuildVoiceTable(void) {
         u_long periodRaw;
         long voiceOffset;
 
-        periodRaw = D_801E4BE8;
+        periodRaw = g_SndCurrentVag;
         periodIndex = periodRaw % 2;
         if (periodIndex > 0) {
             periodIndex = periodRaw << 16;
@@ -275,7 +275,7 @@ void SpuVmRebuildVoiceTable(void) {
         voiceOffset = g_SndCurrentProgTable;
         periodIndex += voiceOffset;
         {
-            voiceOffset = D_801E4BEC;
+            voiceOffset = g_SndCurrentVoiceRegOffset;
         }
         periodIndex = *(u_short *)(periodIndex + 0xC);
         voiceOffset <<= 1;
@@ -289,7 +289,7 @@ void SpuVmRebuildVoiceTable(void) {
             periodIndex <<= 4;
             voiceOffset = g_SndCurrentProgTable;
             periodIndex += voiceOffset;
-            voiceOffset = D_801E4BEC;
+            voiceOffset = g_SndCurrentVoiceRegOffset;
             periodIndex = *(u_short *)(periodIndex + 0xE);
             voiceOffset <<= 1;
             *(u_short *)&g_SndVoiceRegs[6 + voiceOffset] = periodIndex;
@@ -308,7 +308,7 @@ void SpuVmRebuildVoiceTable(void) {
         flags |= 8;
         D_8009E0A0[voiceIndex] = flags;
         asm volatile("" : : "r"(flags));
-        voiceOffsetPtr = &D_801E4BEC;
+        voiceOffsetPtr = &g_SndCurrentVoiceRegOffset;
         periodIndex = g_SndCurrentProgActual;
         tableIndex = g_SndCurrentTone;
         tableBase = g_SndCurrentToneTable;

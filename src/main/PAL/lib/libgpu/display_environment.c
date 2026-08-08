@@ -15,11 +15,11 @@ typedef struct Cache {
 } Cache;
 
 extern GfxState g_GpuFuncs;
-extern char D_80013614[];
+extern char g_FmtGpuPutDispEnv[];
 extern Cache g_DispEnvCache;
 
 /* libgpu PutDispEnv: GP1(05h/06h/07h/08h) from a 0x14-byte DISPENV.
- * Named from its own trace string D_80013614, "PutDispEnv(%08x)...". */
+ * Named from its own trace string g_FmtGpuPutDispEnv, "PutDispEnv(%08x)...". */
 Env *PutDispEnv(Env *env) {
     Env *s0 = env;
     long flags;
@@ -28,7 +28,7 @@ Env *PutDispEnv(Env *env) {
     flags = 0x8000000;
 
     if (g_GpuFuncs.graphDebug >= 2) {
-        g_GpuFuncs.printf(D_80013614, s0);
+        g_GpuFuncs.printf(g_FmtGpuPutDispEnv, s0);
     }
 
     if (g_GpuFuncs.graphType == 1 || g_GpuFuncs.graphType == 2) {

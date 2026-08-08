@@ -30,10 +30,10 @@ extern volatile u_char g_CdReadyStatus;
 extern u_char g_CdSyncResult;
 extern u_char g_CdReadyResult;
 extern u_char g_CdDataEndResult;
-extern u_char D_80013840;
-extern u_char D_8001384C;
-extern u_char D_80013868;
-extern u_char D_8001387C;
+extern u_char g_MsgCdDiskError;
+extern u_char g_MsgCdErrorCommandCode;
+extern u_char g_MsgCdUnknownIntr;
+extern u_char g_MsgCdUnknownIntrCode;
 
 static __inline__ void copy8(u_char *d, u_char *s) {
     long n;
@@ -96,9 +96,9 @@ long CdReadInterruptStatus(void) {
     }
 
     if (mode == 5) {
-        puts(&D_80013840);
+        puts(&g_MsgCdDiskError);
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)&D_8001384C, g_CdCommandNames[g_CdLastCommand], g_CdStatusByte, g_CdErrorByte);
+            printf((u8 *)&g_MsgCdErrorCommandCode, g_CdCommandNames[g_CdLastCommand], g_CdStatusByte, g_CdErrorByte);
         }
     }
 
@@ -154,8 +154,8 @@ long CdReadInterruptStatus(void) {
         return 6;
     }
     default:
-        puts(&D_80013868);
-        printf((u8 *)&D_8001387C, mode);
+        puts(&g_MsgCdUnknownIntr);
+        printf((u8 *)&g_MsgCdUnknownIntrCode, mode);
         break;
     }
     return 0;

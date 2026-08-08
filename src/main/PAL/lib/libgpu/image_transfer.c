@@ -17,22 +17,22 @@ typedef struct {
 
 extern GpuMovePacket g_MoveImagePacket;
 
-extern char D_80013578[];
-extern char D_80013584[];
-extern char D_80013590[];
+extern char g_GpuNameLoadImage[];
+extern char g_GpuNameStoreImage[];
+extern char g_GpuNameMoveImage[];
 
 void LoadImage(Rect *rect, void *pixels) {
-    CheckPrim(D_80013578, rect);
+    CheckPrim(g_GpuNameLoadImage, rect);
     g_GpuFuncs->send(g_GpuFuncs->loadImage, rect, 8, (u_long)pixels);
 }
 
 void StoreImage(Rect *rect, void *data) {
-    CheckPrim(D_80013584, rect);
+    CheckPrim(g_GpuNameStoreImage, rect);
     g_GpuFuncs->send(g_GpuFuncs->storeImage, rect, 8, (u_long)data);
 }
 
 long MoveImage(GpuRectPacked *rect, u_long x, u_long y) {
-    CheckPrim(D_80013590, rect);
+    CheckPrim(g_GpuNameMoveImage, rect);
     if (rect->w == 0 || rect->h == 0) {
         return -1;
     }
@@ -45,8 +45,8 @@ long MoveImage(GpuRectPacked *rect, u_long x, u_long y) {
 }
 
 extern u_char g_GraphDebug;
-extern char D_8001359C[];
-extern char D_800135B4[];
+extern char g_FmtGpuClearOTag[];
+extern char g_FmtGpuClearOTagR[];
 extern u_long g_OtagTerminator;
 
 
@@ -56,7 +56,7 @@ void *ClearOTag(u_long *ot, long count) {
     if (g_GraphDebug >= 2) {
         void (*debug)(char *, ...) = GPU_printf;
 
-        debug(D_8001359C, ot, remaining);
+        debug(g_FmtGpuClearOTag, ot, remaining);
     }
 
     remaining--;
@@ -87,7 +87,7 @@ void *ClearOTag(u_long *ot, long count) {
 
 void *ClearOTagR(u_long *ot, long count) {
     if (g_GraphDebug >= 2) {
-        GPU_printf(D_800135B4, ot, count);
+        GPU_printf(g_FmtGpuClearOTagR, ot, count);
     }
 
     g_GpuFuncs->clearOTag(ot, count);

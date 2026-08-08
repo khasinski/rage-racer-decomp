@@ -663,12 +663,12 @@ void UpdateCarDrivetrain(void *base) {
     steerLoad += (g_StandingStartSpin & 0x1F) * 5;
   }
   {
-    s32 counter = D_8019C998;
+    s32 counter = g_DriveBoostTimer;
     if (counter > 0)
     {
       s32 baseValue = steerLoad + 0xC8;
       steerLoad = baseValue + (counter * 0x14);
-      D_8019C998 = counter - 1;
+      g_DriveBoostTimer = counter - 1;
     }
   }
   if ((*(s32 *)(((u8 *)drive) + 0x98)) == 1)

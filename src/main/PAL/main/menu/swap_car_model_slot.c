@@ -56,7 +56,7 @@ void DrawMenuCarView(void) {
     s32 *p;
     s32 *q;
 
-    vec = D_80011AB4;
+    vec = g_MenuCarPivotOffset;
     SCRATCH_VIEW_Y = -64;
     SCRATCH_VIEW_Z = -256;
     SCRATCH_VIEW_X = 0;
@@ -119,23 +119,23 @@ void DrawMenuCarView(void) {
 
     g_MenuViewOffset = s2 + g_MenuViewOffset;
     s2 = g_MenuViewOffset / 1000;
-    D_8009E782 = GetCarAssetIndex(s1, g_CarTable[s1].modelVariant);
-    D_8009E7B8 = g_CarTable[s1].tireCompound;
+    g_PlayerCarAssetIndex = GetCarAssetIndex(s1, g_CarTable[s1].modelVariant);
+    g_PlayerTireCompound = g_CarTable[s1].tireCompound;
 
     if (g_PadHeld & 2) {
-        if (D_8009E718 < 6144) {
-            D_8009E718 = D_8009E718 + 192;
+        if (g_PlayerSteerAngle < 6144) {
+            g_PlayerSteerAngle = g_PlayerSteerAngle + 192;
         }
     }
     if (g_PadHeld % 2) {
-        s32 *w = &D_8009E718;
+        s32 *w = &g_PlayerSteerAngle;
         if (*w >= -6143) {
             *w = *w - 192;
         }
     }
 
-    D_8009E804 = g_CarTable[s1].transmission;
-    D_8009E71C = (D_8009E71C + 68) & 0xFFF;
+    g_PlayerTransmission = g_CarTable[s1].transmission;
+    g_PlayerCarWheelAngle = (g_PlayerCarWheelAngle + 68) & 0xFFF;
 
     if (g_PadHeld & 4) {
         if (g_MenuViewSpin < 64) {
@@ -176,8 +176,8 @@ void DrawMenuCarView(void) {
     qValue = s2 + 30;
     *q = qValue;
     D_8009E6D4.position[2] = -outZ;
-    D_8009E724 = D_8009E6D4.rotation;
-    D_8009E734 = *q;
+    g_PlayerRenderRotation = D_8009E6D4.rotation;
+    g_PlayerRenderY = *q;
     SelectModelBank(modelSlot);
     q--;
     DrawPlayerCarModel(q);
@@ -286,10 +286,10 @@ void DrawMenuCourseView(void) {
         }
     }
 
-    p = &D_8009E6F8;
+    p = &g_PlayerCarAngleY;
     *p = *p + g_MenuViewSpin;
     BuildRotMatrixY(&mtxB, 0x800 - *p);
-    BuildRotMatrixX(&mtxA, D_8009E6F4);
+    BuildRotMatrixX(&mtxA, g_PlayerCarAngleX);
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtxA);
     SelectModelBank(14);
@@ -317,7 +317,7 @@ void DrawTeamNameCharModel(void) {
     s32 s0;
     s32 s2;
 
-    vcopy = D_80011AC4;
+    vcopy = g_TeamNameCharScale;
 
     SCRATCH_VIEW_Y = -64;
     SCRATCH_VIEW_Z = -256;
@@ -401,4 +401,4 @@ void DrawTeamNameCharModel(void) {
     }
 }
 
-void DrawCarSlotLabel(s32 x, s32 y, s32 label) { DrawText8x8(x, y, D_80082E3C[label]); }
+void DrawCarSlotLabel(s32 x, s32 y, s32 label) { DrawText8x8(x, y, g_CarManufacturerNames[label]); }

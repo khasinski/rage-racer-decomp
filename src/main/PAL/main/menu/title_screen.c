@@ -12,7 +12,7 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-extern s32 D_801E8260;
+extern s32 g_FrontendIdleTimer;
 
 /* Scene 2: the menu-side entry to the front end. Clears the title/menu
  * state words and hands over to scene 4, UpdateFrontend. */
@@ -25,8 +25,8 @@ void EnterFrontend(void) {
     g_FrameSyncThreshold = 0x80;
     g_SceneId = 4;
     g_SceneTimer = 0;
-    D_801E8260 = 0;
-    D_801E6F28 = 0;
+    g_FrontendIdleTimer = 0;
+    g_TitleFadeLevel = 0;
     g_MainMenuSlide = 0;
     g_TitlePulse = 0;
     g_FrontendState = 0;
@@ -42,20 +42,20 @@ extern s32 g_StreamReturnScene;
 void EnterTitleScreen(void) {
     SetupDisplay240(0, 0, 0);
     if (g_StreamReturnScene != 0) {
-        D_801E6F28 = 0xFF;
+        g_TitleFadeLevel = 0xFF;
         g_TitleAttractTimer = 0x190;
         g_TitleExitTimer = 0;
     } else {
         SetDispMask(0);
         UploadLoadBufferImage();
-        D_801E6F28 = 0;
+        g_TitleFadeLevel = 0;
         g_TitleAttractTimer = 0;
         g_TitleExitTimer = 0x1E;
     }
     g_FrameSyncThreshold = 0x80;
     g_SceneTimer = 0;
     g_SceneId = 4;
-    D_801E8260 = 0;
+    g_FrontendIdleTimer = 0;
     g_MainMenuSlide = 0;
     g_FrontendState = 0;
     UpdateBgmTrackCount();
@@ -88,9 +88,9 @@ void DrawPressStartPrompt(void) {
     s32 sinValue;
     s32 frame;
 
-    if (D_801E6F28 > 0) {
-        DrawTitleFadeOverlay((u8)D_801E6F28);
-        D_801E6F28 -= 2;
+    if (g_TitleFadeLevel > 0) {
+        DrawTitleFadeOverlay((u8)g_TitleFadeLevel);
+        g_TitleFadeLevel -= 2;
     }
 
     sinValue = rsin(((g_AnimTimer * 3) << 5) & 0xFE0);
@@ -109,7 +109,7 @@ void UpdateTitleScreen(void) {
     if (g_PadPressed & PAD_START) {
         PlaySoundCue(2);
         g_FrontendState = 1;
-        D_801E8260 = 0;
+        g_FrontendIdleTimer = 0;
         g_TitleMenuSelection = 0;
         if (g_TitleAttractTimer > 0) {
             g_TitleAttractTimer = 0;
@@ -241,7 +241,7 @@ void UpdateMainMenuInput(void) {
     u16 flags;
 
     if (*flagp != 0) {
-        D_801E8260 = 0;
+        g_FrontendIdleTimer = 0;
     }
     flags = *flagp;
     idx = g_TitleMenuSelection;

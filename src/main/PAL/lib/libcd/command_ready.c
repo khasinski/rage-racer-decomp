@@ -14,10 +14,10 @@ extern u_char g_CdSyncResult[];
 extern u_char g_CdReadyResult[];
 extern u_char g_CdDataEndResult[];
 extern long g_CdTimeoutDeadline;
-extern char *D_8009BB10;
-extern char D_80013814[];
-extern char D_80013824[];
-extern char D_800138A4[];
+extern char *g_CdTimeoutName;
+extern char g_MsgCdTimeout[];
+extern char g_FmtCdTimeoutState[];
+extern char g_MsgCdReadyName[];
 
 static __inline__ void copy8(u_char *dst, u_char *src) {
     long count;
@@ -42,13 +42,13 @@ long CD_ready(long mode, u_char *result) {
 
     g_CdTimeoutDeadline = VSync(-1) + 0x3C0;
     g_CdTimeoutCounter = 0;
-    D_8009BB10 = D_800138A4;
+    g_CdTimeoutName = g_MsgCdReadyName;
 
     for (;;) {
         if (g_CdTimeoutDeadline < VSync(-1) ||
             g_CdTimeoutCounter++ > 0x3C0000) {
-            puts(D_80013814);
-            printf((u8 *)D_80013824, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
+            puts(g_MsgCdTimeout);
+            printf((u8 *)g_FmtCdTimeoutState, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
                           g_CdCommandNames[g_CdLastCommand],
                           g_CdIntrNames[g_CdSyncStatus.sync],
                           g_CdIntrNames[g_CdSyncStatus.ready]);

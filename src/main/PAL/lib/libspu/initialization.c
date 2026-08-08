@@ -1,7 +1,7 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long D_8009A718;
+extern long g_SpuRevState;
 extern long g_SpuRevAttr;
 /* Bit per voice; SpuGetKeyStatus turns it into the LibRef Table 15-1 values
  * (SPU_ON / SPU_ON_ENV_OFF / SPU_OFF / SPU_OFF_ENV_ON). */
@@ -25,7 +25,7 @@ void _SpuInit(long reset_voice_center_note) {
 
         value = 0xC000;
         i = 0x17;
-        ptr = &D_8009A766;
+        ptr = &g_SpuVoiceCenterNoteLast;
         do {
             *ptr-- = value;
             i--;
@@ -35,7 +35,7 @@ void _SpuInit(long reset_voice_center_note) {
     SpuStart();
 
     temp = g_SpuRevWorkAreaStartAddr;
-    D_8009A718 = 0;
+    g_SpuRevState = 0;
     g_SpuRevReserveWa = 0;
     g_SpuRevAttr = 0;
     g_SpuRevAttrDepthLeft = 0;

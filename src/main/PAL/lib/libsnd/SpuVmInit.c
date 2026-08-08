@@ -21,15 +21,15 @@ extern volatile u_short g_SndKeyOnHigh;
 extern u_short *g_SndSpuRegs;
 
 extern u_char g_SndVoiceState[];
-extern u_char D_8009E0C0[];
-extern u_char D_8009E0C2[];
+extern u_char g_SndVoiceStateVolume[];
+extern u_char g_SndVoiceStatePan[];
 extern u_char g_SndVoiceStateProg[];
 extern u_char g_SndVoiceStateTone[];
 extern u_char g_SndVoiceStateAutoVol[];
-extern u_char D_8009E0D6[];
-extern u_char D_8009E0D8[];
-extern u_char D_8009E0DA[];
-extern u_char D_8009E0DC[];
+extern u_char g_SndVoiceStateVolStep[];
+extern u_char g_SndVoiceStateVolCounter[];
+extern u_char g_SndVoiceStateVolCounterReload[];
+extern u_char g_SndVoiceStateStartVol[];
 
 extern volatile u_short g_SndReverbOnLow;
 extern volatile u_short g_SndReverbOnHigh;
@@ -94,18 +94,18 @@ void SpuVmInit(long voices) {
                 *(short *)&g_SndVoiceStateProgActual[offset] = 0;
                 *(short *)&g_SndVoiceStateProg[offset] = 0;
                 *(short *)&g_SndVoiceStateTone[offset] = ff;
-                *(short *)&D_8009E0C0[offset] = 0;
-                eighteen = 0x40;   D_8009E0C2[offset] = eighteen;
+                *(short *)&g_SndVoiceStateVolume[offset] = 0;
+                eighteen = 0x40;   g_SndVoiceStatePan[offset] = eighteen;
                 *(short *)&g_SndVoiceStateAutoVol[offset] = 0;
-                *(short *)&D_8009E0D6[offset] = 0;
-                *(short *)&D_8009E0D8[offset] = 0;
-                *(short *)&D_8009E0DA[offset] = 0;
+                *(short *)&g_SndVoiceStateVolStep[offset] = 0;
+                *(short *)&g_SndVoiceStateVolCounter[offset] = 0;
+                *(short *)&g_SndVoiceStateVolCounterReload[offset] = 0;
                 *(short *)&g_SndVoiceStateAutoPan[offset] = 0;
                 *(short *)&g_SndVoiceStatePanStep[offset] = 0;
                 *(short *)&g_SndVoiceStatePanCounter[offset] = 0;
                 *(short *)&g_SndVoiceStatePanCounterReload[offset] = 0;
                 *(short *)&g_SndVoiceStateStartPan[offset] = 0;
-                *(short *)&D_8009E0DC[offset] = 0;
+                *(short *)&g_SndVoiceStateStartVol[offset] = 0;
 
                 spu = (volatile u_short *)&g_SndSpuRegs[(u_short)shifted];
                 spu[3] = 0x200;

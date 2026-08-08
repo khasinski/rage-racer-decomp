@@ -14,11 +14,11 @@ extern volatile CdIntr g_CdSyncStatus;
 extern u_char g_CdSyncResult[8];
 extern u_char g_CdReadyResult[8];
 extern CdAlarm g_CdTimeoutDeadline;
-extern char D_80013814[];
-extern char D_80013824[];
-extern char D_800138B0[];
-extern char D_800138B8[];
-extern char D_800138C8[];
+extern char g_MsgCdTimeout[];
+extern char g_FmtCdTimeoutState[];
+extern char g_FmtCdCommand[];
+extern char g_FmtCdNoParam[];
+extern char g_CdAlarmNameCw[];
 
 static inline void setAlarm(char *name) {
     g_CdTimeoutDeadline.deadline = VSync(-1) + 0x3C0;
@@ -29,8 +29,8 @@ static inline void setAlarm(char *name) {
 static inline long getAlarm(void) {
     if (g_CdTimeoutDeadline.deadline < VSync(-1) ||
         g_CdTimeoutDeadline.count++ > 0x3C0000) {
-        puts(D_80013814);
-        printf((u8 *)D_80013824, g_CdTimeoutDeadline.name, g_CdCommandNames[g_CdLastCommand],
+        puts(g_MsgCdTimeout);
+        printf((u8 *)g_FmtCdTimeoutState, g_CdTimeoutDeadline.name, g_CdCommandNames[g_CdLastCommand],
                       g_CdIntrNames[g_CdSyncStatus.sync], g_CdIntrNames[g_CdSyncStatus.ready]);
         CD_flush();
         return -1;
@@ -47,12 +47,12 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
     u_char *source;
 
     if (g_CdDebugLevel >= 2) {
-        printf((u8 *)D_800138B0, g_CdCommandNames[command]);
+        printf((u8 *)g_FmtCdCommand, g_CdCommandNames[command]);
     }
 
     if (g_CdCommandParamCount[command] != 0 && params == 0) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)D_800138B8, g_CdCommandNames[command]);
+            printf((u8 *)g_FmtCdNoParam, g_CdCommandNames[command]);
         }
         return -2;
     }
@@ -82,7 +82,7 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
         return 0;
     }
 
-    setAlarm(D_800138C8);
+    setAlarm(g_CdAlarmNameCw);
 
     while (g_CdSyncStatus.sync == 0) {
         if (getAlarm() != 0) {

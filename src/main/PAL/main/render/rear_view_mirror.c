@@ -20,7 +20,7 @@ extern s32 g_VisibleCellList;
 /*
  * Sets up the scratchpad render state (0x1F800000) for the rear-view mirror
  * pass: only when all five conditions hold (mirror flag, enabled, etc.) does it
- * save the current matrix into D_8009AF00, install the mirror matrix D_8019CB18,
+ * save the current matrix into g_CameraMatrixSaved, install the mirror matrix g_MirrorViewMatrix,
  * set mode 9 + a narrow clip rect + prim base, flip the ordering flag, and push
  * the pass behind the main scene (depth += 0x800). Returns 1 if the mirror pass
  * is active, else 0.
@@ -44,8 +44,8 @@ s32 BeginMirrorPass(void) {
     }
 
     if (mirrorEnabled != 0) {
-        D_8009AF00 = scratch->matrix;
-        scratch->matrix = D_8019CB18;
+        g_CameraMatrixSaved = scratch->matrix;
+        scratch->matrix = g_MirrorViewMatrix;
 
         SetGeomOffset(0xA0, 0x24);
         SetGeomScreen(0xC0);
@@ -69,41 +69,41 @@ s32 BeginMirrorPass(void) {
         scratch->y1 = v0reg;
 
         if (v1reg > 0) {
-            D_8019CEAA = y0;
+            g_MirrorDrawEnv0ClipY = y0;
             v0reg = y0 + 0xF0;
         } else {
             v0reg = 0xF0;
-            D_8019CEAA = 0;
+            g_MirrorDrawEnv0ClipY = 0;
         }
-        D_801C0692 = v0reg;
+        g_MirrorDrawEnv1ClipY = v0reg;
 
         v0reg = g_MirrorPanelY;
         v1reg = v0reg + 0x24;
         if (v1reg > 0) {
-            v0reg = v1reg - D_8019CEAA;
-            D_8019CEAE = v0reg;
-            D_801C0696 = v0reg;
+            v0reg = v1reg - g_MirrorDrawEnv0ClipY;
+            g_MirrorDrawEnv0ClipH = v0reg;
+            g_MirrorDrawEnv1ClipH = v0reg;
         } else {
-            D_8019CEAE = 0;
-            D_801C0696 = 0;
+            g_MirrorDrawEnv0ClipH = 0;
+            g_MirrorDrawEnv1ClipH = 0;
         }
 
-        g_VisibleCellMask = (s32)&D_8019C7E4;
-        g_VisibleCellList = (s32)&D_8009E888;
+        g_VisibleCellMask = (s32)&g_MirrorVisibleCellMask;
+        g_VisibleCellList = (s32)&g_MirrorVisibleCellList;
         scratch->depth += 0x800;
     }
 
     return mirrorEnabled;
 }
 
-extern s32 D_8019C86C;
-extern s32 D_8009EC94;
+extern s32 g_MainVisibleCellMask;
+extern s32 g_MainVisibleCellList;
 
 /*
  * Sibling of BeginMirrorPass: closes the mirror pass and restores the full-screen
  * main viewport render state (mode 0xA, full 0x140x0xF0 clip rect, prim base),
  * flips the ordering flag back, pulls the depth back (-= 0x800) and restores the
- * saved main-view matrix from D_8009AF00.
+ * saved main-view matrix from g_CameraMatrixSaved.
  */
 void EndMirrorPass(void) {
     GameScratchpadRenderState *scratch;
@@ -121,10 +121,10 @@ void EndMirrorPass(void) {
     scratch->x1 = v0reg;
     v0reg = 0xF0;
     scratch->y1 = v0reg;
-    v0reg = (s32)&D_8019C86C;
+    v0reg = (s32)&g_MainVisibleCellMask;
     g_VisibleCellMask = v0reg;
     v0reg = (s32)g_DrawBuffer;
-    g_VisibleCellList = (s32)&D_8009EC94;
+    g_VisibleCellList = (s32)&g_MainVisibleCellList;
     v1reg = scratch->depth;
     scratch->x0 = 0;
     scratch->y0 = 0;
@@ -133,7 +133,7 @@ void EndMirrorPass(void) {
     v0reg = scratch->orderingFlag;
     scratch->depth = v1reg - 0x800;
     scratch->orderingFlag = v0reg ^ 1;
-    scratch->matrix = D_8009AF00;
+    scratch->matrix = g_CameraMatrixSaved;
 }
 
 u8 *DrawMirrorFrame(u8 *packet) {
@@ -165,11 +165,11 @@ u8 *DrawMirrorFrame(u8 *packet) {
     packet += 0x10;
     AddPrim((u32 *)otArg, (u32 *)prim);
 
-    colorIndex = D_8007C728[g_PlayerCarIndex];
+    colorIndex = g_CarMirrorBadgeStyles[g_PlayerCarIndex];
     paletteIndex = colorIndex * 3;
     base2 = g_DrawBuffer;
     ot = base2 + 0xBD0;
-    next = GameQueueSprite(ot, packet, 0x56, g_MirrorPanelY, D_8007C73A[paletteIndex], 8, D_8007C738[paletteIndex], D_8007C739[paletteIndex], 0x7800);
+    next = GameQueueSprite(ot, packet, 0x56, g_MirrorPanelY, g_MirrorBadgeWidths[paletteIndex], 8, g_MirrorBadgeTexU[paletteIndex], g_MirrorBadgeTexV[paletteIndex], 0x7800);
     return QueueDrawModePrim(ot, next, 9);
 }
 

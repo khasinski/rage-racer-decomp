@@ -140,7 +140,7 @@ extern u8 *g_TrackEventData;
 /* Declared identically by 73 translation units before this
  * header carried them. */
 
-extern s32 D_801E3F60;
+extern s32 g_CameraCarSeedYaw;
 extern s32 g_CameraCarAngleY;
 extern s32 g_CameraCarHeading;
 extern s32 g_CameraCarSpeed;
@@ -187,8 +187,8 @@ void InterpolateTrackPoint(s32 pointIndex, s32* out, s32 weight);
 /* Declared identically by 113 translation units before this
  * header carried them. */
 
-extern s32 D_8009B1EC;
-extern volatile s16 D_801E433C;
+extern s32 g_ChaseYawPrev;
+extern volatile s16 g_RouteSceneryArmed;
 extern s16 g_AnimScenery2Frame;
 extern s32 g_AnimScenery2Tint;
 extern s16 g_AnimScenery2Variant;

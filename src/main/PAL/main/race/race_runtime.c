@@ -303,8 +303,8 @@ void DrawEndingScreen(void) {
     if ((u32)g_SceneTimer < 61) {
         DrawFullscreenFadeTile(255 - (g_SceneTimer - 6) * 11, 0x49);
     }
-    if ((u32)g_SceneTimer >= 571 && D_8009EC88 == 0) {
-        D_8009EC88 = 1;
+    if ((u32)g_SceneTimer >= 571 && g_EndingSceneLatch == 0) {
+        g_EndingSceneLatch = 1;
     }
 
     if (g_PlayerProgressB + g_PlayerProgressA >= g_PlayerLap * g_TrackLength) {
@@ -353,7 +353,7 @@ void DrawEndingScreen(void) {
     } else {
         if (g_RacePhase == 0) {
             RunRaceIntroCamera((struct Obj *)&g_PlayerCar, a);
-            D_8009EC88 = 0;
+            g_EndingSceneLatch = 0;
             g_WaypointsCollected = 0;
             break;
         }

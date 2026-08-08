@@ -5,7 +5,7 @@
 extern GpuCallbacks *g_GpuFuncs;
 extern u_char g_GraphQueue;
 extern u_char g_GraphDebug;
-extern char D_800134F0[];
+extern char g_MsgGpuSetGraphQueue[];
 
 long SetGraphQueue(long mode) {
     u_char *queue = &g_GraphQueue;
@@ -14,7 +14,7 @@ long SetGraphQueue(long mode) {
 
     oldQueue = *queue;
     if (g_GraphDebug >= 2) {
-        GPU_printf(D_800134F0, newQueue);
+        GPU_printf(g_MsgGpuSetGraphQueue, newQueue);
     }
 
     if (newQueue != *queue) {
@@ -36,14 +36,14 @@ long GetGraphDebug(void) {
     return g_GraphDebug;
 }
 
-extern char D_80013504[];
+extern char g_MsgGpuDrawSyncCallback[];
 extern u_long g_DrawSyncCallback;
 
 u_long DrawSyncCallback(u_long callback) {
     u_long ret;
 
     if (g_GraphDebug >= 2) {
-        GPU_printf(D_80013504, callback);
+        GPU_printf(g_MsgGpuDrawSyncCallback, callback);
     }
 
     ret = g_DrawSyncCallback;
@@ -51,7 +51,7 @@ u_long DrawSyncCallback(u_long callback) {
     return ret;
 }
 
-extern char D_80013520[];
+extern char g_MsgGpuSetDispMask[];
 
 void SetDispMask(long mask) {
     u_char *debug = &g_GraphDebug;
@@ -60,7 +60,7 @@ void SetDispMask(long mask) {
     GpuCallbacks *gpu;
 
     if (*debug >= 2) {
-        GPU_printf(D_80013520, enable);
+        GPU_printf(g_MsgGpuSetDispMask, enable);
     }
 
     clearPtr = debug + 0x6A;
@@ -72,20 +72,20 @@ void SetDispMask(long mask) {
     gpu->submit(enable ? 0x3000000 : 0x3000001);
 }
 
-extern char D_80013534[];
+extern char g_MsgGpuDrawSync[];
 
 void DrawSync(long mode) {
     if (g_GraphDebug >= 2) {
-        GPU_printf(D_80013534, mode);
+        GPU_printf(g_MsgGpuDrawSync, mode);
     }
     g_GpuFuncs->drawSync(mode);
 }
 
 extern short g_VramWidth;
 extern short g_VramHeight;
-extern char D_80013548[];
-extern char D_80013554[];
-extern char D_80013568[];
+extern char g_MsgGpuBadRect[];
+extern char g_FmtGpuRect[];
+extern char g_FmtGpuPrimName[];
 
 void CheckPrim(char *name, Rect *rect) {
     switch (g_GraphDebug) {
@@ -125,20 +125,20 @@ void CheckPrim(char *name, Rect *rect) {
         }
         }
         }
-        GPU_printf(D_80013548, name);
-        GPU_printf(D_80013554, rect->x, rect->y, rect->w, rect->h);
+        GPU_printf(g_MsgGpuBadRect, name);
+        GPU_printf(g_FmtGpuRect, rect->x, rect->y, rect->w, rect->h);
         return;
     }
     case 2:
-        GPU_printf(D_80013568, name);
-        GPU_printf(D_80013554, rect->x, rect->y, rect->w, rect->h);
+        GPU_printf(g_FmtGpuPrimName, name);
+        GPU_printf(g_FmtGpuRect, rect->x, rect->y, rect->w, rect->h);
         return;
     }
 }
 
-extern char D_8001356C[];
+extern char g_GpuNameClearImage[];
 
 void ClearImage(void *rect, u_char r, u_char g, u_char b) {
-    CheckPrim(D_8001356C, rect);
+    CheckPrim(g_GpuNameClearImage, rect);
     g_GpuFuncs->send(g_GpuFuncs->cmd0C, rect, 8, (b << 16) | (g << 8) | r);
 }

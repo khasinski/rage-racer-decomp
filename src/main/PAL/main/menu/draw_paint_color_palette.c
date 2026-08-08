@@ -4,7 +4,7 @@
 #include "game/scratchpad.h"
 #include "game/vector.h"
 extern PaintColorTable g_PaintColorTable;
-extern s32 D_8009B290;
+extern s32 g_PaintPalettePulsePhase;
 extern s32 g_MenuAltLayout;
 
 
@@ -52,7 +52,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
             progress = 10;
         }
 
-        phase = D_8009B290 * 2;
+        phase = g_PaintPalettePulsePhase * 2;
         xBase = 0x9E - wideOffset;
         yBase = ((u32)-(progress * 480)) >> 5;
         xBaseHalf = xBase;
@@ -68,7 +68,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
         }
         sineColor = (sineColor >> 6) - 0x41;
 
-        D_8009B290 += 0x20;
+        g_PaintPalettePulsePhase += 0x20;
 
         DrawRectOutline(ot, (s16)xFocus, (s16)yTop, 0xD, 0x1A, 0,
                       sineByte = (u8)sineColor, 0, (u8)0xFF);
@@ -106,7 +106,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
     return 0;
 }
 
-extern s32 D_8007FB2C;
+extern s32 g_OwnedCarCounterSlide;
 
 
 void DrawOwnedCarCounter(s32 owned, s32 step) {
@@ -121,17 +121,17 @@ void DrawOwnedCarCounter(s32 owned, s32 step) {
     a1v = step;
 
     if (ownedCount == 0) {
-        D_8007FB2C = 0;
+        g_OwnedCarCounterSlide = 0;
         return;
     }
     if (ownedCount < 0) {
-        v0 = ownedCount + D_8007FB2C;
-        D_8007FB2C = v0;
+        v0 = ownedCount + g_OwnedCarCounterSlide;
+        g_OwnedCarCounterSlide = v0;
         if (v0 < 0) {
-            D_8007FB2C = 0;
+            g_OwnedCarCounterSlide = 0;
         }
     }
-    v0 = D_8007FB2C;
+    v0 = g_OwnedCarCounterSlide;
     v1 = v0 - 11;
     if (v1 >= 0 && g_MenuAltLayout == 0) {
         if (v1 >= 11) {
@@ -147,10 +147,10 @@ void DrawOwnedCarCounter(s32 owned, s32 step) {
         GameDrawMenuButton(0, (s16)t2, 0x99, 0x23, 0, 0, 0, 0, 0, 0, 0);
     }
     if (ownedCount > 0) {
-        v0 = ownedCount + D_8007FB2C;
-        D_8007FB2C = v0;
+        v0 = ownedCount + g_OwnedCarCounterSlide;
+        g_OwnedCarCounterSlide = v0;
         if (v0 >= 0x1A) {
-            D_8007FB2C = 0x19;
+            g_OwnedCarCounterSlide = 0x19;
         }
     }
 }

@@ -28,28 +28,28 @@ void DrawMenuAltPanel(s32 stepA, s32 stepB) {
     step1 = stepB;
 
     if (step0 == 0 && step1 == 0) {
-        D_8007FB40 = step0;
-        D_8007FB44 = step1;
+        g_MenuAltPanelProgressA = step0;
+        g_MenuAltPanelProgressB = step1;
         return;
     }
 
     if (step0 < 0) {
-        value = D_8007FB40 + step0;
-        D_8007FB40 = value;
+        value = g_MenuAltPanelProgressA + step0;
+        g_MenuAltPanelProgressA = value;
         if (value < 0) {
-            D_8007FB40 = 0;
+            g_MenuAltPanelProgressA = 0;
         }
     }
 
     if (step1 < 0) {
-        value = D_8007FB44 + step1;
-        D_8007FB44 = value;
+        value = g_MenuAltPanelProgressB + step1;
+        g_MenuAltPanelProgressB = value;
         if (value < 0) {
-            D_8007FB44 = 0;
+            g_MenuAltPanelProgressB = 0;
         }
     }
 
-    value = D_8007FB40;
+    value = g_MenuAltPanelProgressA;
     if (value != 0) {
         offset = (value - 1) * 2;
         x0 = (g_MenuAltLayout != 0) ? 0x69 : 0xA8;
@@ -86,7 +86,7 @@ void DrawMenuAltPanel(s32 stepA, s32 stepB) {
             0x1C);
     }
 
-    render1 = D_8007FB44;
+    render1 = g_MenuAltPanelProgressB;
     if (render1 != 0) {
         offset = render1 - 1;
         x0 = (g_MenuAltLayout != 0) ? 0x92 : 0xC0;
@@ -124,19 +124,19 @@ void DrawMenuAltPanel(s32 stepA, s32 stepB) {
     }
 
     if (step0 > 0) {
-        value = D_8007FB40 + step0;
-        D_8007FB40 = value;
+        value = g_MenuAltPanelProgressA + step0;
+        g_MenuAltPanelProgressA = value;
         if (value >= 0xF) {
-            D_8007FB40 = 0xE;
+            g_MenuAltPanelProgressA = 0xE;
         }
     }
 
     if (step1 > 0) {
-        value = D_8007FB44 + step1;
-        D_8007FB44 = value;
+        value = g_MenuAltPanelProgressB + step1;
+        g_MenuAltPanelProgressB = value;
         if (value >= 0x11) {
             __asm__ volatile("" ::);
-            D_8007FB44 = 0x10;
+            g_MenuAltPanelProgressB = 0x10;
         }
     }
 }
@@ -150,10 +150,10 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     s32 v;
     s32 depth;
 
-    verts[0] = D_80011A48[0];
-    verts[1] = D_80011A48[1];
-    verts[2] = D_80011A48[2];
-    verts[3] = D_80011A48[3];
+    verts[0] = g_CourseCardVerts[0];
+    verts[1] = g_CourseCardVerts[1];
+    verts[2] = g_CourseCardVerts[2];
+    verts[3] = g_CourseCardVerts[3];
 
     scratch2 = (s32)SCRATCH_OT_BASE + 4;
 
@@ -172,12 +172,12 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     if (n < 1024) {
         v = *p2;
         if (v >= 0) {
-            D_8007FB48 = v;
+            g_CourseCardFace = v;
             *p2 = -1;
         }
     }
 
-    switch (D_8007FB48) {
+    switch (g_CourseCardFace) {
     case 1:
         depth = 0x1F8;
         break;
@@ -244,19 +244,19 @@ void DrawTimeAttackPlate(s32 stepArg) {
     s16 y1;
 
     if (step == 0) {
-        D_8007FB4C = 0;
+        g_TimeAttackPlateProgress = 0;
         return;
     }
 
     if (step < 0) {
-        value = D_8007FB4C + step;
-        D_8007FB4C = value;
+        value = g_TimeAttackPlateProgress + step;
+        g_TimeAttackPlateProgress = value;
         if (value < 0) {
-            D_8007FB4C = 0;
+            g_TimeAttackPlateProgress = 0;
         }
     }
 
-    renderValue = D_8007FB4C;
+    renderValue = g_TimeAttackPlateProgress;
     y0 = 0xD7;
     if (renderValue != 0) {
         y0 = (s16)(y0 - renderValue);
@@ -289,11 +289,11 @@ void DrawTimeAttackPlate(s32 stepArg) {
     }
 
     if (step > 0) {
-        value = D_8007FB4C + step;
-        D_8007FB4C = value;
+        value = g_TimeAttackPlateProgress + step;
+        g_TimeAttackPlateProgress = value;
         if (value >= 0xD) {
             __asm__ volatile("" ::);
-            D_8007FB4C = 0xC;
+            g_TimeAttackPlateProgress = 0xC;
         }
     }
 }
@@ -302,8 +302,8 @@ extern Matrix g_SceneLightMatrix;
 
 /* The menu-mode twin of InitTrackLighting. */
 void InitMenuLighting(void) {
-    g_SceneColorMatrix = D_80082DFC;
-    g_SceneLightMatrix = D_80082E1C;
+    g_SceneColorMatrix = g_MenuColorMatrix;
+    g_SceneLightMatrix = g_MenuLightMatrix;
     SetColorMatrix(&g_SceneColorMatrix);
     SetLightMatrix(&g_SceneLightMatrix);
     SetBackColor(0x20, 0x20, 0x20);
@@ -311,11 +311,11 @@ void InitMenuLighting(void) {
     SetFogNear(0x4E20, 0x140);
 }
 
-extern void *D_8019C764;
-extern void *D_801E40B4;
-extern void *D_8019C794;
-extern void *D_8019CB00;
-extern void *D_801E4188;
+extern void *g_CourseSelectModalScript;
+extern void *g_CarSelectPopupScript;
+extern void *g_CustomizePopupScript;
+extern void *g_CarShopModalScript;
+extern void *g_EngineerShopModalScript;
 
 
 void InitMenuMode(void) {
@@ -359,13 +359,13 @@ void InitMenuMode(void) {
     SetCameraRotMatrix();
     ScaleMatrix(SCRATCH_VIEW_MATRIX_GTE, &g_MenuViewScale);
 
-    D_8019C764 = &D_80082568;
-    D_801E40B4 = &D_80082568;
-    D_8019C794 = &D_80082568;
-    D_801E8A44 = &D_80082568;
-    D_8009F0B0 = &D_80082568;
-    D_8019CB00 = &D_80082568;
-    D_801E4188 = &D_80082568;
+    g_CourseSelectModalScript = &g_UiEmptyScript;
+    g_CarSelectPopupScript = &g_UiEmptyScript;
+    g_CustomizePopupScript = &g_UiEmptyScript;
+    g_TeamLogoSubPanelScript = &g_UiEmptyScript;
+    g_LogoSampleSubPanelScript = &g_UiEmptyScript;
+    g_CarShopModalScript = &g_UiEmptyScript;
+    g_EngineerShopModalScript = &g_UiEmptyScript;
     g_MenuViewAngle = 500000;
     g_MenuViewAngleTarget = 500000;
     g_UiScriptProgress = 0;
@@ -375,33 +375,33 @@ void InitMenuMode(void) {
     D_8009B304 = 0;
     GameMenuBusy = 0;
     g_MenuHintBarStep = 0;
-    D_8009B310 = 0;
+    g_ClassChangeApplied = 0;
     g_CourseSwapDelay = 0;
     g_MenuViewOffset = 0;
     g_MenuViewOffsetTarget = 0;
-    D_8009B360 = 0;
-    D_8009B364 = 0;
-    D_8009B368 = 0;
+    g_CourseCardSpin = 0;
+    g_CourseCardSpinTarget = 0;
+    g_CourseCardPendingGrade = 0;
     g_MenuPendingCourseIndex = -1;
     g_CarSwapFromIndex = 0;
     g_CarSwapToIndex = -1;
     g_MenuOverlayPattern = 0;
     g_CarNamePlateStep = 0;
     g_MenuPlateCarIndex = 0;
-    D_8009B324 = 0;
+    g_CarSpecGraphStep = 0;
     D_8009B328 = 0;
     g_MenuCourseModelIndex = g_CourseIndex;
-    D_8009B32C = 0;
-    D_8009B330 = 0;
+    g_MenuAltPanelStep = 0;
+    g_MenuAltPanelStep2 = 0;
     g_TimeAttackPlateStep = 0;
     g_MenuHintButtonsVisible = 1;
     g_MenuHandlerIndex = -1;
     g_MenuHandlerIndex2 = -1;
     g_MenuAltLayoutSetting = 0;
-    D_8009B33C = 0;
+    g_CarShopUnlockAll = 0;
     g_MenuScreen = 0;
     g_CourseSelectOption = 0;
-    D_801E4138 = 0;
+    g_CarSelectCursor = 0;
     g_RankingOption = 0;
     g_DesignModeOption = 0;
     D_801E4D74 = 0;
