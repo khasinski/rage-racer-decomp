@@ -321,6 +321,32 @@ typedef struct GameCarDrive {
     s16 unkA6;
 } GameCarDrive;
 
+typedef union PlayerLapTimes {
+    struct {
+        s32 frameCounts[6];
+        s32 milliseconds[6];
+    } table;
+    s32 words[12];
+} PlayerLapTimes;
+
+typedef union PlayerRaceTiming {
+    struct {
+        s32 field_A8;
+        s16 lap;
+        s16 field_AE;
+        PlayerLapTimes lapTimes;
+    } fields;
+    struct {
+        s32 field_A8;
+        s32 words[13];
+    } raw;
+} PlayerRaceTiming;
+
+typedef struct PlayerCarRaceState {
+    GameCarDrive drive;
+    PlayerRaceTiming timing;
+} PlayerCarRaceState;
+
 /* The player's 0x19C-byte race object. Its prefix shares the world/track
  * layout used by the rival cars, but +0xBC is the player drivetrain block,
  * not the rival AI view. */
@@ -387,7 +413,8 @@ typedef struct PlayerCarRuntime {
     GameCarDrive drive;
     s32 field_164;
     s16 lap;
-    u8 pad16A[0x32];
+    s16 field_16A;
+    PlayerLapTimes lapTimes;
 } PlayerCarRuntime;
 
 /* A second, halfword-wide view of that same block, for the code that loads

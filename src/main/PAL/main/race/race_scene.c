@@ -9,7 +9,9 @@
 #include "game/random.h"
 #include "game/records_internal.h"
 #include "game/render.h"
+#define GAME_CAM_ROW_TYPE CamRow
 #include "game/render_internal.h"
+#define GAME_COURSE_PROGRESS_TYPE CourseProgressState
 #include "game/save_internal.h"
 #define GAME_REF_SECTOR_DECL extern s32 g_RefSectorTimes
 #include "game/race_internal.h"
@@ -55,7 +57,7 @@ static __inline__ void GameDebugLapResult(
 
 
 
-s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
+s32 UpdateLapAndFinish(PlayerCarRuntime *car, s32 grandPrixMode) {
     s32 value;
     s32 result;
     s16 recordIndex;
@@ -75,56 +77,46 @@ s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
     s32 routeProgress;
     s32 oldTimer;
     s32 timer;
-    u8 *route;
+    PlayerCarRaceState *route;
 
-    /*
-     * `route` is the car's drive block (GameCarDrive in game/car.h) but this
-     * function reaches past the part that struct describes: `route + i*4 +
-     * 0xAC / 0xC0 / 0xC4` are per-lap arrays whose element counts are not yet
-     * known, and every access here is written as an explicit offset temporary
-     * because that is what reproduces retail's address arithmetic. Left raw on
-     * purpose; see the note in docs/names.md.
-     */
-    switch (0) { default:
-    route = (u8 *)car + 0xBC;
-    if (*(s16 *)((u8 *)car + 0x168) > 0) {
-        if (g_LapCount >= *(s16 *)((u8 *)car + 0x168)) {
-            routeOffset = *(s16 *)((u8 *)car + 0x168) * 4;
+    route = (PlayerCarRaceState *)&car->drive;
+    if (route->timing.fields.lap > 0) {
+        if (g_LapCount >= route->timing.fields.lap) {
+            routeOffset = route->timing.fields.lap * 4;
             *(s32 *)((u8 *)route + routeOffset + 0xAC) += 1;
-            routeOffset = *(s16 *)((u8 *)car + 0x168) * 4;
+            routeOffset = route->timing.fields.lap * 4;
             if (*(s32 *)((u8 *)route + routeOffset + 0xAC) > 0xFFFF) {
-                *(s32 *)(route + 0xAC +
-                         *(s16 *)((u8 *)car + 0x168) * 4) = 0x10000;
+                *(s32 *)((u8 *)route + 0xAC +
+                         route->timing.fields.lap * 4) = 0x10000;
             }
             *(s32 *)((u8 *)route +
                      (routeStoreOffset =
-                          *(s16 *)((u8 *)car + 0x168) * 4) +
+                          route->timing.fields.lap * 4) +
                      0xC4) = FramesToMilliseconds(
-                (routeCallOffset = *(s16 *)((u8 *)car + 0x168) * 4,
+                (routeCallOffset = route->timing.fields.lap * 4,
                  *(s32 *)((u8 *)route + routeCallOffset + 0xAC)),
                 Random15() % 40);
-            routeCompareOffset = *(s16 *)((u8 *)car + 0x168) * 4;
+            routeCompareOffset = route->timing.fields.lap * 4;
             if (*(s32 *)((u8 *)route + routeCompareOffset + 0xC4) > 0x927BE) {
-                *(s32 *)(route + 0xC4 +
-                         *(s16 *)((u8 *)car + 0x168) * 4) = 0x927BF;
+                *(s32 *)((u8 *)route + 0xC4 +
+                         route->timing.fields.lap * 4) = 0x927BF;
                 g_LapTimeSaturated = 1;
             }
-            routeFinalOffset = *(s16 *)((u8 *)car + 0x168) * 4;
+            routeFinalOffset = route->timing.fields.lap * 4;
             g_LapTimeMs =
                 *(s32 *)((u8 *)route + routeFinalOffset + 0xC4);
-            break;
+            goto timing_done;
         }
-
     }
-    if (g_LapCount < *(s16 *)((u8 *)car + 0x168)) {
+    if (g_LapCount < route->timing.fields.lap) {
         if (g_RaceTotalTime <
             g_BestTotalTimes[g_RaceSeries][g_CourseIndex][grandPrixMode]) {
             g_BestTotalTimes[g_RaceSeries][g_CourseIndex][grandPrixMode] = g_RaceTotalTime;
         }
     }
 
-    }
-    progress = *(s16 *)(route + 0xAC);
+timing_done:
+    progress = route->timing.fields.lap;
     if (progress * g_TrackLength <= g_PlayerProgressB + g_PlayerProgressA) {
         s32 progressLimit;
 
@@ -133,13 +125,13 @@ s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
             returnValue = 0;
         } else {
         returnValue = 1;
-        *(s16 *)(route + 0xAC) = progress + 1;
+        route->timing.fields.lap = progress + 1;
         g_LapTimeSaturated = 0;
         g_RaceCueFlags &= 0xF;
         if (g_RaceCueDelay == 0) {
             g_RaceCueDelay = 2;
         }
-        recordIndex = *(s16 *)(route + 0xAC);
+        recordIndex = route->timing.fields.lap;
         progressLimit = g_BestLapThisRace;
         recordOffset = recordIndex * 4;
         candidateTime =
@@ -147,9 +139,9 @@ s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
         tableOffset = progressLimit;
         step = candidateTime < tableOffset;
         if (step && (recordIndex != 1)) {
-            routeProgress = *(u16 *)(route + 0xAC);
-            *(s16 *)(route + 0xA6) = routeProgress - 2;
-            resultOffset = *(s16 *)(route + 0xAC) * 4;
+            routeProgress = (u16)route->timing.fields.lap;
+            route->drive.unkA6 = routeProgress - 2;
+            resultOffset = route->timing.fields.lap * 4;
             result =
                 *(s32 *)((u8 *)route + resultOffset + 0xC0);
             g_BestLapThisRace = candidateTime;
@@ -160,16 +152,16 @@ s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
                 g_RefSectorTime1 = g_SectorTimes[1];
             }
 
-            if (!(g_LapCount < *(s16 *)(route + 0xAC))) {
+            if (!(g_LapCount < route->timing.fields.lap)) {
                 PlaySoundCue(0x26);
                 g_RaceCueDelay = 0x96;
             }
         }
 
         count = g_LapCount;
-        step = *(s16 *)(route + 0xAC);
+        step = route->timing.fields.lap;
         if (step == count + 1) {
-                if (*(s16 *)(route + 0xA4) < 4) {
+                if (route->drive.unkA4 < 4) {
                     {
                         s32 *cursor;
                         s32 element;
@@ -209,7 +201,7 @@ s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
             g_RacePhase = 5;
             SeedFinishCamera(&g_PlayerCar);
             StartCdVolumeFade(0x3C);
-            if (*(s16 *)((u8 *)g_CourseProgress + 6) != 0) {
+            if (g_CourseProgress->retriesRemaining != 0) {
                 PlaySoundCue(0x3D);
             }
             }
@@ -224,7 +216,7 @@ s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
         returnValue = 0;
     }
 
-    if ((g_LapCount < *(s16 *)(route + 0xAC)) &&
+    if ((g_LapCount < route->timing.fields.lap) &&
         (g_RacePhase == 4)) {
         DrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x29);
         timer = g_RaceFadeTimer;
@@ -255,8 +247,7 @@ s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
 
         }
     } else if ((g_GrandPrixMode == 0) &&
-               (((*(s32 *)((u8 *)car + 0x6C) +
-                  *(s32 *)((u8 *)car + 0x68)) <= -g_TrackLength) ||
+               (((car->progressB + car->progressA) <= -g_TrackLength) ||
                 ((g_PlayerLap == 0) && (g_WrongWayTimer >= 0x3C)))) {
         g_RacePhase = 5;
         g_BestLapTimes[g_RaceSeries][g_CourseIndex][0] =
@@ -268,7 +259,7 @@ s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
     }
 
     if (g_RaceCueDelay == 2) {
-        value = g_LapCount - *(s16 *)(route + 0xAC);
+        value = g_LapCount - route->timing.fields.lap;
         switch (value) {
         case 2:
             PlaySoundCue(0x27);
@@ -298,7 +289,7 @@ s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
 void EnterRaceScene(void) {
     s32 pad[2];
     u8 *lapTableRow;
-    u8 *base;
+    PlayerCarRuntime *player;
     s32 mode;
     s32 scene;
     s32 tableOffset;
@@ -321,8 +312,8 @@ void EnterRaceScene(void) {
     } else {
         g_LapCount = 3;
     }
-    base = (u8 *)&g_PlayerCar;
-    InitPlayerCar((PlayerCarRuntime *)base);
+    player = &g_PlayerCar;
+    InitPlayerCar(player);
     SetTrackTexturePageNow(g_PlayerTrackSection);
     BuildStartingGrid();
     trackLength = g_TrackLength;
@@ -360,8 +351,8 @@ void EnterRaceScene(void) {
     g_BestLapThisRace = g_RefLapTime;
     if (count > 0) {
         i = 0;
-        second = (s32 *)(base + 0x184);
-        first = (s32 *)(base + 0x16C);
+        second = player->lapTimes.table.milliseconds;
+        first = player->lapTimes.table.frameCounts;
         do {
             *first = 0;
             *second = 0;
@@ -372,7 +363,7 @@ void EnterRaceScene(void) {
     }
     g_RaceTotalTime = 0;
     ResetMirrorState();
-    SeekEnvironmentScript(*(s32 *)(g_CamRow + 8));
+    SeekEnvironmentScript(g_CamRow->environmentScriptOffset);
     BuildTileStrips();
     BuildRaceHudPrims(g_GrandPrixMode);
     g_AnimTimer = 0;
@@ -445,7 +436,7 @@ void UpdateRaceScene(void) {
                         g_RankingTimes[g_RaceSeries][g_CourseIndex][0];
                 }
             } else {
-                value = *(s16 *)(g_CourseProgress + 6);
+                value = g_CourseProgress->retriesRemaining;
                 g_RacePhase = 5;
                 if (value != 0) {
                     PlaySoundCue(0x3D);
@@ -466,7 +457,7 @@ void UpdateRaceScene(void) {
     }
 
     if (g_RacePhase == 5) {
-        if (((g_GrandPrixMode == 1) && (*(s16 *)(g_CourseProgress + 6) == 0)) ||
+        if (((g_GrandPrixMode == 1) && (g_CourseProgress->retriesRemaining == 0)) ||
             (g_GrandPrixMode == 0)) {
             if (g_RaceFadeTimer >= 0x15) {
                 DrawRaceEndBanner((g_RaceFadeTimer - 0x14) * 3);
@@ -480,7 +471,7 @@ void UpdateRaceScene(void) {
             if (g_RaceFadeTimer >= 0x65) {
                 ExitRaceScene(option);
             }
-        } else if ((g_GrandPrixMode == 1) && (*(s16 *)(g_CourseProgress + 6) > 0)) {
+        } else if ((g_GrandPrixMode == 1) && (g_CourseProgress->retriesRemaining > 0)) {
             DrawLostRaceCaption(g_RaceFadeTimer * 2);
             DrawFullscreenFadeTile(g_RaceFadeTimer * 2, 0x49);
             option = 0xD;
@@ -598,7 +589,7 @@ update_race:
         }
 
         if (g_RacePhase < 5) {
-            option = UpdateLapAndFinish((void *)&g_PlayerCar, g_GrandPrixMode);
+            option = UpdateLapAndFinish(&g_PlayerCar, g_GrandPrixMode);
             UpdateSplitTimes(&g_PlayerCar, g_GrandPrixMode, option);
             if (option < 2) {
                 DrawLapTimes();
@@ -610,7 +601,7 @@ update_race:
                 DrawTimeRemaining(g_RaceTimeRemaining);
             }
             if (g_RaceTimeRemaining <= 0) {
-                if (*(s16 *)(g_CourseProgress + 6) != 0) {
+                if (g_CourseProgress->retriesRemaining != 0) {
                     PlaySoundCue(0x3D);
                 }
                 ForceAllEffectVoicesEnabled(0);

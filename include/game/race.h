@@ -405,7 +405,7 @@ void StoreReplayCarFrame(s32 pairIndex, u8* srcA, u8* srcB);
 void StoreReplayTimeAttackFrame(s32 pointIndex, u8* srcPtr);
 void TriggerRaceCues(void);
 void UpdateFinishCamera(void* obj);
-s32 UpdateLapAndFinish(void *car, s32 grandPrixMode);
+s32 UpdateLapAndFinish(struct PlayerCarRuntime *car, s32 grandPrixMode);
 void UpdatePrologueLoad(void);
 void UpdateRacePosition(void);
 void UpdateReplayCars(void);

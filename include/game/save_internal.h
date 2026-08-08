@@ -16,6 +16,11 @@ typedef struct ClassClearView {
     u16 clears;
     s16 nextPlace;
 } ClassClearView;
+typedef struct CourseProgressState {
+    u8 bestPlace[4];
+    s16 unlockPending;
+    s16 retriesRemaining;
+} CourseProgressState;
 extern ClassClearView g_ClassClears[11];
 #ifndef GAME_CLASS_WIN_COUNT_QUALIFIER
 #define GAME_CLASS_WIN_COUNT_QUALIFIER

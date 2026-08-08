@@ -58,7 +58,8 @@ typedef struct GameRenderAxisMatrix {
  * to / subtracted from a GameRenderObject's y during the view transform.
  */
 typedef struct CamRow {
-    u8 pad0[0xC];
+    u8 pad0[8];
+    s32 environmentScriptOffset;
     s16 axis0;   /* 0x0C */
     u16 axis1;   /* 0x0E */
     u16 axis2;   /* 0x10 */
