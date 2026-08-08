@@ -199,9 +199,9 @@ void intrDMADispatcher(void) {
 
     if (((*g_DmaIrqControl & 0xFF000000) == 0x80000000) || ((*g_DmaIrqControl & 0x8000) != 0)) {
         fmt = g_MsgDmaBusError;
-        printf((u8 *)fmt, *g_DmaIrqControl);
+        printf(fmt, *g_DmaIrqControl);
         for (i = 0; i < 7; i++) {
-            printf((u8 *)g_FmtDmaMadr, i, g_DmaChannelRegs[i * 4]);
+            printf(g_FmtDmaMadr, i, g_DmaChannelRegs[i * 4]);
         }
     }
 }

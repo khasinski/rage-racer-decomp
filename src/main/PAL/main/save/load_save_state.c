@@ -30,9 +30,9 @@ s32 LoadSaveStateBlock(u8 *block) {
             sum += *p++;
             i++;
         } while ((u32)i < 0x7FE);
-        printf((u8 *)g_MsgSaveChecksumOk);
+        printf(g_MsgSaveChecksumOk);
         sum = ~sum;
-        printf((u8 *)g_FmtSaveChecksum, ((GameSaveBlock *)base)->checksum, sum);
+        printf(g_FmtSaveChecksum, ((GameSaveBlock *)base)->checksum, sum);
         if (((GameSaveBlock *)base)->checksum != sum) {
             return 0;
         }

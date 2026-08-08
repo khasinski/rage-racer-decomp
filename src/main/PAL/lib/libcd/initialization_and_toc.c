@@ -34,7 +34,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
     }
 
     if (g_CdDebugLevel >= 2) {
-        printf((u8 *)g_MsgCdTrackRange, firstTrack, lastTrack);
+        printf(g_MsgCdTrackRange, firstTrack, lastTrack);
     }
 
     command[0] = 0;
@@ -54,7 +54,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
             command[0] = ((firstTrack / 10) << 4) + (firstTrack % 10);
             if (CdControlB(0x14, command, response) == 0) {
     if (g_CdDebugLevel != 0) {
-        printf((u8 *)g_MsgCdGetToc2Error);
+        printf(g_MsgCdGetToc2Error);
     }
     CdSyncCallback(oldHandler);
     return 0;
@@ -83,7 +83,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
                 fmt = g_MsgCdGetToc2Entry;
                 first = entry[0];
                 second = entry[1];
-                printf((u8 *)fmt, first, second);
+                printf(fmt, first, second);
                 entry += 4;
                 count++;
             } while (count <= (long)ptr);
@@ -96,7 +96,7 @@ long CdGetToc2(long maxTracks, u_char *out) {
     }
     }
     if (g_CdDebugLevel != 0) {
-        printf((u8 *)g_MsgCdGetToc2Error);
+        printf(g_MsgCdGetToc2Error);
     }
     CdSyncCallback(oldHandler);
     return 0;
@@ -109,7 +109,7 @@ long CdInit(void) {
     while (CD_init(1) != 1) {
         retries--;
         if (retries == -1) {
-            printf((u8 *)g_MsgCdInitFailed);
+            printf(g_MsgCdInitFailed);
             return 0;
         }
     }

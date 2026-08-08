@@ -39,7 +39,7 @@ void _spu_writeByIO(u_short *addr, u_long size) {
             g_SpuWaitCount = 0;
             while (g_SpuRegBase->raw[0xD7] & 0x400) {
                 if (++g_SpuWaitCount >= 5001) {
-                    printf((u8 *)g_SpuTimeoutFmt, g_SpuTimeoutMsgWrdy);
+                    printf(g_SpuTimeoutFmt, g_SpuTimeoutMsgWrdy);
                     break;
                 }
             }
@@ -57,7 +57,7 @@ void _spu_writeByIO(u_short *addr, u_long size) {
     g_SpuWaitCount = 0;
     while ((g_SpuRegBase->raw[0xD7] & 0x7ff) != saved) {
         if (++g_SpuWaitCount >= 5001) {
-            printf((u8 *)g_SpuTimeoutFmt, g_SpuTimeoutMsgDmaf);
+            printf(g_SpuTimeoutFmt, g_SpuTimeoutMsgDmaf);
             break;
         }
     }

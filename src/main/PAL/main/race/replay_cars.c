@@ -170,7 +170,7 @@ void ExitRaceScene(s32 sceneId) {
     if (g_SceneId == 6) {
         RequestSelectBgmAssets();
     }
-    printf((u8 *)&g_MsgGameExit);
+    printf(&g_MsgGameExit);
 }
 
 void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {

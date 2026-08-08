@@ -21,13 +21,13 @@ s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
        call result and that value is still there to hand to SsVabTransBody. */
     vabId = g_VabIds[slot];
     if (vabId == -1) {
-        printf((u8 *)g_MsgVabOpenHeadError);
+        printf(g_MsgVabOpenHeadError);
         BiosExit(1);
     }
 
     g_VabIds[slot] = SsVabTransBody((u_char *)body, vabId);
     if (g_VabIds[slot] == -1) {
-        printf((u8 *)g_MsgVabTransBodyError);
+        printf(g_MsgVabTransBodyError);
         BiosExit(1);
     }
 
@@ -123,13 +123,13 @@ s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table) {
     *vabIdPtr = SsVabOpenHeadSticky((u_char *)header, -1, g_VabSpuAddress[3]);
     vabId = *vabIdPtr;
     if (vabId == -1) {
-        printf((u8 *)g_MsgVabOpenHeadError);
+        printf(g_MsgVabOpenHeadError);
         BiosExit(1);
     }
 
     *vabIdPtr = SsVabTransBody((u_char *)body, vabId);
     if (*vabIdPtr == -1) {
-        printf((u8 *)g_MsgVabTransBodyError);
+        printf(g_MsgVabTransBodyError);
         BiosExit(1);
     }
 
@@ -151,13 +151,13 @@ s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table) {
     *vabIdPtr = SsVabOpenHeadSticky((u_char *)header, -1, 0x6A000);
     vabId = *vabIdPtr;
     if (vabId == -1) {
-        printf((u8 *)g_MsgVabOpenHeadError);
+        printf(g_MsgVabOpenHeadError);
         BiosExit(1);
     }
 
     *vabIdPtr = SsVabTransBody((u_char *)body, vabId);
     if (*vabIdPtr == -1) {
-        printf((u8 *)g_MsgVabTransBodyError);
+        printf(g_MsgVabTransBodyError);
         BiosExit(1);
     }
 

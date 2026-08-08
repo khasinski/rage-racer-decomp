@@ -42,7 +42,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   s32 bandSpeed;
   player = car;
   startData = g_TrackEventData;
-  printf((u8 *)g_MsgInitCar);
+  printf(g_MsgInitCar);
   value = g_GrandPrixSeries;
   g_RacePhase = 2;
   g_RaceSeries = value & 1;
@@ -72,7 +72,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->progressA = 0;
   player->progressB = 0;
   player->trackProgress = 0;
-  printf((u8 *)g_MsgHTbl);
+  printf(g_MsgHTbl);
   startData += g_RaceSeries * 0x90;
   player->trackPointIndex = ((RivalStartEntry *)(startData + 0x354))->trackPointIndex;
   player->x = ((RivalStartEntry *)(startData + 0x354))->x;
@@ -142,7 +142,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->drive.unk3C = 0;
   g_ShiftTargetRpm = 0;
   drive = (GameCarDrive *)(((u8 *)car) + (divisor = 0xBC));
-  printf((u8 *)g_MsgInit0);
+  printf(g_MsgInit0);
   carSpec = g_CarSpec;
   if (carSpec->topGear < 6)
   {
@@ -156,7 +156,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
     carSpec->topGear = 6;
   }
   drive->unk8C = (g_CarSpec->speedScale * 0x490) / 160;
-  printf((u8 *)g_MsgInit1);
+  printf(g_MsgInit1);
   j = 0;
   for (i = 0; i < 16; i++)
   {
@@ -174,8 +174,8 @@ void InitPlayerCar(PlayerCarRuntime *car)
   revLimitPtr = &g_CarSpec->revLimit;
   g_PeakToRevLimitRpmHalf = ((*revLimitPtr) - ((s16) peakRpm)) / 2;
   g_PeakOutputRpm = peakRpm;
-  printf((u8 *)g_MsgInit1b);
-  printf((u8 *)g_FmtDecimalLine, g_CarSpec->topGear);
+  printf(g_MsgInit1b);
+  printf(g_FmtDecimalLine, g_CarSpec->topGear);
   for (j = 0; j < 6; j++)
   {
     scaledGearRatio = (g_CarSpec->gearRatio[j + 1] * 0x490) / 160;
@@ -194,7 +194,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   {
     g_CarSpec->unk112 = 1;
   }
-  printf((u8 *)g_MsgInit2);
+  printf(g_MsgInit2);
   curveSpec = g_CarSpec;
   accelBand = g_TorqueLossBandEnd;
   speedBandOffset = 0;
@@ -230,10 +230,10 @@ void InitPlayerCar(PlayerCarRuntime *car)
     torqueBand++;
   }
   while (speedBandOffset < 20);
-  printf((u8 *)g_MsgInit4);
+  printf(g_MsgInit4);
   drive->unk84 = g_LaunchEnergyThresholds[drive->unk28 % 5] * 0xE;
   drive->unk88 = g_CarSpec->unk108;
-  printf((u8 *)g_MsgInit5);
+  printf(g_MsgInit5);
   player->shiftState = 0;
   drive->unk9E = 0;
   drive->unk9C = 0;
@@ -255,9 +255,9 @@ void InitPlayerCar(PlayerCarRuntime *car)
   g_GripLossTimer = 0;
   g_WrongWayTimer = 0;
   g_PlayerAutoSteer = 0;
-  printf((u8 *)g_MsgInit6);
-  printf((u8 *)g_FmtLongLine, player->progressA);
-  printf((u8 *)g_MsgInitOk);
+  printf(g_MsgInit6);
+  printf(g_FmtLongLine, player->progressA);
+  printf(g_MsgInitOk);
 }
 
 /*

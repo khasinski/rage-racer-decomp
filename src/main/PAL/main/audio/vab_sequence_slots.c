@@ -19,14 +19,14 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     g_VabIds[slot] = SsVabOpenHeadSticky((u_char *)header, -1, g_VabSpuAddress[slot]);
     vabId = g_VabIds[slot];
     if (vabId == -1) {
-        printf((u8 *)g_MsgSeqVabOpenHeadError);
+        printf(g_MsgSeqVabOpenHeadError);
         BiosExit(1);
     }
 
     g_VabIds[slot] = SsVabTransBody((u_char *)body, vabId);
     vabIdAgain = g_VabIds[slot];
     if (vabIdAgain == -1) {
-        printf((u8 *)g_MsgSeqVabTransBodyError);
+        printf(g_MsgSeqVabTransBodyError);
         BiosExit(1);
     }
 

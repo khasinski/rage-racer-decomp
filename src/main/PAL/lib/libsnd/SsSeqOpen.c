@@ -13,7 +13,7 @@ long SsSeqOpen(long seq_data, long vab_id) {
 
     used = g_SndSeqOpenMask;
     if (used == -1) {
-        printf((u8 *)g_MsgSeqTableFull);
+        printf(g_MsgSeqTableFull);
         return -1;
     }
 

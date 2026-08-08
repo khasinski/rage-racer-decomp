@@ -131,13 +131,13 @@ s32 InitSoundWithVab(s32 header, s32 body) {
     *vabIdPtr = SsVabOpenHeadSticky((u_char *)header, -1, 0x1000);
     vabId = *vabIdPtr;
     if (vabId == -1) {
-        printf((u8 *)g_MsgVabOpenHeadError);
+        printf(g_MsgVabOpenHeadError);
         BiosExit(1);
     }
 
     *vabIdPtr = SsVabTransBody((u_char *)body, vabId);
     if (*vabIdPtr == -1) {
-        printf((u8 *)g_MsgVabTransBodyError);
+        printf(g_MsgVabTransBodyError);
         BiosExit(1);
     }
 

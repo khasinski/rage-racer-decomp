@@ -85,7 +85,7 @@ void CD_initintr(void) {
 
 long CdResetState(void) {
     puts(g_MsgCdInit);
-    printf((u8 *)g_MsgCdInitAddr, g_CdDebugInfo);
+    printf(g_MsgCdInitAddr, g_CdDebugInfo);
 
     g_CdLastCommand = 0;
     g_CdModeByte = 0;

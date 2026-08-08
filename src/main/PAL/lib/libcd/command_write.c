@@ -17,7 +17,7 @@ static inline long getAlarm(void) {
     if (g_CdTimeoutDeadline < VSync(-1) ||
         g_CdTimeoutCounter++ > 0x3C0000) {
         puts(g_MsgCdTimeout);
-        printf((u8 *)g_FmtCdTimeoutState, ((CdAlarm *)&g_CdTimeoutDeadline)->name, g_CdCommandNames[g_CdLastCommand],
+        printf(g_FmtCdTimeoutState, ((CdAlarm *)&g_CdTimeoutDeadline)->name, g_CdCommandNames[g_CdLastCommand],
                       g_CdIntrNames[g_CdSyncStatus.sync], g_CdIntrNames[g_CdSyncStatus.ready]);
         CD_flush();
         return -1;
@@ -34,12 +34,12 @@ long CD_cw(u_char command, u_char *params, u_char *result, long async) {
     u_char *source;
 
     if (g_CdDebugLevel >= 2) {
-        printf((u8 *)g_FmtCdCommand, g_CdCommandNames[command]);
+        printf(g_FmtCdCommand, g_CdCommandNames[command]);
     }
 
     if (g_CdCommandParamCount[command] != 0 && params == 0) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)g_FmtCdNoParam, g_CdCommandNames[command]);
+            printf(g_FmtCdNoParam, g_CdCommandNames[command]);
         }
         return -2;
     }

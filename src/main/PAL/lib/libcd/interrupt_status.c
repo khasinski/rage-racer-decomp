@@ -89,7 +89,7 @@ long CdReadInterruptStatus(void) {
     if (mode == 5) {
         puts(&g_MsgCdDiskError);
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)&g_MsgCdErrorCommandCode, g_CdCommandNames[g_CdLastCommand], CD_STATUS_WORD, CD_ERROR_WORD);
+            printf(&g_MsgCdErrorCommandCode, g_CdCommandNames[g_CdLastCommand], CD_STATUS_WORD, CD_ERROR_WORD);
         }
     }
 
@@ -146,7 +146,7 @@ long CdReadInterruptStatus(void) {
     }
     default:
         puts(&g_MsgCdUnknownIntr);
-        printf((u8 *)&g_MsgCdUnknownIntrCode, mode);
+        printf(&g_MsgCdUnknownIntrCode, mode);
         break;
     }
     return 0;

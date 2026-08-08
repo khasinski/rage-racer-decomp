@@ -6,14 +6,14 @@
 
 void InitSoundSystem(void) {
     if (InitSoundWithVab() != 0) {
-        printf((u8 *)&g_MsgSoundError);
+        printf(&g_MsgSoundError);
     }
-    printf((u8 *)&g_MsgInitSoundOk);
+    printf(&g_MsgInitSoundOk);
 }
 
 void InitEngineSound(void) {
     LoadExtraVabSlotWithTable();
     SetEffectVoicesEnabled(1);
     SetReverbPreset(2, 0, 0);
-    printf((u8 *)&g_MsgInitEngineOk);
+    printf(&g_MsgInitEngineOk);
 }

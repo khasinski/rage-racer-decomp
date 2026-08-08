@@ -117,7 +117,7 @@ void WaitFmvDecode(FmvDisplayState *state) {
         do {
             timeout = timeout - 1;
             if (timeout == 0) {
-                printf((u8 *)g_MsgFmvDecodeTimeout);
+                printf(g_MsgFmvDecodeTimeout);
                 state->field_34 = one;
                 state->field_28 = state->field_28 < 1U;
                 x = state->displayRects[state->field_28][0];

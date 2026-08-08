@@ -24,7 +24,7 @@ void DecodeFmvFrame(void) {
 
     while (PresentFmvFrame(g_FmvVlcBuffers) == -1) {
         value = StGetBackloc(streamLoc);
-        printf((u8 *)g_MsgFmvSector, value);
+        printf(g_MsgFmvSector, value);
         if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
             StartStreamRead(g_StreamLoc);
         } else {

@@ -367,7 +367,7 @@ s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR) {
     }
 
     if (result < 0) {
-        printf((u8 *)g_MsgTooManyVoices);
+        printf(g_MsgTooManyVoices);
         return -1;
     }
     return result;

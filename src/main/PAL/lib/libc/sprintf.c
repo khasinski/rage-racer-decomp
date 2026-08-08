@@ -31,7 +31,7 @@ typedef struct LibcFormatWork {
 })
 #define LIBC_LOCAL_ZERO ({ s32 zero = '0'; zero; })
 
-s32 sprintf(u8 *dest, u8 *format, ...) {
+s32 sprintf(char *dest, const char *format, ...) {
     LibcFormatWork work;
     u8 *argState[2];
 #define args argState[0]

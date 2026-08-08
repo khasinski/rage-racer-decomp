@@ -37,7 +37,7 @@ long _spu_init(long resetMode) {
             waitCount = g_SpuWaitCount + 1;
             g_SpuWaitCount = waitCount;
             if (waitCount > 5000) {
-                printf((u8 *)g_SpuTimeoutFmt, g_SpuTimeoutMsgReset);
+                printf(g_SpuTimeoutFmt, g_SpuTimeoutMsgReset);
                 break;
             }
         } while (g_SpuRegBase->regs.spuStat & 0x7FF);

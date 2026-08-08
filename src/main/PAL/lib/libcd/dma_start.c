@@ -30,7 +30,7 @@ void CD_dmastart(
     i = 0;
     while (*(volatile u_long *)(0x1F801088 + (ch << 4)) & 0x01000000) {
         if (i == 0x10000) {
-            printf((u8 *)g_MsgDmaStatusError, *(volatile u_long *)(0x1F801088 + (ch << 4)));
+            printf(g_MsgDmaStatusError, *(volatile u_long *)(0x1F801088 + (ch << 4)));
             break;
         }
         i++;

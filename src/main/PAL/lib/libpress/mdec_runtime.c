@@ -30,7 +30,7 @@ void MDEC_reset(long mode) {
     return;
 
     }
-    printf((u8 *)g_FmtMdecBadOption);
+    printf(g_FmtMdecBadOption);
 }
 
 void MDEC_in(volatile u_long *buf, long words) {
@@ -85,10 +85,10 @@ long MDEC_timeout(u_char *name) {
     u_long status;
     register long ret;
 
-    printf((u8 *)g_FmtMdecTimeout, name);
+    printf(g_FmtMdecTimeout, name);
     status = *g_MdecCtrlReg;
-    printf((u8 *)g_FmtMdecTimeoutDma, (*g_MdecInDmaChcr >> 24) & 1, (*g_MdecOutDmaChcr >> 24) & 1, *g_MdecInDmaMadr, *g_MdecOutDmaMadr);
-    printf((u8 *)g_FmtMdecTimeoutStatus,
+    printf(g_FmtMdecTimeoutDma, (*g_MdecInDmaChcr >> 24) & 1, (*g_MdecOutDmaChcr >> 24) & 1, *g_MdecInDmaMadr, *g_MdecOutDmaMadr);
+    printf(g_FmtMdecTimeoutStatus,
                   (~status >> 31) & 1,
                   (status >> 30) & 1,
                   (status >> 29) & 1,

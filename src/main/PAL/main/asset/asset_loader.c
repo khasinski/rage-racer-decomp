@@ -49,7 +49,7 @@ s32 LoadAsset(s32 assetIndex, void *dst) {
 
     switch (g_CdLoadPhase) {
     case 0:
-        printf((u8 *)g_MsgNowLoading, g_AssetPaths[assetIndex], dst);
+        printf(g_MsgNowLoading, g_AssetPaths[assetIndex], dst);
         if (CdSync(1, 0) != 0) {
             g_CdLoadPhase = 1;
         }
@@ -85,12 +85,12 @@ s32 LoadAsset(s32 assetIndex, void *dst) {
 
     case 5:
         size = (g_AssetCdEntries[assetIndex].size >> 2) << 2;
-        printf((u8 *)g_MsgReadBytes, size);
+        printf(g_MsgReadBytes, size);
         g_CdLoadPhase = 0;
         return size;
 
     case 6:
-        printf((u8 *)g_MsgFileReadError, g_AssetPaths[assetIndex], dst);
+        printf(g_MsgFileReadError, g_AssetPaths[assetIndex], dst);
         g_CdLoadPhase = 0;
         break;
     }
@@ -113,9 +113,9 @@ void LoadDiscArchiveIndex(void) {
     GameCdLoadEntry *dst;
     GameCdLoadEntry *stream;
 
-    printf((u8 *)g_MsgNowLoading, g_PathRageBin, g_LoadBuffer);
+    printf(g_MsgNowLoading, g_PathRageBin, g_LoadBuffer);
     if (DsSearchFile(&file, (char *)g_PathRageBin) == 0) {
-        printf((u8 *)g_MsgFileNotFound, g_PathRageBin);
+        printf(g_MsgFileNotFound, g_PathRageBin);
     }
 
     sectors = 1;
@@ -127,7 +127,7 @@ void LoadDiscArchiveIndex(void) {
         } while (status > 0);
     } while (status != 0);
 
-    printf((u8 *)g_MsgReadSectors, sectors);
+    printf(g_MsgReadSectors, sectors);
     base = CdPosToInt_Local(&file.pos);
     src = g_LoadBuffer;
     dst = g_AssetCdEntries;
@@ -138,11 +138,11 @@ void LoadDiscArchiveIndex(void) {
         dst++;
     }
 
-    printf((u8 *)g_MsgNowSearching, g_PathRageStr);
+    printf(g_MsgNowSearching, g_PathRageStr);
     if (DsSearchFile(&file, (char *)g_PathRageStr) == 0) {
-        printf((u8 *)g_MsgFileNotFound, g_PathRageStr);
+        printf(g_MsgFileNotFound, g_PathRageStr);
     } else {
-        printf((u8 *)g_MsgSearchOk);
+        printf(g_MsgSearchOk);
     }
 
     base = CdPosToInt_Local(&file.pos);

@@ -114,7 +114,7 @@ void ResetGraph(s32 mode) {
     maskedMode = mode & 7;
     if ((maskedMode == 0) || (maskedMode == 3)) {
         graphState = &g_GraphType;
-        printf((u8 *)g_FmtGpuResetGraphTrace, g_GpuJumpTable, graphState);
+        printf(g_FmtGpuResetGraphTrace, g_GpuJumpTable, graphState);
         MemFill(graphState, 0, 0x80);
         KernelCallbackSlot3();
         GPU_cw((void *)((u32)g_GpuFuncs & 0xFFFFFF));

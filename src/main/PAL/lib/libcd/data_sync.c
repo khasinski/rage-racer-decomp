@@ -28,7 +28,7 @@ long CD_datasync(long arg) {
         long status;
         if (VSync(-1) > g_CdTimeoutDeadline || g_CdTimeoutCounter++ > 0x3C0000) {
             puts(g_MsgCdTimeout);
-            printf((u8 *)g_FmtCdTimeoutState,
+            printf(g_FmtCdTimeoutState,
                             ((CdAlarm *)&g_CdTimeoutDeadline)->name,
                             b60[g_CdLastCommand],
                             bE0[b318[0]],

@@ -59,11 +59,11 @@ long SsSeqParseHeader(long slot, long vabId, long data) {
     s->read_pos = seqBytes + 8;
     if (seqBytes[7] == 1) {
     } else {
-    printf((u8 *)g_MsgSeqNotSeqData);
+    printf(g_MsgSeqNotSeqData);
     return -1;
     }
     } else {
-    printf((u8 *)g_MsgSeqOldFormat);
+    printf(g_MsgSeqOldFormat);
     return 0;
     }
 

@@ -3,8 +3,8 @@
 
 #include "common.h"
 
-s32 printf(u8 *format, ...);
-s32 sprintf(u8 *dest, u8 *format, ...);
+s32 printf(const char *format, ...);
+s32 sprintf(char *dest, const char *format, ...);
 void putchar(s32 ch);
 void puts(u8 *str);
 

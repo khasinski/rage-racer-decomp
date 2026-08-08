@@ -25,26 +25,26 @@ long CD_newmedia(void) {
     r = cd_read(1, 16, g_CdSectorBuf);
     if (r != 1) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)g_MsgCdPvdReadError);
+            printf(g_MsgCdPvdReadError);
         }
         return 0;
     }
     if (strncmp((u8 *)&g_CdSectorBuf[1], (u8 *)g_CdVolumeSignature, 5) != 0) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)g_MsgCdPvdFormatError);
+            printf(g_MsgCdPvdFormatError);
         }
         return 0;
     }
     hdr = g_CdRootDirLba;
     if (cd_read(1, *(long *)&hdr, g_CdSectorBuf) != r) {
         if (g_CdDebugLevel > 0) {
-            printf((u8 *)g_MsgCdPathTableReadError, *(long *)&hdr);
+            printf(g_MsgCdPathTableReadError, *(long *)&hdr);
         }
         return 0;
     }
     p = g_CdSectorBuf;
     if (g_CdDebugLevel >= 2) {
-        printf((u8 *)g_MsgCdSearchingDir);
+        printf(g_MsgCdSearchingDir);
     }
     i = 0;
     while (p < &g_CdSectorBuf[0x800]) {
@@ -62,7 +62,7 @@ long CD_newmedia(void) {
         d = (n & 1) + 8;
         p += n + d;
         if (g_CdDebugLevel >= 2) {
-            printf((u8 *)g_FmtCdPathEntry, g_CdPathTable[i].lba.sector,
+            printf(g_FmtCdPathEntry, g_CdPathTable[i].lba.sector,
                           g_CdPathTable[i].number, g_CdPathTable[i].parent_number,
                           g_CdPathTable[i].name);
         }
@@ -76,7 +76,7 @@ long CD_newmedia(void) {
     }
     g_CdCachedDir = 0;
     if (g_CdDebugLevel >= 2) {
-        printf((u8 *)g_MsgCdDirEntriesFound, i);
+        printf(g_MsgCdDirEntriesFound, i);
     }
     return 1;
 }

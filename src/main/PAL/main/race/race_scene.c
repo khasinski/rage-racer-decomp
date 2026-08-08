@@ -41,7 +41,7 @@ static __inline__ void GameDebugLapResult(
     s32 fadeTimer)
 {
     if (format != 0) {
-        printf((u8 *)
+        printf(
             format, result, progress, mode, lapCount, racePhase, fadeTimer);
     }
 }
@@ -381,7 +381,7 @@ void EnterRaceScene(void) {
     g_SceneId = 12;
     g_FrameSyncThreshold = 0x180;
     DrawRoundScreen();
-    printf((u8 *)g_MsgGame0Ok);
+    printf(g_MsgGame0Ok);
 
     (void)pad;
 }

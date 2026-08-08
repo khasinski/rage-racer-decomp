@@ -52,7 +52,7 @@ long CD_sync(long mode, u_char *result) {
         if (g_CdTimeoutDeadline < VSync(-1) ||
             g_CdTimeoutCounter++ > 0x3C0000) {
             puts(g_MsgCdTimeout);
-            printf((u8 *)g_FmtCdTimeoutState, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
+            printf(g_FmtCdTimeoutState, ((CdAlarm *)&g_CdTimeoutDeadline)->name,
                           g_CdCommandNames[g_CdLastCommand],
                           statusNames[intr->sync], statusNames[intr->ready]);
             CD_flush();

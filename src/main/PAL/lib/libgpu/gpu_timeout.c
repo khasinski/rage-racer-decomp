@@ -25,10 +25,10 @@ long Gpu_CheckTimeout(void) {
     (void)*gp1ForLog;
     pending = g_GpuQueueWriteIdx;
     gpuTail = g_GpuQueueReadIdx;
-    printf((u8 *)g_MsgGpuTimeout, (pending - gpuTail) & 0x3F, *gp1ForLog, *g_GpuDmaChcr, *g_GpuDmaMadr);
+    printf(g_MsgGpuTimeout, (pending - gpuTail) & 0x3F, *gp1ForLog, *g_GpuDmaChcr, *g_GpuDmaMadr);
     dc = (long *)&g_GpuLastCb;
     asm("" : "=r"(dc) : "0"(dc));
-    printf((u8 *)g_MsgGpuTimeoutCallback, *dc, g_GpuLastCbArg, g_GpuLastCbData);
+    printf(g_MsgGpuTimeoutCallback, *dc, g_GpuLastCbArg, g_GpuLastCbData);
 
     intrMask = SetIntrMask(0);
     g_GpuQueueReadIdx = 0;
