@@ -339,7 +339,7 @@ extern s32 g_PlayerField3C;
 extern s32 g_PlayerSegmentWeight;
 extern s32 g_RouteSceneryY;
 extern s32 g_RouteSceneryZ;
-extern s32 g_ShuttlePath2Points[];
+extern ShuttlePath g_ShuttlePath2Points;
 extern s16 g_ShuttlePathTravelMax[];
 extern s16 g_SkyTileMap[][16];
 extern u16 g_SpinningSceneryAngle[];
