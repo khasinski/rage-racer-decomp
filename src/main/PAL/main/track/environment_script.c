@@ -178,7 +178,7 @@ void UpdateEnvironment(void) {
         {
             u8 *idx = (u8 *)(i * 2);
             register s32 palo asm("$5");
-            LA_ORDERED(palo, D_801E6DA4, idx);
+            LA_ORDERED(palo, g_EnvironmentClut, idx);
             dst = (s16 *)(idx + palo);
         }
         *dst = 0;

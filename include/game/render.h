@@ -846,6 +846,8 @@ extern s32 g_EnvironmentModePrev;
 /* Sky palette records, 48 bytes each, indexed by environment mode. Installed
  * from the loaded environment block by SetEnvPaletteTable. */
 extern u8 *g_EnvPaletteTable;
+/* The 16 interpolated BGR555 entries uploaded to VRAM at (0xE0, 0x1E6). */
+extern u16 g_EnvironmentClut[16];
 /* g_EnvironmentMode == 4. Picks DrawStaticScenery's model 0x3B over 0x3A
  * and the `flags & 2` prop set over `flags & 1`; also forwarded to scratchpad
  * 0x1F800084 by every car/track renderer. */

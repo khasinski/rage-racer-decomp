@@ -2982,16 +2982,9 @@ alias-collision check 19a asks for (one name per address, one address per name).
 
 * **`D_801E4FB4` is `g_DragScale`.** Found here; folded into the 15g entry that
   claimed it was never read, so the document states it once.
-* **A second `%hi`/`%lo` trap, in this territory.** `LA_ORDERED(dst, sym, dep)`
-  in `include/asm_macros.h` **stringifies** its symbol into an inline-asm `la`.
-  `track/seek_environment_script.c` uses it on `D_801E6DA4` (the 16-entry sky
-  CLUT), so that symbol must keep the raw spelling exactly like the
-  `%hi`/`%lo` cases in 12c. Renaming it links clean at compile time and fails at
-  link. Any future pass touching a `LA_ORDERED` argument must know this.
-* **`include/game/sound.h` claims `D_801E6DA4` as "+0x24 s16 table" of the sound
-  work area.** Its only user in the tree is the sky-CLUT upload. The header
-  declaration is left alone (it is another pass's territory) but the
-  identification is recorded here as doubtful.
+* **`g_EnvironmentClut` was the raw `D_801E6DA4`.** Its only user builds the
+  16-entry BGR555 environment CLUT uploaded at `(0xE0, 0x1E6)`. It belongs to
+  rendering, despite residing immediately after the audio control block.
 * **`D_801E4112`/`D_801E4152` overlap `D_801E4110`**, which section 12e
   identifies as libsnd's open-VAB `ProgAtr` pointer. Both cannot be live at
   once. The drivetrain reading is direct (`func_8002C478` builds the tables, and
@@ -3005,7 +2998,6 @@ alias-collision check 19a asks for (one name per address, one address per name).
 | `g_ChaseYawPrev` | two live roles in one slot — see 18d |
 | `D_801E40B8` | already named `g_SceneTimer`; used only as `g_RankedCars - 1` |
 | `D_8019CB38` / `D_8019CB3A` | referenced from `%hi`/`%lo` inline asm (12c). Since named `g_PaintBlendShade0` / `…1` for the *C* uses in the same file; the inline-asm references still spell them raw, which is the point of the entry. |
-| `D_801E6DA4` | referenced from a `LA_ORDERED` inline asm — see 18e |
 | `g_PlayerAutoSteer` | both writes in the image store zero, so the one reader (skip the pad, freeze the steering) can never fire |
 | `g_DriveBoostTimer` | same shape: initialised to zero, only ever decremented |
 | `g_EngineRpmSnapshot`, `D_801E4248`, `D_801E4CF8`, `D_801E4D84`, `g_RouteSceneryArmed`, `g_CameraCarSeedYaw`, `g_StandingStartState` | written, never read anywhere in the image |
