@@ -240,7 +240,7 @@ timing_done:
                 ((g_PlayerCar.lap == 0) && (g_WrongWayTimer >= 0x3C)))) {
         g_RacePhase = 5;
         g_BestLapTimes[g_RaceSeries][g_CourseIndex][0] =
-            g_RankingTimes[g_RaceSeries][g_CourseIndex][0];
+            g_RankingRecords[g_RaceSeries][g_CourseIndex][0].raceTime;
         StartCdVolumeFade(8);
         ForceAllEffectVoicesEnabled(0);
         g_RaceFadeTimer = 0;
@@ -422,7 +422,7 @@ void UpdateRaceScene(void) {
                 g_RacePhase = 7;
                 if (g_GrandPrixMode == 0) {
                     g_BestLapTimes[g_RaceSeries][g_CourseIndex][0] =
-                        g_RankingTimes[g_RaceSeries][g_CourseIndex][0];
+                        g_RankingRecords[g_RaceSeries][g_CourseIndex][0].raceTime;
                 }
             } else {
                 value = g_CourseProgress->retriesRemaining;

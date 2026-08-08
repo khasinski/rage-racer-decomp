@@ -7,7 +7,6 @@
 #include "game/cd.h"
 #include "game/menu.h"
 #include "game/race.h"
-#define GAME_RANKING_TIMES_DECL extern s32 g_RankingTimes
 #include "game/records_internal.h"
 #define GAME_RACE_TOTAL_TIME_QUALIFIER volatile
 #include "game/race_internal.h"
@@ -17,8 +16,8 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-void DrawRankingPanel(u8 *slideX) {
-    u8 *panel;
+void DrawRankingPanel(s32 slideX) {
+    s32 panel;
     s32 iter;
     s32 countOrIndex;
     s32 xOrField;
@@ -61,7 +60,7 @@ void DrawRankingPanel(u8 *slideX) {
                     (void)(*(volatile char *)&text[0] = iter + 0x31);
                     doubledRow = (doubledRow + row) << 5;
                     scoreValue = *(s32 *)scoreOrX;
-                    value = (destination = (s32)(panel + 0x14));
+                    value = (destination = panel + 0x14);
                     scoreValue;
                 }));
             destination = doubledRow;
@@ -70,7 +69,7 @@ void DrawRankingPanel(u8 *slideX) {
             if (g_BestLapIndex == iter) {
                 color = 0x780F;
             }
-            DrawText8x8((void *)destination, xOrField, text, color);
+            DrawText8x8(destination, xOrField, text, color);
             iter++;
             scoreOrX += 4;
         } while (iter < limit);
@@ -102,7 +101,7 @@ void DrawRankingPanel(u8 *slideX) {
     } while (countOrIndex < 5);
 }
 
-void DrawTimeRecordPanel(u8 *s5) {
+void DrawTimeRecordPanel(s32 s5) {
     char text[48];
     s32 s4, s3;
     s32 s2, color, idx;
@@ -215,7 +214,7 @@ void InsertRaceRecords(void) {
     while (i < 5) {
         score_offset = row_offset + (g_CourseIndex * 0x50);
         score_offset += g_GrandPrixSeries * 0x140;
-        if (best < *(s32 *)((u8 *)&g_RankingTimes + score_offset)) {
+        if (best < ((RaceRecord *)((u8 *)g_RankingRecords + score_offset))->raceTime) {
             if (i < 4) {
                 j = 4;
                 do {
@@ -240,7 +239,7 @@ void InsertRaceRecords(void) {
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *(s32 *)((u8 *)&g_RankingTimes + score_offset) = best;
+            ((RaceRecord *)((u8 *)g_RankingRecords + score_offset))->raceTime = best;
             j = 0;
             fill_offset = row_offset;
             for (; j < 6; j++) {
@@ -252,7 +251,7 @@ void InsertRaceRecords(void) {
 
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *(u16 *)((u8 *)g_RankingCars + score_offset) = g_PlayerCarIndex;
+            ((RaceRecord *)((u8 *)g_RankingRecords + score_offset))->carIndex = g_PlayerCarIndex;
             break;
         }
         i++;
@@ -268,7 +267,7 @@ void InsertRaceRecords(void) {
     while (i < 5) {
         score_offset = row_offset + (g_CourseIndex * 0x50);
         score_offset += g_GrandPrixSeries * 0x140;
-        score_value = *(s32 *)((u8 *)&g_TimeRecordTimes + score_offset);
+        score_value = ((RaceRecord *)((u8 *)g_TimeRecords + score_offset))->raceTime;
         if (g_RaceTotalTime < score_value) {
             if (i < 4) {
                 j = 4;
@@ -294,7 +293,7 @@ void InsertRaceRecords(void) {
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *(s32 *)((u8 *)&g_TimeRecordTimes + score_offset) = g_RaceTotalTime;
+            ((RaceRecord *)((u8 *)g_TimeRecords + score_offset))->raceTime = g_RaceTotalTime;
             j = 0;
             fill_offset = row_offset;
             for (; j < 6; j++) {
@@ -306,7 +305,7 @@ void InsertRaceRecords(void) {
 
             score_offset = row_offset + (g_CourseIndex * 0x50);
             score_offset += g_GrandPrixSeries * 0x140;
-            *(u16 *)((u8 *)g_TimeRecordCars + score_offset) = g_PlayerCarIndex;
+            ((RaceRecord *)((u8 *)g_TimeRecords + score_offset))->carIndex = g_PlayerCarIndex;
             break;
         }
         i++;
@@ -347,7 +346,7 @@ void UpdateRecordEntry(void) {
                 g_RecordEntryState = 2;
             }
         }
-        DrawRankingPanel((u8 *)0);
+        DrawRankingPanel(0);
         break;
 
     case 1: {
@@ -370,7 +369,7 @@ void UpdateRecordEntry(void) {
 
         g_RankingNameCodes[g_NameEntryCursor] = g_NameEntryChar;
         buttons = g_PadPressed;
-        name = (u8 *)g_RankingNameCodes;
+        name = g_RankingNameCodes;
         if (buttons & 0x860) {
             PlaySoundCue(2);
             g_NameEntryCursor++;
@@ -409,7 +408,7 @@ void UpdateRecordEntry(void) {
                 g_NameEntryCharset[g_RankingNameCodes[i]];
             i++;
         } while (i < 6);
-        DrawRankingPanel((u8 *)0);
+        DrawRankingPanel(0);
         break;
     }
 
@@ -418,13 +417,13 @@ void UpdateRecordEntry(void) {
             g_RecordEntryState = 3;
             g_RecordPanelSlide = 0;
         }
-        DrawRankingPanel((u8 *)0);
+        DrawRankingPanel(0);
         break;
 
     case 3:
         g_RecordPanelSlide -= 8;
-        DrawRankingPanel((u8 *)g_RecordPanelSlide);
-        DrawTimeRecordPanel((u8 *)(g_RecordPanelSlide + 0x140));
+        DrawRankingPanel(g_RecordPanelSlide);
+        DrawTimeRecordPanel(g_RecordPanelSlide + 0x140);
         if (g_RecordPanelSlide < -0x13F) {
             if (g_TimeRecordInsertRow < 5) {
                 g_NameEntryCursor = 0;
@@ -453,7 +452,7 @@ void UpdateRecordEntry(void) {
 
         g_TimeRecordNameCodes[g_NameEntryCursor] = g_NameEntryChar;
         buttons = g_PadPressed;
-        name = (u8 *)g_TimeRecordNameCodes;
+        name = g_TimeRecordNameCodes;
         if (buttons & 0x860) {
             PlaySoundCue(2);
             g_NameEntryCursor++;
@@ -477,7 +476,7 @@ void UpdateRecordEntry(void) {
                 g_NameEntryCharset[g_TimeRecordNameCodes[i]];
             i++;
         } while (i < 6);
-        DrawTimeRecordPanel((u8 *)0);
+        DrawTimeRecordPanel(0);
         break;
     }
 
@@ -490,7 +489,7 @@ void UpdateRecordEntry(void) {
             g_RecordEntryState = 6;
             g_RecordPanelSlide = 0;
         }
-        DrawTimeRecordPanel((u8 *)0);
+        DrawTimeRecordPanel(0);
         break;
 
     case 6:
@@ -500,7 +499,7 @@ void UpdateRecordEntry(void) {
             RequestSelectBgmAssets();
             g_SceneId = 6;
         }
-        DrawTimeRecordPanel((u8 *)0);
+        DrawTimeRecordPanel(0);
         break;
     }
 
