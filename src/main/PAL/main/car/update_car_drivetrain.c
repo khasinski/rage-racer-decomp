@@ -19,192 +19,188 @@ extern u8 g_PadType;
  * *(s16*)((u8*)base+0x132)) with the drive sub-block at base+0xBC; the raw
  * offsets are what make it match, so it is intentionally left as void*.
  */
+/*
+ * Note on `gearCurve`: m2c merged two values into one temporary, so it starts
+ * out as the per-gear torque curve pointer and is later reused to carry the
+ * shift target speed. Splitting it changes the register assignment.
+ */
 void UpdateCarDrivetrain(void *base) {
-  u8 *var_a2;
-  s16 temp_a0;
-  s16 temp_a0_2;
-  s16 temp_a1;
-  s32 temp_t1;
-  s16 temp_v0_3;
-  s16 temp_v0_5;
-  s16 temp_a0_5;
-  int new_var2;
+  u8 *gearCurve;
+  s16 curveModeNow;
+  s16 revLimit;
+  s16 targetGear;
+  s32 bandEnd;
+  s16 bandStart;
+  s16 lossStart;
+  s16 targetGearAgain;
+  int assistArmed;
   int steeringNonnegative;
   int secondNonnegative;
-  s16 temp_v0_6;
-  s16 temp_v0_7;
-  s32 temp_v0_15;
-  s16 temp_v1;
-  s16 temp_v1_11;
-  s16 temp_v1_2;
-  s16 temp_v1_3;
-  s16 temp_v1_4;
-  s16 temp_v1_5;
-  s32 var_a0_2;
-  s32 temp_a0_3;
-  s32 temp_a0_4;
-  s32 temp_a0_7;
-  s32 temp_a0_8;
-  s32 temp_a0_9;
-  s32 temp_a1_2;
-  s32 temp_a1_3;
-  s32 temp_a2;
-  s32 temp_lo;
-  s32 temp_lo_2;
-  s32 temp_s2;
-  s32 temp_lo_3;
-  s32 temp_s0;
-  s32 temp_s1;
-  s32 temp_t0;
-  s32 temp_t0_2;
-  s32 temp_t2;
-  s32 temp_v0;
-  s32 temp_v0_10;
-  s32 temp_v0_11;
-  s32 temp_v0_12;
-  s32 temp_v0_13;
+  s16 shiftTimer;
+  s16 shiftTimerNext;
+  s32 assistEnabled;
+  s16 gear;
+  s16 targetGearCheck;
+  s16 leftWheelState;
+  s16 rightWheelState;
+  s16 driveCurveMode;
+  s16 steerBias;
+  s32 camber;
+  s32 bandTorque;
+  s32 lossTorque;
+  s32 shiftRemaining;
+  s32 trackHeadingError;
+  s32 pointIndex;
+  s32 wheelSpeed;
+  s32 lateralOffset;
+  s32 gearTorque;
+  s32 dragProduct;
+  s32 toCentreX;
+  s32 gearTorqueLate;
+  s32 cosCentreAngle;
+  s32 toCentreZ;
+  s32 engineSpeed;
+  s32 engineSpeedLoss;
+  s32 bandIndex;
+  s32 frontLoad;
+  s32 speedForPath;
+  s32 centreAngle;
+  s32 radialDistance;
   s32 shiftTargetRpm;
-  s32 temp_v0_2;
-  u8 *new_var3;
-  s32 temp_v0_4;
-  s32 temp_v0_9;
-  s32 temp_v1_10;
-  s32 temp_v1_12;
-  s32 temp_v1_13;
-  s32 temp_v1_15;
-  s32 temp_v1_18;
-  s32 temp_v1_19;
-  s32 temp_v1_20;
-  s32 temp_v1_21;
-  s32 temp_v1_22;
-  s32 temp_v1_7;
-  s32 temp_v1_8;
-  s32 temp_v1_9;
-  s32 var_a0;
-  s32 var_a0_3;
-  s32 var_a0_4;
-  s32 var_a0_5;
-  s32 var_a0_6;
-  s32 var_a1;
-  s32 var_a1_2;
-  s32 var_a1_3;
-  s32 var_a1_4;
-  int new_var;
-  s32 var_a1_5;
-  s32 var_a1_7;
-  s32 var_s0;
-  s32 var_s1;
-  s32 var_s2;
-  s32 var_s5;
-  s32 var_s6;
-  s32 var_s7;
-  s32 var_t3;
-  s32 var_v0_10;
-  s32 var_v0_11;
-  s32 var_v0_12;
-  s32 var_v0_3;
-  s32 var_v0_4;
-  s32 var_v0_5;
-  s32 var_v0_6;
-  s32 var_v0_7;
-  s32 var_v0_8;
-  s32 var_v0_9;
-  s32 var_v1;
-  s32 var_v1_2;
-  s32 var_v1_4;
-  s32 var_v1_7;
-  s32 var_v1_8;
-  s32 var_v1_9;
+  s32 pointCurveMode;
+  u8 *gearRatioSlot;
+  s32 headingError;
+  s32 shiftMode;
+  s32 gradeScale;
+  s32 sideForce;
+  s32 roadSpeed;
+  s32 arcPointIndex;
+  s32 speedA;
+  s32 torqueShifted;
+  s32 speedB;
+  s32 driveModeLate;
+  s32 loadTorque;
+  s32 driveMode;
+  s32 frontLoadScaled;
+  s32 shiftTargetSpeed;
+  s32 downforceScale;
+  s32 downforce;
+  s32 gripBudget;
+  s32 bandSlot;
+  s32 bandCurve;
+  s32 assistStep;
+  int shiftTimerActive;
+  s32 lossCurve;
+  s32 dragTerm;
+  s32 slipAngle;
+  s32 accel;
+  s32 bandScale;
+  s32 steerLoad;
+  s32 throttleAccel;
+  s32 gearRatio;
+  s32 netTorque;
+  s32 gradePenalty;
+  s32 lateralSum;
+  s32 dragBase;
+  s32 camberLean;
+  s32 netTorqueRoundedA;
+  s32 netTorqueRoundedC;
+  s32 lossBelowLimit;
+  s32 shiftedSpeed;
+  s32 netTorqueRoundedB;
+  s32 bandBase;
+  s32 lossBase;
+  s32 throttleTorque;
+  s32 speedScaled;
+  s32 torqueLate;
   s32 coefficientBase;
   s32 coefficient;
-  s32 temp_a0_6;
-  s32 temp_v0_8;
-  u16 temp_v1_16;
-  u16 temp_v1_23;
-  u16 var_v0;
-  s16 var_v0_2;
-  void *temp_s3;
-  void *temp_v1_17;
-  void *temp_v1_6;
-  void *var_a3;
-  void *var_v1_3;
+  s32 wheelSpeedScaled;
+  u16 arcFlags;
+  u16 currentSpeed;
+  u16 steerBiasNext;
+  void *drive;
+  void *arcCentre;
+  void *trackPoint;
+  void *curveSlot;
+  void *specSlot;
   void *car;
   u8 *config;
   car = base;
   base = (u8 *)g_GearTorqueCurve;
   config = (u8 *)g_CarSpec;
-  temp_v1 = *(s16 *)(((u8 *)car) + 0x132);
-  new_var3 = ((u8 *)(config + (temp_v1 * 4))) + 0xCC;
-  var_a2 = (temp_v1 * 64) + ((u8 *)base);
-  var_s7 = *(s32 *)new_var3;
-  temp_s3 = car + 0xBC;
+  gear = *(s16 *)(((u8 *)car) + 0x132);
+  gearRatioSlot = ((u8 *)(config + (gear * 4))) + 0xCC;
+  gearCurve = (gear * 64) + ((u8 *)base);
+  gearRatio = *(s32 *)gearRatioSlot;
+  drive = car + 0xBC;
   if (g_RacePhase < 2)
   {
-    *(s16 *)(((u8 *)car) + 0xEC) = temp_v1;
-    var_s7 = *(s32 *)(((u8 *)config) + 0xD0);
-    var_a2 = base;
+    *(s16 *)(((u8 *)car) + 0xEC) = gear;
+    gearRatio = *(s32 *)(((u8 *)config) + 0xD0);
+    gearCurve = base;
   }
   else
     if (((*(s32 *)(((u8 *)car) + 0x154)) == 3) && (((*(s16 *)(((u8 *)car) + 0x15C)) < 0x40) || ((*(s16 *)(((u8 *)car) + 0x15E)) >= 0x80)))
   {
-    var_a2 = base;
+    gearCurve = base;
   }
-  temp_v1_2 = *(s16 *)(((u8 *)temp_s3) + 0x9C);
-  if (temp_v1_2 == 0)
+  leftWheelState = *(s16 *)(((u8 *)drive) + 0x9C);
+  if (leftWheelState == 0)
   {
-    if ((*(s16 *)(((u8 *)temp_s3) + 0xA0)) >= 0x85)
+    if ((*(s16 *)(((u8 *)drive) + 0xA0)) >= 0x85)
     {
-      *(s16 *)(((u8 *)temp_s3) + 0x9C) = 1;
+      *(s16 *)(((u8 *)drive) + 0x9C) = 1;
     }
   }
   else
-    if (temp_v1_2 == 1)
+    if (leftWheelState == 1)
   {
-    *(s16 *)(((u8 *)temp_s3) + 0x9C) = 2;
+    *(s16 *)(((u8 *)drive) + 0x9C) = 2;
   }
   else
-    if ((*(s16 *)(((u8 *)temp_s3) + 0xA0)) < 0x7C)
+    if ((*(s16 *)(((u8 *)drive) + 0xA0)) < 0x7C)
   {
-    *(s16 *)(((u8 *)temp_s3) + 0x9C) = 0;
+    *(s16 *)(((u8 *)drive) + 0x9C) = 0;
   }
-  temp_v1_3 = *(s16 *)(((u8 *)temp_s3) + 0x9E);
-  if (temp_v1_3 == 0)
+  rightWheelState = *(s16 *)(((u8 *)drive) + 0x9E);
+  if (rightWheelState == 0)
   {
-    if ((*(s16 *)(((u8 *)temp_s3) + 0xA2)) >= 0x85)
+    if ((*(s16 *)(((u8 *)drive) + 0xA2)) >= 0x85)
     {
-      *(s16 *)(((u8 *)temp_s3) + 0x9E) = 1;
+      *(s16 *)(((u8 *)drive) + 0x9E) = 1;
     }
   }
   else
-    if (temp_v1_3 == 1)
+    if (rightWheelState == 1)
   {
-    *(s16 *)(((u8 *)temp_s3) + 0x9E) = 2;
+    *(s16 *)(((u8 *)drive) + 0x9E) = 2;
   }
   else
-    if ((*(s16 *)(((u8 *)temp_s3) + 0xA2)) < 0x7C)
+    if ((*(s16 *)(((u8 *)drive) + 0xA2)) < 0x7C)
   {
-    *(s16 *)(((u8 *)temp_s3) + 0x9E) = 0;
+    *(s16 *)(((u8 *)drive) + 0x9E) = 0;
   }
-  temp_v0 = (*(s16 *)(((u8 *)temp_s3) + 0xA0)) * 0x64;
-  var_a0 = temp_v0 >> 8;
-  if (temp_v0 < 0)
+  frontLoad = (*(s16 *)(((u8 *)drive) + 0xA0)) * 0x64;
+  frontLoadScaled = frontLoad >> 8;
+  if (frontLoad < 0)
   {
-    var_a0 = ((s32) (temp_v0 + 0xFF)) >> 8;
+    frontLoadScaled = ((s32) (frontLoad + 0xFF)) >> 8;
   }
-  var_a1 = 0x17C - var_a0;
-  var_a1 += ((s32) ((*(s16 *)(((u8 *)temp_s3) + 0xA2)) * 0x64)) / 256;
-  if ((*(s32 *)(((u8 *)temp_s3) + 0x98)) == 1)
+  gripBudget = 0x17C - frontLoadScaled;
+  gripBudget += ((s32) ((*(s16 *)(((u8 *)drive) + 0xA2)) * 0x64)) / 256;
+  if ((*(s32 *)(((u8 *)drive) + 0x98)) == 1)
   {
-    temp_v1_4 = *(s16 *)(((u8 *)temp_s3) + 0x40);
-    temp_v0_2 = (*(u16 *)(((u8 *)((((*((s32 *)(((u8 *)car) + 0x30))) * 3) * 8) + ((u8 *)g_TrackPoints))) + 0x14)) & 3;
-    if (temp_v1_4 != temp_v0_2)
+    driveCurveMode = *(s16 *)(((u8 *)drive) + 0x40);
+    pointCurveMode = (*(u16 *)(((u8 *)((((*((s32 *)(((u8 *)car) + 0x30))) * 3) * 8) + ((u8 *)g_TrackPoints))) + 0x14)) & 3;
+    if (driveCurveMode != pointCurveMode)
     {
-      if (temp_v1_4 != 0)
+      if (driveCurveMode != 0)
       {
-        var_v0 = (*(u16 *)(((u8 *)temp_s3) + 0x42)) - 1;
+        steerBiasNext = (*(u16 *)(((u8 *)drive) + 0x42)) - 1;
         goto block_29;
       }
-      if (temp_v0_2 == 0)
+      if (pointCurveMode == 0)
       {
         goto block_27;
       }
@@ -212,195 +208,195 @@ void UpdateCarDrivetrain(void *base) {
     else
     {
       block_27:
-      if ((*(s16 *)(((u8 *)temp_s3) + 0x40)) != 0)
+      if ((*(s16 *)(((u8 *)drive) + 0x40)) != 0)
       {
-        var_v0 = (*(u16 *)(((u8 *)temp_s3) + 0x42)) + 2;
+        steerBiasNext = (*(u16 *)(((u8 *)drive) + 0x42)) + 2;
         block_29:
-        *(u16 *)(((u8 *)temp_s3) + 0x42) = var_v0;
+        *(u16 *)(((u8 *)drive) + 0x42) = steerBiasNext;
 
       }
 
     }
-    temp_v1_5 = (s16) (*(u16 *)(((u8 *)temp_s3) + 0x42));
-    if (temp_v1_5 >= 0x1F)
+    steerBias = (s16) (*(u16 *)(((u8 *)drive) + 0x42));
+    if (steerBias >= 0x1F)
     {
-      *(s16 *)(((u8 *)temp_s3) + 0x42) = 0x1E;
+      *(s16 *)(((u8 *)drive) + 0x42) = 0x1E;
     }
-    else if (temp_v1_5 < (-0x1E))
+    else if (steerBias < (-0x1E))
     {
-      *(s16 *)(((u8 *)temp_s3) + 0x42) = -0x1E;
+      *(s16 *)(((u8 *)drive) + 0x42) = -0x1E;
     }
-    var_a1 += (g_CarSpec->unk112) - (((s16) (*(u16 *)(((u8 *)temp_s3) + 0x42))) * 0xA);
-    *(s16 *)(((u8 *)temp_s3) + 0x32) = (s16) var_a1;
+    gripBudget += (g_CarSpec->unk112) - (((s16) (*(u16 *)(((u8 *)drive) + 0x42))) * 0xA);
+    *(s16 *)(((u8 *)drive) + 0x32) = (s16) gripBudget;
   }
   else
   {
-    temp_v1_6 = ((*(s32 *)(((u8 *)car) + 0x30)) * 0x18) + ((u8 *)g_TrackPoints);
-    temp_a0 = *(s16 *)(((u8 *)temp_s3) + 0x40);
-    if ((temp_a0 != ((*(u16 *)(((u8 *)temp_v1_6) + 0x14)) & 3)) && (temp_a0 != 0))
+    trackPoint = ((*(s32 *)(((u8 *)car) + 0x30)) * 0x18) + ((u8 *)g_TrackPoints);
+    curveModeNow = *(s16 *)(((u8 *)drive) + 0x40);
+    if ((curveModeNow != ((*(u16 *)(((u8 *)trackPoint) + 0x14)) & 3)) && (curveModeNow != 0))
     {
-      var_a0_2 = *(s16 *)(((u8 *)temp_v1_6) + 0xE);
-      if (var_a0_2 < (-0x32))
+      camber = *(s16 *)(((u8 *)trackPoint) + 0xE);
+      if (camber < (-0x32))
       {
-        var_a0_2 = -0x32;
+        camber = -0x32;
       }
       else
-        if (var_a0_2 >= 0x33)
+        if (camber >= 0x33)
       {
-        var_a0_2 = 0x32;
+        camber = 0x32;
       }
       if (((*(u16 *)(((u8 *)(((*((s32 *)(((u8 *)car) + 0x30))) * 0x18) + ((u8 *)g_TrackPoints))) + 0x14)) & 3) == 1)
       {
-        var_v0_3 = (-(var_a0_2 * 0x3C)) / 20;
+        camberLean = (-(camber * 0x3C)) / 20;
       }
       else
       {
-        var_v0_3 = var_a0_2 * 3;
+        camberLean = camber * 3;
       }
-      var_a1 += var_v0_3;
+      gripBudget += camberLean;
     }
-    *(s16 *)(((u8 *)temp_s3) + 0x32) = (s16) (((s32) ((*(s16 *)(((u8 *)temp_s3) + 0x32)) + ((var_a1 * (*(s32 *)(((u8 *)temp_s3) + 0x88))) / 1000))) / 2);
+    *(s16 *)(((u8 *)drive) + 0x32) = (s16) (((s32) ((*(s16 *)(((u8 *)drive) + 0x32)) + ((gripBudget * (*(s32 *)(((u8 *)drive) + 0x88))) / 1000))) / 2);
   }
-  temp_lo = var_s7 * (*(s32 *)(((u8 *)temp_s3) + 0x78));
-  var_s5 = 0;
-  temp_v1_7 = *(s32 *)(((u8 *)temp_s3) + 0x94);
-  var_t3 = temp_lo - temp_v1_7;
-  temp_v1_8 = *(s32 *)(((u8 *)temp_s3) + 0x98);
-  var_s1 = 0;
-  if (temp_v1_8 == 1)
+  gearTorque = gearRatio * (*(s32 *)(((u8 *)drive) + 0x78));
+  steerLoad = 0;
+  loadTorque = *(s32 *)(((u8 *)drive) + 0x94);
+  netTorque = gearTorque - loadTorque;
+  driveMode = *(s32 *)(((u8 *)drive) + 0x98);
+  accel = 0;
+  if (driveMode == 1)
   {
-    var_v0_4 = var_t3;
-    if (var_t3 < 0)
+    netTorqueRoundedA = netTorque;
+    if (netTorque < 0)
     {
-      var_v0_4 = var_t3 + 0xFFF;
+      netTorqueRoundedA = netTorque + 0xFFF;
     }
-    var_s1 = var_v0_4;
-    var_s1 = var_s1 >> 0xC;
+    accel = netTorqueRoundedA;
+    accel = accel >> 0xC;
   }
   else
-    if (var_t3 >= (-0x30D3))
+    if (netTorque >= (-0x30D3))
   {
-    if (var_t3 > 0x186A0)
+    if (netTorque > 0x186A0)
     {
-      var_v1 = var_t3;
-      if (var_t3 < 0)
+      netTorqueRoundedB = netTorque;
+      if (netTorque < 0)
       {
-        var_v1 = var_t3 + 0xFF;
+        netTorqueRoundedB = netTorque + 0xFF;
       }
-      var_s1 = ((var_v1 >> 8) * 0x46) / 200;
+      accel = ((netTorqueRoundedB >> 8) * 0x46) / 200;
     }
   }
   else
-    if (temp_v1_8 == 3)
+    if (driveMode == 3)
   {
-    var_s1 = (temp_lo - temp_v1_7) / 768;
+    accel = (gearTorque - loadTorque) / 768;
   }
   else
   {
-    var_v0_5 = var_t3;
-    if (var_t3 < 0)
+    netTorqueRoundedC = netTorque;
+    if (netTorque < 0)
     {
-      var_v0_5 = var_t3 + 0x7FF;
+      netTorqueRoundedC = netTorque + 0x7FF;
     }
-    var_s1 = var_v0_5 >> 0xB;
+    accel = netTorqueRoundedC >> 0xB;
   }
-  temp_a0_2 = ((GameCarSpec *)config)->revLimit;
-  if ((*(s32 *)(((u8 *)temp_s3) + 0x78)) >= temp_a0_2)
+  revLimit = ((GameCarSpec *)config)->revLimit;
+  if ((*(s32 *)(((u8 *)drive) + 0x78)) >= revLimit)
   {
-    var_s2 = 0;
-    var_t3 = ((temp_a0_2 - (*(s32 *)(((u8 *)temp_s3) + 0x78))) * 4) / 5;
+    bandScale = 0;
+    netTorque = ((revLimit - (*(s32 *)(((u8 *)drive) + 0x78))) * 4) / 5;
   }
   else
   {
-    temp_t2 = (*(s32 *)(((u8 *)temp_s3) + 0x78)) / 1000;
-    if (temp_t2 == 0)
+    bandIndex = (*(s32 *)(((u8 *)drive) + 0x78)) / 1000;
+    if (bandIndex == 0)
     {
-      var_v1_2 = 0;
+      bandBase = 0;
     }
     else
     {
-      temp_v0_3 = *((&g_TorqueBandStart) + temp_t2);
-      if (temp_v0_3 == 0)
+      bandStart = *((&g_TorqueBandStart) + bandIndex);
+      if (bandStart == 0)
       {
-        var_v1_2 = 0;
+        bandBase = 0;
       }
       else
       {
-        var_v1_2 = temp_v0_3 - 1;
+        bandBase = bandStart - 1;
       }
     }
-    temp_t1 = *((&g_TorqueBandEnd) + temp_t2);
-    var_a1_2 = var_v1_2;
-    if (var_a1_2 < temp_t1)
+    bandEnd = *((&g_TorqueBandEnd) + bandIndex);
+    bandSlot = bandBase;
+    if (bandSlot < bandEnd)
     {
-      temp_t0 = *(s32 *)(((u8 *)temp_s3) + 0x78);
-      var_a3 = (void *)((var_a1_2 * 4) + ((s32) var_a2));
-      var_v1_3 = (void *)((var_a1_2 * 4) + ((s32) config));
+      engineSpeed = *(s32 *)(((u8 *)drive) + 0x78);
+      curveSlot = (void *)((bandSlot * 4) + ((s32) gearCurve));
+      specSlot = (void *)((bandSlot * 4) + ((s32) config));
       loop_68:
-      temp_a0_3 = *(s32 *)(((u8 *)var_v1_3) + 0x40);
+      bandTorque = *(s32 *)(((u8 *)specSlot) + 0x40);
 
-      if ((temp_t0 >= temp_a0_3) && ((var_a2 = *(u8 **)(((u8 *)var_v1_3) + 0x44), (((s32) var_a2) < temp_t0) == 0)))
+      if ((engineSpeed >= bandTorque) && ((gearCurve = *(u8 **)(((u8 *)specSlot) + 0x44), (((s32) gearCurve) < engineSpeed) == 0)))
       {
-        var_a1_3 = ((s32) var_a2) - temp_a0_3;
-        if (var_a1_3 <= 0)
+        bandCurve = ((s32) gearCurve) - bandTorque;
+        if (bandCurve <= 0)
         {
-          var_a1_3 = 1;
+          bandCurve = 1;
         }
-        var_a0 = ((temp_t0 - temp_a0_3) * (*(s32 *)(((u8 *)var_a3) + 4)));
-        var_a0 += (((s32) var_a2) - temp_t0) * (*(s32 *)(((u8 *)var_a3) + 0));
-        var_t3 = var_a0 / ((s32) (var_a1_3 * 0xA));
+        frontLoadScaled = ((engineSpeed - bandTorque) * (*(s32 *)(((u8 *)curveSlot) + 4)));
+        frontLoadScaled += (((s32) gearCurve) - engineSpeed) * (*(s32 *)(((u8 *)curveSlot) + 0));
+        netTorque = frontLoadScaled / ((s32) (bandCurve * 0xA));
       }
       else
       {
-        var_a3 += 4;
-        var_a1_2 += 1;
-        var_v1_3 += 4;
-        if (var_a1_2 < temp_t1)
+        curveSlot += 4;
+        bandSlot += 1;
+        specSlot += 4;
+        if (bandSlot < bandEnd)
         {
           goto loop_68;
         }
       }
     }
-    if (var_t3 < 0)
+    if (netTorque < 0)
     {
-      var_t3 = 0;
+      netTorque = 0;
     }
-    if (temp_t2 == 0)
+    if (bandIndex == 0)
     {
-      var_v1_4 = 0;
+      lossBase = 0;
     }
     else
     {
-      temp_v0_5 = *((&g_TorqueLossBandStart) + temp_t2);
-      var_v1_4 = 0;
-      if (temp_v0_5 != 0)
+      lossStart = *((&g_TorqueLossBandStart) + bandIndex);
+      lossBase = 0;
+      if (lossStart != 0)
       {
-        var_v1_4 = temp_v0_5 - 1;
+        lossBase = lossStart - 1;
       }
     }
-    temp_t1 = *((&g_TorqueLossBandEnd) + temp_t2);
-    var_a1_4 = var_v1_4;
-    var_s2 = 0;
-    if (var_a1_4 < temp_t1)
+    bandEnd = *((&g_TorqueLossBandEnd) + bandIndex);
+    assistStep = lossBase;
+    bandScale = 0;
+    if (assistStep < bandEnd)
     {
-      temp_t0_2 = *(s32 *)(((u8 *)temp_s3) + 0x78);
-      var_a2 = (u8 *)((var_a1_4 * 4) + ((s32) config));
+      engineSpeedLoss = *(s32 *)(((u8 *)drive) + 0x78);
+      gearCurve = (u8 *)((assistStep * 4) + ((s32) config));
       loop_83:
-      temp_a0_4 = *(s32 *)(((u8 *)var_a2) + 0xA8);
+      lossTorque = *(s32 *)(((u8 *)gearCurve) + 0xA8);
 
-      if (temp_t0_2 >= temp_a0_4)
+      if (engineSpeedLoss >= lossTorque)
       {
-        var_a3 = *(void **)(((u8 *)var_a2) + 0xAC);
-        var_a1_4 += 1;
-        if (((s32) var_a3) >= temp_t0_2)
+        curveSlot = *(void **)(((u8 *)gearCurve) + 0xAC);
+        assistStep += 1;
+        if (((s32) curveSlot) >= engineSpeedLoss)
         {
-          var_a1_5 = ((s32) var_a3) - temp_a0_4;
-          if (var_a1_5 <= 0)
+          lossCurve = ((s32) curveSlot) - lossTorque;
+          if (lossCurve <= 0)
           {
-            var_a1_5 = 1;
+            lossCurve = 1;
           }
-          var_s2 = ((s32) (((temp_t0_2 - temp_a0_4) * (*(s32 *)(((u8 *)var_a2) + 0x84))) + ((((s32) var_a3) - temp_t0_2) * (*(s32 *)(((u8 *)var_a2) + 0x80))))) / var_a1_5;
-          var_v0_8 = var_s2 < 0x64;
+          bandScale = ((s32) (((engineSpeedLoss - lossTorque) * (*(s32 *)(((u8 *)gearCurve) + 0x84))) + ((((s32) curveSlot) - engineSpeedLoss) * (*(s32 *)(((u8 *)gearCurve) + 0x80))))) / lossCurve;
+          lossBelowLimit = bandScale < 0x64;
         }
         else
         {
@@ -409,11 +405,11 @@ void UpdateCarDrivetrain(void *base) {
       }
       else
       {
-        var_a1_4 = var_a1_4 + 1;
+        assistStep = assistStep + 1;
         block_89:
-        var_a2 += 4;
+        gearCurve += 4;
 
-        if (var_a1_4 >= temp_t1)
+        if (assistStep >= bandEnd)
         {
           goto block_90;
         }
@@ -423,159 +419,159 @@ void UpdateCarDrivetrain(void *base) {
     else
     {
       block_90:
-      var_v0_8 = var_s2 < 0x64;
+      lossBelowLimit = bandScale < 0x64;
 
     }
-    if (var_v0_8 == 0)
+    if (lossBelowLimit == 0)
     {
-      var_s2 = 0x64;
+      bandScale = 0x64;
     }
     else
-      if (var_s2 <= 0)
+      if (bandScale <= 0)
     {
-      var_s2 = 0;
+      bandScale = 0;
     }
-    if (((*(s16 *)(((u8 *)temp_s3) + 0x76)) == 1) && ((*(s32 *)(((u8 *)temp_s3) + 0x78)) < (g_CarSpec->redline)))
+    if (((*(s16 *)(((u8 *)drive) + 0x76)) == 1) && ((*(s32 *)(((u8 *)drive) + 0x78)) < (g_CarSpec->redline)))
     {
-      var_s2 *= 2;
+      bandScale *= 2;
     }
   }
-  temp_v1_10 = *(s32 *)(((u8 *)temp_s3) + 0x98);
-  if ((temp_v1_10 == 1) || (temp_v1_10 == 3))
+  shiftMode = *(s32 *)(((u8 *)drive) + 0x98);
+  if ((shiftMode == 1) || (shiftMode == 3))
   {
-    *(s16 *)(((u8 *)temp_s3) + 0x38) = 0;
-    *(u16 *)(((u8 *)temp_s3) + 0x34) = 0U;
+    *(s16 *)(((u8 *)drive) + 0x38) = 0;
+    *(u16 *)(((u8 *)drive) + 0x34) = 0U;
   }
   else
   {
-    if (temp_v1_10 == 2)
+    if (shiftMode == 2)
     {
-      temp_v0_6 = *(s16 *)(((u8 *)temp_s3) + 0x38);
-      new_var = temp_v0_6 >= 0;
-      if (new_var)
+      shiftTimer = *(s16 *)(((u8 *)drive) + 0x38);
+      shiftTimerActive = shiftTimer >= 0;
+      if (shiftTimerActive)
       {
-        temp_v0_7 = temp_v0_6 - 1;
-        *(s16 *)(((u8 *)temp_s3) + 0x38) = temp_v0_7;
-        var_s1 = 0;
-        if (temp_v0_7 < 0)
+        shiftTimerNext = shiftTimer - 1;
+        *(s16 *)(((u8 *)drive) + 0x38) = shiftTimerNext;
+        accel = 0;
+        if (shiftTimerNext < 0)
         {
-          *(s16 *)(((u8 *)temp_s3) + 0x38) = 0;
+          *(s16 *)(((u8 *)drive) + 0x38) = 0;
         }
-        temp_a1 = *(s16 *)(((u8 *)temp_s3) + 0x76);
-        if ((*(s16 *)(((u8 *)temp_s3) + 0x30)) != temp_a1)
+        targetGear = *(s16 *)(((u8 *)drive) + 0x76);
+        if ((*(s16 *)(((u8 *)drive) + 0x30)) != targetGear)
         {
-          shiftTargetRpm = ((s32) ((((*(s32 *)(((u8 *)car) + 0xA4)) * 0xA0) / 1168) * 0x2710)) / ((s32) (*(s32 *)(((u8 *)((u8 *)g_CarSpec - (-(temp_a1 * 4)))) + 0xE4)));
-          temp_v1_23 = *(u16 *)(((u8 *)temp_s3) + 0x78);
+          shiftTargetRpm = ((s32) ((((*(s32 *)(((u8 *)car) + 0xA4)) * 0xA0) / 1168) * 0x2710)) / ((s32) (*(s32 *)(((u8 *)((u8 *)g_CarSpec - (-(targetGear * 4)))) + 0xE4)));
+          currentSpeed = *(u16 *)(((u8 *)drive) + 0x78);
           g_ShiftTargetRpm = shiftTargetRpm;
-          *(s16 *)(((u8 *)temp_s3) + 0x3C) = (s16) (((u16) g_ShiftTargetRpm) - temp_v1_23);
+          *(s16 *)(((u8 *)drive) + 0x3C) = (s16) (((u16) g_ShiftTargetRpm) - currentSpeed);
         }
-        temp_t1 = ((*(s16 *)(((u8 *)temp_s3) + 0x3C)) * (*(s16 *)(((u8 *)temp_s3) + 0x38))) / 20;
-        var_v0_9 = temp_t1;
-        var_v0_9 = var_v0_9 + g_ShiftTargetRpm;
+        bandEnd = ((*(s16 *)(((u8 *)drive) + 0x3C)) * (*(s16 *)(((u8 *)drive) + 0x38))) / 20;
+        shiftedSpeed = bandEnd;
+        shiftedSpeed = shiftedSpeed + g_ShiftTargetRpm;
         goto block_129;
       }
     }
-    temp_a0_5 = *(s16 *)(((u8 *)temp_s3) + 0x76);
-    if ((*(s16 *)(((u8 *)temp_s3) + 0x30)) != temp_a0_5)
+    targetGearAgain = *(s16 *)(((u8 *)drive) + 0x76);
+    if ((*(s16 *)(((u8 *)drive) + 0x30)) != targetGearAgain)
     {
       switch (0) { default:
-      var_a2 = (u8 *)(((s32) ((*(s32 *)(((u8 *)car) + 0xA4)) * 0x2710)) / ((s32) (((*(s32 *)(((u8 *)(config - (-(temp_a0_5 * 4)))) + 0xE4)) * 0x490) / 160)));
-      temp_a1_3 = *(u16 *)(((u8 *)car) + 0xA8);
-      temp_a0_6 = temp_a1_3;
-      temp_v0_15 = *(s16 *)(((u8 *)temp_s3) + 0x74);
-      *(u16 *)(((u8 *)temp_s3) + 0x2C) = temp_a0_6;
-      g_ShiftTargetSpeed = (s32) var_a2;
-      if (temp_v0_15 != 0)
+      gearCurve = (u8 *)(((s32) ((*(s32 *)(((u8 *)car) + 0xA4)) * 0x2710)) / ((s32) (((*(s32 *)(((u8 *)(config - (-(targetGearAgain * 4)))) + 0xE4)) * 0x490) / 160)));
+      wheelSpeed = *(u16 *)(((u8 *)car) + 0xA8);
+      wheelSpeedScaled = wheelSpeed;
+      assistEnabled = *(s16 *)(((u8 *)drive) + 0x74);
+      *(u16 *)(((u8 *)drive) + 0x2C) = wheelSpeedScaled;
+      g_ShiftTargetSpeed = (s32) gearCurve;
+      if (assistEnabled != 0)
       {
-        temp_v1_11 = *(s16 *)(((u8 *)temp_s3) + 0x76);
-        if (((*(s16 *)(((u8 *)temp_s3) + 0x30)) < temp_v1_11) && (g_RoadGrade < 0))
+        targetGearCheck = *(s16 *)(((u8 *)drive) + 0x76);
+        if (((*(s16 *)(((u8 *)drive) + 0x30)) < targetGearCheck) && (g_RoadGrade < 0))
         {
-          if (temp_v1_11 < 4)
+          if (targetGearCheck < 4)
           {
             break;
           }
-          if (temp_v1_11 == 4)
+          if (targetGearCheck == 4)
           {
-            var_v0_10 = (-g_RoadGrade) / 120;
-            temp_a0_6 = (s32) ((u32) temp_a0_6 << 16);
-            temp_a0_6 >>= 16;
+            gradePenalty = (-g_RoadGrade) / 120;
+            wheelSpeedScaled = (s32) ((u32) wheelSpeedScaled << 16);
+            wheelSpeedScaled >>= 16;
           }
           else
-            if (temp_v1_11 == 5)
+            if (targetGearCheck == 5)
           {
-            var_v0_10 = (-g_RoadGrade) / 48;
-            temp_a0_6 = (s32) ((u32) temp_a0_6 << 16);
-            temp_a0_6 >>= 16;
+            gradePenalty = (-g_RoadGrade) / 48;
+            wheelSpeedScaled = (s32) ((u32) wheelSpeedScaled << 16);
+            wheelSpeedScaled >>= 16;
           }
           else
-            if (temp_v1_11 >= 6)
+            if (targetGearCheck >= 6)
           {
-            var_v0_10 = (g_RoadGrade * (-7)) / 240;
-            temp_a0_6 = (s32) ((u32) temp_a0_6 << 16);
-            temp_a0_6 >>= 16;
+            gradePenalty = (g_RoadGrade * (-7)) / 240;
+            wheelSpeedScaled = (s32) ((u32) wheelSpeedScaled << 16);
+            wheelSpeedScaled >>= 16;
           }
           else
           {
             break;
           }
-          temp_v1_12 = 0x64 - var_v0_10;
-          *(u16 *)(((u8 *)temp_s3) + 0x2C) = (u16) ((temp_a0_6 * temp_v1_12) / 100);
-          g_ShiftTargetSpeed = (temp_v1_12 * ((s32) var_a2)) / 100;
+          gradeScale = 0x64 - gradePenalty;
+          *(u16 *)(((u8 *)drive) + 0x2C) = (u16) ((wheelSpeedScaled * gradeScale) / 100);
+          g_ShiftTargetSpeed = (gradeScale * ((s32) gearCurve)) / 100;
         }
       }
       }
-      var_a0_3 = g_ShiftTargetSpeed;
+      shiftTargetSpeed = g_ShiftTargetSpeed;
 
-      var_s1 = 0;
-      if ((*(s16 *)(((u8 *)temp_s3) + 0x30)) > (*(s16 *)(((u8 *)temp_s3) + 0x76)))
+      accel = 0;
+      if ((*(s16 *)(((u8 *)drive) + 0x30)) > (*(s16 *)(((u8 *)drive) + 0x76)))
       {
-        var_a0_3 += 0x1F4;
+        shiftTargetSpeed += 0x1F4;
       }
-      g_ShiftTargetSpeed = var_a0_3;
+      g_ShiftTargetSpeed = shiftTargetSpeed;
       {
         u16 targetSpeed = (u16) g_ShiftTargetSpeed;
-        u16 currentSpeed = *(u16 *)(((u8 *)temp_s3) + 0x78);
-        *(u16 *)(((u8 *)temp_s3) + 0x34) = 0xAU;
-        *(s16 *)(((u8 *)temp_s3) + 0x2E) = 0;
-        *(s16 *)(((u8 *)temp_s3) + 0x36) = (s16) (targetSpeed - currentSpeed);
+        u16 currentSpeed = *(u16 *)(((u8 *)drive) + 0x78);
+        *(u16 *)(((u8 *)drive) + 0x34) = 0xAU;
+        *(s16 *)(((u8 *)drive) + 0x2E) = 0;
+        *(s16 *)(((u8 *)drive) + 0x36) = (s16) (targetSpeed - currentSpeed);
       }
     }
     else
     {
       {
-        s32 countdown = --(*(u16 *)(((u8 *)temp_s3) + 0x34));
+        s32 countdown = --(*(u16 *)(((u8 *)drive) + 0x34));
       if (((s16) countdown) <= 0)
       {
-        *(s16 *)(((u8 *)temp_s3) + 0x2E) = 1;
-        *(u16 *)(((u8 *)temp_s3) + 0x2C) = 0U;
-        *(u16 *)(((u8 *)temp_s3) + 0x34) = 0U;
+        *(s16 *)(((u8 *)drive) + 0x2E) = 1;
+        *(u16 *)(((u8 *)drive) + 0x2C) = 0U;
+        *(u16 *)(((u8 *)drive) + 0x34) = 0U;
       }
       else
-        if ((*(s16 *)(((u8 *)temp_s3) + 0x74)) != 0)
+        if ((*(s16 *)(((u8 *)drive) + 0x74)) != 0)
       {
-        *(s32 *)(((u8 *)temp_s3) + 0x78) = (s32) (g_ShiftTargetSpeed - (((*(s16 *)(((u8 *)temp_s3) + 0x36)) * ((s16) countdown)) / 15));
+        *(s32 *)(((u8 *)drive) + 0x78) = (s32) (g_ShiftTargetSpeed - (((*(s16 *)(((u8 *)drive) + 0x36)) * ((s16) countdown)) / 15));
       }
       else
       {
-        temp_a0_7 = (*(s16 *)(((u8 *)temp_s3) + 0x36)) * ((s16) countdown);
+        shiftRemaining = (*(s16 *)(((u8 *)drive) + 0x36)) * ((s16) countdown);
         switch (0) { default:
-        var_v1_4 = temp_a0_7 / 10;
-        *(s32 *)(((u8 *)temp_s3) + 0x78) = g_ShiftTargetSpeed - var_v1_4;
+        lossBase = shiftRemaining / 10;
+        *(s32 *)(((u8 *)drive) + 0x78) = g_ShiftTargetSpeed - lossBase;
         break;
         block_129:
-        *(s32 *)(((u8 *)temp_s3) + 0x78) = var_v0_9;
+        *(s32 *)(((u8 *)drive) + 0x78) = shiftedSpeed;
         }
 
       }
       }
     }
   }
-  var_v1_7 = (var_t3 * (*(s16 *)(((u8 *)temp_s3) + 0xA0))) * (*(s16 *)(((u8 *)temp_s3) + 0x2E));
-  if (var_v1_7 < 0)
+  throttleTorque = (netTorque * (*(s16 *)(((u8 *)drive) + 0xA0))) * (*(s16 *)(((u8 *)drive) + 0x2E));
+  if (throttleTorque < 0)
   {
-    var_v1_7 += 0xFF;
+    throttleTorque += 0xFF;
   }
-  var_s6 = var_v1_7 >> 8;
+  throttleAccel = throttleTorque >> 8;
   if (g_GripLossTimer > 0)
   {
     g_GripLossTimer -= 1;
@@ -586,216 +582,216 @@ void UpdateCarDrivetrain(void *base) {
   }
   if ((*(s16 *)(((u8 *)car) + 0x98)) == 0)
   {
-    var_s5 += ((s32) (*(s32 *)(((u8 *)temp_s3) + 0x78))) / 256;
+    steerLoad += ((s32) (*(s32 *)(((u8 *)drive) + 0x78))) / 256;
   }
-  var_s1 += ((s32) ((*(s16 *)(((u8 *)temp_s3) + 0xA2)) * (*(s32 *)(((u8 *)temp_s3) + 0x78)))) / 8192;
-  if (var_t3 > 0)
+  accel += ((s32) ((*(s16 *)(((u8 *)drive) + 0xA2)) * (*(s32 *)(((u8 *)drive) + 0x78)))) / 8192;
+  if (netTorque > 0)
   {
-    if ((*(s16 *)(((u8 *)temp_s3) + 0xA0)) < 0x7F)
+    if ((*(s16 *)(((u8 *)drive) + 0xA0)) < 0x7F)
     {
-      var_s1 += var_t3 / 2;
+      accel += netTorque / 2;
     }
   }
   else
   {
-    var_s1 -= var_t3 / 2;
+    accel -= netTorque / 2;
   }
-  temp_v0_9 = GetAngleDistance(*(s32 *)(((u8 *)car) + 0x24), *(s32 *)(((u8 *)car) + 0xA0), (s32) var_a2, var_a3);
-  *(s32 *)(((u8 *)temp_s3) + 0x4C) = temp_v0_9;
-  if (temp_v0_9 >= 0x401)
+  headingError = GetAngleDistance(*(s32 *)(((u8 *)car) + 0x24), *(s32 *)(((u8 *)car) + 0xA0), (s32) gearCurve, curveSlot);
+  *(s32 *)(((u8 *)drive) + 0x4C) = headingError;
+  if (headingError >= 0x401)
   {
-    *(s32 *)(((u8 *)temp_s3) + 0x4C) = (s32) (0x800 - temp_v0_9);
+    *(s32 *)(((u8 *)drive) + 0x4C) = (s32) (0x800 - headingError);
   }
-  var_s5 += ((s32) (*(s32 *)(((u8 *)temp_s3) + 0x4C))) / 256;
-  if (((*(s32 *)(((u8 *)temp_s3) + 0x98)) != 1) && (g_PadType == 0x41))
+  steerLoad += ((s32) (*(s32 *)(((u8 *)drive) + 0x4C))) / 256;
+  if (((*(s32 *)(((u8 *)drive) + 0x98)) != 1) && (g_PadType == 0x41))
   {
-    var_a1_4 = ((g_CarSpec->unk10E) * (*(s32 *)(((u8 *)temp_s3) + 0x88))) / 1000;
-    if (var_a1_4 <= 0)
+    assistStep = ((g_CarSpec->unk10E) * (*(s32 *)(((u8 *)drive) + 0x88))) / 1000;
+    if (assistStep <= 0)
     {
-      var_a1_4 = 1;
+      assistStep = 1;
     }
-    temp_a0_7 = *(s32 *)(((u8 *)temp_s3) + 0x1C);
-    new_var2 = temp_a0_7 >= 0;
-    if (new_var2)
+    shiftRemaining = *(s32 *)(((u8 *)drive) + 0x1C);
+    assistArmed = shiftRemaining >= 0;
+    if (assistArmed)
     {
-      var_s5 += ((s32) ((temp_a0_7 * 5) / 6)) / var_a1_4;
+      steerLoad += ((s32) ((shiftRemaining * 5) / 6)) / assistStep;
     }
     else
     {
-      var_s5 -= ((s32) ((temp_a0_7 * 5) / 6)) / var_a1_4;
+      steerLoad -= ((s32) ((shiftRemaining * 5) / 6)) / assistStep;
     }
   }
-  temp_a0_8 = GetAngleDistance(*(s32 *)(((u8 *)car) + 0xA0), 0xC00 - (*(s16 *)(((u8 *)(((*((s32 *)(((u8 *)car) + 0x30))) * 0x18) + ((u8 *)g_TrackPoints))) + 0xA)));
-  var_a0 = temp_a0_8;
-  temp_a1_2 = *(s32 *)(((u8 *)car) + 0x30);
-  temp_a2 = *(s32 *)(((u8 *)car) + 0x38);
-  temp_t0 = (*(s16 *)(((u8 *)((temp_a1_2 * 0x18) + ((u8 *)g_TrackPoints))) + 0xC)) * (0x400 - temp_a2);
-  temp_a1_2 += 1;
-  var_v0_11 = temp_t0 + ((*(s16 *)(((u8 *)(((temp_a1_2 % ((s32) g_TrackPointCount)) * 0x18) + ((u8 *)g_TrackPoints))) + 0xC)) * temp_a2);
-  secondNonnegative = var_v0_11 >= 0;
+  trackHeadingError = GetAngleDistance(*(s32 *)(((u8 *)car) + 0xA0), 0xC00 - (*(s16 *)(((u8 *)(((*((s32 *)(((u8 *)car) + 0x30))) * 0x18) + ((u8 *)g_TrackPoints))) + 0xA)));
+  frontLoadScaled = trackHeadingError;
+  pointIndex = *(s32 *)(((u8 *)car) + 0x30);
+  lateralOffset = *(s32 *)(((u8 *)car) + 0x38);
+  engineSpeed = (*(s16 *)(((u8 *)((pointIndex * 0x18) + ((u8 *)g_TrackPoints))) + 0xC)) * (0x400 - lateralOffset);
+  pointIndex += 1;
+  lateralSum = engineSpeed + ((*(s16 *)(((u8 *)(((pointIndex % ((s32) g_TrackPointCount)) * 0x18) + ((u8 *)g_TrackPoints))) + 0xC)) * lateralOffset);
+  secondNonnegative = lateralSum >= 0;
   if (!secondNonnegative)
   {
-    var_v0_11 += 0x3FF;
+    lateralSum += 0x3FF;
   }
-  var_s0 = var_v0_11 >> 0xA;
-  temp_lo_2 = var_s0 * rcos(var_a0);
-  var_s0 = temp_lo_2 >> 0xC;
-  if (temp_lo_2 < 0)
+  slipAngle = lateralSum >> 0xA;
+  dragProduct = slipAngle * rcos(frontLoadScaled);
+  slipAngle = dragProduct >> 0xC;
+  if (dragProduct < 0)
   {
-    var_s0 = ((s32) (temp_lo_2 + 0xFFF)) >> 0xC;
+    slipAngle = ((s32) (dragProduct + 0xFFF)) >> 0xC;
   }
-  if (var_s0 < (-0xEE))
+  if (slipAngle < (-0xEE))
   {
-    var_s0 = -0xEE;
+    slipAngle = -0xEE;
   }
   else
-    if (var_s0 >= 0xEF)
+    if (slipAngle >= 0xEF)
   {
-    var_s0 = 0xEE;
+    slipAngle = 0xEE;
   }
-  temp_v1_13 = (-rsin(var_s0)) * 0x708;
-  g_RoadGrade = var_s0;
-  var_a0 = temp_v1_13 / 0xA000;
-  steeringNonnegative = var_s0 >= 0;
+  sideForce = (-rsin(slipAngle)) * 0x708;
+  g_RoadGrade = slipAngle;
+  frontLoadScaled = sideForce / 0xA000;
+  steeringNonnegative = slipAngle >= 0;
   if (!steeringNonnegative)
   {
-    var_s5 += var_a0;
+    steerLoad += frontLoadScaled;
   }
   else
   {
-    var_s5 += var_a0 / 10;
+    steerLoad += frontLoadScaled / 10;
   }
-  if ((g_RacePhase == 2) && ((*(s32 *)(((u8 *)temp_s3) + 0x98)) == 3))
+  if ((g_RacePhase == 2) && ((*(s32 *)(((u8 *)drive) + 0x98)) == 3))
   {
-    var_s5 += (g_StandingStartSpin & 0x1F) * 5;
+    steerLoad += (g_StandingStartSpin & 0x1F) * 5;
   }
   {
     s32 counter = D_8019C998;
     if (counter > 0)
     {
-      s32 baseValue = var_s5 + 0xC8;
-      var_s5 = baseValue + (counter * 0x14);
+      s32 baseValue = steerLoad + 0xC8;
+      steerLoad = baseValue + (counter * 0x14);
       D_8019C998 = counter - 1;
     }
   }
-  if ((*(s32 *)(((u8 *)temp_s3) + 0x98)) == 1)
+  if ((*(s32 *)(((u8 *)drive) + 0x98)) == 1)
   {
-    var_s6 = (var_s6 * 4) / 5;
+    throttleAccel = (throttleAccel * 4) / 5;
   }
-  var_a0_3 = (temp_v1_15 = ((*(s32 *)(((u8 *)car) + 0xA4)) * 0xA0) / 1168);
-  var_v0_12 = (s32) ((g_CarSpec->unk110) * 0x3E8);
-  var_a1_7 = var_v0_12 / ((s16) g_DragScale);
-  if (var_a1_7 <= 0)
+  shiftTargetSpeed = (roadSpeed = ((*(s32 *)(((u8 *)car) + 0xA4)) * 0xA0) / 1168);
+  dragBase = (s32) ((g_CarSpec->unk110) * 0x3E8);
+  dragTerm = dragBase / ((s16) g_DragScale);
+  if (dragTerm <= 0)
   {
-    var_a1_7 = 1;
+    dragTerm = 1;
   }
-  var_s5 += ((s32) (temp_v1_15 * temp_v1_15)) / var_a1_7;
+  steerLoad += ((s32) (roadSpeed * roadSpeed)) / dragTerm;
   g_DragScale = 0x3E8;
   if ((*(s16 *)(((u8 *)car) + 0x98)) == 0)
   {
-    var_s5 = (var_s5 * (0x64 - var_s2)) / 100;
+    steerLoad = (steerLoad * (0x64 - bandScale)) / 100;
   }
   else
   {
-    var_s6 *= 2;
-    var_s5 = 0;
+    throttleAccel *= 2;
+    steerLoad = 0;
   }
-  if (((*(s16 *)(((u8 *)temp_s3) + 0x38)) <= 0) && (((s16) (*(u16 *)(((u8 *)temp_s3) + 0x34))) <= 0))
+  if (((*(s16 *)(((u8 *)drive) + 0x38)) <= 0) && (((s16) (*(u16 *)(((u8 *)drive) + 0x34))) <= 0))
   {
-    *(s32 *)(((u8 *)temp_s3) + 0x78) = (s32) (((var_s6 - var_s1) - var_s5) + (*(s32 *)(((u8 *)temp_s3) + 0x78)));
+    *(s32 *)(((u8 *)drive) + 0x78) = (s32) (((throttleAccel - accel) - steerLoad) + (*(s32 *)(((u8 *)drive) + 0x78)));
   }
-  temp_v0_11 = *(s32 *)(((u8 *)temp_s3) + 0x78);
-  if (temp_v0_11 < 0)
+  speedForPath = *(s32 *)(((u8 *)drive) + 0x78);
+  if (speedForPath < 0)
   {
-    *(s32 *)(((u8 *)temp_s3) + 0x78) = 0;
+    *(s32 *)(((u8 *)drive) + 0x78) = 0;
   }
   else
-    if (temp_v0_11 >= 0x3A99)
+    if (speedForPath >= 0x3A99)
   {
-    *(s32 *)(((u8 *)temp_s3) + 0x78) = 0x3A98;
+    *(s32 *)(((u8 *)drive) + 0x78) = 0x3A98;
   }
-  temp_lo_3 = var_s7 * (*(s32 *)(((u8 *)temp_s3) + 0x78));
-  *(s32 *)(((u8 *)temp_s3) + 0x94) = temp_lo_3;
-  if ((*(s32 *)(((u8 *)temp_s3) + 0x98)) == 1)
+  gearTorqueLate = gearRatio * (*(s32 *)(((u8 *)drive) + 0x78));
+  *(s32 *)(((u8 *)drive) + 0x94) = gearTorqueLate;
+  if ((*(s32 *)(((u8 *)drive) + 0x98)) == 1)
   {
-    temp_v1_18 = *(s32 *)(((u8 *)car) + 0x30);
-    temp_v1_16 = *(u16 *)(((u8 *)((temp_v1_18 * 0x18) + ((u8 *)g_TrackPoints))) + 0x14);
-    var_v0_12 = temp_v1_16 % 4;
-    if (var_v0_12 > 0)
+    arcPointIndex = *(s32 *)(((u8 *)car) + 0x30);
+    arcFlags = *(u16 *)(((u8 *)((arcPointIndex * 0x18) + ((u8 *)g_TrackPoints))) + 0x14);
+    dragBase = arcFlags % 4;
+    if (dragBase > 0)
     {
-      temp_v1_17 = (((((s32) (temp_v1_16 << 0x10)) >> 13) >> 7) * 0xC) + g_TrackArcCenters;
-      temp_s2 = (*(s32 *)(((u8 *)car) + 0)) - (*(s32 *)(((u8 *)temp_v1_17) + 0));
-      temp_s1 = (*(s32 *)(((u8 *)car) + 8)) - (*(s32 *)(((u8 *)temp_v1_17) + 4));
-      temp_v0_12 = Atan2(temp_s2, temp_s1);
-      temp_s0 = rcos(temp_v0_12);
-      temp_v0_13 = (temp_s0 * temp_s2) + (rsin(temp_v0_12) * temp_s1);
-      var_a0 = temp_v0_13 >> 0xC;
-      if (temp_v0_13 < 0)
+      arcCentre = (((((s32) (arcFlags << 0x10)) >> 13) >> 7) * 0xC) + g_TrackArcCenters;
+      toCentreX = (*(s32 *)(((u8 *)car) + 0)) - (*(s32 *)(((u8 *)arcCentre) + 0));
+      toCentreZ = (*(s32 *)(((u8 *)car) + 8)) - (*(s32 *)(((u8 *)arcCentre) + 4));
+      centreAngle = Atan2(toCentreX, toCentreZ);
+      cosCentreAngle = rcos(centreAngle);
+      radialDistance = (cosCentreAngle * toCentreX) + (rsin(centreAngle) * toCentreZ);
+      frontLoadScaled = radialDistance >> 0xC;
+      if (radialDistance < 0)
       {
-        var_a0 = ((s32) (temp_v0_13 + 0xFFF)) >> 0xC;
+        frontLoadScaled = ((s32) (radialDistance + 0xFFF)) >> 0xC;
       }
     }
     else
     {
-      var_a0 = (g_CarSpec->unk10C) * 0x64;
+      frontLoadScaled = (g_CarSpec->unk10C) * 0x64;
     }
-    if ((var_a0 <= 0) || ((var_a0_5 = (g_CarSpec->unk10C) * 0x64, var_a0_5 <= 0)))
+    if ((frontLoadScaled <= 0) || ((downforceScale = (g_CarSpec->unk10C) * 0x64, downforceScale <= 0)))
     {
-      var_a0_5 = (g_CarSpec->unk10C) * 0x64;
+      downforceScale = (g_CarSpec->unk10C) * 0x64;
     }
-    var_a0_6 = ((s32) ((g_CarSpec->unk10C) * 0x64)) / var_a0_5;
-    if (var_a0_6 <= 0)
+    downforce = ((s32) ((g_CarSpec->unk10C) * 0x64)) / downforceScale;
+    if (downforce <= 0)
     {
-      var_a0_6 = 1;
+      downforce = 1;
     }
-    var_a1_7 = (*(s16 *)(((u8 *)temp_s3) + 0xA2)) * 0x14;
-    coefficientBase = 0x26FC - var_a0_6;
-    coefficient = coefficientBase - (var_s5 * 2);
-    if (var_a1_7 < 0)
+    dragTerm = (*(s16 *)(((u8 *)drive) + 0xA2)) * 0x14;
+    coefficientBase = 0x26FC - downforce;
+    coefficient = coefficientBase - (steerLoad * 2);
+    if (dragTerm < 0)
     {
-      var_a1_7 += 0xFF;
+      dragTerm += 0xFF;
     }
-    *(s32 *)(((u8 *)car) + 0xA4) = (s32) (((coefficient - (var_a1_7 >> 8)) * (*(s32 *)(((u8 *)car) + 0xA4))) / 10000);
-    temp_v1_18 = *(s32 *)(((u8 *)temp_s3) + 0x94);
-    if (temp_v1_18 < 0)
+    *(s32 *)(((u8 *)car) + 0xA4) = (s32) (((coefficient - (dragTerm >> 8)) * (*(s32 *)(((u8 *)car) + 0xA4))) / 10000);
+    arcPointIndex = *(s32 *)(((u8 *)drive) + 0x94);
+    if (arcPointIndex < 0)
     {
-      temp_v1_18 += 0x1FFFFF;
+      arcPointIndex += 0x1FFFFF;
     }
-    var_v0_12 = temp_v1_18 >> 0x15;
-    *(s32 *)(((u8 *)car) + 0xA8) = var_v0_12;
+    dragBase = arcPointIndex >> 0x15;
+    *(s32 *)(((u8 *)car) + 0xA8) = dragBase;
   }
   else
   {
     if ((*(s16 *)(((u8 *)car) + 0x98)) != 0)
     {
-      temp_v1_19 = *(s32 *)(((u8 *)car) + 0xA4);
+      speedA = *(s32 *)(((u8 *)car) + 0xA4);
       *(s32 *)(((u8 *)car) + 0xA8) = 0;
-      var_v1_8 = (temp_v1_19 * 0x3E7) / 1000;
+      speedScaled = (speedA * 0x3E7) / 1000;
     }
     else
     {
-      if (((s16) (*(u16 *)(((u8 *)temp_s3) + 0x34))) > 0)
+      if (((s16) (*(u16 *)(((u8 *)drive) + 0x34))) > 0)
       {
-        *(s32 *)(((u8 *)car) + 0xA8) = (s32) ((s16) (*(u16 *)(((u8 *)temp_s3) + 0x2C)));
+        *(s32 *)(((u8 *)car) + 0xA8) = (s32) ((s16) (*(u16 *)(((u8 *)drive) + 0x2C)));
       }
       else
       {
-        var_v1_9 = temp_lo_3;
-        if ((*(s16 *)(((u8 *)temp_s3) + 0x38)) > 0)
+        torqueLate = gearTorqueLate;
+        if ((*(s16 *)(((u8 *)drive) + 0x38)) > 0)
         {
-          *(s32 *)(((u8 *)car) + 0xA8) = (s32) ((s16) (*(u16 *)(((u8 *)temp_s3) + 0x2C)));
+          *(s32 *)(((u8 *)car) + 0xA8) = (s32) ((s16) (*(u16 *)(((u8 *)drive) + 0x2C)));
         }
         else
         {
-          if (var_v1_9 < 0)
+          if (torqueLate < 0)
           {
-            var_v1_9 += 0x1FFFF;
+            torqueLate += 0x1FFFF;
           }
-          temp_v1_20 = var_v1_9 >> 0x11;
-          *(s32 *)(((u8 *)car) + 0xA8) = temp_v1_20;
-          if ((*(s16 *)(((u8 *)temp_s3) + 0x74)) == 0)
+          torqueShifted = torqueLate >> 0x11;
+          *(s32 *)(((u8 *)car) + 0xA8) = torqueShifted;
+          if ((*(s16 *)(((u8 *)drive) + 0x74)) == 0)
           {
-            *(s32 *)(((u8 *)car) + 0xA8) = (s32) (((g_CarSpec->unk102) * temp_v1_20) / 1000);
+            *(s32 *)(((u8 *)car) + 0xA8) = (s32) (((g_CarSpec->unk102) * torqueShifted) / 1000);
           }
         }
       }
@@ -803,10 +799,10 @@ void UpdateCarDrivetrain(void *base) {
       {
         *(s32 *)(((u8 *)car) + 0xA8) /= 2;
       }
-      temp_v1_21 = *(s32 *)(((u8 *)car) + 0xA4);
-      var_v1_8 = (temp_v1_21 * 0x5E) / 100;
+      speedB = *(s32 *)(((u8 *)car) + 0xA4);
+      speedScaled = (speedB * 0x5E) / 100;
     }
-    *(s32 *)(((u8 *)car) + 0xA4) = var_v1_8;
+    *(s32 *)(((u8 *)car) + 0xA4) = speedScaled;
   }
   if ((*(s32 *)(((u8 *)car) + 0xA4)) < 8)
   {
@@ -814,23 +810,23 @@ void UpdateCarDrivetrain(void *base) {
   }
   if (g_RacePhase >= 2)
   {
-    temp_v1_22 = *(s32 *)(((u8 *)temp_s3) + 0x98);
-    switch (temp_v1_22)
+    driveModeLate = *(s32 *)(((u8 *)drive) + 0x98);
+    switch (driveModeLate)
     {
       case 0:
-        UpdateCarDriving(car, var_a1_7);
+        UpdateCarDriving(car, dragTerm);
         break;
 
       case 1:
-        UpdateCarLaunch(car, var_a1_7);
+        UpdateCarLaunch(car, dragTerm);
         break;
 
       case 2:
-        UpdateCarAirborne(car, var_a1_7);
+        UpdateCarAirborne(car, dragTerm);
         break;
 
       case 3:
-        UpdateCarStandingStart(car, var_a1_7);
+        UpdateCarStandingStart(car, dragTerm);
         break;
 
     }
