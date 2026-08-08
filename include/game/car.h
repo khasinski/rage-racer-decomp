@@ -449,7 +449,7 @@ void UpdateAttractCars(void);
  * only from UpdatePlayerCar; returns the struck sub-quad 1..4 or 0. */
 /* update_player_car.c spells the argument void *; the body reads
  * GameCarRuntime *. */
-s32 CollidePlayerWithCars();
+s32 CollidePlayerWithCars(PlayerCarRuntime *car);
 /* One row of the AI pairwise sweep: car[index] against car[index + 1 .. 10],
  * push-apart only - no sound, no damage globals, no mode gate. */
 s32 CollideRivalCars(GameCarRuntime *car, s32 index);

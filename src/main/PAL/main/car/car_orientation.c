@@ -505,7 +505,7 @@ typedef struct CollisionContext
   s32 opponentPolygonOffset;
   s32 trackDelta;
 } CollisionContext;
-s32 CollidePlayerWithCars(GameCarRuntime *car)
+s32 CollidePlayerWithCars(PlayerCarRuntime *car)
 {
   SVec rotation;
   s32 opponentX;
@@ -537,9 +537,9 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
   }
   opponent = g_Cars;
   collisionRegion = 0;
-  rotation.vx = *(u16 *)(((u8 *)car) + 0x20);
-  rotation.vz = *(u16 *)(((u8 *)car) + 0x28);
-  rotation.vy = *(u16 *)(((u8 *)car) + 0x24);
+  rotation.vx = (u16)car->field_20;
+  rotation.vz = (u16)car->field_28;
+  rotation.vy = (u16)car->field_24;
   RotMatrix(&rotation, &rotationMatrix);
   index = 0;
   pointWalk = (u8 *)(&rotation);
@@ -598,7 +598,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
       {
         aDist = -aDist;
       }
-      if ((opponent->field_98 == car->field_98) || (aDist < 0x1A))
+      if ((opponent->field_98 == car->shiftState) || (aDist < 0x1A))
       {
         if (((trackDelta < 0x64) && ((progressDelta < 0xC8) || ((g_TrackLength - 0xC8) < progressDelta))) && (aDist < 0x3C))
         {
@@ -606,11 +606,11 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
           {
             g_DragScale = 0x2BC;
           }
-          velocityDelta.x = (*(u16 *)(((u8 *)opponent) + 0x00)) - (*(u16 *)(((u8 *)car) + 0x00));
-          velocityDelta.y = (*(u16 *)(((u8 *)opponent) + 0x08)) - (*(u16 *)(((u8 *)car) + 0x08));
-          rotation.vx = *(u16 *)(((u8 *)opponent) + 0x20);
-          rotation.vz = *(u16 *)(((u8 *)opponent) + 0x28);
-          rotation.vy = *(u16 *)(((u8 *)opponent) + 0x24);
+          velocityDelta.x = (u16)opponent->x - (u16)car->x;
+          velocityDelta.y = (u16)opponent->z - (u16)car->z;
+          rotation.vx = (u16)opponent->field_20;
+          rotation.vz = (u16)opponent->field_28;
+          rotation.vy = (u16)opponent->field_24;
           RotMatrix(&rotation, &rotationMatrix);
           for (cornerOffset = 0; cornerOffset < 16; cornerOffset += 4)
           {
@@ -645,11 +645,11 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
             for (quadIndex = 0; quadIndex < 4; quadIndex++)
             {
               collisionRegion = IsPointInQuad(
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 8 + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 12 + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 4 + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->opponentPolygon + (sampleIndex * 4)));
+                *(s32 *)&context->grid[quadIndex][2],
+                *(s32 *)&context->grid[quadIndex][3],
+                *(s32 *)&context->grid[quadIndex][0],
+                *(s32 *)&context->grid[quadIndex][1],
+                *(s32 *)&context->opponentPolygon[sampleIndex]);
               if (collisionRegion > 0)
               {
                 collisionRegion = quadIndex + 1;
@@ -668,11 +668,11 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
             for (quadIndex = 0; quadIndex < 4; quadIndex++)
             {
               collisionRegion = IsPointInQuad(
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 8 + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 12 + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 4 + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->opponentGrid + (sampleIndex * 4)));
+                *(s32 *)&context->grid[quadIndex][2],
+                *(s32 *)&context->grid[quadIndex][3],
+                *(s32 *)&context->grid[quadIndex][0],
+                *(s32 *)&context->grid[quadIndex][1],
+                *(s32 *)&context->opponentGrid[sampleIndex]);
               if (collisionRegion > 0)
               {
                 collisionRegion = quadIndex + 1;
@@ -691,11 +691,11 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
             for (quadIndex = 0; quadIndex < 4; quadIndex++)
             {
               collisionRegion = IsPointInQuad(
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 8 + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 12 + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->grid + 4 + (quadIndex * 16)),
-                *(s32 *)((u8 *)context + (u32) &((CollisionContext *)0)->opponentGrid + 24 + (sampleIndex * 4)));
+                *(s32 *)&context->grid[quadIndex][2],
+                *(s32 *)&context->grid[quadIndex][3],
+                *(s32 *)&context->grid[quadIndex][0],
+                *(s32 *)&context->grid[quadIndex][1],
+                *(s32 *)&context->opponentGrid[sampleIndex + 6]);
               if (collisionRegion > 0)
               {
                 collisionRegion = quadIndex + 1;
@@ -729,7 +729,7 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     return collisionRegion;
   }
   collision_found:
-  if (((*(s16 *)(((u8 *)car) + 0x82)) < 0xB) && (g_RacePhase < 3))
+  if (((s16)car->motionTimer < 0xB) && (g_RacePhase < 3))
   {
     s32 sid;
     if (((u32) (trackDelta + 0x1D)) < 0x3B)
@@ -758,15 +758,15 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
   {
     if (car->facingBackwards != g_RaceSeries)
     {
-      car->field_150 = 0;
+      car->drive.unk94 = 0;
       car->field_A8 = 0;
     }
     else
     {
       car->field_A8 = car->field_A8 / 2;
-      car->field_150 = (car->field_150 * 0x50) / 100;
+      car->drive.unk94 = car->drive.unk94 * 0x50 / 100;
     }
-    if ((car->field_A4 - opponent->field_A4) >= 0x191)
+    if ((car->speed - opponent->field_A4) >= 0x191)
     {
       g_GripLossTimer = 0x1E;
     }
@@ -777,19 +777,19 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     {
       s32 vx;
       s32 vz;
-      vx = (s16) ((*(u16 *)(((u8 *)opponent) + 0xC8)) - (*(u16 *)(((u8 *)car) + 0xC4)));
+      vx = (s16)((u16)opponent->field_C8 - (u16)car->drive.accelPos);
       velocityDelta.x = vx / 0x20;
-      vz = (s16) ((*(u16 *)(((u8 *)opponent) + 0xD0)) - (*(u16 *)(((u8 *)car) + 0xCC)));
+      vz = (s16)((u16)opponent->field_D0 - (u16)car->drive.brakePos);
       velocityDelta.y = vz / 0x20;
     }
-    if (((car->facingBackwards != g_RaceSeries) && (car->field_A4 >= 0x51)) && (g_WrongWayTimer >= 0xA))
+    if (((car->facingBackwards != g_RaceSeries) && (car->speed >= 0x51)) && (g_WrongWayTimer >= 0xA))
     {
       SetCarKnockback(opponent, 0, 0, 4);
       SetCarKnockback(car, 0, 0, 4);
     }
     else
     {
-      if (car->field_A4 >= 0x29)
+      if (car->speed >= 0x29)
       {
         SetCarKnockback(car, 0, 0, 4);
       }
@@ -807,13 +807,13 @@ s32 CollidePlayerWithCars(GameCarRuntime *car)
     opponent->field_A4 = opponent->field_A4 / 2;
     opponent->field_A8 = opponent->field_A8 / 2;
     opponent->field_12E = opponent->field_12A;
-    vx = (s16) ((*(u16 *)(((u8 *)opponent) + 0xC8)) - (*(u16 *)(((u8 *)car) + 0xC4)));
+    vx = (s16)((u16)opponent->field_C8 - (u16)car->drive.accelPos);
     velocityDelta.x = vx / 0x20;
-    vz = (s16) ((*(u16 *)(((u8 *)opponent) + 0xD0)) - (*(u16 *)(((u8 *)car) + 0xCC)));
+    vz = (s16)((u16)opponent->field_D0 - (u16)car->drive.brakePos);
     velocityDelta.y = vz / 0x20;
-    velocityDelta.x = velocityDelta.x - (*(u16 *)(((u8 *)opponent) + 0x7C));
-    velocityDelta.y = velocityDelta.y - (*(u16 *)(((u8 *)opponent) + 0x7E));
-    if (((car->facingBackwards != g_RaceSeries) && (car->field_A4 >= 0x51)) && (g_WrongWayTimer >= 0xA))
+    velocityDelta.x = velocityDelta.x - (u16)opponent->velocityX;
+    velocityDelta.y = velocityDelta.y - (u16)opponent->velocityZ;
+    if (((car->facingBackwards != g_RaceSeries) && (car->speed >= 0x51)) && (g_WrongWayTimer >= 0xA))
     {
       SetCarKnockback(opponent, 0, 0, 4);
       SetCarKnockback(car, 0, 0, 4);
