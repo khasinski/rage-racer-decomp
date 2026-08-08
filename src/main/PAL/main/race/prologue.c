@@ -119,8 +119,8 @@ void DrawPrologueText(void) {
     s32 delta;
     s32 value;
     s32 clamped;
-    s32 next;
-    s32 prim;
+    u8 *next;
+    u8 *prim;
     s32 green;
     s32 blueScale;
     s32 blue;
@@ -163,14 +163,14 @@ void DrawPrologueText(void) {
 
     {
         s32 fadeLevel;
-        s32 *scratch;
+        u8 **scratch;
         u8 *ptr;
         s32 greenScale;
         s32 tmp;
         u8 *base;
 
         fadeLevel = g_FadeLevel;
-        scratch = &SCRATCH_PRIM_CURSOR_WORD;
+        scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
         tmp = fadeLevel * 7;
         greenScale = tmp * 32;
         base = g_DrawBuffer;
@@ -180,8 +180,8 @@ void DrawPrologueText(void) {
         blueScale = (fadeLevel * 3) << 6;
         blue = (blueScale / 0x100) + 0x40;
 
-        next = (s32)GameQueueTileTrans(ptr, (u8 *)prim, 0, 0, 0x140, 0xF0, fadeLevel, green, blue);
-        *scratch = (s32)QueueDrawModePrim(ptr, (u8 *)next, 0x49);
+        next = GameQueueTileTrans(ptr, prim, 0, 0, 0x140, 0xF0, fadeLevel, green, blue);
+        *scratch = QueueDrawModePrim(ptr, next, 0x49);
     }
 }
 

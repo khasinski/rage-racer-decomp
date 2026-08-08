@@ -198,16 +198,16 @@ void BeginReplay(void) {
 }
 
 void DrawReplayBadge(void) {
-    volatile s32 *scratch;
-    s32 base;
-    s32 next;
-    s32 value;
+    u8 *volatile *scratch;
+    u8 *base;
+    u8 *next;
+    u8 *value;
 
     if ((g_SceneTimer & 0x10) && (g_SeriesCleared == 0)) {
-        scratch = (volatile s32 *)SCRATCHPAD_ADDR;
+        scratch = (u8 *volatile *)SCRATCHPAD_ADDR;
         value = *scratch;
-        base = (s32)g_DrawBuffer + 0xCC;
-        next = (s32)GameQueueSprite(base, value, 0x10, 0x10, 0x48, 0x10, 0, 0x68, 0x780D);
-        *scratch = (s32)QueueDrawModePrim((void *)base, (u8 *)next, 9);
+        base = g_DrawBuffer + 0xCC;
+        next = GameQueueSprite(base, value, 0x10, 0x10, 0x48, 0x10, 0, 0x68, 0x780D);
+        *scratch = QueueDrawModePrim(base, next, 9);
     }
 }

@@ -200,7 +200,7 @@ void DrawStartCountdown(s32 sceneTimer) {
     u32 *patternBeforeFirst;
     u32 *phasePattern;
     TILE *tiles;
-    s32 cursor;
+    u8 *cursor;
     u8 *packet;
     s32 rangeTimer;
     u8 *orderingTable;
@@ -269,9 +269,7 @@ void DrawStartCountdown(s32 sceneTimer) {
                 colorBank = 1;
             }
             {
-                CVec *colors =
-                    (CVec *)(
-                        (u8 *)g_CountdownCellColors + (colorBank * 8));
+                CVec *colors = &g_CountdownCellColors[colorBank * 2];
                 *(CVec *)color = colors[pattern & 1];
             }
             pattern >>= 1;
@@ -289,12 +287,12 @@ void DrawStartCountdown(s32 sceneTimer) {
         g_CountdownBoardOffset = 0;
     }
 
-    cursor = SCRATCH_PRIM_CURSOR_WORD;
+    cursor = SCRATCH_PRIM_CURSOR_AS(u8);
     backdrop = QueueDrawModePrim(
-        g_DrawBuffer + 0xD0, (u8 *)cursor, 9);
+        g_DrawBuffer + 0xD0, cursor, 9);
     pattern = g_CountdownBoardOffset;
     SCRATCH_PRIM_CURSOR_AS(u8) = backdrop;
-    cursor = (s32)GameQueueTexturePacketWide(
+    cursor = GameQueueTexturePacketWide(
         orderingTable,
         GameQueueTexturePacketWide(
             orderingTable, backdrop, 0x70, pattern + 66,
@@ -304,10 +302,10 @@ void DrawStartCountdown(s32 sceneTimer) {
         0x60, 0x18, 0xA0, 0xE8, 0x60, 0x18, 0x784E, 9,
         GAME_TEXTURE_PACKET_SPRT);
 
-    packet = (u8 *)cursor;
+    packet = cursor;
     sprite = (SPRT *)packet;
     for (row = 0; row < 6; row++) {
-        SetSprt((void *)cursor);
+        SetSprt(cursor);
         sprite->w = 0x20;
         sprite->h = 0x18;
         sprite->u0 = 0xE0;
@@ -359,14 +357,13 @@ void DrawStartCountdown(s32 sceneTimer) {
         }
     }
 
-    SCRATCH_PRIM_CURSOR_WORD = cursor;
-    cursor = (s32)QueueDrawModePrim(
-        g_DrawBuffer + 0xD0, (u8 *)cursor, 0xC);
-    SCRATCH_PRIM_CURSOR_WORD = cursor;
+    SCRATCH_PRIM_CURSOR_AS(u8) = cursor;
+    cursor = QueueDrawModePrim(g_DrawBuffer + 0xD0, cursor, 0xC);
+    SCRATCH_PRIM_CURSOR_AS(u8) = cursor;
 
     if (phase > 0) {
         if (g_RacePaused == 0) {
-            AddPrims(orderingTable, tiles, (u8 *)tiles + 8176);
+            AddPrims(orderingTable, tiles, tiles + 511);
         }
     }
 
@@ -397,8 +394,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
     {
         register void *drawPrim;
 
-        prim = (u8 *)SCRATCHPAD_ADDR;
-        prim = *(u8 **)prim;
+        prim = SCRATCH_PRIM_CURSOR_AS(u8);
         SetSprt((SPRT *)prim);
         SetShadeTex((SPRT *)prim, 0);
         ((SPRT *)prim)->x0 = 0x8C;
@@ -510,13 +506,13 @@ void DrawRaceOptionMenu(s32 cursorRow) {
             s32 y;
 
             y = selectedRow * 10 + 0x68;
-            prim = (u8 *)AddTilePrim(
+            prim = AddTilePrim(
                 ot, prim, 0x80, y, 0x40, 1, 0xFF, 0xFF, 0);
-            prim = (u8 *)AddTilePrim(
+            prim = AddTilePrim(
                 ot, prim, 0x80, y + 0xB, 0x40, 1, 0xFF, 0xFF, 0);
-            prim = (u8 *)AddTilePrim(
+            prim = AddTilePrim(
                 ot, prim, 0x80, y, 1, 0xB, 0xFF, 0xFF, 0);
-            prim = (u8 *)AddTilePrim(
+            prim = AddTilePrim(
                 ot, prim, 0xBF, y, 1, 0xB, 0xFF, 0xFF, 0);
         }
 
