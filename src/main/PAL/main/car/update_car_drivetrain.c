@@ -134,7 +134,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   if (g_RacePhase < 2)
   {
     car->drive.gearDisp = gear;
-    gearRatio = *(s32 *)(((u8 *)config) + 0xD0);
+    gearRatio = ((GameCarSpec *)config)->gearLoad[1];
     gearCurve = base;
   }
   else
@@ -625,9 +625,10 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   frontLoadScaled = trackHeadingError;
   pointIndex = car->trackPointIndex;
   lateralOffset = car->field_38;
-  engineSpeed = (*(s16 *)(((u8 *)((pointIndex * 0x18) + ((u8 *)g_TrackPoints))) + 0xC)) * (0x400 - lateralOffset);
+  engineSpeed = g_TrackPoints[pointIndex].field_C * (0x400 - lateralOffset);
   pointIndex += 1;
-  lateralSum = engineSpeed + ((*(s16 *)(((u8 *)(((pointIndex % ((s32) g_TrackPointCount)) * 0x18) + ((u8 *)g_TrackPoints))) + 0xC)) * lateralOffset);
+  lateralSum = engineSpeed +
+               g_TrackPoints[pointIndex % (s32)g_TrackPointCount].field_C * lateralOffset;
   secondNonnegative = lateralSum >= 0;
   if (!secondNonnegative)
   {
@@ -715,11 +716,11 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   if (drive->state98 == 1)
   {
     arcPointIndex = car->trackPointIndex;
-    arcFlags = *(u16 *)(((u8 *)((arcPointIndex * 0x18) + ((u8 *)g_TrackPoints))) + 0x14);
+    arcFlags = g_TrackPoints[arcPointIndex].arcRef;
     dragBase = arcFlags % 4;
     if (dragBase > 0)
     {
-      arcCentre = (((((s32) (arcFlags << 0x10)) >> 13) >> 7) * 0xC) + (u8 *)g_TrackArcCenters;
+      arcCentre = &g_TrackArcCenters[(s16)arcFlags >> 4];
       toCentreX = car->x - ((GameTrackArcCenter *)arcCentre)->x;
       toCentreZ = car->z - ((GameTrackArcCenter *)arcCentre)->z;
       centreAngle = Atan2(toCentreX, toCentreZ);
