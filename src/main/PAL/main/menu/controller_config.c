@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/audio.h"
 #include "game/menu.h"
 #include "game/render.h"
@@ -134,16 +135,6 @@ void UpdateControllerConfigScreen(void) {
     DrawControllerSetupScene(0);
 }
 
-s32 AddTilePrim(
-    s32 ot,
-    s32 prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 r,
-    s32 g,
-    s32 b);
 
 /* Game mode 9's own overlay: the two lines of instructions over a black panel
  * inside a white border, both drawn into the 0xD0 sub-buffer of the current
@@ -157,8 +148,8 @@ void DrawNegconNeutralScreen(void) {
     DrawSpriteString(0x18, 0x48, D_8001004C, 0x7F81);
     ot = (s32)(g_DrawBuffer + 0xD0);
     prim = *cursor;
-    prim = AddTilePrim(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
-    *cursor = AddTilePrim(ot, prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
+    prim = AddTilePrimWord(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
+    *cursor = AddTilePrimWord(ot, prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
 }
 
 /*

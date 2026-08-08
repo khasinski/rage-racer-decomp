@@ -36,14 +36,12 @@ extern s32 g_RaceTotalTime;
 extern s32 g_RankingTimes[][4][20];
 
 
-void ExitRaceScene(s32 sceneId);
 
 extern s32 g_CameraViewMode;
 
 extern u8 *g_CamRow;
 
 
-void SetTrackTexturePageNow(s32);
 
 extern u8 g_SceneLightMatrix[];
 
@@ -73,19 +71,12 @@ static __inline__ void GameDebugLapResult(
 
 
 
-void BeginCarStandingStart(void *car, s32 sceneTimer);
 
-void UpdatePlayerCar(void *car);
 
-void DrawPlayerTachometer(void);
 
-void GetTrackZoneBlend(s32 position);
 
-void RunRaceIntroCamera(void *car, s32 frame);
 
-void UpdateTrackEventSound(s32 trackSection);
 
-void PlayCountdownCues(s32 sceneTimer);
 
 
 s32 UpdateLapAndFinish(void *car, s32 grandPrixMode) {
@@ -614,7 +605,7 @@ void UpdateRaceScene(void) {
                 goto update_race;
             }
         } else if (g_RacePhase == 0) {
-            RunRaceIntroCamera(g_PlayerCar, frameValue);
+            RunRaceIntroCamera((struct Obj *)g_PlayerCar, frameValue);
         } else {
 update_race:
             if ((g_RacePhase == 1) && ((u32)g_SceneTimer >= 0xD3)) {
@@ -665,7 +656,7 @@ update_race:
         }
 
         if (g_RacePhase > 0) {
-            UpdatePlayerCar(g_PlayerCar);
+            UpdatePlayerCar((struct Car *)g_PlayerCar);
         } else if (g_RacePhase == 0) {
             UpdateLoadedAudioVoices(0, 0);
         }

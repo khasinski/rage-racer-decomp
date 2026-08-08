@@ -676,7 +676,6 @@ static __inline__ u8 *GameQueueTexturePacketWide(
  * alpha argument is not 0xFF. SetDrawModePacket only fills the packet in
  * place (no AddPrim, no cursor advance) and has no callers in the retail EXE.
  */
-u8 *QueueDrawModePrim(void *ot, u8 *prim, s32 tpage);
 void SetDrawModePacket(u8 *prim, s32 tpage);
 
 /*
@@ -831,6 +830,13 @@ void BuildVisibleCells(s32 near, s32 far);
 void EndMirrorPass(void);
 void RestoreColorMatrix(void);
 s32 rsinCore(s32 angle);
+s32 rsin(s32 angle);
+s32 rcos(s32 angle);
+void *ApplyMatrixLV();
+s32 SquareRoot0(s32 square);
+void SubmitTerrainCells(void *ctx, void *cells, s32 count);
+s32 SetLookAtMatrix(GameRenderObject *obj);
+void SetTrackTexturePageNow(s32 trackSection);
 
 /* Declared identically by 95 translation units before this
  * header carried them. */

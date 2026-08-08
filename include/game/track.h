@@ -288,6 +288,8 @@ s32 BlendAngle(s32 angleA, s32 angleB, s32 weight);
 extern s32 FindNearestTrackCamera();
 void LerpEnvColor(u8* from, u8* to, u8* out, s32 blend);
 void LoadEnvironmentCue();
+void UpdateTrackEventSound(s16 trackSection);
+void UpdateFreeLookCamera(void *car, s32 updateMotion);
 
 /* Declared identically by 5 translation units before this
  * header carried them. */

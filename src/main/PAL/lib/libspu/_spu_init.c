@@ -7,12 +7,9 @@ extern char g_SpuTimeoutFmt[];
 extern volatile SpuRegisterMap *g_SpuRegBase;
 extern long g_SpuMemModeUnit;
 extern long _spu_mem_mode_plus;
-extern void (*volatile g_SpuTransferCallback)(void);
 /* Deliberately raw: cleared beside g_SpuTransferCallback in _spu_init and
  * SpuQuit and never read. Shape says libspu's IRQ callback slot
  * (SpuSetIRQCallback), but this build has no call site to prove it. */
-extern void (*volatile D_8009ABB4)(void);
-
 #define SPU_INIT_DELAY()                    \
     delayValue = 0xD;                       \
     for (delay = 0; delay < 0xF0; delay++) { \

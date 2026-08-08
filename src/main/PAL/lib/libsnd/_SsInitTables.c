@@ -5,8 +5,6 @@
 
 extern long g_SndTickResolution;
 extern long g_SndUpdateLock;
-extern long g_SndMarkCallbacks[][0x10];
-
 void _SsInitTables(void) {
     short *ptr;
     long i;

@@ -629,4 +629,7 @@ extern Vec4 D_8009E724;
 extern Vec4 g_MenuViewScale;
 extern Matrix g_SceneColorMatrix;
 
+void DrawPrizeMoneyPanel(s32 y);
+extern void (*g_FrontendDrawHandlers[])(void);
+
 #endif

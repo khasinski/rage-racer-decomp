@@ -156,7 +156,6 @@ void ApplyBodyColor1(u32 colour, u32 imageData) {
 
 extern u32 g_CarModelAsset;
 
-void UploadCarImage(u32 slot);
 
 void SetBodyColor1(u32 colour) {
     ApplyBodyColor1(colour, *(u32 *)(g_CarModelAsset + 0x24));

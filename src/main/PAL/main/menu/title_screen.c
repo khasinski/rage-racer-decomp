@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/asset.h"
 #include "game/audio.h"
 #include "game/cd.h"
@@ -79,7 +80,6 @@ void DrawTitleFadeOverlay(s32 brightness) {
     *scratch = QueueDrawModePrim(base, next, 0x29);
 }
 
-s32 rsin(s32 angle);
 
 void DrawPressStartPrompt(void) {
     void **scratch;

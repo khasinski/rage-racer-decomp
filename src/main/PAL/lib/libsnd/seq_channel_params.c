@@ -40,8 +40,6 @@ void SsSeqResetChannelNote(long seq, long sep) {
     state->delta_value = SsSeqReadDeltaTime((short)seq, (short)sep);
 }
 
-extern void( * g_SndMarkCallbacks[][0x10])(long seq,long sep,u_char value);
-
 void SsSeqApplyControlChange(long seq, long sep, u_char value) {
     long seq_raw;
     long sep_raw;

@@ -164,7 +164,6 @@ s32 InitSoundRuntime(void) {
 #include "game/audio.h"
 #include "psyq/snd.h"
 
-s32 SpuVmDamperStep(void);
 
 s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     s16 vabId;
@@ -1252,7 +1251,6 @@ void UpdateEffectVoiceStates(void) {
     } while ((s32)statePtr < (s32)&g_EffectVoiceState[20]);
 }
 
-s32 SpuGetKeyStatus(s32 bit);
 
 /* `note` is what every caller passes as the MIDI note, always 0x3C. */
 s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR) {

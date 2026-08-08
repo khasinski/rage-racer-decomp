@@ -18,8 +18,6 @@ extern char D_80013814[];
 extern char D_80013824[];
 extern char D_800138A4[];
 
-void LibcPutString(char *text);
-
 static __inline__ void copy8(u_char *dst, u_char *src) {
     long count;
     long end;

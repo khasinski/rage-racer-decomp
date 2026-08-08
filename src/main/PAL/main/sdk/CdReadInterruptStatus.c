@@ -34,8 +34,6 @@ extern u_char D_8001384C;
 extern u_char D_80013868;
 extern u_char D_8001387C;
 
-void LibcPutString();
-
 static __inline__ void copy8(u_char *d, u_char *s) {
     long n;
     if (d == 0) {

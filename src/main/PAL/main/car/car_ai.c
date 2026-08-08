@@ -15,13 +15,6 @@ typedef struct GameCollisionPointBytes {
 
 extern GameCollisionPoint g_CarCollisionCorners[4];
 
-void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode)
-;
-s32 IsPointInQuad(s32 p0, s32 p1, s32 p2, s32 p3, s32 point)
-;
-
-s32 rsin(s32 angle);
-
 /*
  * Jump / launch setup: when GetCarCrestTrigger reports a marker crossing, seeds the
  * launch trajectory (field_90/94/98/9A/9C/9E) and snapshots the car's render

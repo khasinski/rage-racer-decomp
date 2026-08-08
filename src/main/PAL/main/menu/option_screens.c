@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/asset.h"
 #include "game/audio.h"
 #include "game/car.h"
@@ -12,12 +13,9 @@
 
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
-s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 extern s32 g_CameraViewMode;
 extern s32 *g_CamRow;
-void SetTrackTexturePageNow(s32 page);
 extern u8 g_TextNowLoading[];
-void RequestTrackDataAssets(void);
 
 /* g_GameModeHandlers[5]: left/right edits the selected audio setting, cancel restores it. */
 void UpdateSoundSettingAdjust(void) {
@@ -227,19 +225,19 @@ void DrawOptionSceneOverlay(void) {
         w120 = 0x120;
         two = 2;
         white = 0xFF;
-        pkt = AddTilePrim(base, pkt, 0x10, 0x20, w120, two, white, white, white);
-        pkt = AddTilePrim(base, pkt, 0x10, 0x1C0, w120, two, white, white, white);
+        pkt = (s32)AddTilePrim(base, (void *)pkt, 0x10, 0x20, w120, two, white, white, white);
+        pkt = (s32)AddTilePrim(base, (void *)pkt, 0x10, 0x1C0, w120, two, white, white, white);
         h1c0 = 0x1C0;
         pkt = (s32)GameQueueLine(base, (u8 *)pkt, 0x10, 0x20, 0x10, h1c0, white, white, white);
         pkt = (s32)GameQueueLine(base, (u8 *)pkt, 0x130, 0x20, 0x130, h1c0, white, white, white);
     }
 
-    *scratch = AddTilePrim(base, pkt, 0, 0, 0x140, g_OptionLetterboxHeight, 0x85, 0x15, 0xE);
+    *scratch = (s32)AddTilePrim(base, (void *)pkt, 0, 0, 0x140, g_OptionLetterboxHeight, 0x85, 0x15, 0xE);
 }
 
 /* Scene 23: the setup / OPTION scene, dispatching g_GameModeHandlers[g_GameMode]. */
 void UpdateOptionScene(void) {
-    SCRATCH_PRIM_CURSOR_WORD = AddTilePrim(g_DrawBuffer + 204, SCRATCH_PRIM_CURSOR_WORD, 0, 0, 0x140, 2, 0, 0, 0);
+    SCRATCH_PRIM_CURSOR_WORD = (s32)AddTilePrim(g_DrawBuffer + 204, (void *)SCRATCH_PRIM_CURSOR_WORD, 0, 0, 0x140, 2, 0, 0, 0);
     g_AnimTimer = g_AnimTimer + 1;
     g_SceneTimer = g_SceneTimer + 1;
     if (g_SceneTimer == 2) {

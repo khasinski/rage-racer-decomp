@@ -19,8 +19,6 @@ extern char D_800138B0[];
 extern char D_800138B8[];
 extern char D_800138C8[];
 
-void LibcPutString(char *text);
-
 static inline void setAlarm(char *name) {
     g_CdTimeoutDeadline.deadline = VSync(-1) + 0x3C0;
     g_CdTimeoutDeadline.count = 0;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/audio.h"
 #include "game/car.h"
 #include "game/race.h"
@@ -37,25 +38,16 @@ extern s32 g_PlayerTrackProgress;
 
 
 
-void ExitRaceScene(s32 a);
-
-void BeginCarStandingStart(void *a);
-
-void RunRaceIntroCamera(void *a);
-
-void UpdatePlayerCar(void *a);
 
 
 
-void DrawCourseScenery(s32 a, s32 b, s32 c);
 
-void GetTrackZoneBlend(s32 a);
 
-void DrawPlayerTachometer(void);
 
-void UpdateTrackEventSound(s32 a);
 
-void PlayCountdownCues(u32 a);
+
+
+
 
 /*
  * The tail's multiply feeds the discarded rounding path below. GCC 2.6.3
@@ -63,17 +55,13 @@ void PlayCountdownCues(u32 a);
  * registers behind (docs/names.md 31f and 35c).
  */
 
-s32 rsin(s32 angle);
 
 extern u8 *g_TrackPoints;
 extern s32 g_TrackLength;
 extern u8 *g_TrackEventData;
 
-extern s32 FindTrackSegment(u8 *ent, s32 trackPointIndex);
 
-extern void SeedCarLapProgress(u8 *ent, s32 trackPointIndex);
 
-extern void UpdateCarTrackState(u8 *ent, s32 trackPointIndex, void *clampPair);
 
 /*
  * Initializes/spawns a route render object `ent`: reads a start entry from the
@@ -364,7 +352,7 @@ void DrawEndingScreen(void) {
         }
     } else {
         if (g_RacePhase == 0) {
-            RunRaceIntroCamera(&g_PlayerCar);
+            RunRaceIntroCamera((struct Obj *)&g_PlayerCar, a);
             D_8009EC88 = 0;
             g_WaypointsCollected = 0;
             break;
@@ -372,7 +360,7 @@ void DrawEndingScreen(void) {
     }
     if (g_RacePhase == 1) {
         if ((u32)g_SceneTimer >= 211) {
-            BeginCarStandingStart(&g_PlayerCar);
+            BeginCarStandingStart((u8 *)&g_PlayerCar, a);
             g_RacePhase = 2;
         }
     }
@@ -384,7 +372,7 @@ void DrawEndingScreen(void) {
     }
 
     if (g_RacePhase > 0) {
-        UpdatePlayerCar(&g_PlayerCar);
+        UpdatePlayerCar((struct Car *)&g_PlayerCar);
     } else if (g_RacePhase == 0) {
         UpdateLoadedAudioVoices(0, 1);
     }

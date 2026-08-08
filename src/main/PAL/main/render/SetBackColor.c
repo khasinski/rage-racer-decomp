@@ -30,7 +30,6 @@ void SetGeomOffset(s32 a, s32 b) {
     gte_ctc2(y, 25);
 }
 __asm__(".align 4");
-void SetGeomScreen(s32 a);
 void SetGeomScreen(s32 a) { gte_ctc2(a, 26); }
 
 /* --- LightColor.s .. OuterProduct0.s --- */
@@ -53,8 +52,6 @@ void DpqColor(void *in, void *rgb, s32 ir0, void *out) {
 }
 
 void DpqColor3(void *v0, void *v1, void *v2, s32 ir0, void *o0, void *o1,
-                   void *o2);
-void DpqColor3(void *v0, void *v1, void *v2, s32 ir0, void *o0, void *o1,
                    void *o2) {
     (void)o0;
     (void)o1;
@@ -70,7 +67,6 @@ void Intpl(void *in, s32 ir0, void *out) {
     gte_swc2(22, out);
 }
 
-void * Square12(void *in, void *out);
 void *Square12(void *in, void *out) {
     register void *p asm("$5") = out;
     gte_ldir(in);
@@ -80,7 +76,6 @@ void *Square12(void *in, void *out) {
     return p;
 }
 
-void * Square0(void *in, void *out);
 void *Square0(void *in, void *out) {
     register void *p asm("$5") = out;
     gte_ldir(in);

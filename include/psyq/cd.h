@@ -99,7 +99,7 @@ CdlLOC *CdLastPos(void);
 CdlLOC *CdIntToPos(long i, CdlLOC *p);
 long CdPosToInt_Local(CdlLOC *loc);
 long CdGetToc(CdlLOC *toc);
-long CdGetToc2(long n, CdlLOC *toc);
+long CdGetToc2(long maxTracks, u_char *out);
 void CD_initintr(void);
 long CD_initvol(void);
 void CD_flush(void);
@@ -127,7 +127,7 @@ void StCdInterrupt(void);
  */
 long CdControl(long com, void *param, long result);
 long CdControlF(long com, void *param);
-long CdControlB(long com, void *param, long result);
+long CdControlB(long com, void *param, void *result);
 long CdSync(long mode, long result);
 /* PSY-Q: long CdReady(long mode, u_char *result); see CD_cw above. */
 long CdReady();
@@ -298,5 +298,16 @@ u_long *DecDCTGetEnv(u_long* env);
 u_long *DecDCTPutEnv(u_long* env);
 void MDEC_reset(long mode);
 long MDEC_timeout(u_char* name);
+long cd_read(long sectors, long address, void *mode);
+long CD_cachefile(long dir);
+long CD_datasync();
+long CdResetState(void);
+long CdGetSector2(long address, u_long words);
+s32 StClearRingRange(long first, u_long count);
+void data_ready_callback(void);
+void StSetRingParams();
+void MDEC_out();
+long MDEC_in_sync(void);
+long MDEC_out_sync(void);
 
 #endif

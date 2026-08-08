@@ -258,11 +258,6 @@ typedef union {
     u16 lo;
 } TeamLogoColorSlot;
 
-void ScrollTeamLogoUp(s32 repeat);
-void ScrollTeamLogoDown(void);
-void ScrollTeamLogoLeft(void);
-void ScrollTeamLogoRight(void);
-void FlipTeamLogoVertical(void);
 extern u16 g_PadHeld;
 extern u16 g_PadPressedRepeat;
 extern u16 g_PadPressed;
@@ -735,16 +730,12 @@ void UpdateTeamLogoCanvas(void) {
 extern s32 g_TeamLogoClutRect;
 extern s32 D_8007F964;
 
-void RestoreTeamLogoClut(void);
 void RestoreTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, &D_8007F964); }
 
-void UploadTeamLogoClut(void);
 void UploadTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, g_TeamLogoClut); }
 
 extern s32 D_8007FB20;
 
-void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h);
-void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r0, u32 g0, u32 b0, u8 r1, u8 g1, u8 b1, u8 alpha);
 
 typedef struct Blob {
     s16 b[33];
@@ -871,16 +862,7 @@ typedef union {
 extern RaceRecord g_RankingRecords[2][4][5];
 extern RaceRecord g_TimeRecords[2][4][5];
 
-void DrawLargeText(s32 x, s16 y, u8 *text, s32 r, s32 g, s32 b,
-                       s32 clut, s32 flags);
-void GameDrawMenuButton(s32 x, s16 y, s32 w, s32 h, s32 r, s32 g, s32 b,
-                        s32 flags, s32 textX, s32 textY,
-                        s32 caption);
-void DrawRectOutline(void *ot, s32 x, s16 y, s32 w, s32 h, s32 r,
-                         s32 g, s32 b, s32 alpha);
 /* The animated five-row ranking/time-record panel. */
-s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking)
-;
 asm(".globl func_8004E07C\nfunc_8004E07C = DrawRankingTable + 0xCF8");
 
 s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {

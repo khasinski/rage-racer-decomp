@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/audio.h"
 #include "game/car.h"
 #include "game/cd.h"
@@ -10,7 +11,6 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 extern volatile s32 g_RaceTotalTime;
 extern s32 g_RankingTimes;
 /* Split symbols of the two RaceRecord tables: +0x08 is the time and +0x0C the
@@ -18,8 +18,6 @@ extern s32 g_RankingTimes;
  * g_TimeRecordTimes / g_TimeRecordCars the same pair of g_TimeRecords. */
 extern u16 g_RankingCars[];
 extern u16 g_TimeRecordCars[];
-void CdSync(s32 mode, s32 result);
-s32 CdControl(s32 com, void *param, s32 result);
 
 void DrawRankingPanel(u8 *slideX) {
     u8 *panel;
@@ -153,7 +151,7 @@ void DrawNameEntryCursor(s32 charIndex, s32 row) {
 
     if (g_AnimTimer & 8) {
         scratch = &SCRATCH_PRIM_CURSOR_WORD;
-        *scratch = AddTilePrim(
+        *scratch = AddTilePrimWord(
             g_DrawBuffer + 0xCC,
             *scratch,
             (charIndex * 8) + 0x7C,

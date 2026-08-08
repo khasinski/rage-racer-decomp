@@ -34,6 +34,21 @@ typedef struct DispEnv {
     u_char isrgb24;
 } DispEnv;
 
+typedef struct Env {
+    short x0;
+    short x2;
+    short x4;
+    short x6;
+    short x8;
+    short xA;
+    short xC;
+    short xE;
+    u_char x10;
+    u_char x11;
+    u_char x12;
+    u_char x13;
+} Env;
+
 typedef struct DrawEnv {
     Rect clip;
     short ofs[2];
@@ -46,6 +61,12 @@ typedef struct DrawEnv {
     u_char g0;
     u_char b0;
 } DrawEnv;
+
+s32 SetGraphDebug(u8 level);
+void *PutDrawEnv(void *env);
+Env *PutDispEnv(Env *env);
+void DrawOTag(void *ot);
+u_char *MemCopy(u_char *dst, u_char *src, long count);
 
 /*
  * The libgpu primitive packets the game builds, in PSY-Q layout: a 4-byte
@@ -397,5 +418,19 @@ u_char Gpu_GetControlMirrorByte(long index);
 long Gpu_WriteGp0Words(u_long *src, long count);
 void Gpu_WriteGp1(u_long command);
 long SetGraphQueue(long mode);
+long Gpu_ProbeType(u_long probe);
+void Gpu_StartDmaTransfer();
+u_long _param(u_long index);
+long Gpu_AddQueue();
+void Gpu_ArmTimeout(void);
+long Gpu_CheckTimeout(void);
+long Gpu_ExecuteQueue(void);
+u_long _get_mode(long dfe, long dtd, u_long tpage);
+u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
+u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
+u_long Gpu_BuildDrawOffsetCmd(long x, long y);
+u_long Gpu_BuildTexWindowCmd(GpuTexWindow *window);
+u_long get_dx();
+void CheckPrim();
 
 #endif

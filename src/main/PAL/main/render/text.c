@@ -33,22 +33,6 @@ extern u8 g_HighFontYOffset[];
 #define INIT_TEXT_FONT(font) \
     asm("" : "=r"(font) : "0"(g_Font8x8Cells))
 
-void DrawText8x8(
-    s32 x,
-    s32 y,
-    u8 *str,
-    s32 clutIndex);
-void GameDrawText8x8Shaded(
-    s32 x,
-    s32 y,
-    u8 *str,
-    s32 clutIndex,
-    u8 intensity);
-void DrawText8x8Trans(
-    s32 x,
-    s32 y,
-    u8 *str,
-    s32 clutIndex);
 void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
     u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
     u8 *packet;
@@ -213,13 +197,6 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
  * insert sign-extends and a truncation here, so this TU declares both the
  * callee and this function with s32 parameters instead of including the header.
  */
-void GameDrawProportionalTextShaded(
-    s32 x,
-    s32 y,
-    u8 *str,
-    s32 clutIndex,
-    s32 intensity);
-
 void GameDrawProportionalTextShaded(
     s32 x,
     s32 y,
@@ -411,7 +388,6 @@ void GameDrawProportionalTextShaded(
 #undef OPAQUE_VALUE
 }
 
-void DrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex);
 
 /* Opaque wrapper over GameDrawProportionalTextShaded: intensity 0x100 selects
  * the raw-texture (SetShadeTex) path instead of a modulated, semi-transparent
@@ -426,17 +402,6 @@ void DrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex) {
  * CLUT index as a full word (the stack arguments are read with `lw`), so the
  * narrow documentation types in game/render.h would make gcc shrink the loads.
  */
-u8 *GameQueueSprite(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex);
-
 /* SPRT, 20 bytes: a raw (SetShadeTex) textured sprite linked into `ot`.
  * Returns the advanced packet cursor. */
 u8 *GameQueueSprite(

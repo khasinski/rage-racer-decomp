@@ -9,15 +9,7 @@ extern short g_SndCurrentSeqSep;
 extern volatile u_char g_SndVoiceCount;
 extern u_char g_SndVoiceRegs[];
 
-short SpuVmSetSeqVol();
-long SpuVmGetSeqVol(long seq_sep, short *volLeft, short *volRight);
-
-short SpuVmSetSeqVol(seq_sep, left, right, mode)
-short seq_sep;
-u_short left;
-u_short right;
-short mode;
-{
+short SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short mode) {
     short i;
     u_char *base;
     u_char *entry;

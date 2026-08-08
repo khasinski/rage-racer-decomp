@@ -37,8 +37,6 @@ typedef struct SwModelPose {
 extern SwObj698 *g_CarModelAsset;
 extern SwModelPose D_8009E6D4 asm("g_PlayerCar");
 
-s32 GetCarAssetIndex(s32 model, s32 grade);
-void *ApplyMatrixLV(void *m, void *v0, void *v1);
 
 void DrawMenuCarView(void) {
     Matrix mtxA;
@@ -308,7 +306,6 @@ void DrawMenuCourseView(void) {
 
 typedef struct Poly { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 
-s32 rsin(s32 angle);
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */
 void DrawTeamNameCharModel(void) {

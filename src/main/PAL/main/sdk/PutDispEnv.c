@@ -2,21 +2,6 @@
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 
-typedef struct Env {
-    short x0;
-    short x2;
-    short x4;
-    short x6;
-    short x8;
-    short xA;
-    short xC;
-    short xE;
-    u_char  x10;
-    u_char  x11;
-    u_char  x12;
-    u_char  x13;
-} Env;
-
 typedef struct Cache {
     volatile u_short x0;
     volatile u_short x2;
@@ -33,12 +18,8 @@ extern GfxState g_GpuFuncs;
 extern char D_80013614[];
 extern Cache g_DispEnvCache;
 
-long get_dx(void *env);
-void *MemCopy(void *dst, void *src, long count);
-
 /* libgpu PutDispEnv: GP1(05h/06h/07h/08h) from a 0x14-byte DISPENV.
  * Named from its own trace string D_80013614, "PutDispEnv(%08x)...". */
-Env *PutDispEnv(Env *env);
 Env *PutDispEnv(Env *env) {
     Env *s0 = env;
     long flags;
@@ -152,6 +133,6 @@ Env *PutDispEnv(Env *env) {
         g_GpuFuncs.funcs->submit(flags);
     }
 
-    MemCopy(&g_DispEnvCache, s0, 0x14);
+    MemCopy((u_char *)&g_DispEnvCache, (u_char *)s0, 0x14);
     return s0;
 }

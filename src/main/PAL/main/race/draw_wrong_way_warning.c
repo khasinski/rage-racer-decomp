@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/car.h"
 #include "game/race.h"
 #include "game/render.h"
@@ -62,12 +63,8 @@ void DrawWrongWayWarning(void) {
     SCRATCH = QueueDrawModePrim(g_DrawBuffer + 0xCC, ret, 9);
 }
 
-s32 rsin(s32 angle);
-s32 rcos(s32 angle);
-void SetPolyF4(void *prim);
-void SetTile(void *prim);
 
-void DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
+s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
     GameCarSpec *p = g_CarSpec;
     s32 cx = p->tachoNeedleX;
     s32 cy = p->tachoNeedleY;

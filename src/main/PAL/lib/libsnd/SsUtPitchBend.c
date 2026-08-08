@@ -16,20 +16,6 @@ extern u_char g_SndCurrentTone;
 extern short g_SndCurrentSeqSep;
 extern short g_SndCurrentVoice;
 
-long SpuVmVSetUp(long vab_id, long program);
-long SpuVmAutoVol(long voiceArg, long startArg, long targetArg, long stepArg);
-long SpuVmAutoPan(long voiceArg, long startArg, long targetArg, long stepArg);
-long SpuVmApplyPitchBendToVoice(long voice, long note, long vab_id, long program, long bend);
-u_short SpuVmCalculateTonePitch(long center, long fine);
-
-long SsUtChangePitch(long voice, long vab_id, long program, long old_note, long old_fine, long new_note, long new_fine);
-long SsUtChangeADSR(long voice, long vab_id, long program, long tone, u_short adsr1, u_short adsr2);
-short SsUtGetDetVVol(short voice, short* left, short* right);
-short SsUtSetDetVVol(short voice, short left, short right);
-short SsUtSetVVol(short voice, short left, short right);
-long SsUtAutoVol(long voice, long start_vol, long end_vol, long delta_time);
-long SsUtAutoPan(long voice, long start_pan, long end_pan, long delta_time);
-
 long SsUtPitchBend(voice, vab_id, program, note, pbend)
     long voice;
     long vab_id;

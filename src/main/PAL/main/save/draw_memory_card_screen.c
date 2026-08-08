@@ -1,15 +1,12 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/memcard.h"
 #include "game/menu.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 
 extern u8 *volatile g_DrawBuffer;
-u8 *GameQueueSpriteTrans(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex);
-s32 AddTilePrim(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
-s32 GameQueueSprite(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex);
 
-void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow);
 void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow)
 {
     s32 base = ((s32) g_DrawBuffer) + 0xCC;
@@ -37,16 +34,16 @@ void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow)
     DrawPadTypeHint();
 
     base = ((s32) g_DrawBuffer) + 0xD8;
-    next = AddTilePrim(base, *scratch, 0x5D, 0x3C, 0xE4, 0x40, 0, 0, 0);
-    next = AddTilePrim(base, next, 0x5C, 0x3A, 0xE5, 0x44, 0xFF, 0xFF, 0xFF);
+    next = AddTilePrimWord(base, *scratch, 0x5D, 0x3C, 0xE4, 0x40, 0, 0, 0);
+    next = AddTilePrimWord(base, next, 0x5C, 0x3A, 0xE5, 0x44, 0xFF, 0xFF, 0xFF);
     for (i = 0; i < 3; i++) {
         next = DrawShadowedTile(base, next, 0x3E, 0xD0 + i * 0x30);
     }
 
     if (showBar != 0) {
-        next = AddTilePrim(base, next, 0x3C, ((barRow * 3) << 4) + 0xCC, 0xC8, 0x28, 0x89, 0xFF, 0x76);
+        next = AddTilePrimWord(base, next, 0x3C, ((barRow * 3) << 4) + 0xCC, 0xC8, 0x28, 0x89, 0xFF, 0x76);
     }
-    next = AddTilePrim(base, next, 0, 0, 0x140, 0xF0, 0x85, 0x15, 0xE);
+    next = AddTilePrimWord(base, next, 0, 0, 0x140, 0xF0, 0x85, 0x15, 0xE);
     SCRATCH_PRIM_CURSOR_WORD = next;
 }
 

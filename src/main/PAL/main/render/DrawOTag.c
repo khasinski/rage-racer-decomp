@@ -5,9 +5,7 @@
 extern GpuCallbacks *g_GpuFuncs;
 extern u8 g_GraphDebug;
 
-void *MemCopy(void *dst, void *src, s32 count);
 
-void DrawOTag(void* ot);
 
 void DrawOTag(void *ot) {
     if (g_GraphDebug >= 2) {
@@ -17,7 +15,6 @@ void DrawOTag(void *ot) {
 }
 
 /* Named from its own trace string D_800135E0, "PutDrawEnv(%08x)...". */
-void *PutDrawEnv(void *env);
 void *PutDrawEnv(void *env) {
     u8 *debug = &g_GraphDebug;
     void *prim = env;

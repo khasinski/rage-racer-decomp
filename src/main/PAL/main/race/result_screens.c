@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/audio.h"
 #include "game/car.h"
 #include "game/cd.h"
@@ -32,9 +33,6 @@ typedef union {
 extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
 extern u8 g_PlayerCar;
-void SetTrackTexturePageNow(s32 trackSection);
-void ApplyReplayFrame(s32 subframe, void *playerObj, void *rivalObj);
-s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 extern s32 g_RaceTotalTime;
 extern s32 g_BestTotalTimes[][4][2];
 extern GrandPrixIntroLayout g_ResultPlaceSprites[];
@@ -164,7 +162,7 @@ void UpdateReplayScene(void) {
         }
     }
 
-    ApplyReplayFrame(g_ReplayReadCursor, &g_PlayerCar, (u8 *)g_Cars);
+    ApplyReplayFrame(g_ReplayReadCursor, (ReplayCarState *)&g_PlayerCar, (ReplayCarState *)g_Cars);
     g_ReplayReadCursor++;
     if (g_ReplayReadCursor == g_ReplayFrameCount) {
         g_ReplayReadCursor = 0;
@@ -210,8 +208,8 @@ void DrawResultScreen(void) {
     base += 0xCC;
 
     next = *scratch;
-    next = AddTilePrim(base, next, 0, 0, width, 0x30, 0x85, 0x15, 0xE);
-    *scratch = AddTilePrim(base, next, 0, 0x30, width, 0x18, 0xF0, 0xF0, 0xF0);
+    next = AddTilePrimWord(base, next, 0, 0, width, 0x30, 0x85, 0x15, 0xE);
+    *scratch = AddTilePrimWord(base, next, 0, 0x30, width, 0x18, 0xF0, 0xF0, 0xF0);
 }
 
 void DrawGrandprixIntro(void) {

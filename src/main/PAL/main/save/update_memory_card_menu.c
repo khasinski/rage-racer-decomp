@@ -15,7 +15,6 @@ extern volatile s32 g_McMenuSubState;
 extern volatile s32 GameMenuLoadPhase;
 extern volatile s32 g_McConfirmChoice_v asm("g_McConfirmChoice");
 
-void DrawMemoryCardScreen(s32 a0, s32 a1, s32 a2, s32 a3);
 
 void UpdateMemoryCardMenu(void) {
     s32 fadeBusy = 0;

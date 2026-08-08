@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/asset.h"
 #include "game/audio.h"
 #include "game/menu.h"
@@ -106,7 +107,6 @@ void UpdateTitleAttract(void) {
     *(void **)scratch = GameQueueShadedTexturedRect(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
 extern u32 D_801E8260;
-extern void (*g_FrontendDrawHandlers[])(void);
 
 
 void UpdateFrontend(void) {

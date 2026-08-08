@@ -11,10 +11,6 @@ extern u_char D_80013910[];
 
 extern volatile CdIntr g_CdSyncStatus;
 
-void KernelCallbackSlot3(void);
-void KernelCallbackSlot2(long index, void *callback);
-void LibcPutString(u_char *text);
-
 long CD_vol(CdlATV *vol) {
     *g_CdReg0 = 2;
     *g_CdReg2 = vol->val0;

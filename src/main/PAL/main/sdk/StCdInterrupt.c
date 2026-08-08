@@ -29,9 +29,6 @@ extern s32 g_StStreamFlag;
 extern volatile StStrHeader *g_StRingBase;
 extern s32 g_StRingSize;
 
-void StClearRingRange(s32 first, u32 count);
-void data_ready_callback(void);
-
 void StCdInterrupt(void) {
     volatile StReadyStatus readyStatus;
     CdlLOC location;

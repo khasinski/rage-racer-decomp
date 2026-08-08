@@ -8,9 +8,7 @@
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
  */
 
-s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out);
 /* libgte ApplyMatrixSV: SVECTOR in, SVECTOR out, returns out. */
-s16 *ApplyMatrixSV(s32 *matrix, void *vec, s16 *out);
 
 s32 *ApplyMatrix(s32 *matrix, s32 *vec, s32 *out) {
     asm volatile(

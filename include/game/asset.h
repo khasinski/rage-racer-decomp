@@ -227,6 +227,8 @@ void StoreTeamLogoImage(void* dst);
 void UploadImageAsset(void *asset);
 void UploadImageBlock(void* asset);
 void UploadLoadBufferImage(void);
+s32 RequestTrackDataAssets(void);
+s32 GetCarAssetIndex(s32 model, s32 grade);
 
 /* Declared identically by 19 translation units before this
  * header carried them. */

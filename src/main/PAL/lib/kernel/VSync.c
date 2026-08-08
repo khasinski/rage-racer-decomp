@@ -9,8 +9,6 @@ typedef struct CallbackTable {
 
 extern KernelCallback *g_IntrRpNode;
 
-void LibcPutString(char *str);
-
 long VSync(long mode) {
     long oldTimer;
     long delta;

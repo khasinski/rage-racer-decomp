@@ -5,12 +5,8 @@
 #include "game/render.h"
 #include "game/audio.h"
 #include "game/random.h"
-void AdvanceCarPosition();
 
-void UpdateCarAirborne(GameCarRuntime *car);
 
-s32 rsin(s32 angle);
-s32 rcos(s32 angle);
 
 /*
  * AI route steering: projects a target point ahead of (or behind, per the

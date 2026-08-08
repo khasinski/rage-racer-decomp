@@ -186,7 +186,6 @@ s32 SetGraphReverse(s32 mode) {
     return old;
 }
 
-s32 SetGraphDebug(u8 level);
 
 s32 SetGraphDebug(u8 level) {
     u8 *ptr = &g_GraphDebug;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
@@ -61,7 +62,6 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     }
 }
 
-void *QueueDrawModePrim(void *ot, void *prim, s32 tpage);
 
 void DrawSprite(ot, x0, y0, x1, y1, u0, v0, r, g, b, clutX, shadeTex, semiTrans, flags)
     void *ot;
@@ -139,7 +139,7 @@ void DrawSprite(ot, x0, y0, x1, y1, u0, v0, r, g, b, clutX, shadeTex, semiTrans,
     clutReg = flags;
     flags &= 0x80;
     if (flags == 0) {
-        prim = QueueDrawModePrim(ot, prim, clutReg & 0xFFFF);
+        prim = (SPRT *)QueueDrawModePrim(ot, (u8 *)prim, clutReg & 0xFFFF);
     }
 
     SCRATCH_PRIM_CURSOR_AS(SPRT) = prim;
@@ -202,7 +202,7 @@ void DrawFlatTriangle(ot, x0, y0, x1, y1, x2, y2, r, g, b, semiTrans, flags)
     semiReg = flagsReg;
     flagsReg &= 0x80;
     if (flagsReg == 0) {
-        prim = QueueDrawModePrim(ot, prim, semiReg & 0xFFFF);
+        prim = (POLY_F3 *)QueueDrawModePrim(ot, (u8 *)prim, semiReg & 0xFFFF);
     }
 
     SCRATCH_PRIM_CURSOR_AS(POLY_F3) = prim;
@@ -280,7 +280,7 @@ void DrawFlatQuad(ot, x0, y0, x1, y1, x2, y2, x3, y3, r, g, b, semiTrans, flags)
     semiReg = flagsReg;
     flagsReg &= 0x80;
     if (flagsReg == 0) {
-        prim = QueueDrawModePrim(ot, prim, semiReg & 0xFFFF);
+        prim = (POLY_F4 *)QueueDrawModePrim(ot, (u8 *)prim, semiReg & 0xFFFF);
     }
 
     SCRATCH_PRIM_CURSOR_AS(POLY_F4) = prim;
@@ -404,7 +404,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
     if (alphaReg != 0xFF) {
-        prim = QueueDrawModePrim(ot, prim, alphaReg);
+        prim = (TILE *)QueueDrawModePrim(ot, (u8 *)prim, alphaReg);
     }
 
     SCRATCH_PRIM_CURSOR_AS(TILE) = prim;
@@ -453,7 +453,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
     if (alphaReg != 0xFF) {
-        prim = QueueDrawModePrim(ot, prim, alphaReg);
+        prim = (LINE_F2 *)QueueDrawModePrim(ot, (u8 *)prim, alphaReg);
     }
 
     SCRATCH_PRIM_CURSOR_AS(LINE_F2) = prim;
@@ -495,7 +495,7 @@ void DrawPolyLine3(ot, x0, y0, x1, y1, x2, y2, r, g, b, alpha)
     AddPrim(ot, oldPrim);
 
     if (alpha != 0xFF) {
-        prim = QueueDrawModePrim(ot, prim, alpha);
+        prim = (LINE_F3 *)QueueDrawModePrim(ot, (u8 *)prim, alpha);
     }
 
     SCRATCH_PRIM_CURSOR_AS(LINE_F3) = prim;
@@ -552,7 +552,7 @@ void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8
     AddPrim((u32 *)ot, (u32 *)oldPrim);
 
     if (alphaReg != 0xFF) {
-        prim = QueueDrawModePrim(ot, prim, alphaReg);
+        prim = (LINE_G2 *)QueueDrawModePrim(ot, (u8 *)prim, alphaReg);
     }
 
     SCRATCH_PRIM_CURSOR_AS(LINE_G2) = prim;

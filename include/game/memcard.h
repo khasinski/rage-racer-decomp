@@ -246,6 +246,7 @@ void InitCARD(s32 padEnable);
 s32 PollMemoryCardStatus(s32 a, s32 b);
 void StartCARD(void);
 void StoreSaveStateBlock(u8 *rowBytes);
+void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow);
 
 /* Declared identically by 1 translation units before this
  * header carried them. */

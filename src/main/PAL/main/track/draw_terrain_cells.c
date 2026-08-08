@@ -6,19 +6,17 @@
 #include "psyq/gte.h"
 
 extern s32 g_VisibleCellList;
-void BuildVisibleCells(s32 near, s32 far);
-void SubmitTerrainCells(s32 ctx, s32 cells, s32 count);
 
 void DrawTerrainCells(void) {
     BuildVisibleCells(-12288, 0x14000);
     SetRotMatrix(SCRATCH_VIEW_MATRIX_GTE);
-    SubmitTerrainCells(SCRATCHPAD_ADDR, g_VisibleCellList, 0x40);
+    SubmitTerrainCells((void *)SCRATCHPAD_ADDR, (void *)g_VisibleCellList, 0x40);
 }
 
 void DrawTerrainCellsWide(void) {
     BuildVisibleCells(0xFFFF6000, 0x14000);
     SetRotMatrix(SCRATCH_VIEW_MATRIX_GTE);
-    SubmitTerrainCells(SCRATCHPAD_ADDR, g_VisibleCellList, 0x40);
+    SubmitTerrainCells((void *)SCRATCHPAD_ADDR, (void *)g_VisibleCellList, 0x40);
 }
 
 extern s32 g_SkyRowBase;

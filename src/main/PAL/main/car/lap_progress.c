@@ -5,7 +5,7 @@
 
 /* Seeds the launch-spin value from how far the revs sit above the power peak;
  * a car already in gear 2 or higher also starts losing grip. */
-void BeginCarStandingStart(u8 *car) {
+void BeginCarStandingStart(u8 *car, s32 sceneTimer) {
     s32 value;
     s16 index;
 
@@ -121,7 +121,6 @@ while (1) {
     obj->field_68 = total;
 }
 
-s32 FindTrackSegment(GameCarRuntime * car,s32 idx);
 
 /*
  * Lap-progress accumulator. Relocates the car's trackPointIndex to the segment

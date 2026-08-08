@@ -13,14 +13,11 @@ extern char D_8001391C[];
 extern char D_80013814[];
 extern char D_80013824[];
 
-void LibcPutString(char *);
-
 /* Waits for the CD data transfer to finish, with a 0x3C0-vblank / 0x3C0000-
  * spin watchdog that prints "CD timeout: " and flushes. Named by the same
  * self-naming idiom as CD_sync / CD_ready / CD_cw: it stores its own name
  * string D_8001391C = "CD_datasync" into the D_8009BB10 slot the timeout
  * message prints as its first %s. arg 0 blocks, non-zero polls. */
-long CD_datasync(long mode);
 long CD_datasync(long arg) {
     long *b60;
     volatile u_char *b318;

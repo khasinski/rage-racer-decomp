@@ -1,8 +1,6 @@
 #include "psyq/spu.h"
 #include "psyq/kernel.h"
 
-extern long g_SpuTransferCallback;
-
 u_long Spu_ReadFromSpu(long addr, u_long requested) {
     u_long size = requested;
 

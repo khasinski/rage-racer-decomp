@@ -1,14 +1,10 @@
 #include <sys/types.h>
 
 #include "common.h"
-
-void SpuVmSeKeyOn(long seq_sep, short vab_id, short program, u_short note, u_short bend, u_short pan);
-void SpuVmSeKeyOff(long vab_id, short program, short tone, u_short note);
+#include "psyq/snd.h"
 
 /* Empty two-word stub. Was misnamed SsUtKeyOnV, which is the eight
  * argument function at SsUtKeyOnV in sdk/SsUtKeyOnV.c. */
-void func_80076C50(void);
-
 /*
  * Keys a sound effect on through the SE pseudo-sequence (seq_sep 0x21),
  * converting the caller's left/right volume pair into the volume + pan pair
@@ -37,7 +33,7 @@ void func_80076B30(short vabId, short prog, u_short note, long fine, u_short vol
 
 /* The matching key-off on the same SE pseudo-sequence. */
 void func_80076C1C(long voice, long volLeft, long volRight) {
-    SpuVmSeKeyOff(0x21, voice, volLeft, volRight);
+    SpuVmSeKeyOff(0x21, (short)voice, (short)volLeft, (u_short)volRight);
 }
 
 void func_80076C50(void) {

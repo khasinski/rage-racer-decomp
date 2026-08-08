@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/car.h"
 #include "game/cd.h"
 #include "game/menu.h"
@@ -12,7 +13,6 @@
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
 extern s32 g_CameraViewMode;
-void AdvanceBgmShuffleBag(u32 track);
 
 void DrawBgmSelectBar(void) {
     u8 *base;

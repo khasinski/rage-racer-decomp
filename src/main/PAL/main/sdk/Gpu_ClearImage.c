@@ -7,9 +7,6 @@ extern u_short g_VramWidth[];
 extern u_short g_VramHeight[];
 extern u_long g_ClearImagePacket[];
 
-u_long _param(long index);
-void Gpu_StartDmaTransfer(void *packet);
-
 long Gpu_ClearImage(short *env, u_long rgb) {
     {
         long x = env[2];
@@ -79,9 +76,6 @@ long Gpu_ClearImage(short *env, u_long rgb) {
 }
 
 extern volatile u_long *g_GpuGp1;
-
-void Gpu_ArmTimeout(void);
-long Gpu_CheckTimeout(void);
 
 /* Driver-table slot +0x20: the worker LoadImage enqueues. Clips the rect,
  * issues GP0(A0h) and pushes the odd words by hand, the rest by DMA2. */

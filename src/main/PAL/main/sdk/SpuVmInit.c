@@ -4,9 +4,6 @@
 #include "psyq/snd.h"
 #include "game/audio.h"
 
-void _spu_setTransferCompletionFlag(long);
-void SpuInitMalloc(long, u_char *);
-
 extern u_char g_SpuMallocArea[];
 
 extern volatile u_short D_801E4B5C;

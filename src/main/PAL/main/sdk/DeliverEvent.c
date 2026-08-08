@@ -31,10 +31,6 @@ CdlLOC *CdLastPos(void) {
     return &g_CdLastPos;
 }
 
-void CD_initintr(void);
-long CdResetState(void);
-long CD_initvol(void);
-
 /*
  * CD reset/init sequence keyed by `mode`: mode 2 only (re)installs the CD
  * interrupt handler (CD_initintr); otherwise it runs the CD flush/sync

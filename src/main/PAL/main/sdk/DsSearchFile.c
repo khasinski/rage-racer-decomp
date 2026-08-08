@@ -18,10 +18,6 @@ extern const char D_80013978[];
 extern const char D_80013998[];
 extern const char D_800139A4[];
 
-extern long CD_newmedia(void);
-extern long DS_searchdir(long type,char * name);
-extern long CD_cachefile(long mode);
-
 Rec *DsSearchFile(Rec *out, char *path) {
     char buf[32];
     char *p;
@@ -111,8 +107,6 @@ Rec *DsSearchFile(Rec *out, char *path) {
     }
     return 0;
 }
-
-long LibcStrncmp(long lhs, long rhs, long len);
 
 long CD_namecmp(long lhs, long rhs) {
     return LibcStrncmp(lhs, rhs, 0xC) == 0;

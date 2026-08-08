@@ -666,9 +666,6 @@ loop:
 
 void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
                    u8 r, u8 g, u8 b,
-                   s32 flags, s32 textX, s32 textY, s32 caption);
-void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
-                   u8 r, u8 g, u8 b,
                    s32 flags, s32 textX, s32 textY, s32 caption) {
     register s32 f asm("$16") = flags;
     register s32 p0 asm("$18") = x0;
@@ -694,7 +691,6 @@ void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
     __asm__("" : : "r"(p0), "r"(p1), "r"(p2), "r"(p3), "r"(p3), "r"(f), "r"(ot));
 }
 
-s32 rsin(s32 angle);
 
 void DrawMenuCursorBox(s32 x0, s32 y0, s32 x1, s32 y1, s32 useFlash) {
     void *ot;

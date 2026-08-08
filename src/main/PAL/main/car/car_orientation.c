@@ -118,11 +118,6 @@ typedef struct GamePlayerCarSpecInit
 #define g_PlayerCarInitSpec ((GamePlayerCarSpecInit *)g_CarSpec)
 extern s16 g_TorqueBandEnd[];
 extern s16 g_TorqueLossBandEnd[];
-void ClearCarMotionState(void *);
-s32 FindTrackSegment(void *, s32);
-void SeedCarLapProgress(void *, s32);
-void UpdateCarTrackState(void *, s32, s16 *);
-s32 IsCarFacingBackwards(GameCarTrackAngleWindow *);
 void InitPlayerCar(GameCarRuntime *car)
 {
   s16 trackState[2];
@@ -412,7 +407,6 @@ extern u8 g_PadType;
 extern s16 g_PadButtonMapping[];
 extern s16 g_NegconMaxTwist;
 
-s32 rcos(s32);
 
 /*
  * Steering-lean / body-roll state machine for the car `ctx`: drives the lean
@@ -618,8 +612,6 @@ typedef struct CollisionContext
   s32 opponentPolygonOffset;
   s32 trackDelta;
 } CollisionContext;
-s32 IsPointInQuad(s32 a, s32 b, s32 c, s32 d, s32 e);
-void SetCarKnockback(GameCarRuntime* car, s32 x, s32 z, s32 mode);
 s32 CollidePlayerWithCars(GameCarRuntime *car)
 {
   SVec rotation;

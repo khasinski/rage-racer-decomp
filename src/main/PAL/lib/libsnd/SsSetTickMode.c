@@ -3,8 +3,6 @@
 
 extern long g_SndTickResolution;
 
-long GetDMAInterruptState(long arg);
-
 void SsSetTickMode(long spec) {
     long v;
     long m;

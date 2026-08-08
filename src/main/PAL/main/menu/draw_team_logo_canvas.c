@@ -3,32 +3,6 @@
 #include "game/menu.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
-extern void GameDrawTexturedQuad(
-    s32 ot,
-    s16 x0,
-    s16 y0,
-    s16 x1,
-    s16 y1,
-    s16 x2,
-    s16 y2,
-    s16 x3,
-    s16 y3,
-    u8 u0,
-    u8 v0,
-    u8 u1,
-    u8 v1,
-    u8 u2,
-    u8 v2,
-    u8 u3,
-    u8 v3,
-    u8 r,
-    u8 g,
-    u8 b,
-    s32 clut,
-    s32 shadeTex,
-    s32 semiTrans,
-    s32 tpage);
-
 typedef struct TeamLogoClutPos {
     s16 cx;
     s16 cy;
@@ -52,13 +26,6 @@ extern TeamLogoWord D_8007F93C;
 extern s32 D_8007F950;
 extern u8 g_PadType;
 extern u32 g_TeamLogoCanvas[];
-
-extern void LoadImage(void *rect, void *data);
-extern s32 rsin(s32 angle);
-extern void SetDrawClipRect(s32 ot, s16 x, s16 y, s16 w, s16 h);
-extern void GameDrawNumber(
-    s16 x, s32 y, s16 flags, s32 value, u8 r, u8 g, u8 b, s32 clut, s32 primitiveCount);
-
 
 void DrawTeamLogoCanvasFade(s32 delta) {
     u8 *scratch;
@@ -270,9 +237,13 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     gy2 = phaseValue + (D_8007F948 / 8);
     clut = (g_TeamLogoRect.ty >> 4) & 0x10;
     clut |= (g_TeamLogoRect.tx & 0x3FF) >> 6;
-    SetDrawClipRect(ot, 0, 0, 0x140, 0x1E0);
-    GameDrawTexturedQuad(ot, x2, sx, x88, sx, x2, w1, x88, w1, gx, gy, gx2, gy, gx, gy2, gx2, gy2, 0x7F, 0x7F, 0x7F, 0x27F, 1, 0, clut);
-    SetDrawClipRect(ot, x0 + 1, kreg + 2, 0x80, 0x100);
+    SetDrawClipRect((void *)ot, (s16)0, (s16)0, (s16)0x140, (s16)0x1E0);
+    GameDrawTexturedQuad(ot, (s16)x2, (s16)sx, (s16)x88, (s16)sx,
+                         (s16)x2, (s16)w1, (s16)x88, (s16)w1,
+                         (u8)gx, (u8)gy, (u8)gx2, (u8)gy,
+                         (u8)gx, (u8)gy2, (u8)gx2, (u8)gy2,
+                         (u8)0x7F, (u8)0x7F, (u8)0x7F, 0x27F, 1, 0, clut);
+    SetDrawClipRect((void *)ot, (s16)(x0 + 1), (s16)(kreg + 2), (s16)0x80, (s16)0x100);
   }
   d = D_8007FB0C - 0xE;
   if (d >= 0)
@@ -349,10 +320,15 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     clut |= (g_TeamLogoRect.tx & 0x3FF) >> 6;
     w1 = kreg + 0x83;
     xb = x0 + 0x41;
-    SetDrawClipRect(ot, 0, 0, 0x140, 0x1E0);
+    SetDrawClipRect((void *)ot, (s16)0, (s16)0, (s16)0x140, (s16)0x1E0);
     asm("" : "=r"(gx2) : "0"(gx2));
-    GameDrawTexturedQuad(ot, x0, kreg, xb, kreg, x0, w1, xb, w1, gx, gy, gx2, gy, gx, gy2, gx2, gy2, 0x7F, 0x7F, 0x7F, pal & 0xFFFF, 1, 0, clut);
-    SetDrawClipRect(ot, x0 + 1, kreg + 2, 0x40, 0x80);
+    GameDrawTexturedQuad(ot, (s16)x0, (s16)kreg, (s16)xb, (s16)kreg,
+                         (s16)x0, (s16)w1, (s16)xb, (s16)w1,
+                         (u8)gx, (u8)gy, (u8)gx2, (u8)gy,
+                         (u8)gx, (u8)gy2, (u8)gx2, (u8)gy2,
+                         (u8)0x7F, (u8)0x7F, (u8)0x7F,
+                         pal & 0xFFFF, 1, 0, clut);
+    SetDrawClipRect((void *)ot, (s16)(x0 + 1), (s16)(kreg + 2), (s16)0x40, (s16)0x80);
   }
   d = D_8007FB10 - 8;
   if (d >= 0)
@@ -491,11 +467,16 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     yA8 = (s16) (kreg + 0x14);
     sx = 0x3F;
     sx = x0 - sx;
-    GameDrawNumber(sx, yA8, 3, g_TeamLogoClut[D_8007F950] & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    GameDrawNumber((s16)sx, yA8, (s16)3, g_TeamLogoClut[D_8007F950] & 0x1F,
+                   (u8)0x7F, (u8)0x7F, (u8)0x7F, 0x244, 0x20);
     yB8 = (s16) (kreg + 0x44);
-    GameDrawNumber(sx, yB8, 3, (g_TeamLogoClut[D_8007F950] >> 5) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    GameDrawNumber((s16)sx, yB8, (s16)3,
+                   (g_TeamLogoClut[D_8007F950] >> 5) & 0x1F,
+                   (u8)0x7F, (u8)0x7F, (u8)0x7F, 0x244, 0x20);
     yC8 = (s16) (kreg + 0x74);
-    GameDrawNumber(sx, yC8, 3, (g_TeamLogoClut[D_8007F950] >> 10) & 0x1F, 0x7F, 0x7F, 0x7F, 0x244, 0x20);
+    GameDrawNumber((s16)sx, yC8, (s16)3,
+                   (g_TeamLogoClut[D_8007F950] >> 10) & 0x1F,
+                   (u8)0x7F, (u8)0x7F, (u8)0x7F, 0x244, 0x20);
     {
       s32 alpha;
       alpha = 0xFF;

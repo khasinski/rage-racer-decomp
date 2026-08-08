@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/race.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
@@ -383,18 +384,6 @@ void DrawStartCountdown(s32 sceneTimer) {
 
 extern u8 *g_CourseProgress;
 
-s32 rcos(s32 angle);
-u8 *AddTilePrim(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 r,
-    s32 g,
-    s32 b);
-
 void DrawRaceOptionMenu(s32 cursorRow) {
     register s32 selectedRow = cursorRow;
     u8 *ot;
@@ -520,13 +509,13 @@ void DrawRaceOptionMenu(s32 cursorRow) {
             s32 y;
 
             y = selectedRow * 10 + 0x68;
-            prim = AddTilePrim(
+            prim = (u8 *)AddTilePrim(
                 ot, prim, 0x80, y, 0x40, 1, 0xFF, 0xFF, 0);
-            prim = AddTilePrim(
+            prim = (u8 *)AddTilePrim(
                 ot, prim, 0x80, y + 0xB, 0x40, 1, 0xFF, 0xFF, 0);
-            prim = AddTilePrim(
+            prim = (u8 *)AddTilePrim(
                 ot, prim, 0x80, y, 1, 0xB, 0xFF, 0xFF, 0);
-            prim = AddTilePrim(
+            prim = (u8 *)AddTilePrim(
                 ot, prim, 0xBF, y, 1, 0xB, 0xFF, 0xFF, 0);
         }
 

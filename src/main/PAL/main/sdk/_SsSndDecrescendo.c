@@ -1,6 +1,7 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/snd.h"
 #include "psyq/snd_types.h"
 
 typedef union SeqVolume71568 {
@@ -9,9 +10,6 @@ typedef union SeqVolume71568 {
 } SeqVolume71568;
 
 extern SeqStruct *g_SndSeqTable[];
-
-long SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short update_voices);
-long SpuVmGetSeqVol(short seq_sep, short *left, short *right);
 
 void _SsSndDecrescendo(short seq, short sep) {
     SeqStruct *score = &g_SndSeqTable[seq][sep];
@@ -24,7 +22,7 @@ void _SsSndDecrescendo(short seq, short sep) {
         if ((score->unk98 % score->unk42) == 0) {
             score->unk40--;
             if (score->unk40 > 0) {
-                SpuVmGetSeqVol(seq | (sep << 8), &left.output, &right.output);
+                SpuVmGetSeqVol((short)(seq | (sep << 8)), &left.output, &right.output);
                 if (((left.value - score->unk40) > 0) &&
                     ((right.value - score->unk40) > 0) &&
                     (left.value != 1)) {
@@ -45,7 +43,7 @@ void _SsSndDecrescendo(short seq, short sep) {
     } else {
         score->unk40 += score->unk42;
         if (score->unk40 > 0) {
-            SpuVmGetSeqVol(seq | (sep << 8), &left.output, &right.output);
+            SpuVmGetSeqVol((short)(seq | (sep << 8)), &left.output, &right.output);
             if (((u_long)(long)score->unk3E >=
                  ((score->unk94 - score->unk98) * -score->unk42)) &&
                 (-score->unk42 < left.value)) {
@@ -64,5 +62,5 @@ void _SsSndDecrescendo(short seq, short sep) {
         }
     }
 
-    SpuVmGetSeqVol(seq | (sep << 8), &score->unk78, &score->unk7A);
+    SpuVmGetSeqVol((short)(seq | (sep << 8)), &score->unk78, &score->unk7A);
 }

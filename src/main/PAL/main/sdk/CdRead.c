@@ -1,18 +1,18 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "game/prim.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "psyq/cd.h"
+#include "psyq/cd_internal.h"
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 
-extern long g_CdReadCallback;
 extern u_char D_8007D7BC[];
 extern u_char D_8007D7BD[];
 extern u_char D_8007D87C[];
 extern u_char g_DrawModeEnv[];
-long AddTilePrim(long ot, long prim, long x, long y, long w, long h, long r, long g, long b);
 
 long CdRead(long sectors, void *buf, long readMode) {
     long savedArg0;
@@ -170,6 +170,6 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
 void DrawShadowedTile(long x, long y, long w, long h) {
     long temp;
 
-    temp = AddTilePrim(x, y, w + 1, h + 2, 0xC2, 0x1C, 0, 0, 0);
-    AddTilePrim(x, temp, w, h, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
+    temp = (long)AddTilePrim((void *)x, (void *)y, w + 1, h + 2, 0xC2, 0x1C, 0, 0, 0);
+    AddTilePrim((void *)x, (void *)temp, w, h, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
 }

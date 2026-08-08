@@ -218,5 +218,7 @@ extern u_char g_SpuTimeoutMsgDmaf[];
 extern char g_SpuTimeoutMsgReset[];
 extern u_char g_SpuTimeoutMsgWrdy[];
 extern long g_SpuZeroBuf[];
+extern void (*volatile g_SpuTransferCallback)(void);
+extern void (*volatile D_8009ABB4)(void);
 
 #endif

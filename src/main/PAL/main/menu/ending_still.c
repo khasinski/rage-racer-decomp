@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/state.h"

@@ -19,10 +19,6 @@ extern long g_StCopySource;
 extern long g_StRingSize;
 extern long g_StInterruptPending;
 
-void data_ready_callback(void);
-void StClearRingRange(long first, long count);
-void StSetRingParams(long streamFlag);
-
 /*
  * Issues CD command 0xE (set mode) with the mode byte `mode`, and when the
  * data-ready bits (0x100) are set, installs the streaming data-ready callback

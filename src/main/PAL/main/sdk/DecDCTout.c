@@ -1,10 +1,6 @@
 #include "common.h"
 #include "psyq/kernel.h"
 
-void MDEC_out(void);
-void MDEC_in_sync(void);
-void MDEC_out_sync(void);
-
 void DecDCTout(void) {
     MDEC_out();
 }

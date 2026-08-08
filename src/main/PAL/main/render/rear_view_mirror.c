@@ -1,11 +1,11 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/car.h"
 #include "game/race.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
-void SetDrawArea(u8 *packet, u8 *drawEnv);
 
 void ResetMirrorState(void) {
     g_MirrorViewEnabled = 1;
@@ -174,7 +174,6 @@ u8 *DrawMirrorFrame(u8 *packet) {
 }
 
 
-void SubmitTerrainCells(void *ctx, s32 cells, s32 count);
 
 void DrawRearViewMirror(s32 mode) {
     u8 **scratch;
@@ -207,7 +206,7 @@ void DrawRearViewMirror(s32 mode) {
             BuildVisibleCells(-0x3000, 0x6000);
             SetRotMatrix(SCRATCH_VIEW_MATRIX_GTE);
             SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
-            SubmitTerrainCells((void *)SCRATCHPAD_ADDR, g_VisibleCellList, 0x40);
+            SubmitTerrainCells((void *)SCRATCHPAD_ADDR, (void *)g_VisibleCellList, 0x40);
 
             packet = *scratch;
             SetDrawArea(packet, g_DrawBuffer);

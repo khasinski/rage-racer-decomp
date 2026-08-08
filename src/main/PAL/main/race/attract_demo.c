@@ -10,14 +10,10 @@
 #include "game/track.h"
 #include "psyq/gpu.h"
 
-extern void (*g_BgmSelectSteps[])(void);
-void UploadImageAsset(void *imageBlock);
-s32 RequestTrackDataAssets(void);
 
 
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
-void AdvanceBgmShuffleBag(s32 track);
 extern u32 g_StreamReturnScene;
 extern u32 g_CameraViewMode;
 

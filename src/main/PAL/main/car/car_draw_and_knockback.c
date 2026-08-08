@@ -5,7 +5,6 @@
 #include "game/render.h"
 #include "game/random.h"
 
-void ClearCarMotionState(GameCarRuntime* car);
 
 extern s32 g_ClosestRivalRank;
 
@@ -212,9 +211,7 @@ void ApplyCarKnockback(GameCarRuntime *car) {
     }
 }
 
-s32 rsin(s32 angle);
 
-s32 rcos(s32 angle);
 
 /*
  * Collision / boundary response: sets the car's knock-back motion vector
@@ -223,7 +220,6 @@ s32 rcos(s32 angle);
  * x/z). Register-pinned, goto-structured decompilation; do not restructure.
  */
 
-s32 InterpolateTrackAngle(s32 index);
 
 void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
     GameCarRuntime *carReg;

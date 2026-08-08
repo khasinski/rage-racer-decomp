@@ -4,8 +4,6 @@
 #include "game/render.h"
 #include "game/car.h"
 #include "psyq/gpu.h"
-s32 rcos();
-s32 rsin();
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
@@ -30,7 +28,6 @@ typedef struct TrackSurfaceCell {
     s32 field_30;
 } TrackSurfaceCell;
 
-s32 FindTrackSegment(TrackSurfaceCell *cell, s32 index);
 
 s32 GetTrackSurfaceHeight(TrackSurfaceCell *cell) {
     s32 index;
@@ -421,7 +418,6 @@ void ResetCarTrackState(GameCarRuntime *car) {
 
 extern GameSpriteDesc g_TachoNeedleSprite;
 
-void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src);
 /*
  * Rebuilds the tachometer needle quad from the car spec block. The spec is
  * read through a plain `u8 *` on purpose: as GameCarSpec member reads, gcc

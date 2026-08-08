@@ -6,6 +6,8 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
+void SpuVmDamperStep(void);
+
 typedef SeqStruct SequenceState;
 
 #define SS_SEQUENCE_CHANNEL_COUNT 0x10
@@ -123,8 +125,11 @@ void SpuVmKeyOnWithDefaultVol(long note, long fine);
 long SpuVmApplyPitchBendToVoice(long voice, long note, long vab_id, long program, long bend);
 long SpuVmApplyPitchBendByTone(long note, long vab_id, long program, long bend);
 void SsUtFlush(void);
-void SpuVmSeKeyOn(long seq, long vab_id, long program, long tone, long volume, long pan);
-void SpuVmSeKeyOff(long seq, long vab_id, long program, long tone);
+long SpuVmSeKeyOn(long seq, long vab_id, long program, long tone, long volume, long pan);
+long SpuVmSeKeyOff(long seq, long vab_id, long program, long tone);
+void SpuVmRebuildVoiceTable(void);
+void SpuVmNoiseKeyOn(u_char voice);
+void SpuVmScaleVabVolume(long vabId, long value);
 /* LibRef47 14-103/14-104. func_80076B30 (6 args, void) and func_80076C1C
  * (3 args) cannot be these; they are left raw (docs/names.md 17). */
 short SsUtKeyOn(short vabId, short prog, short tone, short note, short fine, short volL, short volR);
@@ -198,14 +203,29 @@ extern u_short g_SndVoiceRegDefaults[];
 extern u_char g_SndVoiceRegsAddr[];
 extern long g_SndVoiceSilenceIndex;
 extern u_char g_SndVoiceStateEndPan[];
+extern void (*g_SndMarkCallbacks[][0x10])(long seq, long sep, u_char value);
 
 void SpuVmAutoPanTick(long voice);
 short SpuVmGetSeqVolLeft(long seq_sep);
 short SpuVmGetSeqVolRight(long seq_sep);
 void SpuVmInit(long voices);
-void SsSeqIndexChannel(long channel, short vab, u_char prog, short volume, long pan);
+long SsSeqIndexChannel(long seq_sep, short vab_id, u_char program, short volume, long pan);
 long SsSeqParseHeader(long slot, long vabId, long data);
 void SsSeqSetPortamento(short seq, short sep, u_char value);
 void func_80076C50(void);
+void ContDataEntry(short seq, short sep, u_char value);
+void _SsSndCrescendo(short seq, short sep);
+void _SsSndDecrescendo(short seq, short sep);
+short SpuVmSetSeqVol(short seq_sep, u_short left, u_short right, short update_voices);
+long SpuVmGetSeqVol(long seq_sep, short *left, short *right);
+void SsSeqDispatchMidiEvent(long seq, long sep);
+void SsSeqApplyNrpn(
+    short vab_id,
+    short program,
+    short tone,
+    VagAtr tone_attr,
+    SndAdsr adsr,
+    short parameter,
+    u_char value);
 
 #endif

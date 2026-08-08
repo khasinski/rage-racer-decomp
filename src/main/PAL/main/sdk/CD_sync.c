@@ -17,8 +17,6 @@ extern char D_80013814[];
 extern char D_80013824[];
 extern char D_8001389C[];
 
-void LibcPutString(char *text);
-
 static __inline__ void copy8(u_char *dst, u_char *src) {
     register u_char *dstReg asm("$5");
     u_char *srcReg;

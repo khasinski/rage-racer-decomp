@@ -9,7 +9,6 @@
 /* libcd's static cd_read, named from CD_newmedia's own error text
  * "Read error in cd_read(PVD)"; CD_newmedia and CD_cachefile are its
  * only callers. */
-long cd_read(long count, long sectorInt, void *buf);
 long cd_read(long sectors, long sectorInt, void *buf) {
     long scratch[2];
 

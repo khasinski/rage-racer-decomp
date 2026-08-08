@@ -1,22 +1,14 @@
 #include <sys/types.h>
 
 #include "common.h"
+#include "psyq/cd.h"
+#include "psyq/kernel.h"
 
 extern long g_CdDebugLevel;
 extern u_char D_80013678[];
 extern u_char D_80013688[];
 extern u_char D_800136A4[];
 extern u_char D_800136B8[];
-
-long CD_init(long mode);
-long CdSyncCallback(long callback);
-long CdReadyCallback(long callback);
-long CdControlB(long com, u_char *param, u_char *result);
-void CdDefaultSyncCallback(void);
-void CdDefaultReadyCallback(void);
-void CdDefaultReadCallback(void);
-void DeliverEvent(u_long event, long spec);
-void CdReadCallback(void *callback);
 
 long CdGetToc2(long maxTracks, u_char *out) {
     u_char *fmt;

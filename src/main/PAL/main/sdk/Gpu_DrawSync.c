@@ -4,14 +4,9 @@
 #include "psyq/kernel.h"
 #include "psyq/gpu.h"
 
-void Gpu_ArmTimeout(void);
-
 extern volatile u_long *g_GpuGp1;
 extern long g_GpuQueueWriteIdx;
 extern long g_GpuQueueReadIdx;
-
-void Gpu_ExecuteQueue(void);
-long Gpu_CheckTimeout(void);
 
 long Gpu_DrawSync(long mode) {
     long pending;

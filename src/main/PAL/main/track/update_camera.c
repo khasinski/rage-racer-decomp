@@ -7,9 +7,6 @@
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
-extern s32 rcos(s32);
-extern s32 SquareRoot0(s32);
-extern void *ApplyMatrixLV(void *, void *, void *);
 /* Mode-3 camera path: the eye is eased from one track-camera node to the next
  * over `node->duration` frames. Each of offset (a local xyz applied through the
  * car's matrix) and orientation (pitch/yaw/roll/distance) keeps a start value,

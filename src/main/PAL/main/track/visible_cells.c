@@ -135,7 +135,6 @@ typedef struct Scr {
 } Scr;
 
 extern Vec4 *g_VisibleCellList;
-void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 
 void BuildVisibleCells(s32 near, s32 far) {
     Scr *s = (Scr *)&SCRATCH_VIEW_X;

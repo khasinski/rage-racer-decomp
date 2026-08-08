@@ -8,17 +8,9 @@
 #include "game/vector.h"
 #include "psyq/gte.h"
 
-s32 rsin(s32 angle);
-s32 rcos(s32 angle);
 
 extern s16 g_ClosestRivalRank;
 
-void AccumulateLapProgress();
-void ApplyCarKnockback();
-s32 UpdateCarTrackState();
-void StartCarBodyKick();
-void UpdateCarBodyKick();
-void UpdateCarCrestHop();
 
 /*
  * Car route-steering update. Samples a look-ahead track point (two ahead or two

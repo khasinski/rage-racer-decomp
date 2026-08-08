@@ -3,6 +3,7 @@
 #include "common.h"
 #include "psyq/snd_types.h"
 
+
 /* The key-on path's view of the same block psyq/snd_types.h calls
  * SvmCurrentAttr, but four bytes longer and reading vag unsigned, so the two
  * are not interchangeable. One of them is wrong. */
@@ -11,22 +12,6 @@ extern ProgAtr *g_SndCurrentProgTable;
 extern VagAtr *g_SndCurrentToneTable;
 extern SvmCurrentAttr g_SndCurrentAttr;
 extern SpuVoice g_SndVoiceState[];
-
-extern long SpuVmVSetUp(short, short);
-extern void SpuVmRebuildVoiceTable(void);
-extern void SpuVmNoiseKeyOn(long);
-extern long SpuVmCalculateTonePitch(u_short, u_short);
-extern void SpuVmScaleVabVolume(long, u_short);
-
-long SsUtKeyOnV(
-    long voice,
-    short vab_id,
-    short program,
-    short tone,
-    u_short note,
-    u_short fine,
-    short left,
-    short right);
 
 long SsUtKeyOnV(
     long voice,
@@ -116,7 +101,7 @@ long SsUtKeyOnV(
     if ((short)g_SndCurrentAttr.vag == 0xFF) {
         SpuVmNoiseKeyOn((u8)voice);
     } else {
-        SpuVmScaleVabVolume(1, SpuVmCalculateTonePitch(note, fine));
+        SpuVmScaleVabVolume(1, (u_short)SpuVmCalculateTonePitch(note, fine));
     }
     g_SndUpdateLock = 0;
     return (short)voice;

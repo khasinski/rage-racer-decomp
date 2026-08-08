@@ -2,7 +2,6 @@
 #include "game/track.h"
 #include "game/car.h"
 #include "game/race.h"
-s32 InitSoundWithVab(void);
 
 extern u8 *volatile g_RouteSceneryData;
 
@@ -12,11 +11,8 @@ extern u8 *volatile g_FlybySceneryData;
 
 extern u8 *volatile g_PathSceneryPosData;
 
-void LoadExtraVabSlotWithTable(void);
 
-void SetEffectVoicesEnabled(s32 enabled);
 
-void SetReverbPreset(s32 type, s32 left, s32 right);
 
 void InstallResourceData(void) {
     DebugPrintf(g_MsgResOk);

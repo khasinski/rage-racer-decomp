@@ -8,7 +8,6 @@
  * declarations all agree on one name. What each routine emits is worked out in
  * docs/names.md section 17.
  */
-void SubmitTerrainCells(void *ctx, void *cells, s32 count);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).

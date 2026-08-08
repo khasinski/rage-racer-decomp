@@ -17,10 +17,6 @@ extern const char D_80013A3C[];
 extern const char D_80013A5C[];
 extern const char D_80013A70[];
 
-extern long cd_read(long, long, void *);
-extern long LibcStrncmp(void *, const char *, long);
-extern void LibcMemcpy(char *, u_char *, long);
-
 /*
  * Reads and parses the disc's directory into the Entry table g_CdPathTable[128].
  * Loads sector 16 (the volume descriptor) via cd_read, validates the "CD"
@@ -98,8 +94,6 @@ long CD_newmedia(void) {
 }
 
 extern volatile long D_8009C118[];
-
-long LibcStrcmp(u_char* lhs, u_char* rhs);
 
 long DS_searchdir(long type, u_char *name) {
     long i = 0;

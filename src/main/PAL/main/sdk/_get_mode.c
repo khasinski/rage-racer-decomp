@@ -5,12 +5,6 @@ extern u_char g_GraphType[];
 extern u_short g_VramWidth[];
 extern u_short g_VramHeight[];
 
-u_long _get_mode(long dfe, long dtd, u_long tpage);
-u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
-u_long Gpu_BuildDrawAreaBottomRightCmd(long right, long bottom);
-u_long Gpu_BuildDrawOffsetCmd(long x, long y);
-u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw);
-
 u_long _get_mode(long dfe, long dtd, u_long tpage) {
     volatile u_char *modep = g_GraphType;
     u_long value;
@@ -201,8 +195,6 @@ u_long Gpu_BuildTexWindowCmd(GpuTexWindow *tw) {
 
 extern u_char g_GraphReverse;
 
-u_long get_dx(DispEnv *env);
-
 u_long get_dx(DispEnv *env) {
     volatile u_char *modep = g_GraphType;
     long mode;
@@ -229,9 +221,6 @@ u_long _status(void) {
 extern volatile u_long *g_OtcDmaMadr;
 extern volatile u_long *g_OtcDmaBcr;
 extern volatile u_long *g_OtcDmaChcr;
-
-void Gpu_ArmTimeout(void);
-long Gpu_CheckTimeout(void);
 
 long Gpu_ClearOTagDma(u_long *ot, long count) {
     long size;

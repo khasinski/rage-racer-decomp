@@ -6,8 +6,6 @@ extern long g_CdCommandNeedsSetloc[];
 extern long g_CdSyncCallback;
 extern u_char g_CdStatusByte;
 
-long CD_cw(long com, void *param, long result, long mode);
-
 /*
  * Core CD command sender with retry: issues command `com` (low byte) with the
  * parameter bytes at `param` and result flags `result`, retrying up to 3 times.
@@ -15,7 +13,6 @@ long CD_cw(long com, void *param, long result, long mode);
  * pinned to match; the C identifiers may be renamed but the asm("$N") pins and
  * offsets must not change.
  */
-long CdControl(long com, void *param, long result);
 long CdControl(long com, void *param, long result) {
     void *arg;
     long resultReg;
@@ -120,9 +117,7 @@ done:
 }
 
 
-long CD_sync(long mode, long result);
-
-long CdControlB(long com, void *param, long result) {
+long CdControlB(long com, void *param, void *result) {
     void *arg;
     long resultReg;
     register long cmd asm("$20");
@@ -136,7 +131,7 @@ long CdControlB(long com, void *param, long result) {
     long zero;
 
     arg = param;
-    resultReg = result;
+    resultReg = (long)result;
     cmd = com;
     asm("" : "=r"(cmd) : "0"(cmd));
     retries = 3;

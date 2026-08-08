@@ -10,9 +10,6 @@ extern u_char D_80013304[];
 extern u_char D_8001332C[];
 extern u_char D_80013364[];
 
-long MDEC_in_sync(void);
-long MDEC_out_sync(void);
-
 void MDEC_reset(long mode) {
     register long option asm("$5") = mode;
     register long zero asm("$0");

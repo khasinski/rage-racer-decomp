@@ -20,8 +20,6 @@ extern volatile u_short g_SndReverbOnHigh;
 extern u_char g_SndVoiceCount;
 extern volatile u_char g_SndReservedVoiceCount;
 
-void SpuVmAutoVolTick(long voice);
-
 void SsUtFlush(void) {
     volatile long stack[4];
     register long i asm("$16");

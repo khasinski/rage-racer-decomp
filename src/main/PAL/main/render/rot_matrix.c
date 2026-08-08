@@ -2,14 +2,7 @@
 #include "game/scratchpad.h"
 #include "psyq/gte.h"
 
-s32 rsin(s32 angle);
-s32 rcos(s32 angle);
 
-void BuildRotMatrixZ(Matrix *mtx, s32 angle);
-void BuildRotMatrixY(Matrix *mtx, s32 angle);
-void BuildRotMatrixX(Matrix *mtx, s32 angle);
-void SetCameraRotMatrix(void);
-s32 Atan2(s32 x, s32 y);
 
 void BuildRotMatrixZ(Matrix *mtx, s32 angle) {
     s32 s;

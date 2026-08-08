@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/audio.h"
 #include "game/menu.h"
 #include "game/race.h"
@@ -11,7 +12,6 @@ extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
 extern ScoreRecord g_ClassRecords[];
 extern ClassRecordSprite D_8007D5D4[];
-s32 AddTilePrim(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 
 void DrawOptionRootMenu(void) {
     u8 *base = g_DrawBuffer;
@@ -118,7 +118,7 @@ void DrawClassRecordDetail(void) {
     s32 i;
 
     if (g_GameMode == 3) {
-        next = AddTilePrim(raw + 0xD4, next,
+        next = AddTilePrimWord(raw + 0xD4, next,
                              D_8007D5A8[idx].vx - 2, D_8007D5A8[idx].vy - 4,
                              0x24, 0x58, 0x89, 0xFF, 0x76);
     }
@@ -142,10 +142,10 @@ void DrawClassRecordDetail(void) {
     next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), x + 108, y + 0x28, 8, 0x10,
                          (s16)((s16)g_ClassRecords[idx].clears % 10) << 3, 0x18, 0x7F40);
     next = (s32)QueueDrawModePrim((void *)base, (u8 *)next, 0x3B);
-    next = AddTilePrim(base, next, x + 78, y + 47, 0x14, 2, 0xFF, 0xFF, 0xFF);
-    next = AddTilePrim(base, next, x, y, 0x7C, 0x1E, 0, 0, 0);
-    next = AddTilePrim(base, next, x, y + 32, 0x7C, 0x1E, 0, 0, 0);
-    SCRATCH_PRIM_CURSOR_WORD = AddTilePrim(base, next, x - 1, y - 2, 0x7E, 0x42, 0xFF, 0xFF, 0xFF);
+    next = AddTilePrimWord(base, next, x + 78, y + 47, 0x14, 2, 0xFF, 0xFF, 0xFF);
+    next = AddTilePrimWord(base, next, x, y, 0x7C, 0x1E, 0, 0, 0);
+    next = AddTilePrimWord(base, next, x, y + 32, 0x7C, 0x1E, 0, 0, 0);
+    SCRATCH_PRIM_CURSOR_WORD = AddTilePrimWord(base, next, x - 1, y - 2, 0x7E, 0x42, 0xFF, 0xFF, 0xFF);
 }
 
 void DrawClassRecordGrid(void) {
@@ -295,8 +295,8 @@ void DrawVolumeBar(s32 level, s32 y) {
         } while (i <= level);
     }
     next = (s32)QueueDrawModePrim((void *)base, (u8 *)next, 0x39);
-    next = AddTilePrim(base, next, c | 1, b + 2, 0xB2, 0x1C, 0, 0, 0);
-    SCRATCH_PRIM_CURSOR_WORD = AddTilePrim(base, next, c, b, 0xB4, 0x20, 0xFF, 0xFF, 0xFF);
+    next = AddTilePrimWord(base, next, c | 1, b + 2, 0xB2, 0x1C, 0, 0, 0);
+    SCRATCH_PRIM_CURSOR_WORD = AddTilePrimWord(base, next, c, b, 0xB4, 0x20, 0xFF, 0xFF, 0xFF);
 }
 
 void DrawSoundOptionScreen(void) {
@@ -330,8 +330,8 @@ void DrawSoundOptionScreen(void) {
     }
 
     n = (s32)GameQueueShadedSpriteTrans((void *)(base), (u8 *)(n), 0x66, 0x12A, s3, 0xC, 0xD4, 0xC4, 0x7F40, color);
-    n = AddTilePrim(base, n, 0x47, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
-    n = AddTilePrim(base, n, 0x46, 0x120, 0x58, 0x20, color * 2, color * 2, color * 2);
+    n = AddTilePrimWord(base, n, 0x47, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
+    n = AddTilePrimWord(base, n, 0x46, 0x120, 0x58, 0x20, color * 2, color * 2, color * 2);
 
     color = 0x20;
     if (g_MonoOutput != 0) {
@@ -339,8 +339,8 @@ void DrawSoundOptionScreen(void) {
     }
 
     n = (s32)GameQueueShadedSpriteTrans((void *)(base), (u8 *)(n), 0xBA, 0x12A, 0x28, 0xC, 0xB4, 0xD0, 0x7F40, color);
-    n = AddTilePrim(base, n, 0xA3, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
-    n = AddTilePrim(base, n, 0xA2, 0x120, 0x58, 0x20, color * 2, color * 2, color * 2);
+    n = AddTilePrimWord(base, n, 0xA3, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
+    n = AddTilePrimWord(base, n, 0xA2, 0x120, 0x58, 0x20, color * 2, color * 2, color * 2);
     {
         s32 a0v = g_BgmVolumeSetting;
         *scratch = n;
@@ -355,13 +355,13 @@ void DrawSoundOptionScreen(void) {
     n = *scratch;
     switch (g_SoundOptionCursor) {
     case 0:
-        n = AddTilePrim(base, n, 0x44, 0xCC, 0xB8, 0x28, 0x89, 0xFF, 0x76);
+        n = AddTilePrimWord(base, n, 0x44, 0xCC, 0xB8, 0x28, 0x89, 0xFF, 0x76);
         break;
     case 1:
-        n = AddTilePrim(base, n, 0x44, 0xF4, 0xB8, 0x28, 0x89, 0xFF, 0x76);
+        n = AddTilePrimWord(base, n, 0x44, 0xF4, 0xB8, 0x28, 0x89, 0xFF, 0x76);
         break;
     case 2:
-        n = AddTilePrim(base, n, (g_MonoOutput != 0) ? 0xA0 : 0x44, 0x11C, 0x5C, 0x28, 0x89, 0xFF, 0x76);
+        n = AddTilePrimWord(base, n, (g_MonoOutput != 0) ? 0xA0 : 0x44, 0x11C, 0x5C, 0x28, 0x89, 0xFF, 0x76);
         break;
     }
     SCRATCH_PRIM_CURSOR_WORD = n;

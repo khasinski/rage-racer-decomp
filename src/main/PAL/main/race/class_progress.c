@@ -11,7 +11,7 @@ extern s32 g_CourseProgress;
 extern ScoreRecord g_ClassRecords[];
 extern ScoreRecord g_ClassClears[];
 
-void DrawPrizeMoneyPanel(u8 *s0) {
+void DrawPrizeMoneyPanel(s32 s0) {
     u8 sp[16];
     if (g_RaceProgress->money > 0x3B9AC9FF) {
         g_RaceProgress->money = 0x3B9AC9FF;

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "psyq/gte.h"
@@ -32,7 +33,6 @@ extern s32 g_ScratchViewAngleY asm("0x1F80001C");
 extern s32 g_ScratchViewAngleZ asm("0x1F800020");
 extern s32 g_ScratchEnvMode4 asm("0x1F800084");
 
-s32 rsin(s32 angle);
 
 /* Builds and submits the controller models shown by the pad and NeGcon setup
  * screens. The read-only scratchpad base is retained for the three camera
@@ -156,16 +156,6 @@ void DrawControllerSetupScene(s32 variant) {
 }
 
 /* Wide-parameter view of the packet builders; see GameQueueSprite.c. */
-s32 AddTilePrim(
-    s32 ot,
-    s32 prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 r,
-    s32 g,
-    s32 b);
 /* The 16x32 left arrow, plus - while `pulse` is set - a tile over it whose
  * green channel breathes with rsin of the shared arrow angle. */
 u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
@@ -175,7 +165,7 @@ u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
         u8 glow = rsin(g_SetupArrowPulse % 0x1000) / 64 - 65;
 
         prim = (u8 *)AddTilePrim(
-            (s32)ot, (s32)prim, x, y, 0x10, 0x20, 0, glow, 0);
+            ot, prim, x, y, 0x10, 0x20, 0, glow, 0);
     }
     return prim;
 }
@@ -189,7 +179,7 @@ u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
         u8 glow = rsin(g_SetupArrowPulse % 0x1000) / 64 - 65;
 
         prim = (u8 *)AddTilePrim(
-            (s32)ot, (s32)prim, x, y, 0x10, 0x20, 0, glow, 0);
+            ot, prim, x, y, 0x10, 0x20, 0, glow, 0);
     }
     return prim;
 }
@@ -217,11 +207,11 @@ u8 *DrawPadConfigSelector(ot, prim, x, y, selection)
         ot, prim, x + 34, y + 32, 8, 0x10, 0x68, 0x28, 0x7F40);
     prim = QueueDrawModePrim(ot, prim, 0x5B);
     prim = (u8 *)AddTilePrim(
-        (s32)ot, (s32)prim, x + 1, y + 2, 0x3A, 0x14, 0, 0, 0);
+        ot, prim, x + 1, y + 2, 0x3A, 0x14, 0, 0, 0);
     prim = (u8 *)AddTilePrim(
-        (s32)ot, (s32)prim, x + 2, y + 26, 0x38, 0x1A, 0xFF, 0xFF, 0xFF);
+        ot, prim, x + 2, y + 26, 0x38, 0x1A, 0xFF, 0xFF, 0xFF);
     prim = (u8 *)AddTilePrim(
-        (s32)ot, (s32)prim, x + 1, y + 24, 0x3A, 0x1E, 0, 0, 0);
+        ot, prim, x + 1, y + 24, 0x3A, 0x1E, 0, 0, 0);
     return (u8 *)AddTilePrim(
-        (s32)ot, (s32)prim, x, y, 0x3C, 0x38, 0xFF, 0xFF, 0xFF);
+        ot, prim, x, y, 0x3C, 0x38, 0xFF, 0xFF, 0xFF);
 }

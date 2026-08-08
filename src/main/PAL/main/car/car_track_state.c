@@ -6,9 +6,6 @@
 
 #define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
-void SetCarKnockback(void * ,s32,s32,s32);
-s32 rsin(s32);
-s32 rcos(s32);
 extern u8 g_PlayerCar;
 
 /*
@@ -396,7 +393,6 @@ typedef struct TP {
     u16 segmentLength; /* 0x16 */
 } TP;
 
-s32 FindTrackSegment(Car * car,s32 idx);
 
 /*
  * Samples the track surface height under the car. Locates the containing

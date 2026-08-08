@@ -2,11 +2,10 @@
 
 #include "common.h"
 #include "game/state.h"
+#include "psyq/cd_internal.h"
 #include "psyq/kernel.h"
 
 extern long g_PrologueStep;
-extern void (*D_8007D778[])(void);
-
 void TickPrologueStep(void) {
     void (*func)(void);
 
@@ -21,7 +20,6 @@ extern u_char D_800111F4;
 extern volatile long g_CdReadSectorCount;
 extern volatile long g_CdReadBuffer;
 extern volatile long g_CdReadMode;
-extern void (*g_CdReadCallback)(long, long);
 extern volatile long g_CdReadPtr;
 extern volatile long g_CdReadSectorWords;
 extern volatile long g_CdReadRemaining;
@@ -30,19 +28,6 @@ extern volatile long g_CdReadStartVSync;
 extern volatile long g_CdReadExpectedSector;
 extern volatile long g_CdReadSavedSyncCallback;
 extern volatile long g_CdReadSavedReadyCallback;
-void CdGetSector2(void *dst, long words);
-long CdPosToInt_Local(void *loc);
-void LibcPutString(void *str);
-long CdControl(long com, long param, long result);
-long CdStatus(void);
-long CdLastPos(void);
-long CdMode(void);
-void CdFlush(void);
-void CdControlF(long com, long param);
-long CdReadRetry(long mode);
-void CdSyncCallback(long callback);
-void CdReadyCallback(long callback);
-
 void CdReadDataReadyCallback(u_char intr, long result) {
     volatile long *p;
     long dv;

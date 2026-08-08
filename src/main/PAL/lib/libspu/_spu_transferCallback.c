@@ -1,10 +1,6 @@
 #include "psyq/spu.h"
 
 extern volatile u_short *g_SpuRegBase;
-extern volatile long g_SpuTransferCallback;
-
-void DeliverEvent(long event, long spec);
-
 void _spu_transferCallback(void) {
     volatile long i;
     volatile long delay;

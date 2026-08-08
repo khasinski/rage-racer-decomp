@@ -1,6 +1,9 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
+extern void (*g_SceneHandlers[])(void);
+extern void (*D_8007D778[])(void);
+
 #include "common.h"
 #include "game/vector.h"
 #include "psyq/gte.h"

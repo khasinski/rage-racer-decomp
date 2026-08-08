@@ -4,9 +4,6 @@
 #include "game/car.h"
 #include "game/render.h"
 
-void UpdateCarAirborne();
-s32 rsin(s32);
-s32 rcos();
 extern u8 *g_TrackArcCenters;
 extern s16 g_TorqueBandEnd;
 extern s16 g_TorqueLossBandEnd;

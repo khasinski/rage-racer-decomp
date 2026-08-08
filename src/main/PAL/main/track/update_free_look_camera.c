@@ -12,10 +12,6 @@ extern s32 g_PlayerTrackProgress;
 
 extern GameRenderObject g_CameraCar;
 
-s32 rsin(s32 angle);
-s32 rcos(s32 angle);
-void AccumulateLapProgress(void *car);
-void UpdateCarTrackState(void* obj, s32 trackPointIndex, void* clampPair);
 
 /*
  * Fuller sibling of UpdateFinishCamera: camera track-follower with bob/shake. Aims
@@ -27,7 +23,7 @@ void UpdateCarTrackState(void* obj, s32 trackPointIndex, void* clampPair);
  * view[7]=yaw, view[8]=roll). markerClamp is the zeroed clamp record for the
  * track-marker builder UpdateCarTrackState.
  */
-void UpdateFreeLookCamera(s32 mode, s32 updateMotion) {
+void UpdateFreeLookCamera(void *car, s32 updateMotion) {
     s32 *view = &SCRATCH_PRIM_CURSOR_WORD;
     s32 delta[3];
     s32 coords[3];

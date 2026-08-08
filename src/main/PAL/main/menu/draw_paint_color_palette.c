@@ -3,14 +3,10 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/vector.h"
-void GameDrawMenuButton(s32 a0, s32 a1, s32 a2, s32 a3, s32 a4, s32 a5, s32 a6, s32 a7,
-                   s32 a8, s32 a9, s32 a10);
-
 extern PaintColorTable g_PaintColorTable;
 extern s32 D_8009B290;
 extern s32 g_MenuAltLayout;
 
-s32 rsin(s32 angle);
 
 /* The 18-swatch PAINT COLOR strip with its selection frame and enlarged preview. */
 s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {

@@ -1,14 +1,11 @@
 #include "common.h"
 
-void SetDQA(s32 a);
-void SetDQB(s32 a);
 
 void SetFogNear(s32 near, s32 projection) {
     SetDQA(-((near * 5) << 6) / projection);
     SetDQB(0x1400000);
 }
 
-s32 Lzc(s32 x);
 
 s32 CordicRotate(s32 value) {
     s32 data[16];

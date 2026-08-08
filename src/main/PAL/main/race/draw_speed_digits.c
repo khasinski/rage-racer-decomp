@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/car.h"
 #include "game/race.h"
 #include "game/render.h"

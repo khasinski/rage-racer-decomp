@@ -2,6 +2,12 @@
 
 #include "common.h"
 #include "psyq/snd_types.h"
+#define SpuVmSeKeyOn SpuVmSeKeyOnDeclaration
+#define SpuVmSeKeyOff SpuVmSeKeyOffDeclaration
+#include "psyq/snd.h"
+#undef SpuVmSeKeyOn
+#undef SpuVmSeKeyOff
+
 
 /* Not SvmCurrentAttr from psyq/snd_types.h, though the layout is identical:
  * this TU loads seq_sep, vag and voice signed, and folding it onto the
@@ -44,14 +50,6 @@ extern u_char g_SndVoiceCount;
 extern SvmCurrentAttrKeyOn g_SndCurrentAttr;
 extern SpuVoice g_SndVoiceState[];
 
-long SpuVmVSetUp(short vab_id, short program);
-long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note);
-u_char SpuVmAlloc(long priority);
-void SpuVmRebuildVoiceTable(void);
-void SpuVmNoiseKeyOn(u_char voice);
-u_short SpuVmCalculateCurrentPitch(void);
-void SpuVmScaleVabVolume(u_char tone_count, u_short pitch);
-
 static inline u_char func_80076350_select_tones(
     u_char *tone_indices, u_char *vag_indices) {
     u_char tone;
@@ -72,13 +70,6 @@ static inline u_char func_80076350_select_tones(
     return count;
 }
 
-long SpuVmSeKeyOn(
-    short seq_sep,
-    short vab_id,
-    short program,
-    u_short note,
-    u_short volume,
-    u_short pan);
 long SpuVmSeKeyOn(
     short seq_sep,
     short vab_id,
@@ -117,7 +108,8 @@ long SpuVmSeKeyOn(
         return -1;
     }
     if (volume == 0) {
-        result = SpuVmSeKeyOff(seq_sep, vab_id, program, note);
+        result = SpuVmSeKeyOff(
+            (short)seq_sep, (short)vab_id, (short)program, (u_short)note);
     } else {
         tone_count =
             func_80076350_select_tones(tone_indices, vag_indices);

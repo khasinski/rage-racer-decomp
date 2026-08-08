@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
 
@@ -10,7 +11,6 @@ typedef struct Glyph {
 
 extern Glyph D_8007F984[];
 
-void *QueueDrawModePrim(void *ot, void *prim, s32 tpage);
 
 void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
     s32 x0;
@@ -126,8 +126,11 @@ void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
         }
     }
 
-    SCRATCH_PRIM_CURSOR_AS(void) =
-        QueueDrawModePrim((u8 *)ot + 4, SCRATCH_PRIM_CURSOR_AS(void), (fl & 0x7f) + 27);
+    {
+        void *next = QueueDrawModePrim(
+            (u8 *)ot + 4, SCRATCH_PRIM_CURSOR_AS(u8), (fl & 0x7f) + 27);
+        SCRATCH_PRIM_CURSOR_AS(void) = next;
+    }
 }
 
 extern Glyph D_8007FA3C[];

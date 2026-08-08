@@ -298,9 +298,6 @@ void EnterCarSelectScreen(void) {
 extern u8 *D_801E40B4;
 extern u8 *g_CourseProgress;
 
-void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight)
-;
-
 void UpdateCarSelectScreen(void) {
     s32 mode;
     u8 *cmdList;

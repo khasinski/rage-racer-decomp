@@ -15,13 +15,9 @@ extern s32 g_PlayerTrackProgress;
 
 
 
-void GetTrackZoneBlend(s32 trackProgress);
 
-void ExitRaceScene(s32 sceneId);
 
-void UpdateFreeLookCamera(u8 *car, s32 updateMotion);
 
-void UpdateTrackEventSound(s32 trackSection);
 
 extern s16 g_PlayerLap;
 

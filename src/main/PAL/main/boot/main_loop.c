@@ -12,7 +12,6 @@
 #include "psyq/kernel.h"
 #include "psyq/snd.h"
 
-void SetGraphDebug(s32 level);
 
 extern s32 g_ScreenOffsetY;
 extern s32 g_ScreenOffsetX;
@@ -71,16 +70,12 @@ void InitSubsystems(void) {
     SetCameraRotMatrix();
 }
 
-void PutDrawEnv(u8 *env);
-void PutDispEnv(u8 *env);
-void DrawOTag(u8 *ot);
 
 /* The two 0x237E8-byte frame contexts the loop ping-pongs between. */
 extern u8 g_FrameContexts[];
 /* Which of them is current, mirrored for everyone else to read. */
 extern s32 g_FrameParity;
 /* Scene handlers, indexed by g_SceneId. */
-extern void (*g_SceneHandlers[])(void);
 
 /*
  * The PS-EXE `main`. Boots the subsystems, then never returns: each pass picks
@@ -135,7 +130,7 @@ void MainLoop(void) {
         g_GameClock = ticks + elapsed / 256;
         VSync(0);
         PutDrawEnv(g_DrawBuffer);
-        PutDispEnv(g_DrawBuffer + 0x5C);
+        PutDispEnv((Env *)(g_DrawBuffer + 0x5C));
         DrawOTag(g_DrawBuffer + 0xBC8);
         DrawOTag(g_DrawBuffer + 0x16C8);
         UpdatePadState();

@@ -74,7 +74,6 @@ void DrawPathScenery(void) {
     SubmitModel((void *)SCRATCHPAD_ADDR, drawId);
 }
 
-s32 rcos(s32 angle);
 
 void UpdateTrackEventSound(s16 arg) {
     s32 base;
@@ -174,7 +173,6 @@ void UpdateTrackEventSound(s16 arg) {
     SetPanVoiceTargetVolume(a0v, a1v);
 }
 
-s32 rsin(s32 angle);
 
 typedef struct TrackSeg {
     s32 lo;    /* 0x00 */

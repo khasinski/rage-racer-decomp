@@ -2,8 +2,6 @@
 #include "game/car.h"
 #include "game/render.h"
 
-s32 rsin(s32 angle);
-s32 rcos(s32 angle);
 
 /*
  * Shared "advance car position/heading" helper. Integrates the car's speed

@@ -2,8 +2,6 @@
 
 extern SeqStruct *g_SndSeqTable[];
 
-void SpuVmSetSeqVol(long seq_sep, u_short left, u_short right, long mode);
-
 void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) {
     short sepIndex;
     long sequenceBase;
@@ -60,8 +58,6 @@ void SsSeqSetVol(long seq, long left, long right) {
 void SsSepSetVol(long seq, long sep, long left, long right) {
     SpuVmSetSeqVol((short)(seq | (sep << 8)), (u_short)left, (u_short)right, 0);
 }
-
-long SpuVmGetSeqVol(long seq_sep, short *left, short *right);
 
 long SsSepGetVol(long seq, long sep, short *voll, short *volr) {
     return SpuVmGetSeqVol((short)(seq | (sep << 8)), voll, volr);

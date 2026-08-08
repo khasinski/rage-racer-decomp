@@ -7,7 +7,6 @@
 #include "game/sound.h"
 #include "game/car.h"
 
-void DrawPrizeMoneyPanel(s32);
 extern CarEntry g_SaveDefaults[];
 extern s16 g_ClassRecords;
 extern s16 g_ClassClears;

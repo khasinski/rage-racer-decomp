@@ -61,16 +61,6 @@ extern volatile u16 g_PadHeld;
 extern s16 g_NegconMappingIndex;
 extern u8 *g_TrackPoints;
 
-s32 IsCarFacingBackwards(void *car);
-void UpdateCarBodyRoll(void *car);
-void AccumulateLapProgress(void *car);
-void ApplyCarKnockback(void *car);
-s32 UpdateCarTrackState(void* obj, s32 trackPointIndex, void* clampPair);
-void StartCarBodyKick(s32 strength, void *car);
-void UpdateCarTiltCounter(void *car);
-void UpdateCarCrestHop(void *car);
-void UpdateCarBodyKick(void *car);
-s32 rsin(s32 angle);
 
 /*
  * Per-car physics / gear-shift driver (matched sibling of the ASM
@@ -567,7 +557,6 @@ void UpdatePlayerCar(Car *car) {
 
 extern s32 g_EnvScriptClock;
 
-s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt);
 
 s32 DrawPlayerTachometer(void) {
     s32 value;

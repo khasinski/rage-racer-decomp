@@ -5,6 +5,9 @@
 
 #include "common.h"
 
+void _card_info(s32 port);
+s32 _card_load(s32 port);
+
 typedef void (*KernelCallback)(void);
 
 typedef struct RootCounter {
@@ -74,6 +77,7 @@ long TestEvent(long event);
 void EnableEvent(long event);
 void DisableEvent(long event);
 void WaitEvent(long event);
+void DeliverEvent(long event, long spec);
 
 long BiosFileOpen(void *path, long mode);
 long BiosFileSeek(long fd, long offset, long whence);

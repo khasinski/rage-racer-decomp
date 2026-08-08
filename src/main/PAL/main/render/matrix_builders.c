@@ -51,7 +51,6 @@ void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32
     }
 }
 
-s32 SquareRoot0(s32 square);
 
 /*
  * Builds a billboard / look-at view Matrix for a GameRenderObject: the eye is

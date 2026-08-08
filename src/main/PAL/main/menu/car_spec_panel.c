@@ -3,9 +3,7 @@
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/vector.h"
-void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
-s32 rsin(s32 angle);
 
 /* The five-position tire-compound slider of the CUSTOMIZE screen. */
 void DrawTireCompoundSlider(u8 x, s32 useFlag) {

@@ -21,7 +21,6 @@ extern CameraKey g_CameraPath[];
  * the compiler compute the base once and drops 20 instructions. */
 #define KEY(byteOffset) (*(CameraKey *)((u8 *)g_CameraPath + (byteOffset)))
 
-s32 SetLookAtMatrix(s32 *obj);
 
 /* One frame of the scripted camera: eases the six values between the
  * current and next keyframe and installs the resulting view matrix. */
@@ -66,7 +65,7 @@ void UpdateScriptedCamera(void) {
     tick = KEY(nextOffset).atZ;
     nextOffset = KEY(currentOffset).atZ;
     values[5] = (((tick - nextOffset) * blend) / 10000) + nextOffset;
-    SetLookAtMatrix(values);
+    SetLookAtMatrix((GameRenderObject *)values);
 
     {
         s32 duration = KEY(g_CameraPathKey << 5).duration;

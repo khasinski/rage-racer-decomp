@@ -1,12 +1,6 @@
 #include "common.h"
 #include "game/menu.h"
 #include "game/scratchpad.h"
-void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b,
-                   s32 alpha);
-
-s32 rsin(s32 angle);
-
-
 void DrawLogoSamplePanel(s32 step, s32 sample) {
     void *ot = SCRATCH_OT_BASE_AS(void);
     s32 idx;

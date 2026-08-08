@@ -2,8 +2,6 @@
 
 extern SeqStruct *g_SndSeqTable[];
 
-void ContDataEntry(short seq, short sep, u_char value);
-
 void SsSeqDispatchControlChange(short seq, short sep, long controller) {
     u_long control;
     short value;

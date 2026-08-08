@@ -10,8 +10,6 @@
 
 extern u8 g_PadType;
 
-s32 RunTimedDrawScript(void *, void *);
-void DrawBitPatternOverlay(s32);
 
 /* Scene 8: the menu-mode per-frame dispatcher. Runs the two
  * g_MenuScreenDraw overlay slots and then g_MenuScreenUpdate[g_MenuScreen]. */
@@ -73,7 +71,6 @@ void UpdateMenuMode(void) {
     DrawBitPatternOverlay(g_MenuOverlayPattern);
 }
 
-void SpuVmDamperStep(void);
 void TickSequenceAudio(void) {
     if (g_SceneId == 0xC) {
         SpuVmDamperStep();
@@ -87,7 +84,6 @@ void TickSequenceAudio(void) {
 
 extern u8 D_801E8AFC;
 
-s32 SpuTransferStatus(void *buffer, s32 mode);
 
 s32 IsSpuTransferDone(void) {
     u8 *base;

@@ -17,7 +17,6 @@ typedef struct {
 
 extern GpuMovePacket g_MoveImagePacket;
 
-void CheckPrim(char *name, void *rect);
 extern char D_80013578[];
 extern char D_80013584[];
 extern char D_80013590[];

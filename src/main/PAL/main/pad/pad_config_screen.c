@@ -1,18 +1,9 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/vector.h"
 #include "game/render.h"
 #include "game/state.h"
 
-s32 AddTilePrim(
-    s32 ot,
-    s32 prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 r,
-    s32 g,
-    s32 b);
 
 /*
  * The five action captions, each a strip of glyphs lifted from one texture row
@@ -52,11 +43,11 @@ u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
     do {
         k = labelRow[i];
         prim = (u8 *)AddTilePrim(
-            (s32)ot, (s32)prim, g_PadLabelSlots[k].vx + 1, g_PadLabelSlots[k].vy + 2, 0x46,
+            ot, prim, g_PadLabelSlots[k].vx + 1, g_PadLabelSlots[k].vy + 2, 0x46,
             0x1C, 0, 0, 0);
         k = labelRow[i];
         prim = (u8 *)AddTilePrim(
-            (s32)ot, (s32)prim, g_PadLabelSlots[k].vx, g_PadLabelSlots[k].vy, 0x48, 0x20,
+            ot, prim, g_PadLabelSlots[k].vx, g_PadLabelSlots[k].vy, 0x48, 0x20,
             0xFF, 0xFF, 0xFF);
         i++;
     } while (i < 5);

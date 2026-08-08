@@ -11,8 +11,6 @@ extern s32 g_McStatusResult;
 extern s32 g_McPollStatus;
 extern char g_FmtCardDevice[];
 
-void _card_info(s32 chan);
-void _card_load(s32 chan);
 
 s32 PollMemoryCardStatus(s32 port, s32 slot) {
     s32 handle;

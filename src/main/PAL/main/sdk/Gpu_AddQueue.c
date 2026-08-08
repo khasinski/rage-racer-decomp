@@ -12,17 +12,10 @@ extern volatile u_long *g_GpuGp1;
 extern volatile u_char g_GraphQueue;
 extern long g_DrawSyncCallback;
 
-extern void Gpu_ArmTimeout(void);
-extern long Gpu_CheckTimeout(void);
-extern void Gpu_ExecuteQueue(void);
-extern long SetIntrMask(long);
-extern void DMACallback(long, void *);
-
 /* Driver-table slot +0x08, the `send` entry every libgpu call goes through:
  * runs the worker immediately when the queue is empty and the GPU idle,
  * otherwise copies `size` bytes of parameters into the 64-entry, 96-byte
  * queue at g_GpuQueue and arms the DMA2 callback Gpu_ExecuteQueue. */
-long Gpu_AddQueue(void (*worker)(long, long), long param, long size, long data);
 long Gpu_AddQueue(void (*cb)(long, long), long arg, long size, long tag) {
     long i;
     long *src;

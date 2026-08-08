@@ -1,54 +1,25 @@
 #include <sys/types.h>
 
-#include "common.h"
+#include "psyq/snd.h"
 
-typedef struct Arg {
-    /*00*/ u_char  f00;
-    /*01*/ u_char  f01;
-    /*02*/ u_char  r02[4];
-    /*06*/ u_char  f06;
-    /*07*/ u_char  f07;
-    /*08*/ u_char  r08;
-    /*09*/ u_char  f09;
-    /*0a*/ u_char  f0a;
-    /*0b*/ u_char  r0b[5];
-    /*10*/ u_short f10;
-    /*12*/ u_short f12;
-    /*14*/ u_char  r14[0x0c];
-    /*20*/ u_short f20;
-    /*22*/ u_short f22;
-    /*24*/ u_short f24;
-    /*26*/ u_short f26;
-    /*28*/ u_short f28;
-    /*2a*/ u_short f2a;
-    /*2c*/ u_short f2c;
-    /*2e*/ u_short f2e;
-    /*30*/ u_short f30;
-    /*32*/ u_short r32;
-} Arg;
-
-void SsUtGetVagAtr(short, short, short, Arg *);
-void SsUtSetVagAtr(short, short, short, Arg *);
-void SsUnpackAdsr(u_short, u_short, u_short *);
-void SsPackAdsr(u_short *, u_short *, u_short *);
-short SsUtSetReverbType(short);
-void SsUtSetReverbDepth(long, long);
-void SsUtSetReverbFeedback(long);
-void SsUtSetReverbDelay(long);
-void SsUtReverbOff(void);
-void SsUtReverbOn(void);
-
-void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char val) {
-    SsUtGetVagAtr(p0, p1, p2, &arg);
+void SsSeqApplyNrpn(
+    short p0,
+    short p1,
+    short p2,
+    VagAtr tone_attr,
+    SndAdsr adsr,
+    short mode,
+    u_char val) {
+    SsUtGetVagAtr(p0, p1, p2, &tone_attr);
 
     switch (mode) {
     case 0:
-        arg.f00 = val;
-        SsUtSetVagAtr(p0, p1, p2, &arg);
+        tone_attr.prior = val;
+        SsUtSetVagAtr(p0, p1, p2, &tone_attr);
         break;
     case 1:
-        arg.f01 = val;
-        SsUtSetVagAtr(p0, p1, p2, &arg);
+        tone_attr.mode = val;
+        SsUtSetVagAtr(p0, p1, p2, &tone_attr);
         if (val == 0) {
             SsUtReverbOff();
             break;
@@ -68,12 +39,12 @@ void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char va
         }
         break;
     case 2:
-        arg.f06 = val;
-        SsUtSetVagAtr(p0, p1, p2, &arg);
+        tone_attr.min = val;
+        SsUtSetVagAtr(p0, p1, p2, &tone_attr);
         break;
     case 3:
-        arg.f07 = val;
-        SsUtSetVagAtr(p0, p1, p2, &arg);
+        tone_attr.max = val;
+        SsUtSetVagAtr(p0, p1, p2, &tone_attr);
         break;
     case 4:
     case 5:
@@ -86,54 +57,54 @@ void SsSeqApplyNrpn(short p0, short p1, short p2, Arg arg, short mode, u_char va
     case 12:
     case 13:
     case 14:
-        SsUnpackAdsr(arg.f10, arg.f12, &arg.f20);
+        SsUnpackAdsr(tone_attr.adsr1, tone_attr.adsr2, (u_short *)&adsr);
         switch (mode) {
         case 4:
-            arg.f2a = 0;
-            arg.f20 = val;
+            adsr.sustain_direction = 0;
+            adsr.attack_mode = val;
             break;
         case 5:
-            arg.f2a = 1;
-            arg.f20 = val;
+            adsr.sustain_direction = 1;
+            adsr.attack_mode = val;
             break;
         case 6:
-            arg.f22 = val;
+            adsr.attack_rate = val;
             break;
         case 7:
-            arg.f24 = val;
+            adsr.decay_rate = val;
             break;
         case 8:
-            arg.f2c = 0;
-            arg.f26 = val;
+            adsr.sustain_rate = 0;
+            adsr.sustain_level = val;
             break;
         case 9:
-            arg.f2c = 1;
-            arg.f26 = val;
+            adsr.sustain_rate = 1;
+            adsr.sustain_level = val;
             break;
         case 10:
-            arg.f2e = 0;
-            arg.f28 = val;
+            adsr.release_mode = 0;
+            adsr.sustain_mode = val;
             break;
         case 11:
-            arg.f2e = 1;
-            arg.f28 = val;
+            adsr.release_mode = 1;
+            adsr.sustain_mode = val;
             break;
         case 12:
             if (val != 0 && val < 64) {
-                arg.f30 = 0;
+                adsr.release_rate = 0;
             } else if ((u_char)(val - 64) < 64) {
-                arg.f30 = 1;
+                adsr.release_rate = 1;
             }
             break;
         case 13:
-            arg.f09 = val;
+            tone_attr.vibT = val;
             break;
         case 14:
-            arg.f0a = val;
+            tone_attr.porW = val;
             break;
         }
-        SsPackAdsr(&arg.f20, &arg.f10, &arg.f12);
-        SsUtSetVagAtr(p0, p1, p2, &arg);
+        SsPackAdsr((u_short *)&adsr, &tone_attr.adsr1, &tone_attr.adsr2);
+        SsUtSetVagAtr(p0, p1, p2, &tone_attr);
         break;
     case 15:
         SsUtSetReverbType(val);

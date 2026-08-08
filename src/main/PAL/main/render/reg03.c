@@ -9,11 +9,8 @@
  * (docs/names.md section 25).  Bodies use the named GTE macros.
  */
 
-void SetVertex0(void *v);
 void SetVertex0(void *v) { gte_ldv0(v); }
-void SetVertex1(void *v);
 void SetVertex1(void *v) { gte_ldv1(v); }
-void SetVertex2(void *v);
 void SetVertex2(void *v) { gte_ldv2(v); }
 void SetVertexTri(void *v0, void *v1, void *v2) {
     gte_ldv0(v0);
@@ -33,7 +30,6 @@ void SetIR123(s32 a, s32 b, s32 c) {
     gte_mtc2(b, 10);
     gte_mtc2(c, 11);
 }
-void SetIR0(s32 a);
 void SetIR0(s32 a) { gte_mtc2(a, 8); }
 void SetSZfifo3(s32 a, s32 b, s32 c) {
     gte_mtc2(a, 17);
@@ -61,9 +57,6 @@ void SetMAC123(s32 a, s32 b, s32 c) {
     gte_mtc2(b, 26);
     gte_mtc2(c, 27);
 }
-void SetData32(s32 a);
 void SetData32(s32 a) { gte_mtc2(a, 30); }
-void SetDQA(s32 a);
 void SetDQA(s32 a) { gte_ctc2(a, 27); }
-void SetDQB(s32 a);
 void SetDQB(s32 a) { gte_ctc2(a, 28); }

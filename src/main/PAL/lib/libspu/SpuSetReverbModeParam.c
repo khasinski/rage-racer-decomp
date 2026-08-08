@@ -3,7 +3,6 @@
 
 extern SpuRevAttrState g_SpuRevAttr;
 extern SpuCommonRegs *g_SpuRegBase;
-extern volatile long g_SpuTransferCallback;
 extern long g_SpuRevWorkAreaStartAddr[];
 
 #define SPU_REG16 ((volatile u_short *)g_SpuRegBase)

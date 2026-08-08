@@ -9,7 +9,6 @@ extern GameRenderView *g_CarModelAsset;
 extern Matrix g_SceneLightMatrix;
 extern s32 g_ScratchRenderMode;
 
-s32 GetTrackZoneBlend(s32 position);
 
 /*
  * GameRenderObject -> GPU-primitive submitter. Subtracts the active view's
@@ -141,7 +140,6 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
 }
 
 extern u8 *g_CamRow;
-void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 
 void DrawCar(GameRenderObject *obj) {
     Matrix m_10;
@@ -298,4 +296,3 @@ void DrawCar(GameRenderObject *obj) {
         RestoreColorMatrix();
     }
 }
-s32 CdControl(s32 com, void *param, s32 result);

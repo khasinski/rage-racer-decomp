@@ -2,6 +2,9 @@
 
 #include "common.h"
 #include "psyq/snd_types.h"
+#define SsSeqIndexChannel SsSeqIndexChannelDeclaration
+#include "psyq/snd.h"
+#undef SsSeqIndexChannel
 #include "game/audio.h"
 
 extern SeqStruct *g_SndSeqTable[];
@@ -15,13 +18,6 @@ extern VabHdr *g_SndCurrentVabHeader;
 extern VagAtr *g_SndCurrentToneTable;
 extern long g_SndUpdateLock;
 extern SvmCurrentAttr g_SndCurrentAttr;
-
-long SpuVmVSetUp(short vab_id, short program);
-u_char SpuVmAlloc(long priority);
-void SpuVmRebuildVoiceTable(void);
-void SpuVmNoiseKeyOn(long voice);
-long SpuVmCalculateTonePitch(u_short note, u_short fine);
-void SpuVmScaleVabVolume(long count, long pitch);
 
 long SsSeqIndexChannel(short seq_sep, short vab_id, short program, u_short volume, u_short pan) {
     SeqStruct *score =
@@ -38,7 +34,7 @@ long SsSeqIndexChannel(short seq_sep, short vab_id, short program, u_short volum
     short current_program;
 
     voices_updated = 0;
-    SpuVmVSetUp(vab_id, program);
+    SpuVmVSetUp((short)vab_id, (short)program);
     g_SndCurrentSeqSep = seq_sep;
     for (voice = 0; voice < g_SndVoiceCount; voice++) {
         current_program = program;
@@ -106,7 +102,6 @@ long SsSeqIndexChannel(short seq_sep, short vab_id, short program, u_short volum
     return voices_updated;
 }
 
-short SsUtKeyOn(short, short, short, short, short, short, short);
 short SsUtKeyOn(
     short vab_id,
     short program,
@@ -127,7 +122,7 @@ short SsUtKeyOn(
     }
     g_SndUpdateLock = 1;
 
-    if (SpuVmVSetUp(vab_id, program)) {
+    if (SpuVmVSetUp((short)vab_id, (short)program)) {
         g_SndUpdateLock = 0;
         return -1;
     }
@@ -192,7 +187,8 @@ short SsUtKeyOn(
     if ((short)g_SndCurrentAttr.vag == 0xFF) {
         SpuVmNoiseKeyOn(voice);
     } else {
-        SpuVmScaleVabVolume(1, SpuVmCalculateTonePitch(note, fine) & 0xFFFF);
+        SpuVmScaleVabVolume(
+            1, SpuVmCalculateTonePitch((u_short)note, (u_short)fine) & 0xFFFF);
     }
     g_SndUpdateLock = 0;
     return voice;

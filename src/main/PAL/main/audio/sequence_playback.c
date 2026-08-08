@@ -2,10 +2,8 @@
 #include "game/audio.h"
 #include "game/sound.h"
 
-void SsSeqPlay(s32 seq, s32 mode, s32 loops);
 void PlaySequence(void) { SsSeqPlay(g_SeqHandle, 1, 0); }
 
-void SsSeqStop(s32 seq);
 void StopSequence(void) { SsSeqStop(g_SeqHandle); }
 
 void StartSequenceFadeOut(void) {
@@ -13,7 +11,6 @@ void StartSequenceFadeOut(void) {
     g_ReverbFadeStep = -3;
 }
 
-void SsSeqSetVol(s32 seq, s32 volLeft, s32 volRight);
 
 void UpdateSequenceFadeOut(void) {
     register s32 *fadeStep asm("$4");

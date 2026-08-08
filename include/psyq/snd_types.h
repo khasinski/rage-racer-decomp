@@ -115,6 +115,18 @@ typedef struct VagAtr {
     short reserved[4];
 } VagAtr;
 
+typedef struct SndAdsr {
+    u_short attack_mode;
+    u_short attack_rate;
+    u_short decay_rate;
+    u_short sustain_level;
+    u_short sustain_mode;
+    short sustain_direction;
+    short sustain_rate;
+    u_short release_mode;
+    short release_rate;
+} SndAdsr;
+
 /*
  * One libsnd voice slot (0x34 bytes). Seven translation units each carried
  * their own copy of this layout under a name ending in the address of the

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/audio.h"
 #include "game/menu.h"
 #include "game/render.h"
@@ -13,16 +14,6 @@ extern s16 g_NegconSteerPlay;
 
 
 /* Local wide-parameter views; see GameQueueSprite.c / SetGteLightMatrix.c. */
-s32 AddTilePrim(
-    s32 ot,
-    s32 prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 r,
-    s32 g,
-    s32 b);
 
 /*
  * Game mode 10's overlay: the caption, the two nudge arrows, the three digit
@@ -50,9 +41,9 @@ void DrawNegconSteerPlayScreen(void) {
     prim = GameQueueSpriteTrans(
         ot, prim, 0x88, 0x30, 0xC, 0x18, 0x6C, 0x30, 0x7F81);
     prim = QueueDrawModePrim(ot, prim, 0x3F);
-    prim = (u8 *)AddTilePrim(
+    prim = (u8 *)AddTilePrimWord(
         (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
-    prim = (u8 *)AddTilePrim(
+    prim = (u8 *)AddTilePrimWord(
         (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
     span = ((g_NegconPlayPercent[g_NegconSteerPlay] << 7) / 100) * 2;
     y = 230 - span;
@@ -143,9 +134,9 @@ void DrawNegconMaxTwistScreen(void) {
         ot, prim, xoff + 0x88, 0x30, w, 0x18, g_NegconMaxTwist * 24, 0x30, 0x7F81);
     prim = GameQueueSpriteTrans(ot, prim, 0xAC, 0x30, 4, 0x18, 0x78, 0x30, 0x7F81);
     prim = QueueDrawModePrim(ot, prim, 0x3F);
-    prim = (u8 *)AddTilePrim(
+    prim = (u8 *)AddTilePrimWord(
         (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
-    SCRATCH_PRIM_CURSOR_WORD = AddTilePrim(
+    SCRATCH_PRIM_CURSOR_WORD = AddTilePrimWord(
         (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
 }
 

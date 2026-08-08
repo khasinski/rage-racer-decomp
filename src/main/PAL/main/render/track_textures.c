@@ -68,7 +68,7 @@ void SwapTrackTexturePageNow(void) {
     } while (page < 0x100);
 }
 
-void SetTrackTexturePageNow(void) {
+void SetTrackTexturePageNow(s32 trackSection) {
     s32 temp;
 
     temp = SelectTrackTexturePage();

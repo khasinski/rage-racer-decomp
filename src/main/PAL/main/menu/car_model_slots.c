@@ -3,7 +3,6 @@
 #include "game/render.h"
 
 /* Called here with no argument, so this declaration must stay un-prototyped. */
-s32 GetCarUnlockLevel();
 
 /* GetCarAssetIndex(model, owned grade) written out longhand; indexes the price and engine tables. */
 s32 GetOwnedCarAssetIndex(s32 model) {
@@ -130,7 +129,6 @@ s32 GetOwnedCarAssetIndex(s32 model) {
 }
 
 extern u32 g_CarModelSlot;
-void SelectCarModelSlot(s32 index);
 /* Re-registers the showroom car after g_CarModelSlot changes. */
 void InstallCarModelSlot(void) {
     SelectCarModelSlot(g_CarModelSlot);

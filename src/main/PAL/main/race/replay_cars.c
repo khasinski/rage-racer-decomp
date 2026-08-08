@@ -7,13 +7,9 @@
 
 extern s32 g_PlayerCar;
 
-void ApplyReplayFrameAndTilt(s32 subframe, void *playerObj, void *rivalObj);
 
-void SeedCarLapProgress(void *car, s32 trackPointIndex);
 
-void AccumulateLapProgress(void *car);
 
-s32 FindTrackSegment(void *car, s32 idx);
 
 
 typedef struct TrackZone {

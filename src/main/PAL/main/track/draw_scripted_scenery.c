@@ -82,8 +82,6 @@ typedef struct PathSceneryCursor {
 extern PathSceneryCursor g_PathSceneryPosCursor asm("g_PathSceneryPosPhase");
 extern PathSceneryCursor g_PathSceneryRotCursor asm("g_PathSceneryRotPhase");
 
-s32 rsin(s32 angle);
-s32 rcos(s32 angle);
 
 void InitPathScenery(void) {
     s32 lev;

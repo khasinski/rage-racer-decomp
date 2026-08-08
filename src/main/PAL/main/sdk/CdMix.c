@@ -2,8 +2,6 @@
 #include "psyq/cd.h"
 #include "psyq/kernel.h"
 
-void CD_datasync(void);
-
 /* Both of these forward their own incoming arguments untouched, which is why
  * m2c saw them as (void): the values are already in a0/a1 when the tail call
  * is made. The signatures below are the ones the callers use -- CdMix from

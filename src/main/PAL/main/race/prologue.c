@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/prim.h"
 #include "game/asset.h"
 #include "game/car.h"
 #include "game/cd.h"
@@ -15,10 +16,8 @@ typedef struct UnkEventPair {
 } UnkEventPair;
 
 extern u32 g_StreamReturnScene;
-extern void (*g_AttractDemoSteps[])(void);
 extern s32 g_PrologueStep;
 extern u8 g_TextNowLoading[];
-void RequestTrackDataAssets(void);
 extern u32 g_CameraViewMode;
 extern UnkEventPair g_PrologueCameraCuts[];
 

@@ -2,7 +2,6 @@
 #include "game/race.h"
 #include "game/render.h"
 
-void BuildSpriteFromDesc(u8 *prim, u8 *desc);
 
 void BuildRaceHudPrims(s32 mode) {
     u8 *cursor;
