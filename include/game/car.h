@@ -467,6 +467,24 @@ typedef struct CarAiSpeedKey {
     s16 targetSpeeds[4];
 } CarAiSpeedKey;
 
+typedef struct RivalStartEntry {
+    s32 x;
+    s32 z;
+    s16 trackPointIndex;
+    s16 modelId;
+} RivalStartEntry;
+
+typedef struct RivalAiConfig {
+    s16 speed;
+    u16 field_126;
+    u16 field_128;
+    u16 field_12A;
+    u16 field_12C;
+    u16 field_132;
+    u16 field_134;
+    u16 reserved;
+} RivalAiConfig;
+
 typedef struct GameCarTrackAngleWindow {
     u8 pad0[0x30];
     s32 trackPointIndex;

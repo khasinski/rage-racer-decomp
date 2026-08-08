@@ -490,13 +490,13 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     scene = g_RaceSeries;
     ent->field_122 = val122;
     {
-        u8 *p1;
+        RivalStartEntry *p1;
 
-        p1 = base + (sub + scene * 144);
-        ent->trackPointIndex = *(s16 *)(p1 + 0x35C);
-        ent->x = *(s32 *)(p1 + 0x354);
-        ent->z = *(s32 *)(p1 + 0x358);
-        *(s32 *)&ent->y = 0;
+        p1 = (RivalStartEntry *)(base + (sub + scene * 144) + 0x354);
+        ent->trackPointIndex = p1->trackPointIndex;
+        ent->x = p1->x;
+        ent->z = p1->z;
+        ent->y = 0;
     }
     {
         s32 ret = FindTrackSegment((u8 *)ent, ent->trackPointIndex);
@@ -545,7 +545,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
         ent->field_104 = 0;
         ent->field_C4 = 0;
         ent->field_138 = 0;
-        SeedCarLapProgress(ent, *(s16 *)(p + 0x35E));
+        SeedCarLapProgress(ent, ((RivalStartEntry *)(p + 0x354))->modelId);
     }
 
     sub += g_RaceSeries * 144;
@@ -553,7 +553,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     {
         u16 model;
 
-        model = *(u16 *)(base + 0x35E);
+        model = ((RivalStartEntry *)(base + 0x354))->modelId;
         ent->activeFlag = model;
         if ((s16)model != -1) {
             struct {
@@ -565,7 +565,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
             pair.a = 20;
             pair.b = -20;
             UpdateCarTrackState((u8 *)ent, ent->trackPointIndex, &pair.a);
-            ent->field_60 = *(s32 *)&ent->y;
+            ent->field_60 = ent->y;
             ent->previousTrackProgress = ent->trackProgress;
         }
     }
@@ -583,7 +583,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, s32 *arr) {
     {
         s32 lateral;
 
-        lateral = *(s32 *)&ent->y;
+        lateral = ent->y;
         ent->field_40 = 0;
         ent->field_44 = 0;
         ent->field_48 = 0;
@@ -610,16 +610,16 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
   {
     s32 lev1_R3;
     unsigned int idxoff1_R4;
-    register u8 *p1_R4;
+    register RivalAiConfig *p1_R4;
     lev1_R3 = g_RaceSeries;
     idxoff1_R4 = idx_R8;
     idxoff1_R4 = idxoff1_R4 * 16;
-    p1_R4 = base_R9 + (idxoff1_R4 + (lev1_R3 * 192));
-    ent2_R7->field_124 = ((*(s16 *)(p1_R4 + 0x8F4)) * 1168) / 160;
-    *(u16 *)&ent2_R7->field_126 = *(u16 *)(p1_R4 + 0x8F6);
-    *(u16 *)&ent2_R7->field_128 = *(u16 *)(p1_R4 + 0x8F8);
-    *(u16 *)&ent2_R7->field_12A = *(u16 *)(p1_R4 + 0x8FA);
-    *(u16 *)&ent2_R7->field_12C = *(u16 *)(p1_R4 + 0x8FC);
+    p1_R4 = (RivalAiConfig *)(base_R9 + (idxoff1_R4 + (lev1_R3 * 192)) + 0x8F4);
+    ent2_R7->field_124 = (p1_R4->speed * 1168) / 160;
+    ent2_R7->field_126 = p1_R4->field_126;
+    ent2_R7->field_128 = p1_R4->field_128;
+    ent2_R7->field_12A = p1_R4->field_12A;
+    ent2_R7->field_12C = p1_R4->field_12C;
   }
   __asm__ volatile("");
   c = ent2_R7->field_128;
@@ -655,7 +655,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
     lev2_R2 = g_RaceSeries;
     idxoff2_R4 = idx_R8 * 16;
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
-    w = *(u16 *)(p2_R3 + 0x8FE);
+    w = ((RivalAiConfig *)(p2_R3 + 0x8F4))->field_132;
     sub_R6->field_132 = w;
     if (((s16) w) < 0x3D)
     {
@@ -664,7 +664,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, s32 *arr) {
     lev2_R2 = g_RaceSeries;
     __asm__("" : "=r"(idxoff2_R4) : "0"(idxoff2_R4));
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
-    w = *(u16 *)(p2_R3 + 0x900);
+    w = ((RivalAiConfig *)(p2_R3 + 0x8F4))->field_134;
     sub_R6->field_134 = w;
     if (((s16) w) <= 0)
     {
