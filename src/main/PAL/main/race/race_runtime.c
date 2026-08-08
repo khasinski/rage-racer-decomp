@@ -225,15 +225,15 @@ s32 CountActiveWaypoints(void) {
 }
 
 void DrawLapNumber(void) {
-    u8 *scratch;
+    SPRT *scratch;
     s32 track;
     s32 divisor;
     s32 digitsDrawn;
     s32 xOffset;
     s32 quotient;
-    register u8 *packet asm("$16");
+    register SPRT *packet asm("$16");
 
-    scratch = SCRATCH_PRIM_CURSOR_AS(u8);
+    scratch = SCRATCH_PRIM_CURSOR_AS(SPRT);
     track = g_PlayerLap;
     divisor = 1;
     digitsDrawn = 0;
@@ -248,7 +248,7 @@ void DrawLapNumber(void) {
 
         {
             s32 y;
-            u8 *oldPacket;
+            SPRT *oldPacket;
             s32 tens;
 
             SetSprt(scratch);
@@ -260,16 +260,16 @@ void DrawLapNumber(void) {
             divisor *= 10;
             xOffset += 0x18;
             digitsDrawn++;
-            scratch += 0x14;
-            packet[0x0D] = 0x48;
-            *(s16 *)(packet + 0x10) = 0x18;
-            *(s16 *)(packet + 0x12) = 0x20;
-            *(s16 *)(packet + 0x0A) = 0x10;
-            *(s16 *)(packet + 0x0E) = 0x780B;
-            *(s16 *)(packet + 0x08) = y;
-            packet[0x0C] = (quotient - tens * 10) * 24;
+            scratch++;
+            packet->v0 = 0x48;
+            packet->w = 0x18;
+            packet->h = 0x20;
+            packet->y0 = 0x10;
+            packet->clut = 0x780B;
+            packet->x0 = y;
+            packet->u0 = (quotient - tens * 10) * 24;
 
-            packet += 0x14;
+            packet++;
             AddPrim(g_DrawBuffer + 0xCC, oldPacket);
         }
     }
@@ -279,8 +279,8 @@ void DrawLapNumber(void) {
         u8 *finalScratch;
         s32 tpage;
 
-        finalScratch = scratch;
-        packet = (u8 *)SCRATCHPAD_ADDR;
+        finalScratch = (u8 *)scratch;
+        packet = (SPRT *)SCRATCHPAD_ADDR;
         ot = g_DrawBuffer + 0xCC;
         tpage = 9;
         *(u8 **)packet = finalScratch;
