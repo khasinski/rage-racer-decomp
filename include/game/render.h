@@ -698,7 +698,7 @@ static __inline__ u8 *GameQueueTexturePacketWide(
  * alpha argument is not 0xFF. SetDrawModePacket only fills the packet in
  * place (no AddPrim, no cursor advance) and has no callers in the retail EXE.
  */
-u8 *QueueDrawModePrim(void *ot, u8 *prim, u16 tpage);
+u8 *QueueDrawModePrim(void *ot, u8 *prim, s32 tpage);
 void SetDrawModePacket(u8 *prim, s32 tpage);
 
 /*

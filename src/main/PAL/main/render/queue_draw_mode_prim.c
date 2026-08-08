@@ -10,7 +10,7 @@ extern u8 g_DrawModeEnv[];
 /* DR_MODE, 12 bytes: sets the texture page (and the blend mode packed into it)
  * for the primitives that follow, links it into the ordering table and returns
  * the advanced packet cursor. */
-u8 *QueueDrawModePrim(void *ot, u8 *prim, u16 tpage) {
+u8 *QueueDrawModePrim(void *ot, u8 *prim, s32 tpage) {
     u8 *pkt;
 
     SetDrawMode((DrawPacket *)prim, 0, 1, tpage, g_DrawModeEnv);
