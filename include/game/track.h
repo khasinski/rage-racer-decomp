@@ -248,6 +248,18 @@ typedef struct SceneryMotionKeyframe {
     s16 reserved;
 } SceneryMotionKeyframe;
 
+typedef struct SceneryMotionStart {
+    Vec4 position;
+    s32 reserved[4];
+} SceneryMotionStart;
+
+typedef struct SceneryMotionData {
+    s16 triggerSection[2][2];
+    s16 firstKeyframe[2][2];
+    SceneryMotionStart start[2];
+    SceneryMotionKeyframe keyframes[1];
+} SceneryMotionData;
+
 typedef struct FlybySceneryState {
     s32 timer;
     s32 soundEnabled;
