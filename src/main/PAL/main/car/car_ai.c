@@ -106,7 +106,6 @@ s32 GetCarCrestTrigger(GameCarRuntime *car) {
         pos1 = g_TrackLength - pos1;
     }
 
-    switch (0) { default:
     if (pos1 < pos0) {
         temp = pos0;
         diff = temp - pos1;
@@ -115,7 +114,7 @@ s32 GetCarCrestTrigger(GameCarRuntime *car) {
 
 crossed_label:
     crossed = 1;
-    break;
+    goto crest_scan_done;
 
 not_crossed:
     temp = pos1;
@@ -155,7 +154,7 @@ for (;;) {
     }
 break;
 }
-    }
+crest_scan_done:
     if (crossed != 0) {
         resultOffset = i * 8;
         resultOffset += row * 64;
@@ -247,7 +246,6 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
     s32 scene;
 
     ai = (GameCarAiBlock *)&obj->field_BC;
-    switch (0) { default:
     if (obj->slideInput.value == 0) {
         if (!(obj->field_F4 != 0)) {
         if (carIndex != 0) {
@@ -270,7 +268,7 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
         }
         temp = ai->slideInput;
         if (temp == 0) {
-            break;
+            goto slide_input_done;
         }
     }
 
@@ -299,7 +297,7 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
     }
     return;
 
-    }
+slide_input_done:
     value = ai->field_F4;
     if (value != 0) {
         temp = value * 15;

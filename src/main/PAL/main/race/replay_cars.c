@@ -96,7 +96,6 @@ s32 GetTrackZoneBlend(s32 position) {
     }
 
     if ((start < position) && (position < finish)) {
-        switch (0) { default:
         if (position < start + 0x100) {
             status = 1;
         } else if (finish - 0x100 < position) {
@@ -123,7 +122,7 @@ s32 GetTrackZoneBlend(s32 position) {
 
         } else {
         g_TrackZoneDark = 3;
-        break;
+        goto zone_code_done;
 
 code_two:
         status = 4;
@@ -132,7 +131,7 @@ code_minus_three:
             status = 3;
         }
         g_TrackZoneCode = 1;
-        break;
+        goto zone_code_done;
 
         }
 normalize_code:
@@ -140,7 +139,7 @@ normalize_code:
             g_TrackZoneCode = -g_TrackZoneCode;
             status = 3;
         }
-        }
+zone_code_done:
         g_ReverbZoneDepth = zone->value;
     }
 
@@ -190,7 +189,6 @@ void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
     }
 
     slot = g_SectorIndex;
-    switch (0) { default:
     if (slot >= 0) {
         if ((*(s16 *)((u8 *)car + 0x168) - 1) * g_TrackLength + g_SectorEndDistance[slot] <=
                 (*(s32 *)((u8 *)car + 0x6C) + *(s32 *)((u8 *)car + 0x68)) ||
@@ -240,7 +238,7 @@ void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
             nextSlot %= 3;
             nextSlot <<= 2;
             g_LastSectorTime = *(s32 *)((u8 *)g_SectorTimes + nextSlot);
-            break;
+            goto split_update_done;
         }
     }
 
@@ -267,10 +265,9 @@ void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
         g_SplitSign = 0;
         g_SplitTargetTime = g_RefSectorTimes[0];
     }
-    }
+split_update_done:
 
 }
-    switch (0) { default:
     if (g_SplitTimer >= 0x3C) {
         threshold = 0x927BE;
         value = g_LapTimeMs;
@@ -290,7 +287,7 @@ void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
         threshold = 0x927BE;
         value = g_LastSectorTime;
     } else {
-        break;
+        goto replay_split_current_done;
     }
 
     if (value <= threshold) {
@@ -300,7 +297,7 @@ void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
     }
     DrawTimeValue(0x12, 0x2A, value, tile, 0x3E8);
 
-    }
+replay_split_current_done:
     timeout = 0x3E8;
     DrawTimeValue(0x12, 0x20, g_SplitTargetTime, 0x78CC, timeout);
     DrawSplitDelta(g_SplitSector, g_SplitSign);
