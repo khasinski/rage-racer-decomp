@@ -32,8 +32,8 @@ s32 LoadSaveStateBlock(u8 *block) {
         } while ((u32)i < 0x7FE);
         printf((u8 *)g_MsgSaveChecksumOk);
         sum = ~sum;
-        printf((u8 *)g_FmtSaveChecksum, *(s32 *)(base + MC_BLOCK_CHECKSUM_OFS), sum);
-        if (*(s32 *)(base + MC_BLOCK_CHECKSUM_OFS) != sum) {
+        printf((u8 *)g_FmtSaveChecksum, ((GameSaveBlock *)base)->checksum, sum);
+        if (((GameSaveBlock *)base)->checksum != sum) {
             return 0;
         }
     }
@@ -279,7 +279,7 @@ s32 LoadSaveStateBlock(u8 *block) {
 
     /* g_BgmVolumeSetting / g_SfxVolumeSetting / g_MonoOutput clamps */
     {
-        s32 v = *(s32 *)(base + 0xFBC);
+        s32 v = ((GameSaveBlock *)base)->bgmVolume;
         s32 c;
         g_BgmVolumeSetting = v;
         if (v >= 0) {
@@ -290,7 +290,7 @@ s32 LoadSaveStateBlock(u8 *block) {
         } else {
             c = 0;
         }
-        v = *(s32 *)(base + 0xFC0);
+        v = ((GameSaveBlock *)base)->sfxVolume;
         g_BgmVolumeSetting = c;
         g_SfxVolumeSetting = v;
         if (v >= 0) {
@@ -301,7 +301,7 @@ s32 LoadSaveStateBlock(u8 *block) {
         } else {
             c = 0;
         }
-        v = *(s32 *)(base + 0xFC4);
+        v = ((GameSaveBlock *)base)->monoOutput;
         g_SfxVolumeSetting = c;
         g_MonoOutput = v;
         if (v != 0) {
@@ -310,8 +310,8 @@ s32 LoadSaveStateBlock(u8 *block) {
     }
 
     /* g_GrandPrixCourseProgress / g_ExtraGrandPrixCourseProgress unaligned copies */
-    memcpy(g_GrandPrixCourseProgress, base + 0xFC8, 8);
-    memcpy(g_ExtraGrandPrixCourseProgress, base + 0xFD0, 8);
+    memcpy(g_GrandPrixCourseProgress, ((GameSaveBlock *)base)->grandPrixCourseProgress, 8);
+    memcpy(g_ExtraGrandPrixCourseProgress, ((GameSaveBlock *)base)->extraGrandPrixCourseProgress, 8);
 
     LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
     ApplyAudioSettings();
