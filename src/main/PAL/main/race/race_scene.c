@@ -67,13 +67,6 @@ s32 UpdateLapAndFinish(PlayerCarRuntime *car, s32 grandPrixMode) {
     s16 progress;
     s32 step;
     s32 tableOffset;
-    s32 routeOffset;
-    s32 routeCallOffset;
-    s32 routeStoreOffset;
-    s32 routeCompareOffset;
-    s32 routeFinalOffset;
-    s32 recordOffset;
-    s32 resultOffset;
     s32 routeProgress;
     s32 oldTimer;
     s32 timer;
@@ -82,29 +75,26 @@ s32 UpdateLapAndFinish(PlayerCarRuntime *car, s32 grandPrixMode) {
     route = (PlayerCarRaceState *)&car->drive;
     if (route->timing.fields.lap > 0) {
         if (g_LapCount >= route->timing.fields.lap) {
-            routeOffset = route->timing.fields.lap * 4;
-            *(s32 *)((u8 *)route + routeOffset + 0xAC) += 1;
-            routeOffset = route->timing.fields.lap * 4;
-            if (*(s32 *)((u8 *)route + routeOffset + 0xAC) > 0xFFFF) {
-                *(s32 *)((u8 *)route + 0xAC +
-                         route->timing.fields.lap * 4) = 0x10000;
+            route->timing.fields.lapTimes.table
+                .frameCounts[route->timing.fields.lap - 1] += 1;
+            if (route->timing.fields.lapTimes.table
+                    .frameCounts[route->timing.fields.lap - 1] > 0xFFFF) {
+                route->timing.fields.lapTimes.table
+                    .frameCounts[route->timing.fields.lap - 1] = 0x10000;
             }
-            *(s32 *)((u8 *)route +
-                     (routeStoreOffset =
-                          route->timing.fields.lap * 4) +
-                     0xC4) = FramesToMilliseconds(
-                (routeCallOffset = route->timing.fields.lap * 4,
-                 *(s32 *)((u8 *)route + routeCallOffset + 0xAC)),
+            route->timing.fields.lapTimes.table
+                .milliseconds[route->timing.fields.lap - 1] = FramesToMilliseconds(
+                route->timing.fields.lapTimes.table
+                    .frameCounts[route->timing.fields.lap - 1],
                 Random15() % 40);
-            routeCompareOffset = route->timing.fields.lap * 4;
-            if (*(s32 *)((u8 *)route + routeCompareOffset + 0xC4) > 0x927BE) {
-                *(s32 *)((u8 *)route + 0xC4 +
-                         route->timing.fields.lap * 4) = 0x927BF;
+            if (route->timing.fields.lapTimes.table
+                    .milliseconds[route->timing.fields.lap - 1] > 0x927BE) {
+                route->timing.fields.lapTimes.table
+                    .milliseconds[route->timing.fields.lap - 1] = 0x927BF;
                 g_LapTimeSaturated = 1;
             }
-            routeFinalOffset = route->timing.fields.lap * 4;
-            g_LapTimeMs =
-                *(s32 *)((u8 *)route + routeFinalOffset + 0xC4);
+            g_LapTimeMs = route->timing.fields.lapTimes.table
+                              .milliseconds[route->timing.fields.lap - 1];
             goto timing_done;
         }
     }
@@ -133,17 +123,15 @@ timing_done:
         }
         recordIndex = route->timing.fields.lap;
         progressLimit = g_BestLapThisRace;
-        recordOffset = recordIndex * 4;
-        candidateTime =
-            *(s32 *)((u8 *)route + recordOffset + 0xC0);
+        candidateTime = route->timing.fields.lapTimes.table
+                            .milliseconds[recordIndex - 2];
         tableOffset = progressLimit;
         step = candidateTime < tableOffset;
         if (step && (recordIndex != 1)) {
             routeProgress = (u16)route->timing.fields.lap;
             route->drive.unkA6 = routeProgress - 2;
-            resultOffset = route->timing.fields.lap * 4;
-            result =
-                *(s32 *)((u8 *)route + resultOffset + 0xC0);
+            result = route->timing.fields.lapTimes.table
+                         .milliseconds[route->timing.fields.lap - 2];
             g_BestLapThisRace = candidateTime;
             g_SectorTimes[2] = result;
             if (grandPrixMode == 0) {
@@ -171,7 +159,9 @@ timing_done:
                         if (count > 0) {
                             cursor = (s32 *)route;
                             do {
-                                element = cursor[0x32];
+                                element = ((PlayerCarRaceState *)cursor)
+                                              ->timing.fields.lapTimes.table
+                                              .milliseconds[0];
                                 accumulated = g_RaceTotalTime;
                                 accumulated += element;
                                 g_RaceTotalTime = accumulated;
