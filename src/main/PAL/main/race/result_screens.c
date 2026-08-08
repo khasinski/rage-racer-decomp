@@ -166,7 +166,7 @@ void UpdateReplayScene(void) {
     DrawSkyBackground();
     DrawReplayBadge();
     if (g_SceneTimer == 1) {
-        SetTrackTexturePageNow(g_PlayerTrackSection);
+        SetTrackTexturePageNow(g_PlayerCar.trackSection);
     }
 }
 
@@ -340,8 +340,8 @@ void DrawRaceTimePanel(s32 slideY) {
 
     i = 0;
     if (count != 0) {
-        times = g_PlayerLapTimes;
-        selectedPtr = g_PlayerLapTimes;
+        times = g_PlayerCar.lapTimes.table.milliseconds;
+        selectedPtr = g_PlayerCar.lapTimes.table.milliseconds;
         do {
             x = 0xB0;
             if (i < 3) {

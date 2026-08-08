@@ -33,7 +33,7 @@ void SeedReplayCars(void) {
     secondary = g_Cars;
     ApplyReplayFrameAndTilt(g_ReplayReadCursor, primary, secondary);
 
-    g_PlayerTrackPoint = FindTrackSegment(primary, g_PlayerTrackPoint);
+    g_PlayerCar.trackPointIndex = FindTrackSegment(primary, g_PlayerCar.trackPointIndex);
     SeedCarLapProgress(primary, 1);
     AccumulateLapProgress(primary);
     ResetCarTrackState(primary);
@@ -59,7 +59,7 @@ void UpdateReplayCars(void) {
         ResetCarTrackState(ptr);
     }
 
-    RequestTrackTexturePage(g_PlayerTrackSection);
+    RequestTrackTexturePage(g_PlayerCar.trackSection);
 }
 
 s32 GetTrackZoneBlend(s32 position) {
@@ -277,7 +277,7 @@ void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
 
     } else if (g_SectorIndex >= 0) {
         if (g_SplitSign != 0) {
-            if (g_LapCount >= g_PlayerLap) {
+            if (g_LapCount >= g_PlayerCar.lap) {
                 value = g_SplitDelta;
                 if (g_SplitSign > 0) {
                     tile = 0x7810;

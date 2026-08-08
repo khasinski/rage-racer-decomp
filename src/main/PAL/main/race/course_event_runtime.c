@@ -26,7 +26,7 @@ void PlayCountdownCues(s32 timer) {
 void UpdateRivalCueGate(void) {
     s32 value;
 
-    value = g_PlayerTrackProgress;
+    value = g_PlayerCar.trackProgress;
     if (((value < 0x7001) || (value >= g_TrackLength - 0x3000)) && (g_RivalCueEnabled == 1)) {
         g_RivalCueEnabled = 0;
     } else if ((value >= 0x7001) && (value < g_TrackLength - 0x3000)) {

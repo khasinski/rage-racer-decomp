@@ -158,7 +158,6 @@ extern s16 g_EnvSpareFrom;
 extern s16 g_EnvSpareLerp;
 extern s16 g_EnvSpareTo;
 extern s32 g_PlayerSpeed;
-extern s32 g_PlayerTrackPoint;
 extern s16 g_RaceCueDelay;
 extern s32 g_RaceCueFlags;
 extern volatile s32 g_RouteSceneryFrame;

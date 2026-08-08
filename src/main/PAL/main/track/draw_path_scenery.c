@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/race.h"
+#include "game/player_car_internal.h"
 #include "game/render.h"
 #include "game/render_internal.h"
 #include "game/scratchpad.h"
@@ -128,7 +129,7 @@ void UpdateTrackEventSound(s16 arg) {
     if (s0 != 0) {
         s0 = (s0 * g_PlayerSpeed) / 12775;
         t = SCRATCH_VIEW_ANGLE_Y - 0xC00;
-        s3 = (t + g_TrackPoints[g_PlayerTrackPoint].angle) & 0xFFF;
+        s3 = (t + g_TrackPoints[g_PlayerCar.trackPointIndex].angle) & 0xFFF;
         if (s0 < 0 && (data & 2) > 0) {
             val = s0 * rcos(s3);
             if (val < 0) {

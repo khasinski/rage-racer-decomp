@@ -906,7 +906,6 @@ extern s16 g_CarModelBankTable[][2];
 extern s16 D_80092B08[];
 extern s16 D_80093308[];
 extern s16 D_80093B08[];
-extern s16 g_PlayerCarAssetIndex;
 extern Matrix g_MirrorViewMatrix;
 extern u8 g_ReplayFrameBuffer;
 extern u8 g_CarModelByCourse[][11];

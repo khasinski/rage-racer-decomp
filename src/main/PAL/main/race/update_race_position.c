@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/player_car_internal.h"
 #include "game/race.h"
 
 /* Counts the cars whose lap progress is ahead of the player and publishes the
@@ -11,8 +12,8 @@ void UpdateRacePosition(void) {
     CarProgressWindow *cars;
 
     active = 1;
-    if (g_LapCount >= ((GameRaceRanking *)&g_PlayerLap)->count) {
-        total = g_PlayerProgressA + g_PlayerProgressB;
+    if (g_LapCount >= ((GameRaceRanking *)&g_PlayerCar.lap)->count) {
+        total = g_PlayerCar.progressA + g_PlayerCar.progressB;
         cars = (CarProgressWindow *)&g_Cars[0].field_6C;
 
         for (i = 0; i < 0xB; i++) {

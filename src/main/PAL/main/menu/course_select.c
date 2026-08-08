@@ -6,7 +6,6 @@
 #include "game/menu.h"
 #define GAME_MENU_SCRIPT_TYPE u8
 #include "game/menu_scripts_internal.h"
-#define GAME_PLAYER_CAR_DECL extern s32 g_PlayerCar
 #include "game/player_car_internal.h"
 #define GAME_TEAM_LOGO_CANVAS_DECL extern u8 g_TeamLogoCanvas[]
 #define GAME_TEAM_LOGO_RECT_DECL extern u8 g_TeamLogoRect[]
@@ -57,13 +56,13 @@ void EnterCourseSelectScreen(void) {
     table = g_CourseProgress;
     largeValue |= 0x4000;
     g_UiScriptProgress = 0;
-    g_PlayerCar = 0;
-    g_PlayerCarY = 0;
-    g_PlayerCarZ = 0;
-    g_PlayerCarAngleX = 0;
-    g_PlayerCarAngleY = 0;
-    g_PlayerCarAngleZ = 0;
-    g_PlayerTrackProgress = 0;
+    g_PlayerCar.x = 0;
+    g_PlayerCar.y = 0;
+    g_PlayerCar.z = 0;
+    g_PlayerCar.field_20 = 0;
+    g_PlayerCar.field_24 = 0;
+    g_PlayerCar.field_28 = 0;
+    g_PlayerCar.trackProgress = 0;
     g_PlayerSteerAngle = 0;
     g_PlayerCarWheelAngle = 0;
     g_MenuViewAngleTarget = 0x7A120;

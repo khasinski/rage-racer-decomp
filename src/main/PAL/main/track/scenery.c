@@ -10,7 +10,6 @@
 #include "game/state.h"
 #include "game/track.h"
 #include "game/track_internal.h"
-#define GAME_PLAYER_CAR_DECL extern s32 g_PlayerCar
 #include "game/player_car_internal.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
@@ -287,9 +286,9 @@ void UpdateFlybyScenery(void) {
     base = g_FlybySceneryData;
     state = &g_FlybyScenery;
 
-    if (g_PlayerLap == state->lap) {
+    if (g_PlayerCar.lap == state->lap) {
         series = g_RaceSeries;
-        if (g_PlayerTrackSection == *(s16 *)((series * 4) + (s32)base)) {
+        if (g_PlayerCar.trackSection == *(s16 *)((series * 4) + (s32)base)) {
             state->soundEnabled = 1;
             state->timer = 1;
             src = (u8 *)((series * 32) + (s32)base);
@@ -350,9 +349,9 @@ void UpdateFlybyScenery(void) {
         state->position.y = step[1] / 4 + state->position.y;
         state->position.z = step[2] / 4 + state->position.z;
         if (state->soundEnabled == 1) {
-            delta[0] = dx = g_PlayerCar - state->position.x;
-            delta[1] = dy = g_PlayerCarY - state->position.y;
-            delta[2] = dz = g_PlayerCarZ - state->position.z;
+            delta[0] = dx = g_PlayerCar.x - state->position.x;
+            delta[1] = dy = g_PlayerCar.y - state->position.y;
+            delta[2] = dz = g_PlayerCar.z - state->position.z;
             dist = SquareRoot12(dx * dx / 8 + dy * dy / 16 + dz * dz / 8) >> 12;
             if (dist < 0) {
                 state->soundEnabled = 0;

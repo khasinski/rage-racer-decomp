@@ -1,6 +1,7 @@
 #include "common.h"
 #include "game/prim.h"
 #include "game/race.h"
+#include "game/player_car_internal.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
@@ -74,7 +75,7 @@ void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src) {
 }
 
 
-/* The lap-time column: one row per lap from g_PlayerLap.values at x=0xFA,
+/* The lap-time column: one row per lap from the player timing table at x=0xFA,
  * y stepping 0xA, the current lap highlighted and unset laps drawn as -1. */
 void DrawLapTimes(void) {
     s32 i;
@@ -92,7 +93,7 @@ void DrawLapTimes(void) {
     s32 framePad[2];
     s32 value;
 
-    list = (GameRaceRanking *)&g_PlayerLap;
+    list = (GameRaceRanking *)&g_PlayerCar.lap;
     visibleCount = list->count;
     if (visibleCount > g_LapCount) {
         visibleCount = g_LapCount;

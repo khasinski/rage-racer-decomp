@@ -110,7 +110,7 @@ void DrawMenuCarView(void) {
 
     g_MenuViewOffset = s2 + g_MenuViewOffset;
     s2 = g_MenuViewOffset / 1000;
-    g_PlayerCarAssetIndex = GetCarAssetIndex(s1, g_CarTable[s1].modelVariant);
+    g_PlayerCar.runtime.field_AE = GetCarAssetIndex(s1, g_CarTable[s1].modelVariant);
     g_PlayerTireCompound = g_CarTable[s1].tireCompound;
 
     if (g_PadHeld & 2) {
@@ -260,9 +260,9 @@ void DrawMenuCourseView(void) {
 
     g_PlayerCar.courseViewX = 23 - s1;
     g_MenuViewOffset = s0 + g_MenuViewOffset;
-    g_PlayerCarZ = -20;
+    g_PlayerCar.runtime.z = -20;
     s0 = g_MenuViewOffset / 1000;
-    g_PlayerCarY = s0 + 15;
+    g_PlayerCar.runtime.y = s0 + 15;
 
     if (g_PadHeld & 4) {
         if (g_MenuViewSpin < 64) {
@@ -275,10 +275,10 @@ void DrawMenuCourseView(void) {
         }
     }
 
-    p = &g_PlayerCarAngleY;
+    p = &g_PlayerCar.runtime.field_24;
     *p = *p + g_MenuViewSpin;
     BuildRotMatrixY(&mtxB, 0x800 - *p);
-    BuildRotMatrixX(&mtxA, g_PlayerCarAngleX);
+    BuildRotMatrixX(&mtxA, g_PlayerCar.runtime.field_20);
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtxA);
     SelectModelBank(14);

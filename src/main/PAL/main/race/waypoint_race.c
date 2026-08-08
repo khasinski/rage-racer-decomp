@@ -21,7 +21,7 @@
 /*
  * Initializes the 6 TrackWaypointRuntime slots for the current course. The
  * `magic`/mult/mfhi block is the compiler's divide-by-10 idiom computing the
- * track index (g_PlayerLap-1)/10, clamped to 0..9, which selects a
+ * track index (player lap - 1) / 10, clamped to 0..9, which selects a
  * TrackWaypointSeed row in g_WaypointSeeds. Each slot i is seeded at
  * origin + step*i (x,y), with the fixed constants 0x1766 and 0x174, and marked
  * inactive. Register pins and the raw tail-offset writes are match-load-bearing.
@@ -93,8 +93,8 @@ void UpdateWaypointRaceScene(void) {
         g_SceneTimer--;
         DrawRaceOptionMenu(g_RaceOptionCursor);
         UpdateFreeLookCamera(&g_PlayerCar, 0);
-        GetTrackZoneBlend(g_PlayerTrackProgress);
-        RequestTrackTexturePage(g_PlayerTrackSection);
+        GetTrackZoneBlend(g_PlayerCar.trackProgress);
+        RequestTrackTexturePage(g_PlayerCar.trackSection);
         DrawSkyBackground();
         SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
         DrawTerrainCells();
@@ -123,7 +123,7 @@ void UpdateWaypointRaceScene(void) {
 
     UpdateLoadedAudioVoices(0, 1);
     UpdateFreeLookCamera(&g_PlayerCar, 1);
-    RequestTrackTexturePage(g_PlayerTrackSection);
+    RequestTrackTexturePage(g_PlayerCar.trackSection);
     UpdateEnvironment();
     DrawSkyBackground();
     SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
@@ -136,11 +136,11 @@ void UpdateWaypointRaceScene(void) {
     UpdatePathScenerySound();
     DrawPathScenery();
     DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
-    GetTrackZoneBlend(g_PlayerTrackProgress);
+    GetTrackZoneBlend(g_PlayerCar.trackProgress);
     SetReverbDepth(g_ReverbZoneDepth, g_ReverbZoneDepth);
-    UpdateZoneAmbience(g_PlayerTrackProgress);
-    UpdatePointAmbience(g_PlayerTrackProgress);
-    UpdateTrackEventSound(g_PlayerTrackSection);
+    UpdateZoneAmbience(g_PlayerCar.trackProgress);
+    UpdatePointAmbience(g_PlayerCar.trackProgress);
+    UpdateTrackEventSound(g_PlayerCar.trackSection);
 }
 
 void SeedWaypoints(void) {
@@ -149,7 +149,7 @@ void SeedWaypoints(void) {
     TrackWaypointSeed *seed;
     s32 track;
 
-    track = g_PlayerLap - 1;
+    track = g_PlayerCar.lap - 1;
     track = track % 10;
     if (track < 0) {
         track = 0;

@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/player_car_internal.h"
 #include "game/render.h"
 #define GAME_REPLAY_COUNTER_TYPE u32
 #include "game/replay_internal.h"
@@ -33,7 +34,7 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
     s32 odd;
     u32 first;
 
-    current = g_PlayerCarAssetIndex;
+    current = g_PlayerCar.field_AE;
     src2 = (GameRenderSourcePoint *)srcB;
     sourceField_AE = src2->field_AE;
     g_ReplayPlayerModel = current;
@@ -78,7 +79,7 @@ void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
     GameRenderSourcePoint *src;
     u32 first;
 
-    g_ReplayPlayerModel = g_PlayerCarAssetIndex;
+    g_ReplayPlayerModel = g_PlayerCar.field_AE;
     if (pointIndex % 2) {
         return;
     }

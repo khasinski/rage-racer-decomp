@@ -17,7 +17,7 @@
 
 /*
  * Waypoint proximity test: returns 1 if the waypoint's (x,y) lies within a
- * +/-0x40 box around the car centre (g_PlayerCar / g_PlayerCarZ), else 0.
+ * +/-0x40 box around the player car centre, else 0.
  */
 
 /*
@@ -75,7 +75,7 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint) {
         s32 max_x = center_x + 0x40;
 
         if (x < max_x) {
-            s32 center_y = g_PlayerCarZ;
+            s32 center_y = g_PlayerCar.z;
             s32 y = waypoint->y;
 
             if ((center_y - 0x40) < y) {
@@ -234,7 +234,7 @@ void DrawLapNumber(void) {
     register SPRT *packet asm("$16");
 
     scratch = SCRATCH_PRIM_CURSOR_AS(SPRT);
-    track = g_PlayerLap;
+    track = g_PlayerCar.lap;
     divisor = 1;
     digitsDrawn = 0;
     xOffset = 0;
@@ -301,13 +301,13 @@ void DrawEndingScreen(void) {
         g_EndingSceneLatch = 1;
     }
 
-    if (g_PlayerProgressB + g_PlayerProgressA >= g_PlayerLap * g_TrackLength) {
-        if (g_PlayerLap < 257) {
-            g_PlayerLap = g_PlayerLap + 1;
+    if (g_PlayerCar.progressB + g_PlayerCar.progressA >= g_PlayerCar.lap * g_TrackLength) {
+        if (g_PlayerCar.lap < 257) {
+            g_PlayerCar.lap = g_PlayerCar.lap + 1;
             SeedWaypoints();
         }
     }
-    if (g_PlayerLap >= 257) {
+    if (g_PlayerCar.lap >= 257) {
         if (g_RacePhase == 2) {
             g_RacePhase = 4;
             g_RaceFadeTimer = 0;
@@ -375,7 +375,7 @@ void DrawEndingScreen(void) {
         UpdateCamera(0, &g_PlayerCar);
     }
 
-    p = &g_PlayerTrackSection;
+    p = &g_PlayerCar.trackSection;
     RequestTrackTexturePage(*p);
     UpdateEnvironment();
     DrawSkyBackground();
@@ -383,7 +383,7 @@ void DrawEndingScreen(void) {
     DrawTerrainCells();
     DrawCourseObjects();
     DrawCourseScenery(g_CourseIndex & 3, g_SceneTimer, 1);
-    GetTrackZoneBlend(g_PlayerTrackProgress);
+    GetTrackZoneBlend(g_PlayerCar.trackProgress);
     SetReverbDepth(g_ReverbZoneDepth, g_ReverbZoneDepth);
     DrawPlayerTachometer();
     UpdateTrackEventSound(*p);

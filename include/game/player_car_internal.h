@@ -8,6 +8,5 @@
 #endif
 GAME_PLAYER_CAR_DECL;
 #undef GAME_PLAYER_CAR_DECL
-extern s32 g_PlayerTrackProgress;
 
 #endif

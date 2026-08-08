@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/player_car_internal.h"
 #include "game/track.h"
 #include "game/audio.h"
 
@@ -112,8 +113,8 @@ void TriggerRaceCues(void) {
     base = rawBase + 0x1CCC;
 
     if (!(current & 8)) {
-        if (g_PlayerTrackSection == *(s16 *)((g_RaceSeries * 4) + (s32)base)) {
-            entry = g_PlayerLap;
+        if (g_PlayerCar.trackSection == *(s16 *)((g_RaceSeries * 4) + (s32)base)) {
+            entry = g_PlayerCar.lap;
             if (entry == g_LapCount) {
                 entry = current | 8;
                 g_RaceCueFlags = entry;
@@ -128,7 +129,7 @@ void TriggerRaceCues(void) {
         return;
     }
 
-    stateBase = (u8 *)&g_PlayerTrackSection;
+    stateBase = (u8 *)&g_PlayerCar.trackSection;
     i = 0;
     temp = 0x10;
     do {

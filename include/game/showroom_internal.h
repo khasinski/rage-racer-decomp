@@ -2,6 +2,7 @@
 #define GAME_SHOWROOM_INTERNAL_H
 
 #include "common.h"
+#include "game/car.h"
 #include "game/vector.h"
 
 typedef struct ShowroomCarModel {
@@ -18,6 +19,7 @@ typedef struct ShowroomCarPose {
 typedef union ShowroomPlayerCarState {
     ShowroomCarPose pose;
     s32 courseViewX;
+    PlayerCarRuntime runtime;
 } ShowroomPlayerCarState;
 
 extern ShowroomPlayerCarState g_PlayerCar;

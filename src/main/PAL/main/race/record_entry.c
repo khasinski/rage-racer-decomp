@@ -3,6 +3,7 @@
 #include "game/prim.h"
 #include "game/audio.h"
 #include "game/car.h"
+#include "game/player_car_internal.h"
 #include "game/cd.h"
 #include "game/menu.h"
 #include "game/race.h"
@@ -42,7 +43,7 @@ void DrawRankingPanel(u8 *slideX) {
     }
     iter = 0;
     if (limit > 0) {
-        scoreOrX = (s32)g_PlayerLapTimes;
+        scoreOrX = (s32)g_PlayerCar.lapTimes.table.milliseconds;
         do {
             /* row = iter / 2 and value = (iter % 2) * 8: two lap times per
              * table row, the odd one 8 px to the right. This is gcc's own
@@ -195,7 +196,7 @@ void InsertRaceRecords(void) {
     best = 0x927C0;
     i = 0;
     if (i < count) {
-        score_ptr = g_PlayerLapTimes;
+        score_ptr = g_PlayerCar.lapTimes.table.milliseconds;
         while (i < count) {
             if (*score_ptr < best) {
                 best = *score_ptr;

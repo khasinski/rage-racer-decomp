@@ -137,10 +137,10 @@ void UpdateFreeLookCamera(void *car, s32 updateMotion) {
     value = SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]);
     view[6] = c400 - Atan2(delta[1], value >> 6);
 
-    g_PlayerTrackSection = g_CameraCar.trackSection;
-    g_PlayerProgressA = g_CameraCar.progressA;
-    g_PlayerProgressB = g_CameraCar.progressB;
-    g_PlayerTrackProgress = g_CameraCar.trackProgress;
+    g_PlayerCar.trackSection = g_CameraCar.trackSection;
+    g_PlayerCar.progressA = g_CameraCar.progressA;
+    g_PlayerCar.progressB = g_CameraCar.progressB;
+    g_PlayerCar.trackProgress = g_CameraCar.trackProgress;
     SetCameraRotMatrix();
 }
 

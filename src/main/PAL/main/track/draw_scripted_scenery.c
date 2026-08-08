@@ -5,7 +5,6 @@
 #include "game/menu.h"
 #include "game/track.h"
 #include "game/track_internal.h"
-#define GAME_PLAYER_CAR_DECL extern s32 g_PlayerCar
 #include "game/player_car_internal.h"
 #include "psyq/gte.h"
 
@@ -396,13 +395,13 @@ void UpdatePathScenerySound(void) {
     posFrame = frames[0];
     rotFrame = g_PathSceneryRotFrameU;
     __asm__ volatile("" : "=r"(rotFrame) : "0"(rotFrame));
-    dx = g_PlayerCar - g_PathSceneryX.w[0];
+    dx = g_PlayerCar.x - g_PathSceneryX.w[0];
     posFrame = posFrame + 1;
     frames[0] = posFrame;
     g_PathSceneryRotFrameU = rotFrame + 1;
     delta[0] = dx;
-    delta[1] = dy = g_PlayerCarY - g_PathSceneryY;
-    delta[2] = dz = g_PlayerCarZ - g_PathSceneryZ;
+    delta[1] = dy = g_PlayerCar.y - g_PathSceneryY;
+    delta[2] = dz = g_PlayerCar.z - g_PathSceneryZ;
 
     if (dx < 0x1000 && dz < 0x1000 && dx >= -0xFFF && dz >= -0xFFF) {
         slew =

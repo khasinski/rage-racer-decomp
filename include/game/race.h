@@ -98,7 +98,6 @@ typedef struct GameRaceRanking {
     s32 values[1];
 } GameRaceRanking;
 
-extern s16 g_PlayerLap;
 extern s32 g_ClosestRivalRank;
 
 /* Course-select gate: `g_CourseIndex < (class < 2 ? 2 : 3)`, or 6 : 7 for the
@@ -210,11 +209,6 @@ extern s32 g_ClassCompleted;
 extern s32 g_ClassResultPlace;
 extern s32 g_LapCount;
 extern s16 g_PauseDebounce;
-extern s32 g_PlayerCarZ;
-extern s32 g_PlayerLapTimes[];
-extern s32 g_PlayerProgressA;
-extern s32 g_PlayerProgressB;
-extern s16 g_PlayerTrackSection;
 extern s32 g_PrizeAmount;
 extern s32 g_PrizeScreenState;
 extern s32 g_PromotionBonus;

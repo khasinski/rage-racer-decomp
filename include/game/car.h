@@ -550,13 +550,7 @@ void DrawCars(void);
 void UpdateCarLaunch();
 
 /*
- * The player's own car object and the fields of it that retail addresses as
- * separate absolute symbols. Per-file types; see docs/names.md 12c.
- *   g_PlayerCar           D_8009E6D4  0x19C bytes, the g_Cars[] stride
- *   g_PlayerProgressA/B   g_PlayerProgressA / g_PlayerProgressB  +0x68 / +0x6C, sum = progress
- *   g_PlayerTrackProgress g_PlayerTrackProgress  +0x70
- *   g_PlayerTrackSection  g_PlayerTrackSection  +0x78
- *   g_PlayerLap           g_PlayerLap  +0x168, also the lap-time record header
+ * The player's own 0x19C-byte car object. See docs/names.md 12c.
  */
 
 /* Declared identically by 58 translation units before this

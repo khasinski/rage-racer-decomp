@@ -107,7 +107,7 @@ s32 UpdateLapAndFinish(PlayerCarRuntime *car, s32 grandPrixMode) {
 
 timing_done:
     progress = route->timing.fields.lap;
-    if (progress * g_TrackLength <= g_PlayerProgressB + g_PlayerProgressA) {
+    if (progress * g_TrackLength <= g_PlayerCar.progressB + g_PlayerCar.progressA) {
         s32 progressLimit;
 
         progressLimit = g_LapCount;
@@ -238,7 +238,7 @@ timing_done:
         }
     } else if ((g_GrandPrixMode == 0) &&
                (((car->progressB + car->progressA) <= -g_TrackLength) ||
-                ((g_PlayerLap == 0) && (g_WrongWayTimer >= 0x3C)))) {
+                ((g_PlayerCar.lap == 0) && (g_WrongWayTimer >= 0x3C)))) {
         g_RacePhase = 5;
         g_BestLapTimes[g_RaceSeries][g_CourseIndex][0] =
             g_RankingTimes[g_RaceSeries][g_CourseIndex][0];
@@ -304,7 +304,7 @@ void EnterRaceScene(void) {
     }
     player = &g_PlayerCar;
     InitPlayerCar(player);
-    SetTrackTexturePageNow(g_PlayerTrackSection);
+    SetTrackTexturePageNow(g_PlayerCar.trackSection);
     BuildStartingGrid();
     trackLength = g_TrackLength;
     mode = (count = g_CourseIndex);
@@ -501,7 +501,7 @@ void UpdateRaceScene(void) {
         }
         DrawLapTimes();
         DrawStartCountdown(g_SceneTimer);
-        GetTrackZoneBlend(g_PlayerTrackProgress);
+        GetTrackZoneBlend(g_PlayerCar.trackProgress);
         DrawPlayerTachometer();
 
         {
@@ -522,7 +522,7 @@ void UpdateRaceScene(void) {
         }
 
         UpdateCamera(g_CameraViewMode, &g_PlayerCar);
-        RequestTrackTexturePage(g_PlayerTrackSection);
+        RequestTrackTexturePage(g_PlayerCar.trackSection);
         if (g_GrandPrixMode != 0) {
             DrawCars();
         }
@@ -642,7 +642,7 @@ update_race:
         }
 
         if (g_RacePhase != 5) {
-            next = g_PlayerTrackSection;
+            next = g_PlayerCar.trackSection;
         } else {
             next = g_CameraCarTrackSection;
         }
@@ -689,7 +689,7 @@ update_race:
             EndMirrorPass();
         }
 
-        GetTrackZoneBlend(g_PlayerTrackProgress);
+        GetTrackZoneBlend(g_PlayerCar.trackProgress);
         if (g_RacePhase >= 4) {
             g_ReverbZoneDepth = 0;
         }
@@ -701,10 +701,10 @@ update_race:
         if (g_RacePhase < 4) {
             s32 *valuePtr;
 
-            valuePtr = &g_PlayerTrackProgress;
+            valuePtr = &g_PlayerCar.trackProgress;
             UpdateZoneAmbience(*valuePtr);
             UpdatePointAmbience(*valuePtr);
-            UpdateTrackEventSound(g_PlayerTrackSection);
+            UpdateTrackEventSound(g_PlayerCar.trackSection);
             TriggerRaceCues();
         } else {
             SetPanVoiceTargetVolume(0, 0);

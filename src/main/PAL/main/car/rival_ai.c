@@ -277,7 +277,7 @@ void UpdateRivalRubberBand(void) {
     s32 s1;
     s32 s0;
 
-    s6 = g_PlayerProgressA + g_PlayerProgressB;
+    s6 = g_PlayerCar.progressA + g_PlayerCar.progressB;
     if ((g_CourseIndex & 3) == 3) {
         s5 = 0xC00;
         s4 = 0x1400;

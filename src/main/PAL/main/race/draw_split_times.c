@@ -2,6 +2,7 @@
 #define GAME_BEST_TOTAL_DECL extern u8 g_BestTotalTimes[]
 #include "game/save_internal.h"
 #include "game/race.h"
+#include "game/player_car_internal.h"
 
 
 
@@ -19,7 +20,7 @@ void DrawSplitTimes(void) {
 
     } else if (g_SectorIndex >= 0) {
         if (g_SplitSign != 0) {
-            if (g_LapCount >= g_PlayerLap) {
+            if (g_LapCount >= g_PlayerCar.lap) {
                 value = g_SplitDelta;
                 if (g_SplitSign > 0) {
                     tile = 0x7810;
