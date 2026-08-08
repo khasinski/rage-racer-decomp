@@ -12,11 +12,11 @@ extern u_char g_SndVoiceRegs[];
 short SpuVmSetSeqVol();
 long SpuVmGetSeqVol(long seq_sep, short *volLeft, short *volRight);
 
-short SpuVmSetSeqVol(arg0, arg1, arg2, arg3)
-short arg0;
-u_short arg1;
-u_short arg2;
-short arg3;
+short SpuVmSetSeqVol(seq_sep, left, right, mode)
+short seq_sep;
+u_short left;
+u_short right;
+short mode;
 {
     short i;
     u_char *base;
@@ -28,15 +28,15 @@ short arg3;
     u_long offset;
     u_long index;
 
-    base = *(u_char **)((u_char *)g_SndSeqTable + ((arg0 & 0xFF) << 2));
-    g_SndCurrentSeqSep = arg0;
-    index = (arg0 & 0xFF00) >> 8;
+    base = *(u_char **)((u_char *)g_SndSeqTable + ((seq_sep & 0xFF) << 2));
+    g_SndCurrentSeqSep = seq_sep;
+    index = (seq_sep & 0xFF00) >> 8;
     entry = (u_char *)((index * 0xAC) + (long)base);
 
-    *(u_short *)(entry + 0x74) = arg1;
+    *(u_short *)(entry + 0x74) = left;
     offset = *(u_short *)(entry + 0x74);
-    *(u_short *)(entry + 0x76) = arg2;
-    temp = arg0;
+    *(u_short *)(entry + 0x76) = right;
+    temp = seq_sep;
     if (offset >= 0x80) {
         *(u_short *)(entry + 0x74) = 0x7F;
     }
@@ -46,10 +46,10 @@ short arg3;
         *(u_short *)(entry + 0x76) = 0x7F;
     }
 
-    x = arg1 * 0x81;
-    y = arg2 * 0x81;
+    x = left * 0x81;
+    y = right * 0x81;
 
-    if (arg3 == 1) {
+    if (mode == 1) {
         for (i = 0; i < g_SndVoiceCount; i++) {
             offset = (i * 12 + i) * 4;
             if (*(u_short *)&g_SndVoiceStateSeqSep[offset] == (u_short)temp) {

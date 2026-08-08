@@ -5,7 +5,7 @@ extern SeqStruct *g_SndSeqTable[];
 
 void SsSeqSetChannelPitchBend(long seq, long sep, long pitch, long amount) {
     long seq_raw = seq;
-    long arg2_raw = pitch;
+    long pitchRaw = pitch;
     long seq_offset = (seq_raw << 16) >> 14;
     long sep_s = (sep << 16) >> 16;
     long offset = (((((sep_s * 2) + sep_s) * 4) - sep_s) * 4) - sep_s;
@@ -17,10 +17,10 @@ void SsSeqSetChannelPitchBend(long seq, long sep, long pitch, long amount) {
 
     if (((state->padAA >> channel) & 1) == 0 && state->left_volume != 0) {
         if ((u_char)amount != 0) {
-            SpuVmSeKeyOn((short)(seq_raw | (sep << 8)), state->unk4c, channel_state->programs[0], (u_char)arg2_raw, bend, pan);
+            SpuVmSeKeyOn((short)(seq_raw | (sep << 8)), state->unk4c, channel_state->programs[0], (u_char)pitchRaw, bend, pan);
             state->padA8 = bend;
         } else {
-            SpuVmSeKeyOff((short)(seq_raw | (sep << 8)), state->unk4c, channel_state->programs[0], (u_char)arg2_raw);
+            SpuVmSeKeyOff((short)(seq_raw | (sep << 8)), state->unk4c, channel_state->programs[0], (u_char)pitchRaw);
         }
     }
 }

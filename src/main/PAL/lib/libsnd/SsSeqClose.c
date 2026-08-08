@@ -2,7 +2,7 @@
 
 extern SeqStruct *g_SndSeqTable[];
 
-void SpuVmSetSeqVol(long seq_sep, u_short left, u_short right, long arg3);
+void SpuVmSetSeqVol(long seq_sep, u_short left, u_short right, long mode);
 
 void SsSeqClose(short seq) {
     long i;

@@ -67,7 +67,7 @@ void UpdateCarBodyRoll(void *car);
 void AccumulateLapProgress(void *car);
 void ApplyCarKnockback(void *car);
 s32 UpdateCarTrackState(void* obj, s32 trackPointIndex, void* clampPair);
-void StartCarBodyKick(s32 arg0, void *car);
+void StartCarBodyKick(s32 strength, void *car);
 void UpdateCarTiltCounter(void *car);
 void UpdateCarCrestHop(void *car);
 void UpdateCarBodyKick(void *car);
@@ -572,32 +572,32 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt);
 
 s32 DrawPlayerTachometer(void) {
     s32 value;
-    s32 arg2;
-    s32 arg3;
+    s32 type;
+    s32 amount;
 
     if (g_TrackZoneDark != 3) {
         value = g_EnvScriptClock;
-        arg3 = value - 0x1154;
-        if ((u32)arg3 < 0x434C) {
-            if ((u32)arg3 < 0x80) {
-                arg2 = 3;
+        amount = value - 0x1154;
+        if ((u32)amount < 0x434C) {
+            if ((u32)amount < 0x80) {
+                type = 3;
             } else {
-                arg3 = value - 0x5420;
-                if ((u32)arg3 < 0x80) {
-                    arg2 = 1;
+                amount = value - 0x5420;
+                if ((u32)amount < 0x80) {
+                    type = 1;
                 } else {
-                    arg2 = 0;
-                    arg3 = 0;
+                    type = 0;
+                    amount = 0;
                 }
             }
         } else {
-            arg2 = 2;
-            arg3 = 0;
+            type = 2;
+            amount = 0;
         }
     } else {
-        arg2 = 2;
-        arg3 = 0;
+        type = 2;
+        amount = 0;
     }
 
-    return DrawTachometer(g_EngineRpm + g_EngineRpmJitter, g_TachoNeedleFlash, arg2, arg3);
+    return DrawTachometer(g_EngineRpm + g_EngineRpmJitter, g_TachoNeedleFlash, type, amount);
 }

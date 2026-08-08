@@ -2,7 +2,7 @@
 
 extern u_char *g_SndSeqTable[];
 
-void SsSeqDispatchMidiEvent(long arg0, long arg1);
+void SsSeqDispatchMidiEvent(long seq, long sep);
 
 void SsSeqAdvanceChannelDelta(long seq, long channel) {
     long raw0;

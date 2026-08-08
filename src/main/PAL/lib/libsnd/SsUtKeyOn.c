@@ -2,7 +2,7 @@
 
 #include "common.h"
 
-void SpuVmSeKeyOn(long arg0, short arg1, short arg2, u_short arg3, u_short arg4, u_short arg5);
+void SpuVmSeKeyOn(long seq_sep, short vab_id, short program, u_short note, u_short bend, u_short pan);
 void SpuVmSeKeyOff(long vab_id, short program, short tone, u_short note);
 
 /* Empty two-word stub. Was misnamed SsUtKeyOnV, which is the eight
