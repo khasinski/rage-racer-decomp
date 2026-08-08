@@ -50,7 +50,12 @@ typedef struct CdRegisterMap {
 
 typedef struct StRingEventRecord {
     volatile u_short state;
-    u_char pad2[0x1E];
+    u_char pad02[6];
+    u_long frame;
+    u_char pad0C[4];
+    u_short width;
+    u_short height;
+    u_char pad14[0xC];
 } StRingEventRecord;
 
 typedef struct StRingClearRecord {

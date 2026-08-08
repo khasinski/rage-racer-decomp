@@ -72,12 +72,12 @@ void *GetFmvFrame(s32 *ctx) {
     }
 
     entry = slot[1];
-    if (*(u32 *)((char *)entry + 8) >= (u32)g_StreamSectorCount) {
+    if (entry->frame >= (u32)g_StreamSectorCount) {
         g_FmvStreamEnded = 1;
     }
-    w = *(u16 *)((char *)entry + 0x10);
-    if ((g_FmvFrameWidth != w) || (g_FmvFrameHeight != *(u16 *)((char *)entry + 0x12))) {
-        h = *(u16 *)((char *)entry + 0x12);
+    w = entry->width;
+    if ((g_FmvFrameWidth != w) || (g_FmvFrameHeight != entry->height)) {
+        h = entry->height;
         rect[0] = 0;
         rect[1] = 0;
         rect[2] = w * 3 / 2;
