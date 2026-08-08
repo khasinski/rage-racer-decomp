@@ -159,8 +159,17 @@ extern s32 g_PanVoiceVolumeL;
 extern s32 g_PanVoiceVolumeR;
 extern u8 g_SndTableArea[];
 extern s32 g_SoundCueBank;
-extern const s32 g_SoundCueParams[][6];
-extern const s32 g_SoundCueParams2[][6];
+typedef struct SoundCueParams {
+    s32 volume;
+    s32 vab;
+    s32 program;
+    s32 toneA;
+    s32 toneB;
+    s32 reserved;
+} SoundCueParams;
+
+extern const SoundCueParams g_SoundCueParams[];
+extern const SoundCueParams g_SoundCueParams2[];
 extern s32 g_SoundSlotActive5;
 extern s32 g_SoundSlotVolumeScale;
 extern s32 g_SpecialCueVoiceA;

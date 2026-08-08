@@ -289,19 +289,19 @@ s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR) {
     voiceBits = g_SpecialVoiceBits;
     tone2 = 1;
     if (g_SoundCueBank == 1) {
-        tone2 = g_SoundCueParams[cue][4];
-        vab = g_SoundCueParams[cue][1];
-        prog = g_SoundCueParams[cue][2];
-        tone = g_SoundCueParams[cue][3];
-        baseVol = g_SoundCueParams[cue][0];
+        tone2 = g_SoundCueParams[cue].toneB;
+        vab = g_SoundCueParams[cue].vab;
+        prog = g_SoundCueParams[cue].program;
+        tone = g_SoundCueParams[cue].toneA;
+        baseVol = g_SoundCueParams[cue].volume;
     } else {
         vab = 0;
         if (g_SoundCueBank == 2) {
-            tone2 = g_SoundCueParams2[cue][4];
-            vab = g_SoundCueParams2[cue][1];
-            prog = g_SoundCueParams2[cue][2];
-            tone = g_SoundCueParams2[cue][3];
-            baseVol = g_SoundCueParams2[cue][0];
+            tone2 = g_SoundCueParams2[cue].toneB;
+            vab = g_SoundCueParams2[cue].vab;
+            prog = g_SoundCueParams2[cue].program;
+            tone = g_SoundCueParams2[cue].toneA;
+            baseVol = g_SoundCueParams2[cue].volume;
         } else {
             prog = cue;
             baseVol = 0x80;
@@ -378,9 +378,9 @@ s32 StartSingleSpecialCue(s32 cue, s32 volume) {
     s32 result = -1;
     s32 *handle;
     s32 value;
-    s32 offset;
+    s32 vab;
+    s32 program;
     s32 tone;
-    s32 pitch;
     s32 scaled;
     s32 scaleValue;
     s32 current;
@@ -391,10 +391,10 @@ s32 StartSingleSpecialCue(s32 cue, s32 volume) {
     current = g_ActiveSpecialCue;
 
     if (current != cue) {
-        scaled = volume * g_SoundCueParams[cue][0];
-        offset = g_SoundCueParams[cue][1];
-        tone = g_SoundCueParams[cue][2];
-        pitch = g_SoundCueParams[cue][3];
+        scaled = volume * g_SoundCueParams[cue].volume;
+        vab = g_SoundCueParams[cue].vab;
+        program = g_SoundCueParams[cue].program;
+        tone = g_SoundCueParams[cue].toneA;
         if (scaled < 0) {
             scaled += 0x7F;
         }
@@ -407,14 +407,14 @@ s32 StartSingleSpecialCue(s32 cue, s32 volume) {
             result += 0x7F;
         }
 
-        scaleValue = g_SoundScale.values[offset];
+        scaleValue = g_SoundScale.values[vab];
+        program = (s16)program;
         tone = (s16)tone;
-        pitch = (s16)pitch;
         result = (s16)SsUtKeyOnV(
             0x13,
             scaleValue,
+            program,
             tone,
-            pitch,
             0x3C,
             0,
             (s32)((u32)result << 9) >> 16,
@@ -428,7 +428,7 @@ s32 StartSingleSpecialCue(s32 cue, s32 volume) {
 
 s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
     s32 id;
-    s32 pan;
+    s32 vab;
     s32 prog;
     s32 tone;
     s32 sx;
@@ -442,10 +442,10 @@ s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
 
     id = cue;
     sy = volumeRight;
-    baseVol = g_SoundCueParams2[id][0];
-    pan = g_SoundCueParams2[id][1];
-    prog = g_SoundCueParams2[id][2];
-    tone = g_SoundCueParams2[id][3];
+    baseVol = g_SoundCueParams2[id].volume;
+    vab = g_SoundCueParams2[id].vab;
+    prog = g_SoundCueParams2[id].program;
+    tone = g_SoundCueParams2[id].toneA;
 
     vx = baseVol * volumeLeft;
     if (vx < 0) {
@@ -470,7 +470,7 @@ s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
     if ((SpuGetKeyStatus(g_SpecialVoiceBits4) == 0) || (id == 0x3D) || (id == 0x2B)) {
         result = (s16)SsUtKeyOnV(
             0x16,
-            g_VabIds[pan],
+            g_VabIds[vab],
             (s16)prog,
             (s16)tone,
             0x3C,
@@ -481,7 +481,7 @@ s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
         nextTone = (s32)((u32)nextTone << 16) >> 16;
         result = (s16)SsUtKeyOnV(
             0x17,
-            g_VabIds[(g_SpecialCueVoiceA = result, pan)],
+            g_VabIds[(g_SpecialCueVoiceA = result, vab)],
             (s16)prog,
             nextTone,
             0x3C,
