@@ -10,9 +10,7 @@
 
 typedef struct FmvDisplayState {
     u8 pad0[0x18];
-    u16 field_18;
-    u16 field_1A;
-    u8 pad1[0xC];
+    u16 displayRects[2][4];
     s32 field_28;
     u16 field_2C;
     u16 field_2E;
@@ -122,9 +120,9 @@ void WaitFmvDecode(FmvDisplayState *state) {
                 printf((u8 *)g_MsgFmvDecodeTimeout);
                 state->field_34 = one;
                 state->field_28 = state->field_28 < 1U;
-                x = ((FmvDisplayState *)((u8 *)state + (state->field_28 << 3)))->field_18;
+                x = state->displayRects[state->field_28][0];
                 state->field_2C = x;
-                state->field_2E = ((FmvDisplayState *)((u8 *)state + (state->field_28 << 3)))->field_1A;
+                state->field_2E = state->displayRects[state->field_28][1];
             }
         } while (state->field_34 == 0);
     }
