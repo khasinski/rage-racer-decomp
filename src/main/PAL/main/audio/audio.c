@@ -165,7 +165,7 @@ s32 InitSoundRuntime(void) {
 #include "psyq/snd.h"
 
 s32 SpuVmDamperStep(void);
-void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
+void _SsVmInitWide(s32 voices) asm("_SsVmInit");
 
 s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     s16 vabId;
@@ -377,15 +377,15 @@ void ShutdownSoundSystem(void) {
 #include "common.h"
 #include "game/audio.h"
 
-void SetEffectVolumeScale(s32 arg0) {
-    if (arg0 >= 0) {
-        if (arg0 >= 0x81) {
-            arg0 = 0x80;
+void SetEffectVolumeScale(s32 scale) {
+    if (scale >= 0) {
+        if (scale >= 0x81) {
+            scale = 0x80;
         }
     } else {
-        arg0 = 0;
+        scale = 0;
     }
-    g_SoundScale.scale = arg0;
+    g_SoundScale.scale = scale;
 }
 
 void SetLoadedTableVolumeScale(s32 scale) {
@@ -1255,7 +1255,8 @@ void UpdateEffectVoiceStates(void) {
 
 s32 SpuGetKeyStatus(s32 bit);
 
-s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) {
+/* `note` is what every caller passes as the MIDI note, always 0x3C. */
+s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR) {
     const s32 *voiceBits;
     s32 busy[6];
     s32 tone2;
@@ -1356,7 +1357,7 @@ s32 StartSoundCueVoice(s32 cue, s32 arg1, s32 volL, s32 volR) {
     return result;
 }
 
-s32 SpuGetKeyStatus(s32 arg0);
+s32 SpuGetKeyStatus(s32 bit);
 
 s32 StartSingleSpecialCue(s32 cue, s32 volume) {
     s32 result = -1;
@@ -1525,18 +1526,21 @@ void PlaySoundCue(s32 cue) {
 
 void SsUtPitchBendWide(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend) asm("SsUtPitchBend");
 
-void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
+/* Sets one engine-sound slot: scales `volume` by the global effect scale,
+ * pushes it to the slot's voice, then re-pitches that voice to the tone at
+ * g_SoundSlotTone[slot][toneIndex]. */
+void SetSoundSlotTone(s32 slot, s32 bend, s32 volume, s32 toneIndex, u16 vabSlot) {
     s32 voice;
     register s32 left asm("$5");
     s32 right;
     s32 prod;
-    s32 bend;
+    s32 vab;
     s32 voiceCopy;
 
-    prod = arg2 * g_SoundScale.scale;
-    voice = arg0 + 0xE;
+    prod = volume * g_SoundScale.scale;
+    voice = slot + 0xE;
     voiceCopy = voice;
-    bend = arg4;
+    vab = vabSlot;
     left = prod;
     if (prod < 0) {
         left = prod + 0x7F;
@@ -1558,8 +1562,8 @@ void SetSoundSlotTone(s32 arg0, s32 arg1, s32 arg2, s32 arg3, u16 arg4) {
         right = 0;
     }
     SsUtSetVVol((s16)voiceCopy, left, right);
-    voice = arg0 + 0xE;
-    SsUtPitchBendWide((s16)voice, g_VabIds[(s16)bend], g_SoundSlotTone[arg0][arg3], 0x3C, arg1);
+    voice = slot + 0xE;
+    SsUtPitchBendWide((s16)voice, g_VabIds[(s16)vab], g_SoundSlotTone[slot][toneIndex], 0x3C, bend);
 }
 
 #include "common.h"
@@ -1695,7 +1699,7 @@ void SetDefaultReverbDepth(void) {
     SetReverbDepth(0x28, 0x28);
 }
 
-void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
+void _SsVmInitWide(s32 voices) asm("_SsVmInit");
 void InitSequenceAudio(void) {
     _SsVmInitWide(0);
     SsSetVoiceCount(0x12);
@@ -1767,8 +1771,8 @@ void InitEffectVoiceRuntime(void) {
     SetLoadedTableVolumeScale(g_CarSoundVolumeScales[GetOwnedCarAssetIndex(g_PlayerCarIndex)]);
 }
 
-void RestoreReverbDepth(s32 arg0) {
-    if (arg0 != 0) {
+void RestoreReverbDepth(s32 enabled) {
+    if (enabled != 0) {
         SetReverbDepth(g_ReverbDepthL, g_ReverbDepthR);
     } else {
         SetReverbDepth(0, 0);
@@ -1863,7 +1867,7 @@ void ForceBasicEffectVoicesEnabled(s32 enabled) {
     s32 scale;
     s32 left;
     s32 right;
-    register s32 arg0 asm("$4");
+    register s32 voiceArg asm("$4");
     s32 zeroArg;
 
     unused = 0;
@@ -1873,19 +1877,19 @@ void ForceBasicEffectVoicesEnabled(s32 enabled) {
     offset = 0;
     do {
         if (enabled != 0) {
-            arg0 = voicePacked >> 16;
+            voiceArg = voicePacked >> 16;
             raw = 0x3C;
             left = g_VabIds[0];
             right = *(s16 *)((u8 *)&g_MusicChannels[0].left + offset);
             zeroArg = 0;
-            SsUtKeyOnV(arg0, left, right, zeroArg, raw, 0, 0, 0);
+            SsUtKeyOnV(voiceArg, left, right, zeroArg, raw, 0, 0, 0);
             asm volatile("" : : "r"(unused));
 
             raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);
             scale = g_SoundScale.scale;
             left = raw * scale;
             raw = *(s32 *)((u8 *)&g_MusicChannels[0].volRight + offset);
-            arg0 = voice;
+            voiceArg = voice;
             if (left < 0) {
                 left += 0x7F;
             }
@@ -1912,7 +1916,7 @@ void ForceBasicEffectVoicesEnabled(s32 enabled) {
                 right = 0;
             }
 
-            SsUtSetVVol((s16)arg0, left, right);
+            SsUtSetVVol((s16)voiceArg, left, right);
         } else {
             SsUtKeyOffV(voicePacked >> 16);
         }
@@ -2005,8 +2009,8 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
     s32 scale;
     s32 left;
     register s32 right asm("$6");
-    register s32 arg0 asm("$4");
-    s32 arg3;
+    register s32 voiceArg asm("$4");
+    s32 keyTone;
 
     state = enabled;
     voicePacked = 0xA0000;
@@ -2016,18 +2020,18 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
     offset = 0;
     do {
         if (state != 0) {
-            arg0 = voicePacked >> 16;
+            voiceArg = voicePacked >> 16;
             left = g_VabIds[0];
             right = *(s16 *)toneBase;
-            arg3 = *(s16 *)((u8 *)&g_EffectVoices[0].tone + offset);
+            keyTone = *(s16 *)((u8 *)&g_EffectVoices[0].tone + offset);
             raw = 0x3C;
-            SsUtKeyOnV(arg0, left, right, arg3, raw, 0, 0, 0);
+            SsUtKeyOnV(voiceArg, left, right, keyTone, raw, 0, 0, 0);
 
             scale = *(s32 *)((u8 *)&g_EffectVoices[0].volume + offset);
             asm volatile("" : : "r"(scale));
             raw = g_SoundScale.scale;
             raw = scale * raw;
-            arg0 = voice;
+            voiceArg = voice;
             left = raw;
             if (raw < 0) {
                 left = raw + 0x7F;
@@ -2051,11 +2055,11 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
                 right = 0;
             }
 
-            SsUtSetVVol((s16)arg0, left, right);
+            SsUtSetVVol((s16)voiceArg, left, right);
 
             right = *(s16 *)toneBase;
-            arg0 = voicePacked >> 16;
-            SsUtChangePitch(arg0, 0, right, 0x3C, 0,
+            voiceArg = voicePacked >> 16;
+            SsUtChangePitch(voiceArg, 0, right, 0x3C, 0,
                             (*(s32 *)pitchBase << 9) >> 16,
                             *(u16 *)pitchBase & 0x7F);
         } else {
@@ -2083,8 +2087,8 @@ asm(".globl func_8005E078\n"
 
 void SetSoundSlotVoicesEnabledWithRegisterArg(void) asm("SetSoundSlotVoicesEnabled");
 
-void ForceSoundSlotVoicePlayback(s32 arg0) {
-    s32 saved = arg0;
+void ForceSoundSlotVoicePlayback(s32 enabled) {
+    s32 saved = enabled;
     s32 i;
     register s32 *base asm("$18");
     s32 *active;
@@ -2093,9 +2097,9 @@ void ForceSoundSlotVoicePlayback(s32 arg0) {
     s32 second;
     s32 factor;
     s32 scaled;
-    s32 call_arg0;
-    s32 call_arg1;
-    s32 call_arg3;
+    s32 callSlot;
+    s32 callBend;
+    s32 callTone;
 
     SetSoundSlotVoicesEnabledWithRegisterArg();
 
@@ -2125,11 +2129,11 @@ void ForceSoundSlotVoicePlayback(s32 arg0) {
                 if (scaled < 0) {
                     scaled += 0x7F;
                 }
-                call_arg0 = i;
-                call_arg1 = first;
+                callSlot = i;
+                callBend = first;
                 scaled >>= 7;
-                call_arg3 = base[-3];
-                SetSoundSlotTone(call_arg0, call_arg1, scaled, call_arg3, 3);
+                callTone = base[-3];
+                SetSoundSlotTone(callSlot, callBend, scaled, callTone, 3);
             }
             odd += 2;
             i++;
@@ -2149,7 +2153,7 @@ void ForceAllEffectVoicesEnabled(s32 enabled) {
 #include "common.h"
 #include "psyq/snd.h"
 
-void _SsVmInitWide(s32 arg0) asm("_SsVmInit");
+void _SsVmInitWide(s32 voices) asm("_SsVmInit");
 
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     s16 vabId;
