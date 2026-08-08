@@ -7,9 +7,9 @@ extern char g_MsgSeqNotSeqData[];
 extern char g_MsgSeqOldFormat[];
 
 
-long SsSeqParseHeader(long arg0, long arg1, long arg2) {
+long SsSeqParseHeader(long slot, long vabId, long data) {
     SeqStruct *s;
-    u_char *seq;
+    u_char *seqBytes;
     u_char *p;
     long i;
     long hi, lo, b0, b1, b2;
@@ -18,16 +18,16 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
     long ret;
     u_long D;
     register long prod asm("$6");
-    register long vab asm("$4");
-    register long slot;
+    register long vabReg asm("$4");
+    register long slotReg;
 
-    seq = (u_char *)arg2;
-    slot = arg0;
-    vab = arg0;
-    __asm__("" : "=r"(vab) : "0"(vab));
-    s = (SeqStruct *)g_SndSeqTable[(short)vab];
+    seqBytes = (u_char *)data;
+    slotReg = slot;
+    vabReg = slot;
+    __asm__("" : "=r"(vabReg) : "0"(vabReg));
+    s = (SeqStruct *)g_SndSeqTable[(short)vabReg];
 
-    s->unk4c = arg1;
+    s->unk4c = vabId;
     s->tempo_multiplier = 0;
     s->unk13 = 0;
     s->play_mode = 0;
@@ -55,11 +55,11 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
         s->vol[i] = 0x7f;
     }
     s->unk6E = 1;
-    s->read_pos = seq;
+    s->read_pos = seqBytes;
 
-    if (!(seq[0] != 'S' && seq[0] != 'p')) {
-    s->read_pos = seq + 8;
-    if (seq[7] == 1) {
+    if (!(seqBytes[0] != 'S' && seqBytes[0] != 'p')) {
+    s->read_pos = seqBytes + 8;
+    if (seqBytes[7] == 1) {
     } else {
     DebugPrintf(g_MsgSeqNotSeqData);
     return -1;
@@ -89,7 +89,7 @@ long SsSeqParseHeader(long arg0, long arg1, long arg2) {
 
     s->tempo = s->base_unk84;
     s->read_pos = s->read_pos + 2;
-    ret = SsSeqReadDeltaTime((short)slot, 0);
+    ret = SsSeqReadDeltaTime((short)slotReg, 0);
 
     s->next_sep_pos = s->read_pos;
     D = g_SndTickResolution;

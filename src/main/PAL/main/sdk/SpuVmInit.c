@@ -42,7 +42,7 @@ extern volatile u_char g_SndReservedVoiceCount;
 extern volatile u_short g_SndMonoMode;
 extern volatile u_short g_SndVabProgMax;
 
-void SpuVmInit(long arg0) {
+void SpuVmInit(long voices) {
     s16 i;
     long ff;
     long one;
@@ -74,7 +74,7 @@ void SpuVmInit(long arg0) {
     g_SndVabOpenCount = 0;
     for (i = 0; (u_short)i < 16; i++) g_SndVabStatus[(u_short)i] = 0;
 
-    n = (u8)arg0;
+    n = (u8)voices;
     if (n >= 24) {
         g_SndVoiceCount = 24;
     } else {

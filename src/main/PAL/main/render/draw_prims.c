@@ -400,13 +400,13 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
 }
 
 
-void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 arg10) {
+void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 r, u8 g, u8 b, u8 alpha) {
     LINE_F3 *prim;
     u8 *oldPrim;
 
     prim = SCRATCH_PRIM_CURSOR_AS(LINE_F3);
     SetLineF3(prim);
-    SetSemiTrans(prim, arg10 != 0xFF);
+    SetSemiTrans(prim, alpha != 0xFF);
 
     prim->x0 = x0;
     prim->y0 = y0;
@@ -422,8 +422,8 @@ void DrawPolyLine3(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2, s16 y2, u8 
     prim++;
     AddPrim(ot, oldPrim);
 
-    if (arg10 != 0xFF) {
-        prim = QueueDrawModePrim(ot, prim, arg10);
+    if (alpha != 0xFF) {
+        prim = QueueDrawModePrim(ot, prim, alpha);
     }
 
     SCRATCH_PRIM_CURSOR_AS(LINE_F3) = prim;

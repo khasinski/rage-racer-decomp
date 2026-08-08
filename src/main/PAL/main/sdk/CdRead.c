@@ -122,7 +122,7 @@ typedef struct CdReadSprite {
     volatile short h;
 } CdReadSprite;
 
-void DrawSpriteString(long x, long y, u_char *str, long arg3) {
+void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
     CdReadSprite *packet;
     long idx;
     u_char *next;
@@ -157,7 +157,7 @@ void DrawSpriteString(long x, long y, u_char *str, long arg3) {
                 w = D_8007D87C[idx];
                 packet->h = 0x18;
                 otv = g_DrawBuffer;
-                packet->clut = arg3;
+                packet->clut = clutIndex;
                 packet->w = w;
                 packet++;
                 AddPrim(otv + 0xCC, oldPacket);

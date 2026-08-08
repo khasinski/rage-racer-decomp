@@ -37,7 +37,7 @@ extern u8 *g_TrackCameras;
  * Field accesses use the FIELD(base,type,offset) raw-offset macro to stay
  * byte-exact, so params/locals are not retyped.
  */
-void UpdateCamera(s32 cameraModeSel, void *arg1) {
+void UpdateCamera(s32 cameraModeSel, void *car) {
     s16 sp10[4];
     s32 sp18[3];
     s32 sp28[3];
@@ -116,7 +116,7 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
     void *temp_v0_944;
     u32 temp_v1_1373;
 
-    cameraNodeIndex = FindNearestTrackCamera(arg1);
+    cameraNodeIndex = FindNearestTrackCamera(car);
     scratch = &SCRATCH_PRIM_CURSOR_WORD;
     temp_v1_35 = g_CameraNodeIndex;
     g_CameraNodeIndex = cameraNodeIndex;
@@ -128,8 +128,8 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
     }
     switch (var_v1_44) {
     case 0:
-        *(Block16 *)&scratch[2] = *(Block16 *)arg1;
-        *(Block16 *)&scratch[6] = *(Block16 *)((u8 *)arg1 + 0x20);
+        *(Block16 *)&scratch[2] = *(Block16 *)car;
+        *(Block16 *)&scratch[6] = *(Block16 *)((u8 *)car + 0x20);
         BuildRotMatrixY(&sp48[0], scratch[7]);
         BuildRotMatrixX(&sp68[0], scratch[6]);
         MulMatrix2(&sp68[0], &sp48[0]);
@@ -151,14 +151,14 @@ void UpdateCamera(s32 cameraModeSel, void *arg1) {
         scratch[2] += sp38[0] >> 4;
         scratch[3] += sp38[1] >> 4;
         scratch[4] += sp38[2] >> 4;
-        scratch[6] += FIELD(arg1, s16 *, 0x8C);
+        scratch[6] += FIELD(car, s16 *, 0x8C);
         g_CameraModePrev = 0;
         break;
     case 1:
-        *(Block16 *)&scratch[2] = *(Block16 *)arg1;
-        chaseYawDamping = FIELD(arg1, s32 *, 0x24);
+        *(Block16 *)&scratch[2] = *(Block16 *)car;
+        chaseYawDamping = FIELD(car, s32 *, 0x24);
         chaseTargetYaw = chaseYawDamping & 0xFFF;
-        chaseCarSpeed = FIELD(arg1, s32 *, 0xA4);
+        chaseCarSpeed = FIELD(car, s32 *, 0xA4);
         g_ChaseCarSpeed = chaseCarSpeed;
         previousMode = g_CameraModePrev;
         g_ChaseTargetYaw = chaseTargetYaw;
@@ -295,10 +295,10 @@ block_36:
         BuildRotMatrixX(&sp68[0], -0x80);
         MulMatrix2(&sp68[0], &sp88[0]);
         D_8009B1EC = g_ChaseYaw;
-        BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
+        BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrixWide(&sp48[0], &spA8[0]);
         MulMatrix2(angleState, &sp48[0]);
@@ -335,7 +335,7 @@ block_52:
         sp38[3] = temp_v0_687;
         scratch[6] = 0x400 - (Atan2(sp38[1] + 0x28, temp_v0_687) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
-        scratch[8] = FIELD(arg1, s32 *, 0x28) - FIELD(arg1, s32 *, 0x64);
+        scratch[8] = FIELD(car, s32 *, 0x28) - FIELD(car, s32 *, 0x64);
         if (g_ChaseCameraPreset == 0) {
             var_v0_713 = scratch[6] - 0x90;
         } else {
@@ -348,10 +348,10 @@ block_52:
         temp_s2_728 = cameraNodeIndex * 0x24;
         temp_v0_732 = temp_s2_728 + g_TrackCameras;
         *(Block16 *)&scratch[2] = *(Block16 *)temp_v0_732;
-        BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
+        BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrixWide(&sp48[0], &spA8[0]);
         temp_v0_764 = temp_s2_728 + g_TrackCameras;
@@ -359,19 +359,19 @@ block_52:
         sp18[1] = FIELD(temp_v0_764, s32 *, 0x14);
         sp18[2] = FIELD(temp_v0_764, s32 *, 0x18) + 0x32;
         ApplyMatrixLV(&spA8[0], &sp18[0], &sp28[0]);
-        temp_a1_781 = scratch[2] - (FIELD(arg1, s32 *, 0) + sp28[0]);
+        temp_a1_781 = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
         sp38[0] = temp_a1_781;
-        sp38[1] = scratch[3] - (FIELD(arg1, s32 *, 4) + sp28[1]);
+        sp38[1] = scratch[3] - (FIELD(car, s32 *, 4) + sp28[1]);
         temp_s2_794 = temp_s2_728 + g_TrackCameras;
-        sp38[2] = scratch[4] - (FIELD(arg1, s32 *, 8) + sp28[2]);
+        sp38[2] = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
         scratch[2] -= (temp_a1_781 * FIELD(temp_s2_794, s32 *, 0xC)) / 10000;
         scratch[3] -= (sp38[1] * FIELD(temp_s2_794, s32 *, 0xC)) / 10000;
         scratch[4] -= (sp38[2] * FIELD(temp_s2_794, s32 *, 0xC)) / 10000;
-        temp_v0_845 = scratch[2] - (FIELD(arg1, s32 *, 0) + sp28[0]);
+        temp_v0_845 = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
         squaredX = temp_v0_845 * temp_v0_845;
         sp38[0] = temp_v0_845;
-        sp38[1] = scratch[3] - (FIELD(arg1, s32 *, 4) + sp28[1]);
-        temp_v0_859 = scratch[4] - (FIELD(arg1, s32 *, 8) + sp28[2]);
+        sp38[1] = scratch[3] - (FIELD(car, s32 *, 4) + sp28[1]);
+        temp_v0_859 = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
         sp38[2] = temp_v0_859;
         squaredZ = temp_v0_859 * temp_v0_859;
         scratch[6] = 0x400 - (Atan2(0 - sp38[1], SquareRoot0(squaredX + squaredZ)) & 0xFFF);
@@ -382,7 +382,7 @@ block_52:
         g_CameraModePrev = var_v0_881;
         break;
     case 3:
-        *(Block16 *)&scratch[2] = *(Block16 *)arg1;
+        *(Block16 *)&scratch[2] = *(Block16 *)car;
         if (((u8)temp_v1_40) || (g_CameraModePrev != 3)) {
             g_CamPathNode = cameraNodeIndex;
             g_CamPathFrame = 0;
@@ -490,17 +490,17 @@ block_52:
         camPathAngle = (var_a0_1197 >> 0xD) + g_CamPathAngleStart[CAMPATH_DIST];
         sp38[3] = camPathAngle;
         g_CamPathAngle[CAMPATH_DIST] = camPathAngle;
-        temp_a1_1227 = temp_a2_1183 - FIELD(arg1, s32 *, 0x24);
+        temp_a1_1227 = temp_a2_1183 - FIELD(car, s32 *, 0x24);
         sp38[1] = temp_a1_1227;
         BuildRotMatrixY(&sp88[0], temp_a1_1227);
         BuildRotMatrixX(&sp68[0], sp38[0]);
         MulMatrix2(&sp68[0], &sp88[0]);
         BuildRotMatrixZ(&sp68[0], sp38[2]);
         MulMatrix2(&sp68[0], &sp88[0]);
-        BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
+        BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrixWide(&sp48[0], &spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
@@ -542,10 +542,10 @@ block_52:
         } else if (g_CamPathFrame < FIELD((temp_a3_1372 + (u32)g_TrackCameras), s32 *, 0x1C)) {
             g_CamPathFrame += 1;
         }
-        BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
+        BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrixWide(&sp48[0], &spA8[0]);
         sp18[0] = 0;
@@ -563,11 +563,11 @@ block_52:
         scratch[2] += (s32) (temp_v0_1452 * g_CamPathFrame) / (s32) FIELD(temp_s0_1448, s32 *, 0x1C);
         scratch[3] += (s32) (sp38[1] * g_CamPathFrame) / (s32) FIELD(temp_s0_1448, s32 *, 0x1C);
         scratch[4] += (s32) (sp38[2] * g_CamPathFrame) / (s32) FIELD(temp_s0_1448, s32 *, 0x1C);
-        temp_v0_1535 = scratch[2] - (FIELD(arg1, s32 *, 0) + sp28[0]);
+        temp_v0_1535 = scratch[2] - (FIELD(car, s32 *, 0) + sp28[0]);
         squaredX = temp_v0_1535 * temp_v0_1535;
         sp38[0] = temp_v0_1535;
-        sp38[1] = scratch[3] - (FIELD(arg1, s32 *, 4) + sp28[1]);
-        temp_v0_1549 = scratch[4] - (FIELD(arg1, s32 *, 8) + sp28[2]);
+        sp38[1] = scratch[3] - (FIELD(car, s32 *, 4) + sp28[1]);
+        temp_v0_1549 = scratch[4] - (FIELD(car, s32 *, 8) + sp28[2]);
         sp38[2] = temp_v0_1549;
         squaredZ = temp_v0_1549 * temp_v0_1549;
         scratch[6] = 0x400 - (Atan2(0 - sp38[1], SquareRoot0(squaredX + squaredZ)) & 0xFFF);
@@ -578,12 +578,12 @@ block_52:
         g_CameraModePrev = var_v0_881;
         break;
     case 5:
-        *(Block16 *)&scratch[2] = *(Block16 *)arg1;
+        *(Block16 *)&scratch[2] = *(Block16 *)car;
         BuildRotMatrixY(&sp88[0], 0 - g_OrbitCameraYaw);
-        BuildRotMatrixY(&sp48[0], FIELD(arg1, s32 *, 0x24));
-        BuildRotMatrixX(&sp68[0], FIELD(arg1, s32 *, 0x20));
+        BuildRotMatrixY(&sp48[0], FIELD(car, s32 *, 0x24));
+        BuildRotMatrixX(&sp68[0], FIELD(car, s32 *, 0x20));
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], FIELD(arg1, s32 *, 0x28));
+        BuildRotMatrixZ(&sp68[0], FIELD(car, s32 *, 0x28));
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrixWide(&sp48[0], &spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
@@ -601,7 +601,7 @@ block_52:
         ApplyMatrixLV(&sp68[0], &sp18[0], &sp38[0]);
         scratch[6] = 0x400 - (Atan2(sp38[1], g_OrbitCameraDistance) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
-        scratch[8] = FIELD(arg1, s32 *, 0x28);
+        scratch[8] = FIELD(car, s32 *, 0x28);
         g_CameraModePrev = 5;
         scratch[2] -= sp38[0];
         adjustedY = scratch[3] - 0x28;
@@ -610,9 +610,9 @@ block_52:
         break;
     }
     SetCameraRotMatrix();
-    if ((cameraModeSel > 0) && (arg1 == &g_PlayerCar)) {
+    if ((cameraModeSel > 0) && (car == &g_PlayerCar)) {
         SelectModelBank(0);
-        DrawPlayerCarModel(arg1);
+        DrawPlayerCarModel(car);
     }
 }
 

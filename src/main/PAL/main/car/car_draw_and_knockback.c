@@ -225,12 +225,12 @@ s32 rcos(s32 angle);
 
 s32 InterpolateTrackAngle(s32 arg0);
 
-void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
+void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
     GameCarRuntime *carReg;
-    s32 x;
+    s32 hitX;
     s32 angle;
     register s32 savedAngle asm("$19");
-    s32 z = arg2;
+    s32 hitZ = z;
     register s32 adjustedReg asm("$2");
     s32 raw;
     register s32 rawArg asm("$4");
@@ -243,7 +243,7 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
 
     carReg = car;
     asm("" : : "r"(carReg));
-    x = arg1;
+    hitX = x;
     carReg->motionActive = 1;
     if (mode < 2) {
 
@@ -298,13 +298,13 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     if (adjustedReg < 0) {
         adjustedReg += 0xFFF;
     }
-    x = adjustedReg >> 12;
+    hitX = adjustedReg >> 12;
     trig = rcos(savedAngle);
     adjustedReg = trig * angle;
     if (adjustedReg < 0) {
         adjustedReg += 0xFFF;
     }
-    z = adjustedReg >> 12;
+    hitZ = adjustedReg >> 12;
     tmp = 0x1E;
     } else if (mode < 4) {
     adjustedReg = *(u16 *)&carReg->field_B4;
@@ -325,27 +325,27 @@ void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode) {
     if (tmp < 0) {
         tmp += 0xFFF;
     }
-    x = tmp >> 12;
+    hitX = tmp >> 12;
     trig = rcos(angle);
     tmp = trig * 20;
     if (tmp < 0) {
         tmp += 0xFFF;
     }
-    z = tmp >> 12;
+    hitZ = tmp >> 12;
     tmp = 0xF;
     } else {
-    adjustedReg = (u32)x >> 31;
-    adjustedReg = x + adjustedReg;
-    x = adjustedReg >> 1;
-    adjustedReg = (u32)z >> 31;
-    adjustedReg = z + adjustedReg;
-    z = adjustedReg >> 1;
+    adjustedReg = (u32)hitX >> 31;
+    adjustedReg = hitX + adjustedReg;
+    hitX = adjustedReg >> 1;
+    adjustedReg = (u32)hitZ >> 31;
+    adjustedReg = hitZ + adjustedReg;
+    hitZ = adjustedReg >> 1;
     tmp = 0xF;
     }
 
     carReg->motionTimer = tmp;
-    carReg->velocityX = x;
-    carReg->velocityZ = z;
+    carReg->velocityX = hitX;
+    carReg->velocityZ = hitZ;
 }
 
 void StartCarBodyKick(s32 strength, GameCarRuntime *car) {

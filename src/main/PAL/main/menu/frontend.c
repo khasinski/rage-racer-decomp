@@ -195,7 +195,7 @@ void UpdateFrontend(void) {
  * Empty stub; SetupDisplay240 and SetupDisplay480 both call it with one argument,
  * so the parameter is declared and ignored.
  */
-void ResetFrameContext(int arg0) {
+void ResetFrameContext(int buffer) {
 }
 
 extern volatile u8 g_FrameContexts[];
@@ -273,7 +273,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
     asm(".globl func_8001C05C\nfunc_8001C05C = func_8001BE9C + 0x1C0");
 }
 
-void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
+void SetupDisplay480(s32 mode, s32 x, s32 y) {
     u8 *base = (u8 *)g_FrameContexts;
     s32 height;
     u16 *src0;
@@ -303,9 +303,9 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
         stride = 0x20000;
         g_FrameContexts[offset + 0x16] = one;
         g_FrameContexts[offset + 0x18] = one;
-        g_FrameContexts[offset + 0x19] = arg0;
-        g_FrameContexts[offset + 0x1A] = arg1;
-        g_FrameContexts[offset + 0x1B] = arg2;
+        g_FrameContexts[offset + 0x19] = mode;
+        g_FrameContexts[offset + 0x1A] = x;
+        g_FrameContexts[offset + 0x1B] = y;
         value = *src0;
         stride |= 0x37E8;
         *(volatile u16 *)(g_FrameContexts + offset + 0x64) = value;
@@ -313,9 +313,9 @@ void SetupDisplay480(s32 arg0, s32 arg1, s32 arg2) {
         i++;
         g_FrameContexts[offset + 0x86] = one;
         g_FrameContexts[offset + 0x88] = 0;
-        g_FrameContexts[offset + 0x89] = arg0;
-        g_FrameContexts[offset + 0x8A] = arg1;
-        g_FrameContexts[offset + 0x8B] = arg2;
+        g_FrameContexts[offset + 0x89] = mode;
+        g_FrameContexts[offset + 0x8A] = x;
+        g_FrameContexts[offset + 0x8B] = y;
         *(volatile u16 *)(g_FrameContexts + offset + 0x66) = value2 + 0x1D;
         offset += stride;
     } while (i < 2);

@@ -87,7 +87,7 @@ extern char D_80013548[];
 extern char D_80013554[];
 extern char D_80013568[];
 
-void CheckPrim(char *arg0, Rect *rect) {
+void CheckPrim(char *name, Rect *rect) {
     switch (g_GraphDebug) {
     case 1: {
         long w = rect->w;
@@ -125,12 +125,12 @@ void CheckPrim(char *arg0, Rect *rect) {
         }
         }
         }
-        GPU_printf(D_80013548, arg0);
+        GPU_printf(D_80013548, name);
         GPU_printf(D_80013554, rect->x, rect->y, rect->w, rect->h);
         return;
     }
     case 2:
-        GPU_printf(D_80013568, arg0);
+        GPU_printf(D_80013568, name);
         GPU_printf(D_80013554, rect->x, rect->y, rect->w, rect->h);
         return;
     }

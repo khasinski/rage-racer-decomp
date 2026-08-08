@@ -29,14 +29,14 @@ void StSetRingParams(long arg0);
  * and the CDDA/sync handler, then issues command 0x1B (read-S). Returns the
  * second command's result.
  */
-long CdRead2(long arg0) {
+long CdRead2(long mode) {
     u_char byte;
 
-    byte = arg0;
+    byte = mode;
     CdControl(0xE, &byte, 0);
 
-    if (arg0 & 0x100) {
-        if (arg0 & 0x20) {
+    if (mode & 0x100) {
+        if (mode & 0x20) {
             g_StNotStream2Mode = 0;
         } else {
             g_StNotStream2Mode = 1;

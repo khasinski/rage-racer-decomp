@@ -124,7 +124,7 @@ extern u_short g_SndKeyOnHigh;
 extern u_short g_SndKeyOffLow;
 extern u_short g_SndKeyOffHigh;
 
-void SpuVmScaleVabVolume(long arg0, long val) {
+void SpuVmScaleVabVolume(long vabId, long val) {
     u_long a1v, a2v, a3v;
     u_short vidx;
     long g, t, sixteen, center, hi;
@@ -222,7 +222,7 @@ void SpuVmScaleVabVolume(long arg0, long val) {
     g_SndKeyOffLow &= ~g_SndKeyOnLow;
     g_SndKeyOffHigh &= ~g_SndKeyOnHigh;
 
-    (void)arg0;
+    (void)vabId;
 }
 
 extern u_short g_SndDamper;

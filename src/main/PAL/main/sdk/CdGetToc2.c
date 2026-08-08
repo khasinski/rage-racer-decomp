@@ -18,11 +18,11 @@ void CdDefaultReadCallback(void);
 void DeliverEvent(u_long event, long spec);
 void CdReadCallback(void *arg0);
 
-long CdGetToc2(long arg0, u_char *arg1) {
+long CdGetToc2(long maxTracks, u_char *out) {
     u_char *fmt;
     u_char command[8];
     u_char response[8];
-    u_char *toc = arg1;
+    u_char *toc = out;
     long oldHandler;
     long firstTrack;
     register u_char *ptr asm("$17");

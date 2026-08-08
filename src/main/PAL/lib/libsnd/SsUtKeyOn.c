@@ -9,7 +9,7 @@ void SpuVmSeKeyOff(long vab_id, short program, short tone, u_short note);
  * argument function at SsUtKeyOnV in sdk/SsUtKeyOnV.c. */
 void func_80076C50(void);
 
-void func_80076B30(short vabId, short prog, u_short note, long arg3, u_short voll, u_short volr) {
+void func_80076B30(short vabId, short prog, u_short note, long fine, u_short voll, u_short volr) {
     u_short volume;
     u_short pan;
 
@@ -27,8 +27,8 @@ void func_80076B30(short vabId, short prog, u_short note, long arg3, u_short vol
     SpuVmSeKeyOn(0x21, vabId, prog, note, volume, pan);
 }
 
-void func_80076C1C(long arg0, long arg1, long arg2) {
-    SpuVmSeKeyOff(0x21, arg0, arg1, arg2);
+void func_80076C1C(long voice, long volLeft, long volRight) {
+    SpuVmSeKeyOff(0x21, voice, volLeft, volRight);
 }
 
 void func_80076C50(void) {

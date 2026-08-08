@@ -6,14 +6,14 @@
 
 void *GameQueueDrawModePrimWide(void *arg0, void *arg1, s32 arg2) asm("QueueDrawModePrim");
 
-void DrawRaceHudLabels(s32 arg0) {
+void DrawRaceHudLabels(s32 mode) {
     s32 count;
     s32 i;
     s32 offset;
     void **scratch;
 
     count = 9;
-    if (arg0 != 0) {
+    if (mode != 0) {
         count = 0xC;
     }
 
@@ -140,14 +140,14 @@ void DrawLapTimes(void) {
     DrawTimeValue(0xFA, 0x20, g_BestLapThisRace, 0x78CC, 0x3E8);
 }
 
-void DrawTimeRemaining(s32 arg0) {
+void DrawTimeRemaining(s32 time) {
     s32 arg3 = 0x78CC;
 
-    if (arg0 < 0x5DC) {
+    if (time < 0x5DC) {
         arg3 = 0x7811;
     }
 
-    DrawMinuteSecondTime(0xE, 0xD2, arg0, arg3);
+    DrawMinuteSecondTime(0xE, 0xD2, time, arg3);
 }
 
 /* The two race-position digits, from g_RacePosition; the tens digit is
@@ -187,11 +187,11 @@ void DrawRacePosition(void) {
     }
 }
 
-void SetHudBlinkColor(s32 arg0) {
-    *(u16 *)(g_DrawBuffer + 0x237A6) = arg0 ? 0x7811 : 0x7800;
+void SetHudBlinkColor(s32 phase) {
+    *(u16 *)(g_DrawBuffer + 0x237A6) = phase ? 0x7811 : 0x7800;
 }
 
-void DrawSplitDelta(s32 arg0, s32 arg1) {
+void DrawSplitDelta(s32 delta, s32 y) {
     u8 *base;
     register u8 *prim;
     s32 firstOffset;
@@ -201,7 +201,7 @@ void DrawSplitDelta(s32 arg0, s32 arg1) {
 
     firstOffset = 0x237AC;
     temp = 0x237C0;
-    value = arg0 * 8;
+    value = delta * 8;
     base = g_DrawBuffer;
     value += 0x50;
     prim = base + temp;
@@ -210,12 +210,12 @@ void DrawSplitDelta(s32 arg0, s32 arg1) {
     AddPrim(g_DrawBuffer + 0xCC, base + firstOffset);
     firstOffset = (s32)prim;
 
-    if (arg1 > 0) {
+    if (y > 0) {
         *(volatile u8 *)(base + 0x237CC) = 0x88;
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot), "r"(prim));
         temp = 0x7810;
-    } else if (arg1 < 0) {
+    } else if (y < 0) {
         *(volatile u8 *)(base + 0x237CC) = 0x78;
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot));

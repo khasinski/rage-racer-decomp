@@ -38,8 +38,8 @@ long CdSync(long mode, long result) {
     return CD_sync(mode, result);
 }
 
-long CdReady(long arg0, long arg1) {
-    return CD_ready(arg0, arg1);
+long CdReady(long mode, long result) {
+    return CD_ready(mode, result);
 }
 
 long CdSyncCallback(long callback) {

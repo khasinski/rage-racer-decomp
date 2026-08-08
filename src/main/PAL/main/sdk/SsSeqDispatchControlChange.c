@@ -4,14 +4,14 @@ extern SeqStruct *g_SndSeqTable[];
 
 void ContDataEntry(short seq, short sep, u_char value);
 
-void SsSeqDispatchControlChange(short seq, short sep, long arg2) {
+void SsSeqDispatchControlChange(short seq, short sep, long controller) {
     u_long control;
     short value;
     short channel;
     u_char *readPos;
     SeqStruct *state;
 
-    control = (u8)arg2;
+    control = (u8)controller;
     state = &g_SndSeqTable[seq][sep];
     readPos = state->read_pos;
     channel = state->channel;

@@ -10,9 +10,9 @@ extern volatile u_char g_SndVoiceRegsPitch[];
 extern short g_SndCurrentVoice;
 extern u_char *g_SndCurrentToneTable;
 
-void SpuVmPitchBendVoice(long arg0, long arg1) {
-    long voice = arg0;
-    u_char voiceByte = voice;
+void SpuVmPitchBendVoice(long voice, long bend) {
+    long voiceCopy = voice;
+    u_char voiceByte = voiceCopy;
     long dfIndex = voiceByte * 8;
     long voiceOffset;
     long x;
@@ -31,12 +31,12 @@ void SpuVmPitchBendVoice(long arg0, long arg1) {
     pBd7 = &g_SndCurrentProgActual;
     *pBd7 = g_SndVoiceStateProgActual[voiceOffset];
     g_SndCurrentTone = g_SndVoiceStateTone[voiceOffset];
-    beaVal = voice & 0xFF;
+    beaVal = voiceCopy & 0xFF;
     g_SndCurrentVoice = beaVal;
 
     sh4 = *pBd7 * 16;
     seg = (long)g_SndCurrentTone + sh4;
-    x = (short)arg1;
+    x = (short)bend;
     if (x >= 0) {
         u_char *e = g_SndCurrentToneTable;
         long prodA = x * e[(seg * 32) + 0xD];
@@ -52,7 +52,7 @@ void SpuVmPitchBendVoice(long arg0, long arg1) {
     }
 
     *(volatile short *)(g_SndVoiceRegsPitch + (dfIndex << 1)) = SpuVmCalculateTonePitch(note, pitch);
-    g_SndVoiceFlags[voice & 0xFF] |= 4;
+    g_SndVoiceFlags[voiceCopy & 0xFF] |= 4;
 }
 
 void SpuVmPitchBendNoOpA(void) {

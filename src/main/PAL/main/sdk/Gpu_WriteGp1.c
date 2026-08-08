@@ -12,13 +12,13 @@ void Gpu_StartDmaTransfer(u_long arg0);
 u_long _param(u_long index);
 extern long Gpu_AddQueue(void *callback, void *data, long size, long arg3);
 
-void Gpu_WriteGp1(u_long arg0) {
-    *g_GpuGp1 = arg0;
-    g_GpuGp1Mirror[arg0 / 16777216] = arg0;
+void Gpu_WriteGp1(u_long command) {
+    *g_GpuGp1 = command;
+    g_GpuGp1Mirror[command / 16777216] = command;
 }
 
-u_char Gpu_GetControlMirrorByte(long arg0) {
-    return g_GpuGp1Mirror[arg0];
+u_char Gpu_GetControlMirrorByte(long index) {
+    return g_GpuGp1Mirror[index];
 }
 
 long Gpu_WriteGp0Words(u_long *src, long count) {
@@ -32,18 +32,18 @@ long Gpu_WriteGp0Words(u_long *src, long count) {
     return 0;
 }
 
-void Gpu_StartDmaTransfer(u_long arg0) {
+void Gpu_StartDmaTransfer(u_long packet) {
     *g_GpuGp1 = 0x4000002;
-    *g_GpuDmaMadr = arg0;
+    *g_GpuDmaMadr = packet;
     *g_GpuDmaBcr = 0;
     *g_GpuDmaChcr = 0x1000401;
 }
 
-u_long _param(u_long arg0) {
-    *g_GpuGp1 = arg0 | 0x10000000;
+u_long _param(u_long index) {
+    *g_GpuGp1 = index | 0x10000000;
     return *g_GpuGp0 & 0xFFFFFF;
 }
 
-long _addque(void *callback, void *data, long arg2) {
-    return Gpu_AddQueue(callback, data, 0, arg2);
+long _addque(void *callback, void *data, long size) {
+    return Gpu_AddQueue(callback, data, 0, size);
 }

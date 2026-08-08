@@ -44,8 +44,8 @@ long CD_getsector2(long madr, u_long size) {
     return 0;
 }
 
-void CdSetSectorParam(long arg0) {
-    D_800992E4 = arg0;
+void CdSetSectorParam(long words) {
+    D_800992E4 = words;
 }
 
 void CdDispatchInterrupts(void) {

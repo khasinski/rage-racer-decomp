@@ -6,11 +6,11 @@
 
 extern u_char g_LibcCtype[];
 
-long LibcToLower(long arg0) {
-    u_char value = arg0;
+long LibcToLower(long ch) {
+    u_char value = ch;
 
     if (g_LibcCtype[(u8)value] & 1) {
-        value = arg0 + 0x20;
+        value = ch + 0x20;
     }
 
     return (u8)value;

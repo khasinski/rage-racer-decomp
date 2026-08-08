@@ -178,12 +178,12 @@ u8 *DrawMirrorFrame(u8 *packet) {
 
 void SubmitTerrainCells(void *arg0, s32 arg1, s32 arg2);
 
-void DrawRearViewMirror(s32 arg0) {
+void DrawRearViewMirror(s32 mode) {
     u8 **scratch;
     u8 *packet;
     u8 *prim;
 
-    if (arg0 >= 0x169) {
+    if (mode >= 0x169) {
         g_MirrorUnlocked = 1;
     }
 
