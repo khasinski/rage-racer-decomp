@@ -155,7 +155,7 @@ extern s32 g_CameraCarZ;
 extern s32 g_CourseModelCount;
 extern s16 g_EnvFogEnabled;
 extern s16 g_EnvLerpDuration;
-extern u32 *g_EnvScriptCues;
+extern GameEnvironmentCue *g_EnvScriptCues;
 extern u8 g_EnvSpare;
 extern s16 g_EnvSpareFrom;
 extern s16 g_EnvSpareLerp;

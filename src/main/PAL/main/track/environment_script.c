@@ -69,7 +69,7 @@ void SeekEnvironmentScript(s32 targetTime) {
     nextId = RAW(g_EnvScriptCursor[1].time);
     g_EnvScriptCursor = g_EnvScriptCursor + 1;
     if (nextId < 0) {
-        g_EnvScriptCursor = (GameEnvironmentCue *)g_EnvScriptCues;
+        g_EnvScriptCursor = g_EnvScriptCues;
     }
 
     cue = g_EnvScriptCursor;
@@ -90,7 +90,7 @@ void SeekEnvironmentScript(s32 targetTime) {
     nextId = RAW(g_EnvScriptCursor[1].time);
     g_EnvScriptCursor = g_EnvScriptCursor + 1;
     if (nextId < 0) {
-        g_EnvScriptCursor = (GameEnvironmentCue *)g_EnvScriptCues;
+        g_EnvScriptCursor = g_EnvScriptCues;
     }
 
     fogOut = (s16 *)((u8 *)&g_EnvColors[0].from - 6);
@@ -142,7 +142,7 @@ void UpdateEnvironment(void) {
         g_EnvScriptCursor = cur + 1;
         LoadEnvironmentCue(cur);
         if (g_EnvScriptCursor->time < 0) {
-            g_EnvScriptCursor = (GameEnvironmentCue *)g_EnvScriptCues;
+            g_EnvScriptCursor = g_EnvScriptCues;
         }
     }
 

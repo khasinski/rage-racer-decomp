@@ -616,6 +616,6 @@ void SetEnvironmentScript(u32 *script) {
     g_SkyRowBase = value0;
     value1 = *script;
     script++;
-    g_EnvScriptCues = script;
+    g_EnvScriptCues = (GameEnvironmentCue *)script;
     g_EnvScriptLength = value1;
 }
