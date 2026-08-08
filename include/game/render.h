@@ -269,45 +269,6 @@ typedef struct GameRenderSourcePoint {
     s16 field_AE;
 } GameRenderSourcePoint;
 
-typedef struct GameRenderSinglePoint {
-    u16 field_0;
-    u16 field_2;
-    u16 field_4;
-    u16 field_6;
-    u16 field_8;
-    u16 field_A;
-    u16 field_C;
-    u16 field_E;
-    s32 field_10;
-    u32 field_14;
-    u16 field_18;
-    u8 pad1A[2];
-} GameRenderSinglePoint;
-
-typedef struct GameRenderPairPoint {
-    u16 first_0;
-    u16 first_2;
-    u16 first_4;
-    u16 first_6;
-    u16 first_8;
-    u16 first_A;
-    u16 first_C;
-    u16 first_E;
-    u16 second_10;
-    u16 second_12;
-    u16 second_14;
-    u16 second_16;
-    u16 second_18;
-    u16 second_1A;
-    u16 second_1C;
-    u16 second_1E;
-    s32 field_20;
-    u32 first_24;
-    u32 second_28;
-    u16 first_2C;
-    u16 second_2E;
-} GameRenderPairPoint;
-
 /*
  * Rotation-matrix builders. Each fills only the 3x3 part of `mtx` with a
  * rotation about one axis by a 12-bit angle (0x1000 = one turn), leaving the
@@ -920,7 +881,6 @@ extern s16 g_MirrorViewEnabled;
 extern s32 g_ModelBankCount;
 extern s16 g_NegconSteer;
 extern s16 g_NegconSteerRange[];
-extern u8 *g_ReplayFramesTimeAttack;
 extern s32 g_SetupArrowPulse;
 extern s16 g_SinTable[];
 extern s32 g_StreamSectorCount;

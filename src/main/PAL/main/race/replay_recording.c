@@ -7,7 +7,7 @@
 
 void ResetReplayFrameCounts(void) {
     g_ReplayFramesGp = (ReplayGrandPrixFrame *)&g_ReplayFrameBuffer;
-    g_ReplayFramesTimeAttack = &g_ReplayFrameBuffer;
+    g_ReplayFramesTimeAttack = (ReplayTimeAttackFrame *)&g_ReplayFrameBuffer;
 }
 
 void ResetReplayWriteCursor(void) {
@@ -25,8 +25,7 @@ void ResetReplayWriteCursor(void) {
 }
 
 void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
-    GameRenderPairPoint *dst;
-    u8 *base;
+    ReplayGrandPrixFrame *dst;
     GameRenderSourcePoint *src1;
     GameRenderSourcePoint *src2;
     s32 sourceField_AE;
@@ -45,37 +44,34 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
     }
 
     pairIndex >>= 1;
-    dst = (GameRenderPairPoint *)((pairIndex * 3) << 4);
-    base = (u8 *)g_ReplayFramesGp;
+    dst = &g_ReplayFramesGp[pairIndex];
     src1 = (GameRenderSourcePoint *)srcA;
     first = src1->field_0;
-    dst = (GameRenderPairPoint *)((u8 *)dst + (s32)base);
-    dst->first_0 = first;
-    dst->first_2 = src1->field_4;
-    dst->first_4 = src1->field_8;
-    dst->first_6 = src1->field_60;
-    dst->first_8 = src1->field_20;
-    dst->first_A = src1->field_24;
-    dst->first_C = src1->field_28;
-    dst->first_E = src1->field_48;
-    dst->first_2C = src1->field_44;
-    dst->second_10 = src2->field_0;
-    dst->second_12 = src2->field_4;
-    dst->second_14 = src2->field_8;
-    dst->second_16 = src2->field_60;
-    dst->second_18 = src2->field_20;
-    dst->second_1A = src2->field_24;
-    dst->second_1C = src2->field_28;
-    dst->second_1E = src2->field_48;
-    dst->second_2E = src2->field_44;
-    dst->first_24 = src1->field_30;
-    dst->second_28 = src2->field_30;
-    dst->field_20 = src1->field_8C;
+    dst->x0 = first;
+    dst->y0 = src1->field_4;
+    dst->z0 = src1->field_8;
+    dst->z20 = src1->field_60;
+    dst->rotX0 = src1->field_20;
+    dst->rotY0 = src1->field_24;
+    dst->rotZ0 = src1->field_28;
+    dst->flags0 = src1->field_48;
+    dst->field44_0 = src1->field_44;
+    dst->x1 = src2->field_0;
+    dst->y1 = src2->field_4;
+    dst->z1 = src2->field_8;
+    dst->z21 = src2->field_60;
+    dst->rotX1 = src2->field_20;
+    dst->rotY1 = src2->field_24;
+    dst->rotZ1 = src2->field_28;
+    dst->flags1 = src2->field_48;
+    dst->field44_1 = src2->field_44;
+    dst->field30_0 = src1->field_30;
+    dst->field30_1 = src2->field_30;
+    dst->field20 = src1->field_8C;
 }
 
 void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
-    GameRenderSinglePoint *dst;
-    u8 *base;
+    ReplayTimeAttackFrame *dst;
     GameRenderSourcePoint *src;
     u32 first;
 
@@ -85,20 +81,18 @@ void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
     }
 
     pointIndex >>= 1;
-    dst = (GameRenderSinglePoint *)((pointIndex * 7) << 2);
-    base = g_ReplayFramesTimeAttack;
+    dst = &g_ReplayFramesTimeAttack[pointIndex];
     src = (GameRenderSourcePoint *)srcPtr;
     first = src->field_0;
-    dst = (GameRenderSinglePoint *)((u8 *)dst + (s32)base);
-    dst->field_0 = first;
-    dst->field_2 = src->field_4;
-    dst->field_4 = src->field_8;
-    dst->field_6 = src->field_60;
-    dst->field_8 = src->field_20;
-    dst->field_A = src->field_24;
-    dst->field_C = src->field_28;
-    dst->field_E = src->field_48;
-    dst->field_18 = src->field_44;
-    dst->field_14 = src->field_30;
-    dst->field_10 = src->field_8C;
+    dst->x = first;
+    dst->y = src->field_4;
+    dst->z = src->field_8;
+    dst->z2 = src->field_60;
+    dst->rotX = src->field_20;
+    dst->rotY = src->field_24;
+    dst->rotZ = src->field_28;
+    dst->flags = src->field_48;
+    dst->field44 = src->field_44;
+    dst->field30 = src->field_30;
+    dst->field10 = src->field_8C;
 }

@@ -11,7 +11,9 @@ typedef struct ReplayCarState {
     s32 rotX;
     s32 rotY;
     s32 rotZ;
-    u8 pad2C[0x18];
+    u8 pad2C[4];
+    s32 field30;
+    u8 pad34[0x10];
     s32 field44;
     s32 flags48;
     u8 pad4C[0x14];
@@ -39,8 +41,9 @@ typedef struct ReplayGrandPrixFrame {
     s16 rotY1;
     s16 rotZ1;
     s16 flags1;
-    u16 field20;
-    u8 pad22[0xA];
+    s32 field20;
+    s32 field30_0;
+    s32 field30_1;
     s16 field44_0;
     s16 field44_1;
 } ReplayGrandPrixFrame;
@@ -54,8 +57,8 @@ typedef struct ReplayTimeAttackFrame {
     s16 rotY;
     s16 rotZ;
     s16 flags;
-    u16 field10;
-    u8 pad12[0x6];
+    s32 field10;
+    s32 field30;
     s16 field44;
 } ReplayTimeAttackFrame;
 

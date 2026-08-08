@@ -73,7 +73,7 @@ void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *r
         playerObj->variantAE = g_ReplayPlayerModel;
         if ((subframe & 1) == 0) {
             index = subframe >> 1;
-            small = (ReplayTimeAttackFrame *)(g_ReplayFramesTimeAttack + ((index * 7) << 2));
+            small = &g_ReplayFramesTimeAttack[index];
             playerObj->x = small->x;
             playerObj->y = small->y;
             playerObj->z = small->z;
@@ -89,7 +89,7 @@ void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *r
             if (subframe == 0x505) {
                 subframe = 0;
             }
-            small = (ReplayTimeAttackFrame *)(g_ReplayFramesTimeAttack + ((subframe * 7) << 2));
+            small = &g_ReplayFramesTimeAttack[subframe];
             playerObj->x = AVG(small->x, playerObj->x);
             playerObj->y = AVG(small->y, playerObj->y);
             playerObj->z = AVG(small->z, playerObj->z);
@@ -131,8 +131,8 @@ void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj) {
             offset = next * 3;
         }
         base = (u8 *)((offset * 16) + (s32)g_ReplayFramesGp);
-        *(s32 *)(primary + 0x30) = *(s32 *)(base + 0x24);
-        *(s32 *)(secondary + 0x30) = *(s32 *)(base + 0x28);
+        ((ReplayCarState *)primary)->field30 = ((ReplayGrandPrixFrame *)base)->field30_0;
+        ((ReplayCarState *)secondary)->field30 = ((ReplayGrandPrixFrame *)base)->field30_1;
     } else {
         if ((index & 1) == 0) {
             index >>= 1;
@@ -146,7 +146,7 @@ void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj) {
             offset = next * 7;
         }
         offset = (offset * 4) + (s32)g_ReplayFramesTimeAttack;
-        *(s32 *)(primary + 0x30) = *(s32 *)(offset + 0x14);
+        ((ReplayCarState *)primary)->field30 = ((ReplayTimeAttackFrame *)offset)->field30;
     }
 }
 

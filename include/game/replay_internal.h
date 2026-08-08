@@ -12,6 +12,7 @@
 #endif
 
 extern ReplayGrandPrixFrame *g_ReplayFramesGp;
+extern ReplayTimeAttackFrame *g_ReplayFramesTimeAttack;
 extern GAME_REPLAY_COUNTER_TYPE g_ReplayWriteCursor;
 extern GAME_REPLAY_COUNTER_TYPE g_ReplayFrameCount;
 extern GAME_REPLAY_COUNTER_TYPE g_ReplayBufferWrapped;
