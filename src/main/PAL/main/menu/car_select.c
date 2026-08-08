@@ -2,7 +2,6 @@
 #include "game/asset.h"
 #include "game/audio.h"
 #include "game/car.h"
-#define GAME_CAR_MODEL_ASSET_TYPE u8
 #include "game/asset_internal.h"
 #include "game/menu.h"
 #define GAME_MENU_SCRIPT_TYPE u8
@@ -180,7 +179,7 @@ s32 DrawCarSelectScreen(s32 step) {
         xpos = 0xa6;
     }
 
-    mode = g_CarModelAsset[9];
+    mode = ((u8 *)g_CarModelAsset)[9];
     switch (mode) {
     case 4:
         DrawSprite(buf, xpos, 0x185, 8, 0x10, 0x20, 0x18, v & 0xff, v & 0xff,
@@ -476,7 +475,7 @@ void UpdateCarSelectScreen(void) {
                             if (choice == 3) {
                                 s32 unlockLevel;
 
-                                if (g_CarModelAsset[0xA] != 0) {
+                                if (((u8 *)g_CarModelAsset)[0xA] != 0) {
                                     unlockLevel =
                                         GetCarUnlockLevel(g_PlayerCarIndex);
                                     if (g_RaceProgress->maxClassReached >=
@@ -708,7 +707,7 @@ void UpdateCustomizeScreen(void) {
                         return;
                 }
                 if (sel == 1) {
-                    if (g_CarModelAsset[8] != 0) {
+                    if (((u8 *)g_CarModelAsset)[8] != 0) {
                         PlaySoundCue(2);
                         carByte = g_CarTable[g_PlayerCarIndex].transmission;
                         g_CustomizePopupScript = &g_MenuDialogPanelLowerScript;

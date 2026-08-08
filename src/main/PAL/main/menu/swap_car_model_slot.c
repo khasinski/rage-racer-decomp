@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/asset.h"
 #include "game/car.h"
-#define GAME_CAR_MODEL_ASSET_TYPE ShowroomCarModel
 #include "game/showroom_internal.h"
 #include "game/asset_internal.h"
 #include "game/menu.h"
@@ -142,7 +141,7 @@ void DrawMenuCarView(void) {
     p = &g_PlayerCar.pose.rotation.y;
     *p = *p + g_MenuViewSpin;
     BuildRotMatrixY(&mtxA, *p);
-    vec.z = (s16)(-((s16)g_CarModelAsset->height / 2));
+    vec.z = (s16)(-((s16)((ShowroomCarModel *)g_CarModelAsset)->height / 2));
     ApplyMatrixLV(&mtxA, &vec, &out);
     BuildRotMatrixY(&mtxB, 0x800 - *p);
     BuildRotMatrixX(&mtxA, g_PlayerCar.pose.rotation.x);

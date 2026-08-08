@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/car.h"
-#define GAME_CAR_MODEL_ASSET_TYPE u8
 #include "game/asset_internal.h"
 #include "game/menu.h"
 #define GAME_MENU_SCRIPT_TYPE u8
@@ -91,7 +90,7 @@ void UpdateCarShopScreen(void) {
                     }
                 }
             }
-            if (g_CarModelAsset[8] == 0) {
+            if (((u8 *)g_CarModelAsset)[8] == 0) {
                 g_MenuAltPanelStep = 1;
             } else {
                 g_MenuAltPanelStep = -1;
