@@ -76,10 +76,5 @@ extern GAME_SKY_ROW_BASE_TYPE g_SkyRowBase;
 #undef GAME_SKY_ROW_BASE_TYPE
 
 extern FlybySceneryState g_FlybyScenery;
-#ifndef GAME_ENV_PALETTE_DECL
-#define GAME_ENV_PALETTE_DECL extern u8 *g_EnvPaletteTable
-#endif
-GAME_ENV_PALETTE_DECL;
-#undef GAME_ENV_PALETTE_DECL
 
 #endif
