@@ -2,10 +2,15 @@
 """Remove #include lines a translation unit does not need.
 
 Tries each include in turn and keeps the removal only when the file still
-compiles to the same code and data. An include that is genuinely unused cannot
-change one instruction, so anything that survives this test was pulling its
-weight - usually a declaration the file really does use, occasionally one whose
-mere presence changes what gcc 2.6.3 believes may alias.
+compiles to the same code and data.
+
+CAUTION: "still compiles" is not "still correct to read". Most headers here
+include each other, so this will happily delete game/render.h from a file that
+calls DrawSprite, on the grounds that game/menu.h pulls render.h in anyway.
+That builds and matches, and leaves the file naming things it no longer
+includes. Decide which includes are candidates by checking whether the file
+uses any name the header declares, and use this only to confirm that removing
+those particular ones does not move the code.
 
 Usage: try_drop_includes.py [path...]   (default: src)
 """
