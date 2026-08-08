@@ -22,15 +22,15 @@ extern s16 g_NegconMaxTwist;
 extern s16 g_NegconSteerPlay;
 extern s32 g_ControllerSceneAngleX;
 extern s32 g_ControllerSceneAngleY;
-extern s32 g_Scratch08 asm("0x1F800008");
-extern s32 g_Scratch0C asm("0x1F80000C");
-extern void *g_Scratch0CPointer asm("0x1F80000C");
-extern volatile s32 g_Scratch10Volatile asm("0x1F800010");
-extern void *volatile g_Scratch10Pointer asm("0x1F800010");
-extern s32 g_Scratch18 asm("0x1F800018");
-extern s32 g_Scratch1C asm("0x1F80001C");
-extern s32 g_Scratch20 asm("0x1F800020");
-extern s32 g_Scratch84 asm("0x1F800084");
+extern s32 g_ScratchViewX asm("0x1F800008");
+extern s32 g_ScratchViewY asm("0x1F80000C");
+extern void *g_ScratchViewYPointer asm("0x1F80000C");
+extern volatile s32 g_ScratchViewZVolatile asm("0x1F800010");
+extern void *volatile g_ScratchViewZPointer asm("0x1F800010");
+extern s32 g_ScratchViewAngleX asm("0x1F800018");
+extern s32 g_ScratchViewAngleY asm("0x1F80001C");
+extern s32 g_ScratchViewAngleZ asm("0x1F800020");
+extern s32 g_ScratchEnvMode4 asm("0x1F800084");
 
 s32 rsin(s32 angle);
 
@@ -47,21 +47,21 @@ void DrawControllerSetupScene(s32 variant) {
     s32 model;
     u8 *scratchBase = (u8 *)SCRATCHPAD_ADDR;
 
-    g_Scratch10Volatile = 0;
-    g_Scratch10Pointer = (void *)-0x1080;
+    g_ScratchViewZVolatile = 0;
+    g_ScratchViewZPointer = (void *)-0x1080;
     position[2] = 0;
     position[1] = 0;
     position[0] = 0;
-    g_Scratch0C = 0;
-    g_Scratch08 = 0;
-    g_Scratch20 = 0;
-    g_Scratch1C = 0;
-    g_Scratch18 = 0;
-    g_Scratch0CPointer = 0;
+    g_ScratchViewY = 0;
+    g_ScratchViewX = 0;
+    g_ScratchViewAngleZ = 0;
+    g_ScratchViewAngleY = 0;
+    g_ScratchViewAngleX = 0;
+    g_ScratchViewYPointer = 0;
     if ((u32)(g_GameMode - 10) < 2) {
-        g_Scratch10Pointer = (void *)-0xC80;
+        g_ScratchViewZPointer = (void *)-0xC80;
     } else {
-        g_Scratch0CPointer = (void *)-0x40;
+        g_ScratchViewYPointer = (void *)-0x40;
     }
     SetCameraRotMatrix();
 
@@ -77,7 +77,7 @@ void DrawControllerSetupScene(s32 variant) {
         MulMatrix2(&yRot, &xRot);
         SetGteLightMatrix(&xRot);
         SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
-        g_Scratch84 = 0;
+        g_ScratchEnvMode4 = 0;
         model = g_ModelBankCount < 1;
         SubmitModel((void *)SCRATCHPAD_ADDR, model);
         return;
@@ -111,11 +111,11 @@ void DrawControllerSetupScene(s32 variant) {
     MulMatrix2(&yRot, &xRot);
     SetGteLightMatrix(&xRot);
     SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
-    g_Scratch84 = 0;
+    g_ScratchEnvMode4 = 0;
     SubmitModel((void *)SCRATCHPAD_ADDR, 1);
     if (variant != 0) {
         SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
-        g_Scratch84 = 0;
+        g_ScratchEnvMode4 = 0;
         model = 1;
         if (g_ModelBankCount >= 4) {
             model = 3;
@@ -138,7 +138,7 @@ void DrawControllerSetupScene(s32 variant) {
     MulMatrix2(&yRot, &xRot);
     SetGteLightMatrix(&xRot);
     SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
-    g_Scratch84 = 0;
+    g_ScratchEnvMode4 = 0;
     model = 1;
     if (g_ModelBankCount >= 3) {
         model = 2;
@@ -146,7 +146,7 @@ void DrawControllerSetupScene(s32 variant) {
     SubmitModel((void *)SCRATCHPAD_ADDR, model);
     if (variant != 0) {
         SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
-        g_Scratch84 = 0;
+        g_ScratchEnvMode4 = 0;
         model = 1;
         if (g_ModelBankCount >= 5) {
             model = 4;

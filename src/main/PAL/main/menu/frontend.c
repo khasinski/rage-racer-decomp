@@ -89,7 +89,7 @@ void UpdateTitleAttract(void) {
     yA0 = 0xA0;
     asm("" : "=r"(x28), "=r"(yA0) : "0"(x28), "1"(yA0)); /* Match note: materialize first-call argument registers before the stack-arg temp. */
     color = 0x7E00;
-    scratch = 0x1F800000;
+    scratch = SCRATCHPAD_ADDR;
     hF0 = 0xF0;
     asm("" : "=r"(scratch), "=r"(hF0) : "0"(scratch), "1"(hF0)); /* Match note: keep scratchpad base and 0xf0 materialized before the first stack-arg temp. */
     tmp = 0x18;

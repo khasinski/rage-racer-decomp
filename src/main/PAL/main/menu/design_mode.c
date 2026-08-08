@@ -21,7 +21,7 @@ s32 DrawDesignModeScreen(s32 step) {
     s32 row;
     s32 column;
 
-    ot = (void *)(*(u32 *)0x1F800004 + 4);
+    ot = (void *)(*(u32 *)&SCRATCH_OT_BASE + 4);
     mask = D_80011BD4;
 
     if (step == 0) {
