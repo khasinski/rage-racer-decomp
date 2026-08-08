@@ -1574,10 +1574,10 @@ u16 PollMenuBackInput(void) {
     return *state & 0x90;
 }
 
-void DrawFullscreenFadeTile(s32 level, s32 tpage) asm("DrawFullscreenFadeTile480");
+void DrawFullscreenFadeTile480(s32 level, s32 tpage);
 
 void DrawMenuFadeOverlay(s32 level) {
-    DrawFullscreenFadeTile(level, 0x40);
+    DrawFullscreenFadeTile480(level, 0x40);
 }
 
 void StartMenuExitFade(void) {
