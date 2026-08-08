@@ -60,11 +60,7 @@ extern GAME_ROUTE_SCENERY_QUALIFIER s32 g_RouteSceneryClock;
 extern GAME_ROUTE_SCENERY_QUALIFIER s16 g_RouteSceneryKeyIndex;
 extern GAME_ROUTE_SCENERY_QUALIFIER s32 g_RouteSceneryRotY;
 #undef GAME_ROUTE_SCENERY_QUALIFIER
-#ifndef GAME_ROUTE_KEYFRAME_TYPE
-#define GAME_ROUTE_KEYFRAME_TYPE void
-#endif
-extern GAME_ROUTE_KEYFRAME_TYPE *g_RouteSceneryKeyframe;
-#undef GAME_ROUTE_KEYFRAME_TYPE
+extern SceneryMotionKeyframe *g_RouteSceneryKeyframe;
 
 #ifndef GAME_ENV_SCRIPT_LENGTH_TYPE
 #define GAME_ENV_SCRIPT_LENGTH_TYPE s32

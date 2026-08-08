@@ -5,16 +5,6 @@
 #include "game/track.h"
 #include "game/race.h"
 
-typedef struct KF {
-    s16 x;
-    s16 y;
-    s16 z;
-    s16 dur;
-    s16 rot;
-    s16 pad;
-} KF;
-
-#define GAME_ROUTE_KEYFRAME_TYPE KF
 #include "game/track_internal.h"
 
 void UpdateRouteScenery(void) {
@@ -25,7 +15,7 @@ void UpdateRouteScenery(void) {
     volatile s32 pad[6];
     volatile s32 *cnt;
     u8 *base;
-    register KF *kp asm("$5");
+    register SceneryMotionKeyframe *kp asm("$5");
     register s32 i asm("$4");
     s32 counter;
     s32 c;
@@ -44,10 +34,10 @@ void UpdateRouteScenery(void) {
     kp = g_RouteSceneryKeyframe;
     counter = counter + 1;
     {
-        KF *rec0 = (KF *)(i * 12 + (s32)kp);
+        SceneryMotionKeyframe *rec0 = (SceneryMotionKeyframe *)(i * 12 + (s32)kp);
 
         g_RouteSceneryFrame = counter;
-        if (RAW(rec0->dur) == counter) {
+        if (RAW(rec0->duration) == counter) {
             c = i + 1;
             g_RouteSceneryKeyIndex = c;
             g_RouteSceneryFrame = 0;
@@ -55,10 +45,10 @@ void UpdateRouteScenery(void) {
     }
 
     i = g_RouteSceneryKeyIndex;
-    if ((kp + i)->dur == -1) {
+    if ((kp + i)->duration == -1) {
         s32 idx;
         u8 *src;
-        KF *r3;
+        SceneryMotionKeyframe *r3;
         s32 off;
         s32 n;
         s32 value;
@@ -67,7 +57,7 @@ void UpdateRouteScenery(void) {
         g_RouteSceneryKeyIndex = 0;
         n = *(s16 *)((u8 *)((idx * 4) + (u8 *)base) + 8);
         off = n * 12 + 0x50;
-        r3 = (KF *)((s32)base + off);
+        r3 = (SceneryMotionKeyframe *)((s32)base + off);
         value = *(s16 *)((u8 *)r3 + 0);
         g_RouteSceneryRotX = value;
         value = *(s16 *)((u8 *)r3 + 2);
@@ -82,7 +72,7 @@ void UpdateRouteScenery(void) {
     }
 
     {
-        KF *rec;
+        SceneryMotionKeyframe *rec;
         s32 t;
         Matrix *m0;
         s32 t0v;
@@ -91,16 +81,20 @@ void UpdateRouteScenery(void) {
          * store from sinking past the next term's loads -- see common.h. */
         rec = g_RouteSceneryKeyframe + (s32)g_RouteSceneryKeyIndex;
         t = g_RouteSceneryFrame;
-        t0v = rec->dur - t;
-        g_RouteSceneryRotX = (rec[1].x * t + rec->x * t0v) / rec->dur;
-        r4354 = (RAW(rec[1].y) * t + RAW(rec->y) * t0v) / RAW(rec->dur);
+        t0v = rec->duration - t;
+        g_RouteSceneryRotX =
+            (rec[1].rotationX * t + rec->rotationX * t0v) / rec->duration;
+        r4354 = (RAW(rec[1].rotationY) * t + RAW(rec->rotationY) * t0v) /
+                RAW(rec->duration);
         g_RouteSceneryRotY = r4354;
-        g_RouteSceneryRotZ = (RAW(rec[1].z) * t + RAW(rec->z) * t0v) / RAW(rec->dur);
+        g_RouteSceneryRotZ =
+            (RAW(rec[1].rotationZ) * t + RAW(rec->rotationZ) * t0v) /
+            RAW(rec->duration);
         vin.vx = 0;
         vin.vy = 0;
         m0 = &mtx0;
         __asm__("" : "=r"(m0) : "0"(m0));
-        vin.vz = -RAW(rec->rot) * 4;
+        vin.vz = -RAW(rec->speed) * 4;
         BuildRotMatrixY(m0, 0x800 - r4354);
     }
 

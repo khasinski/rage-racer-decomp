@@ -252,7 +252,7 @@ void SeedFlybyScenery(void) {
     index = recordIndex * 3;
     index <<= 2;
     index += 0x50;
-    g_FlybySceneryKeyframe = (FlybySceneryKeyframe *)(base + index);
+    g_FlybySceneryKeyframe = (SceneryMotionKeyframe *)(base + index);
 }
 
 /*
@@ -273,7 +273,7 @@ void UpdateFlybyScenery(void) {
     s32 series;
     s32 index;
     s32 recordIndex;
-    FlybySceneryKeyframe *kf;
+    SceneryMotionKeyframe *kf;
     Matrix *mx;
     s32 dt;
     s32 cue;
@@ -304,7 +304,7 @@ void UpdateFlybyScenery(void) {
             index = recordIndex * 3;
             index <<= 2;
             index += 0x50;
-            g_FlybySceneryKeyframe = (FlybySceneryKeyframe *)(base + index);
+            g_FlybySceneryKeyframe = (SceneryMotionKeyframe *)(base + index);
         }
     }
 

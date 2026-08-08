@@ -240,14 +240,14 @@ extern u8 g_EnvColor8G;
 extern u8 g_EnvColor8R;
 extern s16 g_EnvLerpFrame;
 extern u8 g_EnvScriptEnabled;
-typedef struct FlybySceneryKeyframe {
+typedef struct SceneryMotionKeyframe {
     s16 rotationX;
     s16 rotationY;
     s16 rotationZ;
     s16 duration;
     s16 speed;
     s16 reserved;
-} FlybySceneryKeyframe;
+} SceneryMotionKeyframe;
 
 typedef struct FlybySceneryState {
     s32 timer;
@@ -263,7 +263,7 @@ typedef struct FlybySceneryState {
     s32 volume;
 } FlybySceneryState;
 
-extern FlybySceneryKeyframe *g_FlybySceneryKeyframe;
+extern SceneryMotionKeyframe *g_FlybySceneryKeyframe;
 extern s32 g_FogNear;
 extern s16 g_FreeCameraAngleOffset[];
 extern s32 g_HighClassSceneryYaw;

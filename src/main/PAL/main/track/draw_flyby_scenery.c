@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/render.h"
 #define GAME_ROUTE_SCENERY_QUALIFIER volatile
-#define GAME_ROUTE_KEYFRAME_TYPE u8
 #include "game/track_internal.h"
 #define GAME_RACE_SERIES_QUALIFIER volatile
 #include "game/race.h"
@@ -61,6 +60,6 @@ void SeedRouteScenery(void) {
     g_RouteSceneryRotX = *(s16 *)(base + 0);
     g_RouteSceneryRotY = *(s16 *)(base + 2);
     value = *(s16 *)(base + 4);
-    g_RouteSceneryKeyframe = base;
+    g_RouteSceneryKeyframe = (SceneryMotionKeyframe *)base;
     g_RouteSceneryRotZ = value;
 }
