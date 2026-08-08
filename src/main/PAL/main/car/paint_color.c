@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/car.h"
+#include "game/asset.h"
 #include "game/asset_internal.h"
 
 /*
@@ -158,7 +159,7 @@ void ApplyBodyColor1(u32 colour, u32 imageData) {
 
 
 void SetBodyColor1(u32 colour) {
-    ApplyBodyColor1(colour, *(u32 *)((u8 *)g_CarModelAsset + 0x24));
+    ApplyBodyColor1(colour, ((GameCarModelAsset *)g_CarModelAsset)->imageDataOffset);
     UploadCarImage(g_CarModelSlot);
 }
 
@@ -213,6 +214,6 @@ void ApplyBodyColor2(u32 colour, u32 imageData) {
 
 
 void SetBodyColor2(u32 colour) {
-    ApplyBodyColor2(colour, *(u32 *)((u8 *)g_CarModelAsset + 0x24));
+    ApplyBodyColor2(colour, ((GameCarModelAsset *)g_CarModelAsset)->imageDataOffset);
     UploadCarImage(g_CarModelSlot);
 }
