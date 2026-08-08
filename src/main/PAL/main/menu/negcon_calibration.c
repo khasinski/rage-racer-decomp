@@ -14,28 +14,6 @@ extern s16 g_NegconSteerPlay;
 void DrawSpriteString(s32 x, s32 y, char *str, s32 clutIndex);
 
 /* Local wide-parameter views; see GameQueueSprite.c / SetGteLightMatrix.c. */
-u8 *DrawLeftArrowWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 pulse) asm("DrawLeftArrow");
-u8 *DrawRightArrowWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 pulse) asm("DrawRightArrow");
-u8 *QueueLineWide(
-    void *ot,
-    u8 *prim,
-    s32 x0,
-    s32 y0,
-    s32 x1,
-    s32 y1,
-    s32 r,
-    s32 g,
-    s32 b) asm("GameQueueLine");
 s32 AddTilePrim(
     s32 ot,
     s32 prim,
@@ -64,8 +42,8 @@ void DrawNegconSteerPlayScreen(void) {
     DrawSpriteString(0x18, 0x30, D_80010078, 0x7F81);
     ot = g_DrawBuffer + 0xCC;
     prim = SCRATCH_PRIM_CURSOR_AS(u8);
-    prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, g_NegconSteerPlay != 0);
-    prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, g_NegconSteerPlay != 3);
+    prim = DrawLeftArrow(ot, prim, 0x28, 0xE0, g_NegconSteerPlay != 0);
+    prim = DrawRightArrow(ot, prim, 0x108, 0xE0, g_NegconSteerPlay != 3);
     prim = GameQueueSpriteTrans(
         ot, prim, 0x70, 0x30, 0xC, 0x18, 0x8C, 0x18, 0x7F81);
     prim = GameQueueSpriteTrans(
@@ -79,15 +57,15 @@ void DrawNegconSteerPlayScreen(void) {
         (s32)ot, (s32)prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
     span = ((g_NegconPlayPercent[g_NegconSteerPlay] << 7) / 100) * 2;
     y = 230 - span;
-    prim = QueueLineWide(ot, prim, 0x94, y, 0xA8, y, 0x20, 0x40, 0xFF);
-    prim = QueueLineWide(ot, prim, 0x94, y + 1, 0xA8, y + 1, 0x20, 0x40, 0xFF);
-    prim = QueueLineWide(
+    prim = GameQueueLine(ot, prim, 0x94, y, 0xA8, y, 0x20, 0x40, 0xFF);
+    prim = GameQueueLine(ot, prim, 0x94, y + 1, 0xA8, y + 1, 0x20, 0x40, 0xFF);
+    prim = GameQueueLine(
         ot, prim, 0x94, span + 230, 0xA8, span + 230, 0x20, 0x40, 0xFF);
     span = span + 231;
-    prim = QueueLineWide(ot, prim, 0x94, span, 0xA8, span, 0x20, 0x40, 0xFF);
-    prim = QueueLineWide(ot, prim, 0x94, 0xE6, 0xA8, 0xE6, 0, 0, 0);
+    prim = GameQueueLine(ot, prim, 0x94, span, 0xA8, span, 0x20, 0x40, 0xFF);
+    prim = GameQueueLine(ot, prim, 0x94, 0xE6, 0xA8, 0xE6, 0, 0, 0);
     SCRATCH_PRIM_CURSOR_AS(u8) =
-        QueueLineWide(ot, prim, 0x94, 0xE7, 0xA8, 0xE7, 0, 0, 0);
+        GameQueueLine(ot, prim, 0x94, 0xE7, 0xA8, 0xE7, 0, 0, 0);
 }
 
 extern u8 g_PadType;
@@ -154,8 +132,8 @@ void DrawNegconMaxTwistScreen(void) {
     DrawSpriteString(0x18, 0x30, D_8001008C, 0x7F81);
     ot = g_DrawBuffer + 0xCC;
     prim = SCRATCH_PRIM_CURSOR_AS(u8);
-    prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, g_NegconMaxTwist != 0);
-    prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, g_NegconMaxTwist != 3);
+    prim = DrawLeftArrow(ot, prim, 0x28, 0xE0, g_NegconMaxTwist != 0);
+    prim = DrawRightArrow(ot, prim, 0x108, 0xE0, g_NegconMaxTwist != 3);
     if (g_NegconMaxTwist == 3) {
         xoff = 0;
         w = 0x24;

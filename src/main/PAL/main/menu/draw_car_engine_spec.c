@@ -9,8 +9,6 @@ void DrawEngineSpecLabel(s32 x, s32 y, s32 label) {
 
 extern CarEngineSpec *g_CarModelAsset;
 
-void drawSmallText(s32 x, s32 y, u8 *str, s32 r, s32 g, s32 b, s32 clut,
-                   s32 flags) asm("DrawSmallText");
 
 void DrawCarEngineSpec(s32 slideRaw, s32 brightness) {
     void *ot;
@@ -32,7 +30,7 @@ void DrawCarEngineSpec(s32 slideRaw, s32 brightness) {
     DrawSprite(ot, 0xB2, 0xCC - slide, 0x1C, 0xC, 0x10, 0xF4, (u8)brightness, (u8)brightness,
                (u8)brightness, 0x244, 0, 1, 0x3A);
     n = sprintf(buf, g_FormatDecimal, g_CarModelAsset->maxPower);
-    drawSmallText(0xD2, 0xCB - slide, buf, (u8)brightness, (u8)brightness, (u8)brightness, 0x244,
+    DrawSmallText(0xD2, 0xCB - slide, buf, (u8)brightness, (u8)brightness, (u8)brightness, 0x244,
                   0x20);
     p = n * 6;
     DrawSprite(ot, p + 0xD4, 0xCC - slide, 8, 0xC, 0x70, 0xF4, (u8)brightness, (u8)brightness,
@@ -41,7 +39,7 @@ void DrawCarEngineSpec(s32 slideRaw, s32 brightness) {
                (u8)brightness, 0x244, 0, 1, 0x3B);
     q = p + 0xE6;
     n = sprintf(buf, g_FormatDecimal, g_CarModelAsset->maxPowerRpm);
-    drawSmallText(q, 0xCB - slide, buf, (u8)brightness, (u8)brightness, (u8)brightness, 0x244,
+    DrawSmallText(q, 0xCB - slide, buf, (u8)brightness, (u8)brightness, (u8)brightness, 0x244,
                   0x20);
     torqueEnd = p + 0xE8;
     DrawSprite(ot, torqueEnd + (n * 6), 0xCC - slide, 0x10, 0xC, 0x78, 0xF4, (u8)brightness,
@@ -52,14 +50,14 @@ void DrawCarEngineSpec(s32 slideRaw, s32 brightness) {
     DrawSprite(ot, 0xB2, 0xDA - slide, 0x20, 0xC, 0x2C, 0xF4, (u8)brightness, (u8)brightness,
                (u8)brightness, 0x244, 0, 1, 0x3A);
     n = sprintf(buf, g_FormatDecimal, g_CarModelAsset->maxTorqueWhole);
-    drawSmallText(0xD2, 0xD9 - slide, buf, (u8)brightness, (u8)brightness, (u8)brightness, 0x244,
+    DrawSmallText(0xD2, 0xD9 - slide, buf, (u8)brightness, (u8)brightness, (u8)brightness, 0x244,
                   0x20);
     p = n * 6;
     DrawSprite(ot, p + 0xD3, 0xDA - slide, 3, 0xC, 0xE0, 0, (u8)brightness, (u8)brightness,
                (u8)brightness, 0x244, 0, 1, 0x3B);
     q = p + 0xD5;
     n = sprintf(buf, g_FormatDecimal, g_CarModelAsset->maxTorqueFraction);
-    drawSmallText(q, 0xD9 - slide, buf, (u8)brightness, (u8)brightness, (u8)brightness, 0x244,
+    DrawSmallText(q, 0xD9 - slide, buf, (u8)brightness, (u8)brightness, (u8)brightness, 0x244,
                   0x20);
     p += 0xD7;
     /* Written as an operand swap: the target keeps the string length in
@@ -73,7 +71,7 @@ void DrawCarEngineSpec(s32 slideRaw, s32 brightness) {
                (u8)brightness, 0x244, 0, 1, 0x3B);
     q += 0x18;
     n = sprintf(buf, g_FormatDecimal, g_CarModelAsset->maxTorqueRpm);
-    drawSmallText(q, 0xD9 - slide, buf, (u8)brightness, (u8)brightness, (u8)brightness, 0x244,
+    DrawSmallText(q, 0xD9 - slide, buf, (u8)brightness, (u8)brightness, (u8)brightness, 0x244,
                   0x20);
     r = q + 2;
     DrawSprite(ot, r + (n * 6), 0xDA - slide, 0x10, 0xC, 0x78, 0xF4, (u8)brightness,

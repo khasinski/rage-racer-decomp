@@ -165,7 +165,6 @@ s32 InitSoundRuntime(void) {
 #include "psyq/snd.h"
 
 s32 SpuVmDamperStep(void);
-void _SsVmInitWide(s32 voices) asm("_SsVmInit");
 
 s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table) {
     s16 vabId;
@@ -247,7 +246,7 @@ s32 CloseVabOnlyAudioSlot(s32 slot) {
     } else {
     *flagsPtr = bit ^ flags;
     SsUtSetReverbDepth(zeroArg, 0);
-    _SsVmInitWide(0);
+    _SsVmInit(0);
     /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
        (rather than naming the symbol) is what the retail code does. */
     ids = (s16 *)((u8 *)flagsPtr + 0xC);
@@ -1523,7 +1522,6 @@ void PlaySoundCue(s32 cue) {
     }
 }
 
-void SsUtPitchBendWide(s32 voice, s32 vab_id, s32 program, s32 tone, s16 bend) asm("SsUtPitchBend");
 
 /* Sets one engine-sound slot: scales `volume` by the global effect scale,
  * pushes it to the slot's voice, then re-pitches that voice to the tone at
@@ -1562,7 +1560,7 @@ void SetSoundSlotTone(s32 slot, s32 bend, s32 volume, s32 toneIndex, u16 vabSlot
     }
     SsUtSetVVol((s16)voiceCopy, left, right);
     voice = slot + 0xE;
-    SsUtPitchBendWide((s16)voice, g_VabIds[(s16)vab], g_SoundSlotTone[slot][toneIndex], 0x3C, bend);
+    SsUtPitchBend((s16)voice, g_VabIds[(s16)vab], g_SoundSlotTone[slot][toneIndex], 0x3C, (s16)bend);
 }
 
 #include "common.h"
@@ -1698,9 +1696,8 @@ void SetDefaultReverbDepth(void) {
     SetReverbDepth(0x28, 0x28);
 }
 
-void _SsVmInitWide(s32 voices) asm("_SsVmInit");
 void InitSequenceAudio(void) {
-    _SsVmInitWide(0);
+    _SsVmInit(0);
     SsSetVoiceCount(0x12);
     SetReverbDepth(0x28, 0x28);
     g_ReverbFadeStep = 0;
@@ -1708,7 +1705,7 @@ void InitSequenceAudio(void) {
 }
 
 void InitEffectVoiceRuntime(void) {
-    _SsVmInitWide(0);
+    _SsVmInit(0);
     SsSetVoiceCount(8);
 
     {
@@ -2084,8 +2081,6 @@ asm(".globl func_8005E078\n"
     ".globl func_8005E314\n"
     "func_8005E314 = ForcePitchEffectVoicesEnabled + 0x144");
 
-void SetSoundSlotVoicesEnabledWithRegisterArg(void) asm("SetSoundSlotVoicesEnabled");
-
 void ForceSoundSlotVoicePlayback(s32 enabled) {
     s32 saved = enabled;
     s32 i;
@@ -2100,7 +2095,7 @@ void ForceSoundSlotVoicePlayback(s32 enabled) {
     s32 callBend;
     s32 callTone;
 
-    SetSoundSlotVoicesEnabledWithRegisterArg();
+    SetSoundSlotVoicesEnabled(enabled);
 
     i = 0;
     if (saved != 0) {
@@ -2152,7 +2147,6 @@ void ForceAllEffectVoicesEnabled(s32 enabled) {
 #include "common.h"
 #include "psyq/snd.h"
 
-void _SsVmInitWide(s32 voices) asm("_SsVmInit");
 
 s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     s16 vabId;
@@ -2198,7 +2192,7 @@ s32 CloseAudioSlot(s32 slot) {
     } else {
         *flagsPtr = bit ^ flags;
         SsUtSetReverbDepth(0, 0);
-        _SsVmInitWide(0);
+        _SsVmInit(0);
         SsSeqCloseWrapper(g_SeqHandle);
         /* g_VabIds sits 0xC bytes past the slot mask; deriving it from flagsPtr
            (rather than naming the symbol) is what the retail code does. */

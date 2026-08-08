@@ -5,7 +5,6 @@
 #include "game/vector.h"
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
-void DrawFlatTriangleSigned(void* ot, s16 x0, s16 y0, s16 x1, u16 y1, s16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("DrawFlatTriangle");
 s32 rsin(s32 angle);
 
 /* The five-position tire-compound slider of the CUSTOMIZE screen. */
@@ -71,7 +70,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
         DrawLine(ot, (s16)((u8)x - 3), 0x60, (s16)((u8)x - 3), 0x68, zero, green, zero, 0xFF);
         DrawLine(ot, (s16)((u8)x - 5), 0x60, (s16)((u8)x - 5), 0x68, zero, green, zero, 0xFF);
         DrawLine(ot, (s16)((u8)x - 7), 0x60, (s16)((u8)x - 7), 0x68, zero, green, zero, 0xFF);
-        DrawFlatTriangleSigned(ot, (s16)((u8)x - 13), 0x64, (s16)((u8)x - 8), 0x5E, (s16)((u8)x - 8), 0x6A,
+        DrawFlatTriangle(ot, (s16)((u8)x - 13), 0x64, (s16)((u8)x - 8), 0x5E, (s16)((u8)x - 8), 0x6A,
                       zero, green, zero, zero, 0x80);
     }
 
@@ -82,7 +81,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
         DrawLine(ot, (s16)((u8)x + 3), 0x6A, (s16)((u8)x + 3), 0x72, zero, green, zero, 0xFF);
         DrawLine(ot, (s16)((u8)x + 5), 0x6A, (s16)((u8)x + 5), 0x72, zero, green, zero, 0xFF);
         DrawLine(ot, (s16)((u8)x + 7), 0x6A, (s16)((u8)x + 7), 0x72, zero, green, zero, 0xFF);
-        DrawFlatTriangleSigned(ot, (s16)((u8)x + 14), 0x6E, (s16)((u8)x + 9), 0x69, (s16)((u8)x + 9), 0x73,
+        DrawFlatTriangle(ot, (s16)((u8)x + 14), 0x6E, (s16)((u8)x + 9), 0x69, (s16)((u8)x + 9), 0x73,
                       zero, green, zero, zero, 0x80);
     }
 
@@ -93,7 +92,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     DrawLine(ot, 0xD7, 0x4A, 0xD7, yLarge, gray, gray, gray, ySmall);
     DrawLine(ot, 0xE7, 0x4A, 0xE7, yLarge, gray, gray, gray, ySmall);
 
-    DrawFlatTriangleSigned(ot, 0xB9, 0x87, 0xF7, 0x48, 0xF7, 0x87, 0x1E, 0x8E, 0x95, zero, 0x80);
+    DrawFlatTriangle(ot, 0xB9, 0x87, 0xF7, 0x48, 0xF7, 0x87, 0x1E, 0x8E, 0x95, zero, 0x80);
     DrawSolidRect(ot, 0xB8, 0x48, 0x40, 0x40, 0x95, 0x25, 0x1E, 0xFF);
 
     D_8009B268 += 0x60;
@@ -188,16 +187,6 @@ const CarSpecGraphColors g_CarSpecGraphColors = {{
     {0x2C, 0x12, 0x83, 0},
 }};
 extern u8 *g_CarModelAsset;
-
-void DrawCarSpecQuad(void *ot, s16 x0, s32 y0, s16 x1, s16 y1, s16 x2,
-                     s16 y2, s16 x3, s16 y3, u8 r, u8 g, u8 b,
-                     s32 semiTrans, u32 flags) asm("DrawFlatQuad");
-void DrawCarSpecQuadSigned(void *ot, s16 x0, s16 y0, s16 x1, s16 y1, s16 x2,
-                           s16 y2, s16 x3, s16 y3, u8 r, u8 g, u8 b,
-                           s32 semiTrans, u32 flags) asm("DrawFlatQuad");
-void DrawCarSpecPolyLine(void *ot, s32 x0, s16 y0, s16 x1, s16 y1, s32 x2,
-                         s16 y2, s32 r, s32 g, s32 b,
-                         s32 alpha) asm("DrawPolyLine3");
 
 /* The four animated performance bars on the CUSTOMIZE car panel. */
 void DrawCarSpecGraph(s32 step, u32 tireGrade) {
@@ -384,11 +373,11 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
         do {
             lineNearX = 0x52;
             lineX = 0x13E - lineStep;
-            DrawCarSpecPolyLine(ot, lineNearX, (s16)lineX, 0x61, (s16)lineX,
+            DrawPolyLine3(ot, lineNearX, (s16)lineX, 0x61, (s16)lineX,
                                 loopLineFarX, (s16)(lineX + 0x38),
                                 loopLineColor, loopLineColor, loopLineColor,
                                 loopLineAlpha);
-            DrawCarSpecPolyLine(ot, 0x52, (s16)(lineX + 1), 0x61,
+            DrawPolyLine3(ot, 0x52, (s16)(lineX + 1), 0x61,
                                 (s16)(lineX + 1), loopLineFarX,
                                 (s16)(lineX + 0x39),
                                 loopLineColor, loopLineColor, loopLineColor,
@@ -402,10 +391,10 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
     lineAlpha = 0xFF;
     lineNearX = 0x52;
     lineX = 0x13E - floorProgress;
-    DrawCarSpecPolyLine(ot, lineNearX, (s16)lineX, 0x61, (s16)lineX,
+    DrawPolyLine3(ot, lineNearX, (s16)lineX, 0x61, (s16)lineX,
                         lineFarX, (s16)(lineX + 0x38),
                         lineColor, lineColor, lineColor, lineAlpha);
-    DrawCarSpecPolyLine(ot, 0x52, (s16)(lineX + 1), 0x61,
+    DrawPolyLine3(ot, 0x52, (s16)(lineX + 1), 0x61,
                         (s16)(lineX + 1), lineFarX,
                         (s16)(lineX + 0x39),
                         lineColor, lineColor, lineColor, lineAlpha);
@@ -481,17 +470,17 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
             }
             darkB = darkBValue;
 
-            DrawCarSpecQuad(ot, (s16)baseX, baseYHalf = (s16)baseY,
+            DrawFlatQuad(ot, (s16)baseX, baseYHalf = (s16)baseY,
                             (s16)baseX, (s16)topY,
                             (s16)rightX, (s16)backY,
                             (s16)rightX, (s16)topRightY,
                             color->r, color->g, color->b, 0, 0xFF);
-            DrawCarSpecQuadSigned(ot, (s16)baseX, (s16)topY,
+            DrawFlatQuad(ot, (s16)baseX, (s16)topY,
                                   (s16)rightX, (s16)topRightY,
                                   (s16)leftX, (s16)topLeftY,
                                   (s16)farX, (s16)topFarY,
                                   lightR, lightG, lightB, 0, 0xFF);
-            DrawCarSpecQuadSigned(ot, (s16)rightX, (s16)backY,
+            DrawFlatQuad(ot, (s16)rightX, (s16)backY,
                                   (s16)rightX, (s16)topRightY,
                                   (s16)farX, (s16)farY,
                                   (s16)farX, (s16)topFarY,
@@ -504,7 +493,7 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
             quarterHeight = shadowHeight / 4;
             shadowX = baseX - quarterHeight;
             shadowY = quarterHeight + baseY;
-            DrawCarSpecQuad(ot, (s16)baseX, baseYHalf,
+            DrawFlatQuad(ot, (s16)baseX, baseYHalf,
                             (s16)shadowX, (s16)shadowY,
                             (s16)rightX, (s16)backY,
                             (s16)(shadowX + 8), (s16)(shadowY + 8),

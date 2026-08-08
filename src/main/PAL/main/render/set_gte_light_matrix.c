@@ -166,8 +166,6 @@ s32 AddTilePrim(
     s32 r,
     s32 g,
     s32 b);
-u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse);
-
 /* The 16x32 left arrow, plus - while `pulse` is set - a tile over it whose
  * green channel breathes with rsin of the shared arrow angle. */
 u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
@@ -181,8 +179,6 @@ u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     }
     return prim;
 }
-
-u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse);
 
 /* The 16x32 right arrow, plus - while `pulse` is set - a tile over it whose
  * green channel breathes with rsin of the shared arrow angle. */
@@ -198,46 +194,19 @@ u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     return prim;
 }
 
-/* game/state.h is deliberately not included: it types `selection` as s32,
- * which would drop the sign-extension retail performs. */
-
-/*
- * Retail calls GameQueueShadedSprite with only nine arguments, leaving its
- * tenth (intensity) whatever happened to be in the argument slot. Declared
- * here with the nine it actually passes so the call site matches.
- */
-u8 *QueueShadedSpriteNine(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex) asm("GameQueueShadedSprite");
-
-/* Local declaration: `selection` is a short here - retail loads the argument
- * slot as a word and sign-extends it into the texel offset. */
-u8 *DrawPadConfigSelector(
-    void *ot,
-    u8 *prim,
-    s16 x,
-    s16 y,
-    s16 selection);
-
 /*
  * The framed "CONFIG n" panel at (x, y): the caption strip, then the three
  * digit cells (the middle one steps 8 texels per configuration), then the
  * white frame drawn as four nested tiles.
  */
-u8 *DrawPadConfigSelector(
-    void *ot,
-    u8 *prim,
-    s16 x,
-    s16 y,
-    s16 selection) {
-    prim = QueueShadedSpriteNine(
+u8 *DrawPadConfigSelector(ot, prim, x, y, selection)
+    void *ot;
+    u8 *prim;
+    s16 x;
+    s16 y;
+    s16 selection;
+{
+    prim = GameQueueShadedSprite(
         ot, prim, x + 6, y + 8, 0x30, 0xC, 0x78, 0xC0, 0x7F40);
     prim = QueueDrawModePrim(ot, prim, 0x3A);
     prim = GameQueueSpriteTrans(

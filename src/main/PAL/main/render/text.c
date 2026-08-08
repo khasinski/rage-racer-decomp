@@ -468,18 +468,6 @@ u8 *GameQueueSprite(
 /* Local wide-parameter declaration; see GameQueueSprite.c. `clutIndex` really
  * is the narrow one here - retail reads it back out of its argument slot with
  * `lhu` at the point of use. */
-u8 *GameQueueShadedSprite(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex,
-    s32 intensity);
-
 /* SPRT, 20 bytes: a textured sprite modulated by `intensity` on all three
  * channels (no SetShadeTex, so the texel is shaded). */
 u8 *GameQueueShadedSprite(
@@ -510,19 +498,6 @@ u8 *GameQueueShadedSprite(
     AddPrim(ot, sprt);
     return prim;
 }
-
-/* Local wide-parameter declaration; see the definition below. */
-u8 *GameQueueShadedSpriteTrans(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex,
-    s32 intensity);
 
 /* SPRT, 20 bytes: GameQueueShadedSprite plus SetSemiTrans. */
 u8 *GameQueueShadedSpriteTrans(
@@ -618,17 +593,6 @@ u8 *GameQueueTileTrans(
  * narrow the loads here. Only this TU needs the wide view, so it declares the
  * symbol itself rather than changing the shared header.
  */
-u8 *GameQueueLine(
-    void *ot,
-    u8 *prim,
-    s32 x0,
-    s32 y0,
-    s32 x1,
-    s32 y1,
-    s32 r,
-    s32 g,
-    s32 b);
-
 /* LINE_F2, 16 bytes: one flat-shaded line, linked into `ot`. Returns the
  * advanced packet cursor. */
 u8 *GameQueueLine(

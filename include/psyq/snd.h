@@ -17,7 +17,7 @@ typedef SeqStruct SequenceState;
 #define SS_SEQ_FLAG_TEMPO_DEC 0x40
 #define SS_SEQ_FLAG_TEMPO_INC 0x80
 
-void _SsSndStop(short seq, short sep);
+void _SsSndStop(int seq, int sep);
 void SsSeqStop(long seq);
 void SsSepStop(long seq, long sep);
 void _SsSndTempo(short seq, short sep);
@@ -46,7 +46,7 @@ long SsUtKeyOnV(
     long fine,
     long volL,
     long volR);
-void _SsVmInit(void);
+void _SsVmInit(int voices);
 
 void SsSetMVol(short left, short right);
 void SsSetSerialVol(u_char source, short left, short right);
@@ -135,7 +135,7 @@ long SsUtGetProgVol(long vab_id, long program);
 long SsUtSetProgPan(long vab_id, long program, long pan);
 long SsUtGetProgPan(long vab_id, long program);
 long SsUtKeyOffV(long voice);
-long SsUtPitchBend(long voice, long vab_id, long program, long note, u_short pbend);
+long SsUtPitchBend(long voice, long vab_id, long program, long note, long pbend);
 long SsUtChangePitch(long voice, long vab_id, long program, long old_note, long old_fine, long new_note, long new_fine);
 long SsUtChangeADSR(long voice, long vab_id, long program, long old_note, long adsr1, long adsr2);
 short SsUtGetDetVVol(short voice, short *left, short *right);

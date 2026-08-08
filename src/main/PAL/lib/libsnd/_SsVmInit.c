@@ -11,7 +11,7 @@ extern u_char g_SndVoiceState[];
 extern u_char g_SndVoiceStateProg[];
 extern u_char g_SndVoiceStateTone[];
 
-void _SsVmInit(void) {
+void _SsVmInit(int voices) {
     register long i asm("$8");
     long ff;
     long one;

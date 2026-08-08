@@ -102,17 +102,6 @@ extern CourseSelectPrizeTable g_CourseSelectPrizeTable asm("g_PrizeMoney");
 extern CourseSelectScrollState g_CourseSelectScrollState;
 extern s32 D_8009B2C0 asm("g_CourseSelectScrollState");
 
-s32 GameDrawNumberWide(
-    s32 x,
-    s32 y,
-    s32 flags,
-    s32 value,
-    s32 r,
-    s32 g,
-    s32 b,
-    s32 clut,
-    s32 primitiveCount) asm("GameDrawNumber");
-
 /*
  * The menu lays out several two-sprite labels from the first sprite's sliding
  * Y. GCC 2.6.3 integrates this explicit inline at -O2; its optional bounds
@@ -395,7 +384,7 @@ s32 DrawCourseSelectScreen(s32 step)
         prizeClut = 0x244;
         do {
             coordinateY = row * 0x10 - prizeOffset;
-            digitCount = GameDrawNumberWide(
+            digitCount = GameDrawNumber(
                 0x65, coordinateY, 9,
                 prizeTable->values[g_CourseIndex & 3][g_GrandPrixClass][row],
                 prizeFade, prizeFade, prizeFade, prizeClut, 0x20);

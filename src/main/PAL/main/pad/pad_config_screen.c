@@ -63,17 +63,6 @@ u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
     return QueueDrawModePrim(ot, prim, 0x3B);
 }
 
-/* Local wide-parameter view of GameQueueLine; see GameQueueSprite.c. */
-u8 *QueueLineWide(
-    void *ot,
-    u8 *prim,
-    s32 x0,
-    s32 y0,
-    s32 x1,
-    s32 y1,
-    s32 r,
-    s32 g,
-    s32 b) asm("GameQueueLine");
 
 /*
  * The five green callout lines joining each action label to its button: one
@@ -89,11 +78,11 @@ u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow) {
             DVec *lp = &g_PadCalloutLabelPoints[labelRow[i]];
             DVec *bp = &g_PadCalloutButtonPoints[buttonRow[i]];
 
-            prim = QueueLineWide(
+            prim = GameQueueLine(
                 ot, prim, lp->vx, lp->vy, lp->vx, bp->vy, 0x20, 0xFF, 0x20);
-            prim = QueueLineWide(
+            prim = GameQueueLine(
                 ot, prim, lp->vx, bp->vy, bp->vx, bp->vy, 0x20, 0xFF, 0x20);
-            prim = QueueLineWide(
+            prim = GameQueueLine(
                 ot, prim, lp->vx, bp->vy - 1, bp->vx, bp->vy - 1, 0x20, 0xFF, 0x20);
             i++;
         } while (i < 5);

@@ -12,7 +12,16 @@ extern Glyph D_8007F984[];
 
 void *QueueDrawModePrim(void *ot, void *prim, s32 tpage);
 
-void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
+void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
+    s32 x0;
+    s16 y;
+    u8 *str0;
+    u8 color;
+    u8 g;
+    u8 b;
+    u16 clut;
+    s32 flags;
+{
     u8 *str;
     s32 x;
     u8 fl = flags;
@@ -124,7 +133,16 @@ void DrawSmallText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
 extern Glyph D_8007FA3C[];
 
 
-void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 flags) {
+void DrawLargeText(x0, y, str0, color, g, b, clut, flags)
+    s32 x0;
+    s16 y;
+    u8 *str0;
+    u8 color;
+    u8 g;
+    u8 b;
+    u16 clut;
+    s32 flags;
+{
     u8 *str;
     s32 x;
     u8 fl = flags;
@@ -225,26 +243,17 @@ void DrawLargeText(s32 x0, s16 y, u8 *str0, u8 color, u8 g, u8 b, u16 clut, s32 
 }
 
 
-s32 GameDrawNumber(
-    s32 x,
-    s16 y,
-    s32 flags,
-    u32 value,
-    u8 r,
-    u8 g,
-    u8 b,
-    u16 clut,
-    u8 primitiveCount);
-s32 GameDrawNumber(
-    s32 x,
-    s16 y,
-    s32 flags,
-    u32 value,
-    u8 r,
-    u8 g,
-    u8 b,
-    u16 clut,
-    u8 primitiveCount) {
+s32 GameDrawNumber(x, y, flags, value, r, g, b, clut, primitiveCount)
+    s32 x;
+    s16 y;
+    s32 flags;
+    u32 value;
+    u8 r;
+    u8 g;
+    u8 b;
+    u16 clut;
+    u8 primitiveCount;
+{
     u8 digits[11];
     u16 drawVValue;
     void *ot;

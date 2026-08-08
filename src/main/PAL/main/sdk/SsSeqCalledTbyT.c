@@ -5,7 +5,6 @@ void _SsSndCrescendo(short seq, short sep);
 extern volatile long g_SndUpdateLock;
 extern SeqStruct *g_SndSeqTable[];
 void _SsSndDecrescendo(short seq, short sep);
-void _SsSndStopWide(long seq, long sep) asm("_SsSndStop");
 
 void SsSeqCalledTbyT(void) {
     long i;
@@ -44,7 +43,7 @@ void SsSeqCalledTbyT(void) {
                 SsSeqResume((short)i, (short)j);
             }
             if (g_SndSeqTable[i][j].flags & 0x4) {
-                _SsSndStopWide(i, j);
+                _SsSndStop(i, j);
                 g_SndSeqTable[i][j].flags = 0;
             }
         }

@@ -10,7 +10,6 @@
 
 extern u8 *g_CarModelAsset;
 
-void DrawRectOutlineWide(void *buf, s32 xa, s32 ya, s32 w, s32 h, s32 r, s32 g, s32 b, s32 code) asm("DrawRectOutline");
 
 void DrawMenuLightBurst(s32 arg);
 
@@ -165,7 +164,7 @@ s32 DrawCarSelectScreen(s32 step) {
 
     v = (u32) D_8009B2CC / 4;
     col = v & 0xff;
-    DrawRectOutlineWide(buf, 0xa3, 0x180, 0x1a, 0x19, col, col, col, 0x20);
+    DrawRectOutline(buf, 0xa3, 0x180, 0x1a, 0x19, col, col, col, 0x20);
 
     tex = g_CarTable[g_PlayerCarIndex].transmission;
     if (tex != 0) {
@@ -662,7 +661,6 @@ s32 DrawCustomizeScreen(s32 step) {
 }
 
 extern u8 *D_8019C794;
-void GameDrawMenuButtonWide(s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 flags, s32 textX, s32 textY, void* caption) asm("GameDrawMenuButton");
 
 void UpdateCustomizeScreen(void) {
     void *ot;
@@ -804,8 +802,8 @@ void UpdateCustomizeScreen(void) {
                 DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xDA : 0xB8, 0x68, 0x20, 0x20, 0);
                 DrawSprite(ot, 0xC2, 0x70, 0xC, 0x10, 0x60, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 DrawSprite(ot, 0xE3, 0x70, 0x10, 0x10, 0x6C, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                GameDrawMenuButtonWide(0xB8, 0x68, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, &g_MenuBlankCaption);
-                GameDrawMenuButtonWide(0xDA, 0x68, 0x20, 0x20, 0x1E, 0x8E, 0x95, 0, 0, 0, &g_MenuBlankCaption);
+                GameDrawMenuButton(0xB8, 0x68, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
+                GameDrawMenuButton(0xDA, 0x68, 0x20, 0x20, 0x1E, 0x8E, 0x95, 0, 0, 0, (s32)&g_MenuBlankCaption);
             }
         } else if (GameMenuBusy == -3) {
             RunTimedDrawScript(D_8019C794, &g_UiScriptProgress2, 0);
@@ -848,8 +846,8 @@ void UpdateCustomizeScreen(void) {
                 DrawMenuCursorBox((g_MenuSubCursor != 0) ? 0xDA : 0xB8, 0x68, 0x20, 0x20, 1);
                 DrawSprite(ot, 0xC2, 0x70, 0xC, 0x10, 0x60, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
                 DrawSprite(ot, 0xE3, 0x70, 0x10, 0x10, 0x6C, 0x7C, 0, 0, 0, 0x244, 1, 1, 0x3B);
-                GameDrawMenuButtonWide(0xB8, 0x68, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, &g_MenuBlankCaption);
-                GameDrawMenuButtonWide(0xDA, 0x68, 0x20, 0x20, 0x1E, 0x8E, 0x95, 0, 0, 0, &g_MenuBlankCaption);
+                GameDrawMenuButton(0xB8, 0x68, 0x20, 0x20, 0x95, 0x25, 0x1E, 0, 0, 0, (s32)&g_MenuBlankCaption);
+                GameDrawMenuButton(0xDA, 0x68, 0x20, 0x20, 0x1E, 0x8E, 0x95, 0, 0, 0, (s32)&g_MenuBlankCaption);
             }
         }
         DrawFadingMenuSprites(g_UiScriptProgress, mode, g_RankingOption);

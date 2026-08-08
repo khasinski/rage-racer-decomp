@@ -80,7 +80,6 @@ void DrawTitleFadeOverlay(s32 brightness) {
 }
 
 s32 rsin(s32 angle);
-void *QueueShadedSpriteNine(void* ot, void* prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex, s32 intensity) asm("GameQueueShadedSprite");
 
 void DrawPressStartPrompt(void) {
     void **scratch;
@@ -101,7 +100,7 @@ void DrawPressStartPrompt(void) {
     base = g_DrawBuffer;
     base += 0xCC;
     next = *scratch;
-    next = QueueShadedSpriteNine(base, next, 0x68, 0xC8, 0x70, 0x10, 0x70, 0xA0, 0x7E84, frame);
+    next = GameQueueShadedSprite(base, next, 0x68, 0xC8, 0x70, 0x10, 0x70, 0xA0, 0x7E84, frame);
     *scratch = QueueDrawModePrim(base, next, 0x39);
 }
 
@@ -120,12 +119,6 @@ void UpdateTitleScreen(void) {
     DrawPressStartPrompt();
 }
 
-/* This call site hands full words where GameQueueTexturedRect's parameters are
- * s16/u8; the alias names the routine, not its address, so the truncation the
- * header would insert never happens here. */
-u8 *GameQueueTexturedRectWide(
-    void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v,
-    s32 uSpan, s32 vSpan, s32 clutIndex, s32 tpage) asm("GameQueueTexturedRect");
 
 void DrawMainMenuRows(void) {
     void *scratch;
@@ -177,7 +170,7 @@ void DrawMainMenuRows(void) {
             frame = 0;
         }
 
-        scratch = GameQueueTexturedRectWide(base, scratch, 0x68, y, width, frame, 0, (i * 16) + 0xA0, width, 0x10, code, 0x39);
+        scratch = GameQueueTexturedRect(base, scratch, 0x68, y, width, frame, 0, (i * 16) + 0xA0, width, 0x10, code, 0x39);
         y += 0x18;
         i++;
         row++;

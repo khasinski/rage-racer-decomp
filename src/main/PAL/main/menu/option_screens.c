@@ -14,7 +14,6 @@ void DrawOptionHintBar(s32 variant);
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
 s32 AddTilePrim(void *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
-s32 QueueLineWide(void* ot, s32 prim, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b) asm("GameQueueLine");
 extern s32 g_CameraViewMode;
 extern s32 *g_CamRow;
 void InitRenderState(s32 otShift);
@@ -234,8 +233,8 @@ void DrawOptionSceneOverlay(void) {
         pkt = AddTilePrim(base, pkt, 0x10, 0x20, w120, two, white, white, white);
         pkt = AddTilePrim(base, pkt, 0x10, 0x1C0, w120, two, white, white, white);
         h1c0 = 0x1C0;
-        pkt = QueueLineWide(base, pkt, 0x10, 0x20, 0x10, h1c0, white, white, white);
-        pkt = QueueLineWide(base, pkt, 0x130, 0x20, 0x130, h1c0, white, white, white);
+        pkt = (s32)GameQueueLine(base, (u8 *)pkt, 0x10, 0x20, 0x10, h1c0, white, white, white);
+        pkt = (s32)GameQueueLine(base, (u8 *)pkt, 0x130, 0x20, 0x130, h1c0, white, white, white);
     }
 
     *scratch = AddTilePrim(base, pkt, 0, 0, 0x140, g_OptionLetterboxHeight, 0x85, 0x15, 0xE);

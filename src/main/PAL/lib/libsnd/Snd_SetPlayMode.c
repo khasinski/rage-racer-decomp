@@ -67,7 +67,10 @@ long SsSepGetVol(long seq, long sep, short *voll, short *volr) {
     return SpuVmGetSeqVol((short)(seq | (sep << 8)), voll, volr);
 }
 
-void _SsSndStop(short seq, short sep) {
+void _SsSndStop(seq, sep)
+    short seq;
+    short sep;
+{
     long i;
     SeqStruct *score;
 

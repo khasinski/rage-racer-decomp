@@ -102,10 +102,10 @@ void DrawControllerSetupScene(s32 variant);
  * g_PadType == 0x23 picks which diagram is drawn). See docs/names.md 1.
  */
 /* 16x32 arrow sprites at (0x28, 0xE0) and (0x108, 0xE0); `pulse` adds the glow. */
-u8 *DrawLeftArrow(void *ot, u8 *prim, s16 x, s16 y, s32 pulse);
-u8 *DrawRightArrow(void *ot, u8 *prim, s16 x, s16 y, s32 pulse);
+u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse);
+u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse);
 /* Framed panel showing the selected configuration number. */
-u8 *DrawPadConfigSelector(void *ot, u8 *prim, s16 x, s16 y, s32 selection);
+u8 *DrawPadConfigSelector(void *ot, u8 *prim, s32 x, s32 y, s32 selection);
 /* The five action labels, and the five lines from each label to its button. */
 u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow);
 u8 *DrawPadConfigCallouts(void *ot, u8 *prim, u8 *labelRow, u8 *buttonRow);

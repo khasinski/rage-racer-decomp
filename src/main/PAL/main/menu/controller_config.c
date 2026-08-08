@@ -11,24 +11,6 @@ extern u8 g_PadType;
 extern s16 g_PadMappingIndex;
 extern s16 g_NegconMappingIndex;
 
-u8 *DrawLeftArrowWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 pulse) asm("DrawLeftArrow");
-u8 *DrawRightArrowWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 pulse) asm("DrawRightArrow");
-u8 *DrawPadConfigSelectorWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 selection) asm("DrawPadConfigSelector");
 void DrawOptionHintBar(s32 variant);
 
 /*
@@ -64,16 +46,16 @@ void DrawControllerConfigScreen(void) {
     } else {
         ot = g_DrawBuffer + 0xCC;
         prim = SCRATCH_PRIM_CURSOR_AS(u8);
-        prim = DrawLeftArrowWide(ot, prim, 0x28, 0xE0, leftLit);
-        prim = DrawRightArrowWide(ot, prim, 0x108, 0xE0, rightLit);
+        prim = DrawLeftArrow(ot, prim, 0x28, 0xE0, leftLit);
+        prim = DrawRightArrow(ot, prim, 0x108, 0xE0, rightLit);
         if (g_PadType == 0x23) {
-            prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, g_NegconMappingIndex);
+            prim = DrawPadConfigSelector(ot, prim, 0xF0, 0x28, g_NegconMappingIndex);
             prim = DrawNegconConfigDiagram(ot, prim);
             prim = GameQueueSpriteTrans(
                 ot, prim, 0x10, 0x40, 0xD8, 0x10, 0, 0xA8, 0x7F40);
             prim = QueueDrawModePrim(ot, prim, 0x3F);
         } else {
-            prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, g_PadMappingIndex);
+            prim = DrawPadConfigSelector(ot, prim, 0xF0, 0x28, g_PadMappingIndex);
             prim = DrawPadConfigDiagram(ot, prim);
         }
         SCRATCH_PRIM_CURSOR_AS(u8) = prim;

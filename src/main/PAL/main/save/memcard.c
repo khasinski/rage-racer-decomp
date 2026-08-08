@@ -1443,9 +1443,6 @@ void DrawMemoryCardHelpPrompt(s32 page) {
 #include "psyq/gpu.h"
 #include "game/render.h"
 
-/* DrawLargeText with word-wide parameters; the header spelling does not
- * match here. See DrawText8x8 above. */
-void DrawLargeTextWide(s32, s32, void *, s32, s32, s32, s32, s32) asm("DrawLargeText");
 
 void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
     char text[16];
@@ -1464,7 +1461,7 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
             s32 i;
 
             sprintf(text, g_FmtSaveRow, row_bit);
-            DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
+            DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
 
             for (i = 0; i < row[0]; i++) {
                 text_ptr[i] = g_SaveNameCharset[*((row + i) + 1)];
@@ -1473,31 +1470,31 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
                 text_ptr[i++] = ' ';
             }
             sprintf(text + 6, g_FmtSaveRowTail);
-            DrawLargeTextWide(0x68, y, text, 0x7F, color, color, width, height);
-            DrawLargeTextWide(0xB0, y, FormatSaveElapsedTime(text, *(s32 *)(row + 8)), 0x7F, color, color, width, height);
+            DrawLargeText(0x68, y, text, 0x7F, color, color, width, height);
+            DrawLargeText(0xB0, y, FormatSaveElapsedTime(text, *(s32 *)(row + 8)), 0x7F, color, color, width, height);
         } else if (flags_reg & 0x10000) {
             sprintf(text, g_FmtSaveRow, row_bit);
-            DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
-            DrawLargeTextWide(0x88, y, g_McSlotLabelError, 0x7F, color, color, width, height);
+            DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
+            DrawLargeText(0x88, y, g_McSlotLabelError, 0x7F, color, color, width, height);
         } else if (g_McFreeBlocks == 0) {
             if (g_McMenuPage == 0) {
                 sprintf(text, g_FmtSaveRowEmpty, row_bit);
-                DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
+                DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
             } else if (g_McMenuRowCursor == 0) {
                 sprintf(text, g_FmtSaveRowEmpty, row_bit);
-                DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
+                DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
             } else {
                 sprintf(text, g_FmtSaveRow, row_bit);
-                DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
-                DrawLargeTextWide(0x90, y, g_McSlotLabelNoFile, 0x7F, color, color, width, height);
+                DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
+                DrawLargeText(0x90, y, g_McSlotLabelNoFile, 0x7F, color, color, width, height);
             }
         } else if (g_McMenuPage == 0) {
             sprintf(text, g_FmtSaveRowEmpty, row_bit);
-            DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
+            DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
         } else {
             sprintf(text, g_FmtSaveRow, row_bit);
-            DrawLargeTextWide(0x48, y, text, 0x7F, color, color, width, height);
-            DrawLargeTextWide(0x90, y, g_McSlotLabels + (g_McMenuRowCursor * 10), 0x7F, color, color, width, height);
+            DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
+            DrawLargeText(0x90, y, g_McSlotLabels + (g_McMenuRowCursor * 10), 0x7F, color, color, width, height);
         }
 
         row_bit++;

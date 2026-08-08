@@ -15,7 +15,6 @@ extern ClassRecordSprite D_8007D5D4[];
 void StartOptionMenuExit(s32 scene);
 s32 AddTilePrim(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 void DrawOptionHintBar(s32 variant);
-s32 GameQueueShadedSpriteTransWide(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex, s32 intensity) asm("GameQueueShadedSpriteTrans");
 
 void DrawOptionRootMenu(void) {
     u8 *base = g_DrawBuffer;
@@ -333,7 +332,7 @@ void DrawSoundOptionScreen(void) {
         color = 0x20;
     }
 
-    n = GameQueueShadedSpriteTransWide(base, n, 0x66, 0x12A, s3, 0xC, 0xD4, 0xC4, 0x7F40, color);
+    n = (s32)GameQueueShadedSpriteTrans((void *)(base), (u8 *)(n), 0x66, 0x12A, s3, 0xC, 0xD4, 0xC4, 0x7F40, color);
     n = AddTilePrim(base, n, 0x47, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
     n = AddTilePrim(base, n, 0x46, 0x120, 0x58, 0x20, color * 2, color * 2, color * 2);
 
@@ -342,7 +341,7 @@ void DrawSoundOptionScreen(void) {
         color = 0x7F;
     }
 
-    n = GameQueueShadedSpriteTransWide(base, n, 0xBA, 0x12A, 0x28, 0xC, 0xB4, 0xD0, 0x7F40, color);
+    n = (s32)GameQueueShadedSpriteTrans((void *)(base), (u8 *)(n), 0xBA, 0x12A, 0x28, 0xC, 0xB4, 0xD0, 0x7F40, color);
     n = AddTilePrim(base, n, 0xA3, 0x122, 0x56, 0x1C, 0x85, 0x15, 0xE);
     n = AddTilePrim(base, n, 0xA2, 0x120, 0x58, 0x20, color * 2, color * 2, color * 2);
     {

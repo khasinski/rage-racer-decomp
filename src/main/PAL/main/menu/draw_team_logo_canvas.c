@@ -3,8 +3,6 @@
 #include "game/menu.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
-extern void DrawRectOutline(
-    s32 ot, s16 x, s16 y, s16 w, s32 h, u8 r, u8 g, u8 b, u8 alpha);
 extern void GameDrawTexturedQuad(
     s32 ot,
     s16 x0,
@@ -219,7 +217,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     asm("" : : "r"(drawX));
     sy = (((u32) (d * 0x460)) >> 5) + 0xFEC9;
     ff = 0xFF;
-    DrawRectOutline(ot, drawX, sy, 0x82, 0x104, 0xB4, 0xB4, 0xB4, ff);
+    DrawRectOutline((void *)ot, (s16)drawX, (s16)sy, (s16)0x82, 0x104, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)ff);
     kreg = sy;
     if (D_8009B29C >= 0x100)
     {
@@ -246,7 +244,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
         drawValue *= 0x1000;
         drawValue = angleValue - drawValue;
         clut = (rsin(drawValue) / 64) - 0x41;
-        DrawRectOutline(ot, sy2Arg, sy, D_8007F94C * 4, (s16) (D_8007F94C * 8), 0, clut, 0, ff);
+        DrawRectOutline((void *)ot, (s16)sy2Arg, (s16)sy, (s16)(D_8007F94C * 4), (s16)(D_8007F94C * 8), 0, (u8)clut, 0, (u8)ff);
       }
     }
     sx = (s16) kreg;
@@ -292,7 +290,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     sy = su + 0x1FB;
     x0 = 0x2F;
     ff = 0xFF;
-    DrawRectOutline(ot, 0x2F, sy, 0x42, 0x84, 0xB4, 0xB4, 0xB4, ff);
+    DrawRectOutline((void *)ot, (s16)0x2F, (s16)sy, (s16)0x42, 0x84, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)ff);
     kreg = sy;
     if ((D_8009B29C >= 0x100) && (D_8007F944 != 0))
     {
@@ -336,9 +334,9 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       }
       else
       {
-        DrawRectOutline(ot, x1 + D_8007F934.lo, y1 + (D_8007F938 * 2), (s16) D_8007F94C, (s16) (D_8007F94C * 2), clut, clut, clut, 0xFF);
+        DrawRectOutline((void *)ot, (s16)(x1 + D_8007F934.lo), (s16)(y1 + D_8007F938 * 2), (s16)D_8007F94C, (s16)(D_8007F94C * 2), (u8)clut, (u8)clut, (u8)clut, (u8)0xFF);
       }
-      DrawRectOutline(ot, x1, y1, 0x20, 0x40, 0, clut, 0, 0xFF);
+      DrawRectOutline((void *)ot, (s16)x1, (s16)y1, (s16)0x20, 0x40, 0, (u8)clut, 0, (u8)0xFF);
     }
     gx = (g_TeamLogoRect.tx * 4) - 1;
     gy = (*(u8 *)(&g_TeamLogoRect.ty)) - 1;
@@ -377,11 +375,11 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       s32 panelAng;
       panelAng = D_8009B288 * 2;
       clut = (rsin(panelAng % 0x1000) / 64) - 0x41;
-      DrawRectOutline(ot, x1, y1, 0xD, 0x1A, 0, clut, 0, 0xFF);
+      DrawRectOutline((void *)ot, (s16)x1, (s16)y1, (s16)0xD, 0x1A, 0, (u8)clut, 0, (u8)0xFF);
     }
     else
     {
-      DrawRectOutline(ot, x1, y1, 0xD, 0x1A, 0xB4, 0xB4, 0xB4, 0xFF);
+      DrawRectOutline((void *)ot, (s16)x1, (s16)y1, (s16)0xD, 0x1A, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)0xFF);
     }
     DrawSolidRect((void *)ot, (s16)(x1 + 1), (s16)(y1 + 2), (s16)0xB, (s16)0x16, (u8)(*(u8 *)(&g_TeamLogoClut[D_8007F950]) * 8), (u8)((g_TeamLogoClut[D_8007F950] >> 2) & 0xF8), (u8)((g_TeamLogoClut[D_8007F950] >> 7) & 0xF8), (u8)0xFF);
     {
@@ -399,7 +397,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       }
     }
     {
-      DrawRectOutline(ot, x0, kreg, 0x7A, 0x14, 0xB4, 0xB4, 0xB4, 0xFF);
+      DrawRectOutline((void *)ot, (s16)x0, (s16)kreg, (s16)0x7A, 0x14, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)0xFF);
       y1 = kreg + 0x1C;
     i = 0;
     yA0 = (kreg + 0x22) << 16;
@@ -488,7 +486,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     if (D_8007F954 == 1)
     {
       clut = (rsin((D_8009B288 * 2) % 0x1000) / 64) - 0x41;
-      DrawRectOutline(ot, x0, sy, 0x12, 0x15, 0, clut, 0, 0xFF);
+      DrawRectOutline((void *)ot, (s16)x0, (s16)sy, (s16)0x12, 0x15, 0, (u8)clut, 0, (u8)0xFF);
     }
     yA8 = (s16) (kreg + 0x14);
     sx = 0x3F;
@@ -501,9 +499,9 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     {
       s32 alpha;
       alpha = 0xFF;
-      DrawRectOutline(ot, x0, kreg, 0x12, 0x26, 0xB4, 0xB4, 0xB4, alpha);
-      DrawRectOutline(ot, x0, kreg + 0x30, 0x12, 0x26, 0xB4, 0xB4, 0xB4, alpha);
-      DrawRectOutline(ot, x0, kreg + 0x60, 0x12, 0x26, 0xB4, 0xB4, 0xB4, alpha);
+      DrawRectOutline((void *)ot, (s16)x0, (s16)kreg, (s16)0x12, 0x26, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)alpha);
+      DrawRectOutline((void *)ot, (s16)x0, (s16)(kreg + 0x30), (s16)0x12, 0x26, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)alpha);
+      DrawRectOutline((void *)ot, (s16)x0, (s16)(kreg + 0x60), (s16)0x12, 0x26, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)alpha);
     }
     xa = x0 + 1;
     xb = x0 + 0x11;

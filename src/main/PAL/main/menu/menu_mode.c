@@ -9,7 +9,6 @@
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
-void GameDrawTexturedQuadWide() asm("GameDrawTexturedQuad");
 
 void DrawMenuAltPanel(s32 stepA, s32 stepB) {
     s32 step0;
@@ -60,8 +59,8 @@ void DrawMenuAltPanel(s32 stepA, s32 stepB) {
         y0 = (s16)(y0 - offset);
         x0 += 0x1C;
         y1 = (s16)(offset + 0x9F);
-        GameDrawTexturedQuadWide(
-            callScratch,
+        GameDrawTexturedQuad(
+            (s32)callScratch,
             callX,
             y0,
             x0,
@@ -97,8 +96,8 @@ void DrawMenuAltPanel(s32 stepA, s32 stepB) {
         y0 = (s16)(y0 - offset);
         x0 += 0x4E;
         y1 = (s16)(render1 + 0x128);
-        GameDrawTexturedQuadWide(
-            callScratch,
+        GameDrawTexturedQuad(
+            (s32)callScratch,
             callX,
             y0,
             x0,
@@ -226,7 +225,7 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
         y3 += 0x58;
         x1 += 0xE4;
 
-        GameDrawTexturedQuadWide(scratch2,
+        GameDrawTexturedQuad((s32)scratch2,
             x0, y0, x1, y1, x2, y2, x3, y3,
             0xA0, 0x70, 0xDF, 0x70, 0xA0, 0xBF, 0xDF, 0xBF,
             0x7F, 0x7F, 0x7F,
@@ -262,8 +261,8 @@ void DrawTimeAttackPlate(s32 stepArg) {
     if (renderValue != 0) {
         y0 = (s16)(y0 - renderValue);
         y1 = (s16)(renderValue + 0xD8);
-        GameDrawTexturedQuadWide(
-            scratch,
+        GameDrawTexturedQuad(
+            (s32)scratch,
             0x4C,
             y0,
             0x7C,

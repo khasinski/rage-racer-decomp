@@ -313,25 +313,20 @@ void DrawScriptedTriangle(s32 time, u8 *styleArg, u8 *recordArg) {
     }
 
     asm("" : : "r"(packedSpeed));
-    DrawFlatTriangleSigned(
+    DrawFlatTriangle(
         (u8 *)ot + (mode * 4),
-        x,
-        y,
-        limit,
-        y0,
-        packedSpeed,
-        y1,
+        (s16)x,
+        (s16)y,
+        (s16)limit,
+        (s16)y0,
+        (s16)packedSpeed,
+        (s16)y1,
         style[8],
         style[9],
         style[10],
         semiTrans,
         flags);
 }
-
-void GameDrawTexturedQuadWide(u8 *ot, s16 x0, s16 y0, s16 x1a, s16 y0b, s16 x0b,
-                   s16 y1a, s16 x1b, s16 y1b, s32 d0, s32 d1, s32 d2,
-                   s32 d3, s32 d4, s32 d5, s32 d6, s32 d7, s32 dA,
-                   s32 dB, s32 dC, s32 h8, s32 f8, s32 f4, s32 dE) asm("GameDrawTexturedQuad");
 
 void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     s32 duration;
@@ -425,8 +420,9 @@ void DrawScriptedQuad(s32 time, u8 *desc, s32 *ctx) {
     }
 
     flags = entry[0xD];
-    GameDrawTexturedQuadWide(table + index * 4, x, y, x + dx, y, x, y + dy,
-                  x + dx, y + dy, entry[0], entry[1], entry[2], entry[3],
+    GameDrawTexturedQuad((s32)(table + index * 4), (s16)x, (s16)y,
+                  (s16)(x + dx), (s16)y, (s16)x, (s16)(y + dy),
+                  (s16)(x + dx), (s16)(y + dy), entry[0], entry[1], entry[2], entry[3],
                   entry[4], entry[5], entry[6], entry[7], entry[0xA],
                   entry[0xB], entry[0xC], *(u16 *)(entry + 8), flags & 8,
                   flags & 4, entry[0xE]);
@@ -667,8 +663,6 @@ loop:
     }
 }
 
-void DrawLargeTextWide(s32 x0, s32 y, s32 str0, s32 color, s32 g, s32 b, s32 clut, s32 flags) asm("DrawLargeText");
-void drawSmallText(s32 x0, s32 y, s32 str0, s32 color, s32 g, s32 b, s32 clut, s32 flags) asm("DrawSmallText");
 
 void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
                    u8 r, u8 g, u8 b,
@@ -685,10 +679,10 @@ void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
 
     if (flags & 0x10) {
         if (flags % 2) {
-            DrawLargeTextWide((s16)(x0 + textX), (s16)(y0 + textY), caption,
+            DrawLargeText((s16)(x0 + textX), (s16)(y0 + textY), (u8 *)caption,
                           0x7f, 0x7f, 0x7f, 0x244, (flags & 8) ? 0x20 : 0x40);
         } else {
-            drawSmallText((s16)(x0 + textX), (s16)(y0 + textY), caption,
+            DrawSmallText((s16)(x0 + textX), (s16)(y0 + textY), (u8 *)caption,
                           0x7f, 0x7f, 0x7f, 0x244, (flags & 8) ? 0x20 : 0x40);
         }
     }

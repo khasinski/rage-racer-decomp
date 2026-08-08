@@ -300,78 +300,58 @@ void DrawSprite(
     u32 flags);
 void DrawFlatTriangle(
     void *ot,
-    s16 x0,
-    s16 y0,
-    s16 x1,
-    u16 y1,
-    u16 x2,
-    u16 y2,
-    u8 r,
-    u8 g,
-    u8 b,
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    s32 y1,
+    s32 x2,
+    s32 y2,
+    s32 r,
+    s32 g,
+    s32 b,
     s32 semiTrans,
     u32 flags);
-
-/* The same routine seen through signed coordinates. Retail's two callers
- * disagree about these three parameters and the disagreement is load-bearing:
- * the definition in SetDrawClipRect.c matches only as u16, while
- * DrawScriptedTriangle sign-extends them, which a u16 prototype cannot
- * produce. Both views are therefore real. See names.md 30 on width and
- * signedness being per-use rather than per-field. */
-void DrawFlatTriangleSigned(
-    void *ot,
-    s16 x0,
-    s16 y0,
-    s16 x1,
-    s16 y1,
-    s16 x2,
-    s16 y2,
-    u8 r,
-    u8 g,
-    u8 b,
-    s32 semiTrans,
-    u32 flags) asm("DrawFlatTriangle");
 void DrawFlatQuad(
     void *ot,
-    s16 x0,
-    s16 y0,
-    s16 x1,
-    u16 y1,
-    u16 x2,
-    u16 y2,
-    u16 x3,
-    u16 y3,
-    u8 r,
-    u8 g,
-    u8 b,
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    s32 y1,
+    s32 x2,
+    s32 y2,
+    s32 x3,
+    s32 y3,
+    s32 r,
+    s32 g,
+    s32 b,
     s32 semiTrans,
     u32 flags);
 /* POLY_FT4: four xy/uv pairs, flat rgb, tpage and a CLUT index as depth key. */
 void GameDrawTexturedQuad(
     s32 ot,
-    s16 x0,
-    s16 y0,
-    s16 x1,
-    u16 y1,
-    u16 x2,
-    u16 y2,
-    u16 x3,
-    u16 y3,
-    u8 u0,
-    u8 v0,
-    u8 u1,
-    u8 v1,
-    u8 u2,
-    u8 v2,
-    u8 u3,
-    u8 v3,
-    u8 r,
-    u8 g,
-    u8 b,
-    u16 clutIndex,
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    s32 y1,
+    s32 x2,
+    s32 y2,
+    s32 x3,
+    s32 y3,
+    s32 u0,
+    s32 v0,
+    s32 u1,
+    s32 v1,
+    s32 u2,
+    s32 v2,
+    s32 u3,
+    s32 v3,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 clutIndex,
     s32 shadeTex,
     s32 semiTrans,
-    u16 tpage);
+    s32 tpage);
 /* TILE: solid rectangle at (x, y) sized (w, h). */
 void DrawSolidRect(
     void *ot,
@@ -396,16 +376,16 @@ void DrawLine(
 /* LINE_F3: flat-shaded 3-point polyline. */
 void DrawPolyLine3(
     void *ot,
-    s16 x0,
-    s16 y0,
-    s16 x1,
-    u16 y1,
-    u16 x2,
-    u16 y2,
-    u8 r,
-    u8 g,
-    u8 b,
-    u8 alpha);
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    s32 y1,
+    s32 x2,
+    s32 y2,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 alpha);
 /* LINE_G2: line interpolating rgb0 -> rgb1. */
 void DrawGradientLine(
     void *ot,
@@ -427,10 +407,10 @@ void DrawRectOutline(
     s32 y,
     s32 w,
     s32 h,
-    u8 r,
-    u8 g,
-    u8 b,
-    u8 alpha);
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 alpha);
 /* Clips (x, y, w, h) to the 320x480 frame and queues a SetDrawArea packet. */
 void SetDrawClipRect(
     void *ot,
@@ -447,35 +427,35 @@ void SetDrawClipRect(
  */
 void DrawSmallText(
     s32 x,
-    s16 y,
+    s32 y,
     u8 *str,
-    u8 r,
-    u8 g,
-    u8 b,
-    u16 clutIndex,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 clutIndex,
     s32 flags);
 void DrawLargeText(
     s32 x,
-    s16 y,
+    s32 y,
     u8 *str,
-    u8 r,
-    u8 g,
-    u8 b,
-    u16 clutIndex,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 clutIndex,
     s32 flags);
 /* Right-aligned decimal, up to 10 digits, leading zeros blanked. Returns the
  * number of digit sprites emitted. flags: 1 = large font, 4 = fixed digits at
  * v=0xDC, 8 = draw into the overlay OT layer. */
 s32 GameDrawNumber(
     s32 x,
-    s16 y,
+    s32 y,
     s32 flags,
-    u32 value,
-    u8 r,
-    u8 g,
-    u8 b,
-    u16 clutIndex,
-    u8 primitiveCount);
+    s32 value,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 clutIndex,
+    s32 primitiveCount);
 /* Blits an 8x6 bit pattern from D_8007F6E8 as 4x8 blocks; negative argument
  * animates through the table. */
 void DrawBitPatternOverlay(s32 pattern);
@@ -563,28 +543,18 @@ void DrawScriptedQuad(s32 elapsed, u8 *style, s32 *record);
  * the texture is drawn raw.
  */
 /* SPRT, 20 bytes. */
-u8 *GameQueueShadedSprite(
-    void *ot,
-    u8 *prim,
-    s16 x,
-    s16 y,
-    s16 w,
-    s16 h,
-    u8 u,
-    u8 v,
-    u16 clutIndex,
-    u8 intensity);
+u8 *GameQueueShadedSprite();
 u8 *GameQueueShadedSpriteTrans(
     void *ot,
     u8 *prim,
-    s16 x,
-    s16 y,
-    s16 w,
-    s16 h,
-    u8 u,
-    u8 v,
-    u16 clutIndex,
-    u8 intensity);
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 clutIndex,
+    s32 intensity);
 u8 *GameQueueSpriteTrans(
     void *ot,
     u8 *prim,
@@ -610,13 +580,13 @@ u8 *GameQueueTileTrans(
 u8 *GameQueueLine(
     void *ot,
     u8 *prim,
-    s16 x0,
-    s16 y0,
-    s16 x1,
-    s16 y1,
-    u8 r,
-    u8 g,
-    u8 b);
+    s32 x0,
+    s32 y0,
+    s32 x1,
+    s32 y1,
+    s32 r,
+    s32 g,
+    s32 b);
 /*
  * POLY_FT4, 40 bytes, built as an axis-aligned rectangle at (x, y) sized
  * (w, h). A negative w or h flips the u or v axis instead of the geometry.
@@ -626,15 +596,15 @@ u8 *GameQueueLine(
 u8 *GameQueueShadedTexturedRect(
     void *ot,
     u8 *prim,
-    s16 x,
-    s16 y,
-    s16 w,
-    s16 h,
-    u8 u,
-    u8 v,
-    u16 clutIndex,
-    u16 tpage,
-    u8 intensity);
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 clutIndex,
+    s32 tpage,
+    s32 intensity);
 
 /*
  * Wide forms used by callers whose packet fields are still represented as
@@ -654,16 +624,16 @@ u8 *GameQueueSprite();
 u8 *GameQueueTexturedRect(
     void *ot,
     u8 *prim,
-    s16 x,
-    s16 y,
-    s16 w,
-    s16 h,
-    u8 u,
-    u8 v,
-    u8 uSpan,
-    u8 vSpan,
-    u16 clutIndex,
-    u16 tpage);
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 uSpan,
+    s32 vSpan,
+    s32 clutIndex,
+    s32 tpage);
 
 typedef enum GameTexturePacketKind {
     GAME_TEXTURE_PACKET_SPRT,

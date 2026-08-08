@@ -53,8 +53,6 @@ void UpdateMainMenuExit(void) {
 
 extern s32 g_ClassWinCount;
 
-void *QueueShadedSpriteNine(void* ot, void* prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex, s32 intensity) asm("GameQueueShadedSprite");
-void *GameQueueShadedTexturedRectWide(void* ot, void* prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex, s32 tpage, s32 intensity) asm("GameQueueShadedTexturedRect");
 
 void UpdateTitleAttract(void) {
     s32 alpha;
@@ -96,17 +94,17 @@ void UpdateTitleAttract(void) {
     h88 = 0x88;
     clut0 = 0x7DC0;
 
-    next = QueueShadedSpriteNine(base = g_DrawBuffer + 0xD0, next, x28, yA0, hF0, tmp, 0, h88, clut0, alpha);
-    next = QueueShadedSpriteNine(base, next, 0x20, 0xB8, 0x100, 0x10, 0, hF0, 0x7DC1, alpha);
-    next = QueueShadedSpriteNine(base, next, 0x11A, 0xAF, 0xC, 8, 0xE0, 0xB0, clut0, alpha);
+    next = GameQueueShadedSprite(base = g_DrawBuffer + 0xD0, next, x28, yA0, hF0, tmp, 0, h88, clut0, alpha);
+    next = GameQueueShadedSprite(base, next, 0x20, 0xB8, 0x100, 0x10, 0, hF0, 0x7DC1, alpha);
+    next = GameQueueShadedSprite(base, next, 0x11A, 0xAF, 0xC, 8, 0xE0, 0xB0, clut0, alpha);
     next = QueueDrawModePrim(base, next, 0x19);
 
     if (g_ClassWinCount >= 0xB) {
         color = 0x7D80;
     }
 
-    next = QueueShadedSpriteNine(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
-    *(void **)scratch = GameQueueShadedTexturedRectWide(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
+    next = GameQueueShadedSprite(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
+    *(void **)scratch = GameQueueShadedTexturedRect(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
 extern u32 D_801E8260;
 extern void (*g_FrontendDrawHandlers[])(void);
