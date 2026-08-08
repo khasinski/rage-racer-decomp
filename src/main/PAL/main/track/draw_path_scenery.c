@@ -110,12 +110,11 @@ void UpdateTrackEventSound(s16 arg) {
     } while ((s32)p < (s32)end);
 
     if (!(data == 0)) {
-    switch (0) { default:
     s0 = g_PlayerField3C;
     if (!(s0 >= 0)) {
     s0 += 0x100;
     if (s0 <= 0) {
-        break;
+        goto track_event_motion_done;
     }
     s0 = 0;
     } else {
@@ -125,7 +124,7 @@ void UpdateTrackEventSound(s16 arg) {
     s0 = 0;
     }
     }
-    }
+track_event_motion_done:
     if (s0 != 0) {
         s0 = (s0 * g_PlayerSpeed) / 12775;
         t = SCRATCH_VIEW_ANGLE_Y - 0xC00;
@@ -221,7 +220,6 @@ void UpdatePointAmbience(s32 arg) {
 loop:
     v1 = seg->lo;
     t0 = seg->hi;
-    switch (0) { default:
     if (!(v1 == sentinel)) {
     a1raw = seg->f08;
     t1raw = seg->f0A;
@@ -247,7 +245,7 @@ loop:
     s3 = seg->f0C;
     s4 = seg->f10;
     s6 = seg->f14;
-    break;
+    goto track_segment_found;
     }
     }
     s0v++;
@@ -257,7 +255,7 @@ loop:
     }
 
     }
-    }
+track_segment_found:
     v0 = s2 << 16;
     s0v = v0 >> 16;
     if (s0v != 0) {

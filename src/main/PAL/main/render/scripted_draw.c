@@ -454,9 +454,8 @@ s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
 
     nextProgress = (index * 3) << 2;
     cmdTmp = (TimedDrawCommand *)(nextProgress + (s32)base);
-    switch (0) { default:
     if (cmdTmp->time < 0) {
-        break;
+        goto timed_commands_done;
     }
     cmd = cmdTmp;
 loop_body:
@@ -521,7 +520,7 @@ loop_body:
         goto loop_body;
     }
 
-}
+timed_commands_done:
     if (stepReg >= 0) {
         cmdTmp = (TimedDrawCommand *)*progressPtr;
         updatedProgress = stepReg + (s32)cmdTmp;
