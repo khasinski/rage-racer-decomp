@@ -43,7 +43,7 @@ void LoadEnvironmentCue(GameEnvironmentCue *cue) {
 
     if (g_EnvSpareLerp != 0) {
         g_EnvSpareFrom = g_EnvSpare;
-        g_EnvSpareTo = *(u16 *)((u8 *)cue + 0x2E);
+        g_EnvSpareTo = RAW(cue->field_2E);
     }
 
     signedMode = (s16)newMode;
