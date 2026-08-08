@@ -25,7 +25,7 @@
  * (active==0) that the car is near (IsCarNearWaypoint) spawns: increments the spawn
  * counter g_WaypointsCollected, plays cue 0xA, marks the slot active and seeds its
  * velocity from g_PlayerVelocity. An active slot integrates position from velocity
- * with 15/16 per-frame damping and grows its scale toward 0x400, retiring to
+ * with 15/16 per-frame damping and grows its Z rotation toward 0x400, retiring to
  * state 2 once motion decays to zero. Register pins and raw tail-relative field
  * offsets are match-load-bearing.
  */
@@ -96,13 +96,15 @@ void UpdateWaypoints(void) {
     /*
      * Retail addresses the waypoint's velocity block through a base register
      * biased to &waypoint->velocityMagnitude, so these stay raw:
-     *   tail-0x30 x        tail-0x28 y          tail-0x20 scale
-     *   tail-0x1C field18  tail-0x10 velocityX  tail-0xC field28
+     *   tail-0x30 x        tail-0x28 y          tail-0x20 rotationZ
+     *   tail-0x1C rotationY tail-0x10 velocityX tail-0xC field28
      *   tail-0x8 velocityY tail-0x4  field30    tail      velocityMagnitude
      * Writing them as waypoint->field drops the second induction variable and
      * re-bases every store on $17.
      */
     register char *tail asm("$16");
+#define CURRENT_WAYPOINT \
+    ((TrackWaypointRuntime *)(tail - (sizeof(TrackWaypointRuntime) - sizeof(s32))))
 
     if (g_WaypointSpawnCooldown != 0) {
         g_WaypointSpawnCooldown--;
@@ -119,29 +121,29 @@ void UpdateWaypoints(void) {
                 PlaySoundCue(0xA);
 
                 waypoint->active = activeState;
-                *(Block16 *)(tail - 0x10) = *(Block16 *)g_PlayerVelocity;
+                *(Block16 *)&CURRENT_WAYPOINT->velocityX = *(Block16 *)g_PlayerVelocity;
 
-                *(s32 *)(tail - 0x10) *= 2;
-                *(s32 *)(tail - 0x8) *= 2;
-                *(s32 *)tail =
-                    ((*(s32 *)(tail - 0x10) * *(s32 *)(tail - 0x10)) + (*(s32 *)(tail - 0x8) * *(s32 *)(tail - 0x8))) /
+                CURRENT_WAYPOINT->velocityX *= 2;
+                CURRENT_WAYPOINT->velocityY *= 2;
+                CURRENT_WAYPOINT->velocityMagnitude =
+                    ((CURRENT_WAYPOINT->velocityX * CURRENT_WAYPOINT->velocityX) + (CURRENT_WAYPOINT->velocityY * CURRENT_WAYPOINT->velocityY)) /
                     0x2000;
             }
         } else if (waypoint->active == activeState) {
-            *(s32 *)(tail - 0x30) += *(s32 *)(tail - 0x10) / 0x100;
-            *(s32 *)(tail - 0x28) += *(s32 *)(tail - 0x8) / 0x100;
-            *(s32 *)(tail - 0x10) = (*(s32 *)(tail - 0x10) * 15) / 16;
-            *(s32 *)(tail - 0x8) = (*(s32 *)(tail - 0x8) * 15) / 16;
-            *(s32 *)(tail - 0x1C) += *(s32 *)tail / 0x100;
-            *(s32 *)tail = (*(s32 *)tail * 15) / 16;
+            CURRENT_WAYPOINT->x += CURRENT_WAYPOINT->velocityX / 0x100;
+            CURRENT_WAYPOINT->y += CURRENT_WAYPOINT->velocityY / 0x100;
+            CURRENT_WAYPOINT->velocityX = (CURRENT_WAYPOINT->velocityX * 15) / 16;
+            CURRENT_WAYPOINT->velocityY = (CURRENT_WAYPOINT->velocityY * 15) / 16;
+            CURRENT_WAYPOINT->rotationY += CURRENT_WAYPOINT->velocityMagnitude / 0x100;
+            CURRENT_WAYPOINT->velocityMagnitude = (CURRENT_WAYPOINT->velocityMagnitude * 15) / 16;
 
-            if (*(s32 *)(tail - 0x20) < 0x400) {
-                *(s32 *)(tail - 0x20) += 0x80;
+            if (CURRENT_WAYPOINT->rotationZ < 0x400) {
+                CURRENT_WAYPOINT->rotationZ += 0x80;
             } else {
-                *(s32 *)(tail - 0x20) = 0x400;
+                CURRENT_WAYPOINT->rotationZ = 0x400;
             }
 
-            if ((*(s32 *)(tail - 0x10) == 0) && (*(s32 *)(tail - 0x8) == 0) && (*(s32 *)tail == 0)) {
+            if ((CURRENT_WAYPOINT->velocityX == 0) && (CURRENT_WAYPOINT->velocityY == 0) && (CURRENT_WAYPOINT->velocityMagnitude == 0)) {
                 waypoint->active = 2;
             }
         }
@@ -150,6 +152,7 @@ void UpdateWaypoints(void) {
         tail += sizeof(*waypoint);
         waypoint++;
     } while (i < 6);
+#undef CURRENT_WAYPOINT
 }
 
 static inline void ClearScratchRenderMode37AAC(void) {

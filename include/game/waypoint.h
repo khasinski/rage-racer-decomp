@@ -16,8 +16,8 @@ typedef struct TrackWaypointRuntime {
     s32 height;
     s32 y;
     s32 field10;
-    s32 scale;
-    s32 field18;
+    s32 rotationZ;
+    s32 rotationY;
     s32 field1C;
     s32 field20;
     s32 velocityX;

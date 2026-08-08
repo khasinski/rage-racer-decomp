@@ -165,8 +165,8 @@ void SeedWaypoints(void) {
         waypoint->x = seed->x + seed->stepX * i;
         waypoint->y = seed->y + seed->stepY * i;
         waypoint->height = 0x1766;
-        waypoint->field18 = 0x174;
-        waypoint->scale = 0;
+        waypoint->rotationY = 0x174;
+        waypoint->rotationZ = 0;
         waypoint->field1C = 0;
         waypoint++;
     }
