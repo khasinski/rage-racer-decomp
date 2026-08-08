@@ -200,11 +200,11 @@ extern long g_SndVoiceSilenceIndex;
 extern u_char g_SndVoiceStateEndPan[];
 
 void SpuVmAutoPanTick(long voice);
-short SpuVmGetSeqVolLeft(long arg0);
-short SpuVmGetSeqVolRight(long arg0);
-void SpuVmInit(long arg0);
+short SpuVmGetSeqVolLeft(long seq_sep);
+short SpuVmGetSeqVolRight(long seq_sep);
+void SpuVmInit(long voices);
 void SsSeqIndexChannel(long channel, short vab, u_char prog, short volume, long pan);
-long SsSeqParseHeader(long arg0, long arg1, long arg2);
+long SsSeqParseHeader(long slot, long vabId, long data);
 void SsSeqSetPortamento(short seq, short sep, u_char value);
 void func_80076C50(void);
 

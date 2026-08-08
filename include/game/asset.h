@@ -208,8 +208,8 @@ extern s32 g_PendingCarModelIndex;
 extern u8 *g_TrackTextureShadow;
 
 void InstallTerrainCellData(s32 *base);
-void InstallTrackEventData(void *arg0);
-void InstallTrackPoints(void *arg0);
+void InstallTrackEventData(void* eventData);
+void InstallTrackPoints(void* trackData);
 void LoadCourseAssets(void);
 void LoadGrandPrixScreen(void);
 s32 PollAudioSlotLoad(void);
@@ -217,15 +217,15 @@ void RegisterModelBank(s32 *base, s32 index);
 void RegisterCourseModels(s32 *base);
 s32 RequestRaceStart(void);
 void ResetTrackTextureSwap(void);
-void SelectTrackCameraTable(void *arg0, s32 arg1);
+void SelectTrackCameraTable(void* block, s32 variant);
 /* Install sub-block 0 of the loaded .2ND track pack as the CamRow base. */
 void SetTrackCameraTable(void *table);
-void SetCourseObjects(void *arg0);
-void SetEnvPaletteTable(void *arg0);
-void SetEnvironmentScript(void *arg0);
-void StoreTeamLogoImage(void *arg0);
+void SetCourseObjects(void* table);
+void SetEnvPaletteTable(void* table);
+void SetEnvironmentScript(void* script);
+void StoreTeamLogoImage(void* dst);
 void UploadImageAsset(void *asset);
-void UploadImageBlock(void *arg0);
+void UploadImageBlock(void* asset);
 void UploadLoadBufferImage(void);
 
 /* Declared identically by 19 translation units before this
@@ -247,7 +247,7 @@ extern char g_MsgSearchOk[];
 extern char g_PathRageBin[];
 extern char g_PathRageStr[];
 
-void InstallResourceData(void *arg0);
+void InstallResourceData(void *data);
 void LoadCarModel(s32);
 void LoadUpgradedCarModel(s32);
 void SetCarSpec(u32 spec);

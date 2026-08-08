@@ -422,8 +422,8 @@ extern s16 g_TrackZoneDark;
 s32 GetCarAssetIndex(s32 model, s32 grade);
 /* Progress level needed to buy this model's next grade. */
 s32 GetCarUnlockLevel(s32 model);
-void SetCarImageSlot(void *arg0, s32 arg1);
-void SetCarModelSlot(void *arg0, s32 arg1);
+void SetCarImageSlot(void* asset, s32 index);
+void SetCarModelSlot(void* asset, s32 index);
 /* Which of the two showroom model slots is live, 0 or 1. */
 extern u32 g_CarModelSlot;
 /* Point g_CarModelAsset at g_CarModelSlots[index]. */
@@ -431,7 +431,7 @@ void SelectCarModelSlot(s32 index);
 /* Repaint the loaded car's texture block in the two body colours. */
 void ApplyBodyColor1(u32 colour, u32 imageData);
 void ApplyBodyColor2(u32 colour, u32 imageData);
-s32 SmoothTrackAngle(s32 arg0, s32 arg1);
+s32 SmoothTrackAngle(s32 pointIndex, s32 weight);
 void UpdateRivalRubberBand(void);
 
 /* Declared identically by 77 translation units before this
@@ -503,14 +503,14 @@ extern s16 g_TorqueBandStart;
 extern s16 g_TorqueLossBandStart;
 
 void ApplyCarRacingLineHint();
-void BlendPaintColor(u32 arg0, u32 arg1);
-void BlendPaintColorQuarters(u32 arg0, u32 arg1);
-void BlendPaintColorThirds(u32 arg0, u32 arg1);
+void BlendPaintColor(u32 color0, u32 color1);
+void BlendPaintColorQuarters(u32 color0, u32 color1);
+void BlendPaintColorThirds(u32 color0, u32 color1);
 void BuildTachoNeedleQuad(void);
 void ClampCarLateralOffset();
-s32 GetCarCrestTrigger(GameCarRuntime *arg0);
-void InitRivalCar(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
-void InitRivalCarAi(GameCarRuntime *arg0, s32 arg1, s32 *arg2);
+s32 GetCarCrestTrigger(GameCarRuntime* car);
+void InitRivalCar(GameCarRuntime* ent, s32 pos, s32* arr);
+void InitRivalCarAi(GameCarRuntime* ent, s32 pos, s32* arr);
 void RankContenders(void);
 void SeedCarRouteMarkers(void);
 void SlowRivalAhead();

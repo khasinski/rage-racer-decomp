@@ -157,7 +157,7 @@ s32 _card_clear(s32 chan);
 void CardReadAndSetMode(s32 param);
 void CardSeekParam(s32 param);
 s32 CardReadStatusPair(s32 high, s32 low);
-s32 FormatMemoryCard(s32 arg0, s32 arg1);
+s32 FormatMemoryCard(s32 port, s32 slot);
 
 /* Moved here from menu.h and audio.h: these belong to the card, not to
  * the menu or the mixer. */
@@ -240,7 +240,7 @@ extern u8 g_SaveNameCharset[];
 extern char g_SaveTitleSjis[];
 
 void BiosBuInit(void);
-void DrawMemoryCardMessage(s32 a0);
+void DrawMemoryCardMessage(s32 message);
 s32 DrawShadowedTile(s32 base, s32 prim, s32 a, s32 b);
 void InitCARD(s32 padEnable);
 s32 PollMemoryCardStatus(s32 a, s32 b);

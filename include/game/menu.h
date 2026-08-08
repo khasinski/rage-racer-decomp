@@ -403,13 +403,13 @@ extern u8 g_UiChromeScript2;
 
 void BuildStartingGrid(void);
 void ClearTeamNameTexture(void);
-void DrawCarNamePlate(s32 arg0, s32 arg1, s32 arg2);
-void DrawMenuAltPanel(s32 arg0, s32 arg1);
+void DrawCarNamePlate(s32 step, s32 model, s32 grade);
+void DrawMenuAltPanel(s32 stepA, s32 stepB);
 void DrawMenuCourseView(void);
 void DrawOptionRootMenu(void);
 void DrawPadTypeHint(void);
 void DrawSoundOptionScreen(void);
-void DrawTimeAttackPlate(s32 arg0);
+void DrawTimeAttackPlate(s32 stepArg);
 void InitTrackLighting(void);
 void InstallCarModelSlot(void);
 void LoadTrackTexturePageRange(void);
@@ -571,8 +571,8 @@ extern s16 g_RoundScreenFadeDelays[];
 
 void AdvanceGrandPrixClass(void);
 s32 CountOwnedCars(void);
-void DrawCarSlotLabel(s32 arg0, s32 arg1, s32 arg2);
-s32 DrawClassChangeCurtain(s32 arg0);
+void DrawCarSlotLabel(s32 x, s32 y, s32 label);
+s32 DrawClassChangeCurtain(s32 step);
 void DrawClassRecordDetail(void);
 void DrawClassRecordGrid(void);
 void DrawOptionSceneOverlay(void);
@@ -582,7 +582,7 @@ void DrawScreenAdjustScreen(void);
 void DrawTeamNameCharModel(void);
 void DrawTireCompoundSlider(u8 x, s32 useFlag);
 void DrawTitleFadeOverlay(s32 brightness);
-void DrawVolumeBar(s32 arg0, s32 arg1);
+void DrawVolumeBar(s32 level, s32 y);
 void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2);
 /* All three return 1 while the load is still running, as defined in
  * asset/asset_requests.c and asset/car_assets.c; every caller drops it. */
@@ -595,7 +595,7 @@ void TickClassClearFanfare(void);
 void UpdateCarListCursor(void);
 void UpdateFrontend(void);
 void UpdateOptionSceneFade(void);
-s32 UpdateRoundScreenFade(s32 arg0);
+s32 UpdateRoundScreenFade(s32 stage);
 void UpdateTitleAttract(void);
 
 /* Declared identically by 15 translation units before this

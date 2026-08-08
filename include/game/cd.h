@@ -79,6 +79,6 @@ extern u8 g_CdSearchFile[];
 extern s32 g_CdTocEntryCount;
 extern u8 g_CdTrackElapsedLoc[];
 
-void CdMix(u8 *arg0);
+void CdMix(u8* vol);
 
 #endif

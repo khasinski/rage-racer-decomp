@@ -369,9 +369,9 @@ extern void (*GPU_printf)(char *, ...);
 long Gpu_ClearImage(short *rect, u_long rgb);
 long Gpu_ClearOTagDma(u_long *ot, long count);
 long Gpu_DrawSync(long mode);
-u_char Gpu_GetControlMirrorByte(long arg0);
+u_char Gpu_GetControlMirrorByte(long index);
 long Gpu_WriteGp0Words(u_long *src, long count);
-void Gpu_WriteGp1(u_long arg0);
+void Gpu_WriteGp1(u_long command);
 long SetGraphQueue(long mode);
 
 #endif

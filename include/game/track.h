@@ -182,7 +182,7 @@ extern s32 g_RouteSceneryRotZ;
 extern s32 g_RouteSceneryX;
 extern s16 g_ShuttlePathDwellMax[];
 
-void InterpolateTrackPoint(s32 arg0, s32 *out, s32 weight);
+void InterpolateTrackPoint(s32 pointIndex, s32* out, s32 weight);
 
 /* Declared identically by 113 translation units before this
  * header carried them. */
@@ -286,9 +286,9 @@ extern u8 g_SpinningSceneryYaw[];
 extern s32 g_StartGridSceneryAngle[];
 extern s32 g_StaticSceneryYaw;
 
-s32 BlendAngle(s32 arg0, s32 arg1, s32 arg2);
+s32 BlendAngle(s32 angleA, s32 angleB, s32 weight);
 extern s32 FindNearestTrackCamera();
-void LerpEnvColor(u8 *arg0, u8 *arg1, u8 *out, s32 arg3);
+void LerpEnvColor(u8* from, u8* to, u8* out, s32 blend);
 void LoadEnvironmentCue();
 
 /* Declared identically by 5 translation units before this
@@ -316,7 +316,7 @@ extern u8 *g_CellVisibilityTable;
  *   visibility *(u32 *)(base + y * 0x80 + x * 4), bit = region id
  *              -> a u32 per cell, 32 * 32 * 4 = 0x1000
  *
- * The row stride the code uses is the proof of the second: `arg1 << 7` is
+ * The row stride the code uses is the proof of the second: `cellZ << 7` is
  * 32 u32 entries per row, and 32 such rows are 0x1000. It also caps region ids
  * at 32, even though the grid word has room for 64 in its top six bits.
  */

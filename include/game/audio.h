@@ -118,7 +118,7 @@ extern EngineSoundCurveRow g_EngineSoundCurves[2][12];
 extern s32 g_EngineSoundMaxRpm;
 extern s32 g_SoundSlotActive[];
 
-s32 GetOwnedCarAssetIndex(s32 arg0);
+s32 GetOwnedCarAssetIndex(s32 model);
 
 /* Declared identically by 62 translation units before this
  * header carried them. */
@@ -189,8 +189,8 @@ extern s32 g_VabTransferDone;
  * value the failure path does not use. Without it gcc thinks control returns
  * from BiosExit into the code after the check, so every value still needed
  * there is live across two calls and has to sit in a callee-saved register. */
-void BiosExit(s32 arg0) __attribute__((noreturn));
-s32 StartSoundCueVoice(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+void BiosExit(s32 code) __attribute__((noreturn));
+s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR);
 void UpdateBasicEffectVoices(void);
 void UpdateEffectVoiceStates(void);
 

@@ -511,7 +511,7 @@ extern s32 g_FadeLevel;
 extern s32 g_FadeStep;
 
 /*
- * Timed draw script: a table of {time, type, arg0, arg1} entries replayed
+ * Timed draw script: a table of {time, type, shape, motion} entries replayed
  * against a progress counter, terminated by time < 0. Element types 0/1/9 draw
  * a sprite, 10/19 a line, 20/29 a triangle and 30/39 a textured quad; the +9
  * variants are skipped while g_MenuAltLayout is set. Each element interpolates its
@@ -847,12 +847,12 @@ extern s32 g_StreamSectorCount;
 extern s32 g_TrackTextureSectionHi;
 extern s32 g_TrackTextureSectionLo;
 
-void ApplyZoneLighting(s32 arg0, Matrix *arg1);
+void ApplyZoneLighting(s32 zone, Matrix *mtx);
 s32 BezierEase(s32 t, s32 control);
-void BuildVisibleCells(s32 arg0, s32 arg1);
+void BuildVisibleCells(s32 near, s32 far);
 void EndMirrorPass(void);
 void RestoreColorMatrix(void);
-s32 rsinCore(s32 arg0);
+s32 rsinCore(s32 angle);
 
 /* Declared identically by 95 translation units before this
  * header carried them. */
@@ -937,20 +937,20 @@ extern u8 g_WordFontV[];
 extern u8 g_WordFontWidth[];
 
 void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axis);
-s32 CdRead2(s32 arg0);
-void DecDCTReset(s32 arg0);
-void DecDCTin(volatile u32 *arg0, s32 arg1);
-void DrawMinuteSecondTime(s32 arg0, s32 arg1, s32 arg2, s32 arg3);
+s32 CdRead2(s32 mode);
+void DecDCTReset(s32 mode);
+void DecDCTin(volatile u32* bitstream, s32 mode);
+void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color);
 u8 *DrawMirrorFrame(u8 *packet);
 void *DrawOTagEnv(void *ot, void *env);
-void GPU_cw(void *arg0);
-void Gpu_BuildDrawEnvCmds(void *arg0, void *arg1);
-s32 Gpu_Reset(s32 arg0);
+void GPU_cw(void *packet);
+void Gpu_BuildDrawEnvCmds(void* packet, void* env);
+s32 Gpu_Reset(s32 mode);
 void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ);
-void MatrixApplyZRotation(Matrix *arg0, s32 arg1);
-void MdecUnpackStatus(void *arg0, s32 arg1);
-s32 SetGraphReverse(s32 arg0);
-void SetupFmvBuffers(s32 arg0);
+void MatrixApplyZRotation(Matrix* mtx, s32 degrees);
+void MdecUnpackStatus(void *ctx, s32 slot);
+s32 SetGraphReverse(s32 mode);
+void SetupFmvBuffers(s32 base);
 void SwapTrackTexturePageNow(void);
 void SwapTrackTextureRow(void);
 

@@ -226,7 +226,7 @@ extern u_char g_MdecQuantCmd[];
 extern long g_StRingSlot;
 
 long CdReadInterruptStatus(void);
-void MDEC_in(volatile u_long *arg0, long arg1);
+void MDEC_in(volatile u_long* buf, long words);
 
 /* Declared identically by 54 translation units before this
  * header carried them. */
@@ -289,9 +289,9 @@ void CdDefaultReadyCallback(void);
 void CdDefaultSyncCallback(void);
 void CdDispatchInterrupts(void);
 void CdRead2Callback(void);
-u_long *DecDCTGetEnv(u_long *arg0);
-u_long *DecDCTPutEnv(u_long *arg0);
-void MDEC_reset(long arg0);
-long MDEC_timeout(u_char *arg0);
+u_long *DecDCTGetEnv(u_long* env);
+u_long *DecDCTPutEnv(u_long* env);
+void MDEC_reset(long mode);
+long MDEC_timeout(u_char* name);
 
 #endif
