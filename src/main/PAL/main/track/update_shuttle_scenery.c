@@ -67,10 +67,8 @@ void DrawShuttleScenery(s32 instance) {
     Matrix mtx0;
     Matrix mtx1;
     GameShuttleScenery *state;
-    GameShuttleScenery *base;
     Matrix *mtx1Ptr;
     s32 drawValue;
-    s32 offset;
     s32 wordIndex;
     s32 bitIndex;
     s32 bit;
@@ -81,9 +79,7 @@ void DrawShuttleScenery(s32 instance) {
     s32 visible;
     s32 frameValue;
 
-    offset = (((instance * 3) << 2) + instance) << 2;
-    base = g_ShuttleScenery;
-    state = (GameShuttleScenery *)((u8 *)base + offset);
+    state = &g_ShuttleScenery[instance];
     firstValue = state->z;
     wordIndex = firstValue + 0x400;
     if (wordIndex < 0) {
