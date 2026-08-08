@@ -130,13 +130,15 @@ void UpdateRaceCars(void) {
     s32 t;
     i = 0;
     q = (u8 *)g_Cars + 0x8A;
+#define qCar ((GameCarRuntime *)(q - 0x8A))
     do {
-        (*(s32 *)((u8 *)(q) + (0x6E))) = 0;
-        (*(s32 *)((u8 *)(q) + (-0x66))) = (*(s32 *)((u8 *)(q) + (0x7E)));
-        (*(s16 *)((u8 *)(q) + (0))) = (*(u16 *)((u8 *)(q) + (0))) & 1;
+        qCar->field_F8 = 0;
+        qCar->field_24 = qCar->field_108;
+        qCar->field_8A = (u16)qCar->field_8A & 1;
         i++;
         q += 0x19C;
     } while ((s16)i < 11);
+#undef qCar
     RankContenders();
     for (i = 0; i < 11; i++) {
         s32 j = (s16)i;
@@ -180,26 +182,26 @@ void UpdateRaceCars(void) {
     base = g_Cars;
     walk = g_Cars;
     do {
-        if ((*(s16 *)((u8 *)(((u8 *)walk + 0x24)) + (0x88))) != -1) {
+        if (walk->activeFlag != -1) {
             drive = (GameCarAiBlock *)&base->field_BC;
-            if ((*(s16 *)((u8 *)(((u8 *)walk + 0x24)) + (0x10A))) > 0) {
-                if ((*(s16 *)((u8 *)(((u8 *)walk + 0x24)) + (0x104))) < (*(s16 *)((u8 *)(((u8 *)walk + 0x24)) + (0x10A))) && (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80))) >= 0x321) {
-                    (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84))) = 0;
-                } else if (drive->field_130 >= (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84)))) {
-                    (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84))) = drive->field_12C + (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84)));
+            if (walk->field_12E > 0) {
+                if (walk->field_128 < walk->field_12E && walk->field_A4 >= 0x321) {
+                    walk->field_A8 = 0;
+                } else if (drive->field_130 >= walk->field_A8) {
+                    walk->field_A8 = drive->field_12C + walk->field_A8;
                 } else {
-                    (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84))) = drive->field_130;
+                    walk->field_A8 = drive->field_130;
                 }
                 drive->field_12E = drive->field_12E - 1;
-            } else if ((*(s16 *)((u8 *)(((u8 *)walk + 0x24)) + (0x10C))) >= (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84)))) {
-                (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84))) = (*(s16 *)((u8 *)(((u8 *)walk + 0x24)) + (0x102))) + (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84)));
+            } else if (walk->field_130 >= walk->field_A8) {
+                walk->field_A8 = walk->field_126 + walk->field_A8;
             } else {
-                (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84))) = (*(s16 *)((u8 *)(((u8 *)walk + 0x24)) + (0x10C)));
+                walk->field_A8 = walk->field_130;
             }
-            (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80))) * 0x5E / 100;
-            (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80))) + (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x84)));
-            (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00))) =
-                GetAngleDelta((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00))), drive->field_EC) / 5 + (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00)));
+            walk->field_A4 = walk->field_A4 * 0x5E / 100;
+            walk->field_A4 = walk->field_A4 + walk->field_A8;
+            walk->field_24 =
+                GetAngleDelta(walk->field_24, drive->field_EC) / 5 + walk->field_24;
         }
         i++;
         walk++;
@@ -215,33 +217,33 @@ void UpdateRaceCars(void) {
     walk = g_Cars;
     do {
         drive = (GameCarAiBlock *)&base->field_BC;
-        if ((*(s16 *)((u8 *)(((u8 *)walk + 0x24)) + (0x88))) != -1) {
-            (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0xE4))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00)));
-            t = rsin((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x7C)))) * (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80)));
+        if (walk->activeFlag != -1) {
+            walk->field_108 = walk->field_24;
+            t = rsin(walk->headingAngle) * walk->field_A4;
             if (t < 0) {
                 t += 0xFF;
             }
-            (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0xA4))) = t >> 8;
-            t = rcos((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x7C)))) * (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x80)));
+            walk->field_C8 = t >> 8;
+            t = rcos(walk->headingAngle) * walk->field_A4;
             if (t < 0) {
                 t += 0xFF;
             }
-            (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0xAC))) = t >> 8;
+            walk->field_D0 = t >> 8;
             if ((s16)i < 4) {
                 s32 sixth;
                 s32 f4;
-                (*(s32 *)((u8 *)(base) + (0x00))) = (*(s32 *)((u8 *)(base) + (0x00))) - (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x14)));
-                f4 = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0xD0)));
-                (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x1C))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x1C))) - (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x0C)));
+                base->x = base->x - walk->motionX;
+                f4 = walk->field_F4;
+                walk->z = walk->z - walk->motionZ;
                 if (f4 < 0) {
                     sixth = -f4 / 6;
                 } else {
                     sixth = f4 / 6;
                 }
-                BuildRotMatrixY(pm1, (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00))));
-                BuildRotMatrixX(pm2, (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x04))));
+                BuildRotMatrixY(pm1, walk->field_24);
+                BuildRotMatrixX(pm2, walk->field_20);
                 MulMatrix2(pm2, pm1);
-                BuildRotMatrixZ(pm2, (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x04))));
+                BuildRotMatrixZ(pm2, walk->field_28);
                 MulMatrix2(pm2, pm1);
                 sv.vx = 0;
                 sv.vy = 0;
@@ -255,32 +257,32 @@ void UpdateRaceCars(void) {
                 m2.m[2][0] = m1.m[0][2];
                 m2.m[2][1] = m1.m[1][2];
                 m2.m[2][2] = m1.m[2][2];
-                ApplyMatrix(pm2, &sv, (u8 *)base + 0x10);
-                (*(s32 *)((u8 *)(base) + (0x00))) = (*(s32 *)((u8 *)(base) + (0x00))) + (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x14)));
-                (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x1C))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x1C))) + (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x0C)));
+                ApplyMatrix(pm2, &sv, &base->motionX);
+                base->x = base->x + walk->motionX;
+                walk->z = walk->z + walk->motionZ;
             }
-            vpos.x = drive->field_C8 * 6 / 1280 + (*(s32 *)((u8 *)(base) + (0x00)));
-            vpos.z = drive->field_D0 * 6 / 1280 + (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (-0x1C)));
+            vpos.x = drive->field_C8 * 6 / 1280 + base->x;
+            vpos.z = drive->field_D0 * 6 / 1280 + walk->z;
             /*
              * Retail only initializes x and z before copying all four words.
              * Its uninitialized y and w stores are intentionally preserved.
              */
             *(Vec4 *)base = vpos;
-            if ((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x20))) >= 0x41) {
-                (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x40))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x40))) - 6;
-            } else if ((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x20))) < -0x40) {
-                (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x40))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x40))) + 6;
+            if (walk->field_44 >= 0x41) {
+                walk->field_64 = walk->field_64 - 6;
+            } else if (walk->field_44 < -0x40) {
+                walk->field_64 = walk->field_64 + 6;
             }
-            if ((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x40))) != 0) {
-                (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x40))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x40))) * 7 / 8;
+            if (walk->field_64 != 0) {
+                walk->field_64 = walk->field_64 * 7 / 8;
             }
-            (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x20))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x20))) + drive->field_F4;
-            if ((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x20))) >= 0x12C) {
-                (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x20))) = 0x12C;
-            } else if ((*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x20))) < -0x12B) {
-                (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x20))) = -0x12C;
+            walk->field_44 = walk->field_44 + drive->field_F4;
+            if (walk->field_44 >= 0x12C) {
+                walk->field_44 = 0x12C;
+            } else if (walk->field_44 < -0x12B) {
+                walk->field_44 = -0x12C;
             }
-            (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00))) = (*(s32 *)((u8 *)(((u8 *)walk + 0x24)) + (0x00))) + drive->field_F4;
+            walk->field_24 = walk->field_24 + drive->field_F4;
         }
         i++;
         walk++;
@@ -311,72 +313,67 @@ void UpdateRaceCars(void) {
         base = g_Cars;
         lastBase = g_Cars;
         do {
-        if ((*(s16 *)((u8 *)(lastBase) + (0xAC))) != -1) {
+        if (lastBase->activeFlag != -1) {
             register s16 step asm("$17");
             register s32 spin asm("$2");
             s32 scaled;
             s32 limit;
-            scaled = (*(s32 *)((u8 *)(lastBase) + (0xA4))) * 3;
+            scaled = lastBase->field_A4 * 3;
             step = scaled;
             if ((s16)scaled >= 0x1001) {
                 step = 0x249;
             }
-            spin = (step + (*(s32 *)((u8 *)(lastBase) + (0x48)))) & 0xFFF;
-            (*(s32 *)((u8 *)(lastBase) + (0x48))) = spin;
-            if ((*(s32 *)((u8 *)(lastBase) + (0xA4))) >= 0x321) {
-                (*(s32 *)((u8 *)(lastBase) + (0x48))) = spin | 0x1000;
+            spin = (step + lastBase->field_48) & 0xFFF;
+            lastBase->field_48 = spin;
+            if (lastBase->field_A4 >= 0x321) {
+                lastBase->field_48 = spin | 0x1000;
             }
-            limit = (*(s32 *)((u8 *)(lastBase) + (0x04))) - 8;
-            *(Vec4 *)((u8 *)lastBase + 0x50) =
-                *(Vec4 *)((u8 *)lastBase + 0x20);
-            (*(s32 *)((u8 *)(lastBase) + (0x28))) =
-                (*(s32 *)((u8 *)(lastBase) + (0x28))) + (*(s32 *)((u8 *)(lastBase) + (0x64)));
-            (*(s32 *)((u8 *)(lastBase) + (0x60))) = (*(s32 *)((u8 *)(lastBase) + (0x04)));
-            if ((*(s16 *)((u8 *)(lastBase) + (0x98))) != 0) {
+            limit = lastBase->y - 8;
+            *(Vec4 *)&lastBase->field_50 = *(Vec4 *)&lastBase->field_20;
+            lastBase->field_28 = lastBase->field_28 + lastBase->field_64;
+            lastBase->field_60 = lastBase->y;
+            if (lastBase->field_98 != 0) {
                 s32 tick;
                 s32 state;
-                tick = (u16)(*(s16 *)((u8 *)(lastBase) + (0x9A))) + 1;
-                (*(s16 *)((u8 *)(lastBase) + (0x9A))) = tick;
-                state = (*(s16 *)((u8 *)(lastBase) + (0x98)));
+                tick = (u16)lastBase->field_9A + 1;
+                lastBase->field_9A = tick;
+                state = lastBase->field_98;
                 if (state == 1) {
                     s32 n = (s16)tick;
-                    (*(s32 *)((u8 *)(lastBase) + (0x04))) =
-                        (*(s16 *)((u8 *)(lastBase) + (0x9C))) * n + n * n * 72 / 100
-                        + (*(s32 *)((u8 *)(lastBase) + (0x04)));
-                    if ((*(s32 *)((u8 *)(lastBase) + (0x04))) >= limit) {
-                        (*(s16 *)((u8 *)(lastBase) + (0x98))) = 0;
+                    lastBase->y =
+                        lastBase->field_9C * n + n * n * 72 / 100
+                        + lastBase->y;
+                    if (lastBase->y >= limit) {
+                        lastBase->field_98 = 0;
                     }
                 } else if (state == 2) {
-                    if ((*(s16 *)((u8 *)(lastBase) + (0x9E))) >=
-                        limit - (*(s16 *)((u8 *)(lastBase) + (0x9C)))) {
-                        (*(s32 *)((u8 *)(lastBase) + (0x04))) = (*(s16 *)((u8 *)(lastBase) + (0x9E)));
+                    if (lastBase->field_9E >= limit - lastBase->field_9C) {
+                        lastBase->y = lastBase->field_9E;
                     } else {
-                        (*(s16 *)((u8 *)(lastBase) + (0x98))) = 3;
-                        (*(s16 *)((u8 *)(lastBase) + (0x9C))) = (*(s16 *)((u8 *)(lastBase) + (0x9A)));
-                        (*(s32 *)((u8 *)(lastBase) + (0x04))) = (*(s16 *)((u8 *)(lastBase) + (0x9E)));
+                        lastBase->field_98 = 3;
+                        lastBase->field_9C = lastBase->field_9A;
+                        lastBase->y = lastBase->field_9E;
                     }
                 } else {
-                    s16 n = tick - (u16)(*(s16 *)((u8 *)(lastBase) + (0x9C)));
-                    (*(s32 *)((u8 *)(lastBase) + (0x04))) =
-                        (*(s16 *)((u8 *)(lastBase) + (0x9E))) + n * n * 216 / 100;
-                    if ((*(s32 *)((u8 *)(lastBase) + (0x04))) >= limit) {
-                        (*(s16 *)((u8 *)(lastBase) + (0x98))) = 0;
+                    s16 n = tick - (u16)lastBase->field_9C;
+                    lastBase->y = lastBase->field_9E + n * n * 216 / 100;
+                    if (lastBase->y >= limit) {
+                        lastBase->field_98 = 0;
                     }
                 }
-                if ((*(s16 *)((u8 *)(lastBase) + (0x98))) == 0) {
-                    (*(s32 *)((u8 *)(lastBase) + (0x04))) = limit + 8;
-                    (*(s16 *)((u8 *)(lastBase) + (0x90))) = 0;
-                    (*(s16 *)((u8 *)(lastBase) + (0x94))) = 0;
-                    (*(s16 *)((u8 *)(lastBase) + (0x98))) = 0;
+                if (lastBase->field_98 == 0) {
+                    lastBase->y = limit + 8;
+                    lastBase->field_90 = 0;
+                    lastBase->field_94 = 0;
+                    lastBase->field_98 = 0;
                     StartCarBodyKick(1, base);
                 }
             }
-            if ((*(s16 *)((u8 *)(lastBase) + (0x8A))) == 0) {
+            if (lastBase->field_8A == 0) {
                 UpdateCarBodyKick(base);
                 UpdateCarCrestHop(base);
             } else {
-                (*(s32 *)((u8 *)(lastBase) + (0xA4))) =
-                    (*(s32 *)((u8 *)(lastBase) + (0xA4))) * 97 / 100 * 97 / 100;
+                lastBase->field_A4 = lastBase->field_A4 * 97 / 100 * 97 / 100;
             }
         }
         i++;
@@ -436,24 +433,26 @@ void UpdateAttractCars(void) {
         i = 0;
         car = g_Cars;
         sub = (GameCarRuntime *)((u8 *)g_Cars + 0x24);
+#define subCar ((GameCarRuntime *)((u8 *)sub - 0x24))
         do {
-        if ((*(s16 *)((u8 *)(sub) + (0x88))) != -1) {
+        if (subCar->activeFlag != -1) {
             drive = (GameCarAiBlock *)&car->field_BC;
 
-            if ((*(s32 *)((u8 *)(sub) + (0x84))) < (*(s16 *)((u8 *)(sub) + (0x10C)))) {
-                (*(s32 *)((u8 *)(sub) + (0x84))) = (*(s16 *)((u8 *)(sub) + (0x102))) + (*(s32 *)((u8 *)(sub) + (0x84)));
+            if (subCar->field_A8 < subCar->field_130) {
+                subCar->field_A8 = subCar->field_126 + subCar->field_A8;
             } else {
-                (*(s32 *)((u8 *)(sub) + (0x84))) = (*(s16 *)((u8 *)(sub) + (0x10C)));
+                subCar->field_A8 = subCar->field_130;
             }
-            (*(s32 *)((u8 *)(sub) + (0x80))) = (((*(s32 *)((u8 *)(sub) + (0x80)))) * 94 / 100);
-            (*(s32 *)((u8 *)(sub) + (0x80))) = (*(s32 *)((u8 *)(sub) + (0x80))) + (*(s32 *)((u8 *)(sub) + (0x84)));
-            (*(s32 *)((u8 *)(sub) + (0x00))) =
-                GetAngleDelta((*(s32 *)((u8 *)(sub) + (0x00))), drive->field_EC) / 5 + (*(s32 *)((u8 *)(sub) + (0x00)));
+            subCar->field_A4 = subCar->field_A4 * 94 / 100;
+            subCar->field_A4 = subCar->field_A4 + subCar->field_A8;
+            subCar->field_24 =
+                GetAngleDelta(subCar->field_24, drive->field_EC) / 5 + subCar->field_24;
         }
         i++;
         sub = (GameCarRuntime *)((u8 *)sub + 0x19C);
         car++;
         } while (i < 11);
+#undef subCar
         {
         GameCarRuntime *base;
         i = 0;
@@ -462,30 +461,30 @@ void UpdateAttractCars(void) {
         do {
         drive = (GameCarAiBlock *)&car->field_BC;
 
-        if ((*(s16 *)((u8 *)(base) + (0xAC))) != -1) {
+        if (base->activeFlag != -1) {
             s32 t;
-            (*(s32 *)((u8 *)(base) + (0x108))) = (*(s32 *)((u8 *)(base) + (0x24)));
-            t = rsin((*(s32 *)((u8 *)(base) + (0xA0)))) * (*(s32 *)((u8 *)(base) + (0xA4)));
+            base->field_108 = base->field_24;
+            t = rsin(base->headingAngle) * base->field_A4;
             if (t < 0) {
                 t += 0xFF;
             }
-            (*(s32 *)((u8 *)(base) + (0xC8))) = t >> 8;
-            (*(s32 *)((u8 *)(base) + (0xD0))) = rcos((*(s32 *)((u8 *)(base) + (0xA0)))) * (*(s32 *)((u8 *)(base) + (0xA4))) / 256;
+            base->field_C8 = t >> 8;
+            base->field_D0 = rcos(base->headingAngle) * base->field_A4 / 256;
             if ((s16)i < 4) {
                 s32 sixth;
                 s32 f4;
-                (*(s32 *)((u8 *)(car) + (0x00))) = (*(s32 *)((u8 *)(car) + (0x00))) - (*(s32 *)((u8 *)(base) + (0x10)));
-                f4 = (*(s32 *)((u8 *)(base) + (0xF4)));
-                (*(s32 *)((u8 *)(base) + (0x08))) = (*(s32 *)((u8 *)(base) + (0x08))) - (*(s32 *)((u8 *)(base) + (0x18)));
+                car->x = car->x - base->motionX;
+                f4 = base->field_F4;
+                base->z = base->z - base->motionZ;
                 if (f4 < 0) {
                     sixth = -f4 / 6;
                 } else {
                     sixth = f4 / 6;
                 }
-                BuildRotMatrixY(&m1, (*(s32 *)((u8 *)(base) + (0x24))));
-                BuildRotMatrixX(&m2, (*(s32 *)((u8 *)(base) + (0x20))));
+                BuildRotMatrixY(&m1, base->field_24);
+                BuildRotMatrixX(&m2, base->field_20);
                 MulMatrix2(&m2, &m1);
-                BuildRotMatrixZ(&m2, (*(s32 *)((u8 *)(base) + (0x28))));
+                BuildRotMatrixZ(&m2, base->field_28);
                 MulMatrix2(&m2, &m1);
                 sv1.vx = 0;
                 sv1.vy = 0;
@@ -499,32 +498,32 @@ void UpdateAttractCars(void) {
                 m2.m[2][0] = m1.m[0][2];
                 m2.m[2][1] = m1.m[1][2];
                 m2.m[2][2] = m1.m[2][2];
-                ApplyMatrix(&m2, &sv1, (u8 *)car + 0x10);
-                (*(s32 *)((u8 *)(car) + (0x00))) = (*(s32 *)((u8 *)(car) + (0x00))) + (*(s32 *)((u8 *)(base) + (0x10)));
-                (*(s32 *)((u8 *)(base) + (0x08))) = (*(s32 *)((u8 *)(base) + (0x08))) + (*(s32 *)((u8 *)(base) + (0x18)));
+                ApplyMatrix(&m2, &sv1, &car->motionX);
+                car->x = car->x + base->motionX;
+                base->z = base->z + base->motionZ;
             }
-            vTmp.x = drive->field_C8 * 6 / 1280 + (*(s32 *)((u8 *)(car) + (0x00)));
-            vTmp.z = drive->field_D0 * 6 / 1280 + (*(s32 *)((u8 *)(base) + (0x08)));
+            vTmp.x = drive->field_C8 * 6 / 1280 + car->x;
+            vTmp.z = drive->field_D0 * 6 / 1280 + base->z;
             /*
              * Retail only initializes x and z before copying all four words.
              * Its uninitialized y and w stores are intentionally preserved.
              */
             *(Vec4 *)car = vTmp;
-            if ((*(s32 *)((u8 *)(base) + (0x44))) >= 0x41) {
-                (*(s32 *)((u8 *)(base) + (0x64))) = (*(s32 *)((u8 *)(base) + (0x64))) - 6;
-            } else if ((*(s32 *)((u8 *)(base) + (0x44))) < -0x40) {
-                (*(s32 *)((u8 *)(base) + (0x64))) = (*(s32 *)((u8 *)(base) + (0x64))) + 6;
+            if (base->field_44 >= 0x41) {
+                base->field_64 = base->field_64 - 6;
+            } else if (base->field_44 < -0x40) {
+                base->field_64 = base->field_64 + 6;
             }
-            if ((*(s32 *)((u8 *)(base) + (0x64))) != 0) {
-                (*(s32 *)((u8 *)(base) + (0x64))) = (*(s32 *)((u8 *)(base) + (0x64))) * 7 / 8;
+            if (base->field_64 != 0) {
+                base->field_64 = base->field_64 * 7 / 8;
             }
-            (*(s32 *)((u8 *)(base) + (0x44))) = (*(s32 *)((u8 *)(base) + (0x44))) + drive->field_F4;
-            if ((*(s32 *)((u8 *)(base) + (0x44))) >= 0x12C) {
-                (*(s32 *)((u8 *)(base) + (0x44))) = 0x12C;
-            } else if ((*(s32 *)((u8 *)(base) + (0x44))) < -0x12B) {
-                (*(s32 *)((u8 *)(base) + (0x44))) = -0x12C;
+            base->field_44 = base->field_44 + drive->field_F4;
+            if (base->field_44 >= 0x12C) {
+                base->field_44 = 0x12C;
+            } else if (base->field_44 < -0x12B) {
+                base->field_44 = -0x12C;
             }
-            (*(s32 *)((u8 *)(base) + (0x24))) = (*(s32 *)((u8 *)(base) + (0x24))) + drive->field_F4;
+            base->field_24 = base->field_24 + drive->field_F4;
         }
         i++;
         base++;
@@ -556,67 +555,66 @@ void UpdateAttractCars(void) {
     car = g_Cars;
     base = g_Cars;
     do {
-        if ((*(s16 *)((u8 *)(base) + (0xAC))) != -1) {
+        if (base->activeFlag != -1) {
             register s16 step asm("$17");
             register s32 spin asm("$2");
             s32 scaled;
             s32 limit;
-            scaled = (*(s32 *)((u8 *)(base) + (0xA4))) * 3;
+            scaled = base->field_A4 * 3;
             step = scaled;
             if ((s16)scaled >= 0x1001) {
                 step = 0x249;
             }
-            spin = (step + (*(s32 *)((u8 *)(base) + (0x48)))) & 0xFFF;
-            (*(s32 *)((u8 *)(base) + (0x48))) = spin;
-            if ((*(s32 *)((u8 *)(base) + (0xA4))) >= 0x321) {
-                (*(s32 *)((u8 *)(base) + (0x48))) = spin | 0x1000;
+            spin = (step + base->field_48) & 0xFFF;
+            base->field_48 = spin;
+            if (base->field_A4 >= 0x321) {
+                base->field_48 = spin | 0x1000;
             }
-            limit = (*(s32 *)((u8 *)(base) + (0x04))) - 8;
-            *(Vec4 *)((u8 *)base + 0x50) =
-                *(Vec4 *)((u8 *)base + 0x20);
-            (*(s32 *)((u8 *)(base) + (0x28))) = (*(s32 *)((u8 *)(base) + (0x28))) + (*(s32 *)((u8 *)(base) + (0x64)));
-            (*(s32 *)((u8 *)(base) + (0x60))) = (*(s32 *)((u8 *)(base) + (0x04)));
-            if ((*(s16 *)((u8 *)(base) + (0x98))) != 0) {
+            limit = base->y - 8;
+            *(Vec4 *)&base->field_50 = *(Vec4 *)&base->field_20;
+            base->field_28 = base->field_28 + base->field_64;
+            base->field_60 = base->y;
+            if (base->field_98 != 0) {
                 s32 tick;
                 s32 state;
-                tick = (u16)(*(s16 *)((u8 *)(base) + (0x9A))) + 1;
-                (*(s16 *)((u8 *)(base) + (0x9A))) = tick;
-                state = (*(s16 *)((u8 *)(base) + (0x98)));
+                tick = (u16)base->field_9A + 1;
+                base->field_9A = tick;
+                state = base->field_98;
                 if (state == 1) {
                     s32 t = (s16)tick;
-                    (*(s32 *)((u8 *)(base) + (0x04))) =
-                        (*(s16 *)((u8 *)(base) + (0x9C))) * t + t * t * 72 / 100 + (*(s32 *)((u8 *)(base) + (0x04)));
-                    if ((*(s32 *)((u8 *)(base) + (0x04))) >= limit) {
-                        (*(s16 *)((u8 *)(base) + (0x98))) = 0;
+                    base->y =
+                        base->field_9C * t + t * t * 72 / 100 + base->y;
+                    if (base->y >= limit) {
+                        base->field_98 = 0;
                     }
                 } else if (state == 2) {
-                    if ((*(s16 *)((u8 *)(base) + (0x9E))) >= limit - (*(s16 *)((u8 *)(base) + (0x9C)))) {
-                        (*(s32 *)((u8 *)(base) + (0x04))) = (*(s16 *)((u8 *)(base) + (0x9E)));
+                    if (base->field_9E >= limit - base->field_9C) {
+                        base->y = base->field_9E;
                     } else {
-                        (*(s16 *)((u8 *)(base) + (0x98))) = 3;
-                        (*(s16 *)((u8 *)(base) + (0x9C))) = (*(s16 *)((u8 *)(base) + (0x9A)));
-                        (*(s32 *)((u8 *)(base) + (0x04))) = (*(s16 *)((u8 *)(base) + (0x9E)));
+                        base->field_98 = 3;
+                        base->field_9C = base->field_9A;
+                        base->y = base->field_9E;
                     }
                 } else {
-                    s16 n = tick - (u16)(*(s16 *)((u8 *)(base) + (0x9C)));
-                    (*(s32 *)((u8 *)(base) + (0x04))) = (*(s16 *)((u8 *)(base) + (0x9E))) + n * n * 216 / 100;
-                    if ((*(s32 *)((u8 *)(base) + (0x04))) >= limit) {
-                        (*(s16 *)((u8 *)(base) + (0x98))) = 0;
+                    s16 n = tick - (u16)base->field_9C;
+                    base->y = base->field_9E + n * n * 216 / 100;
+                    if (base->y >= limit) {
+                        base->field_98 = 0;
                     }
                 }
-                if ((*(s16 *)((u8 *)(base) + (0x98))) == 0) {
-                    (*(s32 *)((u8 *)(base) + (0x04))) = limit + 8;
-                    (*(s16 *)((u8 *)(base) + (0x90))) = 0;
-                    (*(s16 *)((u8 *)(base) + (0x94))) = 0;
-                    (*(s16 *)((u8 *)(base) + (0x98))) = 0;
+                if (base->field_98 == 0) {
+                    base->y = limit + 8;
+                    base->field_90 = 0;
+                    base->field_94 = 0;
+                    base->field_98 = 0;
                     StartCarBodyKick(1, car);
                 }
             }
-            if ((*(s16 *)((u8 *)(base) + (0x8A))) == 0) {
+            if (base->field_8A == 0) {
                 UpdateCarBodyKick(car);
                 UpdateCarCrestHop(car);
             } else {
-                (*(s32 *)((u8 *)(base) + (0xA4))) = (*(s32 *)((u8 *)(base) + (0xA4))) * 97 / 100 * 97 / 100;
+                base->field_A4 = base->field_A4 * 97 / 100 * 97 / 100;
             }
         }
         i++;
@@ -734,7 +732,7 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
     }
 }
 
-void SeedFinishCamera(void *car) {
+void SeedFinishCamera(GameCarRuntime *car) {
     register u32 word0;
     Block16 *src;
     Block16 *dst;
@@ -745,7 +743,7 @@ void SeedFinishCamera(void *car) {
     register s32 index asm("$3");
     s32 lastIndex;
 
-    base = car;
+    base = (u32 *)car;
     dst = (Block16 *)&g_CameraCar;
     src = (Block16 *)base;
     end = (Block16 *)((u8 *)base + 0x190);
@@ -757,18 +755,18 @@ void SeedFinishCamera(void *car) {
 
     *(LVec *)dst = *(LVec *)src;
 
-    index = ((GameCarRuntime *)base)->trackPointIndex;
+    index = car->trackPointIndex;
     track = g_TrackPoints;
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
     g_CameraCar.x = point->x;
 
-    index = ((GameCarRuntime *)base)->trackPointIndex;
+    index = car->trackPointIndex;
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
     g_CameraCar.z = point->z;
 
-    index = ((GameCarRuntime *)base)->trackPointIndex;
+    index = car->trackPointIndex;
     point = (GameTrackPoint *)((index * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);
     index = g_CameraCar.speed;
@@ -778,8 +776,8 @@ void SeedFinishCamera(void *car) {
     g_CameraCar.speed = index;
     g_CameraCar.y = word0;
 
-    index = *(s16 *)((u8 *)base + 0xB8);
-    lastIndex = ((GameCarRuntime *)base)->trackPointIndex;
+    index = car->facingBackwards;
+    lastIndex = car->trackPointIndex;
     index <<= 11;
     point = (GameTrackPoint *)((lastIndex * 3) << 3);
     point = (GameTrackPoint *)((u8 *)point + (s32)track);

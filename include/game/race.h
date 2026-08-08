@@ -6,6 +6,8 @@
 #include "game/vector.h"
 #include "game/replay.h"
 
+struct GameCarRuntime;
+
 /* Grand Prix class index, 0-based; displayed as CLASS(n+1). Also the track
  * tier: course asset index = 0x57 + (course << 1) + (class << 3). OVAL is
  * gated to class >= 2. See names.md 3. */
@@ -394,7 +396,7 @@ void RecordReplayFrame(void);
 void ResetFreeLookCamera(void);
 void ResetMirrorState(void);
 void ResetReplayWriteCursor(void);
-void SeedFinishCamera(void* car);
+void SeedFinishCamera(struct GameCarRuntime *car);
 void SeedFlybyScenery(void);
 void SeedReplayCars(void);
 void SeedRouteScenery(void);
