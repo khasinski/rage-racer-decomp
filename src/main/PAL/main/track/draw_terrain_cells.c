@@ -196,7 +196,7 @@ void GameDrawSkyBackground(void)
   s32 columnStepY;
   s32 rowStepX;
   s32 rowStepY;
-  s32 new_var;
+  s32 heldScreenY;
   s32 savedSinRoll;
   s32 savedCosRoll;
   s32 textureColumn;
@@ -210,11 +210,11 @@ void GameDrawSkyBackground(void)
   s32 savedCourseX0;
   u8 *packetCursor = scratch->packetCursor;
   s32 savedCourseX1;
-  s32 new_var3;
+  s32 heldBandY;
   s32 xWork_late;
   s32 adjW;
   s32 courseSaveY1;
-  u8 *new_var2;
+  u8 *heldPacket;
   s32 doubleRowStepY;
   s32 nextCellXFixed;
   s32 rowOffsetYFixed;
@@ -226,8 +226,8 @@ void GameDrawSkyBackground(void)
   s32 coordinateAccumulator;
   {
     s32 cameraY;
-    s32 var_a3_184;
-    s32 temp_lo_117;
+    s32 bandRowY;
+    s32 rotatedBandY;
     s32 sinRoll;
     s32 nearVerticalFixed;
     s32 horizontalFixed;
@@ -305,37 +305,37 @@ void GameDrawSkyBackground(void)
       rotatedX += 0xFFF;
     }
     negativeSinRoll = -sinRoll;
-    temp_lo_117 = negativeSinRoll * horizontalFixed;
+    rotatedBandY = negativeSinRoll * horizontalFixed;
     rotatedX >>= 0xC;
     leftViewAngle = 0xA000;
     panelXFixed = rotatedX + leftViewAngle;
-    rotatedY = temp_lo_117 + (cosRoll * nearVerticalFixed);
+    rotatedY = rotatedBandY + (cosRoll * nearVerticalFixed);
     unroundedY = rotatedY;
     if (unroundedY < 0)
     {
       rotatedY += 0xFFF;
     }
-    var_a3_184 = rotatedY >> 0xC;
+    bandRowY = rotatedY >> 0xC;
     coordinateAccumulator += sinRoll * farVerticalFixed;
-    panelYFixed = var_a3_184 + 0x7800;
+    panelYFixed = bandRowY + 0x7800;
     if (coordinateAccumulator < 0)
     {
       coordinateAccumulator += 0xFFF;
     }
     rotatedY = cosRoll * farVerticalFixed;
-    temp_lo_117 += rotatedY;
+    rotatedBandY += rotatedY;
     rotatedY = coordinateAccumulator >> 0xC;
     lowerPanelXFixed = rotatedY + 0xA000;
-    if (temp_lo_117 < 0)
+    if (rotatedBandY < 0)
     {
-      temp_lo_117 += 0xFFF;
+      rotatedBandY += 0xFFF;
     }
-    leftViewAngle = temp_lo_117 >> 0xC;
+    leftViewAngle = rotatedBandY >> 0xC;
     coordinateAccumulator = leftViewAngle + 0x7800;
     if (g_MirrorMode != SCRATCH_MIRROR)
     {
       panelYFixed = 0x2400;
-      panelYFixed = var_a3_184 + panelYFixed;
+      panelYFixed = bandRowY + panelYFixed;
       coordinateAccumulator = leftViewAngle + 0x2400;
     }
     columnStepX = cosRoll * 4;
@@ -360,46 +360,46 @@ void GameDrawSkyBackground(void)
     if (g_SkyRowBase != 0)
     {
       {
-        s32 temp_s7_256;
-        s32 var_a3_184;
+        s32 nextTileY;
+        s32 bandRowY;
         POLY_FT4 *quad;
         POLY_FT4 *quadRow;
         s16 tileIndex;
-        s32 temp_v1_257;
-        s32 temp_v1_223;
-        s32 temp_a1_208;
-        s32 temp_a0_248;
-        s32 var_fp_181;
-        s32 spF0 = 0;
-        s32 spF8 = 0;
+        s32 tileBottomY;
+        s32 tileRightX;
+        s32 tileLeftX;
+        s32 tileTopY;
+        s32 column;
+        s32 rowShearY = 0;
+        s32 rowShearX = 0;
         gridRow = 0;
         do
         {
-          var_fp_181 = 0;
+          column = 0;
           quadRow = (POLY_FT4 *)packetCursor;
-          doubleRowStepY = spF8;
-          rowOffsetYFixed = spF0;
-          var_a3_184 = panelYFixed;
+          doubleRowStepY = rowShearX;
+          rowOffsetYFixed = rowShearY;
+          bandRowY = panelYFixed;
           cellXFixed = panelXFixed;
           do
           {
-            quad = quadRow + var_fp_181;
-            tileIndex = g_SkyTileMap[(gridRow % 2) + g_SkyRowBase][(textureColumn + var_fp_181) & 0xF];
+            quad = quadRow + column;
+            tileIndex = g_SkyTileMap[(gridRow % 2) + g_SkyRowBase][(textureColumn + column) & 0xF];
             tileUv = &g_SkyTileUV[tileIndex];
-            temp_a1_208 = cellXFixed - doubleRowStepY;
-            screenX0 = GameRoundTerrainCoordinate(temp_a1_208);
+            tileLeftX = cellXFixed - doubleRowStepY;
+            screenX0 = GameRoundTerrainCoordinate(tileLeftX);
             nextCellXFixed = cellXFixed + columnStepX;
-            temp_v1_223 = nextCellXFixed - doubleRowStepY;
-            screenX1 = GameRoundTerrainCoordinate(temp_v1_223);
-            screenX2 = GameRoundTerrainCoordinate(temp_a1_208 + rowStepX);
-            screenX3 = GameRoundTerrainCoordinate(temp_v1_223 + rowStepX);
-            temp_a0_248 = var_a3_184 - rowOffsetYFixed;
-            screenY0 = GameRoundTerrainCoordinate(temp_a0_248);
-            temp_s7_256 = var_a3_184 + columnStepY;
-            temp_v1_257 = temp_s7_256 - rowOffsetYFixed;
-            screenY1 = GameRoundTerrainCoordinate(temp_v1_257);
-            screenY2 = GameRoundTerrainCoordinate(temp_a0_248 + rowStepY);
-            screenY3 = GameRoundTerrainCoordinate(temp_v1_257 + rowStepY);
+            tileRightX = nextCellXFixed - doubleRowStepY;
+            screenX1 = GameRoundTerrainCoordinate(tileRightX);
+            screenX2 = GameRoundTerrainCoordinate(tileLeftX + rowStepX);
+            screenX3 = GameRoundTerrainCoordinate(tileRightX + rowStepX);
+            tileTopY = bandRowY - rowOffsetYFixed;
+            screenY0 = GameRoundTerrainCoordinate(tileTopY);
+            nextTileY = bandRowY + columnStepY;
+            tileBottomY = nextTileY - rowOffsetYFixed;
+            screenY1 = GameRoundTerrainCoordinate(tileBottomY);
+            screenY2 = GameRoundTerrainCoordinate(tileTopY + rowStepY);
+            screenY3 = GameRoundTerrainCoordinate(tileBottomY + rowStepY);
             SetPolyFT4(packetCursor);
             SetShadeTex(packetCursor, 0);
             quad->tpage = 0x18;
@@ -414,22 +414,22 @@ void GameDrawSkyBackground(void)
             quad->x3 = screenX3;
             quad->t.r0 = 0x80;
             quad->t.g0 = 0x80;
-            new_var = screenY0;
+            heldScreenY = screenY0;
             quad->t.b0 = 0x80;
-            quad->y0 = new_var;
+            quad->y0 = heldScreenY;
             quad->y1 = screenY1;
             quad->y2 = screenY2;
             quad->y3 = screenY3;
             quad->clut = 0x798E;
             AddPrim(&scratch->orderingTable[SKY_OT_NEAR], quad);
-            var_fp_181 += 1;
+            column += 1;
             cellXFixed = nextCellXFixed;
-            var_a3_184 = temp_s7_256;
+            bandRowY = nextTileY;
           }
-          while (var_fp_181 < 8);
+          while (column < 8);
           gridRow += 1;
-          spF0 += rowStepY;
-          spF8 += rowStepX;
+          rowShearY += rowStepY;
+          rowShearX += rowStepX;
         }
         while (gridRow < 4);
       }
@@ -439,23 +439,23 @@ void GameDrawSkyBackground(void)
     else
     {
       SkyClipBounds clip;
-      s32 temp_lo_117;
+      s32 rotatedBandY;
       POLY_FT4 *quad;
-      s32 temp_fp_714;
-      s32 temp_v0_431;
-      s32 temp_v1_408;
-      s32 temp_v1_475;
-      s32 var_fp_360;
-      s32 var_s7_357;
+      s32 bandRightX;
+      s32 stripFarX;
+      s32 stripRightX;
+      s32 stripLowerY;
+      s32 horizonBottomY;
+      s32 lowestY;
       s32 upperBandXFixed;
-      s32 var_v0_941;
-      s32 var_v0_947;
+      s32 bandNextY;
+      s32 bandSpareY;
       panelYFixed = coordinateAccumulator;
       {
         panelXFixed = lowerPanelXFixed;
         horizonTopY = GameRoundTerrainCoordinate(panelYFixed);
-        var_fp_360 = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
-        var_s7_357 = 0xF0;
+        horizonBottomY = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
+        lowestY = 0xF0;
         clip.xMinTop = (clip.xMinBottom = 0x140);
         clip.xMaxBottom = 0;
         clip.xMaxTop = 0;
@@ -468,18 +468,18 @@ void GameDrawSkyBackground(void)
         do
         {
           screenX0 = GameRoundTerrainCoordinate(panelXFixed);
-          temp_v1_408 = panelXFixed + columnStepX;
-          screenX1 = GameRoundTerrainCoordinate(temp_v1_408);
+          stripRightX = panelXFixed + columnStepX;
+          screenX1 = GameRoundTerrainCoordinate(stripRightX);
           screenX2 = GameRoundTerrainCoordinate(panelXFixed + rowStepX);
-          temp_v0_431 = GameRoundTerrainCoordinate(temp_v1_408 + rowStepX);
-          screenX3 = temp_v0_431;
-          if (((((screenX0 >= 0) || (screenX1 >= 0)) || (screenX2 >= 0)) || (temp_v0_431 >= 0)) && ((((screenX0 < 0x140) || (screenX1 < 0x140)) || (screenX2 < 0x140)) || (screenX3 < 0x140)))
+          stripFarX = GameRoundTerrainCoordinate(stripRightX + rowStepX);
+          screenX3 = stripFarX;
+          if (((((screenX0 >= 0) || (screenX1 >= 0)) || (screenX2 >= 0)) || (stripFarX >= 0)) && ((((screenX0 < 0x140) || (screenX1 < 0x140)) || (screenX2 < 0x140)) || (screenX3 < 0x140)))
           {
             screenY0 = GameRoundTerrainCoordinate(panelYFixed);
-            temp_v1_475 = panelYFixed + columnStepY;
-            screenY1 = GameRoundTerrainCoordinate(temp_v1_475);
+            stripLowerY = panelYFixed + columnStepY;
+            screenY1 = GameRoundTerrainCoordinate(stripLowerY);
             screenY2 = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
-            screenY3 = GameRoundTerrainCoordinate(temp_v1_475 + rowStepY);
+            screenY3 = GameRoundTerrainCoordinate(stripLowerY + rowStepY);
             if (horizonTopY < screenY0)
             {
               horizonTopY = screenY0;
@@ -488,25 +488,25 @@ void GameDrawSkyBackground(void)
             {
               horizonTopY = screenY1;
             }
-            if (screenY2 < var_fp_360)
+            if (screenY2 < horizonBottomY)
             {
-              var_fp_360 = screenY2;
+              horizonBottomY = screenY2;
             }
-            if (screenY3 < var_fp_360)
+            if (screenY3 < horizonBottomY)
             {
-              var_fp_360 = screenY3;
+              horizonBottomY = screenY3;
             }
             if (screenY2 < screenY3)
             {
-              if (screenY2 < var_s7_357)
+              if (screenY2 < lowestY)
               {
-                var_s7_357 = screenY2;
+                lowestY = screenY2;
               }
             }
             else
-              if (screenY3 < var_s7_357)
+              if (screenY3 < lowestY)
             {
-              var_s7_357 = screenY3;
+              lowestY = screenY3;
             }
             if (screenX0 < clip.xMinTop)
             {
@@ -599,19 +599,19 @@ void GameDrawSkyBackground(void)
       columnStepX *= 8;
       columnStepY *= 8;
       screenX0 = GameRoundTerrainCoordinate(panelXFixed);
-      temp_fp_714 = panelXFixed + columnStepX;
-      screenX1 = GameRoundTerrainCoordinate(temp_fp_714);
+      bandRightX = panelXFixed + columnStepX;
+      screenX1 = GameRoundTerrainCoordinate(bandRightX);
       screenX2 = GameRoundTerrainCoordinate(panelXFixed + rowStepX);
-      screenX3 = GameRoundTerrainCoordinate(temp_fp_714 + rowStepX);
+      screenX3 = GameRoundTerrainCoordinate(bandRightX + rowStepX);
       screenY0 = GameRoundTerrainCoordinate(panelYFixed);
-      var_s7_357 = panelYFixed + columnStepY;
-      screenY1 = GameRoundTerrainCoordinate(var_s7_357);
+      lowestY = panelYFixed + columnStepY;
+      screenY1 = GameRoundTerrainCoordinate(lowestY);
       {
         u8 color;
-        s32 var_v0_762;
+        s32 bandFarY;
         screenY2 = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
-        var_v0_762 = var_s7_357 + rowStepY;
-        screenY3 = var_v0_762 / 256;
+        bandFarY = lowestY + rowStepY;
+        screenY3 = bandFarY / 256;
         nextPacket = packetCursor + 0x24;
         SetPolyG4(packetCursor);
         ((POLY_G4 *)packetCursor)->x0 = screenX0;
@@ -658,9 +658,9 @@ void GameDrawSkyBackground(void)
           adjW = xWork + 0xFF;
         }
         screenX2 = adjW >> 8;
-        upperBandXFixed = temp_fp_714 - rowStepX;
+        upperBandXFixed = bandRightX - rowStepX;
         screenX3 = upperBandXFixed / 256;
-        asm("" : : "r"(temp_fp_714) : "memory");
+        asm("" : : "r"(bandRightX) : "memory");
         upperBandYFixed = panelYFixed - rowStepY;
         adjW = upperBandYFixed;
         if (upperBandYFixed < 0)
@@ -668,9 +668,9 @@ void GameDrawSkyBackground(void)
           adjW = upperBandYFixed + 0xFF;
         }
         screenY2 = adjW >> 8;
-        new_var3 = var_s7_357;
-        var_v0_941 = new_var3;
-        savedCourseY1 = var_v0_941 - rowStepY;
+        heldBandY = lowestY;
+        bandNextY = heldBandY;
+        savedCourseY1 = bandNextY - rowStepY;
         adjW = savedCourseY1;
         if (savedCourseY1 < 0)
         {
@@ -728,7 +728,7 @@ void GameDrawSkyBackground(void)
 
         packetCursor = nextPacket;
         g4Cursor = (POLY_G4 *)packetCursor;
-        x3Raw = temp_fp_714 - leftXWorkFixed;
+        x3Raw = bandRightX - leftXWorkFixed;
         if (x3Raw < 0)
         {
           x3Raw += 0xFF;
@@ -738,10 +738,10 @@ void GameDrawSkyBackground(void)
         asm("");
         asm("" : : "r"(savedCourseY1));
         screenY0 = screenY2;
-        temp_lo_117 = rowStepY * 3;
+        rotatedBandY = rowStepY * 3;
         screenY1 = screenY3;
-        screenY2 = GameRoundTerrainCoordinate(panelYFixed - temp_lo_117);
-        screenY3 = GameRoundTerrainCoordinate(new_var3 - temp_lo_117);
+        screenY2 = GameRoundTerrainCoordinate(panelYFixed - rotatedBandY);
+        screenY3 = GameRoundTerrainCoordinate(heldBandY - rotatedBandY);
         nextPacket = (u8 *)(g4Cursor + 1);
         SetPolyG4(g4Cursor);
         g4Cursor->x0 = screenX0;
@@ -770,34 +770,34 @@ void GameDrawSkyBackground(void)
       }
     }
     {
-      s32 temp_a0_1048;
-      s32 temp_a0_1170;
-      s32 temp_a1_1150;
-      s32 temp_v1_1063;
-      s32 temp_v1_1140;
-      s32 temp_v1_1161;
-      s32 var_v0_1007;
+      s32 courseTopY;
+      s32 skirtBottomY;
+      s32 skirtRightX;
+      s32 courseBottomY;
+      s32 skirtStepX;
+      s32 skirtStepY;
+      s32 courseLeftX;
       textureColumn = rowStepX * 4;
       if (g_CourseIndex != 2)
       {
         u8 color;
         POLY_G4 *courseG4 = (POLY_G4 *)packetCursor;
         leftXWorkFixed = (panelXFixed + rowStepX) * 8;
-        var_v0_1007 = leftXWorkFixed - savedSinRoll;
-        screenX0 = var_v0_1007 / 2048;
+        courseLeftX = leftXWorkFixed - savedSinRoll;
+        screenX0 = courseLeftX / 2048;
         rightXWorkFixed = ((panelXFixed + columnStepX) + rowStepX) * 8;
         screenX1 = GameRoundTerrainCoordinate11(rightXWorkFixed - savedSinRoll);
         screenX2 = GameRoundTerrainCoordinate11(leftXWorkFixed + savedSinRoll);
         savedCourseX0 = screenX2;
         screenX3 = GameRoundTerrainCoordinate11(rightXWorkFixed + savedSinRoll);
-        temp_a0_1048 = (panelYFixed + rowStepY) * 8;
+        courseTopY = (panelYFixed + rowStepY) * 8;
         savedCourseX1 = screenX3;
-        screenY0 = GameRoundTerrainCoordinate11(temp_a0_1048 - savedCosRoll);
-        temp_v1_1063 = ((panelYFixed + columnStepY) + rowStepY) * 8;
-        screenY1 = GameRoundTerrainCoordinate11(temp_v1_1063 - savedCosRoll);
-        screenY2 = GameRoundTerrainCoordinate11(temp_a0_1048 + savedCosRoll);
+        screenY0 = GameRoundTerrainCoordinate11(courseTopY - savedCosRoll);
+        courseBottomY = ((panelYFixed + columnStepY) + rowStepY) * 8;
+        screenY1 = GameRoundTerrainCoordinate11(courseBottomY - savedCosRoll);
+        screenY2 = GameRoundTerrainCoordinate11(courseTopY + savedCosRoll);
         xWork_late = screenY2;
-        screenY3 = GameRoundTerrainCoordinate11(temp_v1_1063 + savedCosRoll);
+        screenY3 = GameRoundTerrainCoordinate11(courseBottomY + savedCosRoll);
         SetPolyG4(courseG4);
         courseG4->x0 = screenX0;
         courseG4->x1 = screenX1;
@@ -830,23 +830,23 @@ void GameDrawSkyBackground(void)
         AddPrim(&scratch->orderingTable[SKY_OT_FAR], courseG4);
         packetCursor = nextPacket;
       }
-      temp_v1_1140 = rowStepX * 3;
-      screenX2 = GameRoundTerrainCoordinate(panelXFixed + temp_v1_1140);
-      temp_a1_1150 = panelXFixed + columnStepX;
-      screenX3 = GameRoundTerrainCoordinate(temp_a1_1150 + temp_v1_1140);
-      temp_v1_1161 = rowStepY * 3;
-      screenY2 = GameRoundTerrainCoordinate(panelYFixed + temp_v1_1161);
-      temp_a0_1170 = panelYFixed + columnStepY;
-      screenY3 = GameRoundTerrainCoordinate(temp_a0_1170 + temp_v1_1161);
+      skirtStepX = rowStepX * 3;
+      screenX2 = GameRoundTerrainCoordinate(panelXFixed + skirtStepX);
+      skirtRightX = panelXFixed + columnStepX;
+      screenX3 = GameRoundTerrainCoordinate(skirtRightX + skirtStepX);
+      skirtStepY = rowStepY * 3;
+      screenY2 = GameRoundTerrainCoordinate(panelYFixed + skirtStepY);
+      skirtBottomY = panelYFixed + columnStepY;
+      screenY3 = GameRoundTerrainCoordinate(skirtBottomY + skirtStepY);
       if (g_CourseIndex == 2)
       {
         u8 color;
         POLY_G4 *courseG4 = (POLY_G4 *)packetCursor;
         rightXWorkFixed = panelXFixed;
         screenX0 = GameRoundTerrainCoordinate(rightXWorkFixed + rowStepX);
-        screenX1 = GameRoundTerrainCoordinate(temp_a1_1150 + (rowStepX + (rowStepX - rowStepX)));
+        screenX1 = GameRoundTerrainCoordinate(skirtRightX + (rowStepX + (rowStepX - rowStepX)));
         screenY0 = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
-        screenY1 = GameRoundTerrainCoordinate(temp_a0_1170 + rowStepY);
+        screenY1 = GameRoundTerrainCoordinate(skirtBottomY + rowStepY);
         nextPacket = (u8 *)(courseG4 + 1);
         SetPolyG4(courseG4);
         courseG4->x0 = screenX0;
