@@ -63,28 +63,35 @@ void StoreSaveStateBlock(u8 *block) {
 
             saveValue = (long)block;
             for (i = 0; i < 13; i++) {
-                ((u8 *)saveValue)[MC_GP_CARS_OFS + 0] = g_GrandPrixCars[i].modelVariant;
-                ((u8 *)saveValue)[MC_GP_CARS_OFS + 1] = g_GrandPrixCars[i].tireCompound;
-                ((u8 *)saveValue)[MC_GP_CARS_OFS + 2] = g_GrandPrixCars[i].transmission;
-                ((u8 *)saveValue)[MC_GP_CARS_OFS + 3] = g_GrandPrixCars[i].paintColor1;
-                ((u8 *)saveValue)[MC_GP_CARS_OFS + 4] = g_GrandPrixCars[i].paintColor2;
-                ((u8 *)saveValue)[MC_GP_CARS_OFS + 5] = g_GrandPrixCars[i].enabled;
+                SavedCarSetup *grandPrixCar =
+                    &((GameSaveBlock *)saveValue)->carSetup[0][0];
+                SavedCarSetup *extraGrandPrixCar =
+                    &((GameSaveBlock *)saveValue)->carSetup[1][0];
+                SavedCarSetup *timeAttackCar =
+                    &((GameSaveBlock *)saveValue)->carSetup[2][0];
 
-                ((u8 *)saveValue)[MC_EXTRA_CARS_OFS + 0] = g_ExtraGrandPrixCars[i].modelVariant;
-                ((u8 *)saveValue)[MC_EXTRA_CARS_OFS + 1] = g_ExtraGrandPrixCars[i].tireCompound;
-                ((u8 *)saveValue)[MC_EXTRA_CARS_OFS + 2] = g_ExtraGrandPrixCars[i].transmission;
-                ((u8 *)saveValue)[MC_EXTRA_CARS_OFS + 3] = g_ExtraGrandPrixCars[i].paintColor1;
-                ((u8 *)saveValue)[MC_EXTRA_CARS_OFS + 4] = g_ExtraGrandPrixCars[i].paintColor2;
-                ((u8 *)saveValue)[MC_EXTRA_CARS_OFS + 5] = g_ExtraGrandPrixCars[i].enabled;
+                grandPrixCar->modelVariant = g_GrandPrixCars[i].modelVariant;
+                grandPrixCar->tireCompound = g_GrandPrixCars[i].tireCompound;
+                grandPrixCar->transmission = g_GrandPrixCars[i].transmission;
+                grandPrixCar->paintColor1 = g_GrandPrixCars[i].paintColor1;
+                grandPrixCar->paintColor2 = g_GrandPrixCars[i].paintColor2;
+                grandPrixCar->enabled = g_GrandPrixCars[i].enabled;
 
-                ((u8 *)saveValue)[MC_TIME_CARS_OFS + 0] = g_TimeAttackCars[i].modelVariant;
-                ((u8 *)saveValue)[MC_TIME_CARS_OFS + 1] = g_TimeAttackCars[i].tireCompound;
-                ((u8 *)saveValue)[MC_TIME_CARS_OFS + 2] = g_TimeAttackCars[i].transmission;
-                ((u8 *)saveValue)[MC_TIME_CARS_OFS + 3] = g_TimeAttackCars[i].paintColor1;
-                ((u8 *)saveValue)[MC_TIME_CARS_OFS + 4] = g_TimeAttackCars[i].paintColor2;
-                ((u8 *)saveValue)[MC_TIME_CARS_OFS + 5] = g_TimeAttackCars[i].enabled;
+                extraGrandPrixCar->modelVariant = g_ExtraGrandPrixCars[i].modelVariant;
+                extraGrandPrixCar->tireCompound = g_ExtraGrandPrixCars[i].tireCompound;
+                extraGrandPrixCar->transmission = g_ExtraGrandPrixCars[i].transmission;
+                extraGrandPrixCar->paintColor1 = g_ExtraGrandPrixCars[i].paintColor1;
+                extraGrandPrixCar->paintColor2 = g_ExtraGrandPrixCars[i].paintColor2;
+                extraGrandPrixCar->enabled = g_ExtraGrandPrixCars[i].enabled;
 
-                saveValue += 8;
+                timeAttackCar->modelVariant = g_TimeAttackCars[i].modelVariant;
+                timeAttackCar->tireCompound = g_TimeAttackCars[i].tireCompound;
+                timeAttackCar->transmission = g_TimeAttackCars[i].transmission;
+                timeAttackCar->paintColor1 = g_TimeAttackCars[i].paintColor1;
+                timeAttackCar->paintColor2 = g_TimeAttackCars[i].paintColor2;
+                timeAttackCar->enabled = g_TimeAttackCars[i].enabled;
+
+                saveValue += sizeof(SavedCarSetup);
             }
         }
 
@@ -94,9 +101,13 @@ void StoreSaveStateBlock(u8 *block) {
             saveValue = (long)block;
             offset = 0;
             for (; offset < 0x2C; offset += 4) {
-                *(u16 *)(saveValue + 0x190) = *(u16 *)((u8 *)g_ClassRecords + offset);
-                *(u16 *)(saveValue + 0x192) = *(u16 *)((u8 *)g_ClassRecords + offset + 2);
-                saveValue += 4;
+                SavedClassRecord *dst =
+                    &((GameSaveBlock *)saveValue)->classRecords[0];
+                dst->grade =
+                    ((SavedClassRecord *)((u8 *)g_ClassRecords + offset))->grade;
+                dst->clears =
+                    ((SavedClassRecord *)((u8 *)g_ClassRecords + offset))->clears;
+                saveValue += sizeof(SavedClassRecord);
             }
         }
     }

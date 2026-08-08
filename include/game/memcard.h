@@ -56,8 +56,8 @@ typedef struct SavedCarSetup {
 } SavedCarSetup;
 
 typedef struct SavedClassRecord {
-    s16 grade;
-    s16 clears;
+    u16 grade;
+    u16 clears;
 } SavedClassRecord;
 
 /*

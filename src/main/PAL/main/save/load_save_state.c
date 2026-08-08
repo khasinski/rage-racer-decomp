@@ -87,25 +87,32 @@ s32 LoadSaveStateBlock(u8 *block) {
         register u8 *src asm("$6") = base;
         s32 i;
         for (i = 0; i < 13; i++) {
-            g_GrandPrixCars[i].modelVariant = src[MC_GP_CARS_OFS + 0];
-            g_GrandPrixCars[i].tireCompound = src[MC_GP_CARS_OFS + 1];
-            g_GrandPrixCars[i].transmission = src[MC_GP_CARS_OFS + 2];
-            g_GrandPrixCars[i].paintColor1 = src[MC_GP_CARS_OFS + 3];
-            g_GrandPrixCars[i].paintColor2 = src[MC_GP_CARS_OFS + 4];
-            g_GrandPrixCars[i].enabled = src[MC_GP_CARS_OFS + 5];
-            g_ExtraGrandPrixCars[i].modelVariant = src[MC_EXTRA_CARS_OFS + 0];
-            g_ExtraGrandPrixCars[i].tireCompound = src[MC_EXTRA_CARS_OFS + 1];
-            g_ExtraGrandPrixCars[i].transmission = src[MC_EXTRA_CARS_OFS + 2];
-            g_ExtraGrandPrixCars[i].paintColor1 = src[MC_EXTRA_CARS_OFS + 3];
-            g_ExtraGrandPrixCars[i].paintColor2 = src[MC_EXTRA_CARS_OFS + 4];
-            g_ExtraGrandPrixCars[i].enabled = src[MC_EXTRA_CARS_OFS + 5];
-            g_TimeAttackCars[i].modelVariant = src[MC_TIME_CARS_OFS + 0];
-            g_TimeAttackCars[i].tireCompound = src[MC_TIME_CARS_OFS + 1];
-            g_TimeAttackCars[i].transmission = src[MC_TIME_CARS_OFS + 2];
-            g_TimeAttackCars[i].paintColor1 = src[MC_TIME_CARS_OFS + 3];
-            g_TimeAttackCars[i].paintColor2 = src[MC_TIME_CARS_OFS + 4];
-            g_TimeAttackCars[i].enabled = src[MC_TIME_CARS_OFS + 5];
-            src += 8;
+            SavedCarSetup *grandPrixCar =
+                &((GameSaveBlock *)src)->carSetup[0][0];
+            SavedCarSetup *extraGrandPrixCar =
+                &((GameSaveBlock *)src)->carSetup[1][0];
+            SavedCarSetup *timeAttackCar =
+                &((GameSaveBlock *)src)->carSetup[2][0];
+
+            g_GrandPrixCars[i].modelVariant = grandPrixCar->modelVariant;
+            g_GrandPrixCars[i].tireCompound = grandPrixCar->tireCompound;
+            g_GrandPrixCars[i].transmission = grandPrixCar->transmission;
+            g_GrandPrixCars[i].paintColor1 = grandPrixCar->paintColor1;
+            g_GrandPrixCars[i].paintColor2 = grandPrixCar->paintColor2;
+            g_GrandPrixCars[i].enabled = grandPrixCar->enabled;
+            g_ExtraGrandPrixCars[i].modelVariant = extraGrandPrixCar->modelVariant;
+            g_ExtraGrandPrixCars[i].tireCompound = extraGrandPrixCar->tireCompound;
+            g_ExtraGrandPrixCars[i].transmission = extraGrandPrixCar->transmission;
+            g_ExtraGrandPrixCars[i].paintColor1 = extraGrandPrixCar->paintColor1;
+            g_ExtraGrandPrixCars[i].paintColor2 = extraGrandPrixCar->paintColor2;
+            g_ExtraGrandPrixCars[i].enabled = extraGrandPrixCar->enabled;
+            g_TimeAttackCars[i].modelVariant = timeAttackCar->modelVariant;
+            g_TimeAttackCars[i].tireCompound = timeAttackCar->tireCompound;
+            g_TimeAttackCars[i].transmission = timeAttackCar->transmission;
+            g_TimeAttackCars[i].paintColor1 = timeAttackCar->paintColor1;
+            g_TimeAttackCars[i].paintColor2 = timeAttackCar->paintColor2;
+            g_TimeAttackCars[i].enabled = timeAttackCar->enabled;
+            src += sizeof(SavedCarSetup);
         }
     }
 
@@ -113,9 +120,14 @@ s32 LoadSaveStateBlock(u8 *block) {
         register u8 *src asm("$4") = base;
         s32 offset = 0;
         for (; offset < 0x2C; offset += 4) {
-            *(u16 *)((u8 *)g_ClassRecords + offset) = *(u16 *)(src + 0x190);
-            *(u16 *)((u8 *)g_ClassRecords + offset + 2) = *(u16 *)(src + 0x192);
-            src += 4;
+            SavedClassRecord *saved =
+                &((GameSaveBlock *)src)->classRecords[0];
+
+            ((SavedClassRecord *)((u8 *)g_ClassRecords + offset))->grade =
+                saved->grade;
+            ((SavedClassRecord *)((u8 *)g_ClassRecords + offset))->clears =
+                saved->clears;
+            src += sizeof(SavedClassRecord);
         }
     }
 
