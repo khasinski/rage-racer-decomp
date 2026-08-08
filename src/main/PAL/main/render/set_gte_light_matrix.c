@@ -217,18 +217,6 @@ u8 *QueueShadedSpriteNine(
     s32 v,
     s32 clutIndex) asm("GameQueueShadedSprite");
 
-/* Local wide-parameter views; see GameQueueSprite.c. */
-u8 *QueueSpriteTransWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex) asm("GameQueueSpriteTrans");
-
 /* Local declaration: `selection` is a short here - retail loads the argument
  * slot as a word and sign-extends it into the texel offset. */
 u8 *DrawPadConfigSelector(
@@ -252,11 +240,11 @@ u8 *DrawPadConfigSelector(
     prim = QueueShadedSpriteNine(
         ot, prim, x + 6, y + 8, 0x30, 0xC, 0x78, 0xC0, 0x7F40);
     prim = QueueDrawModePrim(ot, prim, 0x3A);
-    prim = QueueSpriteTransWide(
+    prim = GameQueueSpriteTrans(
         ot, prim, x + 18, y + 32, 8, 0x10, 0x68, 0x28, 0x7F40);
-    prim = QueueSpriteTransWide(
+    prim = GameQueueSpriteTrans(
         ot, prim, x + 26, y + 32, 8, 0x10, selection * 8 + 80, 0x18, 0x7F40);
-    prim = QueueSpriteTransWide(
+    prim = GameQueueSpriteTrans(
         ot, prim, x + 34, y + 32, 8, 0x10, 0x68, 0x28, 0x7F40);
     prim = QueueDrawModePrim(ot, prim, 0x5B);
     prim = (u8 *)AddTilePrim(

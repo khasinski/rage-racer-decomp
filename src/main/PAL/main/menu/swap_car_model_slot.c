@@ -18,14 +18,13 @@ void SwapCarModelSlot(void) {
     InstallCarModelSlot();
 }
 
-s32 GameQueueTileTransWide(void* ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
 
 void DrawCarSlotHighlight(s32 slot) {
     s32 *scratch = &SCRATCH_PRIM_CURSOR_WORD;
     u8 *base = g_DrawBuffer;
     s32 value = *scratch;
 
-    *scratch = GameQueueTileTransWide(base + 0xCC, value, 0x24, (slot * 16) + 0x24, 0x50, 0x10, 0, 0, 0xFF);
+    *scratch = (s32)GameQueueTileTrans(base + 0xCC, (u8 *)value, 0x24, (slot * 16) + 0x24, 0x50, 0x10, 0, 0, 0xFF);
 }
 
 typedef struct SwObj698 { s32 unk0; u16 unk4; } SwObj698;

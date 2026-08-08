@@ -29,16 +29,6 @@ u8 *DrawPadConfigSelectorWide(
     s32 x,
     s32 y,
     s32 selection) asm("DrawPadConfigSelector");
-u8 *QueueSpriteTransWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex) asm("GameQueueSpriteTrans");
 void DrawOptionHintBar(s32 variant);
 
 /*
@@ -79,7 +69,7 @@ void DrawControllerConfigScreen(void) {
         if (g_PadType == 0x23) {
             prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, g_NegconMappingIndex);
             prim = DrawNegconConfigDiagram(ot, prim);
-            prim = QueueSpriteTransWide(
+            prim = GameQueueSpriteTrans(
                 ot, prim, 0x10, 0x40, 0xD8, 0x10, 0, 0xA8, 0x7F40);
             prim = QueueDrawModePrim(ot, prim, 0x3F);
         } else {

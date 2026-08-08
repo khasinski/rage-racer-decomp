@@ -10,7 +10,6 @@
 
 extern u8 g_PadType;
 
-void GameDrawSolidRectWide(void *, s32, s32, s32, s32, s32, s32, s32, s32) asm("DrawSolidRect");
 s32 RunTimedDrawScript(void *, void *);
 void DrawBitPatternOverlay(s32);
 
@@ -31,7 +30,7 @@ void UpdateMenuMode(void) {
     if (c1 == 2) {
         SetDispMask(1);
     }
-    GameDrawSolidRectWide(scratch, 0, 0, 0x140, 2, 0, 0, 0, 0xFF);
+    DrawSolidRect(scratch, 0, 0, 0x140, 2, 0, 0, 0, 0xFF);
 
     if ((u32)(g_MenuScreen - 1) < 2) {
         SCRATCH_OT_SHIFT = 1;

@@ -12,7 +12,6 @@ extern s32 D_8009B290;
 extern s32 g_MenuAltLayout;
 
 s32 rsin(s32 angle);
-void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
 
 /* The 18-swatch PAINT COLOR strip with its selection frame and enlarged preview. */
 s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {

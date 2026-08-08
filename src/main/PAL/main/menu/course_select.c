@@ -102,26 +102,6 @@ extern CourseSelectPrizeTable g_CourseSelectPrizeTable asm("g_PrizeMoney");
 extern CourseSelectScrollState g_CourseSelectScrollState;
 extern s32 D_8009B2C0 asm("g_CourseSelectScrollState");
 
-void GameDrawSolidRectWide(
-    void *ot,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 r,
-    s32 g,
-    s32 b,
-    s32 alpha) asm("DrawSolidRect");
-void GameDrawLineWide(
-    void *ot,
-    s32 x0,
-    s32 y0,
-    s32 x1,
-    s32 y1,
-    s32 r,
-    s32 g,
-    s32 b,
-    s32 alpha) asm("DrawLine");
 s32 GameDrawNumberWide(
     s32 x,
     s32 y,
@@ -321,13 +301,13 @@ s32 DrawCourseSelectScreen(s32 step)
             gpFade, gpFade, gpFade, gpClut, 0, gpSemiTrans, gpFlags);
 
         lineColor = (u32)gpFade * 2;
-        GameDrawLineWide(
+        DrawLine(
             ot, 0x48, 0xAA - gpSlide, 0xAF, 0xAA - gpSlide,
             lineColor, lineColor, lineColor, 0x40);
-        GameDrawLineWide(
+        DrawLine(
             ot, 0x48, 0xAB - gpSlide, 0xAF, 0xAB - gpSlide,
             lineColor, lineColor, lineColor, 0x40);
-        GameDrawSolidRectWide(
+        DrawSolidRect(
             ot, 0x48, 0x94 - gpSlide, 0x68, 0x30,
             lineColor, lineColor, lineColor,
             (u32)gpFade < 0x7F ? 0x20 : 0xFF);

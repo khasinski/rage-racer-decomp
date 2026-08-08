@@ -9,7 +9,6 @@
 #include "game/track.h"
 #include "psyq/gpu.h"
 
-s32 GameQueueTileTransWide(u8 *ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
 extern u32 g_BgmShuffleIndex;
 extern u8 g_BgmShuffleOrder[];
 void ShuffleBgmOrder(void);
@@ -51,7 +50,7 @@ void DrawBgmSelectBar(void) {
 
     next = (s32)GameQueueSprite(base, next, 0x64, 0xC2, 0xBA, 0xC, 0, temp, 0x3FED);
     next = (s32)GameQueueSprite(base, next, 0x62, 0xC0, 0xBE, 0x10, 0x3C, 0, 0x3FEE);
-    next = GameQueueTileTransWide(base, next, 0x14, 0xB8, 0x118, 0x20, 0, 0, 0);
+    next = (s32)GameQueueTileTrans(base, (u8 *)next, 0x14, 0xB8, 0x118, 0x20, 0, 0, 0);
     SCRATCH_PRIM_CURSOR_WORD = (s32)QueueDrawModePrim(base, (u8 *)next, 0xB);
 }
 

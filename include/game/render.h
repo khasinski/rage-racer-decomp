@@ -378,21 +378,21 @@ void DrawSolidRect(
     s32 x,
     s32 y,
     s32 w,
-    u16 h,
-    u8 r,
-    u8 g,
-    u8 b,
-    u8 alpha);
+    s32 h,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 alpha);
 void DrawLine(
     void *ot,
     s32 x0,
     s32 y0,
     s32 x1,
-    u16 y1,
-    u8 r,
-    u8 g,
-    u8 b,
-    u8 alpha);
+    s32 y1,
+    s32 r,
+    s32 g,
+    s32 b,
+    s32 alpha);
 /* LINE_F3: flat-shaded 3-point polyline. */
 void DrawPolyLine3(
     void *ot,
@@ -588,24 +588,24 @@ u8 *GameQueueShadedSpriteTrans(
 u8 *GameQueueSpriteTrans(
     void *ot,
     u8 *prim,
-    s16 x,
-    s16 y,
-    s16 w,
-    s16 h,
-    u8 u,
-    u8 v,
-    u16 clutIndex);
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 u,
+    s32 v,
+    s32 clutIndex);
 /* TILE, 16 bytes. */
 u8 *GameQueueTileTrans(
     void *ot,
     u8 *prim,
-    s16 x,
-    s16 y,
-    s16 w,
-    s16 h,
-    u8 r,
-    u8 g,
-    u8 b);
+    s32 x,
+    s32 y,
+    s32 w,
+    s32 h,
+    s32 r,
+    s32 g,
+    s32 b);
 /* LINE_F2, 16 bytes. */
 u8 *GameQueueLine(
     void *ot,

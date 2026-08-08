@@ -302,7 +302,7 @@ void GameDrawTexturedQuad(s32 ot, s16 x0, s16 y0, s16 x1,
 }
 
 
-void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
+void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 alpha) {
     s32 x0Reg;
     s32 y0Reg;
     s32 x1Reg;
@@ -316,11 +316,11 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
     u8 *oldPrim;
 
     prim = SCRATCH_PRIM_CURSOR_AS(TILE);
-    y1Reg = y1;
-    rReg = r;
-    gReg = g;
-    bReg = b;
-    alphaReg = alpha;
+    y1Reg = (u16)y1;
+    rReg = (u8)r;
+    gReg = (u8)g;
+    bReg = (u8)b;
+    alphaReg = (u8)alpha;
     asm("");
     x0Reg = x0;
     y0Reg = y0;
@@ -351,7 +351,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u
 }
 
 
-void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha) {
+void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 alpha) {
     s32 x0Reg;
     s32 y0Reg;
     s32 x1Reg;
@@ -365,11 +365,11 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alp
     u8 *oldPrim;
 
     prim = SCRATCH_PRIM_CURSOR_AS(LINE_F2);
-    y1Reg = y1;
-    rReg = r;
-    gReg = g;
-    bReg = b;
-    alphaReg = alpha;
+    y1Reg = (u16)y1;
+    rReg = (u8)r;
+    gReg = (u8)g;
+    bReg = (u8)b;
+    alphaReg = (u8)alpha;
     asm("");
     x0Reg = x0;
     y0Reg = y0;
@@ -486,7 +486,6 @@ void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8
     SCRATCH_PRIM_CURSOR_AS(LINE_G2) = prim;
 }
 
-void GameDrawLineWide(void *buf, s16 x1, s16 y1, s16 x2, s16 y2, s32 r, s32 g, s32 b, s32 code) asm("DrawLine");
 void DrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code);
 void DrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, u8 code)
 {
@@ -508,13 +507,13 @@ void DrawRectOutline(void *buf, s32 xa, s32 ya, s32 w, s32 h, u8 r, u8 g, u8 b, 
   x1 = (s16) (leftX + lastColumn);
   rowY = (s16) y_R18;
   h = (((((((((h - 1) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
-  GameDrawLineWide(buf, x0, rowY, x1, rowY, r, g, b, code);
-  GameDrawLineWide(buf, x0, (s16) (y_R18 + 1), x1, (s16) (y_R18 + 1), r, g, b, code);
+  DrawLine(buf, (s16)x0, (s16)rowY, (s16)x1, (s16)rowY, r, g, b, code);
+  DrawLine(buf, (s16)x0, (s16)(y_R18 + 1), (s16)x1, (s16)(y_R18 + 1), r, g, b, code);
   ytop2 = (s16) (y_R18 + 2);
   ybot = y_R18 + h;
   ybi = (s16) (ybot - 2);
-  GameDrawLineWide(buf, x0, ytop2, x0, ybi, r, g, b, code);
-  GameDrawLineWide(buf, x1, ytop2, x1, ybi, r, g, b, code);
-  GameDrawLineWide(buf, x0, (s16) ybot, x1, (s16) ybot, r, g, b, code);
-  GameDrawLineWide(buf, x0, (s16) (ybot - 1), x1, (s16) (ybot - 1), r, g, b, code);
+  DrawLine(buf, (s16)x0, (s16)ytop2, (s16)x0, (s16)ybi, r, g, b, code);
+  DrawLine(buf, (s16)x1, (s16)ytop2, (s16)x1, (s16)ybi, r, g, b, code);
+  DrawLine(buf, (s16)x0, (s16)ybot, (s16)x1, (s16)ybot, r, g, b, code);
+  DrawLine(buf, (s16)x0, (s16)(ybot - 1), (s16)x1, (s16)(ybot - 1), r, g, b, code);
 }

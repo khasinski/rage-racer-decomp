@@ -1,18 +1,8 @@
 #include "common.h"
 #include "game/vector.h"
+#include "game/render.h"
 #include "game/state.h"
 
-/* Local wide-parameter views; see GameQueueSprite.c. */
-u8 *QueueSpriteTransWide(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex) asm("GameQueueSpriteTrans");
 s32 AddTilePrim(
     s32 ot,
     s32 prim,
@@ -35,27 +25,27 @@ u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
     s32 i;
 
     k = labelRow[0];
-    prim = QueueSpriteTransWide(
+    prim = GameQueueSpriteTrans(
         ot, prim, g_PadLabelSlots[k].vx + 4, g_PadLabelSlots[k].vy + 8, 0x40, 0x10, 0x40,
         0xBC, 0x7F40);
     k = labelRow[1];
-    prim = QueueSpriteTransWide(
+    prim = GameQueueSpriteTrans(
         ot, prim, g_PadLabelSlots[k].vx + 22, g_PadLabelSlots[k].vy + 8, 0x1C, 0x10, 0x84,
         0xBC, 0x7F40);
     k = labelRow[2];
-    prim = QueueSpriteTransWide(
+    prim = GameQueueSpriteTrans(
         ot, prim, g_PadLabelSlots[k].vx + 18, g_PadLabelSlots[k].vy + 8, 0x28, 0x10, 0x90,
         0xAC, 0x7F40);
     k = labelRow[3];
-    prim = QueueSpriteTransWide(
+    prim = GameQueueSpriteTrans(
         ot, prim, g_PadLabelSlots[k].vx + 9, g_PadLabelSlots[k].vy + 8, 0x18, 0x10, 0x90,
         0xAC, 0x7F40);
     k = labelRow[3];
-    prim = QueueSpriteTransWide(
+    prim = GameQueueSpriteTrans(
         ot, prim, g_PadLabelSlots[k].vx + 33, g_PadLabelSlots[k].vy + 8, 0x20, 0x10, 0xB8,
         0xAC, 0x7F40);
     k = labelRow[4];
-    prim = QueueSpriteTransWide(
+    prim = GameQueueSpriteTrans(
         ot, prim, g_PadLabelSlots[k].vx + 5, g_PadLabelSlots[k].vy + 8, 0x40, 0x10, 0,
         0xBC, 0x7F40);
     i = 0;

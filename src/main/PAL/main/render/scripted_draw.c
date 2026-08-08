@@ -98,8 +98,6 @@ void DrawScriptedSprite(s32 elapsed, u8 *shape, u8 *motion, s32 type) {
         alpha);
 }
 
-void GameDrawLineWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha) asm("DrawLine");
-
 void DrawScriptedLine(s32 elapsed, u8 *shape, u8 *motion) {
     register u8 *motionReg asm("$8") = motion;
     u8 *shapeReg;
@@ -204,15 +202,15 @@ void DrawScriptedLine(s32 elapsed, u8 *shape, u8 *motion) {
     x1 <<= 0x10;
     otPtr = (s32)otBase + elapsed;
     asm("" : "=r"(otPtr), "=r"(x0) : "0"(otPtr), "1"(x0));
-    GameDrawLineWide(
+    DrawLine(
         (void *)otPtr,
         x0 >> 0x10,
         y1 >> 0x10,
         x1 >> 0x10,
         y1Reg,
-        shapeReg[0],
-        shapeReg[1],
-        shapeReg[2],
+        (u8)shapeReg[0],
+        (u8)shapeReg[1],
+        (u8)shapeReg[2],
         alpha);
 }
 
@@ -671,7 +669,6 @@ loop:
 
 void DrawLargeTextWide(s32 x0, s32 y, s32 str0, s32 color, s32 g, s32 b, s32 clut, s32 flags) asm("DrawLargeText");
 void drawSmallText(s32 x0, s32 y, s32 str0, s32 color, s32 g, s32 b, s32 clut, s32 flags) asm("DrawSmallText");
-void GameDrawSolidRectWide(void* ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 alpha) asm("DrawSolidRect");
 
 void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
                    u8 r, u8 g, u8 b,
@@ -697,7 +694,7 @@ void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
     }
     DrawRectOutline(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
                     0xb4, 0xb4, 0xb4, (f & 4) ? (f & 0x60) : 0xff);
-    GameDrawSolidRectWide(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
+    DrawSolidRect(ot, (s16)p0, (s16)p1, (s16)p2, (s16)p3,
                   r, g, b, (f & 2) ? (f & 0x60) : 0xff);
     /* The second p3 use keeps it ahead of ot in global-alloc priority. */
     __asm__("" : : "r"(p0), "r"(p1), "r"(p2), "r"(p3), "r"(p3), "r"(f), "r"(ot));

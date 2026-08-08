@@ -28,8 +28,6 @@ typedef union {
     s16 color;
 } GrandPrixIntroSelection;
 
-void *GameQueueTileTransWide(
-    void *ot, void *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) asm("GameQueueTileTrans");
 
 extern s32 g_ReplayFrameCount;
 extern s32 g_ReplayBufferWrapped;
@@ -95,7 +93,7 @@ void DrawSeriesClearedWash(s32 x, s32 y) {
 
     width = 0x140;
     height = 0xF0;
-    prim = GameQueueTileTransWide(ot, prim, 0, 0, width, height, redStack, green, temp);
+    prim = GameQueueTileTrans(ot, prim, 0, 0, width, height, redStack, green, temp);
     SCRATCH_PRIM_CURSOR_AS(void) = QueueDrawModePrim(ot, prim, 0x49);
 }
 

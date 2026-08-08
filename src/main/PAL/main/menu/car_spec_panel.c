@@ -6,10 +6,6 @@
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, u8 r, u8 g, u8 b, u8 alpha);
 
 void DrawFlatTriangleSigned(void* ot, s16 x0, s16 y0, s16 x1, u16 y1, s16 x2, u16 y2, u8 r, u8 g, u8 b, s32 semiTrans, u32 flags) asm("DrawFlatTriangle");
-void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
-                   u8 b, u8 alpha);
-void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g,
-                   u8 b, u8 alpha);
 s32 rsin(s32 angle);
 
 /* The five-position tire-compound slider of the CUSTOMIZE screen. */

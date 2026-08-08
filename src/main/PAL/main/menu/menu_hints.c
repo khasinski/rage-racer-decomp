@@ -1,8 +1,8 @@
 #include "common.h"
 #include "game/menu.h"
+#include "game/render.h"
 #include "game/scratchpad.h"
 
-s32 GameQueueSpriteTrans(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex);
 extern u8 * volatile g_DrawBuffer;
 extern u8 g_PadType;
 
@@ -15,7 +15,7 @@ void DrawMenuCursorArrow(s32 x, s32 y) {
 
     base += 0xCC;
     scratchValue = *scratch;
-    prim = GameQueueSpriteTrans((s32)base, scratchValue, x, y, 0xC, 0x18, 0xE0, 0x48, 0x7F40);
+    prim = (s32)GameQueueSpriteTrans((void *)((s32)base), (u8 *)(scratchValue), x, y, 0xC, 0x18, 0xE0, 0x48, 0x7F40);
     *scratch = (s32)QueueDrawModePrim(base, (u8 *)prim, 0x3F);
 }
 
@@ -39,20 +39,20 @@ void DrawOptionHintBar(s32 variant) {
         x = (0x120 - g_OptionHintCaptions[which].width) / 2;
     }
 
-    prim = GameQueueSpriteTrans(base, prim, x, 0x180, 0xC, 0x18, 0xE0, 0x78, 0x7F40);
+    prim = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(prim), x, 0x180, 0xC, 0x18, 0xE0, 0x78, 0x7F40);
 
     x += 0x10;
     index = which;
-    prim = GameQueueSpriteTrans(base, prim, x, 0x180, g_OptionHintCaptions[index].width, 0x18,
+    prim = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(prim), x, 0x180, g_OptionHintCaptions[index].width, 0x18,
                                 g_OptionHintCaptions[index].u, g_OptionHintCaptions[index].v, 0x7F40);
 
     x += g_OptionHintCaptions[index].advance;
     if (which == 4) {
-        prim = GameQueueSpriteTrans(base, prim, x, 0x180, 0x30, 0x18, 0, 0x78, 0x7F40);
+        prim = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(prim), x, 0x180, 0x30, 0x18, 0, 0x78, 0x7F40);
         x += 0x34;
     }
 
-    prim = GameQueueSpriteTrans(base, prim, x, 0x180, 0xC, 0x18, 0xEC, 0x78, 0x7F40);
+    prim = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(prim), x, 0x180, 0xC, 0x18, 0xEC, 0x78, 0x7F40);
     SCRATCH_PRIM_CURSOR_WORD = (s32)QueueDrawModePrim((void *)base, (u8 *)prim, 0x3F);
 }
 
@@ -88,8 +88,8 @@ void DrawPadTypeHint(void) {
     v = 0xB8;
     clutIndex = 0x7F40;
 
-    prim = GameQueueSpriteTrans(base, prim, 0x7A, 0x1A0, w, h, u, v, clutIndex);
-    prim = GameQueueSpriteTrans(base, prim, 0x92, 0x1A0, w, h, u + 8, v, clutIndex);
-    prim = GameQueueSpriteTrans(base, prim, 0x58, 0x1A0, 0x90, h, 0, v, clutIndex);
+    prim = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(prim), 0x7A, 0x1A0, w, h, u, v, clutIndex);
+    prim = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(prim), 0x92, 0x1A0, w, h, u + 8, v, clutIndex);
+    prim = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(prim), 0x58, 0x1A0, 0x90, h, 0, v, clutIndex);
     SCRATCH_PRIM_CURSOR_WORD = (s32)QueueDrawModePrim((void *)base, (u8 *)prim, 0x3F);
 }

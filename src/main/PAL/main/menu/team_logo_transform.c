@@ -745,7 +745,6 @@ extern s32 D_8007FB20;
 
 void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h);
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r0, u32 g0, u32 b0, u8 r1, u8 g1, u8 b1, u8 alpha);
-void DrawLogoRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u32 r, u32 g, u32 b, u8 alpha) asm("DrawSolidRect");
 
 typedef struct Blob {
     s16 b[33];
@@ -812,7 +811,7 @@ void DrawMenuLightBurst(s32 arg) {
             value = v;
             scaled = (u32)value / 512;
             value = (u8)scaled;
-            DrawLogoRect(s3, x0, y0, x1, 2, value, value, value, 0x60);
+            DrawSolidRect(s3, x0, y0, x1, 2, value, value, value, 0x60);
             s0++;
         } while (s0 < 0x21);
 
@@ -879,9 +878,6 @@ void GameDrawMenuButton(s32 x, s16 y, s32 w, s32 h, s32 r, s32 g, s32 b,
                         s32 caption);
 void DrawRectOutline(void *ot, s32 x, s16 y, s32 w, s32 h, s32 r,
                          s32 g, s32 b, s32 alpha);
-void DrawSolidRect(void *ot, s32 x, s16 y, s32 w, s32 h, s32 r,
-                       s32 g, s32 b, s32 alpha);
-
 /* The animated five-row ranking/time-record panel. */
 s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking)
 ;

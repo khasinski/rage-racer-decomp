@@ -10,7 +10,6 @@
 #include "game/track.h"
 #include "psyq/gpu.h"
 
-s32 QueueSpriteTransWide(s32 ot, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex) asm("GameQueueSpriteTrans");
 void DrawOptionHintBar(s32 variant);
 extern s32 g_ScreenOffsetX;
 extern s32 g_ScreenOffsetY;
@@ -122,10 +121,10 @@ void DrawScreenAdjustScreen(void) {
 
     base += 0xCC;
     next = *scratch;
-    next = QueueSpriteTransWide(base, next, 0x9A, 0x88, w0c, h18, 0xC8, y48, color);
-    next = QueueSpriteTransWide(base, next, 0x9A, 0xB8, w0c, h18, 0xD4, y48, color);
-    next = QueueSpriteTransWide(base, next, 0xA6, 0xA0, w0c, h18, 0xE0, y48, color);
-    *scratch = QueueSpriteTransWide(base, next, 0x8E, 0xA0, w0c, h18, 0xEC, y48, color);
+    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0x9A, 0x88, w0c, h18, 0xC8, y48, color);
+    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0x9A, 0xB8, w0c, h18, 0xD4, y48, color);
+    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0xA6, 0xA0, w0c, h18, 0xE0, y48, color);
+    *scratch = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0x8E, 0xA0, w0c, h18, 0xEC, y48, color);
     DrawOptionHintBar(3);
 }
 

@@ -555,18 +555,6 @@ u8 *GameQueueShadedSpriteTrans(
     return prim;
 }
 
-/* Local wide-parameter declaration; see GameQueueSprite.c. */
-u8 *GameQueueSpriteTrans(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 u,
-    s32 v,
-    s32 clutIndex);
-
 /* SPRT, 20 bytes: GameQueueSprite plus SetSemiTrans. */
 u8 *GameQueueSpriteTrans(
     void *ot,
@@ -594,18 +582,6 @@ u8 *GameQueueSpriteTrans(
     AddPrim(ot, sprt);
     return prim;
 }
-
-/* Local wide-parameter declaration; see GameQueueSprite.c. */
-u8 *GameQueueTileTrans(
-    void *ot,
-    u8 *prim,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 r,
-    s32 g,
-    s32 b);
 
 /* TILE, 16 bytes: a semi-transparent solid rectangle linked into `ot`.
  * Returns the advanced packet cursor. */

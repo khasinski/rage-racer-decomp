@@ -4,10 +4,8 @@
 void DrawRectOutline(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b,
                    s32 alpha);
 
-void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r, u8 g, u8 b, u8 alpha);
 s32 rsin(s32 angle);
 
-void DrawLogoRect() asm("DrawSolidRect");
 
 void DrawLogoSamplePanel(s32 step, s32 sample) {
     void *ot = SCRATCH_OT_BASE_AS(void);
@@ -42,9 +40,10 @@ void DrawLogoSamplePanel(s32 step, s32 sample) {
         DrawSprite(ot, 0xEA, y, 4, 0x10, 0xB0, 0xCC, 0, 0, 0, 0x244, 1, 1, 0x3A);
 
         for (i = 0, xoff = -23; i < 15; i++) {
-            DrawSolidRect(ot, (s16)(xc + xoff), (s16)(t + 528), 8, 0x10,
-                          *(u8 *)&g_TeamLogoSwatches[i] << 3, (g_TeamLogoSwatches[i] >> 2) & 0xf8,
-                          (g_TeamLogoSwatches[i] >> 7) & 0xf8, 0xFF);
+            DrawSolidRect(ot, (s16)(xc + xoff), (s16)(t + 528), 8, (u16)0x10,
+                          (u8)(*(u8 *)&g_TeamLogoSwatches[i] << 3),
+                          (u8)((g_TeamLogoSwatches[i] >> 2) & 0xf8),
+                          (u8)((g_TeamLogoSwatches[i] >> 7) & 0xf8), (u8)0xFF);
             xoff += 8;
         }
 
@@ -111,7 +110,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         colour = sine;
         colour >>= 6;
         colour -= 0x41;
-        DrawLogoRect(ot + 4, (s16)(((cursorIndex % 11) * 0xC) + 0x54),
+        DrawSolidRect(ot + 4, (s16)(((cursorIndex % 11) * 0xC) + 0x54),
                      (s16)(rowY + ((cursorIndex / 11) * 0x18)), 0xB,
                      (s32)(s16)(animationStep * 2), 0, colour & 0xFF, 0, 0xFF);
         g_TeamNameCursorPhase += 0x60;

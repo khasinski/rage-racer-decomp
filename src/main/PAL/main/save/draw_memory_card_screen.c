@@ -5,7 +5,7 @@
 #include "game/state.h"
 
 extern u8 *volatile g_DrawBuffer;
-s32 GameQueueSpriteTrans(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 color);
+u8 *GameQueueSpriteTrans(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex);
 s32 AddTilePrim(s32 base, s32 prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b);
 void DrawMenuCursorArrow(s32 a, s32 b);
 void DrawOptionHintBar(s32 a);
@@ -21,19 +21,19 @@ void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow)
     s32 i;
     s32 y;
 
-    next = GameQueueSpriteTrans(base, *scratch, 0x24, 0x38, 0x20, 0x18, 0xA0, 0x90, 0x7F40);
+    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(*scratch), 0x24, 0x38, 0x20, 0x18, 0xA0, 0x90, 0x7F40);
     if (variant != 0) {
-        next = GameQueueSpriteTrans(base, next, 0x24, 0x58, 0x24, 0x18, 0xCC, 0x90, 0x7F40);
+        next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0x24, 0x58, 0x24, 0x18, 0xCC, 0x90, 0x7F40);
     }
     if (variant != 0) {
         y = 0x78;
     } else {
         y = 0x58;
     }
-    next = GameQueueSpriteTrans(base, next, 0x24, y, 0x1C, 0x18, 0xD0, 0x60, 0x7F40);
-    next = GameQueueSpriteTrans(base, next, 0x48, 0xB8, 0x10, 0x10, 0, 0xC8, 0x7F40);
-    next = GameQueueSpriteTrans(base, next, 0x68, 0xB8, 0x34, 0x10, 0x10, 0xC8, 0x7F40);
-    next = GameQueueSpriteTrans(base, next, 0xB0, 0xB8, 0x14, 0x10, 0x44, 0xC8, 0x7F40);
+    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0x24, y, 0x1C, 0x18, 0xD0, 0x60, 0x7F40);
+    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0x48, 0xB8, 0x10, 0x10, 0, 0xC8, 0x7F40);
+    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0x68, 0xB8, 0x34, 0x10, 0x10, 0xC8, 0x7F40);
+    next = (s32)GameQueueSpriteTrans((void *)(base), (u8 *)(next), 0xB0, 0xB8, 0x14, 0x10, 0x44, 0xC8, 0x7F40);
     *scratch = next;
     DrawMenuCursorArrow(0x14, (cursor * 32) + 0x38);
     DrawOptionHintBar(variant + 5);
