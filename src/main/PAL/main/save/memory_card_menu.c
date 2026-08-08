@@ -9,7 +9,6 @@
 
 void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
     char text[16];
-    u8 *rows_base = (u8 *)rows;
     s32 flags_reg = flags;
     s32 color = 0x7F;
     s32 width = 0x244;
@@ -17,7 +16,7 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
     char *text_ptr = text;
     s32 y = 0xD8;
     s32 row_bit = 1;
-    u8 *row = rows_base;
+    GameSaveHeaderRow *row = rows;
 
     do {
         if (flags_reg % 2) {
@@ -26,15 +25,15 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
             sprintf(text, g_FmtSaveRow, row_bit);
             DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
 
-            for (i = 0; i < row[0]; i++) {
-                text_ptr[i] = g_SaveNameCharset[*((row + i) + 1)];
+            for (i = 0; i < row->nameLength; i++) {
+                text_ptr[i] = g_SaveNameCharset[row->name[i]];
             }
             while (i < 7) {
                 text_ptr[i++] = ' ';
             }
             sprintf(text + 6, g_FmtSaveRowTail);
             DrawLargeText(0x68, y, text, 0x7F, color, color, width, height);
-            DrawLargeText(0xB0, y, FormatSaveElapsedTime(text, *(s32 *)(row + 8)), 0x7F, color, color, width, height);
+            DrawLargeText(0xB0, y, FormatSaveElapsedTime(text, row->saveCounter), 0x7F, color, color, width, height);
         } else if (flags_reg & 0x10000) {
             sprintf(text, g_FmtSaveRow, row_bit);
             DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
@@ -61,10 +60,10 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
         }
 
         row_bit++;
-        row += 0x80;
+        row++;
         y += 0x30;
         flags_reg >>= 1;
-    } while ((s32)row < (s32)(rows_base + 0x180));
+    } while ((s32)row < (s32)(rows + 3));
 }
 
 void AdjustMenuSelectionHorizontal(s32 *value, s32 min, s32 max) {
