@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+#include "game/menu_types.h"
+
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 
@@ -67,6 +69,14 @@ typedef struct SavedClassRecord {
     u16 clears;
 } SavedClassRecord;
 
+typedef struct SavedRaceProgress {
+    s32 course;
+    s32 carIndex;
+    s32 classIndex;
+    s32 maxClassReached;
+    s32 money;
+} SavedRaceProgress;
+
 /*
  * The 0x1000-byte memory-card payload: a flat dump of live globals, named per
  * field below. checksum = ~sum(u16[0..0x7FE]). Written by StoreSaveStateBlock, read
@@ -95,11 +105,9 @@ typedef struct GameSaveBlock {
     u16 negconNeutralII;
     u16 negconNeutralL;
     u16 negconMaxTwist;
-    s32 grandPrixProgress[5]; /* +0x10 g_GrandPrixSave, GameRaceProgress: course,
-                              carIndex, classIndex, maxClassReached, money */
-    s32 extraGrandPrixProgress[5]; /* +0x24 g_ExtraGrandPrixSave */
-    s32 timeAttackProgress[5]; /* +0x38 g_TimeAttackSave; this slot reuses the
-                              money word for g_GrandPrixSeries */
+    SavedRaceProgress grandPrixProgress;
+    SavedRaceProgress extraGrandPrixProgress;
+    SavedRaceProgress timeAttackProgress;
     u16 bgmSelection;             /* +0x4C g_BgmSelection */
     u16 advancedUnlocked;  /* +0x4E g_AdvancedSeriesUnlocked */
     s32 maxClassReached[2];/* +0x50 g_MaxClassReached */
@@ -109,8 +117,8 @@ typedef struct GameSaveBlock {
     u16 teamLogoCanvas[0x400];
     s32 bestLapTimes[2][4][2];
     s32 bestTotalTimes[2][4][2];
-    s32 rankingRecords[2][4][5][4];
-    s32 timeRecords[2][4][5][4]; /* +0xCDC g_TimeRecords time rows */
+    RaceRecord rankingRecords[2][4][5];
+    RaceRecord timeRecords[2][4][5]; /* +0xCDC g_TimeRecords time rows */
     s32 bestSectorTimes[2][4][3];
     s32 bgmVolume;            /* +0xFBC g_BgmVolumeSetting, clamped to 0..0xF on load */
     s32 sfxVolume;            /* +0xFC0 g_SfxVolumeSetting, clamped to 0..0xF on load */
