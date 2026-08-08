@@ -282,35 +282,35 @@ extern s32 D_8007FB1C;
 extern s32 D_8019CAB8;
 
 void UpdateTeamLogoCanvas(void) {
-    s32 temp_a0;
-    s32 temp_v0;
-    s32 temp_v0_2;
-    s32 temp_v0_3;
-    s32 temp_v0_5;
-    s32 temp_v1_9;
-    s32 var_a0_2;
-    s32 var_a0_3;
-    s32 var_a0_4;
-    s32 var_a0_7;
-    s32 var_a1;
-    s32 var_a3;
-    s32 var_a3_2;
-    s32 var_t0;
-    s32 var_t0_2;
-    s32 var_v0_3;
-    s32 var_v1;
-    s32 var_v1_2;
-    s32 var_v1_3;
-    s32 var_v1_5;
-    u16 *temp_v1;
-    u16 temp_a1;
-    u16 var_v0_5;
-    u32 temp_v1_3;
-    u32 temp_v1_4;
-    u32 temp_v1_5;
-    u32 var_v0_7;
-    u16 *temp_a1_5;
-    s32 var_a2;
+    s32 cursorX;
+    s32 redUp;
+    s32 greenUp;
+    s32 blueUp;
+    s32 wordColumn;
+    s32 nibbleShift;
+    s32 nextTool;
+    s32 darker;
+    s32 brighter;
+    s32 plotStamp;
+    s32 eraseStamp;
+    s32 plotColumn;
+    s32 eraseColumn;
+    s32 plotRow;
+    s32 eraseRow;
+    s32 prevChannel;
+    s32 prevSlot;
+    s32 nextSlot;
+    s32 rowWords;
+    s32 nextChannel;
+    u16 *clutEntry;
+    u16 opaqueColour;
+    u16 colour;
+    u32 redDown;
+    u32 slotValue;
+    u32 blueDown;
+    u32 pixelValue;
+    u16 *canvasWord;
+    s32 pixelX;
 
     {
         s32 input;
@@ -341,11 +341,11 @@ void UpdateTeamLogoCanvas(void) {
     if (D_8007F930 != 0) {
         if (g_PadPressed & PAD_SELECT) {
             D_8007FB1C = D_8007F944;
-            var_a0_2 = 0;
+            nextTool = 0;
             if (D_8007F944 < 2) {
-                var_a0_2 = D_8007F944 + 1;
+                nextTool = D_8007F944 + 1;
             }
-            D_8007F944 = var_a0_2;
+            D_8007F944 = nextTool;
         }
     } else {
         D_8007F944 = 1;
@@ -374,11 +374,11 @@ void UpdateTeamLogoCanvas(void) {
 
                 PlaySoundCue(1);
                 selected = D_8007F950.value;
-                var_v1 = 0xF;
+                prevSlot = 0xF;
                 if (selected >= 2) {
-                    var_v1 = selected - 1;
+                    prevSlot = selected - 1;
                 }
-                output.value = var_v1;
+                output.value = prevSlot;
                 D_8007F950 = output;
             }
             if (g_PadHeld & PAD_RIGHT) {
@@ -387,11 +387,11 @@ void UpdateTeamLogoCanvas(void) {
 
                 PlaySoundCue(1);
                 selected = D_8007F950.value;
-                var_v1_2 = 1;
+                nextSlot = 1;
                 if (selected < 0xF) {
-                    var_v1_2 = selected + 1;
+                    nextSlot = selected + 1;
                 }
-                output.value = var_v1_2;
+                output.value = nextSlot;
                 D_8007F950 = output;
             }
         }
@@ -399,43 +399,43 @@ void UpdateTeamLogoCanvas(void) {
             if (g_PadHeld & (PAD_R1 | PAD_R2)) {
                 if (g_PadPressedRepeat & PAD_UP) {
                     PlaySoundCue(4);
-                    temp_v1_4 = D_8007F950.value;
-                    temp_v1 = g_TeamLogoClut + temp_v1_4;
-                    temp_a1 = *temp_v1 | 0x8000;
-                    *temp_v1 = temp_a1;
-                    var_v0_5 = temp_a1;
+                    slotValue = D_8007F950.value;
+                    clutEntry = g_TeamLogoClut + slotValue;
+                    opaqueColour = *clutEntry | 0x8000;
+                    *clutEntry = opaqueColour;
+                    colour = opaqueColour;
                     switch (D_8007F958) {
                     case 0:
-                        temp_v0 = temp_a1 & 0x1F;
-                        if (temp_v0 == 0) {
-                            var_a0_3 = 0x1F;
+                        redUp = opaqueColour & 0x1F;
+                        if (redUp == 0) {
+                            darker = 0x1F;
                         } else {
-                            var_a0_3 = temp_v0 - 1;
+                            darker = redUp - 1;
                         }
                         g_TeamLogoClut[D_8007F950.value] =
-                            var_a0_3 |
+                            darker |
                             (g_TeamLogoClut[D_8007F950.value] & 0xFFE0);
                         break;
                     case 1:
-                        temp_v0_2 = (var_v0_5 >> 5) & 0x1F;
-                        if (temp_v0_2 != 0) {
-                            var_a0_3 = (temp_v0_2 * 32) - 0x20;
+                        greenUp = (colour >> 5) & 0x1F;
+                        if (greenUp != 0) {
+                            darker = (greenUp * 32) - 0x20;
                         } else {
-                            var_a0_3 = 0x3E0;
+                            darker = 0x3E0;
                         }
                         g_TeamLogoClut[D_8007F950.value] =
-                            var_a0_3 |
+                            darker |
                             (g_TeamLogoClut[D_8007F950.value] & 0xFC1F);
                         break;
                     case 2:
-                        temp_v0_3 = (var_v0_5 >> 0xA) & 0x1F;
-                        if (temp_v0_3 != 0) {
-                            var_a0_3 = (temp_v0_3 << 0xA) - 0x400;
+                        blueUp = (colour >> 0xA) & 0x1F;
+                        if (blueUp != 0) {
+                            darker = (blueUp << 0xA) - 0x400;
                         } else {
-                            var_a0_3 = 0x7C00;
+                            darker = 0x7C00;
                         }
                         g_TeamLogoClut[D_8007F950.value] =
-                            var_a0_3 |
+                            darker |
                             (g_TeamLogoClut[D_8007F950.value] & 0x83FF);
                         break;
                     default:
@@ -444,43 +444,43 @@ void UpdateTeamLogoCanvas(void) {
                 }
                 if (g_PadPressedRepeat & PAD_DOWN) {
                     PlaySoundCue(4);
-                    temp_v1_4 = D_8007F950.value;
-                    temp_v1 = g_TeamLogoClut + temp_v1_4;
-                    temp_a1 = *temp_v1 | 0x8000;
-                    *temp_v1 = temp_a1;
-                    var_v0_5 = temp_a1;
+                    slotValue = D_8007F950.value;
+                    clutEntry = g_TeamLogoClut + slotValue;
+                    opaqueColour = *clutEntry | 0x8000;
+                    *clutEntry = opaqueColour;
+                    colour = opaqueColour;
                     switch (D_8007F958) {
                     case 0:
-                        temp_v1_3 = temp_a1 & 0x1F;
-                        if (temp_v1_3 >= 0x1FU) {
-                            var_a0_4 = 0;
+                        redDown = opaqueColour & 0x1F;
+                        if (redDown >= 0x1FU) {
+                            brighter = 0;
                         } else {
-                            var_a0_4 = temp_v1_3 + 1;
+                            brighter = redDown + 1;
                         }
                         g_TeamLogoClut[D_8007F950.value] =
-                            var_a0_4 |
+                            brighter |
                             (g_TeamLogoClut[D_8007F950.value] & 0xFFE0);
                         return;
                     case 1:
-                        temp_v1_4 = (var_v0_5 >> 5) & 0x1F;
-                        if (temp_v1_4 < 0x1FU) {
-                            var_a0_4 = (temp_v1_4 + 1) << 5;
+                        slotValue = (colour >> 5) & 0x1F;
+                        if (slotValue < 0x1FU) {
+                            brighter = (slotValue + 1) << 5;
                         } else {
-                            var_a0_4 = 0;
+                            brighter = 0;
                         }
                         g_TeamLogoClut[D_8007F950.value] =
-                            var_a0_4 |
+                            brighter |
                             (g_TeamLogoClut[D_8007F950.value] & 0xFC1F);
                         return;
                     case 2:
-                        temp_v1_5 = (var_v0_5 >> 0xA) & 0x1F;
-                        if (temp_v1_5 < 0x1FU) {
-                            var_a0_4 = (temp_v1_5 + 1) << 0xA;
+                        blueDown = (colour >> 0xA) & 0x1F;
+                        if (blueDown < 0x1FU) {
+                            brighter = (blueDown + 1) << 0xA;
                         } else {
-                            var_a0_4 = 0;
+                            brighter = 0;
                         }
                         g_TeamLogoClut[D_8007F950.value] =
-                            var_a0_4 |
+                            brighter |
                             (g_TeamLogoClut[D_8007F950.value] & 0x83FF);
                         return;
                     default:
@@ -490,19 +490,19 @@ void UpdateTeamLogoCanvas(void) {
             } else {
                 if (g_PadPressed & PAD_UP) {
                     PlaySoundCue(1);
-                    var_v0_3 = 2;
+                    prevChannel = 2;
                     if (D_8007F958 > 0) {
-                        var_v0_3 = D_8007F958 - 1;
+                        prevChannel = D_8007F958 - 1;
                     }
-                    D_8007F958 = var_v0_3;
+                    D_8007F958 = prevChannel;
                 }
                 if (g_PadPressed & PAD_DOWN) {
                     PlaySoundCue(1);
-                    var_v1_5 = 0;
+                    nextChannel = 0;
                     if (D_8007F958 < 2) {
-                        var_v1_5 = D_8007F958 + 1;
+                        nextChannel = D_8007F958 + 1;
                     }
-                    D_8007F958 = var_v1_5;
+                    D_8007F958 = nextChannel;
                 }
             }
         }
@@ -511,8 +511,8 @@ void UpdateTeamLogoCanvas(void) {
             if (g_PadPressed & PAD_CIRCLE) {
                 PlaySoundCue(4);
             }
-            for (var_t0 = 0; var_t0 < D_8007F94C; var_t0++) {
-                    for (var_a3 = 0; var_a3 < D_8007F94C; var_a3++) {
+            for (plotRow = 0; plotRow < D_8007F94C; plotRow++) {
+                    for (plotColumn = 0; plotColumn < D_8007F94C; plotColumn++) {
                             u16 *p;
                             s32 sum;
                             s32 adj;
@@ -521,9 +521,9 @@ void UpdateTeamLogoCanvas(void) {
                             s32 rem;
 
                             p = (u16 *)g_TeamLogoCanvas;
-                            sum = D_8007F93C + D_8007F934 + var_a3;
+                            sum = D_8007F93C + D_8007F934 + plotColumn;
                             adj = sum;
-                            row = (D_8007F940 + D_8007F938 + var_t0) * 0x10;
+                            row = (D_8007F940 + D_8007F938 + plotRow) * 0x10;
                             if (sum < 0) {
                                 adj = sum + 3;
                             }
@@ -551,8 +551,8 @@ void UpdateTeamLogoCanvas(void) {
             if (g_PadPressed & PAD_SQUARE) {
                 PlaySoundCue(4);
             }
-            for (var_t0_2 = 0; var_t0_2 < D_8007F94C; var_t0_2++) {
-                    for (var_a3_2 = 0; var_a3_2 < D_8007F94C; var_a3_2++) {
+            for (eraseRow = 0; eraseRow < D_8007F94C; eraseRow++) {
+                    for (eraseColumn = 0; eraseColumn < D_8007F94C; eraseColumn++) {
                             u16 *p;
                             s32 sum;
                             s32 adj;
@@ -560,10 +560,10 @@ void UpdateTeamLogoCanvas(void) {
                             s32 q;
                             s32 rem;
 
-                            sum = D_8007F93C + D_8007F934 + var_a3_2;
+                            sum = D_8007F93C + D_8007F934 + eraseColumn;
                             p = (u16 *)g_TeamLogoCanvas;
                             adj = sum;
-                            row = D_8007F940 + D_8007F938 + var_t0_2;
+                            row = D_8007F940 + D_8007F938 + eraseRow;
                             row *= 0x10;
                             if (sum < 0) {
                                 adj = sum + 3;
@@ -650,46 +650,46 @@ void UpdateTeamLogoCanvas(void) {
                 }
             }
         } else {
-            var_a1 = 0;
+            eraseStamp = 0;
             if ((D_8007FB14 == 0x14) || (D_8007FB14 == 1) || (g_PadHeld & 5)) {
-                var_a0_7 = 0;
+                plotStamp = 0;
                 if (g_PadHeld & PAD_UP) {
                     if (D_8007F938 > 0) {
                         D_8007F938 -= 1;
-                        var_a0_7 = 1;
+                        plotStamp = 1;
                     } else if (D_8007F940 > 0) {
                         D_8007F940 -= 1;
-                        var_a0_7 = 1;
+                        plotStamp = 1;
                     }
                 }
                 if (g_PadHeld & PAD_DOWN) {
                     if ((D_8007F938 + D_8007F94C) < 0x20) {
                         D_8007F938 += 1;
-                        var_a0_7 = 1;
+                        plotStamp = 1;
                     } else if (D_8007F940 < 0x20) {
                         D_8007F940 += 1;
-                        var_a0_7 = 1;
+                        plotStamp = 1;
                     }
                 }
                 if (g_PadHeld & PAD_LEFT) {
                     if (D_8007F934 > 0) {
                         D_8007F934 -= 1;
-                        var_a1 = 1;
+                        eraseStamp = 1;
                     } else if (D_8007F93C > 0) {
                         D_8007F93C -= 1;
-                        var_a1 = 1;
+                        eraseStamp = 1;
                     }
                 }
                 if (g_PadHeld & PAD_RIGHT) {
                     if ((D_8007F934 + D_8007F94C) < 0x20) {
                         D_8007F934 += 1;
-                        var_a1 = 1;
+                        eraseStamp = 1;
                     } else if (D_8007F93C < 0x20) {
                         D_8007F93C += 1;
-                        var_a1 = 1;
+                        eraseStamp = 1;
                     }
                 }
-                if ((g_PadHeld & (PAD_SQUARE | PAD_CIRCLE)) && ((var_a1 != 0) || (var_a0_7 != 0))) {
+                if ((g_PadHeld & (PAD_SQUARE | PAD_CIRCLE)) && ((eraseStamp != 0) || (plotStamp != 0))) {
                     PlaySoundCue(4);
                 }
             }
@@ -697,37 +697,37 @@ void UpdateTeamLogoCanvas(void) {
         }
         if ((g_PadPressed & 2) && (D_8007F930 != 0)) {
             PlaySoundCue(4);
-            temp_a1_5 = (u16 *)g_TeamLogoCanvas;
-            temp_a0 = D_8007F93C + D_8007F934;
-            var_a2 = temp_a0;
-            var_v1_3 = (D_8007F940 + D_8007F938) * 0x10;
-            if (temp_a0 < 0) {
-                var_a2 = temp_a0 + 3;
+            canvasWord = (u16 *)g_TeamLogoCanvas;
+            cursorX = D_8007F93C + D_8007F934;
+            pixelX = cursorX;
+            rowWords = (D_8007F940 + D_8007F938) * 0x10;
+            if (cursorX < 0) {
+                pixelX = cursorX + 3;
             }
-            temp_v0_5 = var_a2 >> 2;
-            temp_a1_5 += var_v1_3 + temp_v0_5;
-            temp_v1_9 = temp_a0;
-            temp_v1_9 = temp_v1_9 - (temp_v0_5 * 4);
-            switch (temp_v1_9) {
+            wordColumn = pixelX >> 2;
+            canvasWord += rowWords + wordColumn;
+            nibbleShift = cursorX;
+            nibbleShift = nibbleShift - (wordColumn * 4);
+            switch (nibbleShift) {
             case 0:
-                var_v0_7 = temp_a1_5[0] & 0xF;
+                pixelValue = canvasWord[0] & 0xF;
                 break;
             case 1:
-                var_v0_7 = *(u8 *)temp_a1_5 / 16;
+                pixelValue = *(u8 *)canvasWord / 16;
                 break;
             case 2:
-                var_v0_7 = *((u8 *)temp_a1_5 + 1) & 0xF;
+                pixelValue = *((u8 *)canvasWord + 1) & 0xF;
                 break;
             case 3:
-                var_v0_7 = temp_a1_5[0] >> 0xC;
+                pixelValue = canvasWord[0] >> 0xC;
                 break;
             default:
                 return;
             }
-            if (var_v0_7 == 0) {
-                var_v0_7 = (u32)D_8007F950.value;
+            if (pixelValue == 0) {
+                pixelValue = (u32)D_8007F950.value;
             }
-            D_8007F950.value = (s32)var_v0_7;
+            D_8007F950.value = (s32)pixelValue;
         }
     }
 }
