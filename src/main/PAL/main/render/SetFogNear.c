@@ -3,14 +3,14 @@
 void SetDQA(s32 a);
 void SetDQB(s32 a);
 
-void SetFogNear(s32 arg0, s32 arg1) {
-    SetDQA(-((arg0 * 5) << 6) / arg1);
+void SetFogNear(s32 near, s32 projection) {
+    SetDQA(-((near * 5) << 6) / projection);
     SetDQB(0x1400000);
 }
 
 s32 Lzc(s32 x);
 
-s32 CordicRotate(s32 arg0) {
+s32 CordicRotate(s32 value) {
     s32 data[16];
     s32 *hi;
     register s32 *lo asm("$6");
@@ -28,8 +28,8 @@ s32 CordicRotate(s32 arg0) {
     i = 1;
     hi = &data[9];
     lo = &data[1];
-    lo[0] = arg0 + magic;
-    hi[0] = arg0 - magic;
+    lo[0] = value + magic;
+    hi[0] = value - magic;
 
     do {
         if (i != 4) {
@@ -82,23 +82,23 @@ s32 CordicRotate(s32 arg0) {
     return data[7];
 }
 
-s32 SquareRoot12(s32 arg0) {
+s32 SquareRoot12(s32 square) {
     s32 bits;
     s32 shift;
     s32 value;
     s32 ret;
 
-    if (arg0 == 0) {
+    if (square == 0) {
         return 0;
     }
 
-    bits = 8 - Lzc(arg0);
+    bits = 8 - Lzc(square);
     if (bits >= 0) {
         shift = bits >> 1;
-        value = arg0 >> (shift * 2);
+        value = square >> (shift * 2);
     } else {
         shift = (bits >> 1) + 1;
-        value = arg0 << -(((bits >> 1) + 1) * 2);
+        value = square << -(((bits >> 1) + 1) * 2);
     }
 
     shift -= 6;

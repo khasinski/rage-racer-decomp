@@ -12,48 +12,48 @@ s32 rcos(s32 angle);
  * geo_00.o (rsin anchor); see docs/names.md section 25.
  */
 
-s32 rsin(s32 arg0) {
-    if (arg0 < 0) {
-        return -rsinCore(-arg0 & 0xFFF);
+s32 rsin(s32 angle) {
+    if (angle < 0) {
+        return -rsinCore(-angle & 0xFFF);
     }
 
-    return rsinCore(arg0 & 0xFFF);
+    return rsinCore(angle & 0xFFF);
 }
 
-s32 rsinCore(s32 arg0) {
-    if (arg0 < 0x801) {
-        if (arg0 < 0x401) {
-            return g_SinTable[arg0];
+s32 rsinCore(s32 angle) {
+    if (angle < 0x801) {
+        if (angle < 0x401) {
+            return g_SinTable[angle];
         }
 
-        return g_SinTable[0x800 - arg0];
+        return g_SinTable[0x800 - angle];
     }
 
-    if (arg0 < 0xC01) {
-        return -D_80093308[arg0];
+    if (angle < 0xC01) {
+        return -D_80093308[angle];
     }
 
-    return -g_SinTable[0x1000 - arg0];
+    return -g_SinTable[0x1000 - angle];
 }
 
-s32 rcos(s32 arg0) {
-    if (arg0 < 0) {
-        arg0 = -arg0;
+s32 rcos(s32 angle) {
+    if (angle < 0) {
+        angle = -angle;
     }
 
-    arg0 &= 0xFFF;
+    angle &= 0xFFF;
 
-    if (arg0 < 0x801) {
-        if (arg0 < 0x401) {
-            return g_SinTable[0x400 - arg0];
+    if (angle < 0x801) {
+        if (angle < 0x401) {
+            return g_SinTable[0x400 - angle];
         }
 
-        return -D_80093B08[arg0];
+        return -D_80093B08[angle];
     }
 
-    if (arg0 < 0xC01) {
-        return -g_SinTable[0xC00 - arg0];
+    if (angle < 0xC01) {
+        return -g_SinTable[0xC00 - angle];
     }
 
-    return D_80092B08[arg0];
+    return D_80092B08[angle];
 }

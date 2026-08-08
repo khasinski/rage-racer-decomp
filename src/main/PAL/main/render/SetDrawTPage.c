@@ -28,13 +28,13 @@ s32 encoded;
     *(u32 *)&prim[4] = encoded;
 }
 
-void SetDrawLoad(u8 *arg0, u8 *arg1) {
+void SetDrawLoad(u8 *p, u8 *rect) {
     s32 sign;
     s32 value;
     s32 size;
 
-    sign = *(s16 *)&arg1[4];
-    value = sign * *(s16 *)&arg1[6];
+    sign = *(s16 *)&rect[4];
+    value = sign * *(s16 *)&rect[6];
     value += 1;
     sign = (u32)value >> 31;
     value += sign;
@@ -44,34 +44,34 @@ void SetDrawLoad(u8 *arg0, u8 *arg1) {
         size = 0;
     }
 
-    *(u32 *)&arg0[4] = 0x01000000;
-    arg0[3] = size;
-    *(u32 *)&arg0[8] = 0xA0000000;
-    *(u32 *)&arg0[0xC] = *(u32 *)&arg1[0];
-    *(u32 *)&arg0[0x10] = *(u32 *)&arg1[4];
+    *(u32 *)&p[4] = 0x01000000;
+    p[3] = size;
+    *(u32 *)&p[8] = 0xA0000000;
+    *(u32 *)&p[0xC] = *(u32 *)&rect[0];
+    *(u32 *)&p[0x10] = *(u32 *)&rect[4];
 }
 
-s32 MargePrim(u8 *arg0, u8 *arg1) {
+s32 MargePrim(u8 *p0, u8 *p1) {
     s32 value;
 
-    value = arg0[3] + arg1[3] + 1;
+    value = p0[3] + p1[3] + 1;
     if (value >= 0x21) {
         return -1;
     }
-    arg0[3] = value;
-    *(u32 *)arg1 = 0;
+    p0[3] = value;
+    *(u32 *)p1 = 0;
     return 0;
 }
 
-void DumpDrawEnv(DrawEnv *arg0) {
+void DumpDrawEnv(DrawEnv *env) {
     s32 mode;
     u32 value;
 
-    GPU_printf(D_8001339C, arg0->clip.x, arg0->clip.y, arg0->clip.w, arg0->clip.h);
-    GPU_printf(D_800133B4, arg0->ofs[0], arg0->ofs[1]);
-    GPU_printf(D_800133C4, arg0->tw.x, arg0->tw.y, arg0->tw.w, arg0->tw.h);
-    GPU_printf(D_800133DC, arg0->dtd);
-    GPU_printf(D_800133E8, arg0->dfe);
+    GPU_printf(D_8001339C, env->clip.x, env->clip.y, env->clip.w, env->clip.h);
+    GPU_printf(D_800133B4, env->ofs[0], env->ofs[1]);
+    GPU_printf(D_800133C4, env->tw.x, env->tw.y, env->tw.w, env->tw.h);
+    GPU_printf(D_800133DC, env->dtd);
+    GPU_printf(D_800133E8, env->dfe);
 
     mode = GetGraphType();
     switch (0) { default:
@@ -84,12 +84,12 @@ void DumpDrawEnv(DrawEnv *arg0) {
     }
 
     }
-    value = arg0->tpage;
+    value = env->tpage;
     GPU_printf(D_80013374, (value >> 9) & 3, (value >> 7) & 3, (value * 64) & 0x7C0, (value * 8) & 0x300);
     return;
 
     }
-    value = arg0->tpage;
+    value = env->tpage;
     GPU_printf(D_80013374, (value >> 7) & 3, (value >> 5) & 3, (value * 64) & 0x7C0, ((value * 16) & 0x100) + ((value >> 2) & 0x200));
 }
 
@@ -151,9 +151,9 @@ void ResetGraph(s32 mode) {
 
 extern u8 g_GraphReverse;
 
-s32 SetGraphReverse(s32 arg0) {
+s32 SetGraphReverse(s32 mode) {
     u8 *state = &g_GraphReverse;
-    s32 newValue = arg0;
+    s32 newValue = mode;
     s32 old = *state;
     GpuCallbacks *callbacks;
     GpuCallbacks *callbacks2;
@@ -189,12 +189,12 @@ s32 SetGraphReverse(s32 arg0) {
 
 s32 SetGraphDebug(u8 arg0);
 
-s32 SetGraphDebug(u8 arg0) {
+s32 SetGraphDebug(u8 level) {
     u8 *ptr = &g_GraphDebug;
     u8 old = *ptr;
 
-    *ptr = arg0;
-    if (arg0 != 0) {
+    *ptr = level;
+    if (level != 0) {
         void (*func)(char *, ...) = GPU_printf;
         s32 a1;
         s32 a2;

@@ -211,7 +211,7 @@ void *MulMatrix0(s32 *matrix, void *src, void *dst) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *MulRotMatrix0(void *arg0, void *arg1) {
+void *MulRotMatrix0(void *lhs, void *rhs) {
     asm volatile(
         "lhu $8,0($4)\n"
         "lw $9,4($4)\n"
@@ -268,7 +268,7 @@ void *MulRotMatrix0(void *arg0, void *arg1) {
         "sw $9,8($5)\n"
         "swc2 $11,16($5)"
         :
-        : "r"(arg0), "r"(arg1)
+        : "r"(lhs), "r"(rhs)
         );
     asm volatile("move $2,$5");
 }
@@ -276,7 +276,7 @@ void *MulRotMatrix0(void *arg0, void *arg1) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-void *MulRotMatrix(void *arg0) {
+void *MulRotMatrix(void *mtx) {
     asm volatile(
         "lw $8,0($4)\n"
         "lw $9,4($4)\n"
@@ -334,7 +334,7 @@ void *MulRotMatrix(void *arg0) {
         "sw $9,8($4)\n"
         "swc2 $11,16($4)"
         :
-        : "r"(arg0)
+        : "r"(mtx)
         );
     asm volatile("move $2,$4");
 }
@@ -534,7 +534,7 @@ void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-s32 TransformCollisionVector(s32 *arg0, s32 *arg1, s32 arg2) {
+s32 TransformCollisionVector(s32 *in, s32 *out, s32 flag) {
     asm volatile(
         "lw $8,0(%0)\n"
         "lw $9,4(%0)\n"
@@ -546,7 +546,7 @@ s32 TransformCollisionVector(s32 *arg0, s32 *arg1, s32 arg2) {
         "swc2 $10,4($5)\n"
         "swc2 $11,8($5)"
         :
-        : "r"(arg0), "r"(arg1)
+        : "r"(in), "r"(out)
         );
     asm volatile("move $2,$6");
 }
