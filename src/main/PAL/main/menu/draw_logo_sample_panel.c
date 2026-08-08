@@ -22,16 +22,16 @@ void DrawLogoSamplePanel(s32 step, s32 sample) {
     s32 xc = 0xA2;
 
     if (step == 0) {
-        D_8007FB24 = 0;
+        g_LogoSamplePanelSlide = 0;
         return;
     }
     if (step < 0) {
-        D_8007FB24 += step;
-        if (D_8007FB24 < 0) {
-            D_8007FB24 = 0;
+        g_LogoSamplePanelSlide += step;
+        if (g_LogoSamplePanelSlide < 0) {
+            g_LogoSamplePanelSlide = 0;
         }
     }
-    idx = D_8007FB24;
+    idx = g_LogoSamplePanelSlide;
     if (idx >= 0) {
         if (idx >= 6) {
             idx = 5;
@@ -54,85 +54,85 @@ void DrawLogoSamplePanel(s32 step, s32 sample) {
         DrawRectOutline(ot, (s16)(xc - 24), (s16)((u16)y + 32), 0x7A, 0x14, 0xB4, 0xB4, 0xB4, 0xFF);
     }
     if (step > 0) {
-        D_8007FB24 += step;
-        if (D_8007FB24 >= 6) {
-            D_8007FB24 = 5;
+        g_LogoSamplePanelSlide += step;
+        if (g_LogoSamplePanelSlide >= 6) {
+            g_LogoSamplePanelSlide = 5;
         }
     }
 }
 
 void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
-    s16 temp_a2;
-    s16 temp_s2;
-    s16 var_a2;
-    s16 var_s1;
-    s32 temp_s7;
-    s32 temp_v0;
-    s32 temp_v0_2;
-    s32 var_a0;
+    s16 gridY;
+    s16 height;
+    s16 nameY;
+    s16 rowY;
+    s32 ot;
+    s32 lowered;
+    s32 raised;
+    s32 rounded;
     s32 i;
     s32 rowI;
     u16 rowX;
     u16 xFirst;
     u16 xSecond;
     s32 animationStep;
-    s32 var_v0;
+    s32 sine;
     s32 colour;
-    u32 temp_s0;
-    u8 temp_v1;
+    u32 rise;
+    u8 ch;
 
-    temp_s7 = SCRATCH_OT_BASE_WORD;
+    ot = SCRATCH_OT_BASE_WORD;
     if (step == 0) {
-        D_8007FB28 = 0;
+        g_TeamNameEntrySlide = 0;
         return;
     }
     if (step < 0) {
-        temp_v0 = step + D_8007FB28;
-        D_8007FB28 = temp_v0;
-        if (temp_v0 < 0) {
-            D_8007FB28 = 0;
+        lowered = step + g_TeamNameEntrySlide;
+        g_TeamNameEntrySlide = lowered;
+        if (lowered < 0) {
+            g_TeamNameEntrySlide = 0;
         }
     }
-    if ((D_8007FB28 >= 0x19) && ((u8)g_TeamNameLength < 6U)) {
-        DrawLogoSprite(temp_s7, (g_TeamNameLength * 0xC) + 0x53, 0x7D, 0xC, 0x18, 0xF4, 0x28, 0,
+    if ((g_TeamNameEntrySlide >= 0x19) && ((u8)g_TeamNameLength < 6U)) {
+        DrawLogoSprite(ot, (g_TeamNameLength * 0xC) + 0x53, 0x7D, 0xC, 0x18, 0xF4, 0x28, 0,
                        0, 0, 0x244, 1, 1, 0x39);
     }
-    animationStep = D_8007FB28 - 0xE;
+    animationStep = g_TeamNameEntrySlide - 0xE;
     if (animationStep >= 0) {
         if (animationStep >= 0xC) {
             animationStep = 0xB;
         }
-        var_s1 = ((u32)-(animationStep * 64) >> 5) + 0xFB;
-        var_a0 = D_8009B28C;
-        if (D_8009B28C < 0) {
-            var_a0 = D_8009B28C + 0xFFF;
+        rowY = ((u32)-(animationStep * 64) >> 5) + 0xFB;
+        rounded = g_TeamNameCursorPhase;
+        if (g_TeamNameCursorPhase < 0) {
+            rounded = g_TeamNameCursorPhase + 0xFFF;
         }
-        var_v0 = rsin(D_8009B28C - ((var_a0 >> 0xC) << 0xC));
-        if (var_v0 < 0) {
-            var_v0 += 0x3F;
+        sine = rsin(g_TeamNameCursorPhase - ((rounded >> 0xC) << 0xC));
+        if (sine < 0) {
+            sine += 0x3F;
         }
-        colour = var_v0;
+        colour = sine;
         colour >>= 6;
         colour -= 0x41;
-        DrawLogoRect(temp_s7 + 4, (s16)(((cursorIndex % 11) * 0xC) + 0x54),
-                     (s16)(var_s1 + ((cursorIndex / 11) * 0x18)), 0xB,
+        DrawLogoRect(ot + 4, (s16)(((cursorIndex % 11) * 0xC) + 0x54),
+                     (s16)(rowY + ((cursorIndex / 11) * 0x18)), 0xB,
                      (s32)(s16)(animationStep * 2), 0, colour & 0xFF, 0, 0xFF);
-        D_8009B28C += 0x60;
+        g_TeamNameCursorPhase += 0x60;
     }
-    animationStep = D_8007FB28 - 0x11;
+    animationStep = g_TeamNameEntrySlide - 0x11;
     if (animationStep >= 0) {
         if (animationStep >= 9) {
             animationStep = 8;
         }
-        temp_a2 = ((u32)-(animationStep * 64) >> 5) + 0xF9;
+        gridY = ((u32)-(animationStep * 64) >> 5) + 0xF9;
         if (cursorIndex < 0xA) {
-            DrawLogoSprite(temp_s7, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
-                           (s16)(temp_a2 + ((cursorIndex / 11) * 0x18)), 8,
+            DrawLogoSprite(ot, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
+                           (s16)(gridY + ((cursorIndex / 11) * 0x18)), 8,
                            (s32)(s16)(animationStep * 2), (s32)(s16)((cursorIndex % 32) * 8),
                            (s32)(s16)((cursorIndex / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1, 0x5B);
         } else if (cursorIndex >= 0xB) {
-            DrawLogoSprite(temp_s7, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
-                           (s16)(temp_a2 + ((cursorIndex / 11) * 0x18)), 8,
+            DrawLogoSprite(ot, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
+                           (s16)(gridY + ((cursorIndex / 11) * 0x18)), 8,
                            (s32)(s16)(animationStep * 2),
                            (s32)(s16)(((cursorIndex - 1) % 32) * 8),
                            (s32)(s16)(((cursorIndex - 1) / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1,
@@ -141,7 +141,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         rowI = 0;
         do {
             rowX = (rowI * 0xC) + 0x56;
-            DrawLogoSprite(temp_s7 + 4, (rowX << 16) >> 16, temp_a2, 8,
+            DrawLogoSprite(ot + 4, (rowX << 16) >> 16, gridY, 8,
                            (s32)(s16)(animationStep * 2), (s32)(s16)(rowI * 8), 0x18, 0, 0, 0,
                            0x244, 1, 1, 0x3B);
             rowI += 1;
@@ -149,7 +149,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         i = 0;
         do {
             rowX = (i * 0xC) + 0x56;
-            DrawLogoSprite(temp_s7 + 4, (rowX << 16) >> 16, (s16)(temp_a2 + 0x18), 8,
+            DrawLogoSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x18), 8,
                            (s32)(s16)(animationStep * 2), (s32)(s16)((i * 8) + 0x50), 0x18, 0,
                            0, 0, 0x244, 1, 1, 0x3B);
             i += 1;
@@ -157,7 +157,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         i = 0;
         do {
             rowX = (i * 0xC) + 0x56;
-            DrawLogoSprite(temp_s7 + 4, (rowX << 16) >> 16, (s16)(temp_a2 + 0x30), 8,
+            DrawLogoSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x30), 8,
                            (s32)(s16)(animationStep * 2), (s32)(s16)((i * 8) + 0xA8), 0x18, 0,
                            0, 0, 0x244, 1, 1, 0x3B);
             i += 1;
@@ -165,46 +165,46 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         i = 0;
         do {
             rowX = (i * 0xC) + 0x56;
-            DrawLogoSprite(temp_s7 + 4, (rowX << 16) >> 16, (s16)(temp_a2 + 0x48), 8,
+            DrawLogoSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x48), 8,
                            (s32)(s16)(animationStep * 2), (s32)(s16)(i * 8), 0x28, 0, 0, 0,
                            0x244, 1, 1, 0x3B);
             i += 1;
         } while (i < 0xB);
     }
-    animationStep = D_8007FB28 - 0x13;
+    animationStep = g_TeamNameEntrySlide - 0x13;
     if (animationStep >= 0) {
         if (animationStep >= 7) {
             animationStep = 6;
         }
-        temp_s0 = (u32)-(animationStep * 64) >> 5;
-        temp_s2 = animationStep * 2;
-        DrawLogoSprite(temp_s7 + 4, 0xDA, (s16)(temp_s0 + 0xF4), 0x1E, (s32)temp_s2, 0xAC,
+        rise = (u32)-(animationStep * 64) >> 5;
+        height = animationStep * 2;
+        DrawLogoSprite(ot + 4, 0xDA, (s16)(rise + 0xF4), 0x1E, (s32)height, 0xAC,
                        0xE8, 0, 0, 0, 0x244, 1, 1, 0x3A);
-        DrawLogoSprite(temp_s7 + 4, 0xDA, (s16)(temp_s0 + 0x10B), 0x20, (s32)temp_s2, 0xAC,
+        DrawLogoSprite(ot + 4, 0xDA, (s16)(rise + 0x10B), 0x20, (s32)height, 0xAC,
                        0xF4, 0, 0, 0, 0x244, 1, 1, 0x3A);
-        DrawLogoSprite(temp_s7 + 4, 0xDA, (s16)(temp_s0 + 0x117), 0x14, (s32)temp_s2, 0xCC,
+        DrawLogoSprite(ot + 4, 0xDA, (s16)(rise + 0x117), 0x14, (s32)height, 0xCC,
                        0xF4, 0, 0, 0, 0x244, 1, 1, 0x3A);
     }
-    animationStep = D_8007FB28 - 0x11;
+    animationStep = g_TeamNameEntrySlide - 0x11;
     if (animationStep >= 0) {
         if (animationStep >= 9) {
             animationStep = 8;
         }
         i = 0;
-        var_a2 = ((u32)-(animationStep * 0x178) >> 5) + 0xF9;
+        nameY = ((u32)-(animationStep * 0x178) >> 5) + 0xF9;
         if (i < (s32)g_TeamNameLength) {
             do {
-                temp_v1 = g_TeamNameChars[i];
-                if (temp_v1 < 0xAU) {
+                ch = g_TeamNameChars[i];
+                if (ch < 0xAU) {
                     xFirst = (i * 0xC) + 0x56;
-                    DrawLogoSprite(temp_s7, (xFirst << 16) >> 16, var_a2, 8,
+                    DrawLogoSprite(ot, (xFirst << 16) >> 16, nameY, 8,
                                    (s32)(s16)(animationStep * 2),
                                    (s32)(s16)((g_TeamNameChars[i] & 0x1F) * 8),
                                    (s32)(s16)((g_TeamNameChars[i] >> 5) * 16 + 0x18), 0, 0, 0,
                                    0x244, 1, 1, 0x3B);
-                } else if (temp_v1 >= 0xBU) {
+                } else if (ch >= 0xBU) {
                     xSecond = (i * 0xC) + 0x56;
-                    DrawLogoSprite(temp_s7, (xSecond << 16) >> 16, var_a2, 8,
+                    DrawLogoSprite(ot, (xSecond << 16) >> 16, nameY, 8,
                                    (s32)(s16)(animationStep * 2),
                                    (s32)(s16)(((g_TeamNameChars[i] - 1) % 32) * 8),
                                    (s32)(s16)(((g_TeamNameChars[i] - 1) / 32) * 16 + 0x18), 0, 0, 0,
@@ -215,10 +215,10 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         }
     }
     if (step > 0) {
-        temp_v0_2 = step + D_8007FB28;
-        D_8007FB28 = temp_v0_2;
-        if (temp_v0_2 >= 0x1A) {
-            D_8007FB28 = 0x19;
+        raised = step + g_TeamNameEntrySlide;
+        g_TeamNameEntrySlide = raised;
+        if (raised >= 0x1A) {
+            g_TeamNameEntrySlide = 0x19;
         }
     }
 }
