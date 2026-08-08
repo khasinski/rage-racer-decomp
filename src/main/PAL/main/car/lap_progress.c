@@ -5,7 +5,7 @@
 
 /* Seeds the launch-spin value from how far the revs sit above the power peak;
  * a car already in gear 2 or higher also starts losing grip. */
-void BeginCarStandingStart(GameCarRuntime *car, s32 sceneTimer) {
+void BeginCarStandingStart(PlayerCarRuntime *car, s32 sceneTimer) {
     s32 value;
     s16 index;
 
@@ -18,10 +18,10 @@ void BeginCarStandingStart(GameCarRuntime *car, s32 sceneTimer) {
             value = 0;
         }
     } else {
-        index = car->field_132;
+        index = car->drive.gear;
         value *= g_PeakOutputValue / ((index * 200) + 300);
-        car->field_150 = car->field_150 / index;
-        if (car->field_132 >= 2) {
+        car->drive.unk94 = car->drive.unk94 / index;
+        if (car->drive.gear >= 2) {
             g_GripLossTimer = 200;
         }
     }

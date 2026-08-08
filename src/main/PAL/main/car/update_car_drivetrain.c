@@ -20,7 +20,7 @@
  * out as the per-gear torque curve pointer and is later reused to carry the
  * shift target speed. Splitting it changes the register assignment.
  */
-void UpdateCarDrivetrain(void *carArg) {
+void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   u8 *gearCurve;
   s16 curveModeNow;
   s16 revLimit;
@@ -117,28 +117,28 @@ void UpdateCarDrivetrain(void *carArg) {
   u16 steerBiasNext;
   GameCarDrive *drive;
   void *arcCentre;
-  void *trackPoint;
+  GameTrackPoint *trackPoint;
   void *curveSlot;
   void *specSlot;
-  GameCarRuntime *car;
+  PlayerCarRuntime *car;
   u8 *config;
   void *base;
-  car = (GameCarRuntime *)carArg;
+  car = carArg;
   base = (u8 *)g_GearTorqueCurve;
   config = (u8 *)g_CarSpec;
-  gear = car->field_132;
+  gear = car->drive.gear;
   gearRatioSlot = ((u8 *)(config + (gear * 4))) + 0xCC;
   gearCurve = (gear * 64) + ((u8 *)base);
   gearRatio = *(s32 *)gearRatioSlot;
-  drive = (GameCarDrive *)&car->field_BC;
+  drive = &car->drive;
   if (g_RacePhase < 2)
   {
-    *(s16 *)&car->field_EC = gear;
+    car->drive.gearDisp = gear;
     gearRatio = *(s32 *)(((u8 *)config) + 0xD0);
     gearCurve = base;
   }
   else
-    if ((car->field_154 == 3) && ((car->field_15C < 0x40) || (car->field_15E >= 0x80)))
+    if ((car->drive.state98 == 3) && ((car->drive.accelBtn < 0x40) || (car->drive.brakeBtn >= 0x80)))
   {
     gearCurve = base;
   }
@@ -188,13 +188,13 @@ void UpdateCarDrivetrain(void *carArg) {
   gripBudget += ((s32) (drive->brakeBtn * 0x64)) / 256;
   if (drive->state98 == 1)
   {
-    driveCurveMode = *(s16 *)(((u8 *)drive) + 0x40);
-    pointCurveMode = (*(u16 *)(((u8 *)((((*((s32 *)(((u8 *)car) + 0x30))) * 3) * 8) + ((u8 *)g_TrackPoints))) + 0x14)) & 3;
+    driveCurveMode = drive->unk40;
+    pointCurveMode = g_TrackPoints[car->trackPointIndex].arcRef & 3;
     if (driveCurveMode != pointCurveMode)
     {
       if (driveCurveMode != 0)
       {
-        steerBiasNext = (*(u16 *)(((u8 *)drive) + 0x42)) - 1;
+        steerBiasNext = (u16)drive->unk42 - 1;
         goto block_29;
       }
       if (pointCurveMode == 0)
@@ -205,34 +205,34 @@ void UpdateCarDrivetrain(void *carArg) {
     else
     {
       block_27:
-      if ((*(s16 *)(((u8 *)drive) + 0x40)) != 0)
+      if (drive->unk40 != 0)
       {
-        steerBiasNext = (*(u16 *)(((u8 *)drive) + 0x42)) + 2;
+        steerBiasNext = (u16)drive->unk42 + 2;
         block_29:
-        *(u16 *)(((u8 *)drive) + 0x42) = steerBiasNext;
+        drive->unk42 = steerBiasNext;
 
       }
 
     }
-    steerBias = (s16) (*(u16 *)(((u8 *)drive) + 0x42));
+    steerBias = drive->unk42;
     if (steerBias >= 0x1F)
     {
-      *(s16 *)(((u8 *)drive) + 0x42) = 0x1E;
+      drive->unk42 = 0x1E;
     }
     else if (steerBias < (-0x1E))
     {
-      *(s16 *)(((u8 *)drive) + 0x42) = -0x1E;
+      drive->unk42 = -0x1E;
     }
-    gripBudget += (g_CarSpec->unk112) - (((s16) (*(u16 *)(((u8 *)drive) + 0x42))) * 0xA);
-    *(s16 *)(((u8 *)drive) + 0x32) = (s16) gripBudget;
+    gripBudget += g_CarSpec->unk112 - drive->unk42 * 0xA;
+    drive->unk32 = (s16)gripBudget;
   }
   else
   {
-    trackPoint = ((*(s32 *)(((u8 *)car) + 0x30)) * 0x18) + ((u8 *)g_TrackPoints);
-    curveModeNow = *(s16 *)(((u8 *)drive) + 0x40);
-    if ((curveModeNow != ((*(u16 *)(((u8 *)trackPoint) + 0x14)) & 3)) && (curveModeNow != 0))
+    trackPoint = &g_TrackPoints[car->trackPointIndex];
+    curveModeNow = drive->unk40;
+    if ((curveModeNow != (trackPoint->arcRef & 3)) && (curveModeNow != 0))
     {
-      camber = *(s16 *)(((u8 *)trackPoint) + 0xE);
+      camber = trackPoint->field_E;
       if (camber < (-0x32))
       {
         camber = -0x32;
@@ -242,7 +242,7 @@ void UpdateCarDrivetrain(void *carArg) {
       {
         camber = 0x32;
       }
-      if (((*(u16 *)(((u8 *)(((*((s32 *)(((u8 *)car) + 0x30))) * 0x18) + ((u8 *)g_TrackPoints))) + 0x14)) & 3) == 1)
+      if ((g_TrackPoints[car->trackPointIndex].arcRef & 3) == 1)
       {
         camberLean = (-(camber * 0x3C)) / 20;
       }
@@ -252,13 +252,13 @@ void UpdateCarDrivetrain(void *carArg) {
       }
       gripBudget += camberLean;
     }
-    *(s16 *)(((u8 *)drive) + 0x32) = (s16) (((s32) ((*(s16 *)(((u8 *)drive) + 0x32)) + ((gripBudget * (*(s32 *)(((u8 *)drive) + 0x88))) / 1000))) / 2);
+    drive->unk32 = (s16)((drive->unk32 + (gripBudget * drive->unk88) / 1000) / 2);
   }
-  gearTorque = gearRatio * (*(s32 *)(((u8 *)drive) + 0x78));
+  gearTorque = gearRatio * drive->unk78;
   steerLoad = 0;
-  loadTorque = *(s32 *)(((u8 *)drive) + 0x94);
+  loadTorque = drive->unk94;
   netTorque = gearTorque - loadTorque;
-  driveMode = *(s32 *)(((u8 *)drive) + 0x98);
+  driveMode = drive->state98;
   accel = 0;
   if (driveMode == 1)
   {
@@ -298,14 +298,14 @@ void UpdateCarDrivetrain(void *carArg) {
     accel = netTorqueRoundedC >> 0xB;
   }
   revLimit = ((GameCarSpec *)config)->revLimit;
-  if ((*(s32 *)(((u8 *)drive) + 0x78)) >= revLimit)
+  if (drive->unk78 >= revLimit)
   {
     bandScale = 0;
-    netTorque = ((revLimit - (*(s32 *)(((u8 *)drive) + 0x78))) * 4) / 5;
+    netTorque = ((revLimit - drive->unk78) * 4) / 5;
   }
   else
   {
-    bandIndex = (*(s32 *)(((u8 *)drive) + 0x78)) / 1000;
+    bandIndex = drive->unk78 / 1000;
     if (bandIndex == 0)
     {
       bandBase = 0;
@@ -326,7 +326,7 @@ void UpdateCarDrivetrain(void *carArg) {
     bandSlot = bandBase;
     if (bandSlot < bandEnd)
     {
-      engineSpeed = *(s32 *)(((u8 *)drive) + 0x78);
+      engineSpeed = drive->unk78;
       curveSlot = (void *)((bandSlot * 4) + ((s32) gearCurve));
       specSlot = (void *)((bandSlot * 4) + ((s32) config));
       loop_68:
@@ -376,7 +376,7 @@ void UpdateCarDrivetrain(void *carArg) {
     bandScale = 0;
     if (assistStep < bandEnd)
     {
-      engineSpeedLoss = *(s32 *)(((u8 *)drive) + 0x78);
+      engineSpeedLoss = drive->unk78;
       gearCurve = (u8 *)((assistStep * 4) + ((s32) config));
       loop_83:
       lossTorque = *(s32 *)(((u8 *)gearCurve) + 0xA8);
@@ -428,60 +428,62 @@ void UpdateCarDrivetrain(void *carArg) {
     {
       bandScale = 0;
     }
-    if (((*(s16 *)(((u8 *)drive) + 0x76)) == 1) && ((*(s32 *)(((u8 *)drive) + 0x78)) < (g_CarSpec->redline)))
+    if ((drive->gear == 1) && (drive->unk78 < g_CarSpec->redline))
     {
       bandScale *= 2;
     }
   }
-  shiftMode = *(s32 *)(((u8 *)drive) + 0x98);
+  shiftMode = drive->state98;
   if ((shiftMode == 1) || (shiftMode == 3))
   {
-    *(s16 *)(((u8 *)drive) + 0x38) = 0;
-    *(u16 *)(((u8 *)drive) + 0x34) = 0U;
+    drive->unk38 = 0;
+    drive->clutch = 0;
   }
   else
   {
     if (shiftMode == 2)
     {
-      shiftTimer = *(s16 *)(((u8 *)drive) + 0x38);
+      shiftTimer = drive->unk38;
       shiftTimerActive = shiftTimer >= 0;
       if (shiftTimerActive)
       {
         shiftTimerNext = shiftTimer - 1;
-        *(s16 *)(((u8 *)drive) + 0x38) = shiftTimerNext;
+        drive->unk38 = shiftTimerNext;
         accel = 0;
         if (shiftTimerNext < 0)
         {
-          *(s16 *)(((u8 *)drive) + 0x38) = 0;
+          drive->unk38 = 0;
         }
-        targetGear = *(s16 *)(((u8 *)drive) + 0x76);
-        if ((*(s16 *)(((u8 *)drive) + 0x30)) != targetGear)
+        targetGear = drive->gear;
+        if (drive->gearDisp != targetGear)
         {
-          shiftTargetRpm = ((s32) ((((*(s32 *)(((u8 *)car) + 0xA4)) * 0xA0) / 1168) * 0x2710)) / ((s32) (*(s32 *)(((u8 *)((u8 *)g_CarSpec - (-(targetGear * 4)))) + 0xE4)));
-          currentSpeed = *(u16 *)(((u8 *)drive) + 0x78);
+          shiftTargetRpm = ((s32)(((car->speed * 0xA0) / 1168) * 0x2710)) /
+                           *(s32 *)((u8 *)((u8 *)g_CarSpec - (-(targetGear * 4))) + 0xE4);
+          currentSpeed = (u16)drive->unk78;
           g_ShiftTargetRpm = shiftTargetRpm;
-          *(s16 *)(((u8 *)drive) + 0x3C) = (s16) (((u16) g_ShiftTargetRpm) - currentSpeed);
+          drive->unk3C = (s16)((u16)g_ShiftTargetRpm - currentSpeed);
         }
-        bandEnd = ((*(s16 *)(((u8 *)drive) + 0x3C)) * (*(s16 *)(((u8 *)drive) + 0x38))) / 20;
+        bandEnd = drive->unk3C * drive->unk38 / 20;
         shiftedSpeed = bandEnd;
         shiftedSpeed = shiftedSpeed + g_ShiftTargetRpm;
         goto block_129;
       }
     }
-    targetGearAgain = *(s16 *)(((u8 *)drive) + 0x76);
-    if ((*(s16 *)(((u8 *)drive) + 0x30)) != targetGearAgain)
+    targetGearAgain = drive->gear;
+    if (drive->gearDisp != targetGearAgain)
     {
       switch (0) { default:
-      gearCurve = (u8 *)(((s32) ((*(s32 *)(((u8 *)car) + 0xA4)) * 0x2710)) / ((s32) (((*(s32 *)(((u8 *)(config - (-(targetGearAgain * 4)))) + 0xE4)) * 0x490) / 160)));
-      wheelSpeed = *(u16 *)(((u8 *)car) + 0xA8);
+      gearCurve = (u8 *)((car->speed * 0x2710) /
+                         (*(s32 *)((u8 *)(config - (-(targetGearAgain * 4))) + 0xE4) * 0x490 / 160));
+      wheelSpeed = (u16)car->field_A8;
       wheelSpeedScaled = wheelSpeed;
-      assistEnabled = *(s16 *)(((u8 *)drive) + 0x74);
-      *(u16 *)(((u8 *)drive) + 0x2C) = wheelSpeedScaled;
+      assistEnabled = drive->manual;
+      drive->unk2C = wheelSpeedScaled;
       g_ShiftTargetSpeed = (s32) gearCurve;
       if (assistEnabled != 0)
       {
-        targetGearCheck = *(s16 *)(((u8 *)drive) + 0x76);
-        if (((*(s16 *)(((u8 *)drive) + 0x30)) < targetGearCheck) && (g_RoadGrade < 0))
+        targetGearCheck = drive->gear;
+        if ((drive->gearDisp < targetGearCheck) && (g_RoadGrade < 0))
         {
           if (targetGearCheck < 4)
           {
@@ -512,7 +514,7 @@ void UpdateCarDrivetrain(void *carArg) {
             break;
           }
           gradeScale = 0x64 - gradePenalty;
-          *(u16 *)(((u8 *)drive) + 0x2C) = (u16) ((wheelSpeedScaled * gradeScale) / 100);
+          drive->unk2C = (u16)((wheelSpeedScaled * gradeScale) / 100);
           g_ShiftTargetSpeed = (gradeScale * ((s32) gearCurve)) / 100;
         }
       }
@@ -520,50 +522,50 @@ void UpdateCarDrivetrain(void *carArg) {
       shiftTargetSpeed = g_ShiftTargetSpeed;
 
       accel = 0;
-      if ((*(s16 *)(((u8 *)drive) + 0x30)) > (*(s16 *)(((u8 *)drive) + 0x76)))
+      if (drive->gearDisp > drive->gear)
       {
         shiftTargetSpeed += 0x1F4;
       }
       g_ShiftTargetSpeed = shiftTargetSpeed;
       {
         u16 targetSpeed = (u16) g_ShiftTargetSpeed;
-        u16 currentSpeed = *(u16 *)(((u8 *)drive) + 0x78);
-        *(u16 *)(((u8 *)drive) + 0x34) = 0xAU;
-        *(s16 *)(((u8 *)drive) + 0x2E) = 0;
-        *(s16 *)(((u8 *)drive) + 0x36) = (s16) (targetSpeed - currentSpeed);
+        u16 currentSpeed = (u16)drive->unk78;
+        drive->clutch = 0xA;
+        drive->unk2E = 0;
+        drive->unk36 = (s16)(targetSpeed - currentSpeed);
       }
     }
     else
     {
       {
-        s32 countdown = --(*(u16 *)(((u8 *)drive) + 0x34));
+        s32 countdown = --drive->clutch;
       if (((s16) countdown) <= 0)
       {
-        *(s16 *)(((u8 *)drive) + 0x2E) = 1;
-        *(u16 *)(((u8 *)drive) + 0x2C) = 0U;
-        *(u16 *)(((u8 *)drive) + 0x34) = 0U;
+        drive->unk2E = 1;
+        drive->unk2C = 0;
+        drive->clutch = 0;
       }
       else
-        if ((*(s16 *)(((u8 *)drive) + 0x74)) != 0)
+        if (drive->manual != 0)
       {
-        *(s32 *)(((u8 *)drive) + 0x78) = (s32) (g_ShiftTargetSpeed - (((*(s16 *)(((u8 *)drive) + 0x36)) * ((s16) countdown)) / 15));
+        drive->unk78 = g_ShiftTargetSpeed - drive->unk36 * (s16)countdown / 15;
       }
       else
       {
-        shiftRemaining = (*(s16 *)(((u8 *)drive) + 0x36)) * ((s16) countdown);
+        shiftRemaining = drive->unk36 * (s16)countdown;
         switch (0) { default:
         lossBase = shiftRemaining / 10;
-        *(s32 *)(((u8 *)drive) + 0x78) = g_ShiftTargetSpeed - lossBase;
+        drive->unk78 = g_ShiftTargetSpeed - lossBase;
         break;
         block_129:
-        *(s32 *)(((u8 *)drive) + 0x78) = shiftedSpeed;
+        drive->unk78 = shiftedSpeed;
         }
 
       }
       }
     }
   }
-  throttleTorque = (netTorque * (*(s16 *)(((u8 *)drive) + 0xA0))) * (*(s16 *)(((u8 *)drive) + 0x2E));
+  throttleTorque = netTorque * drive->accelBtn * drive->unk2E;
   if (throttleTorque < 0)
   {
     throttleTorque += 0xFF;
@@ -577,14 +579,14 @@ void UpdateCarDrivetrain(void *carArg) {
   {
     g_GripLossTimer = 0;
   }
-  if ((*(s16 *)(((u8 *)car) + 0x98)) == 0)
+  if (car->shiftState == 0)
   {
-    steerLoad += ((s32) (*(s32 *)(((u8 *)drive) + 0x78))) / 256;
+    steerLoad += drive->unk78 / 256;
   }
-  accel += ((s32) ((*(s16 *)(((u8 *)drive) + 0xA2)) * (*(s32 *)(((u8 *)drive) + 0x78)))) / 8192;
+  accel += drive->brakeBtn * drive->unk78 / 8192;
   if (netTorque > 0)
   {
-    if ((*(s16 *)(((u8 *)drive) + 0xA0)) < 0x7F)
+    if (drive->accelBtn < 0x7F)
     {
       accel += netTorque / 2;
     }
@@ -593,21 +595,21 @@ void UpdateCarDrivetrain(void *carArg) {
   {
     accel -= netTorque / 2;
   }
-  headingError = GetAngleDistance(*(s32 *)(((u8 *)car) + 0x24), *(s32 *)(((u8 *)car) + 0xA0), (s32) gearCurve, curveSlot);
-  *(s32 *)(((u8 *)drive) + 0x4C) = headingError;
+  headingError = GetAngleDistance(car->field_24, car->headingAngle, (s32) gearCurve, curveSlot);
+  drive->unk4C = headingError;
   if (headingError >= 0x401)
   {
-    *(s32 *)(((u8 *)drive) + 0x4C) = (s32) (0x800 - headingError);
+    drive->unk4C = 0x800 - headingError;
   }
-  steerLoad += ((s32) (*(s32 *)(((u8 *)drive) + 0x4C))) / 256;
-  if (((*(s32 *)(((u8 *)drive) + 0x98)) != 1) && (g_PadType == 0x41))
+  steerLoad += drive->unk4C / 256;
+  if ((drive->state98 != 1) && (g_PadType == 0x41))
   {
-    assistStep = ((g_CarSpec->unk10E) * (*(s32 *)(((u8 *)drive) + 0x88))) / 1000;
+    assistStep = g_CarSpec->unk10E * drive->unk88 / 1000;
     if (assistStep <= 0)
     {
       assistStep = 1;
     }
-    shiftRemaining = *(s32 *)(((u8 *)drive) + 0x1C);
+    shiftRemaining = drive->steerPos;
     assistArmed = shiftRemaining >= 0;
     if (assistArmed)
     {
@@ -618,10 +620,11 @@ void UpdateCarDrivetrain(void *carArg) {
       steerLoad -= ((s32) ((shiftRemaining * 5) / 6)) / assistStep;
     }
   }
-  trackHeadingError = GetAngleDistance(*(s32 *)(((u8 *)car) + 0xA0), 0xC00 - (*(s16 *)(((u8 *)(((*((s32 *)(((u8 *)car) + 0x30))) * 0x18) + ((u8 *)g_TrackPoints))) + 0xA)));
+  trackHeadingError = GetAngleDistance(car->headingAngle,
+                                       0xC00 - g_TrackPoints[car->trackPointIndex].angle);
   frontLoadScaled = trackHeadingError;
-  pointIndex = *(s32 *)(((u8 *)car) + 0x30);
-  lateralOffset = *(s32 *)(((u8 *)car) + 0x38);
+  pointIndex = car->trackPointIndex;
+  lateralOffset = car->field_38;
   engineSpeed = (*(s16 *)(((u8 *)((pointIndex * 0x18) + ((u8 *)g_TrackPoints))) + 0xC)) * (0x400 - lateralOffset);
   pointIndex += 1;
   lateralSum = engineSpeed + ((*(s16 *)(((u8 *)(((pointIndex % ((s32) g_TrackPointCount)) * 0x18) + ((u8 *)g_TrackPoints))) + 0xC)) * lateralOffset);
@@ -658,7 +661,7 @@ void UpdateCarDrivetrain(void *carArg) {
   {
     steerLoad += frontLoadScaled / 10;
   }
-  if ((g_RacePhase == 2) && ((*(s32 *)(((u8 *)drive) + 0x98)) == 3))
+  if ((g_RacePhase == 2) && (drive->state98 == 3))
   {
     steerLoad += (g_StandingStartSpin & 0x1F) * 5;
   }
@@ -671,11 +674,11 @@ void UpdateCarDrivetrain(void *carArg) {
       g_DriveBoostTimer = counter - 1;
     }
   }
-  if ((*(s32 *)(((u8 *)drive) + 0x98)) == 1)
+  if (drive->state98 == 1)
   {
     throttleAccel = (throttleAccel * 4) / 5;
   }
-  shiftTargetSpeed = (roadSpeed = ((*(s32 *)(((u8 *)car) + 0xA4)) * 0xA0) / 1168);
+  shiftTargetSpeed = (roadSpeed = car->speed * 0xA0 / 1168);
   dragBase = (s32) ((g_CarSpec->unk110) * 0x3E8);
   dragTerm = dragBase / ((s16) g_DragScale);
   if (dragTerm <= 0)
@@ -684,7 +687,7 @@ void UpdateCarDrivetrain(void *carArg) {
   }
   steerLoad += ((s32) (roadSpeed * roadSpeed)) / dragTerm;
   g_DragScale = 0x3E8;
-  if ((*(s16 *)(((u8 *)car) + 0x98)) == 0)
+  if (car->shiftState == 0)
   {
     steerLoad = (steerLoad * (0x64 - bandScale)) / 100;
   }
@@ -693,32 +696,32 @@ void UpdateCarDrivetrain(void *carArg) {
     throttleAccel *= 2;
     steerLoad = 0;
   }
-  if (((*(s16 *)(((u8 *)drive) + 0x38)) <= 0) && (((s16) (*(u16 *)(((u8 *)drive) + 0x34))) <= 0))
+  if ((drive->unk38 <= 0) && (drive->clutch <= 0))
   {
-    *(s32 *)(((u8 *)drive) + 0x78) = (s32) (((throttleAccel - accel) - steerLoad) + (*(s32 *)(((u8 *)drive) + 0x78)));
+    drive->unk78 = throttleAccel - accel - steerLoad + drive->unk78;
   }
-  speedForPath = *(s32 *)(((u8 *)drive) + 0x78);
+  speedForPath = drive->unk78;
   if (speedForPath < 0)
   {
-    *(s32 *)(((u8 *)drive) + 0x78) = 0;
+    drive->unk78 = 0;
   }
   else
     if (speedForPath >= 0x3A99)
   {
-    *(s32 *)(((u8 *)drive) + 0x78) = 0x3A98;
+    drive->unk78 = 0x3A98;
   }
-  gearTorqueLate = gearRatio * (*(s32 *)(((u8 *)drive) + 0x78));
-  *(s32 *)(((u8 *)drive) + 0x94) = gearTorqueLate;
-  if ((*(s32 *)(((u8 *)drive) + 0x98)) == 1)
+  gearTorqueLate = gearRatio * drive->unk78;
+  drive->unk94 = gearTorqueLate;
+  if (drive->state98 == 1)
   {
-    arcPointIndex = *(s32 *)(((u8 *)car) + 0x30);
+    arcPointIndex = car->trackPointIndex;
     arcFlags = *(u16 *)(((u8 *)((arcPointIndex * 0x18) + ((u8 *)g_TrackPoints))) + 0x14);
     dragBase = arcFlags % 4;
     if (dragBase > 0)
     {
       arcCentre = (((((s32) (arcFlags << 0x10)) >> 13) >> 7) * 0xC) + (u8 *)g_TrackArcCenters;
-      toCentreX = (*(s32 *)(((u8 *)car) + 0)) - (*(s32 *)(((u8 *)arcCentre) + 0));
-      toCentreZ = (*(s32 *)(((u8 *)car) + 8)) - (*(s32 *)(((u8 *)arcCentre) + 4));
+      toCentreX = car->x - ((GameTrackArcCenter *)arcCentre)->x;
+      toCentreZ = car->z - ((GameTrackArcCenter *)arcCentre)->z;
       centreAngle = Atan2(toCentreX, toCentreZ);
       cosCentreAngle = rcos(centreAngle);
       radialDistance = (cosCentreAngle * toCentreX) + (rsin(centreAngle) * toCentreZ);
@@ -741,42 +744,42 @@ void UpdateCarDrivetrain(void *carArg) {
     {
       downforce = 1;
     }
-    dragTerm = (*(s16 *)(((u8 *)drive) + 0xA2)) * 0x14;
+    dragTerm = drive->brakeBtn * 0x14;
     coefficientBase = 0x26FC - downforce;
     coefficient = coefficientBase - (steerLoad * 2);
     if (dragTerm < 0)
     {
       dragTerm += 0xFF;
     }
-    *(s32 *)(((u8 *)car) + 0xA4) = (s32) (((coefficient - (dragTerm >> 8)) * (*(s32 *)(((u8 *)car) + 0xA4))) / 10000);
-    arcPointIndex = *(s32 *)(((u8 *)drive) + 0x94);
+    car->speed = (coefficient - (dragTerm >> 8)) * car->speed / 10000;
+    arcPointIndex = drive->unk94;
     if (arcPointIndex < 0)
     {
       arcPointIndex += 0x1FFFFF;
     }
     dragBase = arcPointIndex >> 0x15;
-    *(s32 *)(((u8 *)car) + 0xA8) = dragBase;
+    car->field_A8 = dragBase;
   }
   else
   {
-    if ((*(s16 *)(((u8 *)car) + 0x98)) != 0)
+    if (car->shiftState != 0)
     {
-      speedA = *(s32 *)(((u8 *)car) + 0xA4);
-      *(s32 *)(((u8 *)car) + 0xA8) = 0;
+      speedA = car->speed;
+      car->field_A8 = 0;
       speedScaled = (speedA * 0x3E7) / 1000;
     }
     else
     {
-      if (((s16) (*(u16 *)(((u8 *)drive) + 0x34))) > 0)
+      if (drive->clutch > 0)
       {
-        *(s32 *)(((u8 *)car) + 0xA8) = (s32) ((s16) (*(u16 *)(((u8 *)drive) + 0x2C)));
+        car->field_A8 = drive->unk2C;
       }
       else
       {
         torqueLate = gearTorqueLate;
-        if ((*(s16 *)(((u8 *)drive) + 0x38)) > 0)
+        if (drive->unk38 > 0)
         {
-          *(s32 *)(((u8 *)car) + 0xA8) = (s32) ((s16) (*(u16 *)(((u8 *)drive) + 0x2C)));
+          car->field_A8 = drive->unk2C;
         }
         else
         {
@@ -785,29 +788,29 @@ void UpdateCarDrivetrain(void *carArg) {
             torqueLate += 0x1FFFF;
           }
           torqueShifted = torqueLate >> 0x11;
-          *(s32 *)(((u8 *)car) + 0xA8) = torqueShifted;
-          if ((*(s16 *)(((u8 *)drive) + 0x74)) == 0)
+          car->field_A8 = torqueShifted;
+          if (drive->manual == 0)
           {
-            *(s32 *)(((u8 *)car) + 0xA8) = (s32) (((g_CarSpec->unk102) * torqueShifted) / 1000);
+            car->field_A8 = g_CarSpec->unk102 * torqueShifted / 1000;
           }
         }
       }
       if (g_GripLossTimer > 0)
       {
-        *(s32 *)(((u8 *)car) + 0xA8) /= 2;
+        car->field_A8 /= 2;
       }
-      speedB = *(s32 *)(((u8 *)car) + 0xA4);
+      speedB = car->speed;
       speedScaled = (speedB * 0x5E) / 100;
     }
-    *(s32 *)(((u8 *)car) + 0xA4) = speedScaled;
+    car->speed = speedScaled;
   }
-  if ((*(s32 *)(((u8 *)car) + 0xA4)) < 8)
+  if (car->speed < 8)
   {
-    *(s32 *)(((u8 *)car) + 0xA0) = (s32) (*(s32 *)(((u8 *)car) + 0x24));
+    car->headingAngle = car->field_24;
   }
   if (g_RacePhase >= 2)
   {
-    driveModeLate = *(s32 *)(((u8 *)drive) + 0x98);
+    driveModeLate = drive->state98;
     switch (driveModeLate)
     {
       case 0:
@@ -831,10 +834,10 @@ void UpdateCarDrivetrain(void *carArg) {
   }
   else
   {
-    *(s32 *)(((u8 *)car) + 0xA4) = 0;
+    car->speed = 0;
   }
-  if ((*(s32 *)(((u8 *)car) + 0xA4)) < 8)
+  if (car->speed < 8)
   {
-    *(s32 *)(((u8 *)car) + 0xA0) = (s32) (*(s32 *)(((u8 *)car) + 0x24));
+    car->headingAngle = car->field_24;
   }
 }

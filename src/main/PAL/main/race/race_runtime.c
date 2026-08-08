@@ -365,7 +365,7 @@ void DrawEndingScreen(void) {
     }
 
     if (g_RacePhase > 0) {
-        UpdatePlayerCar((struct Car *)&g_PlayerCar);
+        UpdatePlayerCar(&g_PlayerCar);
     } else if (g_RacePhase == 0) {
         UpdateLoadedAudioVoices(0, 1);
     }

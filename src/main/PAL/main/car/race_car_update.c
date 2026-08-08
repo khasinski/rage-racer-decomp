@@ -732,7 +732,7 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
     }
 }
 
-void SeedFinishCamera(GameCarRuntime *car) {
+void SeedFinishCamera(PlayerCarRuntime *car) {
     register u32 word0;
     Block16 *src;
     Block16 *dst;

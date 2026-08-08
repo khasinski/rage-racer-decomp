@@ -5,7 +5,6 @@
 #include "game/vector.h"
 
 struct Obj;
-struct Car;
 
 /*
  * Per-car entry. The two setup bytes are what the CUSTOMIZE screen edits and
@@ -312,6 +311,75 @@ typedef struct GameCarDrive {
     u8 padA4[4];
 } GameCarDrive;
 
+/* The player's 0x19C-byte race object. Its prefix shares the world/track
+ * layout used by the rival cars, but +0xBC is the player drivetrain block,
+ * not the rival AI view. */
+typedef struct PlayerCarRuntime {
+    s32 x;
+    s32 y;
+    s32 z;
+    s32 field_0C;
+    s32 motionX;
+    s32 motionY;
+    s32 motionZ;
+    s32 field_1C;
+    s32 field_20;
+    s32 field_24;
+    s32 field_28;
+    s32 field_2C;
+    s32 trackPointIndex;
+    s32 field_34;
+    s32 field_38;
+    s32 field_3C;
+    s32 field_40;
+    s32 field_44;
+    s32 field_48;
+    s32 field_4C;
+    s32 field_50;
+    s32 field_54;
+    s32 field_58;
+    s32 field_5C;
+    s32 field_60;
+    s32 field_64;
+    s32 progressA;
+    s32 progressB;
+    s32 trackProgress;
+    s32 previousTrackProgress;
+    s16 trackSection;
+    s16 field_7A;
+    s16 velocityX;
+    s16 velocityZ;
+    s16 motionActive;
+    u16 motionTimer;
+    s16 motionMode;
+    s16 motionModeTimer;
+    s16 motionValue;
+    s16 field_8A;
+    s16 field_8C;
+    s16 field_8E;
+    s16 field_90;
+    s16 field_92;
+    s16 field_94;
+    s16 field_96;
+    s16 shiftState;
+    u16 shiftTick;
+    s16 shiftRef;
+    s16 shiftBase;
+    s32 headingAngle;
+    s32 speed;
+    s32 field_A8;
+    s16 activeFlag;
+    s16 field_AE;
+    s32 field_B0;
+    s32 field_B4;
+    s16 facingBackwards;
+    u8 padBA[2];
+    GameCarDrive drive;
+    s32 field_164;
+    s16 lap;
+    u8 pad16A[0x32];
+} PlayerCarRuntime;
+
 /* A second, halfword-wide view of that same block, for the code that loads
  * 0x104..0x134 as s16 where GameCarDrive declares s32. See names.md 3b. */
 typedef struct GameCarAiBlock {
@@ -520,7 +588,7 @@ void SlowRivalAhead();
 void SteerCarToTrackLine(GameCarRuntime *car);
 void TransformCollisionVector(s32 *input, s32 *output);
 void UpdateCarAiTargetSpeed();
-void UpdateCarDrivetrain(void *car);
+void UpdateCarDrivetrain(PlayerCarRuntime *car);
 void UpdateCarDriving();
 void UpdateCarStandingStart();
 void UpdateCarTrafficAvoidance();
@@ -544,8 +612,8 @@ void UpdateCarTiltCounter();
 s32 UpdateCarTrackState();
 s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt);
 s32 DrawPlayerTachometer(void);
-void BeginCarStandingStart(GameCarRuntime *car, s32 sceneTimer);
+void BeginCarStandingStart(PlayerCarRuntime *car, s32 sceneTimer);
 void RunRaceIntroCamera(struct Obj *obj, s32 mode);
-void UpdatePlayerCar(struct Car *car);
+void UpdatePlayerCar(PlayerCarRuntime *car);
 
 #endif

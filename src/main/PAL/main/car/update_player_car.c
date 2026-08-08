@@ -18,49 +18,6 @@ typedef struct GearRange {
     s16 down;
 } GearRange;
 
-typedef struct Car {
-    s32 unk00;
-    s32 unk04;
-    s32 unk08;
-    s32 unk0C;
-    s32 unk10;
-    s32 unk14;
-    s32 unk18;
-    s32 unk1C;
-    s32 unk20;
-    s32 unk24;
-    s32 unk28;
-    s32 unk2C;
-    s32 trackPointIndex; /* 0x30 */
-    u8 pad34[0x10];
-    s32 unk44;
-    s32 unk48;
-    u8 pad4C[4];
-    s32 unk50;
-    s32 unk54;
-    s32 unk58;
-    s32 unk5C;
-    s32 unk60;
-    s32 unk64;
-    u8 pad68[0x1A];
-    s16 unk82;
-    u8 pad84[0xC];
-    s16 unk90;
-    s16 unk92;
-    s16 unk94;
-    s16 unk96;
-    s16 shiftState;  /* 0x98 */
-    u16 shiftTick;   /* 0x9A */
-    s16 shiftRef;    /* 0x9C */
-    s16 shiftBase;   /* 0x9E */
-    s32 unkA0;
-    s32 speed;       /* 0xA4 */
-    u8 padA8[0x10];
-    s16 unkB8;
-    u8 padBA[2];
-    GameCarDrive drive;  /* 0xBC */
-} Car;
-
 /*
  * Per-car physics / gear-shift driver (matched sibling of the ASM
  * UpdateAttractCars). Samples input, builds the car's orientation matrices, runs
@@ -68,10 +25,10 @@ typedef struct Car {
  * g_CarSpec for top-gear/upshift/downshift-speed tables and the shift
  * cooldown timers g_SteerHoldFrames/g_AutoShiftCooldown), dispatches the engine audio and the
  * boost/launch handlers, and resolves track-boundary skid via UpdateCarTrackState.
- * The local Car struct and the shared GameCarDrive are a distinct hand-rolled layout (drive block
- * at +0xBC) shaped to match; they are NOT GameCarRuntime.
+ * PlayerCarRuntime and GameCarDrive describe the player layout, whose block at
+ * +0xBC is not the rival-car GameCarAiBlock view.
  */
-void UpdatePlayerCar(Car *car) {
+void UpdatePlayerCar(PlayerCarRuntime *car) {
     Matrix m1;
     Matrix m2;
     SVec sv1;
@@ -94,7 +51,7 @@ void UpdatePlayerCar(Car *car) {
     s32 off;
 
     mode23 = g_PadType == 0x23;
-    car->unkB8 = IsCarFacingBackwards(car);
+    car->facingBackwards = IsCarFacingBackwards(car);
 
     if (car->drive.manual != 0) {
         if (g_PadPressed & g_PadShiftMasks[mode23][0]) {
@@ -228,21 +185,21 @@ void UpdatePlayerCar(Car *car) {
         if (step > 4096) {
             step = 0x249;
         }
-        spin = (step + car->unk48) & 0xFFF;
-        car->unk48 = spin;
+        spin = (step + car->field_48) & 0xFFF;
+        car->field_48 = spin;
         if (car->speed > 800) {
-            car->unk48 = spin | 0x1000;
+            car->field_48 = spin | 0x1000;
         }
     }
 
     if (g_PadType == 0x23) {
-        if (car->unk44 >= 4096) {
-            car->unk44 = 4096;
+        if (car->field_44 >= 4096) {
+            car->field_44 = 4096;
             if (p->steerPos < -4096) {
                 g_SteerHoldFrames++;
             }
-        } else if (car->unk44 < -4095) {
-            car->unk44 = -4096;
+        } else if (car->field_44 < -4095) {
+            car->field_44 = -4096;
             if (p->steerPos > 4096) {
                 g_SteerHoldFrames++;
             }
@@ -250,23 +207,23 @@ void UpdatePlayerCar(Car *car) {
             g_SteerHoldFrames = -10;
         }
     } else {
-        if (car->unk44 >= 4096) {
-            car->unk44 = 4096;
+        if (car->field_44 >= 4096) {
+            car->field_44 = 4096;
             g_SteerHoldFrames++;
-        } else if (car->unk44 < -4095) {
-            car->unk44 = -4096;
+        } else if (car->field_44 < -4095) {
+            car->field_44 = -4096;
             g_SteerHoldFrames++;
         } else {
             g_SteerHoldFrames = 0;
         }
     }
 
-    car->unk00 -= car->unk10;
-    car->unk08 -= car->unk18;
-    BuildRotMatrixY(&m1, car->unk24);
-    BuildRotMatrixX(&m2, car->unk20);
+    car->x -= car->motionX;
+    car->z -= car->motionZ;
+    BuildRotMatrixY(&m1, car->field_24);
+    BuildRotMatrixX(&m2, car->field_20);
     MulMatrix2(&m2, &m1);
-    BuildRotMatrixZ(&m2, car->unk28);
+    BuildRotMatrixZ(&m2, car->field_28);
     MulMatrix2(&m2, &m1);
 
     sv1.vx = 0;
@@ -281,15 +238,15 @@ void UpdatePlayerCar(Car *car) {
     m2.m[2][1] = m1.m[1][2];
     m2.m[2][2] = m1.m[2][2];
     sv1.vz = -p->unk3E - 50;
-    ApplyMatrix(&m2, &sv1, &car->unk10);
+    ApplyMatrix(&m2, &sv1, &car->motionX);
 
-    tmp.x = (p->accelPos * 6) / 1280 + car->unk00 + car->unk10;
-    tmp.z = (p->brakePos * 6) / 1280 + car->unk08 + car->unk18;
-    *(Vec4 *)&car->unk00 = tmp;
-    AccumulateLapProgress(car);
+    tmp.x = (p->accelPos * 6) / 1280 + car->x + car->motionX;
+    tmp.z = (p->brakePos * 6) / 1280 + car->z + car->motionZ;
+    *(Vec4 *)&car->x = tmp;
+    AccumulateLapProgress((GameCarRuntime *)car);
 
     {
-        s32 base = car->unk24 - 0xC00;
+        s32 base = car->field_24 - 0xC00;
 
         slip = (base + g_TrackPoints[car->trackPointIndex].angle) & 0xFFF;
     }
@@ -316,7 +273,7 @@ void UpdatePlayerCar(Car *car) {
         }
     }
 
-    if (car->unk82 > 0) {
+    if ((s16)car->motionTimer > 0) {
         ApplyCarKnockback(car);
     }
     skid = UpdateCarTrackState(car, car->trackPointIndex, arr);
@@ -327,7 +284,7 @@ void UpdatePlayerCar(Car *car) {
     if (p->unk3C != 0) {
         s32 d = (g_CarSpec->revLimit + g_CarSpec->redline) / 2 - g_ShiftTargetRpm;
         if (d > 0) {
-            car->unk20 += (d * Random15()) / 3276700;
+            car->field_20 += (d * Random15()) / 3276700;
         }
     }
 
@@ -337,11 +294,11 @@ void UpdatePlayerCar(Car *car) {
     }
 
     {
-        s32 fuel = car->unk04;
+        s32 fuel = car->y;
 
-        *(Vec4 *)&car->unk50 = *(Vec4 *)&car->unk20;
-        car->unk28 = car->unk28 + car->unk64;
-        car->unk60 = car->unk04;
+        *(Vec4 *)&car->field_50 = *(Vec4 *)&car->field_20;
+        car->field_28 = car->field_28 + car->field_64;
+        car->field_60 = car->y;
         limit = fuel - 8;
     }
 
@@ -352,31 +309,31 @@ void UpdatePlayerCar(Car *car) {
         if (car->shiftState == 1) {
             s32 t = (s16)n;
 
-            car->unk04 = car->shiftRef * t + (t * t * 72) / 100 + car->unk04;
-            if (car->unk04 >= limit) {
+            car->y = car->shiftRef * t + (t * t * 72) / 100 + car->y;
+            if (car->y >= limit) {
                 car->shiftState = 0;
             }
         } else if (car->shiftState == 2) {
             if (limit - car->shiftRef <= car->shiftBase) {
-                car->unk04 = car->shiftBase;
+                car->y = car->shiftBase;
             } else {
                 car->shiftState = 3;
                 car->shiftRef = car->shiftTick;
-                car->unk04 = car->shiftBase;
+                car->y = car->shiftBase;
             }
         } else {
             n = (s16)n - car->shiftRef;
 
-            car->unk04 = car->shiftBase + (n * n * 216) / 100;
-            if (car->unk04 >= limit) {
+            car->y = car->shiftBase + (n * n * 216) / 100;
+            if (car->y >= limit) {
                 car->shiftState = 0;
             }
         }
 
         if (car->shiftState == 0) {
-            car->unk04 = limit + 8;
-            car->unk90 = 0;
-            car->unk94 = 0;
+            car->y = limit + 8;
+            car->field_90 = 0;
+            car->field_94 = 0;
             StartCarBodyKick(1, car);
             g_ShiftSoundLevel = 0;
             if ((s16)car->shiftTick >= 19) {
@@ -393,7 +350,7 @@ void UpdatePlayerCar(Car *car) {
                 p->unk94 = v * car->speed / 100;
                 g_ShiftSoundLevel = car->shiftTick & 0x3F;
                 p->unk60 = 0;
-                p->unk58 = car->unkA0;
+                p->unk58 = car->headingAngle;
                 p->unk5C = car->speed / 0x100000;
                 p->unk50 = 0;
                 props = g_CarSpec;
@@ -422,11 +379,11 @@ void UpdatePlayerCar(Car *car) {
     UpdateCarCrestHop(car);
 
     if (skid == 0 && crash == 0) {
-        car->unk04 += p->unk68;
+        car->y += p->unk68;
         UpdateCarBodyKick(car);
     } else {
         slip = GetAngleDistance(0xC00 - g_TrackPoints[car->trackPointIndex].angle,
-                             car->unkA0);
+                             car->headingAngle);
         if (crash != 0) {
             p->unk48 -= 1000;
             if (car->speed >= 81) {
@@ -445,7 +402,7 @@ void UpdatePlayerCar(Car *car) {
                 switch (skid) {
                 case 1:
                 case 3:
-                    if (car->unk82 >= 15) {
+                    if ((s16)car->motionTimer >= 15) {
                         if ((u32)(slip - 768) < 257U) {
                             if (skid == 1) {
                                 PlaySoundCue(0xA);
@@ -459,7 +416,7 @@ void UpdatePlayerCar(Car *car) {
                     break;
                 case 2:
                 case 4:
-                    if (car->unk82 >= 15) {
+                    if ((s16)car->motionTimer >= 15) {
                         if ((u32)(slip - 768) < 257U) {
                             if (skid == 2) {
                                 PlaySoundCue(0xA);
