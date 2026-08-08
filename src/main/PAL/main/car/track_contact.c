@@ -6,8 +6,6 @@
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
-#define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
-
 typedef struct TrackPointWindow {
     s32 x;
     s32 z;
@@ -153,7 +151,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
 
     spad = CAR_TRACK_SCRATCH;
     spad->field_3C = 0;
-    trackPointIndex = FIELD(car, s32 *, 0x30);
+    trackPointIndex = car->trackPointIndex;
     nextPointIndex = (trackPointIndex + 1) % *(s32 *)0x8009E6A8;
     pointsBase = *(s32 *)0x8009E688;
     point = (GameTrackPoint *)((trackPointIndex * 0x18) + pointsBase);
@@ -174,9 +172,9 @@ void ResetCarTrackState(GameCarRuntime *car) {
         spad->arcCenterX = arcCenterX;
         arcCenterZ = arcCenter->z;
         spad->arcCenterZ = arcCenterZ;
-        carToCenterX = FIELD(car, s32 *, 0) - arcCenterX;
+        carToCenterX = car->x - arcCenterX;
         spad->carToCenterX = carToCenterX;
-        carToCenterZ = FIELD(car, s32 *, 8) - arcCenterZ;
+        carToCenterZ = car->z - arcCenterZ;
         spad->carToCenterZ = carToCenterZ;
         spad->sweptAngle = Atan2(carToCenterX, carToCenterZ) & 0xFFF;
         pointToCenterX = point->x;
@@ -256,9 +254,9 @@ void ResetCarTrackState(GameCarRuntime *car) {
         }
     }
 
-    spad->offsetX = (u16)(((u16)FIELD(car, s32 *, 0) - (u16)point->x) * 4);
+    spad->offsetX = (u16)(((u16)car->x - (u16)point->x) * 4);
     headingAngle = spad->heading;
-    spad->offsetZ = (s16)(((u16)FIELD(car, s32 *, 8) - (u16)point->z) * 4);
+    spad->offsetZ = (s16)(((u16)car->z - (u16)point->z) * 4);
     spad->field_62 = 0;
     cosHeading = rcos(headingAngle);
     rotated = (cosHeading * (s16)spad->offsetX) +
@@ -309,7 +307,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
         } else {
             outputProgress = (s16)spad->segmentLength - alongSegment;
         }
-        FIELD(car, s32 *, 0x6C) = outputProgress;
+        car->field_6C = outputProgress;
     }
     segLenC = (s16)spad->segmentLength;
     spad->field_8E =
@@ -319,7 +317,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
     {
         s16 angle;
 
-        angle = (u16)FIELD(car, s32 *, 0x24);
+        angle = (u16)car->field_24;
         angle -= 0xC00;
         spad->field_8C = angle + (u16)spad->heading;
     }
@@ -359,7 +357,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
         if (secondProduct < 0) {
             secondProduct += 0xFFF;
         }
-        FIELD(car, s32 *, 0x50) = firstProduct + (secondProduct >> 0xC);
+        car->field_50 = firstProduct + (secondProduct >> 0xC);
     }
     {
         s32 firstComponent;
@@ -385,18 +383,18 @@ void ResetCarTrackState(GameCarRuntime *car) {
 
             trackLength = g_TrackLength;
             progress =
-                (FIELD(car, s32 *, 0x68) + FIELD(car, s32 *, 0x6C)) % trackLength;
+                (car->field_68 + car->field_6C) % trackLength;
             combinedComponent = firstComponent + (lateralProduct >> 0xC);
-            FIELD(car, s32 *, 0x58) = combinedComponent;
-            FIELD(car, s32 *, 0x54) = FIELD(car, s32 *, 0x24);
-            FIELD(car, s32 *, 0xB4) = spad->heading;
-            FIELD(car, s32 *, 0x74) = FIELD(car, s32 *, 0x70);
-            FIELD(car, s32 *, 0x70) = progress;
+            car->field_58 = combinedComponent;
+            car->field_54 = car->field_24;
+            car->field_B4 = spad->heading;
+            car->previousTrackProgress = car->trackProgress;
+            car->trackProgress = progress;
             if (progress < 0) {
                 s32 adjustedProgress;
 
                 adjustedProgress = progress + trackLength;
-                FIELD(car, s32 *, 0x70) = adjustedProgress;
+                car->trackProgress = adjustedProgress;
             }
         }
     }
@@ -404,11 +402,11 @@ void ResetCarTrackState(GameCarRuntime *car) {
         s32 finalAngle;
 
         if (*(s32 *)0x801E408C != 0) {
-            finalAngle = g_TrackLength - FIELD(car, s32 *, 0x70);
-            FIELD(car, s16 *, 0x78) = (s16)(finalAngle >> 8);
+            finalAngle = g_TrackLength - car->trackProgress;
+            car->field_78 = (s16)(finalAngle >> 8);
         } else {
-            finalAngle = FIELD(car, s32 *, 0x70);
-            FIELD(car, s16 *, 0x78) = (s16)(finalAngle >> 8);
+            finalAngle = car->trackProgress;
+            car->field_78 = (s16)(finalAngle >> 8);
         }
     }
 }

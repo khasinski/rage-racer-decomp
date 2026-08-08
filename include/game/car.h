@@ -29,6 +29,13 @@ typedef union CarSlideInput {
     } halves;
 } CarSlideInput;
 
+typedef struct CarTrackLimits {
+    s16 rightInset;
+    s16 leftInset;
+    s16 rightKnockbackMode;
+    s16 leftKnockbackMode;
+} CarTrackLimits;
+
 typedef struct GameCarRuntime {
     s32 x;
     /* +0x04 32 bits wide, not 16: `lw`/`sw` at nine sites in each of

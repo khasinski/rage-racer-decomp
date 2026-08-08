@@ -1,13 +1,12 @@
 #include "common.h"
 #include "game/car.h"
+#define GAME_PLAYER_CAR_DECL extern GameCarRuntime g_PlayerCar
 #include "game/player_car_internal.h"
 #include "game/track.h"
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/vector.h"
-
-#define FIELD(base, type, offset) (*(type)((u8 *)(base) + (offset)))
 
 /*
  * Track-segment / route-sprite geometry builder. Interpolates between the
@@ -16,11 +15,11 @@
  * and rsin/rcos, builds the collision-boundary
  * offset, and writes the interpolated position/angle/height into the render
  * object `obj`. The scratchpad struct at 0x1F80011C ("spad") is the GTE
- * per-primitive transform scratch. `clampPair` supplies the s16 margin values
- * (offsets 0/2/4/6). Raw FIELD(base,type,offset) accesses preserve the match.
+ * per-primitive transform scratch. `limits` supplies the boundary margins and
+ * knockback modes.
  * Returns the boundary/skid response code.
  */
-s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
+s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits *limits) {
     s32 headingAngle;
     s32 secondResult;
     s16 segLenE;
@@ -101,9 +100,9 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         spad->arcCenterX = arcCenterX;
         arcCenterZ = arcCenter->z;
         spad->arcCenterZ = arcCenterZ;
-        carToCenterX = FIELD(obj, s32 *, 0) - arcCenterX;
+        carToCenterX = obj->x - arcCenterX;
         spad->carToCenterX = carToCenterX;
-        carToCenterZ = FIELD(obj, s32 *, 8) - arcCenterZ;
+        carToCenterZ = obj->z - arcCenterZ;
         spad->carToCenterZ = carToCenterZ;
         spad->sweptAngle = Atan2(carToCenterX, carToCenterZ) & 0xFFF;
         pointToCenterX = point->x;
@@ -156,7 +155,8 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
             }
             *(s32 *)0x1F800130 = interpolated;
         }
-        arcLateral = (s16) (FIELD(spad, u16 *, 0x10) - FIELD(spad, u16 *, 0x14));
+        arcLateral =
+            (s16)(*(u16 *)((u8 *)spad + 0x10) - *(u16 *)((u8 *)spad + 0x14));
         if (spad->curveMode == 2)
         {
             arcLateral = 0 - arcLateral;
@@ -186,9 +186,9 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         }
     }
 
-    spad->offsetX = (u16) (((u16) FIELD(obj, s32 *, 0) - (u16) point->x) * 4);
+    spad->offsetX = (u16)(((u16)obj->x - (u16)point->x) * 4);
     headingAngle = spad->heading;
-    spad->offsetZ = (s16) (((u16) FIELD(obj, s32 *, 8) - (u16) point->z) * 4);
+    spad->offsetZ = (s16)(((u16)obj->z - (u16)point->z) * 4);
     spad->field_62 = 0;
     cosHeading = rcos(headingAngle);
     rotated = (cosHeading * (s16) spad->offsetX) + (rsin(spad->heading) * spad->offsetZ);
@@ -213,7 +213,7 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
     segLenB = (s16)spad->segmentLength;
     edgeHeight = (s32) ((nextPoint->field_12 * alongSegment) + (point->field_12 * (segLenB - alongSegment))) / segLenB;
     spad->field_88 = (s16) edgeHeight;
-    leftLimit = spad->field_8A + FIELD(clampPair, s16 *, 2);
+    leftLimit = spad->field_8A + limits->leftInset;
     clampSource = &spad->pad40[0];
     if (lateralOffset < (0 - leftLimit))
     {
@@ -225,16 +225,16 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         ApplyMatrix(clampSource, &spad->offsetX, &spad->field_68);
         if (obj == &g_PlayerCar)
         {
-            SetCarKnockback(obj, spad->field_68, spad->field_70, FIELD(clampPair, s16 *, 6));
+            SetCarKnockback(obj, spad->field_68, spad->field_70, limits->leftKnockbackMode);
         }
-        FIELD(obj, s32 *, 0) = (s32) (FIELD(obj, s32 *, 0) - spad->field_68);
-        FIELD(obj, s32 *, 8) = (s32) (FIELD(obj, s32 *, 8) - spad->field_70);
-        lateralOffset = -spad->field_8A - FIELD(clampPair, s16 *, 2);
-        spad->field_3C = FIELD(clampPair, s16 *, 6);
+        obj->x = obj->x - spad->field_68;
+        obj->z = obj->z - spad->field_70;
+        lateralOffset = -spad->field_8A - limits->leftInset;
+        spad->field_3C = limits->leftKnockbackMode;
     }
     else
     {
-    rightLimit = (s16) edgeHeight - FIELD(clampPair, s16 *, 0);
+    rightLimit = (s16)edgeHeight - limits->rightInset;
     if (rightLimit < lateralOffset)
     {
         lateralOffset -= rightLimit;
@@ -245,12 +245,12 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         ApplyMatrix(clampSource, &spad->offsetX, &spad->field_68);
         if (obj == &g_PlayerCar)
         {
-            SetCarKnockback(obj, spad->field_68, spad->field_70, FIELD(clampPair, s16 *, 4));
+            SetCarKnockback(obj, spad->field_68, spad->field_70, limits->rightKnockbackMode);
         }
-        FIELD(obj, s32 *, 0) = (s32) (FIELD(obj, s32 *, 0) - spad->field_68);
-        FIELD(obj, s32 *, 8) = (s32) (FIELD(obj, s32 *, 8) - spad->field_70);
-        lateralOffset = spad->field_88 - FIELD(clampPair, s16 *, 0);
-        spad->field_3C = (s32) FIELD(clampPair, s16 *, 4);
+        obj->x = obj->x - spad->field_68;
+        obj->z = obj->z - spad->field_70;
+        lateralOffset = spad->field_88 - limits->rightInset;
+        spad->field_3C = limits->rightKnockbackMode;
     }
     }
     if ((s16)spad->segmentLength < alongSegment)
@@ -261,21 +261,21 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
     {
         alongSegment = 0;
     }
-    FIELD(obj, s32 *, 0x38) = (s32) ((s32) (alongSegment << 0xA) / (s16) spad->segmentLength);
+    obj->field_38 = (s32)((s32)(alongSegment << 0xA) / (s16)spad->segmentLength);
     if (lateralOffset < 0)
     {
-        FIELD(obj, s32 *, 0x3C) = (lateralOffset * 0x400) / spad->field_8A;
+        obj->field_3C = (lateralOffset * 0x400) / spad->field_8A;
     }
     else
     {
-        FIELD(obj, s32 *, 0x3C) = (lateralOffset * 0x400) / spad->field_88;
+        obj->field_3C = (lateralOffset * 0x400) / spad->field_88;
     }
     {
         u32 outputProgress;
         s32 useProgress;
 
         useProgress = *(s32 *)0x801E408C;
-        FIELD(obj, s32 *, 0x34) = lateralOffset;
+        obj->field_34 = lateralOffset;
         if (useProgress != 0)
         {
             outputProgress = alongSegment;
@@ -284,18 +284,18 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         {
             outputProgress = (s16)spad->segmentLength - alongSegment;
         }
-        FIELD(obj, s32 *, 0x6C) = outputProgress;
+        obj->field_6C = outputProgress;
     }
     segLenC = (s16)spad->segmentLength;
     spad->field_8E = (s16) ((s32) ((nextPoint->field_E * alongSegment) + (point->field_E * (segLenC - alongSegment))) / segLenC);
     segLenD = (s16)spad->segmentLength;
     surfaceHeight = (s32) ((nextPoint->y * alongSegment) + (point->y * (segLenD - alongSegment))) / segLenD;
-    FIELD(obj, s32 *, 4) = surfaceHeight;
-    FIELD(obj, s32 *, 4) = (s32) (((s32) (spad->field_8E * lateralOffset) >> 7) + surfaceHeight);
+    obj->y = surfaceHeight;
+    obj->y = (s32)(((s32)(spad->field_8E * lateralOffset) >> 7) + surfaceHeight);
     {
         s16 angle;
 
-        angle = FIELD(obj, u16 *, 0x24);
+        angle = (u16)obj->field_24;
         angle -= 0xC00;
         spad->field_8C = angle + (u16)spad->heading;
     }
@@ -327,7 +327,7 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         {
             secondProduct += 0xFFF;
         }
-        FIELD(obj, s32 *, 0x20) = firstProduct + (secondProduct >> 0xC);
+        obj->field_20 = firstProduct + (secondProduct >> 0xC);
     }
     forwardProduct = (0 - spad->field_38) * spad->field_94;
     if (forwardProduct < 0)
@@ -341,27 +341,27 @@ s32 UpdateCarTrackState(void *obj, s32 trackPointIndex, void *clampPair) {
         lateralProduct += 0xFFF;
     }
     trackLength = g_TrackLength;
-    lapProgress = (s32) (FIELD(obj, s32 *, 0x68) + FIELD(obj, s32 *, 0x6C)) % trackLength;
-    FIELD(obj, s32 *, 0x28) = (s32) (forwardComponent + (lateralProduct >> 0xC));
-    FIELD(obj, s32 *, 0xB4) = (s32) spad->heading;
-    FIELD(obj, s32 *, 0x74) = (s32) FIELD(obj, s32 *, 0x70);
-    FIELD(obj, s32 *, 0x70) = lapProgress;
+    lapProgress = (s32)(obj->field_68 + obj->field_6C) % trackLength;
+    obj->field_28 = (s32)(forwardComponent + (lateralProduct >> 0xC));
+    obj->field_B4 = (s32)spad->heading;
+    obj->previousTrackProgress = obj->trackProgress;
+    obj->trackProgress = lapProgress;
     if (lapProgress < 0)
     {
-        FIELD(obj, s32 *, 0x70) = (s32) (lapProgress + trackLength);
+        obj->trackProgress = (s32)(lapProgress + trackLength);
     }
     {
         s32 finalAngle;
 
         if (*(s32 *)0x801E408C != 0)
         {
-            finalAngle = g_TrackLength - FIELD(obj, s32 *, 0x70);
-            FIELD(obj, s16 *, 0x78) = (s16) (finalAngle >> 8);
+            finalAngle = g_TrackLength - obj->trackProgress;
+            obj->field_78 = (s16)(finalAngle >> 8);
         }
         else
         {
-            finalAngle = FIELD(obj, s32 *, 0x70);
-            FIELD(obj, s16 *, 0x78) = (s16) (finalAngle >> 8);
+            finalAngle = obj->trackProgress;
+            obj->field_78 = (s16)(finalAngle >> 8);
         }
     }
     return spad->field_3C;
