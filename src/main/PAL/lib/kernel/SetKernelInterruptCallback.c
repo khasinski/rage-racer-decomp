@@ -7,7 +7,7 @@ typedef void (*Callback)(void);
 
 extern Callback g_IntrCallbacks[];
 
-Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
+Callback SetKernelInterruptCallback(long slot, Callback handler) {
     long index;
     Callback callback;
     register Callback *base asm("$5");
@@ -19,9 +19,9 @@ Callback SetKernelInterruptCallback(long arg0, Callback arg1) {
     long disabled;
     volatile u_short *maskPtr;
 
-    index = arg0;
+    index = slot;
     __asm__("" : "=r"(index) : "0"(index));
-    callback = arg1;
+    callback = handler;
     base = g_IntrCallbacks;
     __asm__("" : "=r"(base) : "0"(base));
     offset = index << 2;

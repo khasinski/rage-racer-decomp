@@ -209,7 +209,7 @@ void intrDMADispatcher(void) {
     }
 }
 
-u_long setIntrDMA(long arg0, u_long arg1) {
+u_long setIntrDMA(long channel, u_long handler) {
     long index;
     u_long callback;
     u_long *base;
@@ -217,12 +217,12 @@ u_long setIntrDMA(long arg0, u_long arg1) {
     u_long *slot;
     u_long oldCallback;
 
-    index = arg0;
+    index = channel;
     base = g_DmaCallbacks;
     offset = index << 2;
     slot = (u_long *)((long)base + offset);
     oldCallback = *slot;
-    callback = arg1;
+    callback = handler;
 
     if (callback != oldCallback) {
         if (callback != 0) {
@@ -277,11 +277,11 @@ void clearIntrDMACallbacks(u_long *dst, long count) {
     }
 }
 
-long SetDMAInterruptState(long arg0) {
+long SetDMAInterruptState(long state) {
     long value;
 
     value = D_8009A51C;
-    D_8009A51C = arg0;
+    D_8009A51C = state;
     return value;
 }
 

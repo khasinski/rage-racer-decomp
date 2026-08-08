@@ -181,17 +181,17 @@ void TickCdAudio(void) {
 
 extern void *g_TrackCameras;
 
-void SelectTrackCameraTable(u8 *arg0, s32 arg1) {
+void SelectTrackCameraTable(u8 *block, s32 variant) {
     void *ptr;
 
-    if (arg1 != 0) {
+    if (variant != 0) {
         if (g_GrandPrixSeries != 0) {
-            ptr = arg0 + *(s32 *)(arg0 + 4);
+            ptr = block + *(s32 *)(block + 4);
         } else {
-            ptr = arg0 + *(s32 *)(arg0 + 0);
+            ptr = block + *(s32 *)(block + 0);
         }
     } else {
-        ptr = arg0 + *(s32 *)(arg0 + 8);
+        ptr = block + *(s32 *)(block + 8);
     }
 
     g_TrackCameras = ptr;

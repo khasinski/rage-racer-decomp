@@ -100,8 +100,8 @@ void DMACallback(long spec, long callback) {
     g_IntrRpNode[1]();
 }
 
-void VSyncCallback(long arg0) {
-    ((Callback2)g_IntrRpNode[5])(0, arg0);
+void VSyncCallback(long count) {
+    ((Callback2)g_IntrRpNode[5])(0, count);
 }
 
 void KernelCallbackSlot5(void) {

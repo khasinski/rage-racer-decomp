@@ -3,14 +3,14 @@
 
 extern long g_SpuTransferCallback;
 
-u_long Spu_ReadFromSpu(long arg0, u_long arg1) {
-    u_long size = arg1;
+u_long Spu_ReadFromSpu(long addr, u_long requested) {
+    u_long size = requested;
 
     if (0x7F000 < size) {
         size = 0x7F000;
     }
 
-    _spu_Fw(arg0, size);
+    _spu_Fw(addr, size);
 
     if (g_SpuTransferCallback == 0) {
         g_SpuTransferCompleted = 0;

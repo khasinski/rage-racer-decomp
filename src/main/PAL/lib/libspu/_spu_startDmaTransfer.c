@@ -4,14 +4,14 @@
  * channel 4 (SPU) MADR/BCR/CHCR 0x1F8010C0/C4/C8, SPU_DELAY 0x1F801014. */
 extern volatile u_short *g_SpuRegBase;
 
-void _spu_startDmaTransfer(u_long arg0, u_short arg1, u_long arg2) {
-    u_long addr = arg0;
+void _spu_startDmaTransfer(u_long ramAddr, u_short spuAddr, u_long words) {
+    u_long addr = ramAddr;
     volatile long i;
     volatile long delay;
     u_short cnt;
     u_long value;
 
-    g_SpuRegBase[0xD3] = arg1;
+    g_SpuRegBase[0xD3] = spuAddr;
 
     delay = 0xD;
     i = 0;
@@ -50,7 +50,7 @@ void _spu_startDmaTransfer(u_long arg0, u_short arg1, u_long arg2) {
     *g_SpuDelayReg = value;
 
     *g_SpuDmaMadr = addr;
-    *g_SpuDmaBcr = (arg2 << 0x10) | 0x10;
+    *g_SpuDmaBcr = (words << 0x10) | 0x10;
     g_SpuTransferIsRead = 1;
     *g_SpuDmaChcr = 0x01000200;
 }
