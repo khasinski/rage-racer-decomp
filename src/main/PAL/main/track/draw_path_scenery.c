@@ -174,7 +174,7 @@ void UpdateTrackEventSound(s16 arg) {
     SetPanVoiceTargetVolume(a0v, a1v);
 }
 
-s32 rsin(s32 arg0);
+s32 rsin(s32 angle);
 
 typedef struct TrackSeg {
     s32 lo;    /* 0x00 */

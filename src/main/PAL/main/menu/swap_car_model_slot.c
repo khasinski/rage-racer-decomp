@@ -310,7 +310,7 @@ void DrawMenuCourseView(void) {
 
 typedef struct Poly { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
 
-s32 rsin(s32 arg0);
+s32 rsin(s32 angle);
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */
 void DrawTeamNameCharModel(void) {

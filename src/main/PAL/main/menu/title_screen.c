@@ -80,7 +80,7 @@ void DrawTitleFadeOverlay(s32 brightness) {
     *scratch = GameQueueDrawModePrimWide(base, next, 0x29);
 }
 
-s32 rsin(s32 arg0);
+s32 rsin(s32 angle);
 void *QueueShadedSpriteNine(void* ot, void* prim, s32 x, s32 y, s32 w, s32 h, s32 u, s32 v, s32 clutIndex, s32 intensity) asm("GameQueueShadedSprite");
 void *GameQueueDrawModePrimWide(void *ot, void *prim, s32 tpage);
 

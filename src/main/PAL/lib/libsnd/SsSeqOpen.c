@@ -5,7 +5,7 @@
 extern long g_SndSeqOpenMask;
 extern char g_MsgSeqTableFull[];
 
-long SsSeqParseHeader(long arg0, long arg1, long arg2);
+long SsSeqParseHeader(long slot, long vabId, long data);
 
 long SsSeqOpen(long seq_data, long vab_id);
 

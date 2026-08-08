@@ -2,7 +2,7 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 
-s32 rsin(s32 arg0);
+s32 rsin(s32 angle);
 s32 rcos(s32 angle);
 
 /*

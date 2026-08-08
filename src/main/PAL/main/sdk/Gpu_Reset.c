@@ -7,7 +7,7 @@ extern long g_GpuQueueWriteIdx;
 extern volatile long g_GpuQueueReadIdx;
 extern u_char g_GpuQueue[];
 
-long Gpu_ProbeType(u_long arg0);
+long Gpu_ProbeType(u_long probe);
 
 /* Driver-table slot +0x34, the body of ResetGraph: empties the queue,
  * re-arms DMA2, and issues GP1(00h) (mode 0) or GP1(02h)+GP1(01h)

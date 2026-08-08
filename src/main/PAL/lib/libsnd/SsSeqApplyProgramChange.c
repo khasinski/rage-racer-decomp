@@ -13,7 +13,7 @@ void SsSeqApplyProgramChange(long seq, long sep) {
 
 extern long g_SndTickResolution;
 
-void SsSeqSetChannelProgram(short arg0, short arg1, u_char arg2);
+void SsSeqSetChannelProgram(short seq, short channel, u_char program);
 
 void SsSeqSetChannelProgram(short seq, short channel, u_char program) {
     SeqStruct *pSeq = &g_SndSeqTable[seq][channel];

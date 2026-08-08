@@ -99,7 +99,7 @@ long CD_newmedia(void) {
 
 extern volatile long D_8009C118[];
 
-long LibcStrcmp(u_char *arg0, u_char *arg1);
+long LibcStrcmp(u_char* lhs, u_char* rhs);
 
 long DS_searchdir(long type, u_char *name) {
     long i = 0;

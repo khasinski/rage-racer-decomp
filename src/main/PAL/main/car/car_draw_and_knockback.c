@@ -5,7 +5,7 @@
 #include "game/render.h"
 #include "game/random.h"
 
-void ClearCarMotionState(GameCarRuntime *arg0);
+void ClearCarMotionState(GameCarRuntime* car);
 
 extern s32 g_ClosestRivalRank;
 

@@ -619,7 +619,7 @@ typedef struct CollisionContext
   s32 trackDelta;
 } CollisionContext;
 s32 IsPointInQuad(s32 a, s32 b, s32 c, s32 d, s32 e);
-void SetCarKnockback(GameCarRuntime *car, s32 arg1, s32 arg2, s32 mode);
+void SetCarKnockback(GameCarRuntime* car, s32 x, s32 z, s32 mode);
 s32 CollidePlayerWithCars(GameCarRuntime *car)
 {
   SVec rotation;

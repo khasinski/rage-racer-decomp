@@ -7,7 +7,7 @@ extern u8 g_GraphDebug;
 
 void *MemCopy(void *dst, void *src, s32 count);
 
-void DrawOTag(void *arg0);
+void DrawOTag(void* ot);
 
 void DrawOTag(void *ot) {
     if (g_GraphDebug >= 2) {
