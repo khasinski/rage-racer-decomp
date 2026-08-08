@@ -172,7 +172,7 @@ void ExitRaceScene(s32 sceneId) {
     printf(&g_MsgGameExit);
 }
 
-void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
+void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
     s32 slot;
     s32 nextSlot;
     s32 delta;
@@ -180,9 +180,9 @@ void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
     s32 tile;
     s32 timeout;
     s32 threshold;
-    u8 *route;
+    PlayerCarRaceState *raceState;
 
-    route = (u8 *)car + 0xBC;
+    raceState = (PlayerCarRaceState *)&car->drive;
 
     if (lapEvent == 2 || grandPrixMode != 0) {
         return;
@@ -190,8 +190,8 @@ void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
 
     slot = g_SectorIndex;
     if (slot >= 0) {
-        if ((*(s16 *)((u8 *)car + 0x168) - 1) * g_TrackLength + g_SectorEndDistance[slot] <=
-                (*(s32 *)((u8 *)car + 0x6C) + *(s32 *)((u8 *)car + 0x68)) ||
+        if ((car->lap - 1) * g_TrackLength + g_SectorEndDistance[slot] <=
+                (RAW(car->progressB) + RAW(car->progressA)) ||
             lapEvent != 0) {
             g_SectorTimes[slot] = g_LapTimeMs;
             if (g_LapTimeMs <= 0x927BE) {
@@ -250,7 +250,7 @@ void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent) {
         g_SplitSector = (u16)g_SectorIndex;
     } else {
     nextSlot = g_SectorIndex;
-    if (nextSlot >= 0 && g_LapCount >= *(s16 *)(route + 0xAC)) {
+    if (nextSlot >= 0 && g_LapCount >= raceState->timing.fields.lap) {
         if (g_SplitTimer < 0x3C) {
             g_SplitTimer++;
             if (g_SplitTimer == 0x3C) {

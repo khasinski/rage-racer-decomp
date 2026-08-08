@@ -410,7 +410,7 @@ void UpdatePrologueLoad(void);
 void UpdateRacePosition(void);
 void UpdateReplayCars(void);
 void UpdateRivalCueGate(void);
-void UpdateSplitTimes(void *car, s32 grandPrixMode, s32 lapEvent);
+void UpdateSplitTimes(struct PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent);
 void UpdateWaypoints(void);
 void ExitRaceScene(s32 sceneId);
 s32 GetTrackZoneBlend(s32 position);
