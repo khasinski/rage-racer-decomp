@@ -9,7 +9,7 @@
 #include "psyq/gte.h"
 
 s32 rsin(s32 arg0);
-s32 rcos(s32 arg0);
+s32 rcos(s32 angle);
 
 extern s16 g_ClosestRivalRank;
 
@@ -664,9 +664,9 @@ extern KE *g_RaceIntroCameraCursor;
 
 s32 rcos(s32 angle);
 s32 rsin(s32 angle);
-void DrawPlayerCarModel(void *arg0);
+void DrawPlayerCarModel(void *obj);
 void DrawFullscreenFadeTile(s32 color, s32 tpage);
-void UpdateCamera(void *arg0, s32 arg1);
+void UpdateCamera(void *obj, s32 mode);
 
 void RunRaceIntroCamera(Obj *obj, s32 mode) {
     s32 *spad = &SCRATCH_PRIM_CURSOR_WORD;

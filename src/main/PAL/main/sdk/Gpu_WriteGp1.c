@@ -9,7 +9,7 @@
 extern volatile u_long *g_GpuGp1;
 
 void Gpu_StartDmaTransfer(u_long arg0);
-u_long _param(u_long arg0);
+u_long _param(u_long index);
 extern long Gpu_AddQueue(void *callback, void *data, long size, long arg3);
 
 void Gpu_WriteGp1(u_long arg0) {

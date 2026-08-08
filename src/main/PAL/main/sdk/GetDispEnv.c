@@ -2,7 +2,7 @@
 #include "psyq/gpu.h"
 
 extern u_char g_DispEnvCache;
-void MemCopy(long arg0, void *arg1, long arg2);
+void MemCopy(long dst, void *src, long size);
 long GetDispEnv(long env) { MemCopy(env, &g_DispEnvCache, 0x14); return env; }
 
 extern GpuCallbacks *g_GpuFuncs;
@@ -18,7 +18,7 @@ u_long Gpu_BuildDisplayMode(long arg0, long arg1, u_long arg2) asm("_get_mode");
 u_long Gpu_BuildDrawAreaTopLeftCmd(long x, long y);
 u_long Gpu_BuildDrawAreaBottomRightCmd(long x, long y);
 u_long Gpu_BuildDrawOffsetCmd(long x, long y);
-u_long Gpu_BuildTexWindowCmd(void *arg0);
+u_long Gpu_BuildTexWindowCmd(void *window);
 
 void SetTexWindow(DrawPacket *pkt, void *arg1) {
     pkt->code = 2;

@@ -3,7 +3,7 @@
 #include "game/render.h"
 
 s32 rsin(s32 arg0);
-s32 rcos(s32 arg0);
+s32 rcos(s32 angle);
 
 /*
  * PSY-Q 3.5 libgte object geo_00.o (LIBGTE.A): the fixed-point sine/cosine

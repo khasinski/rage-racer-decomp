@@ -74,7 +74,7 @@ void DrawPathScenery(void) {
     SubmitModel((void *)SCRATCHPAD_ADDR, drawId);
 }
 
-s32 rcos(s32 arg0);
+s32 rcos(s32 angle);
 
 void UpdateTrackEventSound(s16 arg) {
     s32 base;

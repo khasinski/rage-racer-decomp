@@ -10,7 +10,7 @@ extern volatile u_char g_SndVoiceCount;
 extern u_char g_SndVoiceRegs[];
 
 short SpuVmSetSeqVol();
-long SpuVmGetSeqVol(long arg0, short *arg1, short *arg2);
+long SpuVmGetSeqVol(long seq_sep, short *volLeft, short *volRight);
 
 short SpuVmSetSeqVol(arg0, arg1, arg2, arg3)
 short arg0;

@@ -10,7 +10,7 @@ void AdvanceCarPosition();
 void UpdateCarAirborne(GameCarRuntime *car);
 
 s32 rsin(s32 arg0);
-s32 rcos(s32 arg0);
+s32 rcos(s32 angle);
 
 /*
  * AI route steering: projects a target point ahead of (or behind, per the

@@ -20,7 +20,7 @@ extern const char D_800139A4[];
 
 extern long CD_newmedia(void);
 extern long DS_searchdir(long type,char * name);
-extern long CD_cachefile(long arg0);
+extern long CD_cachefile(long mode);
 
 Rec *DsSearchFile(Rec *out, char *path) {
     char buf[32];

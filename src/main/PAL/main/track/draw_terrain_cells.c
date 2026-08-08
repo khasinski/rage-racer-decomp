@@ -6,7 +6,7 @@
 #include "psyq/gte.h"
 
 extern s32 g_VisibleCellList;
-void BuildVisibleCells(s32 arg0, s32 arg1);
+void BuildVisibleCells(s32 near, s32 far);
 void SubmitTerrainCells(s32 arg0, s32 arg1, s32 arg2);
 
 void DrawTerrainCells(void) {

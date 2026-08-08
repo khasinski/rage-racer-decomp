@@ -17,7 +17,7 @@ extern u8 g_ExtraGrandPrixCourseProgress;
 extern u8 g_GrandPrixCourseProgress;
 extern u8 *g_CourseProgress;
 extern s32 g_BgmSelection;
-void ResetProgressSlot(void *arg0, s32 *arg1);
+void ResetProgressSlot(void *slot, s32 *out);
 void ShuffleBgmOrder(void);
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */

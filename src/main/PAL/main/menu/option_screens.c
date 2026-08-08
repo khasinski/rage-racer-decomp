@@ -19,7 +19,7 @@ s32 QueueLineWide(void *arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, 
 extern s32 g_CameraViewMode;
 extern s32 *g_CamRow;
 void InitRenderState(s32 otShift);
-void SetTrackTexturePageNow(s32 arg0);
+void SetTrackTexturePageNow(s32 page);
 extern u8 g_TextNowLoading[];
 void DrawFullscreenFadeTile(s32 color, s32 tpage);
 void RequestTrackDataAssets(void);

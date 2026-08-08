@@ -20,7 +20,7 @@ extern long g_StRingSize;
 extern long g_StInterruptPending;
 
 void data_ready_callback(void);
-void StClearRingRange(long arg0, long arg1);
+void StClearRingRange(long first, long count);
 void StSetRingParams(long arg0);
 
 /*

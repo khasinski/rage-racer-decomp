@@ -18,7 +18,7 @@ extern u_char D_80013AF4[];
 extern u_short D_80013AD0;
 extern short D_80013AD4;
 extern signed char D_80013AD6;
-long cd_read(long arg0, long arg1, void *arg2);
+long cd_read(long sectors, long addr, void *mode);
 void LibcMemcpy(char *dst, u_char *src, long n);
 /* Fills the 64-entry file cache from one ISO directory, converting each
  * record's extent to a CdlLOC. Owns its three "CD_cachefile: ..." messages. */

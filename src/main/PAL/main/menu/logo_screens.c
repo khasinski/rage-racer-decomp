@@ -21,7 +21,7 @@ extern Rect g_TeamLogoClutRect;
 
 void GameDrawSpriteWide(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 u0, s32 v0,
                    s32 r, s32 g, s32 b, s32 clut, s32 sh, s32 st, s32 flags) asm("DrawSprite");
-void RampTeamLogoCanvas(s32 arg0, s32 arg1);
+void RampTeamLogoCanvas(s32 from, s32 to);
 void DrawLogoSamplePanel(s32 arg0, s32 arg1);
 
 void UpdateTeamLogoScreen(void)

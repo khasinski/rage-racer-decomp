@@ -105,7 +105,7 @@ void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out) {
 }
 
 s32 rsin(s32 arg0);
-s32 rcos(s32 arg0);
+s32 rcos(s32 angle);
 void MatrixApplyZRotation(Matrix *mtx, s32 arg1) {
     Matrix sp10;
     s32 angle;

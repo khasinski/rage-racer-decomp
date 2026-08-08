@@ -11,11 +11,11 @@ extern u_char D_800136B8[];
 long CD_init(long mode);
 long CdSyncCallback(long callback);
 long CdReadyCallback(long callback);
-long CdControlB(long arg0, u_char *arg1, u_char *arg2);
+long CdControlB(long com, u_char *param, u_char *result);
 void CdDefaultSyncCallback(void);
 void CdDefaultReadyCallback(void);
 void CdDefaultReadCallback(void);
-void DeliverEvent(u_long arg0, long arg1);
+void DeliverEvent(u_long event, long spec);
 void CdReadCallback(void *arg0);
 
 long CdGetToc2(long arg0, u_char *arg1) {

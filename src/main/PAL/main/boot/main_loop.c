@@ -73,7 +73,7 @@ void InitSubsystems(void) {
 }
 
 void PutDrawEnv(u8 *env);
-void PutDispEnv(u8 *arg0);
+void PutDispEnv(u8 *env);
 void DrawOTag(u8 *ot);
 
 /* The two 0x237E8-byte frame contexts the loop ping-pongs between. */

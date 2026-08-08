@@ -24,7 +24,7 @@ u_short SpuVmCalculateTonePitch(long center, long fine);
 
 long SsUtPitchBend(long voice, long vab_id, long program, long note, u_short pbend);
 long SsUtChangePitch(long voice, long vab_id, long program, long old_note, long old_fine, long new_note, long new_fine);
-long SsUtChangeADSR(long arg0, long arg1, long arg2, long arg3, u_short arg4, u_short arg5);
+long SsUtChangeADSR(long voice, long vab_id, long program, long tone, u_short adsr1, u_short adsr2);
 short SsUtGetDetVVol(short voice, short* left, short* right);
 short SsUtSetDetVVol(short voice, short left, short right);
 short SsUtSetVVol(short voice, short left, short right);
