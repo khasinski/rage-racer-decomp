@@ -13,7 +13,6 @@ u8 *QueueSpriteTransWide(
     s32 u,
     s32 v,
     s32 clutIndex) asm("GameQueueSpriteTrans");
-u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("QueueDrawModePrim");
 s32 AddTilePrim(
     s32 ot,
     s32 prim,
@@ -71,7 +70,7 @@ u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
             0xFF, 0xFF, 0xFF);
         i++;
     } while (i < 5);
-    return QueueDrawModePrimWide(ot, prim, 0x3B);
+    return QueueDrawModePrim(ot, prim, 0x3B);
 }
 
 /* Local wide-parameter view of GameQueueLine; see GameQueueSprite.c. */

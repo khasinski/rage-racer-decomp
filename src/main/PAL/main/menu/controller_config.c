@@ -39,7 +39,6 @@ u8 *QueueSpriteTransWide(
     s32 u,
     s32 v,
     s32 clutIndex) asm("GameQueueSpriteTrans");
-u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("QueueDrawModePrim");
 void DrawOptionHintBar(s32 variant);
 
 /*
@@ -82,7 +81,7 @@ void DrawControllerConfigScreen(void) {
             prim = DrawNegconConfigDiagram(ot, prim);
             prim = QueueSpriteTransWide(
                 ot, prim, 0x10, 0x40, 0xD8, 0x10, 0, 0xA8, 0x7F40);
-            prim = QueueDrawModePrimWide(ot, prim, 0x3F);
+            prim = QueueDrawModePrim(ot, prim, 0x3F);
         } else {
             prim = DrawPadConfigSelectorWide(ot, prim, 0xF0, 0x28, g_PadMappingIndex);
             prim = DrawPadConfigDiagram(ot, prim);

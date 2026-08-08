@@ -36,7 +36,6 @@ u8 *QueueSpriteTransWide(
     s32 u,
     s32 v,
     s32 clutIndex) asm("GameQueueSpriteTrans");
-u8 *QueueDrawModePrimWide(void *ot, u8 *prim, s32 tpage) asm("QueueDrawModePrim");
 u8 *QueueLineWide(
     void *ot,
     u8 *prim,
@@ -83,7 +82,7 @@ void DrawNegconSteerPlayScreen(void) {
         ot, prim, 0x7C, 0x30, 0xC, 0x18, g_NegconSteerPlay * 12 + 152, 0x18, 0x7F81);
     prim = QueueSpriteTransWide(
         ot, prim, 0x88, 0x30, 0xC, 0x18, 0x6C, 0x30, 0x7F81);
-    prim = QueueDrawModePrimWide(ot, prim, 0x3F);
+    prim = QueueDrawModePrim(ot, prim, 0x3F);
     prim = (u8 *)AddTilePrim(
         (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
     prim = (u8 *)AddTilePrim(
@@ -177,7 +176,7 @@ void DrawNegconMaxTwistScreen(void) {
     prim = QueueSpriteTransWide(
         ot, prim, xoff + 0x88, 0x30, w, 0x18, g_NegconMaxTwist * 24, 0x30, 0x7F81);
     prim = QueueSpriteTransWide(ot, prim, 0xAC, 0x30, 4, 0x18, 0x78, 0x30, 0x7F81);
-    prim = QueueDrawModePrimWide(ot, prim, 0x3F);
+    prim = QueueDrawModePrim(ot, prim, 0x3F);
     prim = (u8 *)AddTilePrim(
         (s32)ot, (s32)prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
     SCRATCH_PRIM_CURSOR_WORD = AddTilePrim(
