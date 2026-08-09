@@ -101,9 +101,9 @@ void UpdateFreeLookCamera(void *car, s32 updateMotion) {
     markerClamp[1] = 0;
     UpdateCarTrackState(&g_CameraCar, g_CameraCar.trackPointIndex, markerClamp);
 
-    *(Block16 *)(view + 2) = *(Block16 *)&g_CameraCar.x;
+    *(Block16 *)&view[2] = *(Block16 *)&g_CameraCar.x;
     view[3] -= 48;
-    *(Block16 *)(view + 6) = *(Block16 *)&g_CameraCar.bodyPitch;
+    *(Block16 *)&view[6] = *(Block16 *)&g_CameraCar.bodyPitch;
     view[6] = g_FreeCameraAngleOffset[0] + view[6];
 
     BuildRotMatrixY(&m1, view[7]);

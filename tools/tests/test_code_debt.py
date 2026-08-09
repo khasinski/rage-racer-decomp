@@ -16,6 +16,7 @@ void f(u8 *base, void *ptr) {
     register s32 named asm("v0");
     value = *(s16 *)(base + 0x10);
     value += *(s32 *)(base - 8);
+    value += (*(u8 *)(&object->member)) - 1;
     ptr = (void *)((u8 *)ptr + 4);
     value += (s32)ptr;
     value += FIELD32(base, 4);

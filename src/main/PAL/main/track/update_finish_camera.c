@@ -64,7 +64,7 @@ void UpdateFinishCamera(GameRenderObject *obj) {
     markerClamp[1] = 0;
     UpdateCarTrackState(&g_CameraCar, g_CameraCarTrackPoint, markerClamp);
 
-    *(Block16 *)(view + 2) = *(Block16 *)&g_CameraCar;
+    *(Block16 *)&view[2] = *(Block16 *)&g_CameraCar;
     view[3] -= 64;
 
     delta[0] = obj->x - view[2];

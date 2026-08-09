@@ -16,7 +16,8 @@ PATTERNS = {
         r"\(\s*(?:const\s+|volatile\s+)?(?:u8|s8|char)\s*\*\s*\)[^;\n]*\+"
     ),
     "raw_offset_dereferences": re.compile(
-        r"\*\s*\([^)]*\*\s*\)\s*\([^;\n]*[+-]\s*(?:0x[0-9A-Fa-f]+|[1-9][0-9]*)"
+        r"\*\s*\([^)]*\*\s*\)\s*\("
+        r"(?:[^();\n]|\([^();\n]*\))*?[+-]\s*(?:0x[0-9A-Fa-f]+|[1-9][0-9]*)"
     ),
     "pointer_integer_casts": re.compile(
         r"\(\s*(?:s32|u32|long|unsigned\s+long)\s*\)\s*(?:[A-Za-z_&]|\()"
