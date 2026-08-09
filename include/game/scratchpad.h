@@ -63,6 +63,11 @@ typedef struct ScratchViewState {
     s32 angleZ;
 } ScratchViewState;
 
+typedef union ScratchBlockAddress {
+    s32 *words;
+    Block16 *blocks;
+} ScratchBlockAddress;
+
 typedef union CarTrackRadius {
     s32 value;
     struct {
