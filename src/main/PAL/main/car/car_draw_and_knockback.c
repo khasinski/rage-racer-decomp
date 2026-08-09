@@ -5,6 +5,10 @@
 #include "game/render.h"
 #include "game/random.h"
 
+typedef union CarSpeedAddress {
+    s32 *value;
+    u16 *magnitude;
+} CarSpeedAddress;
 
 
 /*
@@ -263,7 +267,10 @@ void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
         if (fieldA4 >= 0x709) {
             speed = 0x708;
         } else {
-            speed = *(u16 *)&carReg->speed;
+            CarSpeedAddress speedAddress;
+
+            speedAddress.value = &carReg->speed;
+            speed = *speedAddress.magnitude;
         }
         trig = rsin(GetAngleDistance((s16)rawArg, carReg->bodyYaw));
         product = (s16)speed * trig;
