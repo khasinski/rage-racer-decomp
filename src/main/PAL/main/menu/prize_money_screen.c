@@ -67,11 +67,11 @@ void UpdatePrizeMoneyScreen(void) {
         t.value = g_PrizeAmount;
         if (t.value >= lim1) {
             g_PrizeAmount = t.value - lim1;
-            g_RaceProgress->money += lim1;
+            g_RaceProgress->money.value += lim1;
         } else {
-            s32 e = g_RaceProgress->money;
+            s32 e = g_RaceProgress->money.value;
             g_PrizeAmount = 0;
-            g_RaceProgress->money = e + t.value;
+            g_RaceProgress->money.value = e + t.value;
         }
         }
         if (g_PrizeAmount != 0) break;
@@ -93,11 +93,11 @@ void UpdatePrizeMoneyScreen(void) {
         t.value = g_PromotionBonus;
         if (t.value >= lim0) {
             g_PromotionBonus = t.value - lim0;
-            g_RaceProgress->money += lim0;
+            g_RaceProgress->money.value += lim0;
         } else {
-            s32 e = g_RaceProgress->money;
+            s32 e = g_RaceProgress->money.value;
             g_PromotionBonus = 0;
-            g_RaceProgress->money = e + t.value;
+            g_RaceProgress->money.value = e + t.value;
         }
         if (g_PromotionBonus != 0) break;
     Lstore7:

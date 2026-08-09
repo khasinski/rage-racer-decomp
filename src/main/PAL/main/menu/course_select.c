@@ -758,9 +758,9 @@ void UpdateCourseSelectScreen(void) {
                     p->carIndex = d;
                     p->classIndex = lapc;
                     if (half != 0) {
-                        p->money = g_PlayerMoney;
+                        p->money.value = g_PlayerMoney;
                     } else {
-                        p->money = g_GrandPrixSeries;
+                        p->money.value = g_GrandPrixSeries;
                     }
                     g_UiScriptProgress = 0;
                     GameMenuBusy = 0;
@@ -787,10 +787,10 @@ void UpdateCourseSelectScreen(void) {
                     g_RaceProgress->carIndex = d;
                     g_RaceProgress->classIndex = lapc;
                     if (half != 0) {
-                        g_RaceProgress->money = g_PlayerMoney;
+                        g_RaceProgress->money.value = g_PlayerMoney;
                     } else {
                         p = g_RaceProgress;
-                        p->money = g_GrandPrixSeries;
+                        p->money.value = g_GrandPrixSeries;
                     }
                 clear:
                     g_UiScriptProgress = 0;

@@ -550,9 +550,9 @@ void UpdateCarSelectScreen(void) {
             g_RaceProgress->carIndex = g_PlayerCarIndex;
             g_RaceProgress->classIndex = g_GrandPrixClass;
             if (g_GrandPrixMode != 0) {
-                g_RaceProgress->money = g_PlayerMoney;
+                g_RaceProgress->money.value = g_PlayerMoney;
             } else {
-                g_RaceProgress->money = g_GrandPrixSeries;
+                g_RaceProgress->money.value = g_GrandPrixSeries;
             }
             break;
         case 2:

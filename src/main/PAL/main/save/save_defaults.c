@@ -24,7 +24,7 @@ void ResetProgressSlot(CarEntry *slot, GameRaceProgress *progress) {
     progress->course = 0;
     progress->classIndex = 0;
     progress->maxClassReached = -1;
-    progress->money = 0;
+    progress->money.value = 0;
 }
 
 void ResetCourseProgress(s32 mode) {
@@ -73,7 +73,7 @@ void InitSaveDefaults(void) {
     g_TimeAttackSave.carIndex = 3;
     g_TimeAttackSave.classIndex = 0;
     g_TimeAttackSave.maxClassReached = 0;
-    g_TimeAttackSave.money = 0;
+    g_TimeAttackSave.money.value = 0;
     ResetProgressSlot(g_GrandPrixCars, &g_GrandPrixSave);
     ResetProgressSlot(g_ExtraGrandPrixCars, &g_ExtraGrandPrixSave);
 

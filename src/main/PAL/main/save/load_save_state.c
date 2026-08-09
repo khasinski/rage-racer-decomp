@@ -69,7 +69,8 @@ s32 LoadSaveStateBlock(u8 *block) {
             g_GrandPrixSave.carIndex = ((GameSaveBlock *)base)->grandPrixProgress.carIndex;
             g_GrandPrixSave.classIndex = ((GameSaveBlock *)base)->grandPrixProgress.classIndex;
             g_GrandPrixSave.maxClassReached = ((GameSaveBlock *)base)->grandPrixProgress.maxClassReached;
-            g_GrandPrixSave.money = ((GameSaveBlock *)base)->grandPrixProgress.money;
+            g_GrandPrixSave.money.value =
+                ((GameSaveBlock *)base)->grandPrixProgress.money;
             g_ExtraGrandPrixSave.course = ((GameSaveBlock *)base)->extraGrandPrixProgress.course;
             g_ExtraGrandPrixSave.carIndex = ((GameSaveBlock *)base)->extraGrandPrixProgress.carIndex;
             g_ExtraGrandPrixSave.classIndex = ((GameSaveBlock *)base)->extraGrandPrixProgress.classIndex;
@@ -81,12 +82,14 @@ s32 LoadSaveStateBlock(u8 *block) {
             g_NegconMaxTwist = hE;
             g_ExtraGrandPrixSave.maxClassReached = extraMaxClass;
         }
-        g_ExtraGrandPrixSave.money = ((GameSaveBlock *)base)->extraGrandPrixProgress.money;
+        g_ExtraGrandPrixSave.money.value =
+            ((GameSaveBlock *)base)->extraGrandPrixProgress.money;
         g_TimeAttackSave.course = ((GameSaveBlock *)base)->timeAttackProgress.course;
         g_TimeAttackSave.carIndex = ((GameSaveBlock *)base)->timeAttackProgress.carIndex;
         g_TimeAttackSave.classIndex = ((GameSaveBlock *)base)->timeAttackProgress.classIndex;
         g_TimeAttackSave.maxClassReached = ((GameSaveBlock *)base)->timeAttackProgress.maxClassReached;
-        g_TimeAttackSave.money = ((GameSaveBlock *)base)->timeAttackProgress.money;
+        g_TimeAttackSave.money.value =
+            ((GameSaveBlock *)base)->timeAttackProgress.money;
         {
             s32 bgmSelection = ((GameSaveBlock *)base)->bgmSelection;
             u16 advancedUnlocked = ((GameSaveBlock *)base)->advancedUnlocked;

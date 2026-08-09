@@ -46,13 +46,13 @@ void StoreSaveStateBlock(u8 *block) {
     ((GameSaveBlock *)block)->grandPrixProgress.carIndex = g_GrandPrixSave.carIndex;
     ((GameSaveBlock *)block)->grandPrixProgress.classIndex = g_GrandPrixSave.classIndex;
     ((GameSaveBlock *)block)->grandPrixProgress.maxClassReached = g_GrandPrixSave.maxClassReached;
-    ((GameSaveBlock *)block)->grandPrixProgress.money = g_GrandPrixSave.money;
+    ((GameSaveBlock *)block)->grandPrixProgress.money = g_GrandPrixSave.money.value;
     ((GameSaveBlock *)block)->extraGrandPrixProgress.course = g_ExtraGrandPrixSave.course;
     ((GameSaveBlock *)block)->extraGrandPrixProgress.carIndex = g_ExtraGrandPrixSave.carIndex;
     ((GameSaveBlock *)block)->extraGrandPrixProgress.classIndex = g_ExtraGrandPrixSave.classIndex;
     ((GameSaveBlock *)block)->extraGrandPrixProgress.maxClassReached = g_ExtraGrandPrixSave.maxClassReached;
     {
-        s32 extraMoney = g_ExtraGrandPrixSave.money;
+        s32 extraMoney = g_ExtraGrandPrixSave.money.value;
         u16 bgmSelection = g_BgmSelection;
         ((GameSaveBlock *)block)->extraGrandPrixProgress.money = extraMoney;
         ((GameSaveBlock *)block)->timeAttackProgress.course = g_TimeAttackSave.course;
@@ -67,7 +67,7 @@ void StoreSaveStateBlock(u8 *block) {
         }
         {
             u16 advancedUnlocked = g_AdvancedSeriesUnlocked;
-            saveAddress.offset = g_TimeAttackSave.money;
+            saveAddress.offset = g_TimeAttackSave.money.value;
             ((GameSaveBlock *)block)->bgmSelection = bgmSelection;
             ((GameSaveBlock *)block)->advancedUnlocked = advancedUnlocked;
             ((GameSaveBlock *)block)->timeAttackProgress.money = saveAddress.offset;
