@@ -378,7 +378,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     UpdateCarCrestHop(car);
 
     if (skid == 0 && crash == 0) {
-        car->y += p->unk68;
+        car->y += p->standingStartBounceY;
         UpdateCarBodyKick(car);
     } else {
         slip = GetAngleDistance(0xC00 - g_TrackPoints[car->trackPointIndex].angle,

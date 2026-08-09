@@ -410,11 +410,11 @@ void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused) {
         if (f15c < 127 && f134 >= 2001) {
             sinA += 127;
         }
-        route->unk68 = (Random15() & 3) * sinA / 256;
+        route->standingStartBounceY = (Random15() & 3) * sinA / 256;
         route->unk6C = (Random15() & 7) * sinA / 256;
         g_StandingStartSpin -= sinA;
         if (g_StandingStartSpin <= 0) {
-            route->unk68 = 0;
+            route->standingStartBounceY = 0;
             route->unk6C = 0;
             route->motionState = CAR_MOTION_DRIVING;
             SetIndexedEffectVoice(-1, 0, 0);
@@ -422,7 +422,7 @@ void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused) {
     } else {
         SetIndexedEffectVoice(-1, 0, 0);
         route->motionState = CAR_MOTION_DRIVING;
-        route->unk68 = 0;
+        route->standingStartBounceY = 0;
         route->unk6C = 0;
     }
 }
