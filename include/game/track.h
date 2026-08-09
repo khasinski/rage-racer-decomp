@@ -285,6 +285,10 @@ extern s32 g_CourseModelCount;
 extern s16 g_EnvFogEnabled;
 extern s16 g_EnvLerpDuration;
 extern GameEnvironmentCue *g_EnvScriptCues;
+typedef union EnvironmentScriptLocation {
+    s32 time;
+    GameEnvironmentCue *pointer;
+} EnvironmentScriptLocation;
 extern u8 g_EnvSpare;
 extern s16 g_EnvSpareFrom;
 extern s16 g_EnvSpareLerp;

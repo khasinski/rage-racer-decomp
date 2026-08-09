@@ -838,9 +838,7 @@ extern GameEnvColorSlot g_EnvColors[9];
 
 /* Jumps that timeline to `time` and applies one frame, then programs
  * SetFarColor + SetFogNear. */
-/* replay.c hands it a pointer difference, environment_script.c an s32;
- * an empty parameter list lets both units keep their own spelling. */
-void SeekEnvironmentScript();
+void SeekEnvironmentScript(s32 targetTime);
 /* The backdrop: half a 16-segment panorama cylinder over gradient bands shaded
  * between successive colour slots. */
 void DrawSkyBackground(void);

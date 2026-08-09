@@ -18,17 +18,19 @@ void SeekEnvironmentScript(s32 targetTime) {
     s32 signedFrame;
     s32 fog;
     GameEnvironmentCue *cue;
+    EnvironmentScriptLocation scriptLocation;
     s16 *fogOut;
     s16 *fogTarget;
 
-    clock = (targetTime + g_EnvScriptLength) % g_EnvScriptLength;
-    targetTime = (s32)g_EnvScriptCues;
-    g_EnvScriptCursor = (GameEnvironmentCue *)targetTime;
+    scriptLocation.time = targetTime;
+    clock = (scriptLocation.time + g_EnvScriptLength) % g_EnvScriptLength;
+    scriptLocation.pointer = g_EnvScriptCues;
+    g_EnvScriptCursor = scriptLocation.pointer;
     g_EnvScriptClock = clock;
     for (count = 0;
-         ((GameEnvironmentCue *)targetTime)[count].time != -1;
+         scriptLocation.pointer[count].time != -1;
          count++) {
-        if (clock < ((GameEnvironmentCue *)targetTime)[count].time) {
+        if (clock < scriptLocation.pointer[count].time) {
             break;
         }
     }
@@ -36,9 +38,9 @@ void SeekEnvironmentScript(s32 targetTime) {
     if ((s32)count >= 2) {
         g_EnvScriptCursor += count - 2;
     } else {
-        targetTime = (s32)g_EnvScriptCursor;
+        scriptLocation.pointer = g_EnvScriptCursor;
         for (tailCount = 0;
-             ((GameEnvironmentCue *)targetTime)[tailCount + 1].time != -1;
+             scriptLocation.pointer[tailCount + 1].time != -1;
              tailCount++) {
         }
         g_EnvScriptCursor += tailCount;
