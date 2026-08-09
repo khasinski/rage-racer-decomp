@@ -28,6 +28,10 @@ PATTERNS = {
         r"\*\s*\(\s*(?:(?:const|volatile)\s+)*"
         r"(?:u8|s8|u16|s16|u32|s32)\s*\*\s*\)\s*\(?\s*&"
     ),
+    "aggregate_address_casts": re.compile(
+        r"\(\s*(?:(?:const|volatile)\s+)*[A-Z][A-Za-z0-9_]*\s*\*\s*\)"
+        r"\s*\(?\s*&"
+    ),
     "field_macros": re.compile(r"\b(?:FIELD|RAW_FIELD)\w*\s*\("),
     "register_pins": re.compile(
         r"\bregister\b[^;\n]*\basm\s*\(\s*\"(?:\$\d+|zero|at|v[01]|a[0-3]|t[0-9]|s[0-8]|k[01]|gp|sp|fp|ra)\""
