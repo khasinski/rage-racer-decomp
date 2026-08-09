@@ -54,9 +54,8 @@ typedef union MusicChannelWordValue {
 
 extern MusicChannel g_MusicChannels[];
 
-/* Contiguous game-owned sound state beginning at 0x801E6C9C.  Several legacy
- * symbols name fields inside this object because retail code addresses those
- * fields independently. */
+/* Typed overlay used where retail addresses the contiguous sound state as one
+ * object. Its linker symbol aliases the first scalar without allocating BSS. */
 typedef struct AudioRuntimeState {
     s32 loadedSlotMask;                 /* +0x00 */
     s32 cueBank;                        /* +0x04 */

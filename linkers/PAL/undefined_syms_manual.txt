@@ -7,6 +7,9 @@ func_8004BAC8 = ScrollTeamLogoDown + 0x78;
 func_8005B004 = IsSpuTransferDone + 0x30;
 func_8005BDB0 = SetSequenceVolumeSetting + 0x2C;
 
+/* Typed overlay of the contiguous game audio globals. */
+g_AudioRuntimeState = g_AudioLoadedSlotMask;
+
 /* Scratchpad (0x1F800000) locations the render code reaches by name.  They
    sit outside every segment, so no object can define them. */
 g_FinalSkyOrderingTable = 0x1F800004;
