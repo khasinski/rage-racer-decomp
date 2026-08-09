@@ -224,6 +224,12 @@ typedef struct ModelBankHeader {
     AssetAddress models[1];
 } ModelBankHeader;
 
+typedef struct TerrainCellAssetHeader {
+    s32 cellCount;
+    AssetAddress faces;
+    AssetAddress cells[1];
+} TerrainCellAssetHeader;
+
 /* Asset-installation helpers. RegisterModelBank/RegisterCourseModels
  * rebase a pack's internal offsets to absolute addresses; UnrelocateModelBank
  * is the exact inverse (used before a bank is copied elsewhere). The Set*Slot
@@ -237,7 +243,7 @@ void UploadCarImage(s32 slot);
 extern s32 g_PendingCarModelIndex;
 extern u8 *g_TrackTextureShadow;
 
-void InstallTerrainCellData(s32 *base);
+void InstallTerrainCellData(u8 *base);
 void InstallTrackEventData(void* eventData);
 void InstallTrackPoints(void* trackData);
 void LoadCourseAssets(void);

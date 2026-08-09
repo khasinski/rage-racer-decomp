@@ -125,22 +125,24 @@ void RegisterCourseModels(s32 *base) {
     }
 }
 
-void InstallTerrainCellData(s32 *base) {
-    s32 *ptr;
+void InstallTerrainCellData(u8 *base) {
+    TerrainCellAssetHeader *header;
+    AssetAddress *ptr;
     s32 count;
     s32 i;
 
     g_TerrainCellGrid = (u16 *)base;
-    base = (s32 *)((u8 *)base + TERRAIN_CELL_GRID_SIZE);
-    g_CellVisibilityTable = (u8 *)base;
-    base = (s32 *)((u8 *)base + CELL_VISIBILITY_TABLE_SIZE);
-    ptr = base + 2;
-    count = base[0];
+    base += TERRAIN_CELL_GRID_SIZE;
+    g_CellVisibilityTable = base;
+    base += CELL_VISIBILITY_TABLE_SIZE;
+    header = (TerrainCellAssetHeader *)base;
+    ptr = header->cells;
+    count = header->cellCount;
     SCRATCH_CELL_TABLE = (s32)ptr;
     g_TerrainCellCount = count;
-    SCRATCH_CELL_FACES = (s32)((u8 *)base + base[1]);
+    SCRATCH_CELL_FACES = (s32)(base + header->faces.offset);
     for (i = 0; i < count; i++) {
-        *ptr = (s32)((u8 *)base + *ptr);
+        ptr->pointer = base + ptr->offset;
         ptr++;
     }
 }

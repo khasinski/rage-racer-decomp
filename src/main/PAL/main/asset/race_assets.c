@@ -177,7 +177,7 @@ void LoadRaceAssets(void) {
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[7];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
-            InstallTerrainCellData((s32 *)g_AssetBlockPtr);
+            InstallTerrainCellData(g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[8];
