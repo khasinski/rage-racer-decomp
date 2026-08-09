@@ -538,7 +538,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->field_104 = 0;
         ent->field_C4 = 0;
         ent->routeMarkerIndex = 0;
-        SeedCarLapProgress(ent, ((TrackRivalStart *)(p + 0x354))->modelId);
+        SeedCarLapProgress(ent, ((TrackEventData *)p)->rivalStarts[0][0].modelId);
     }
 
     sub += g_RaceSeries * 144;
@@ -546,7 +546,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     {
         u16 model;
 
-        model = ((TrackRivalStart *)(base + 0x354))->modelId;
+        model = ((TrackEventData *)base)->rivalStarts[0][0].modelId;
         ent->activeFlag = model;
         if ((s16)model != -1) {
             struct {
