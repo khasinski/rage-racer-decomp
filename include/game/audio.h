@@ -8,6 +8,16 @@ typedef struct EffectCueProgram {
     s32 tone;
 } EffectCueProgram;
 
+typedef struct EffectCueBankHeader {
+    s32 voiceCount;
+    s32 volumeScale;
+} EffectCueBankHeader;
+
+typedef union EffectCueBankEntry {
+    EffectCueBankHeader header;
+    EffectCueProgram program;
+} EffectCueBankEntry;
+
 typedef struct EffectCueBank {
     s32 voiceCount;
     s32 volumeScale;
@@ -17,6 +27,7 @@ typedef struct EffectCueBank {
 typedef union EffectCueBankAddress {
     s32 byteOffset;
     const EffectCueBank *pointer;
+    const EffectCueBankEntry *entryPointer;
 } EffectCueBankAddress;
 
 typedef struct VabSlotVoice {

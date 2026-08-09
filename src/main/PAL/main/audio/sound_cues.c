@@ -20,7 +20,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     s32 active;
     s32 inactive;
     s32 defaultPitch;
-    register const EffectCueBank *cueCursor asm("$7");
+    register const EffectCueBankEntry *cueCursor asm("$7");
     const EffectCueBank *tableBase;
     s32 *stateBase;
 
@@ -83,7 +83,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
 
                     cueAddress.pointer = tableBase;
                     cueAddress.byteOffset += loopTblOff;
-                    cueCursor = cueAddress.pointer;
+                    cueCursor = cueAddress.entryPointer;
                 }
                 do {
                     EffectCueBankAddress scaleAddress;
@@ -95,12 +95,12 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     scaleAddress.byteOffset += loopTblOff;
                     scaleValue = scaleAddress.pointer->volumeScale;
                     scaled = volume * scaleValue;
-                    cueValue = cueCursor->programs[0].note;
+                    cueValue = cueCursor[1].program.note;
                     g_EffectVoices[i].note.value = cueValue;
-                    toneValue = cueCursor->programs[0].tone;
+                    toneValue = cueCursor[1].program.tone;
                     g_EffectVoices[i].pitch.value = pitch;
                     g_EffectVoices[i].tone = toneValue;
-                    cueCursor = (const EffectCueBank *)&cueCursor->programs[0];
+                    cueCursor++;
                     if (scaled < 0) {
                         scaled += 0x7F;
                     }
@@ -171,7 +171,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
 
                     cueAddress.pointer = tableBase;
                     cueAddress.byteOffset += loopTblOff;
-                    cueCursor = cueAddress.pointer;
+                    cueCursor = cueAddress.entryPointer;
                 }
                 do {
                     EffectCueBankAddress scaleAddress;
@@ -183,12 +183,12 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     scaleAddress.byteOffset += loopTblOff;
                     scaleValue = scaleAddress.pointer->volumeScale;
                     scaled = volume * scaleValue;
-                    cueValue = cueCursor->programs[0].note;
+                    cueValue = cueCursor[1].program.note;
                     g_EffectVoices[i + 2].note.value = cueValue;
-                    toneValue = cueCursor->programs[0].tone;
+                    toneValue = cueCursor[1].program.tone;
                     g_EffectVoices[i + 2].pitch.value = pitch;
                     g_EffectVoices[i + 2].tone = toneValue;
-                    cueCursor = (const EffectCueBank *)&cueCursor->programs[0];
+                    cueCursor++;
                     if (scaled < 0) {
                         scaled += 0x7F;
                     }
