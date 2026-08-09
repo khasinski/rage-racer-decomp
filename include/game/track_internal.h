@@ -40,14 +40,10 @@ extern PathSceneryCursor g_PathSceneryRotCursor asm("g_PathSceneryRotPhase");
 extern s32 g_TrackLength;
 extern TrackEventData *g_TrackEventData;
 
-#ifndef GAME_SCENERY_DATA_QUALIFIER
-#define GAME_SCENERY_DATA_QUALIFIER
-#endif
-extern SceneryMotionData *GAME_SCENERY_DATA_QUALIFIER g_RouteSceneryData;
-extern PathSceneryRotationData *GAME_SCENERY_DATA_QUALIFIER g_PathSceneryRotData;
-extern SceneryMotionData *GAME_SCENERY_DATA_QUALIFIER g_FlybySceneryData;
-extern PathSceneryPositionData *GAME_SCENERY_DATA_QUALIFIER g_PathSceneryPosData;
-#undef GAME_SCENERY_DATA_QUALIFIER
+extern SceneryMotionData *volatile g_RouteSceneryData;
+extern PathSceneryRotationData *volatile g_PathSceneryRotData;
+extern SceneryMotionData *volatile g_FlybySceneryData;
+extern PathSceneryPositionData *volatile g_PathSceneryPosData;
 
 extern s32 g_RouteSceneryClock;
 extern s16 g_RouteSceneryKeyIndex;
