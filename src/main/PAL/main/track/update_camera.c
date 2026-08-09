@@ -28,6 +28,11 @@ typedef union CameraMatrixBuffer {
     s32 words[8];
 } CameraMatrixBuffer;
 
+typedef union CameraCarAddress {
+    PlayerCarRuntime *player;
+    GameRenderObject *renderObject;
+} CameraCarAddress;
+
 void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     s16 sp10[4];
     s32 sp18[3];
@@ -107,6 +112,7 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     GameTrackCameraNode *chaseNodeOffsets;
     GameTrackCameraNode *prevNode;
     GameTrackCameraNodeAddress introNode;
+    CameraCarAddress playerAddress;
 
     cameraNodeIndex = FindNearestTrackCamera(car);
     scratch = &SCRATCH_PRIM_CURSOR_WORD;
@@ -602,9 +608,12 @@ block_52:
         break;
     }
     SetCameraRotMatrix();
-    if ((cameraModeSel > 0) && (car == (GameRenderObject *)&g_PlayerCar)) {
-        SelectModelBank(0);
-        DrawPlayerCarModel(car);
+    if (cameraModeSel > 0) {
+        playerAddress.player = &g_PlayerCar;
+        if (car == playerAddress.renderObject) {
+            SelectModelBank(0);
+            DrawPlayerCarModel(car);
+        }
     }
 }
 

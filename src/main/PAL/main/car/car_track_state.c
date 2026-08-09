@@ -9,6 +9,11 @@
 #include "game/track_internal.h"
 #include "game/vector.h"
 
+typedef union TrackCarAddress {
+    PlayerCarRuntime *player;
+    GameCarRuntime *runtime;
+} TrackCarAddress;
+
 /*
  * Track-segment / route-sprite geometry builder. Interpolates between the
  * GameTrackPoint at `trackPointIndex`
@@ -75,6 +80,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     GameTrackPoint *nextPoint;
     GameTrackArcCenter *arcCenter;
     CarTrackScratch *spad;
+    TrackCarAddress playerAddress;
 
     nextPointIndex = (trackPointIndex + 1) % g_TrackPointCount;
     spad = CAR_TRACK_SCRATCH;
@@ -233,7 +239,8 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         spad->offsetZ = lateralOffset;
         BuildRotMatrixY(clampSource, spad->heading);
         ApplyMatrix(clampSource, &spad->offsetX, &spad->correctionX);
-        if (obj == (GameCarRuntime *)&g_PlayerCar)
+        playerAddress.player = &g_PlayerCar;
+        if (obj == playerAddress.runtime)
         {
             SetCarKnockback(obj, spad->correctionX, spad->correctionZ, limits->leftKnockbackMode);
         }
@@ -253,7 +260,8 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         spad->offsetZ = lateralOffset;
         BuildRotMatrixY(clampSource, spad->heading);
         ApplyMatrix(clampSource, &spad->offsetX, &spad->correctionX);
-        if (obj == (GameCarRuntime *)&g_PlayerCar)
+        playerAddress.player = &g_PlayerCar;
+        if (obj == playerAddress.runtime)
         {
             SetCarKnockback(obj, spad->correctionX, spad->correctionZ, limits->rightKnockbackMode);
         }
