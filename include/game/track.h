@@ -98,6 +98,11 @@ typedef struct TrackRacingLineHint {
     u16 reserved;
 } TrackRacingLineHint;
 
+typedef struct TrackCrestEvent {
+    s32 progress;
+    s32 motionValue;
+} TrackCrestEvent;
+
 typedef struct TrackEventSoundZone {
     s16 start;
     s16 end;
@@ -117,7 +122,7 @@ typedef struct TrackPointAmbienceZone {
 
 typedef struct TrackEventData {
     s32 trackWalkStart;
-    u8 reserved004[0x80];
+    TrackCrestEvent crestEvents[2][8];
     TrackRacingLineHint racingLineHints[2][30];
     TrackRivalStart rivalStarts[2][12];
     TrackAiSpeedKey aiSpeedKeys[2][48];
