@@ -2,6 +2,11 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 
+typedef union MatrixElementAddress {
+    s16 *elements;
+    s32 *packed;
+} MatrixElementAddress;
+
 /*
  * Applies the 3x3 fixed-point matrix `mtx` to the vector (x,y,z), writing each
  * component to the three output pointers (result >> 12). Each row has an identity
@@ -10,8 +15,10 @@
  */
 void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) {
     s16 *m = mtx;
+    MatrixElementAddress elementAddress;
 
-    if (*(s32 *)&m[0] == 0x1000 && m[2] == 0) {
+    elementAddress.elements = &m[0];
+    if (*elementAddress.packed == 0x1000 && m[2] == 0) {
         *outX = x;
     } else {
         s32 result = m[0] * x;
@@ -21,7 +28,8 @@ void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *
         *outX = result >> 12;
     }
 
-    if (m[3] == 0 && *(s32 *)&m[4] == 0x1000) {
+    elementAddress.elements = &m[4];
+    if (m[3] == 0 && *elementAddress.packed == 0x1000) {
         *outY = y;
     } else {
         s32 result = m[3] * x;
@@ -31,7 +39,8 @@ void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *
         *outY = result >> 12;
     }
 
-    if (*(s32 *)&m[6] == 0 && m[8] == 0x1000) {
+    elementAddress.elements = &m[6];
+    if (*elementAddress.packed == 0 && m[8] == 0x1000) {
         *outZ = z;
     } else {
         s32 result = m[6] * x;
@@ -84,20 +93,24 @@ void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *
 void MatrixApplyVector(s16 *mtx, s32 *vec, s32 *out) {
     s16 *m = mtx;
     s32 *v = vec;
+    MatrixElementAddress elementAddress;
 
-    if (*(s32 *)&m[0] == 0x1000 && m[2] == 0) {
+    elementAddress.elements = &m[0];
+    if (*elementAddress.packed == 0x1000 && m[2] == 0) {
         FAST_LOAD(0);
     } else {
         DOT_ROW(0, 0);
     }
 
-    if (m[3] == 0 && *(s32 *)&m[4] == 0x1000) {
+    elementAddress.elements = &m[4];
+    if (m[3] == 0 && *elementAddress.packed == 0x1000) {
         FAST_LOAD(4);
     } else {
         DOT_ROW(6, 1);
     }
 
-    if (*(s32 *)&m[6] == 0 && m[8] == 0x1000) {
+    elementAddress.elements = &m[6];
+    if (*elementAddress.packed == 0 && m[8] == 0x1000) {
         FAST_LOAD(8);
     } else {
         DOT_ROW(12, 2);
