@@ -182,7 +182,7 @@ void DrawRacePosition(void) {
 }
 
 void SetHudBlinkColor(s32 phase) {
-    *(u16 *)(g_DrawBuffer + 0x237A6) = phase ? 0x7811 : 0x7800;
+    ((SPRT *)(g_DrawBuffer + 0x23798))->clut = phase ? 0x7811 : 0x7800;
 }
 
 void DrawSplitDelta(s32 delta, s32 y) {
