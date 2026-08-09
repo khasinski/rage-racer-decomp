@@ -274,15 +274,19 @@ void DrawStartCountdown(s32 sceneTimer) {
         }
         rowOffset = row * 32;
         do {
-            u8 *color =
-                (u8 *)(((rowOffset + column) << 4) + (s32)tiles) + 4;
+            RenderBufferAddress tileBase;
+            RenderBufferAddress color;
+
+            tileBase.pointer = tiles;
+            color.byteOffset = ((rowOffset + column) << 4) +
+                tileBase.byteOffset + sizeof(u32);
             colorBank = 0;
             if (phase == 4 || phaseIsNegative) {
                 colorBank = 1;
             }
             {
                 CVec *colors = &g_CountdownCellColors[colorBank * 2];
-                *(CVec *)color = colors[pattern & 1];
+                *color.color = colors[pattern & 1];
             }
             pattern >>= 1;
             column++;

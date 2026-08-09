@@ -20,6 +20,7 @@ typedef union RenderBufferAddress {
     u8 *bytes;
     void *pointer;
     SPRT *sprite;
+    CVec *color;
 } RenderBufferAddress;
 
 typedef union VisibilityMaskAddress {
