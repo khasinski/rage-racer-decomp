@@ -23,8 +23,8 @@ void StoreSaveStateBlock(u8 *block) {
     {
         u16 negconMaxTwist = g_NegconMaxTwist;
         u16 negconNeutralL = g_NegconNeutralL;
-        *(u16 *)(block + 0xE) = negconMaxTwist;
-        *(u16 *)(block + 0xC) = negconNeutralL;
+        ((GameSaveBlock *)block)->negconMaxTwist = negconMaxTwist;
+        ((GameSaveBlock *)block)->negconNeutralL = negconNeutralL;
     }
 
     ((GameSaveBlock *)block)->grandPrixProgress.course = g_GrandPrixSave.course;
