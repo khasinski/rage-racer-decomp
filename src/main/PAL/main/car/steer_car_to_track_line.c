@@ -249,7 +249,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
             }
             {
                 drive->unk2C =
-                    lo * *(s32 *)(specBase + 0xCC) / 0x20000;
+                    lo * ((GameCarSpec *)specBase)->gearLoad[0] / 0x20000;
                 if (drive->manual == 0) {
                     drive->unk2C =
                         drive->unk2C * 985 / 1000;
