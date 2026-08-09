@@ -182,14 +182,9 @@ typedef struct GameRenderAxisMatrix {
 #define SCREEN_HEIGHT  0xF0
 
 /*
- * The camera car object at g_CameraCar. Eleven of its words are also declared
- * as standalone globals (g_CameraCarY, g_CameraCarAngleY, g_CameraCarSpeed and
- * so on), which is where the names below come from.
- *
- * This is the same block as GameCarRuntime in game/car.h: 45 offsets agree on
- * type, and both arrive at headingAngle for 0xA0 independently. They are still
- * two declarations because the tails disagree - car.h reads 0x7C, 0x80, 0x84,
- * 0x88, 0xAC and 0xBC as halfwords, which shifts every later offset by four.
+ * Prefix used by the renderer for car-like objects. The full camera-car
+ * storage is declared as GameCarRuntime in game/car.h; every field below has
+ * the same offset in that canonical type.
  */
 typedef union CameraLookAt {
     struct {

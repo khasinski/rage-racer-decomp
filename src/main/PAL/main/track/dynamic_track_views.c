@@ -55,7 +55,7 @@ void UpdateFreeLookCamera(void *car, s32 updateMotion) {
     InterpolateTrackPoint(index, coords, g_CameraCar.segmentFraction);
     angle = 0x400 - Atan2(coords[0] - g_CameraCar.x, coords[2] - g_CameraCar.z);
     g_CameraCarHeading += GetAngleDelta(g_CameraCarHeading, angle);
-    g_CameraCar.angleY = g_CameraCarHeading;
+    g_CameraCar.bodyYaw = g_CameraCarHeading;
 
     if (updateMotion != 0) {
         if (g_CameraCarSpeedRamp < 50) {
@@ -95,7 +95,7 @@ void UpdateFreeLookCamera(void *car, s32 updateMotion) {
         g_FreeCameraAngleOffset[0] = -256;
     }
 
-    g_CameraCar.angleY = g_FreeCameraAngleOffset[1] + g_CameraCar.angleY;
+    g_CameraCar.bodyYaw = g_FreeCameraAngleOffset[1] + g_CameraCar.bodyYaw;
     AccumulateLapProgress(&g_CameraCar);
     markerClamp[0] = 0;
     markerClamp[1] = 0;

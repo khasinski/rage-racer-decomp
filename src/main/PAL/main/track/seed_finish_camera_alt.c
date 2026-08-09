@@ -9,6 +9,7 @@
 
 typedef union FinishCameraCarAddress {
     u32 *words;
+    Block16 *blocks;
     GameCarRuntime *car;
 } FinishCameraCarAddress;
 
@@ -20,6 +21,7 @@ void SeedFinishCameraAlt(void *car) {
     Block16 *dst;
     Block16 *end;
     FinishCameraCarAddress source;
+    FinishCameraCarAddress destination;
     GameTrackPoint *track;
     TrackPointTableAddress pointAddress;
     TrackPointTableAddress trackAddress;
@@ -28,13 +30,14 @@ void SeedFinishCameraAlt(void *car) {
     s32 lastIndex;
 
     /* car is a car runtime block: the copy below moves 0x19C bytes of it into
-     * g_CameraCar, which is a GameRenderObject -- every one of the eleven
-     * g_CameraCar* split symbols lands on one of its fields. Storing through
+     * g_CameraCar. Every one of the eleven g_CameraCar* split symbols lands
+     * on one of its fields. Storing through
      * the source view is what lets the index reads below stay plain: both sides
      * carry the aggregate mark now, so 44a's exemption never fires. */
     source.car = car;
     asm("" : "=r"(source.words) : "0"(source.words));
-    dst = (Block16 *)&g_CameraCar;
+    destination.car = &g_CameraCar;
+    dst = destination.blocks;
     src = (Block16 *)source.words;
     end = src + sizeof(GameCarRuntime) / sizeof(*src);
     do {
@@ -85,5 +88,5 @@ void SeedFinishCameraAlt(void *car) {
     index -= point->angle;
     g_CameraCar.headingAngle = index;
     g_CameraCarSeedYaw = index;
-    g_CameraCar.angleY = index;
+    g_CameraCar.bodyYaw = index;
 }

@@ -38,7 +38,6 @@ typedef union ScreenOffset {
 } ScreenOffset;
 
 extern Matrix g_MirrorViewMatrix;
-extern struct GameRenderObject g_CameraCar;
 extern Matrix g_SceneLightMatrix;
 extern u32 g_ScratchRenderMode;
 extern u8 *g_CamRow;

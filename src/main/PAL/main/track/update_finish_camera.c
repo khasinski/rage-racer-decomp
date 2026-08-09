@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/car.h"
 #include "game/render.h"
 #include "game/render_internal.h"
 #include "game/scratchpad.h"
@@ -9,7 +10,7 @@
 
 /*
  * Camera track-follower: advances a look-ahead track point, aims the eye object
- * g_CameraCar (a GameRenderObject) toward the sampled centre-line point
+ * g_CameraCar toward the sampled centre-line point
  * (InterpolateTrackPoint + atan2), nudges its position, then seeds the scratchpad view
  * state (view[2..4]=eye XYZ, view[6]=pitch, view[7]=yaw, view[8]=roll) from the
  * eye object and submits the render object (DrawPlayerCarModel). markerClamp is the

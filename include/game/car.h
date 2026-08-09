@@ -180,6 +180,12 @@ typedef struct GameCarRuntime {
     u8 pad16A[0x32];
 } GameCarRuntime;
 
+typedef union GameCarRuntimeAddress {
+    GameCarRuntime *runtime;
+    u32 *words;
+    Block16 *blocks;
+} GameCarRuntimeAddress;
+
 typedef struct CarProgressWindow {
     s32 progressB;
     u8 reserved[0x3C];
@@ -247,6 +253,7 @@ extern CarCollisionPoint g_CarCollisionCorners[4];
 /* Per-car runtime state, player in slot 0. Individual slots and single fields
  * also have their own split symbols; see docs/names.md section 3b. */
 extern GameCarRuntime g_Cars[11];
+extern GameCarRuntime g_CameraCar;
 
 /* The four contenders ordered by race progress (`progressA + progressB`), best
  * first; re-sorted every frame by RankContenders to rubber-band the AI. */
