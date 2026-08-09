@@ -178,18 +178,19 @@ void TickCdAudio(void) {
 }
 
 
-void SelectTrackCameraTable(u8 *block, s32 variant) {
-    void *ptr;
+void SelectTrackCameraTable(void *block, s32 variant) {
+    TrackCameraTable *table = block;
+    s32 offset;
 
     if (variant != 0) {
         if (g_GrandPrixSeries != 0) {
-            ptr = block + *(s32 *)(block + 4);
+            offset = table->seriesOffset[1];
         } else {
-            ptr = block + *(s32 *)(block + 0);
+            offset = table->seriesOffset[0];
         }
     } else {
-        ptr = block + *(s32 *)(block + 8);
+        offset = table->defaultOffset;
     }
 
-    g_TrackCameras = ptr;
+    g_TrackCameras = (GameTrackCameraNode *)((u8 *)block + offset);
 }

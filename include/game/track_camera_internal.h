@@ -32,6 +32,11 @@ typedef struct GameTrackCameraNode {
     TrackCameraSection trackSection;
 } GameTrackCameraNode;
 
+typedef struct TrackCameraTable {
+    s32 seriesOffset[2];
+    s32 defaultOffset;
+} TrackCameraTable;
+
 extern GameTrackCameraNode *g_TrackCameras;
 extern u16 g_TrackSectionCount;
 
