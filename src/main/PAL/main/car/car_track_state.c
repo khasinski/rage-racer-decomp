@@ -405,35 +405,21 @@ typedef struct Car {
     s16 f98;       /* 0x98 */
 } Car;
 
-typedef struct TP {
-    u16 x;             /* 0x00 */
-    u16 pad2;          /* 0x02 */
-    u16 z;             /* 0x04 */
-    u16 pad6;          /* 0x06 */
-    s16 y;             /* 0x08 */
-    s16 angle;         /* 0x0A */
-    u8 padC[2];        /* 0x0C */
-    s16 crossSlope;    /* 0x0E */
-    u8 pad10[6];       /* 0x10 */
-    u16 segmentLength; /* 0x16 */
-} TP;
-
-
 /*
  * Samples the track surface height under the car. Locates the containing
  * segment (FindTrackSegment), rotates the car position into segment-local space,
  * clamps the along-segment distance `t` to [0, segmentLength], and linearly
  * interpolates the point height `y` and `crossSlope` between the two segment
  * endpoints. Writes the resulting surface height into car->out4 (and out4 into
- * f60 while f98 is idle). The local TP/Car/SVec/LVec structs mirror
- * GameTrackPoint / the render object by raw offset to stay byte-exact.
+ * f60 while f98 is idle). GameTrackPointHalfwordView and the local Car view
+ * preserve the halfword and raw-offset accesses used by this routine.
  */
 void SampleTrackSurfaceHeight(Car *car) {
     Matrix mtx;
     SVec v;
     LVec out;
-    TP *p1;
-    TP *p2;
+    GameTrackPointHalfwordView *p1;
+    GameTrackPointHalfwordView *p2;
     s32 idx;
     s32 seg;
     s32 t;
@@ -443,8 +429,9 @@ void SampleTrackSurfaceHeight(Car *car) {
     s32 v8;
 
     idx = FindTrackSegment(car, car->f30);
-    p2 = (TP *)&g_TrackPoints[(idx + 1) % g_TrackPointCount];
-    p1 = (TP *)&g_TrackPoints[idx];
+    p2 = GetTrackPointHalfwordView(
+        &g_TrackPoints[(idx + 1) % g_TrackPointCount]);
+    p1 = GetTrackPointHalfwordView(&g_TrackPoints[idx]);
 
     seg = p1->segmentLength;
     v.vx = car->x - p1->x;

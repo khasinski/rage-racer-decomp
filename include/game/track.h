@@ -42,6 +42,24 @@ typedef struct GameTrackPoint {
     u16 segmentLength;
 } GameTrackPoint;
 
+typedef struct GameTrackPointHalfwordView {
+    u16 x;
+    u16 reserved02;
+    u16 z;
+    u16 reserved06;
+    s16 y;
+    s16 angle;
+    u8 reserved0C[2];
+    s16 crossSlope;
+    u8 reserved10[6];
+    u16 segmentLength;
+} GameTrackPointHalfwordView;
+
+static inline GameTrackPointHalfwordView *GetTrackPointHalfwordView(
+    GameTrackPoint *point) {
+    return (GameTrackPointHalfwordView *)point;
+}
+
 typedef struct TrackAiSpeedKey {
     s16 progress;
     u16 pitch;
