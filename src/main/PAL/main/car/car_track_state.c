@@ -5,11 +5,12 @@
 #include "psyq/gte.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
+#include "game/track_internal.h"
 #include "game/vector.h"
 
 /*
  * Track-segment / route-sprite geometry builder. Interpolates between the
- * GameTrackPoint at `trackPointIndex` (*(GameTrackPoint*)0x8009E688 + i*0x18)
+ * GameTrackPoint at `trackPointIndex`
  * and its successor: computes route angles/heights via atan2 (Atan2)
  * and rsin/rcos, builds the collision-boundary
  * offset, and writes the interpolated position/angle/height into the render
@@ -36,7 +37,6 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     s32 swept;
     s32 arcLateral;
     s32 pointHeading;
-    s32 pointsBase;
     s32 carToCenterX;
     s32 pointToCenterX;
     s32 carToCenterZ;
@@ -75,26 +75,25 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     GameTrackArcCenter *arcCenter;
     CarTrackScratch *spad;
 
-    nextPointIndex = (trackPointIndex + 1) % *(s32 *)0x8009E6A8;
-    pointsBase = *(s32 *)0x8009E688;
+    nextPointIndex = (trackPointIndex + 1) % g_TrackPointCount;
     spad = CAR_TRACK_SCRATCH;
     spad->knockbackMode = 0;
-    point = (GameTrackPoint *)((trackPointIndex * 0x18) + pointsBase);
+    point = &g_TrackPoints[trackPointIndex];
     segmentLength = point->segmentLength;
     spad->segmentLength = segmentLength;
-    nextPoint = (GameTrackPoint *)((nextPointIndex * 0x18) + pointsBase);
-    if ((s32) ((u32) segmentLength << 0x10) <= 0)
+    nextPoint = &g_TrackPoints[nextPointIndex];
+    if ((s16)segmentLength <= 0)
     {
         spad->segmentLength = 1U;
     }
     spad->heading = (u16)point->angle;
-    arcIndex = (s32)((u32)point->arcRef << 0x10) >> 0x14;
+    arcIndex = (s16)point->arcRef >> 4;
     spad->arcIndex = (s16)arcIndex;
     curveMode = point->arcRef & 3;
     spad->curveMode = curveMode;
     if (curveMode != 0)
     {
-        arcCenter = (GameTrackArcCenter *)((arcIndex * 0xC) + *(s32 *)0x8019C7D0);
+        arcCenter = &g_TrackArcCenters[arcIndex];
         arcCenterX = arcCenter->x;
         spad->arcCenterX = arcCenterX;
         arcCenterZ = arcCenter->z;
