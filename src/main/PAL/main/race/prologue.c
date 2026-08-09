@@ -7,7 +7,6 @@
 #include "game/cd.h"
 #include "game/race.h"
 #include "game/render.h"
-#define GAME_CAMERA_VIEW_MODE_TYPE u32
 #include "game/render_internal.h"
 #include "game/race_internal.h"
 #include "game/scratchpad.h"
