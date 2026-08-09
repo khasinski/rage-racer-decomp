@@ -2,8 +2,6 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
-#define GAME_SKY_ROW_BASE_TYPE u32
-#define GAME_ENV_SCRIPT_LENGTH_TYPE u32
 #include "game/track_internal.h"
 #include "game/player_car_internal.h"
 #include "game/vector.h"

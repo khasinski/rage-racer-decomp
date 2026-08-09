@@ -62,18 +62,10 @@ extern GAME_ROUTE_SCENERY_QUALIFIER s32 g_RouteSceneryRotY;
 #undef GAME_ROUTE_SCENERY_QUALIFIER
 extern SceneryMotionKeyframe *g_RouteSceneryKeyframe;
 
-#ifndef GAME_ENV_SCRIPT_LENGTH_TYPE
-#define GAME_ENV_SCRIPT_LENGTH_TYPE s32
-#endif
-extern GAME_ENV_SCRIPT_LENGTH_TYPE g_EnvScriptLength;
-#undef GAME_ENV_SCRIPT_LENGTH_TYPE
+extern s32 g_EnvScriptLength;
 extern GameEnvironmentCue *g_EnvScriptCursor;
 
-#ifndef GAME_SKY_ROW_BASE_TYPE
-#define GAME_SKY_ROW_BASE_TYPE s32
-#endif
-extern GAME_SKY_ROW_BASE_TYPE g_SkyRowBase;
-#undef GAME_SKY_ROW_BASE_TYPE
+extern s32 g_SkyRowBase;
 
 extern FlybySceneryState g_FlybyScenery;
 
