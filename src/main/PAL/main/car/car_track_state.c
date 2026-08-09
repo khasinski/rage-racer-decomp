@@ -150,7 +150,9 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
             }
             else
             {
-                interpolated = (s32) ((s32) (((s16) sweptAngle * spad->pointRadius.value) + ((arcAngle - (s16) sweptAngle) * spad->nextPointRadius.value)) / arcAngle);
+                interpolated = (((s16)sweptAngle * spad->pointRadius.value) +
+                                ((arcAngle - (s16)sweptAngle) * spad->nextPointRadius.value)) /
+                               arcAngle;
             }
             *(s32 *)0x1F800130 = interpolated;
         }
@@ -168,19 +170,24 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
             {
                 swept = spad->sweptAngle;
                 arcSpan = spad->arcSpan;
-                spad->heading = (s16) ((s32) (((headingAngle - 0x1000) * swept) + (pointHeading * (arcSpan - swept))) / arcSpan);
+                spad->heading = (s16)(((headingAngle - 0x1000) * swept +
+                                       pointHeading * (arcSpan - swept)) /
+                                      arcSpan);
             }
             else if ((pointHeading - headingAngle) >= 0x801)
             {
                 swept = spad->sweptAngle;
                 arcSpan = spad->arcSpan;
-                spad->heading = (s16) ((s32) ((headingAngle * swept) + ((pointHeading - 0x1000) * (arcSpan - swept))) / arcSpan);
+                spad->heading = (s16)((headingAngle * swept +
+                                       (pointHeading - 0x1000) * (arcSpan - swept)) /
+                                      arcSpan);
             }
             else
             {
                 swept = spad->sweptAngle;
                 arcSpan = spad->arcSpan;
-                spad->heading = (s16) ((s32) ((headingAngle * swept) + (pointHeading * (arcSpan - swept))) / arcSpan);
+                spad->heading =
+                    (s16)((headingAngle * swept + pointHeading * (arcSpan - swept)) / arcSpan);
             }
         }
     }
@@ -208,9 +215,13 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         lateralOffset = (s32) spad->arcLateral;
     }
     segLenA = (s16)spad->segmentLength;
-    spad->field_8A = (s16) ((s32) ((nextPoint->field_10 * alongSegment) + (point->field_10 * (segLenA - alongSegment))) / segLenA);
+    spad->field_8A = (s16)((nextPoint->field_10 * alongSegment +
+                           point->field_10 * (segLenA - alongSegment)) /
+                          segLenA);
     segLenB = (s16)spad->segmentLength;
-    edgeHeight = (s32) ((nextPoint->field_12 * alongSegment) + (point->field_12 * (segLenB - alongSegment))) / segLenB;
+    edgeHeight = (nextPoint->field_12 * alongSegment +
+                  point->field_12 * (segLenB - alongSegment)) /
+                 segLenB;
     spad->field_88 = (s16) edgeHeight;
     leftLimit = spad->field_8A + limits->leftInset;
     clampSource = &spad->pad40[0];
@@ -286,9 +297,12 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         obj->field_6C = outputProgress;
     }
     segLenC = (s16)spad->segmentLength;
-    spad->field_8E = (s16) ((s32) ((nextPoint->field_E * alongSegment) + (point->field_E * (segLenC - alongSegment))) / segLenC);
+    spad->field_8E = (s16)((nextPoint->field_E * alongSegment +
+                           point->field_E * (segLenC - alongSegment)) /
+                          segLenC);
     segLenD = (s16)spad->segmentLength;
-    surfaceHeight = (s32) ((nextPoint->y * alongSegment) + (point->y * (segLenD - alongSegment))) / segLenD;
+    surfaceHeight =
+        (nextPoint->y * alongSegment + point->y * (segLenD - alongSegment)) / segLenD;
     obj->y = surfaceHeight;
     obj->y = (s32)(((s32)(spad->field_8E * lateralOffset) >> 7) + surfaceHeight);
     {
@@ -299,14 +313,17 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         spad->field_8C = angle + (u16)spad->heading;
     }
     segLenE = (s16)spad->segmentLength;
-    spad->field_92 = (s16) ((s32) ((nextPoint->field_C * alongSegment) + (point->field_C * (segLenE - alongSegment))) / segLenE);
+    spad->field_92 = (s16)((nextPoint->field_C * alongSegment +
+                           point->field_C * (segLenE - alongSegment)) /
+                          segLenE);
     trackWidth = (u16) spad->field_88 + (u16) spad->field_8A;
     spad->field_86 = trackWidth;
     nextCamber = Atan2((s32) trackWidth, (s32) (nextPoint->field_E * trackWidth) >> 7);
     trackWidthCopy = spad->field_86;
     secondResult = Atan2((s32) trackWidthCopy, (s32) (point->field_E * trackWidthCopy) >> 7);
     segLenF = (s16)spad->segmentLength;
-    spad->field_94 = (s16) ((s32) ((nextCamber * alongSegment) + (secondResult * (segLenF - alongSegment))) / segLenF);
+    spad->field_94 =
+        (s16)((nextCamber * alongSegment + secondResult * (segLenF - alongSegment)) / segLenF);
     spad->field_38 = rcos(spad->field_8C);
     {
         s32 firstProduct;
