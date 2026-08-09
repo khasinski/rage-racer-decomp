@@ -12,8 +12,8 @@
 void InstallResourceData(void) {
     printf(g_MsgResOk);
 }
-void SetCarSpec(u32 spec) {
-    g_CarSpec = (GameCarSpec *)spec;
+void SetCarSpec(GameCarSpec *spec) {
+    g_CarSpec = spec;
 }
 
 void InstallTrackEventData(void *resourceData) {

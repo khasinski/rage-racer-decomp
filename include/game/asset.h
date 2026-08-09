@@ -4,6 +4,8 @@
 #include "common.h"
 #include "psyq/gpu.h"
 
+struct GameCarSpec;
+
 /* Asset-load state machine phase (0 idle; 1..6 drive LoadAsset loads). */
 extern s32 g_AssetLoadState;
 
@@ -268,7 +270,7 @@ extern char g_PathRageStr[];
 void InstallResourceData(void *data);
 void LoadCarModel(s32);
 void LoadUpgradedCarModel(s32);
-void SetCarSpec(u32 spec);
+void SetCarSpec(struct GameCarSpec *spec);
 
 /* Declared identically by 3 translation units before this
  * header carried them. */
