@@ -36,7 +36,7 @@ void StCdInterrupt(void) {
         return;
     }
 
-    if (CdReady(1, (s32)readyResult) == 5) {
+    if (CdReady(1, readyResult) == 5) {
         return;
     }
 

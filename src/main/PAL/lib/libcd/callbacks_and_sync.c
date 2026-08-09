@@ -30,11 +30,11 @@ char *CdIntstr(long intr) {
     return g_CdIntrNames[intr];
 }
 
-long CdSync(long mode, long result) {
+long CdSync(long mode, u_char *result) {
     return CD_sync(mode, result);
 }
 
-long CdReady(long mode, long result) {
+long CdReady(long mode, u_char *result) {
     return CD_ready(mode, result);
 }
 

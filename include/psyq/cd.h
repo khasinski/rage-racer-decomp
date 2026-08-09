@@ -53,9 +53,8 @@ void StCdInterrupt(void);
 long CdControl(long com, void *param, u_char *result);
 long CdControlF(long com, void *param);
 long CdControlB(long com, void *param, void *result);
-long CdSync(long mode, long result);
-/* PSY-Q: long CdReady(long mode, u_char *result); see CD_cw above. */
-long CdReady();
+long CdSync(long mode, u_char *result);
+long CdReady(long mode, u_char *result);
 /* Install a completion / data-ready callback; returns the previous one. */
 long CdSyncCallback(long callback);
 long CdReadyCallback(long callback);
@@ -93,7 +92,7 @@ long CdReadyCallback(long callback);
 #define CdlModeSpeed 0x80
 
 long CdRead(long sectors, void *buf, long mode);
-long CdReadSync(long mode, long result);
+long CdReadSync(long mode, u_char *result);
 void CdReadBreak(void);
 /* cdread.c's `data_ready_callback`: drains one sector per CdReady interrupt. */
 void CdReadDataReadyCallback(u_char intr, long result);
@@ -125,10 +124,8 @@ void DecDCTinCallback(long callback);
 void DecDCToutCallback(long callback);
 
 long CD_init(long mode);
-/* PSY-Q: long CD_sync(long mode, u_char *result); see CD_cw above. */
-long CD_sync();
-/* PSY-Q: long CD_ready(long mode, u_char *result); see CD_cw above. */
-long CD_ready();
+long CD_sync(long mode, u_char *result);
+long CD_ready(long mode, u_char *result);
 long CD_cw(u_char command, u_char *params, u_char *result, long async);
 
 /* Declared identically by 65 translation units before this

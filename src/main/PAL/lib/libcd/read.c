@@ -49,9 +49,9 @@ long CdRead(long sectors, void *buf, long readMode) {
     return CdReadRetry(0) > 0;
 }
 
-long CdReadSync(long mode, long result) {
+long CdReadSync(long mode, u_char *result) {
     long savedMode;
-    long savedResult;
+    u_char *savedResult;
     volatile long *state;
     long status;
 
