@@ -102,7 +102,7 @@ s32 WriteMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *header) {
 s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
     GameSaveHeaderRow *buffer;
     s32 sum;
-    s32 i;
+    u32 i;
     u16 *ptr;
 
     buffer = header;
@@ -120,7 +120,7 @@ s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
 
     GameMenuLoadPhase = 0x140;
     ptr = buffer->halfwords;
-    for (i = 0; (u32)i < 0x3E; i++) {
+    for (i = 0; i < 0x3E; i++) {
         sum += ptr[i];
     }
     /* Folding the complement back into sum is what puts it in sum's own
@@ -144,7 +144,7 @@ s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
     GameMenuLoadPhase = 0x170;
     sum = 0;
     ptr = buffer->halfwords;
-    for (i = 0; (u32)i < 0x3E; i++) {
+    for (i = 0; i < 0x3E; i++) {
         sum += ptr[i];
     }
     /* Folding the complement back into sum is what puts it in sum's own

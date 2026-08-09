@@ -43,13 +43,13 @@ void InitRenderState(s32 otShift) {
 
 void RegisterModelBank(ModelBankHeader *base, s32 index) {
     AssetAddress *ptr;
-    s32 i;
+    u32 i;
 
     ptr = base->models;
     g_ModelBanks[index] = base;
     base->table.pointer = (u8 *)base + base->table.offset;
     base->normals.pointer = (u8 *)base + base->normals.offset;
-    for (i = 0; (u32)i < (u32)base->modelCount; i++) {
+    for (i = 0; i < base->modelCount; i++) {
         ptr->pointer = (u8 *)base + ptr->offset;
         ptr++;
     }
@@ -57,12 +57,12 @@ void RegisterModelBank(ModelBankHeader *base, s32 index) {
 
 void UnrelocateModelBank(ModelBankHeader *base, s32 offset) {
     AssetAddress *ptr;
-    s32 i;
+    u32 i;
 
     ptr = base->models;
     base->table.offset -= offset;
     base->normals.offset -= offset;
-    for (i = 0; (u32)i < (u32)base->modelCount; i++) {
+    for (i = 0; i < base->modelCount; i++) {
         ptr->offset -= offset;
         ptr++;
     }

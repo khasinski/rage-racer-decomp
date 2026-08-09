@@ -220,7 +220,7 @@ void InstallCourseAssets(void);
 void RelocateCarModel(void);
 
 typedef struct ModelBankHeader {
-    s32 modelCount;
+    u32 modelCount;
     AssetAddress table;
     AssetAddress normals;
     AssetAddress models[1];
