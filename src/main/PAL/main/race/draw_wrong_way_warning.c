@@ -143,9 +143,9 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         DrawSpeedDigits(cx, cy, g_PlayerSpeed * 160 / 1168);
     }
 
-    *(u8 *)(g_DrawBuffer + 0x236E8) = g_TachoFaceR;
-    *(u8 *)(g_DrawBuffer + 0x236E9) = g_TachoFaceG;
-    *(u8 *)(g_DrawBuffer + 0x236EA) = g_TachoFaceB;
+    ((SPRT *)(g_DrawBuffer + 0x236E4))->t.r0 = g_TachoFaceR;
+    ((SPRT *)(g_DrawBuffer + 0x236E4))->t.g0 = g_TachoFaceG;
+    ((SPRT *)(g_DrawBuffer + 0x236E4))->t.b0 = g_TachoFaceB;
 
     { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236CC); }
     { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236E4); }
