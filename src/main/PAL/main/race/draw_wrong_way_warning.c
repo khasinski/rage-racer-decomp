@@ -16,6 +16,11 @@ typedef union TachometerSpriteClutAddress {
     SPRT *spritePointer;
 } TachometerSpriteClutAddress;
 
+typedef union TachometerColorAddress {
+    u8 *components;
+    s32 *packed;
+} TachometerColorAddress;
+
 void DrawWrongWayWarning(void) {
     register SPRT *packet __asm("$16");
     SPRT *next;
@@ -121,6 +126,8 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         clutAddress.halfwordPointer = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
         *clutAddress.halfwordPointer = 0x33A8;
     } else if (type == 2) {
+        TachometerColorAddress packetColor;
+        TachometerColorAddress needleColor;
         TachometerSpriteClutAddress clutAddress;
 
         clutAddress.halfwordPointer = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
@@ -128,8 +135,12 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
         g_TachoFaceR = 0x80;
-        *(s32 *)&prim->t.r0 = *(s32 *)p->needleColorAlt;
+        packetColor.components = &prim->t.r0;
+        needleColor.components = p->needleColorAlt;
+        *packetColor.packed = *needleColor.packed;
     } else {
+        TachometerColorAddress packetColor;
+        TachometerColorAddress needleColor;
         TachometerSpriteClutAddress clutAddress;
         s16 rv = 0x33A8;
 
@@ -138,7 +149,9 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
         g_TachoFaceR = 0x80;
-        *(s32 *)&prim->t.r0 = *(s32 *)p->needleColor;
+        packetColor.components = &prim->t.r0;
+        needleColor.components = p->needleColor;
+        *packetColor.packed = *needleColor.packed;
     }
 
     prim->t.code = code7;
