@@ -208,23 +208,28 @@ s32 LoadSaveStateBlock(u8 *block) {
                     register RaceRecordAddress timeAddress asm("$2");
                     RaceRecordAddress destinationAddress;
                     register s32 *dst2 asm("$11");
-                    register s32 sb asm("$3");
-                    s32 s2;
+                    register GameSaveBlockAddress saveAddress asm("$3");
+                    RaceRecordAddress timeSourceAddress;
+                    RaceRecordAddress sourceAddress;
                     s32 *src2;
                     s32 *dst1;
                     register s32 *src1 asm("$6");
-                    s32 s1;
+                    RaceRecordAddress rankingSourceAddress;
                     k = 0;
                     timeAddress.wordPointer = cb78;
                     timeAddress.byteOffset = iofc + timeAddress.byteOffset;
                     destinationAddress.byteOffset = joff + timeAddress.byteOffset;
                     dst2 = destinationAddress.wordPointer;
-                    sb = iofc + (s32)base;
-                    s2 = sb + 0xCDC;
-                    src2 = (s32 *)(joff + s2);
+                    saveAddress.bytePointer = base;
+                    saveAddress.offset = iofc + saveAddress.offset;
+                    timeSourceAddress.pointer = &saveAddress.pointer->timeRecords[0][0][0];
+                    sourceAddress.byteOffset = joff + timeSourceAddress.byteOffset;
+                    src2 = sourceAddress.wordPointer;
                     dst1 = d1;
-                    s1 = sb + 0xA5C;
-                    src1 = (s32 *)(joff + s1);
+                    rankingSourceAddress.pointer =
+                        &saveAddress.pointer->rankingRecords[0][0][0];
+                    sourceAddress.byteOffset = joff + rankingSourceAddress.byteOffset;
+                    src1 = sourceAddress.wordPointer;
                     do {
                         s32 a0 = src1[0], a1 = src1[1], a2 = src1[2], a3 = src1[3];
                         dst1[0] = a0;
