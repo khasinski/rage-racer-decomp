@@ -148,21 +148,36 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
             switch (g_NegconMappingIndex) {
             case 0:
             case 5:
-                *(volatile s16 *)&p->acceleratorInput = (g_NegconAnalogI << 8) / 106;
+            {
+                CarInputAddress acceleratorInput;
+
+                acceleratorInput.pointer = &p->acceleratorInput;
+                *acceleratorInput.sampled = (g_NegconAnalogI << 8) / 106;
                 p->brakeInput = (g_NegconAnalogII << 8) / 106;
                 break;
+            }
             case 1:
             case 6:
-                *(volatile s16 *)&p->acceleratorInput = (g_NegconAnalogII << 8) / 106;
+            {
+                CarInputAddress acceleratorInput;
+
+                acceleratorInput.pointer = &p->acceleratorInput;
+                *acceleratorInput.sampled = (g_NegconAnalogII << 8) / 106;
                 p->brakeInput = (g_NegconAnalogI << 8) / 106;
                 break;
+            }
             case 2:
                 p->brakeInput = (g_NegconAnalogL << 8) / 106;
                 break;
             case 3:
-                *(volatile s16 *)&p->acceleratorInput = (g_NegconAnalogII << 8) / 106;
+            {
+                CarInputAddress acceleratorInput;
+
+                acceleratorInput.pointer = &p->acceleratorInput;
+                *acceleratorInput.sampled = (g_NegconAnalogII << 8) / 106;
                 p->brakeInput = (g_NegconAnalogL << 8) / 106;
                 break;
+            }
             case 4:
             case 7:
                 break;

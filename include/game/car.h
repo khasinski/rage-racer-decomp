@@ -357,6 +357,11 @@ typedef union CarInputValue {
     volatile s16 sampled;
 } CarInputValue;
 
+typedef union CarInputAddress {
+    s16 *pointer;
+    volatile s16 *sampled;
+} CarInputAddress;
+
 /* Drivetrain / input block beginning at +0xBC; the player physics code addresses
  * the car's second half through this rather than through GameCarRuntime.
  *
