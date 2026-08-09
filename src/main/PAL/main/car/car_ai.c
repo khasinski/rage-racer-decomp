@@ -383,52 +383,30 @@ advance:
 
 void SeedCarRouteMarkers(void) {
     s32 one = 1;
-    register s32 offset asm("a2") = 0;
-    register u8 *base asm("t0");
+    s32 carIndex;
     s32 scene;
-    s32 product;
-    s32 baseOffset;
     s32 index;
-    s32 tableOffset;
-    s32 raw;
     s32 target;
     s32 value;
 
     scene = g_RaceSeries;
-    base = (u8 *)g_TrackEventData;
-    product = scene * 9;
-    baseOffset = product * 64;
+    for (carIndex = 0; carIndex < 11; carIndex++) {
+        index = 0;
+        target = g_Cars[carIndex].trackProgress >> 4;
+        g_Cars[carIndex].routeMarkerActive = one;
 
-outer:
-    __asm__ volatile("" ::);
-    index = 0;
-    raw = ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackProgress;
-    tableOffset = baseOffset;
-    ((GameCarRuntime *)((u8 *)g_Cars + offset))->routeMarkerActive = one;
-    target = raw >> 4;
-
-inner:
-    value = ((TrackEventData *)(base + tableOffset))->aiSpeedKeys[0][0].progress;
-    if (target >= value) {
-        ((GameCarRuntime *)((u8 *)g_Cars + offset))->routeMarkerIndex = index;
-        offset += 0x19C;
-    } else {
-    if (value == -1) {
-        ((GameCarRuntime *)((u8 *)g_Cars + offset))->routeMarkerIndex = 0;
-        offset += 0x19C;
-    } else {
-    __asm__ volatile("" ::);
-    index++;
-    if (index < 0x30) {
-        tableOffset += 0xC;
-        goto inner;
-    }
-    offset += 0x19C;
-
-    }
-    }
-    if (offset < 0x11B4) {
-        goto outer;
+        while (index < 0x30) {
+            value = g_TrackEventData->aiSpeedKeys[scene][index].progress;
+            if (target >= value) {
+                g_Cars[carIndex].routeMarkerIndex = index;
+                break;
+            }
+            if (value == -1) {
+                g_Cars[carIndex].routeMarkerIndex = 0;
+                break;
+            }
+            index++;
+        }
     }
 }
 
