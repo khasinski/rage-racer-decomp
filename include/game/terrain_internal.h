@@ -49,6 +49,5 @@ typedef struct SkyCVec {
 } SkyCVec;
 
 extern SkyTileUV g_SkyTileUV[];
-extern GameEnvColorSlot g_EnvColors[9];
 
 #endif

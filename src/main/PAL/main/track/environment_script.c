@@ -46,15 +46,15 @@ void SeekEnvironmentScript(s32 targetTime) {
         g_EnvScriptCursor += tailCount;
     }
 
-    g_EnvColors[0].cur = g_EnvScriptCursor->colors[0];
-    g_EnvColors[1].cur = g_EnvScriptCursor->colors[1];
-    g_EnvColors[2].cur = g_EnvScriptCursor->colors[2];
-    g_EnvColors[3].cur = g_EnvScriptCursor->colors[3];
-    g_EnvColors[4].cur = g_EnvScriptCursor->colors[4];
-    g_EnvColors[5].cur = g_EnvScriptCursor->colors[5];
-    g_EnvColors[6].cur = g_EnvScriptCursor->colors[6];
-    g_EnvColors[7].cur = g_EnvScriptCursor->colors[7];
-    g_EnvColors[8].cur = g_EnvScriptCursor->colors[8];
+    g_EnvironmentColors.fields.slots[0].cur = g_EnvScriptCursor->colors[0];
+    g_EnvironmentColors.fields.slots[1].cur = g_EnvScriptCursor->colors[1];
+    g_EnvironmentColors.fields.slots[2].cur = g_EnvScriptCursor->colors[2];
+    g_EnvironmentColors.fields.slots[3].cur = g_EnvScriptCursor->colors[3];
+    g_EnvironmentColors.fields.slots[4].cur = g_EnvScriptCursor->colors[4];
+    g_EnvironmentColors.fields.slots[5].cur = g_EnvScriptCursor->colors[5];
+    g_EnvironmentColors.fields.slots[6].cur = g_EnvScriptCursor->colors[6];
+    g_EnvironmentColors.fields.slots[7].cur = g_EnvScriptCursor->colors[7];
+    g_EnvironmentColors.fields.slots[8].cur = g_EnvScriptCursor->colors[8];
 
     g_EnvironmentMode = g_EnvScriptCursor->mode;
     nextId = RAW(g_EnvScriptCursor[1].time);
@@ -84,7 +84,7 @@ void SeekEnvironmentScript(s32 targetTime) {
         g_EnvScriptCursor = g_EnvScriptCues;
     }
 
-    fogOut = (s16 *)((u8 *)&g_EnvColors[0].from - 6);
+    fogOut = &g_EnvironmentColors.fields.fogEnabled;
     g_EnvScriptEnabled = 1;
     *fogOut = 1;
     UpdateEnvironment();
@@ -94,14 +94,14 @@ void SeekEnvironmentScript(s32 targetTime) {
         g_EnvScriptEnabled = 0;
     }
     fogTarget = fogOut;
-    if ((*(u32 *)fogOut & 0xFFFF0000) != 0x80800000 ||
-        g_EnvColors[0].cur.bytes.b != 0x80) {
+    if ((g_EnvironmentColors.fogColorWord & 0xFFFF0000) != 0x80800000 ||
+        g_EnvironmentColors.fields.slots[0].cur.bytes.b != 0x80) {
         fog = 1;
     }
     *fogTarget = fog;
-    SetFarColor(g_EnvColors[0].cur.bytes.r,
-                g_EnvColors[0].cur.bytes.g,
-                g_EnvColors[0].cur.bytes.b);
+    SetFarColor(g_EnvironmentColors.fields.slots[0].cur.bytes.r,
+                g_EnvironmentColors.fields.slots[0].cur.bytes.g,
+                g_EnvironmentColors.fields.slots[0].cur.bytes.b);
 
     if (g_EnvironmentMode == 2) {
         g_FogNear = 0x7FFF;
@@ -140,7 +140,7 @@ void UpdateEnvironment(void) {
 
     g_EnvScriptClock = (g_EnvScriptClock < g_EnvScriptLength) ? g_EnvScriptClock + 1 : 0;
 
-    if (g_EnvFogEnabled == 0) {
+    if (g_EnvironmentColors.fields.fogEnabled == 0) {
         return;
     }
 
@@ -189,40 +189,40 @@ void UpdateEnvironment(void) {
     rect.h = 0x1;
     LoadImage(&rect);
 
-    LerpEnvColor(&g_EnvColors[0].from, &g_EnvColors[0].to,
-                 &g_EnvColors[0].cur, frac);
-    LerpEnvColor(&g_EnvColors[1].from, &g_EnvColors[1].to,
-                 &g_EnvColors[1].cur, frac);
-    LerpEnvColor(&g_EnvColors[2].from, &g_EnvColors[2].to,
-                 &g_EnvColors[2].cur, frac);
-    LerpEnvColor(&g_EnvColors[3].from, &g_EnvColors[3].to,
-                 &g_EnvColors[3].cur, frac);
-    LerpEnvColor(&g_EnvColors[4].from, &g_EnvColors[4].to,
-                 &g_EnvColors[4].cur, frac);
+    LerpEnvColor(&g_EnvironmentColors.fields.slots[0].from, &g_EnvironmentColors.fields.slots[0].to,
+                 &g_EnvironmentColors.fields.slots[0].cur, frac);
+    LerpEnvColor(&g_EnvironmentColors.fields.slots[1].from, &g_EnvironmentColors.fields.slots[1].to,
+                 &g_EnvironmentColors.fields.slots[1].cur, frac);
+    LerpEnvColor(&g_EnvironmentColors.fields.slots[2].from, &g_EnvironmentColors.fields.slots[2].to,
+                 &g_EnvironmentColors.fields.slots[2].cur, frac);
+    LerpEnvColor(&g_EnvironmentColors.fields.slots[3].from, &g_EnvironmentColors.fields.slots[3].to,
+                 &g_EnvironmentColors.fields.slots[3].cur, frac);
+    LerpEnvColor(&g_EnvironmentColors.fields.slots[4].from, &g_EnvironmentColors.fields.slots[4].to,
+                 &g_EnvironmentColors.fields.slots[4].cur, frac);
     if (g_CourseIndex == 2) {
-        LerpEnvColor(&g_EnvColors[5].from, &g_EnvColors[5].to,
-                     &g_EnvColors[5].cur, frac);
-        LerpEnvColor(&g_EnvColors[6].from, &g_EnvColors[6].to,
-                     &g_EnvColors[6].cur, frac);
+        LerpEnvColor(&g_EnvironmentColors.fields.slots[5].from, &g_EnvironmentColors.fields.slots[5].to,
+                     &g_EnvironmentColors.fields.slots[5].cur, frac);
+        LerpEnvColor(&g_EnvironmentColors.fields.slots[6].from, &g_EnvironmentColors.fields.slots[6].to,
+                     &g_EnvironmentColors.fields.slots[6].cur, frac);
     } else {
-        LerpEnvColor(&g_EnvColors[7].from, &g_EnvColors[7].to,
-                     &g_EnvColors[7].cur, frac);
-        LerpEnvColor(&g_EnvColors[8].from, &g_EnvColors[8].to,
-                     &g_EnvColors[8].cur, frac);
+        LerpEnvColor(&g_EnvironmentColors.fields.slots[7].from, &g_EnvironmentColors.fields.slots[7].to,
+                     &g_EnvironmentColors.fields.slots[7].cur, frac);
+        LerpEnvColor(&g_EnvironmentColors.fields.slots[8].from, &g_EnvironmentColors.fields.slots[8].to,
+                     &g_EnvironmentColors.fields.slots[8].cur, frac);
     }
 
-    SetFarColor(g_EnvColors[0].cur.bytes.r,
-                g_EnvColors[0].cur.bytes.g,
-                g_EnvColors[0].cur.bytes.b);
+    SetFarColor(g_EnvironmentColors.fields.slots[0].cur.bytes.r,
+                g_EnvironmentColors.fields.slots[0].cur.bytes.g,
+                g_EnvironmentColors.fields.slots[0].cur.bytes.b);
 
     if (g_EnvSpareLerp != 0) {
-        g_EnvSpare = (g_EnvSpareFrom * diff + g_EnvSpareTo * g_EnvLerpFrame) / g_EnvLerpDuration;
+        g_EnvironmentColors.fields.slots[0].cur.bytes.unused = (g_EnvSpareFrom * diff + g_EnvSpareTo * g_EnvLerpFrame) / g_EnvLerpDuration;
     }
 
     if (g_EnvLerpFrame == g_EnvLerpDuration) {
-        if ((*(u32 *)&g_EnvFogEnabled & 0xFFFF0000) == 0x80800000 &&
-            g_EnvColors[0].cur.bytes.b == 0x80) {
-            g_EnvFogEnabled = 0;
+        if ((g_EnvironmentColors.fogColorWord & 0xFFFF0000) == 0x80800000 &&
+            g_EnvironmentColors.fields.slots[0].cur.bytes.b == 0x80) {
+            g_EnvironmentColors.fields.fogEnabled = 0;
         }
     }
 

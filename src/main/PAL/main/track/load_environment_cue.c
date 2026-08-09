@@ -10,26 +10,26 @@ void LoadEnvironmentCue(GameEnvironmentCue *cue) {
     s32 field28;
     u32 flag;
 
-    g_EnvFogEnabled = 1;
+    g_EnvironmentColors.fields.fogEnabled = 1;
 
-    g_EnvColors[0].to = cue->colors[0];
-    g_EnvColors[0].from = g_EnvColors[0].cur;
-    g_EnvColors[1].to = cue->colors[1];
-    g_EnvColors[1].from = g_EnvColors[1].cur;
-    g_EnvColors[2].to = cue->colors[2];
-    g_EnvColors[2].from = g_EnvColors[2].cur;
-    g_EnvColors[3].to = cue->colors[3];
-    g_EnvColors[3].from = g_EnvColors[3].cur;
-    g_EnvColors[4].to = cue->colors[4];
-    g_EnvColors[4].from = g_EnvColors[4].cur;
-    g_EnvColors[5].to = cue->colors[5];
-    g_EnvColors[5].from = g_EnvColors[5].cur;
-    g_EnvColors[6].to = cue->colors[6];
-    g_EnvColors[6].from = g_EnvColors[6].cur;
-    g_EnvColors[7].to = cue->colors[7];
-    g_EnvColors[7].from = g_EnvColors[7].cur;
-    g_EnvColors[8].to = cue->colors[8];
-    g_EnvColors[8].from = g_EnvColors[8].cur;
+    g_EnvironmentColors.fields.slots[0].to = cue->colors[0];
+    g_EnvironmentColors.fields.slots[0].from = g_EnvironmentColors.fields.slots[0].cur;
+    g_EnvironmentColors.fields.slots[1].to = cue->colors[1];
+    g_EnvironmentColors.fields.slots[1].from = g_EnvironmentColors.fields.slots[1].cur;
+    g_EnvironmentColors.fields.slots[2].to = cue->colors[2];
+    g_EnvironmentColors.fields.slots[2].from = g_EnvironmentColors.fields.slots[2].cur;
+    g_EnvironmentColors.fields.slots[3].to = cue->colors[3];
+    g_EnvironmentColors.fields.slots[3].from = g_EnvironmentColors.fields.slots[3].cur;
+    g_EnvironmentColors.fields.slots[4].to = cue->colors[4];
+    g_EnvironmentColors.fields.slots[4].from = g_EnvironmentColors.fields.slots[4].cur;
+    g_EnvironmentColors.fields.slots[5].to = cue->colors[5];
+    g_EnvironmentColors.fields.slots[5].from = g_EnvironmentColors.fields.slots[5].cur;
+    g_EnvironmentColors.fields.slots[6].to = cue->colors[6];
+    g_EnvironmentColors.fields.slots[6].from = g_EnvironmentColors.fields.slots[6].cur;
+    g_EnvironmentColors.fields.slots[7].to = cue->colors[7];
+    g_EnvironmentColors.fields.slots[7].from = g_EnvironmentColors.fields.slots[7].cur;
+    g_EnvironmentColors.fields.slots[8].to = cue->colors[8];
+    g_EnvironmentColors.fields.slots[8].from = g_EnvironmentColors.fields.slots[8].cur;
 
     field28 = RAW(cue->duration);
     mode = g_EnvironmentMode;
@@ -42,7 +42,7 @@ void LoadEnvironmentCue(GameEnvironmentCue *cue) {
     compareMode = 4;
 
     if (g_EnvSpareLerp != 0) {
-        g_EnvSpareFrom = g_EnvSpare;
+        g_EnvSpareFrom = g_EnvironmentColors.fields.slots[0].cur.bytes.unused;
         g_EnvSpareTo = RAW(cue->spareTarget);
     }
 

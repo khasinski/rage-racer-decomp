@@ -30,4 +30,14 @@ typedef struct GameEnvColorSlot {
     GameEnvColor to;
 } GameEnvColorSlot;
 
+typedef union GameEnvironmentColors {
+    struct {
+        s16 fogEnabled;
+        GameEnvColorSlot slots[9];
+    } fields;
+    u32 fogColorWord;
+} GameEnvironmentColors;
+
+extern GameEnvironmentColors g_EnvironmentColors;
+
 #endif

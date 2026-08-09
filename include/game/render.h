@@ -829,7 +829,7 @@ void SetGteObjectMatrix();
 
 /*
  * The environment colour timeline and the sky it feeds. The state is nine
- * 12-byte { cur, from, to } RGB slots at g_EnvColors + 0x0C * k - slot 0 the GTE
+ * 12-byte { cur, from, to } RGB slots in g_EnvironmentColors - slot 0 the GTE
  * far/fog colour, 1..8 the sky gradient - lerped every frame by UpdateEnvironment.
  */
 /* One packed RGB triple of that timeline. The block starts at 0x801E3FB6, i.e.
@@ -839,11 +839,9 @@ void SetGteObjectMatrix();
  * LoadEnvironmentCue rolls `cur` into `from` and the cue's value into `to`;
  * UpdateEnvironment walks `cur` across over g_EnvLerpDuration frames. */
 /* The nine slots. [0] is the GTE far/fog colour (SetFarColor takes its three
- * bytes; g_EnvSpare is its unused fourth byte), [1..8] the sky-gradient bands.
+ * bytes; its unused fourth byte carries auxiliary state), [1..8] the sky-gradient bands.
  * Only six are lerped on a given course: [5]/[6] and [7]/[8] are alternates
  * picked by g_CourseIndex == 2. */
-extern GameEnvColorSlot g_EnvColors[9];
-
 /* Jumps that timeline to `time` and applies one frame, then programs
  * SetFarColor + SetFogNear. */
 void SeekEnvironmentScript(s32 targetTime);
