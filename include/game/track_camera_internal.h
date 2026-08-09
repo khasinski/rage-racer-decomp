@@ -44,7 +44,11 @@ typedef struct TrackCameraTable {
 
 static __inline__ GameTrackCameraNode *ResolveTrackCameraOffset(
     TrackCameraTable *table, s32 offset) {
-    return (GameTrackCameraNode *)((u8 *)table + offset);
+    GameTrackCameraNodeAddress address;
+
+    address.pointer = (GameTrackCameraNode *)table;
+    address.value += offset;
+    return address.pointer;
 }
 
 extern GameTrackCameraNode *g_TrackCameras;
