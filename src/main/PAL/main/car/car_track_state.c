@@ -78,7 +78,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     nextPointIndex = (trackPointIndex + 1) % *(s32 *)0x8009E6A8;
     pointsBase = *(s32 *)0x8009E688;
     spad = CAR_TRACK_SCRATCH;
-    spad->field_3C = 0;
+    spad->knockbackMode = 0;
     point = (GameTrackPoint *)((trackPointIndex * 0x18) + pointsBase);
     segmentLength = point->segmentLength;
     spad->segmentLength = segmentLength;
@@ -195,7 +195,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     spad->offsetX = (u16)(((u16)obj->x - (u16)point->x) * 4);
     headingAngle = spad->heading;
     spad->offsetZ = (s16)(((u16)obj->z - (u16)point->z) * 4);
-    spad->field_62 = 0;
+    spad->offsetY = 0;
     cosHeading = rcos(headingAngle);
     rotated = (cosHeading * (s16) spad->offsetX) + (rsin(spad->heading) * spad->offsetZ);
     if (rotated < 0)
@@ -229,7 +229,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     {
         lateralOffset += leftLimit;
         spad->offsetX = 0U;
-        spad->field_62 = 0;
+        spad->offsetY = 0;
         spad->offsetZ = lateralOffset;
         BuildRotMatrixY(clampSource, spad->heading);
         ApplyMatrix(clampSource, &spad->offsetX, &spad->correctionX);
@@ -240,7 +240,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         obj->x = obj->x - spad->correctionX;
         obj->z = obj->z - spad->correctionZ;
         lateralOffset = -spad->leftHalfWidth - limits->leftInset;
-        spad->field_3C = limits->leftKnockbackMode;
+        spad->knockbackMode = limits->leftKnockbackMode;
     }
     else
     {
@@ -249,7 +249,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     {
         lateralOffset -= rightLimit;
         spad->offsetX = 0U;
-        spad->field_62 = 0;
+        spad->offsetY = 0;
         spad->offsetZ = lateralOffset;
         BuildRotMatrixY(clampSource, spad->heading);
         ApplyMatrix(clampSource, &spad->offsetX, &spad->correctionX);
@@ -260,7 +260,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         obj->x = obj->x - spad->correctionX;
         obj->z = obj->z - spad->correctionZ;
         lateralOffset = spad->rightHalfWidth - limits->rightInset;
-        spad->field_3C = limits->rightKnockbackMode;
+        spad->knockbackMode = limits->rightKnockbackMode;
     }
     }
     if ((s16)spad->segmentLength < alongSegment)
@@ -380,7 +380,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
             obj->trackSection = (s16)(finalAngle >> 8);
         }
     }
-    return spad->field_3C;
+    return spad->knockbackMode;
 }
 
 typedef struct Car {

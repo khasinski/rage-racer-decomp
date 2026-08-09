@@ -130,7 +130,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
     CarTrackScratch *spad;
 
     spad = CAR_TRACK_SCRATCH;
-    spad->field_3C = 0;
+    spad->knockbackMode = 0;
     trackPointIndex = car->trackPointIndex;
     nextPointIndex = (trackPointIndex + 1) % *(s32 *)0x8009E6A8;
     pointsBase = *(s32 *)0x8009E688;
@@ -237,7 +237,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
     spad->offsetX = (u16)(((u16)car->x - (u16)point->x) * 4);
     headingAngle = spad->heading;
     spad->offsetZ = (s16)(((u16)car->z - (u16)point->z) * 4);
-    spad->field_62 = 0;
+    spad->offsetY = 0;
     cosHeading = rcos(headingAngle);
     rotated = (cosHeading * (s16)spad->offsetX) +
              (rsin(spad->heading) * spad->offsetZ);
