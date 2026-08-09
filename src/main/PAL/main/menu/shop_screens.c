@@ -294,7 +294,7 @@ void UpdateCarShopScreen(void) {
 }
 
 u32 DrawEngineerShopScreen(s32 step) {
-    u32 value;
+    s32 value;
     s32 amount;
 
     if (step == 0) {
@@ -305,7 +305,7 @@ u32 DrawEngineerShopScreen(s32 step) {
     if (step > 0) {
         value = step + g_EngineSpecStep;
         g_EngineSpecStep = value;
-        if ((s32)value >= 0x1FD) {
+        if (value >= 0x1FD) {
             g_EngineSpecStep = 0x1FC;
         }
         amount = 0;
@@ -315,7 +315,7 @@ u32 DrawEngineerShopScreen(s32 step) {
 
         value = step + g_EngineSpecStep;
         g_EngineSpecStep = value;
-        if ((s32)value < 0) {
+        if (value < 0) {
             g_EngineSpecStep = 0;
         }
         diff -= g_EngineSpecStep;
