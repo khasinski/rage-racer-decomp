@@ -128,19 +128,19 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   config.pointer = g_CarSpec;
   gear = car->drive.gear;
   gearRatioSlot.byteOffset = config.byteOffset + (gear * 4);
-  gearCurve = (gear * 64) + base.bytes;
+  gearCurve = (u8 *)base.rowPointer[gear].values;
   gearRatio = gearRatioSlot.pointer->gearLoad[0];
   drive = &car->drive;
   if (g_RacePhase < 2)
   {
     car->drive.gearDisp = gear;
     gearRatio = config.pointer->gearLoad[1];
-    gearCurve = base.bytes;
+    gearCurve = (u8 *)base.rowPointer[0].values;
   }
   else
     if ((car->drive.motionState == CAR_MOTION_STANDING_START) && ((car->drive.acceleratorInput < 0x40) || (car->drive.brakeInput >= 0x80)))
   {
-    gearCurve = base.bytes;
+    gearCurve = (u8 *)base.rowPointer[0].values;
   }
   leftWheelState = drive->acceleratorLatch;
   if (leftWheelState == 0)
