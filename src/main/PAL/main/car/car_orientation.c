@@ -6,7 +6,6 @@
 #include "game/car.h"
 #include "game/car_internal.h"
 #define GAME_INPUT_BUTTON_TYPE s16
-#define GAME_INPUT_CALIBRATION_TYPE s16
 #include "game/input_internal.h"
 #include "game/race.h"
 #include "game/menu.h"

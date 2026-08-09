@@ -6,7 +6,6 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
-#define GAME_INPUT_CALIBRATION_TYPE s16
 #include "game/input_internal.h"
 
 /* Copied into a local solely to preserve the retail code shape. */
