@@ -60,7 +60,7 @@ void UpdateRouteScenery(void) {
             value = r3->rotationZ;
             g_RouteSceneryKeyframe = r3;
             g_RouteSceneryRotZ = value;
-            *(Vec4 *)&g_RouteSceneryX = (idx + base->start)->position;
+            SetRouteSceneryPosition(&(idx + base->start)->position);
             *cnt = 1;
             g_RouteSceneryFrame = 0;
         }

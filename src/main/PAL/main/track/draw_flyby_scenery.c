@@ -45,7 +45,7 @@ void SeedRouteScenery(void) {
     series0 = g_RaceSeries;
     data = g_RouteSceneryData;
     series1 = g_RaceSeries;
-    *(Vec4 *)&g_RouteSceneryX = (series0 + data->start)->position;
+    SetRouteSceneryPosition(&(series0 + data->start)->position);
 
     keyframeIndex = (series1 + data->firstKeyframe)[0]
         [(g_RouteSceneryKeyIndex = 0, g_RouteSceneryFrame = 0, 0)];

@@ -321,6 +321,11 @@ extern s32 g_RouteSceneryRotZ;
  * tail, so its component accesses were not member accesses.
  */
 extern s32 g_RouteSceneryX;
+
+static inline void SetRouteSceneryPosition(const Vec4 *position) {
+    *(Vec4 *)&g_RouteSceneryX = *position;
+}
+
 extern s16 g_ShuttlePathDwellMax[];
 
 void InterpolateTrackPoint(s32 pointIndex, s32* out, s32 weight);
