@@ -22,9 +22,9 @@ void InstallTrackEventData(u8 *eventData) {
     u8 *callArg;
     u8 *base;
 
-    offset0 = *(s32 *)(eventData + 0xB78);
-    offset1 = *(s32 *)(eventData + 0xB68);
-    base = eventData + 0xB64;
+    offset0 = ((TrackEventData *)eventData)->offsets.flybyScenery;
+    offset1 = ((TrackEventData *)eventData)->offsets.raceIntroCamera;
+    base = (u8 *)&((TrackEventData *)eventData)->offsets;
     g_TrackEventData = (TrackEventData *)eventData;
     g_FlybySceneryData = (SceneryMotionData *)(base + offset0);
     offset0 = *(s32 *)(eventData + 0xB64);
