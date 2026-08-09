@@ -248,9 +248,9 @@ typedef struct GameRenderObject {
     s32 stepZ;
     s32 field_D0;
     s32 field_D4;
-    s32 field_D8;
-    s32 field_DC;
-    s32 field_E0;
+    s32 reservedD8;
+    s32 reservedDC;
+    s32 reservedE0;
     s32 renderDepth;   /* 0xE4 */
 } GameRenderObject;
 

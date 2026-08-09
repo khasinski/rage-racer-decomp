@@ -39,7 +39,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
     lateral = car->aiLateralOffset;
     offset = car->trackPointIndex;
     ai = (GameCarAiBlock *)&car->aiEnabled;
-    car->field_DC = 0;
+    car->reservedDC = 0;
 
     if (g_RaceSeries != 0) {
         index = offset + 2;
@@ -131,7 +131,7 @@ void UpdateRaceCars(void) {
     i = 0;
     q = g_Cars;
     do {
-        q->field_F8 = 0;
+        q->reservedF8 = 0;
         q->bodyYaw = q->baseBodyYaw;
         q->collisionFlag = (u16)q->collisionFlag & 1;
         i++;
@@ -398,7 +398,7 @@ void UpdateAttractCars(void) {
     GameCarRuntime *c0;
     c0 = g_Cars;
     for (i = 0; i < 11; i++) {
-        c0->field_F8 = 0;
+        c0->reservedF8 = 0;
         c0->collisionFlag = 0;
         c0->bodyYaw = c0->baseBodyYaw;
         c0->progressA = ((c0->progressA) % (g_TrackLength));

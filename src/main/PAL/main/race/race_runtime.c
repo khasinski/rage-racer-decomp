@@ -515,17 +515,17 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->speed = 0;
         ent->acceleration = 0;
         ent->worldVelocityZ = 0;
-        ent->field_CC = 0;
+        ent->reservedCC = 0;
         ent->worldVelocityX = 0;
-        ent->field_E0 = 0;
-        ent->field_DC = 0;
-        ent->field_D8 = 0;
+        ent->reservedE0 = 0;
+        ent->reservedDC = 0;
+        ent->reservedD8 = 0;
         ent->motionZ = 0;
         ent->motionY = 0;
         ent->motionX = 0;
         ent->routeIndex = 0;
-        ent->field_116 = 0;
-        ent->field_110 = 0;
+        ent->reserved116 = 0;
+        ent->reserved110 = 0;
         ent->yawRate = 0;
         ent->routeMarkerActive = 0;
         ent->slideInput.value = 0;
@@ -533,9 +533,9 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         p = base + (sub + lev * 144);
         ent->targetYaw = ent->bodyYaw;
         ent->headingAngle = ent->bodyYaw;
-        ent->field_F8 = 0;
+        ent->reservedF8 = 0;
         ent->avoidanceActive = 0;
-        ent->field_C4 = 0;
+        ent->reservedC4 = 0;
         ent->routeMarkerIndex = 0;
         SeedCarLapProgress(ent, ((TrackEventData *)p)->rivalStarts[0][0].modelId);
     }
