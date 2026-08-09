@@ -426,7 +426,7 @@ void SampleTrackSurfaceHeight(Car *car) {
     v.vz = car->z - p1->z;
     v.vy = 0;
     BuildRotMatrixY(&mtx, (0x1000 - p1->angle) & 0xFFF);
-    ApplyMatrix((s32 *)&mtx, (s32 *)&v, (s32 *)&out);
+        ApplyMatrix(&mtx, &v, &out);
 
     t = out.x;
     oz = out.z;

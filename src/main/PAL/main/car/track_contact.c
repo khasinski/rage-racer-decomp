@@ -56,7 +56,7 @@ s32 GetTrackSurfaceHeight(TrackSurfaceCell *cell) {
     next = &g_TrackPoints[nextIndex];
     BuildRotMatrixY(&mtx, (0x1000 - angle) & 0xFFF);
 
-    ApplyMatrix((s32 *)&mtx, (s32 *)vec, out);
+    ApplyMatrix(&mtx, vec, out);
 
     segmentLengthCompare = (s16)segmentLengthRaw;
     distance = out[0];

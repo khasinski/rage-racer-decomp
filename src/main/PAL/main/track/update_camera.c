@@ -134,7 +134,7 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
         sp68[6] = sp48[2];
         sp68[7] = sp48[5];
         sp68[8] = sp48[8];
-        ApplyMatrix((s32 *)&sp68[0], (s32 *)&sp10[0], &sp38[0]);
+        ApplyMatrix(&sp68[0], &sp10[0], &sp38[0]);
         scratch[2] += sp38[0] >> 4;
         scratch[3] += sp38[1] >> 4;
         scratch[4] += sp38[2] >> 4;

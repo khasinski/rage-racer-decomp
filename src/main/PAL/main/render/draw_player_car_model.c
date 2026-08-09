@@ -122,7 +122,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
         v_110[0] = ax;
         v_110[1] = v->modelOffsetY;
         v_110[2] = v->modelOffsetZ;
-        ApplyMatrix((s32 *)&m_50, (s32 *)v_110, m_118);
+        ApplyMatrix(&m_50, v_110, m_118);
         m_118[0] += obj->x;
         m_118[1] += obj->y;
         m_118[2] += obj->z;
@@ -258,7 +258,7 @@ void DrawCar(GameRenderObject *obj) {
                 v_110[0] = ax;
                 v_110[1] = ((CamRow *)(g_CamRow + (model << 3)))->axis1;
                 v_110[2] = ((CamRow *)(g_CamRow + (model << 3)))->axis2;
-                ApplyMatrix((s32 *)&m_50, (s32 *)v_110, m_118);
+                ApplyMatrix(&m_50, v_110, m_118);
                 m_118[0] += obj->x;
                 m_118[1] += obj->y;
                 m_118[2] += obj->z;

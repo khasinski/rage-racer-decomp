@@ -92,7 +92,7 @@ void UpdateRouteScenery(void) {
     MulMatrix2(&mtx0, &mtx1);
     BuildRotMatrixZ(&mtx0, g_RouteSceneryRotZ);
     MulMatrix(&mtx1, &mtx0);
-    ApplyMatrix((s32 *)&mtx1, (s32 *)&vin, (s32 *)&vout);
+    ApplyMatrix(&mtx1, &vin, &vout);
 
     g_RouteSceneryX += vout.x / 4;
     g_RouteSceneryY += vout.y / 4;
