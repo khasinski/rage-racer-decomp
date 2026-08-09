@@ -7,13 +7,13 @@ void BuildRaceHudPrims(s32 mode) {
     u8 *cursor;
     s32 col;
     s32 row;
-    s32 rowOffset;
+    RenderBufferAddress rowOffset;
 
     if (mode != 0) {
         s32 bufferOffset;
 
         row = 0;
-        rowOffset = 0;
+        rowOffset.byteOffset = 0;
 
 nonzero_outer:
         col = 0;
@@ -26,9 +26,9 @@ nonzero_inner:
 
             dst = g_TachoNeedlePrim0PageA;
             dst = bufferOffset + dst;
-            offset = rowOffset + 0x2C;
+            offset = rowOffset.byteOffset + 0x2C;
             dst += offset;
-            BuildSpriteFromDesc(dst, g_RaceHudSpriteDescsGp + rowOffset);
+            BuildSpriteFromDesc(dst, g_RaceHudSpriteDescsGp + rowOffset.byteOffset);
         }
         if (g_GrandPrixClass == 5 && row == 0xB) {
             cursor[0] += 0xE8;
@@ -40,7 +40,7 @@ nonzero_inner:
             goto nonzero_inner;
         }
         row++;
-        rowOffset += 0x14;
+        rowOffset.byteOffset += 0x14;
         if (row < 0xC) {
             goto nonzero_outer;
         }
@@ -48,12 +48,12 @@ nonzero_inner:
         s32 bufferOffset;
 
         row = 0;
-        rowOffset = (s32)g_TachoNeedlePrim0PageA;
+        rowOffset.bytes = g_TachoNeedlePrim0PageA;
         bufferOffset = 0;
 
 zero_outer:
         col = 0;
-        cursor = (u8 *)rowOffset;
+        cursor = rowOffset.bytes;
 zero_inner:
         BuildSpriteFromDesc(cursor + (bufferOffset + 0x2C), g_RaceHudSpriteDescsTimeTrial + bufferOffset);
         cursor += 0x237E8;
