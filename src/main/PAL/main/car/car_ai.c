@@ -29,7 +29,7 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
     car->motionModeTimer--;
     if ((s16)car->motionModeTimer == 0) {
         car->motionMode = 0;
-        car->field_92 = 0;
+        car->bodyKickOffset = 0;
     }
 
     {
@@ -52,10 +52,10 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
     switch (car->motionMode) {
     case 1:
     case 5:
-        car->field_92 = value + amplitude;
-        car->bodyPitch += car->field_92;
-        car->field_92 = value + amplitude / 2;
-        car->bodyRoll += car->field_92 / 2;
+        car->bodyKickOffset = value + amplitude;
+        car->bodyPitch += car->bodyKickOffset;
+        car->bodyKickOffset = value + amplitude / 2;
+        car->bodyRoll += car->bodyKickOffset / 2;
         break;
 
     case 2:
@@ -66,8 +66,8 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
         break;
 
     case 3:
-        car->field_92 = value + amplitude;
-        car->bodyPitch += car->field_92;
+        car->bodyKickOffset = value + amplitude;
+        car->bodyPitch += car->bodyKickOffset;
         break;
 
     case 4:

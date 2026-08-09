@@ -234,7 +234,7 @@ typedef struct GameRenderObject {
     s16 tiltCounter;
     s16 field_8E;
     s16 verticalPitch;
-    s16 field_92;
+    s16 bodyKickOffset;
     s16 verticalRoll;
     s16 field_96;
     s16 shiftState;
