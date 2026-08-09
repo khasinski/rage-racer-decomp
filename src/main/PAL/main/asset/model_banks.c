@@ -47,10 +47,10 @@ void RegisterModelBank(ModelBankHeader *base, s32 index) {
 
     ptr = base->models;
     g_ModelBanks[index] = base;
-    base->table.pointer = (u8 *)base + base->table.offset;
-    base->normals.pointer = (u8 *)base + base->normals.offset;
+    base->table.pointer = ResolveAssetAddress(base, base->table.offset);
+    base->normals.pointer = ResolveAssetAddress(base, base->normals.offset);
     for (i = 0; i < base->modelCount; i++) {
-        ptr->pointer = (u8 *)base + ptr->offset;
+        ptr->pointer = ResolveAssetAddress(base, ptr->offset);
         ptr++;
     }
 }
@@ -115,8 +115,8 @@ void RegisterCourseModels(CourseModelAssetHeader *base) {
     if (count > 0) {
         limit = count;
         do {
-            entry->geometry.pointer = (u8 *)base + entry->geometry.offset;
-            entry->model.pointer = (u8 *)base + entry->model.offset;
+            entry->geometry.pointer = ResolveAssetAddress(base, entry->geometry.offset);
+            entry->model.pointer = ResolveAssetAddress(base, entry->model.offset);
             entry++;
             i++;
         } while (i < limit);

@@ -66,7 +66,7 @@ void LoadCarSelectAssets(void) {
 
                 imageHeader = (GameSceneAssetHeader *)g_AssetLoadCursor;
                 assetOffset = imageHeader->offsets[2];
-                g_AssetBlockPtr = (u8 *)imageHeader + assetOffset;
+                g_AssetBlockPtr = GetSceneAssetAddress(imageHeader, assetOffset);
                 UploadImageAsset(g_AssetBlockPtr);
 
                 g_AssetLoadState = 4;
