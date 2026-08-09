@@ -37,6 +37,11 @@ typedef struct TrackCameraTable {
     s32 defaultOffset;
 } TrackCameraTable;
 
+static __inline__ GameTrackCameraNode *ResolveTrackCameraOffset(
+    TrackCameraTable *table, s32 offset) {
+    return (GameTrackCameraNode *)((u8 *)table + offset);
+}
+
 extern GameTrackCameraNode *g_TrackCameras;
 extern u16 g_TrackSectionCount;
 

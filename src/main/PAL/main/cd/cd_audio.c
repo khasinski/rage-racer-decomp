@@ -192,5 +192,5 @@ void SelectTrackCameraTable(void *block, s32 variant) {
         offset = table->defaultOffset;
     }
 
-    g_TrackCameras = (GameTrackCameraNode *)((u8 *)block + offset);
+    g_TrackCameras = ResolveTrackCameraOffset(table, offset);
 }
