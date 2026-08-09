@@ -43,15 +43,15 @@ s32 LoadSaveStateBlock(u8 *block) {
         {
             u16 hE = *(u16 *)(base + 0xE);
             s32 extraMaxClass;
-            g_GrandPrixSave.course = *(s32 *)(base + 0x10);
-            g_GrandPrixSave.carIndex = *(s32 *)(base + 0x14);
-            g_GrandPrixSave.classIndex = *(s32 *)(base + 0x18);
-            g_GrandPrixSave.maxClassReached = *(s32 *)(base + 0x1C);
-            g_GrandPrixSave.money = *(s32 *)(base + 0x20);
-            g_ExtraGrandPrixSave.course = *(s32 *)(base + 0x24);
-            g_ExtraGrandPrixSave.carIndex = *(s32 *)(base + 0x28);
-            g_ExtraGrandPrixSave.classIndex = *(s32 *)(base + 0x2C);
-            extraMaxClass = *(s32 *)(base + 0x30);
+            g_GrandPrixSave.course = ((GameSaveBlock *)base)->grandPrixProgress.course;
+            g_GrandPrixSave.carIndex = ((GameSaveBlock *)base)->grandPrixProgress.carIndex;
+            g_GrandPrixSave.classIndex = ((GameSaveBlock *)base)->grandPrixProgress.classIndex;
+            g_GrandPrixSave.maxClassReached = ((GameSaveBlock *)base)->grandPrixProgress.maxClassReached;
+            g_GrandPrixSave.money = ((GameSaveBlock *)base)->grandPrixProgress.money;
+            g_ExtraGrandPrixSave.course = ((GameSaveBlock *)base)->extraGrandPrixProgress.course;
+            g_ExtraGrandPrixSave.carIndex = ((GameSaveBlock *)base)->extraGrandPrixProgress.carIndex;
+            g_ExtraGrandPrixSave.classIndex = ((GameSaveBlock *)base)->extraGrandPrixProgress.classIndex;
+            extraMaxClass = ((GameSaveBlock *)base)->extraGrandPrixProgress.maxClassReached;
             g_PadMappingIndex = padMappingIndex;
             g_NegconMappingIndex = negconMappingIndex;
             g_NegconSteerNeutral = negconSteerNeutral;
@@ -59,7 +59,7 @@ s32 LoadSaveStateBlock(u8 *block) {
             g_NegconMaxTwist = hE;
             g_ExtraGrandPrixSave.maxClassReached = extraMaxClass;
         }
-        g_ExtraGrandPrixSave.money = *(s32 *)(base + 0x34);
+        g_ExtraGrandPrixSave.money = ((GameSaveBlock *)base)->extraGrandPrixProgress.money;
         g_TimeAttackSave.course = ((GameSaveBlock *)base)->timeAttackProgress.course;
         g_TimeAttackSave.carIndex = ((GameSaveBlock *)base)->timeAttackProgress.carIndex;
         g_TimeAttackSave.classIndex = ((GameSaveBlock *)base)->timeAttackProgress.classIndex;
