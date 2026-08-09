@@ -237,7 +237,7 @@ void GameDrawProportionalTextShaded(
                 SetSprt(packet);
                 if (shade == OPAQUE_VALUE) {
                     SetShadeTex(packet, 1);
-                    *(volatile s16 *)((u8 *)sprt + 8) = xPos;
+                    RAW(sprt->x0) = xPos;
                 } else {
                     SetSemiTrans(packet, 1);
                     sprt->t.r0 = shade;
@@ -283,7 +283,7 @@ void GameDrawProportionalTextShaded(
                 SetSprt(packet);
                 if (shade == OPAQUE_VALUE) {
                     SetShadeTex(packet, 1);
-                    *(volatile s16 *)((u8 *)sprt + 8) = xPos;
+                    RAW(sprt->x0) = xPos;
                 } else {
                     SetSemiTrans(packet, 1);
                     sprt->t.r0 = shade;
@@ -335,7 +335,7 @@ void GameDrawProportionalTextShaded(
                     SetSprt(packet);
                     if (shade == OPAQUE_VALUE) {
                         SetShadeTex(packet, 1);
-                        *(volatile s16 *)((u8 *)sprt + 8) = xPos;
+                        RAW(sprt->x0) = xPos;
                     } else {
                         SetSemiTrans(packet, 1);
                         sprt->t.r0 = shade;
