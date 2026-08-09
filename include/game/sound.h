@@ -40,6 +40,11 @@ typedef struct MusicChannel {
     s32 volRight;  /* +0x14 scaled right volume      (g_MusicChannelVolRight) */
 } MusicChannel; /* sizeof 0x18 */
 
+typedef struct AudioSlotChannelView {
+    u8 reserved[0x64];
+    MusicChannel channel;
+} AudioSlotChannelView;
+
 extern MusicChannel g_MusicChannels[];
 
 /* Effect voice, 4 elements for hardware voices 10..13. SetPitchedSoundCue walks it

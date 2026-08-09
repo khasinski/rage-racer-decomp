@@ -337,7 +337,7 @@ after_match:
                 CHANNEL(offset).right.value = inactiveValue;
                 CHANNEL(offset).mode = activeValue;
                 table = (s32 *)((u8 *)&g_AudioSlotMask + offset);
-                *(s32 *)((s32)table + 0x78) = 0;
+                ((AudioSlotChannelView *)table)->channel.volRight = 0;
                 CHANNEL(offset).volLeft = 0;
                 i++;
             } while (i < resetCount);
