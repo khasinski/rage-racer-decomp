@@ -22,7 +22,7 @@ void DrawRankingPanel(s32 slideX) {
     s32 xOrField;
     s32 destination;
     s32 color;
-    s32 scoreOrX;
+    PlayerLapTimeAddress scoreOrX;
     char text[56];
     s32 mode;
     s32 row;
@@ -41,7 +41,7 @@ void DrawRankingPanel(s32 slideX) {
     }
     iter = 0;
     if (limit > 0) {
-        scoreOrX = (s32)g_PlayerCar.lapTimes.table.milliseconds;
+        scoreOrX.timePointer = g_PlayerCar.lapTimes.table.milliseconds;
         do {
             /* row = iter / 2 and value = (iter % 2) * 8: two lap times per
              * table row, the odd one 8 px to the right. This is gcc's own
@@ -55,7 +55,7 @@ void DrawRankingPanel(s32 slideX) {
             xOrField = value + 0x58;
             *(volatile char *)&text[0] = iter + 0x31;
             doubledRow = (doubledRow + row) << 5;
-            scoreValue = *(s32 *)scoreOrX;
+            scoreValue = *scoreOrX.timePointer;
             value = (destination = panel + 0x14);
             FormatLapTime(&text[2], scoreValue);
             destination = doubledRow;
@@ -66,12 +66,12 @@ void DrawRankingPanel(s32 slideX) {
             }
             DrawText8x8(destination, xOrField, text, color);
             iter++;
-            scoreOrX += 4;
+            scoreOrX.byteOffset += 4;
         } while (iter < limit);
     }
     DrawProportionalText(panel + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
     countOrIndex = 0;
-    scoreOrX = 0x82;
+    scoreOrX.byteOffset = 0x82;
     destination = 0x78;
     do {
         text[0] = g_PlaceSuffixNames[countOrIndex][0];
@@ -89,9 +89,9 @@ void DrawRankingPanel(s32 slideX) {
         }
         DrawText8x8(panel + 0x14, destination, text, color);
         sprintf(text, g_FmtCarName, g_CarNames[xOrField]);
-        DrawText8x8(panel + 0x2C, scoreOrX, text, color);
+        DrawText8x8(panel + 0x2C, scoreOrX.byteOffset, text, color);
         destination += 0x14;
-        scoreOrX += 0x14;
+        scoreOrX.byteOffset += 0x14;
         countOrIndex++;
     } while (countOrIndex < 5);
 }
