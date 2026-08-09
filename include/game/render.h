@@ -901,7 +901,6 @@ extern s16 D_80092B08[];
 extern s16 D_80093308[];
 extern s16 D_80093B08[];
 extern Matrix g_MirrorViewMatrix;
-extern u8 g_ReplayFrameBuffer;
 extern u8 g_CarModelByCourse[][11];
 extern s32 g_FmvFrameHeight;
 extern s32 g_FmvFrameWidth;

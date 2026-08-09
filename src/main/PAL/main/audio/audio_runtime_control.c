@@ -7,6 +7,7 @@
 #include "game/scratchpad.h"
 #include "game/sound.h"
 #include "game/state.h"
+#include "game/work_buffer.h"
 #include "psyq/gpu.h"
 #include "psyq/snd.h"
 
@@ -24,17 +25,11 @@ void TickSequenceAudio(void) {
 
 
 s32 IsSpuTransferDone(void) {
-    typedef struct SpuTransferSampleBuffer {
-        u8 transferArea[0x800];
-        s16 channelA[2][0x100];
-        s16 channelB[2][0x100];
-    } SpuTransferSampleBuffer;
-
     SpuTransferSampleBuffer *buffer;
     s32 value0;
     s32 value1;
 
-    buffer = (SpuTransferSampleBuffer *)&g_ReplayFrameBuffer;
+    buffer = &g_ReplayFrameBuffer.spuTransfer;
     value1 = SpuTransferStatus(buffer, 0);
     value0 = buffer->channelA[value1][0];
     value1 = buffer->channelB[value1][0];

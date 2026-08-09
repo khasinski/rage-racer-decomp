@@ -3,10 +3,11 @@
 #include "game/player_car_internal.h"
 #include "game/render.h"
 #include "game/replay_internal.h"
+#include "game/work_buffer.h"
 
 void ResetReplayFrameCounts(void) {
-    g_ReplayFramesGp = (ReplayGrandPrixFrame *)&g_ReplayFrameBuffer;
-    g_ReplayFramesTimeAttack = (ReplayTimeAttackFrame *)&g_ReplayFrameBuffer;
+    g_ReplayFramesGp = g_ReplayFrameBuffer.grandPrixReplay;
+    g_ReplayFramesTimeAttack = g_ReplayFrameBuffer.timeAttackReplay;
 }
 
 void ResetReplayWriteCursor(void) {
