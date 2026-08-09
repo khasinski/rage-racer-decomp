@@ -321,8 +321,10 @@ void UpdateRivalRubberBand(void) {
             if (!((0x200 >> s0) & g_RivalCueFlags)) {
                 s32 bit;
                 s32 flags;
+                u32 cueVariant;
 
-                switch ((u32)g_SceneTimer % 3) {
+                cueVariant = g_SceneTimer;
+                switch (cueVariant % 3) {
                 default:
                 case 0:
                 if (g_RivalCueEnabled != 0) {
