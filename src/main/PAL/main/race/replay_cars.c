@@ -57,8 +57,8 @@ void UpdateReplayCars(void) {
 s32 GetTrackZoneBlend(s32 position) {
     TrackEventData *data;
     s32 scene;
-    TrackZone *first;
-    register TrackZone *zone asm("$6");
+    TrackZoneAddress first;
+    register TrackZoneAddress zone asm("$6");
     s32 status;
     s32 two;
     s32 start;
@@ -68,21 +68,21 @@ s32 GetTrackZoneBlend(s32 position) {
 
     data = g_TrackEventData;
     scene = g_RaceSeries;
-    first = data->zones;
+    first.pointer = data->zones;
     if (scene != 0) {
         position = g_TrackLength - position;
     }
 
     status = 0;
     two = 2;
-    zone = first;
+    zone.pointer = first.pointer;
     g_TrackZoneCode = 0;
     g_ReverbZoneDepth = 0;
     g_TrackZoneDark = 0;
 
     do {
-    start = zone->start;
-    finish = zone->end;
+    start = zone.pointer->start;
+    finish = zone.pointer->end;
     if (start == -1) {
         goto done;
     }
@@ -96,7 +96,7 @@ s32 GetTrackZoneBlend(s32 position) {
             status = 3;
         }
 
-        rawCode = zone->code;
+        rawCode = zone.pointer->code;
         RAW(g_TrackZoneCode) = rawCode;
         code = (s16)rawCode;
         if (!(code == 0)) {
@@ -132,14 +132,14 @@ normalize_code:
             status = 3;
         }
 zone_code_done:
-        g_ReverbZoneDepth = zone->value;
+        g_ReverbZoneDepth = zone.pointer->value;
     }
 
     if (status > 0) {
         break;
     }
-    zone++;
-    } while ((s32)zone < (s32)first + 0xF0);
+    zone.pointer++;
+    } while (zone.byteOffset < first.byteOffset + 0xF0);
 
 done:
     switch (status) {

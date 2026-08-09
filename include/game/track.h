@@ -73,6 +73,11 @@ typedef struct TrackZone {
     s16 value;
 } TrackZone;
 
+typedef union TrackZoneAddress {
+    s32 byteOffset;
+    TrackZone *pointer;
+} TrackZoneAddress;
+
 typedef struct TrackEventOffsets {
     s32 routeScenery;
     s32 raceIntroCamera;
