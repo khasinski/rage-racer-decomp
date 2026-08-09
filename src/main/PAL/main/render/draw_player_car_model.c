@@ -44,7 +44,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
 
     if (g_SceneId != 8) {
-        clipHandle = GetTrackZoneBlend((s32) obj->trackProgress);
+        clipHandle = GetTrackZoneBlend(obj->trackProgress);
         if (clipHandle != 0) {
             ApplyZoneLighting(clipHandle, &m_90);
         }
@@ -182,7 +182,7 @@ void DrawCar(GameRenderObject *obj) {
             BuildRotMatrixX(&m_30, obj->angleX);
             MulMatrix2(&m_10, &m_30);
             MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
-            clipHandle = GetTrackZoneBlend((s32)obj->trackProgress);
+            clipHandle = GetTrackZoneBlend(obj->trackProgress);
             if (clipHandle != 0) {
                 ApplyZoneLighting(clipHandle, &m_90);
             }
@@ -273,7 +273,7 @@ void DrawCar(GameRenderObject *obj) {
             BuildRotMatrixX(&m_50, obj->angleX);
             MulMatrix2(&m_10, &m_50);
             MulMatrix0(&g_SceneLightMatrix, &m_50, &m_90);
-            clipHandle = GetTrackZoneBlend((s32)obj->trackProgress);
+            clipHandle = GetTrackZoneBlend(obj->trackProgress);
             if (clipHandle != 0) {
                 ApplyZoneLighting(clipHandle, &m_90);
             }
