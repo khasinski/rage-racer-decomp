@@ -44,6 +44,11 @@ extern s16 g_GrandPrixMode;
 /* In-race copy of g_GrandPrixSeries, latched when the grid is built. Outer
  * index of the per-series tables and, because the advanced series runs the
  * courses backwards, also the lap-direction flag. See names.md 3. */
+typedef union RaceSeriesValue {
+    s32 series;
+    u16 trackDirection;
+} RaceSeriesValue;
+
 extern volatile s32 g_RaceSeries;
 
 static inline s32 ReadStableRaceSeries(void) {
