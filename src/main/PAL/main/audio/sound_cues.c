@@ -393,6 +393,7 @@ s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR) {
 
 s32 StartSingleSpecialCue(s32 cue, s32 volume) {
     s32 result = -1;
+    s32 voiceVolume;
     s32 *handle;
     s32 value;
     s32 vab;
@@ -427,6 +428,7 @@ s32 StartSingleSpecialCue(s32 cue, s32 volume) {
         scaleValue = g_SoundScale.vabIds[vab];
         program = (s16)program;
         tone = (s16)tone;
+        voiceVolume = (result << 9) >> 16;
         result = (s16)SsUtKeyOnV(
             0x13,
             scaleValue,
@@ -434,8 +436,8 @@ s32 StartSingleSpecialCue(s32 cue, s32 volume) {
             tone,
             0x3C,
             0,
-            (s32)((u32)result << 9) >> 16,
-            (s32)((u32)result << 9) >> 16);
+            voiceVolume,
+            voiceVolume);
         *handle = result;
     }
 
@@ -495,7 +497,7 @@ s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
             (s16)sx,
             (s16)sy);
         nextTone = tone + 1;
-        nextTone = (s32)((u32)nextTone << 16) >> 16;
+        nextTone = (s16)nextTone;
         result = (s16)SsUtKeyOnV(
             0x17,
             g_VabIds[(g_SpecialCueVoiceA = result, vab)],
