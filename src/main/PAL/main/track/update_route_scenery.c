@@ -71,7 +71,7 @@ void UpdateRouteScenery(void) {
         s32 t;
         s32 t0v;
 
-        rec = g_RouteSceneryKeyframe + (s32)g_RouteSceneryKeyIndex;
+        rec = g_RouteSceneryKeyframe + g_RouteSceneryKeyIndex;
         t = g_RouteSceneryFrame;
         t0v = rec->duration - t;
         g_RouteSceneryRotX =
