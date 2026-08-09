@@ -438,15 +438,15 @@ typedef union PathSceneryKeyAddress {
     PathSceneryRotationKey *rotationPointer;
 } PathSceneryKeyAddress;
 
-typedef union SpinningSceneryAngleAddress {
-    s32 byteOffset;
-    u16 *pointer;
-} SpinningSceneryAngleAddress;
-
 typedef struct PathSceneryPositionData {
     s16 firstKey[2];
     PathSceneryPositionKey keys[1];
 } PathSceneryPositionData;
+
+typedef union SpinningSceneryAngleAddress {
+    s32 byteOffset;
+    u16 *pointer;
+} SpinningSceneryAngleAddress;
 
 typedef struct PathSceneryRotationData {
     s16 firstKey[2];
@@ -488,6 +488,12 @@ typedef struct SpinningSceneryOrientation {
     s32 yaw;
     u8 reserved[12];
 } SpinningSceneryOrientation;
+typedef union SpinningSceneryDataAddress {
+    s32 byteOffset;
+    SpinningSceneryOrientation *orientationPointer;
+    Vec4 *positionPointer;
+    void *pointer;
+} SpinningSceneryDataAddress;
 extern SpinningSceneryOrientation g_SpinningSceneryYaw[];
 extern s32 g_StartGridSceneryAngle[];
 extern s32 g_StaticSceneryYaw;

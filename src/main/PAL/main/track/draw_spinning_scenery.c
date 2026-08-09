@@ -1,5 +1,4 @@
 #include "common.h"
-#include "game/asset.h"
 #include "game/race.h"
 #include "game/random.h"
 #include "game/render.h"
@@ -21,13 +20,11 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
     s32 end;
     s32 start;
     s32 loopIndex;
-    s32 dstOffset;
     s32 limit;
     s32 active;
     s32 activeValue;
     s32 frameMask;
-    AssetAddress dataAddress;
-    SpinningSceneryAngleAddress startAddress;
+    SpinningSceneryDataAddress dataAddress;
     SpinningSceneryAngleAddress cursorAddress;
     SpinningSceneryAngleAddress endAddress;
 
@@ -49,10 +46,7 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
         delta = &deltaBase[active];
         work = objectMatrix;
         base = g_SpinningSceneryAngle;
-        dstOffset = loopIndex * 2;
-        startAddress.pointer = base;
-        startAddress.byteOffset = dstOffset + startAddress.byteOffset;
-        dst = startAddress.pointer;
+        dst = &base[loopIndex];
         offset = loopIndex * 0x10;
 
         do {
@@ -61,16 +55,15 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
             }
             *dst &= 0xFFF;
 
-            dataAddress.pointer = g_SpinningSceneryYaw;
-            dataAddress.offset += offset;
-            BuildRotMatrixY(yawMatrix,
-                            ((SpinningSceneryOrientation *)dataAddress.pointer)->yaw);
+            dataAddress.orientationPointer = g_SpinningSceneryYaw;
+            dataAddress.byteOffset += offset;
+            BuildRotMatrixY(yawMatrix, dataAddress.orientationPointer->yaw);
             MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, yawMatrix);
             BuildRotMatrixZ(work, *(s16 *)dst);
             MulMatrix2(yawMatrix, work);
-            dataAddress.pointer = g_SpinningSceneryPos;
-            dataAddress.offset += offset;
-            SetGteObjectMatrix((void *)0x1F80011C, dataAddress.pointer, work);
+            dataAddress.positionPointer = g_SpinningSceneryPos;
+            dataAddress.byteOffset += offset;
+            SetGteObjectMatrix((void *)0x1F80011C, dataAddress.positionPointer, work);
 
             SCRATCH_ENV_MODE4 = 0;
             limit = 1;
