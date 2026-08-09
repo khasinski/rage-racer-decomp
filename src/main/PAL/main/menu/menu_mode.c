@@ -63,7 +63,7 @@ void DrawMenuAltPanel(s32 stepA, s32 stepB) {
         x0 += 0x1C;
         y1 = (s16)(offset + 0x9F);
         GameDrawTexturedQuad(
-            (s32)callScratch,
+            callScratch,
             callX,
             y0,
             x0,
@@ -100,7 +100,7 @@ void DrawMenuAltPanel(s32 stepA, s32 stepB) {
         x0 += 0x4E;
         y1 = (s16)(render1 + 0x128);
         GameDrawTexturedQuad(
-            (s32)callScratch,
+            callScratch,
             callX,
             y0,
             x0,
@@ -148,7 +148,7 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     SVec verts[4];
     MenuProjectedVertex out[4];
     Matrix mtx;
-    s32 scratch2;
+    u32 *scratch2;
     s32 n;
     s32 v;
     s32 depth;
@@ -158,7 +158,7 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     verts[2] = g_CourseCardVerts[2];
     verts[3] = g_CourseCardVerts[3];
 
-    scratch2 = (s32)SCRATCH_OT_BASE + 4;
+    scratch2 = SCRATCH_OT_BASE_AS(u32) + 1;
 
     n = *p0 - *p1;
     if (n != 0) {
@@ -228,7 +228,7 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
         y3 += 0x58;
         x1 += 0xE4;
 
-        GameDrawTexturedQuad((s32)scratch2,
+        GameDrawTexturedQuad(scratch2,
             x0, y0, x1, y1, x2, y2, x3, y3,
             0xA0, 0x70, 0xDF, 0x70, 0xA0, 0xBF, 0xDF, 0xBF,
             0x7F, 0x7F, 0x7F,
@@ -265,7 +265,7 @@ void DrawTimeAttackPlate(s32 stepArg) {
         y0 = (s16)(y0 - renderValue);
         y1 = (s16)(renderValue + 0xD8);
         GameDrawTexturedQuad(
-            (s32)scratch,
+            scratch,
             0x4C,
             y0,
             0x7C,

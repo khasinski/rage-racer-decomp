@@ -419,7 +419,7 @@ void DrawScriptedQuad(s32 time, u8 *desc, ScriptedQuadMotion *ctx) {
     }
 
     flags = ((ScriptedQuadShape *)entry)->flags;
-    GameDrawTexturedQuad((s32)(table + index * 4), (s16)x, (s16)y,
+    GameDrawTexturedQuad(table + index * 4, (s16)x, (s16)y,
                   (s16)(x + dx), (s16)y, (s16)x, (s16)(y + dy),
                   (s16)(x + dx), (s16)(y + dy), entry[0], entry[1], entry[2], entry[3],
                   entry[4], entry[5], entry[6], entry[7], ((ScriptedQuadShape *)entry)->r,

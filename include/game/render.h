@@ -399,7 +399,7 @@ void DrawFlatQuad(
     u32 flags);
 /* POLY_FT4: four xy/uv pairs, flat rgb, tpage and a CLUT index as depth key. */
 void GameDrawTexturedQuad(
-    s32 ot,
+    void *ot,
     s32 x0,
     s32 y0,
     s32 x1,

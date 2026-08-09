@@ -294,7 +294,7 @@ void DrawFlatQuad(ot, x0, y0, x1, y1, x2, y2, x3, y3, r, g, b, semiTrans, flags)
 void GameDrawTexturedQuad(ot, x0, y0, x1, y1, x2, y2, x3, y3,
                           u0, v0, u1, v1, u2, v2, u3, v3,
                           r, g, b, clutIndex, shadeTex, semiTrans, tpage)
-    s32 ot;
+    void *ot;
     s16 x0;
     s16 y0;
     s16 x1;
@@ -357,7 +357,7 @@ void GameDrawTexturedQuad(ot, x0, y0, x1, y1, x2, y2, x3, y3,
     prim->clut = clut;
     oldPrim = (u8 *)prim;
     prim++;
-    AddPrim((u32 *)ot, (u32 *)oldPrim);
+    AddPrim(ot, oldPrim);
     SCRATCH_PRIM_CURSOR_AS(POLY_FT4) = prim;
 }
 
