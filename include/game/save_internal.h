@@ -7,10 +7,6 @@
 #include "game/team_logo.h"
 #include "psyq/gpu.h"
 
-#ifndef GAME_SAVE_BGM_TYPE
-#define GAME_SAVE_BGM_TYPE s32
-#endif
-
 extern CarEntry g_SaveDefaults[13];
 extern ScoreRecord g_ClassRecords[11];
 typedef struct CourseProgressState {
@@ -25,12 +21,11 @@ extern GAME_CLASS_WIN_COUNT_QUALIFIER s32 g_ClassWinCount;
 extern CourseProgressState g_GrandPrixCourseProgress;
 extern CourseProgressState g_ExtraGrandPrixCourseProgress;
 extern CourseProgressState *g_CourseProgress;
-extern GAME_SAVE_BGM_TYPE g_BgmSelection;
+extern s32 g_BgmSelection;
 extern TeamLogoCanvas g_TeamLogoCanvas;
 extern s32 g_BestLapTimes[2][4][2];
 extern s32 g_BestTotalTimes[2][4][2];
 extern s32 g_BestSectorTimes[2][4][3];
 
-#undef GAME_SAVE_BGM_TYPE
 #undef GAME_CLASS_WIN_COUNT_QUALIFIER
 #endif

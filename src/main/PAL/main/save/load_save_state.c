@@ -6,13 +6,7 @@
 #include "psyq/gpu.h"
 #define GAME_INPUT_MAPPING_TYPE s16
 #include "game/input_internal.h"
-#define GAME_SAVE_BGM_TYPE u16
 #include "game/save_internal.h"
-
-/* The loader stores a whole word here; the saver reads only the low half
- * as g_BgmSelection. Same address, two widths, so two names. */
-
-
 
 s32 LoadSaveStateBlock(u8 *block) {
     register u8 *base asm("$17") = block;
@@ -77,7 +71,7 @@ s32 LoadSaveStateBlock(u8 *block) {
             s32 maxClassReached1;
             g_MaxClassReached[0] = *(s32 *)(base + 0x50);
             maxClassReached1 = *(s32 *)(base + 0x54);
-            *(s32 *)&g_BgmSelection = bgmSelection;
+            g_BgmSelection = bgmSelection;
             g_AdvancedSeriesUnlocked = advancedUnlocked;
             g_MaxClassReached[1] = maxClassReached1;
         }

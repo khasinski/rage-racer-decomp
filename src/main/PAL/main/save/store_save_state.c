@@ -5,7 +5,6 @@
 #include "game/menu.h"
 #define GAME_INPUT_MAPPING_TYPE s16
 #include "game/input_internal.h"
-#define GAME_SAVE_BGM_TYPE u16
 #include "game/save_internal.h"
 
 void StoreSaveStateBlock(u8 *block) {
