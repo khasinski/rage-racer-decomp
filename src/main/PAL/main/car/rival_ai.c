@@ -7,6 +7,14 @@
 #include "game/race.h"
 #include "game/audio.h"
 
+enum TrafficAvoidanceAnchorIndex {
+    CAR_SPEED_ACTIVE_FLAG_HALFWORD = 4,
+    CAR_SPEED_TRACK_LATERAL_WORD = -28,
+    CAR_SPEED_TRACK_PROGRESS_WORD = -13,
+    PLAYER_PROGRESS_TRACK_LATERAL_WORD = -15,
+    PLAYER_PROGRESS_SPEED_HALFWORD = 26
+};
+
 void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     GameCarAiBlock *state = (GameCarAiBlock *)&car->aiEnabled;
     s32 acc8 = 0;
@@ -62,26 +70,26 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
         if (i == carIndex) {
             continue;
         }
-        if (*(s16 *)(block + 8) == -1) { /* g_Cars[i].activeFlag */
+        if (((s16 *)block)[CAR_SPEED_ACTIVE_FLAG_HALFWORD] == -1) {
             continue;
         }
 
         if (i == k11) {
             s32 op = *(s32 *)(base + 0);
             a2 = op + track;
-            otherLateralOffset = *(s32 *)(base - 0x3C);
+            otherLateralOffset = ((s32 *)base)[PLAYER_PROGRESS_TRACK_LATERAL_WORD];
             if (carIndex < 4) {
                 otherA4 = 0;
             } else {
-                otherA4 = *(u16 *)(base + 0x34);
+                otherA4 = ((u16 *)base)[PLAYER_PROGRESS_SPEED_HALFWORD];
             }
             t1 = 0;
             t6 = 0x1800 - (g_PlayerCar.speed * 2);
         } else {
             s32 op;
-            otherLateralOffset = *(s32 *)(block - 0x70); /* g_Cars[i].trackLateralOffset */
+            otherLateralOffset = ((s32 *)block)[CAR_SPEED_TRACK_LATERAL_WORD];
             otherA4 = *(u16 *)block; /* g_Cars[i].speed, low half */
-            op = *(s32 *)(block - 0x34); /* g_Cars[i].trackProgress */
+            op = ((s32 *)block)[CAR_SPEED_TRACK_PROGRESS_WORD];
             a2 = op + track;
             t1 = (u16)state->avoidanceActive;
         }
