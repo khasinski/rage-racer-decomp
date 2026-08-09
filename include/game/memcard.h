@@ -134,6 +134,7 @@ typedef struct GameSaveBlock {
 } GameSaveBlock;
 
 typedef union GameSaveBlockAddress {
+    s32 offset;
     u8 *bytePointer;
     u16 *halfwordPointer;
     s32 *wordPointer;

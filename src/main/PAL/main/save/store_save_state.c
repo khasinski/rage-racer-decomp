@@ -7,7 +7,7 @@
 #include "game/save_internal.h"
 
 void StoreSaveStateBlock(u8 *block) {
-    register long saveValue asm("$4");
+    register GameSaveBlockAddress saveAddress asm("$4");
     {
         GameSaveBlockAddress padMappingAddress;
         GameSaveBlockAddress negconMappingAddress;
@@ -67,10 +67,10 @@ void StoreSaveStateBlock(u8 *block) {
         }
         {
             u16 advancedUnlocked = g_AdvancedSeriesUnlocked;
-            saveValue = g_TimeAttackSave.money;
+            saveAddress.offset = g_TimeAttackSave.money;
             ((GameSaveBlock *)block)->bgmSelection = bgmSelection;
             ((GameSaveBlock *)block)->advancedUnlocked = advancedUnlocked;
-            ((GameSaveBlock *)block)->timeAttackProgress.money = saveValue;
+            ((GameSaveBlock *)block)->timeAttackProgress.money = saveAddress.offset;
         }
     }
     ((GameSaveBlock *)block)->maxClassReached[0] = g_MaxClassReached[0];
@@ -80,14 +80,14 @@ void StoreSaveStateBlock(u8 *block) {
         {
             s32 i;
 
-            saveValue = (long)block;
+            saveAddress.pointer = (GameSaveBlock *)block;
             for (i = 0; i < 13; i++) {
                 SavedCarSetup *grandPrixCar =
-                    &((GameSaveBlock *)saveValue)->carSetup[0][0];
+                    &saveAddress.pointer->carSetup[0][0];
                 SavedCarSetup *extraGrandPrixCar =
-                    &((GameSaveBlock *)saveValue)->carSetup[1][0];
+                    &saveAddress.pointer->carSetup[1][0];
                 SavedCarSetup *timeAttackCar =
-                    &((GameSaveBlock *)saveValue)->carSetup[2][0];
+                    &saveAddress.pointer->carSetup[2][0];
 
                 grandPrixCar->modelVariant = g_GrandPrixCars[i].modelVariant;
                 grandPrixCar->tireCompound = g_GrandPrixCars[i].tireCompound;
@@ -110,21 +110,21 @@ void StoreSaveStateBlock(u8 *block) {
                 timeAttackCar->paintColor2 = g_TimeAttackCars[i].paintColor2;
                 timeAttackCar->enabled = g_TimeAttackCars[i].enabled;
 
-                saveValue += sizeof(SavedCarSetup);
+                saveAddress.offset += sizeof(SavedCarSetup);
             }
         }
 
         {
             s32 index;
 
-            saveValue = (long)block;
+            saveAddress.pointer = (GameSaveBlock *)block;
             index = 0;
             for (; index < 11; index++) {
                 SavedClassRecord *dst =
-                    &((GameSaveBlock *)saveValue)->classRecords[0];
+                    &saveAddress.pointer->classRecords[0];
                 dst->grade = g_ClassRecords[index].place;
                 dst->clears = g_ClassRecords[index].clears;
-                saveValue += sizeof(SavedClassRecord);
+                saveAddress.offset += sizeof(SavedClassRecord);
             }
         }
     }
