@@ -333,7 +333,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
         if (secondProduct < 0) {
             secondProduct += 0xFFF;
         }
-        car->field_50 = firstProduct + (secondProduct >> 0xC);
+        car->modelPitch = firstProduct + (secondProduct >> 0xC);
     }
     {
         s32 firstComponent;
@@ -361,8 +361,8 @@ void ResetCarTrackState(GameCarRuntime *car) {
             progress =
                 (car->field_68 + car->field_6C) % trackLength;
             combinedComponent = firstComponent + (lateralProduct >> 0xC);
-            car->field_58 = combinedComponent;
-            car->field_54 = car->bodyYaw;
+            car->modelRoll = combinedComponent;
+            car->modelYaw = car->bodyYaw;
             car->field_B4 = spad->heading;
             car->previousTrackProgress = car->trackProgress;
             car->trackProgress = progress;

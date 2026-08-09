@@ -63,9 +63,9 @@ typedef struct GameCarRuntime {
     s32 steeringAngle;
     s32 wheelRotation;
     s32 field_4C;
-    s32 field_50;
-    s32 field_54;
-    s32 field_58;
+    s32 modelPitch;
+    s32 modelYaw;
+    s32 modelRoll;
     s32 field_5C;
     s32 modelY;
     s32 bodyRollVelocity;
@@ -419,9 +419,9 @@ typedef struct PlayerCarRuntime {
     s32 steeringAngle;
     s32 wheelRotation;
     s32 field_4C;
-    s32 field_50;
-    s32 field_54;
-    s32 field_58;
+    s32 modelPitch;
+    s32 modelYaw;
+    s32 modelRoll;
     s32 field_5C;
     s32 modelY;
     s32 bodyRollVelocity;

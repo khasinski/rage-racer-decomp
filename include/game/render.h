@@ -198,9 +198,9 @@ typedef struct GameRenderObject {
     s32 steeringAngle; /* 0x44 */
     s32 wheelRotation; /* 0x48, 12-bit phase plus high-speed bit 0x1000 */
     s32 field_4C;
-    s32 angle_50;   /* 0x50 */
-    s32 angle_54;   /* 0x54 */
-    s32 angle_58;   /* 0x58 */
+    s32 modelPitch; /* 0x50 */
+    s32 modelYaw;   /* 0x54 */
+    s32 modelRoll;  /* 0x58 */
     s32 field_5C;
     s32 modelY;     /* 0x60 secondary model origin, normally copied from y */
     s32 bodyRollVelocity; /* 0x64, damped and accumulated into bodyRoll */

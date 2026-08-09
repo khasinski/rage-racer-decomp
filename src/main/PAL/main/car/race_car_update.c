@@ -327,7 +327,7 @@ void UpdateRaceCars(void) {
                 lastBase->wheelRotation = spin | 0x1000;
             }
             limit = lastBase->y - 8;
-            *(Vec4 *)&lastBase->field_50 = *(Vec4 *)&lastBase->bodyPitch;
+            *(Vec4 *)&lastBase->modelPitch = *(Vec4 *)&lastBase->bodyPitch;
             lastBase->bodyRoll = lastBase->bodyRoll + lastBase->bodyRollVelocity;
             lastBase->modelY = lastBase->y;
             if (lastBase->field_98 != 0) {
@@ -567,7 +567,7 @@ void UpdateAttractCars(void) {
                 base->wheelRotation = spin | 0x1000;
             }
             limit = base->y - 8;
-            *(Vec4 *)&base->field_50 = *(Vec4 *)&base->bodyPitch;
+            *(Vec4 *)&base->modelPitch = *(Vec4 *)&base->bodyPitch;
             base->bodyRoll = base->bodyRoll + base->bodyRollVelocity;
             base->modelY = base->y;
             if (base->field_98 != 0) {
