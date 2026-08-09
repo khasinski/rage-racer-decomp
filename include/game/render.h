@@ -869,6 +869,13 @@ typedef union EnvironmentPaletteAddress {
     Rgb *colorPointer;
 } EnvironmentPaletteAddress;
 
+typedef union EnvironmentClutAddress {
+    s32 byteOffset;
+    u8 *bytes;
+    u16 *pointer;
+    s16 *signedPointer;
+} EnvironmentClutAddress;
+
 extern EnvironmentPalette *g_EnvPaletteTable;
 /* The 16 interpolated BGR555 entries uploaded to VRAM at (0xE0, 0x1E6). */
 extern u16 g_EnvironmentClut[16];

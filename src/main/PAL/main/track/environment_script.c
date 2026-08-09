@@ -169,10 +169,13 @@ void UpdateEnvironment(void) {
         SetFarColor(p2->r, p2->g, p2->b);
         Intpl(local, frac, out);
         {
-            u8 *idx = (u8 *)(i * 2);
+            EnvironmentClutAddress idx;
             register s32 palo asm("$5");
-            LA_ORDERED(palo, g_EnvironmentClut, idx);
-            dst = (s16 *)(idx + palo);
+
+            idx.byteOffset = i * sizeof(g_EnvironmentClut[0]);
+            LA_ORDERED(palo, g_EnvironmentClut, idx.byteOffset);
+            idx.byteOffset += palo;
+            dst = idx.signedPointer;
         }
         *dst = 0;
         *dst = out[0];
