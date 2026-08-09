@@ -82,6 +82,13 @@ typedef struct TrackEventOffsets {
     s32 flybyScenery;
 } TrackEventOffsets;
 
+typedef struct TrackAmbienceZone {
+    s32 start;
+    s32 end;
+    u16 value;
+    u16 flags;
+} TrackAmbienceZone;
+
 typedef struct TrackEventData {
     s32 trackWalkStart;
     u8 reserved004[0x350];
@@ -90,6 +97,8 @@ typedef struct TrackEventData {
     TrackRivalAiConfig rivalAiConfigs[2][12];
     TrackZone zones[20];
     TrackEventOffsets offsets;
+    u8 reservedB7C[0x1120];
+    TrackAmbienceZone ambienceZones[4];
 } TrackEventData;
 
 /*

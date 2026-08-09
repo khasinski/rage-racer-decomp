@@ -4,13 +4,6 @@
 #include "game/track.h"
 #include "game/audio.h"
 
-typedef struct UnkFunc80040DB4Entry {
-    s32 start;
-    s32 end;
-    u16 unk8;
-    u16 flags;
-} UnkFunc80040DB4Entry;
-
 void UpdateZoneAmbience(s32 zone) {
     s32 position;
     s32 base;
@@ -19,15 +12,13 @@ void UpdateZoneAmbience(s32 zone) {
     s32 finalValue;
     s32 i;
     s32 sentinel;
-    s32 entryBaseValue;
-    UnkFunc80040DB4Entry *entryBase;
-    register UnkFunc80040DB4Entry *entry asm("$3");
+    TrackAmbienceZone *entryBase;
+    register TrackAmbienceZone *entry asm("$3");
     s32 selector;
 
     position = zone;
     selector = g_GrandPrixClass;
-    entryBaseValue = (s32)g_TrackEventData;
-    entryBase = (UnkFunc80040DB4Entry *)(entryBaseValue + 0x1C9C);
+    entryBase = g_TrackEventData->ambienceZones;
     selector = selector % 5;
 
     switch (selector) {
