@@ -167,15 +167,15 @@ void UpdateScreenAdjustScreen(void) {
     if (confirm & 0x860) {
         PlaySoundCue(2);
         g_GameMode = 1;
-        g_ScreenOffsetX = g_ScreenOffsetEditX;
-        g_ScreenOffsetY = g_ScreenOffsetEditY;
+        g_ScreenOffsetX.value = g_ScreenOffsetEditX;
+        g_ScreenOffsetY.value = g_ScreenOffsetEditY;
     } else {
         confirmMask = confirm & 0x90;
         if (confirmMask != 0) {
             PlaySoundCue(3);
             g_GameMode = 1;
-            g_ScreenOffsetEditX = g_ScreenOffsetX;
-            g_ScreenOffsetEditY = g_ScreenOffsetY;
+            g_ScreenOffsetEditX = g_ScreenOffsetX.value;
+            g_ScreenOffsetEditY = g_ScreenOffsetY.value;
         }
     }
 

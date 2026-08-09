@@ -88,8 +88,8 @@ void UpdateOptionRootMenu(void) {
             break;
         case 4:
             g_GameMode = 6;
-            g_ScreenOffsetEditX = g_ScreenOffsetX;
-            g_ScreenOffsetEditY = g_ScreenOffsetY;
+            g_ScreenOffsetEditX = g_ScreenOffsetX.value;
+            g_ScreenOffsetEditY = g_ScreenOffsetY.value;
             break;
         case 5:
             StartOptionMenuExit(2);

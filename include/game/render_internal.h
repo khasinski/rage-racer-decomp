@@ -32,6 +32,11 @@ typedef struct GameFrameEnvironmentHeader {
     DrawEnv mirrorDraw;
 } GameFrameEnvironmentHeader;
 
+typedef union ScreenOffset {
+    s32 value;
+    u16 displayValue;
+} ScreenOffset;
+
 extern Matrix g_MirrorViewMatrix;
 extern struct GameRenderObject g_CameraCar;
 extern Matrix g_SceneLightMatrix;
@@ -52,12 +57,8 @@ extern u8 *g_DrawBuffer;
 #endif
 extern GAME_FRAME_CONTEXT_QUALIFIER u8 g_FrameContexts[];
 #undef GAME_FRAME_CONTEXT_QUALIFIER
-#ifndef GAME_SCREEN_OFFSET_TYPE
-#define GAME_SCREEN_OFFSET_TYPE s32
-#endif
-extern GAME_SCREEN_OFFSET_TYPE g_ScreenOffsetX;
-extern GAME_SCREEN_OFFSET_TYPE g_ScreenOffsetY;
-#undef GAME_SCREEN_OFFSET_TYPE
+extern ScreenOffset g_ScreenOffsetX;
+extern ScreenOffset g_ScreenOffsetY;
 extern s32 g_FrameParity;
 extern u8 g_Font8x8Cells[];
 extern u8 g_DrawModeEnv[];

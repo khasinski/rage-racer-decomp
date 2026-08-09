@@ -9,7 +9,6 @@
 #include "game/random.h"
 #include "game/render.h"
 #define GAME_FRAME_CONTEXT_QUALIFIER volatile
-#define GAME_SCREEN_OFFSET_TYPE u16
 #include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
@@ -238,8 +237,8 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
 
     i = 0;
     one = 1;
-    src0 = &g_ScreenOffsetX;
-    src1 = &g_ScreenOffsetY;
+    src0 = &g_ScreenOffsetX.displayValue;
+    src1 = &g_ScreenOffsetY.displayValue;
     offset = 0;
     do {
         stride = 0x20000;
@@ -290,8 +289,8 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
 
     i = 0;
     one = 1;
-    src0 = &g_ScreenOffsetX;
-    src1 = &g_ScreenOffsetY;
+    src0 = &g_ScreenOffsetX.displayValue;
+    src1 = &g_ScreenOffsetY.displayValue;
     offset = 0;
     do {
         stride = 0x20000;
