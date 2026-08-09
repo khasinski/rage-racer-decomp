@@ -40,6 +40,7 @@ void UpdateFreeLookCamera(void *car, s32 updateMotion) {
     s32 zValue;
     s32 c400;
     GameCarRuntimeAddress cameraAddress;
+    CarBodyRotationAddress rotationAddress;
     ScratchBlockAddress viewAddress;
 
     offset = g_CameraCar.trackPointIndex;
@@ -107,8 +108,9 @@ void UpdateFreeLookCamera(void *car, s32 updateMotion) {
     viewAddress.words = &view[2];
     viewAddress.blocks[0] = cameraAddress.blocks[0];
     view[3] -= 48;
+    rotationAddress.words = &g_CameraCar.bodyPitch;
     viewAddress.words = &view[6];
-    viewAddress.blocks[0] = *(Block16 *)&g_CameraCar.bodyPitch;
+    viewAddress.blocks[0] = rotationAddress.block[0];
     view[6] = g_FreeCameraAngleOffset[0] + view[6];
 
     BuildRotMatrixY(&m1, view[7]);

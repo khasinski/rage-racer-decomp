@@ -186,6 +186,11 @@ typedef union GameCarRuntimeAddress {
     Block16 *blocks;
 } GameCarRuntimeAddress;
 
+typedef union CarBodyRotationAddress {
+    s32 *words;
+    Block16 *block;
+} CarBodyRotationAddress;
+
 typedef struct CarProgressWindow {
     s32 progressB;
     u8 reserved[0x3C];
