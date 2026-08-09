@@ -443,7 +443,7 @@ void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused) {
  * pts[0] is the car-relative point; pts[1..4] are the quad corners.
  */
 s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
-    DVec pts[5];
+    DVecValue pts[5];
     s32 i;
     s32 k;
     s32 nxt;
@@ -479,8 +479,8 @@ s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
         paz = pa->z;
         sx = pb->x - pax;
         sz = pb->z - paz;
-        pts[0].vx = carx - pax;
-        pts[0].vy = carz - paz;
+        pts[0].components.vx = carx - pax;
+        pts[0].components.vy = carz - paz;
 
         cos_c = rcos(0xC00 - pa->angle);
         sin_c = rsin(0xC00 - pa->angle);
@@ -492,19 +492,19 @@ s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
         f12b = pb->rightHalfWidth;
         f10b = pb->leftHalfWidth;
 
-        pts[1].vx =  (s16)(f10a * 2) * (s16)cos_c / 4096;
-        pts[1].vy = -(s16)(f10a * 2) * (s16)sin_c / 4096;
-        pts[2].vx = -(s16)(f12a * 2) * (s16)cos_c / 4096;
-        pts[2].vy =  (s16)(f12a * 2) * (s16)sin_c / 4096;
-        pts[3].vx = sx + (s16)(f10b * 2) * (s16)cos_n / 4096;
-        pts[3].vy = sz - (s16)(f10b * 2) * (s16)sin_n / 4096;
-        pts[4].vx = sx - (s16)(f12b * 2) * (s16)cos_n / 4096;
-        pts[4].vy = sz + (s16)(f12b * 2) * (s16)sin_n / 4096;
+        pts[1].components.vx =  (s16)(f10a * 2) * (s16)cos_c / 4096;
+        pts[1].components.vy = -(s16)(f10a * 2) * (s16)sin_c / 4096;
+        pts[2].components.vx = -(s16)(f12a * 2) * (s16)cos_c / 4096;
+        pts[2].components.vy =  (s16)(f12a * 2) * (s16)sin_c / 4096;
+        pts[3].components.vx = sx + (s16)(f10b * 2) * (s16)cos_n / 4096;
+        pts[3].components.vy = sz - (s16)(f10b * 2) * (s16)sin_n / 4096;
+        pts[4].components.vx = sx - (s16)(f12b * 2) * (s16)cos_n / 4096;
+        pts[4].components.vy = sz + (s16)(f12b * 2) * (s16)sin_n / 4096;
 
-        if (NormalClip(*(s32 *)&pts[1], *(s32 *)&pts[2], *(s32 *)&pts[0]) >= 0 &&
-            NormalClip(*(s32 *)&pts[2], *(s32 *)&pts[4], *(s32 *)&pts[0]) >= 0 &&
-            NormalClip(*(s32 *)&pts[4], *(s32 *)&pts[3], *(s32 *)&pts[0]) > 0 &&
-            NormalClip(*(s32 *)&pts[3], *(s32 *)&pts[1], *(s32 *)&pts[0]) >= 0) {
+        if (NormalClip(pts[1].packed, pts[2].packed, pts[0].packed) >= 0 &&
+            NormalClip(pts[2].packed, pts[4].packed, pts[0].packed) >= 0 &&
+            NormalClip(pts[4].packed, pts[3].packed, pts[0].packed) > 0 &&
+            NormalClip(pts[3].packed, pts[1].packed, pts[0].packed) >= 0) {
             return i;
         }
 

@@ -25,6 +25,11 @@ typedef struct DVec {
     s16 vy;
 } DVec;
 
+typedef union DVecValue {
+    DVec components;
+    s32 packed;
+} DVecValue;
+
 /* Eight-bit colour triplet. */
 typedef struct Rgb {
     u8 r;
