@@ -15,10 +15,20 @@ DOCS = ROOT / "docs"
 BADGES = DOCS / "badges"
 
 
-ASM_MARKERS = re.compile(
-    r"INCLUDE_ASM|INCLUDE_RODATA|\.word\b|\.globl\b|\.ent\b|\.include\b"
-)
+INCLUDE_MARKERS = re.compile(r"INCLUDE_ASM|INCLUDE_RODATA")
+# Assembler directives count only where they can actually occur in C: inside a
+# string literal handed to asm(). Matched against bare source they also hit
+# ordinary struct field accesses -- `foo.word` on a union with a `word` member
+# reads as a `.word` directive and silently reclassifies plain C as assembly.
+ASM_DIRECTIVE = re.compile(r"\.(?:word|globl|ent|include)\b")
+STRING_LITERAL = re.compile(r'"(?:[^"\\\n]|\\.)*"')
 ASM_RE = re.compile(r"(^|[^_a-zA-Z0-9])(__asm__|asm)\b")
+
+
+def has_asm_markers(text: str) -> bool:
+    if INCLUDE_MARKERS.search(text):
+        return True
+    return any(ASM_DIRECTIVE.search(lit.group(0)) for lit in STRING_LITERAL.finditer(text))
 SUBSEGMENT = re.compile(
     r"\[0x([0-9A-Fa-f]+),\s*([^,\]\s]+),\s*([^,\]\s]+)"
 )
@@ -105,7 +115,7 @@ def is_plain_c(path: Path) -> bool:
     if not path.exists():
         return False
     text = strip_nonblocking_asm(strip_comments(path.read_text(errors="ignore")))
-    return ASM_MARKERS.search(text) is None and ASM_RE.search(text) is None
+    return not has_asm_markers(text) and ASM_RE.search(text) is None
 
 
 # Proven handwritten assembly (see README.md) is excluded from
@@ -233,7 +243,7 @@ def classify_with_addresses(path: Path) -> list:
     for name, body, offset in _function_bodies(text):
         marked = documented(offset, name)
         stripped = strip_nonblocking_asm(body)
-        blocking = ASM_MARKERS.search(stripped) or ASM_RE.search(stripped)
+        blocking = has_asm_markers(stripped) or ASM_RE.search(stripped)
         if marked and blocking:
             kind = "handwritten"
         elif blocking:

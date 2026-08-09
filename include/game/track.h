@@ -473,8 +473,6 @@ extern PathSceneryRotationKey *g_PathSceneryRotKeys;
 extern u16 g_PathSceneryRotPhase;
 extern u16 g_PathSceneryRotRate;
 extern s16 g_PathSceneryRotSpan;
-extern s16 g_PathSceneryRotY;
-extern s16 g_PathSceneryRotZ;
 extern s32 g_PathSceneryVolume;
 extern s32 g_PlayerField3C;
 extern s32 g_PlayerSegmentWeight;
