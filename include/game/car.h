@@ -187,6 +187,20 @@ typedef struct CarProgressWindow {
     u8 trailing[0x15A];
 } CarProgressWindow;
 
+typedef struct CarSurfaceSampleView {
+    u16 x;
+    u16 reserved02;
+    s32 surfaceY;
+    u16 z;
+    u16 reserved0A;
+    u8 reserved0C[0x24];
+    s32 trackPointIndex;
+    u8 reserved34[0x2C];
+    s32 modelY;
+    u8 reserved64[0x34];
+    s16 verticalMotionState;
+} CarSurfaceSampleView;
+
 typedef struct PlayerRaceCueState {
     s16 trackSection;
     u8 reserved02[8];
@@ -542,6 +556,10 @@ static inline PlayerRaceCueState *GetPlayerRaceCueState(PlayerCarRuntime *car) {
 
 static inline void CopyPlayerBodyRotationToModel(PlayerCarRuntime *car) {
     *(Vec4 *)&car->modelPitch = *(Vec4 *)&car->bodyPitch;
+}
+
+static inline void SetPlayerPosition(PlayerCarRuntime *car, const Vec4 *position) {
+    *(Vec4 *)&car->x = *position;
 }
 
 static inline void CopyCarBodyRotationToModel(GameCarRuntime *car) {

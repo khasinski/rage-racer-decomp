@@ -257,7 +257,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
 
     tmp.x = (p->accelPos * 6) / 1280 + car->x + car->motionX;
     tmp.z = (p->brakePos * 6) / 1280 + car->z + car->motionZ;
-    *(Vec4 *)&car->x = tmp;
+    SetPlayerPosition(car, &tmp);
     AccumulateLapProgress((GameCarRuntime *)car);
 
     {

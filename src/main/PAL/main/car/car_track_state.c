@@ -391,30 +391,16 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     return spad->knockbackMode;
 }
 
-typedef struct Car {
-    u16 x;         /* 0x00 */
-    u16 pad2;      /* 0x02 */
-    s32 out4;      /* 0x04 */
-    u16 z;         /* 0x08 */
-    u16 padA;      /* 0x0A */
-    u8 padC[0x24]; /* 0x0C */
-    s32 f30;       /* 0x30 */
-    u8 pad34[0x2C];/* 0x34 */
-    s32 f60;       /* 0x60 */
-    u8 pad64[0x34];/* 0x64 */
-    s16 f98;       /* 0x98 */
-} Car;
-
 /*
  * Samples the track surface height under the car. Locates the containing
  * segment (FindTrackSegment), rotates the car position into segment-local space,
  * clamps the along-segment distance `t` to [0, segmentLength], and linearly
  * interpolates the point height `y` and `crossSlope` between the two segment
- * endpoints. Writes the resulting surface height into car->out4 (and out4 into
- * f60 while f98 is idle). GameTrackPointHalfwordView and the local Car view
- * preserve the halfword and raw-offset accesses used by this routine.
+ * endpoints. Writes the resulting surface height into surfaceY and mirrors it
+ * into modelY while vertical motion is idle. The named halfword views preserve
+ * the access widths used by this routine.
  */
-void SampleTrackSurfaceHeight(Car *car) {
+void SampleTrackSurfaceHeight(CarSurfaceSampleView *car) {
     Matrix mtx;
     SVec v;
     LVec out;
@@ -428,7 +414,7 @@ void SampleTrackSurfaceHeight(Car *car) {
     s32 e;
     s32 v8;
 
-    idx = FindTrackSegment(car, car->f30);
+    idx = FindTrackSegment(car, car->trackPointIndex);
     p2 = GetTrackPointHalfwordView(
         &g_TrackPoints[(idx + 1) % g_TrackPointCount]);
     p1 = GetTrackPointHalfwordView(&g_TrackPoints[idx]);
@@ -452,8 +438,8 @@ void SampleTrackSurfaceHeight(Car *car) {
     e = (p2->crossSlope * t + p1->crossSlope * diff) / (s16)seg;
     v8 = (p2->y * t + p1->y * diff) / (s16)seg;
 
-    car->out4 = ((s16)e * oz >> 7) + v8;
-    if (car->f98 == 0) {
-        car->f60 = car->out4;
+    car->surfaceY = ((s16)e * oz >> 7) + v8;
+    if (car->verticalMotionState == 0) {
+        car->modelY = car->surfaceY;
     }
 }
