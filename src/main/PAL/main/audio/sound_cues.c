@@ -514,6 +514,8 @@ s32 StartSpecialCueVoice(s32 cue, s32 volumeLeft, s32 volumeRight) {
 }
 
 void PlaySoundCue(s32 cue) {
+    u32 specialCueRange;
+
     if (g_SoundCueBank == 1) {
         if (cue >= 0) {
             if (cue >= 0x1E) {
@@ -523,7 +525,8 @@ void PlaySoundCue(s32 cue) {
             cue = 0;
         }
 
-        if ((u32)(cue - 0xF) < 3U) {
+        specialCueRange = cue - 0xF;
+        if (specialCueRange < 3U) {
             if (cue != g_LastSpecialCueRequest) {
                 g_LastSpecialCueRequest = cue;
                 StartSingleSpecialCue(cue, 0x80);
@@ -543,7 +546,8 @@ void PlaySoundCue(s32 cue) {
             cue = 0;
         }
 
-        if ((u32)(cue - 0xF) < 3U) {
+        specialCueRange = cue - 0xF;
+        if (specialCueRange < 3U) {
             if (cue != g_LastSpecialCueRequest) {
                 g_LastSpecialCueRequest = cue;
                 StartSingleSpecialCue(cue, 0x80);
