@@ -11,11 +11,7 @@ typedef struct AudioBankRuntime {
 } AudioBankRuntime;
 
 extern u8 g_ReplayFrameBuffer;
-#ifndef GAME_BGM_SHUFFLE_QUALIFIER
-#define GAME_BGM_SHUFFLE_QUALIFIER
-#endif
 extern s32 g_BgmShuffleIndex;
-extern GAME_BGM_SHUFFLE_QUALIFIER u8 g_BgmShuffleOrder[];
-#undef GAME_BGM_SHUFFLE_QUALIFIER
+extern u8 g_BgmShuffleOrder[];
 
 #endif

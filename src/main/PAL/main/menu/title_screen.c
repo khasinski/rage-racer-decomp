@@ -2,7 +2,6 @@
 #include "game/prim.h"
 #include "game/asset.h"
 #include "game/audio.h"
-#define GAME_BGM_SHUFFLE_QUALIFIER volatile
 #include "game/audio_internal.h"
 #include "game/cd.h"
 #include "game/car.h"
@@ -220,7 +219,7 @@ void ShuffleBgmOrder(void) {
             }
             j++;
         }
-        D_801E7733[j] = i;
+        g_BgmShuffleOrder[j - 1] = i;
     }
 
     g_BgmShuffleIndex = 0;

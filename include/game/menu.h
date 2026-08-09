@@ -541,7 +541,6 @@ extern u8 g_TimeAttackCarTransmissions[];
 extern u8 g_TimeAttackCarEnabled[];
 extern s32 D_801E4D74;
 extern s32 g_TitleFadeLevel;
-extern u8 D_801E7733[];
 extern s32 g_PaintColorCursor;
 extern s32 g_TeamLogoOption;
 extern char *g_BgmTrackNames[];
