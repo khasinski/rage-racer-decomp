@@ -205,12 +205,12 @@ void DrawSplitDelta(s32 delta, s32 y) {
     firstOffset = (s32)prim;
 
     if (y > 0) {
-        *(volatile u8 *)(base + 0x237CC) = 0x88;
+        ((volatile SPRT *)prim)->u0 = 0x88;
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot), "r"(prim));
         temp = 0x7810;
     } else if (y < 0) {
-        *(volatile u8 *)(base + 0x237CC) = 0x78;
+        ((volatile SPRT *)prim)->u0 = 0x78;
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot));
         temp = 0x780F;
