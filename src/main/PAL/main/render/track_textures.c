@@ -159,7 +159,6 @@ void StepTrackTextureSwap(void) {
 s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
     s32 random;
     s32 candidate;
-    s32 offset;
     s32 first;
 
     if (mask & g_SceneTimer) {
@@ -169,13 +168,9 @@ s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
         random = Random15() & 0x7FFF;
         candidate = random % 11;
 
-        offset = (((((current * 3) * 4) + current) * 8) - current) * 4;
-        first = SelectTrackTexturePage(
-            ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackSection);
+        first = SelectTrackTexturePage(g_Cars[current].trackSection);
 
-        offset = (((((candidate * 3) * 4) + candidate) * 8) - candidate) * 4;
-        if (first == SelectTrackTexturePage(
-                         ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackSection)) {
+        if (first == SelectTrackTexturePage(g_Cars[candidate].trackSection)) {
             return candidate;
         }
     }
@@ -185,7 +180,6 @@ s32 CycleBgmSelectCameraCar(s32 mask, s32 current) {
 s32 CycleAttractCameraCar(s32 mask, s32 current) {
     s32 random;
     s32 candidate;
-    s32 offset;
     s32 first;
 
     if (mask & g_SceneTimer) {
@@ -195,13 +189,9 @@ s32 CycleAttractCameraCar(s32 mask, s32 current) {
         random = Random15() & 0x7FFF;
         candidate = random % 4;
 
-        offset = (((((current * 3) * 4) + current) * 8) - current) * 4;
-        first = SelectTrackTexturePage(
-            ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackSection);
+        first = SelectTrackTexturePage(g_Cars[current].trackSection);
 
-        offset = (((((candidate * 3) * 4) + candidate) * 8) - candidate) * 4;
-        if (first == SelectTrackTexturePage(
-                         ((GameCarRuntime *)((u8 *)g_Cars + offset))->trackSection)) {
+        if (first == SelectTrackTexturePage(g_Cars[candidate].trackSection)) {
             return candidate;
         }
     }
