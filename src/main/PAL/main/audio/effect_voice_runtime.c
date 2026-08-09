@@ -220,8 +220,7 @@ indexed_effect_done:
     g_IndexedEffectIndexPrev = g_IndexedEffectIndex;
 }
 
-/* Byte-offset view of g_MusicChannels (see game/sound.h): the retail code
- * keeps i * 0x18 in a register rather than indexing. */
+/* The retail loop keeps i * sizeof(MusicChannel) in a register. */
 #define CHANNEL(byteOffset) (*(MusicChannel *)((u8 *)g_MusicChannels + (byteOffset)))
 
 void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
@@ -371,11 +370,7 @@ after_match:
     cue = 0;
     do {
         if (i != 0) {
-            /* Asymmetric on purpose: retail writes channel[i].mode through the
-             * indexed form but reads channel[0].mode through its own symbol.
-             * Spelling the read as g_MusicChannels[0].mode costs an
-             * instruction, with or without RAW() on either side. */
-            CHANNEL(cue).mode = g_MusicChannelMode;
+            CHANNEL(cue).mode = CHANNEL(0).mode;
         }
 
         flag = g_StereoOutput;
