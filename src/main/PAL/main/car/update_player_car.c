@@ -184,10 +184,10 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         if (step > 4096) {
             step = 0x249;
         }
-        spin = (step + car->field_48) & 0xFFF;
-        car->field_48 = spin;
+        spin = (step + car->wheelRotation) & 0xFFF;
+        car->wheelRotation = spin;
         if (car->speed > 800) {
-            car->field_48 = spin | 0x1000;
+            car->wheelRotation = spin | 0x1000;
         }
     }
 

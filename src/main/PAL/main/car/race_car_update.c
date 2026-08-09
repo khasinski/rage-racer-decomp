@@ -321,10 +321,10 @@ void UpdateRaceCars(void) {
             if ((s16)scaled >= 0x1001) {
                 step = 0x249;
             }
-            spin = (step + lastBase->field_48) & 0xFFF;
-            lastBase->field_48 = spin;
+            spin = (step + lastBase->wheelRotation) & 0xFFF;
+            lastBase->wheelRotation = spin;
             if (lastBase->speed >= 0x321) {
-                lastBase->field_48 = spin | 0x1000;
+                lastBase->wheelRotation = spin | 0x1000;
             }
             limit = lastBase->y - 8;
             *(Vec4 *)&lastBase->field_50 = *(Vec4 *)&lastBase->bodyPitch;
@@ -561,10 +561,10 @@ void UpdateAttractCars(void) {
             if ((s16)scaled >= 0x1001) {
                 step = 0x249;
             }
-            spin = (step + base->field_48) & 0xFFF;
-            base->field_48 = spin;
+            spin = (step + base->wheelRotation) & 0xFFF;
+            base->wheelRotation = spin;
             if (base->speed >= 0x321) {
-                base->field_48 = spin | 0x1000;
+                base->wheelRotation = spin | 0x1000;
             }
             limit = base->y - 8;
             *(Vec4 *)&base->field_50 = *(Vec4 *)&base->bodyPitch;

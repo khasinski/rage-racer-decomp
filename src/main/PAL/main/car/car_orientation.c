@@ -62,7 +62,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->motionZ = 0;
   player->motionY = 0;
   player->motionX = 0;
-  player->field_48 = 0;
+  player->wheelRotation = 0;
   player->field_44 = 0;
   player->field_40 = 0;
   player->speed = 0;

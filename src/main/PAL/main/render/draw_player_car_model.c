@@ -86,17 +86,17 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     SubmitModel((void *)SCRATCHPAD_ADDR, g_ModelBankCount < 1);
 
     otDepth = obj->field_E4 * 2;
-    if (obj->flags_48 & 0x1000) {
+    if (obj->wheelRotation & 0x1000) {
         otDepth += 10;
     }
     BuildRotMatrixZ(&m_10, obj->bodyRoll - obj->bodyRollVelocity);
     MulMatrix(&m_50, &m_10);
     MulMatrix(&m_30, &m_10);
-    BuildRotMatrixX(&m_F0, obj->flags_48);
+    BuildRotMatrixX(&m_F0, obj->wheelRotation);
     MulMatrix2(&m_30, &m_F0);
 
     BuildRotMatrixY(&m_10, obj->angle_44 / 12);
-    BuildRotMatrixX(&m_B0[0], obj->flags_48);
+    BuildRotMatrixX(&m_B0[0], obj->wheelRotation);
     MulMatrix2(&m_10, &m_B0[0]);
     MulMatrix2(&m_30, &m_B0[0]);
 
@@ -228,11 +228,11 @@ void DrawCar(GameRenderObject *obj) {
             BuildRotMatrixZ(&m_10, obj->bodyRoll - obj->bodyRollVelocity);
             MulMatrix(&m_50, &m_10);
             MulMatrix(&m_30, &m_10);
-            BuildRotMatrixX(&m_F0, obj->flags_48);
+            BuildRotMatrixX(&m_F0, obj->wheelRotation);
             MulMatrix2(&m_30, &m_F0);
 
             BuildRotMatrixY(&m_10, obj->angle_44 * 2);
-            BuildRotMatrixX(&m_B0[0], obj->flags_48);
+            BuildRotMatrixX(&m_B0[0], obj->wheelRotation);
             MulMatrix2(&m_10, &m_B0[0]);
             MulMatrix2(&m_30, &m_B0[0]);
 
