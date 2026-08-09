@@ -154,7 +154,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   {
     carSpec->topGear = 6;
   }
-  drive->unk8C = (g_CarSpec->speedScale * 0x490) / 160;
+  drive->unk8C = (g_CarSpec->tachometer.speedScale * 0x490) / 160;
   printf(g_MsgInit1);
   j = 0;
   for (i = 0; i < 16; i++)

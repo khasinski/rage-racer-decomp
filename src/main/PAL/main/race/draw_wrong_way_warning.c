@@ -65,14 +65,11 @@ void DrawWrongWayWarning(void) {
 
 
 s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
-    GameCarSpec *p = g_CarSpec;
-    s32 cx = p->tachoNeedleX;
-    s32 cy = p->tachoNeedleY;
-    /* retail keeps a biased base register at &spec->tachoNeedleX; +28 is
-     * spec->needleColor and +32 spec->needleColorAlt. */
-    u8 *base = (u8 *)&p->tachoNeedleX;
-    s32 b = p->needleAngleMin;
-    s32 angle = b + rpm * (p->needleAngleMax - b) / 10000;
+    CarTachometerSpec *p = &g_CarSpec->tachometer;
+    s32 cx = p->needleX;
+    s32 cy = p->needleY;
+    s32 b = p->angleMin;
+    s32 angle = b + rpm * (p->angleMax - b) / 10000;
     s32 cos = rsin(angle);
     s32 sin = rcos(angle);
     POLY_F4 *prim = (POLY_F4 *)SCRATCH;
@@ -102,32 +99,32 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         g_TachoFaceB = -128 - amt;
         g_TachoFaceG = -128 - amt;
         g_TachoFaceR = -128 - amt;
-        prim->t.r0 = (amt * 32 + base[28] * (96 - amt)) / 96;
-        prim->t.g0 = (amt * 32 + base[29] * (96 - amt)) / 96;
-        prim->t.b0 = (amt * 32 + base[30] * (96 - amt)) / 96;
+        prim->t.r0 = (amt * 32 + p->needleColor[0] * (96 - amt)) / 96;
+        prim->t.g0 = (amt * 32 + p->needleColor[1] * (96 - amt)) / 96;
+        prim->t.b0 = (amt * 32 + p->needleColor[2] * (96 - amt)) / 96;
     } else if (type == 3) {
         amt -= 32;
         if (amt < 0) amt = 0;
         g_TachoFaceB = amt + 32;
         g_TachoFaceG = amt + 32;
         g_TachoFaceR = amt + 32;
-        prim->t.r0 = ((96 - amt) * 32 + base[28] * amt) / 96;
-        prim->t.g0 = ((96 - amt) * 32 + base[29] * amt) / 96;
-        prim->t.b0 = ((96 - amt) * 32 + base[30] * amt) / 96;
+        prim->t.r0 = ((96 - amt) * 32 + p->needleColor[0] * amt) / 96;
+        prim->t.g0 = ((96 - amt) * 32 + p->needleColor[1] * amt) / 96;
+        prim->t.b0 = ((96 - amt) * 32 + p->needleColor[2] * amt) / 96;
         *(s16 *)(g_DrawBuffer + 0x236F2) = 0x33A8;
     } else if (type == 2) {
         *(s16 *)(g_DrawBuffer + 0x236F2) = 0x33E8;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
         g_TachoFaceR = 0x80;
-        *(s32 *)&prim->t.r0 = *(s32 *)(base + 32);
+        *(s32 *)&prim->t.r0 = *(s32 *)p->needleColorAlt;
     } else {
         s16 rv = 0x33A8;
         *(s16 *)(g_DrawBuffer + 0x236F2) = rv;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
         g_TachoFaceR = 0x80;
-        *(s32 *)&prim->t.r0 = *(s32 *)(base + 28);
+        *(s32 *)&prim->t.r0 = *(s32 *)p->needleColor;
     }
 
     prim->t.code = code7;
@@ -136,8 +133,8 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
     SCRATCH = (u8 *)prim;
 
     {
-        s32 x = cx + *(s16 *)(base + 12);
-        s32 y = cy + *(s16 *)(base + 14);
+        s32 x = cx + p->gearDigitDX;
+        s32 y = cy + p->gearDigitDY;
         /* Not SCRATCH: this read has to stay volatile. Spelling it as the
          * plain macro lets the cursor written above be reused instead of
          * reloaded, which changes the output. */
@@ -161,8 +158,8 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         s32 v10;
         SetTile(q);
         tile = q;
-        q->x0 = cx + *(u16 *)(base + 16);
-        v10 = cy + *(u16 *)(base + 18);
+        q->x0 = cx + p->shiftLightDX;
+        v10 = cy + p->shiftLightDY;
         q->w = 0x10;
         q->h = 0x10;
         q->t.r0 = flash * 223 + 32;

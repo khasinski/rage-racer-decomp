@@ -240,6 +240,25 @@ typedef union CarTorqueBand {
     u16 halves[32];
 } CarTorqueBand;
 
+typedef struct CarTachometerSpec {
+    s16 needleX;
+    s16 needleY;
+    u16 faceDX;
+    u16 faceDY;
+    u16 digitsX;
+    u16 digitsY;
+    s16 gearDigitDX;
+    s16 gearDigitDY;
+    u16 shiftLightDX;
+    u16 shiftLightDY;
+    u8 needleQuad[4];
+    s16 angleMin;
+    s16 angleMax;
+    u8 needleColor[4];
+    u8 needleColorAlt[4];
+    s32 speedScale;
+} CarTachometerSpec;
+
 /* The loaded car's spec block (`g_CarSpec`), from its asset pack. */
 typedef struct GameCarSpec {
     s32 torqueCurve[16];      /* +0x00 engine torque samples */
@@ -260,19 +279,7 @@ typedef struct GameCarSpec {
     s16 unk112;           /* +0x112 */
     s16 torqueScale[6];
     GameCarSpecShiftPoint shiftPoints[6]; /* +0x120, index = gear - 1 */
-    s16 tachoNeedleX;     /* +0x138 tachometer needle pivot */
-    s16 tachoNeedleY;     /* +0x13A */
-    u16 tachoFaceDX;      /* +0x13C added to the pivot for the dial sprite */
-    u16 tachoFaceDY;      /* +0x13E */
-    u16 tachoDigitsX;     /* +0x140 origin of the numeric readout */
-    u16 tachoDigitsY;     /* +0x142 */
-    u8 unk144[8];
-    u8 needleQuad[4];      /* +0x14C needle half-width/height corner offsets */
-    s16 needleAngleMin;   /* +0x150 needle sweep, 1/10000 of a turn */
-    s16 needleAngleMax;   /* +0x152 */
-    u8 needleColor[4];    /* +0x154 rgb + primitive code */
-    u8 needleColorAlt[4]; /* +0x158 */
-    s32 speedScale;       /* +0x15C player speed scale */
+    CarTachometerSpec tachometer; /* +0x138 */
 } GameCarSpec;
 
 extern GameCarSpec *g_CarSpec;

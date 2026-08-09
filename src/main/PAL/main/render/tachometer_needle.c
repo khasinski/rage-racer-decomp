@@ -5,22 +5,22 @@
 #include "psyq/gpu.h"
 
 void BuildTachoNeedleQuad(void) {
-    u8 *data = (u8 *)g_CarSpec;
+    CarTachometerSpec *spec = &g_CarSpec->tachometer;
     u8 *prim0 = g_TachoNeedlePrim0;
     u8 *prim1 = g_TachoNeedlePrim1;
     GameSpriteDesc *src = &g_TachoNeedleSprite;
 
-    g_TachoNeedleQuad[0][0] = -data[0x14F];
-    g_TachoNeedleQuad[0][1] = data[0x14E];
-    g_TachoNeedleQuad[1][0] = -data[0x14D];
-    g_TachoNeedleQuad[1][1] = -data[0x14C];
-    g_TachoNeedleQuad[2][0] = data[0x14F];
-    g_TachoNeedleQuad[2][1] = data[0x14E];
-    g_TachoNeedleQuad[3][0] = data[0x14D];
-    g_TachoNeedleQuad[3][1] = -data[0x14C];
+    g_TachoNeedleQuad[0][0] = -spec->needleQuad[3];
+    g_TachoNeedleQuad[0][1] = spec->needleQuad[2];
+    g_TachoNeedleQuad[1][0] = -spec->needleQuad[1];
+    g_TachoNeedleQuad[1][1] = -spec->needleQuad[0];
+    g_TachoNeedleQuad[2][0] = spec->needleQuad[3];
+    g_TachoNeedleQuad[2][1] = spec->needleQuad[2];
+    g_TachoNeedleQuad[3][0] = spec->needleQuad[1];
+    g_TachoNeedleQuad[3][1] = -spec->needleQuad[0];
 
-    src->x = *(u16 *)(data + 0x13C) + *(u16 *)(data + 0x138);
-    src->y = *(u16 *)(data + 0x13E) + *(u16 *)(data + 0x13A);
+    src->x = spec->faceDX + spec->needleX;
+    src->y = spec->faceDY + spec->needleY;
 
     BuildSpriteFromDesc((SPRT *)prim0, src);
     BuildSpriteFromDesc((SPRT *)prim1, src);
