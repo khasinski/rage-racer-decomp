@@ -31,6 +31,7 @@ typedef union CameraMatrixBuffer {
 typedef union CameraCarAddress {
     PlayerCarRuntime *player;
     GameRenderObject *renderObject;
+    Block16 *blocks;
 } CameraCarAddress;
 
 void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
@@ -126,8 +127,9 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     }
     switch (cameraMode) {
     case 0:
-        *(Block16 *)&scratch[2] = *(Block16 *)car;
-        *(Block16 *)&scratch[6] = *(Block16 *)&car->bodyPitch;
+        playerAddress.renderObject = car;
+        *(Block16 *)&scratch[2] = playerAddress.blocks[0];
+        *(Block16 *)&scratch[6] = playerAddress.blocks[2];
         BuildRotMatrixY(objectRotation.halfwords, scratch[7]);
         BuildRotMatrixX(matrixWork.halfwords, scratch[6]);
         MulMatrix2(matrixWork.halfwords, objectRotation.halfwords);
@@ -153,7 +155,8 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
         g_CameraModePrev = 0;
         break;
     case 1:
-        *(Block16 *)&scratch[2] = *(Block16 *)car;
+        playerAddress.renderObject = car;
+        *(Block16 *)&scratch[2] = playerAddress.blocks[0];
         chaseYawDamping = car->angleY;
         chaseTargetYaw = chaseYawDamping & 0xFFF;
         chaseCarSpeed = car->speed;
@@ -380,7 +383,8 @@ block_52:
         g_CameraModePrev = nextPrevMode;
         break;
     case 3:
-        *(Block16 *)&scratch[2] = *(Block16 *)car;
+        playerAddress.renderObject = car;
+        *(Block16 *)&scratch[2] = playerAddress.blocks[0];
         if (((u8)nodeChanged) || (g_CameraModePrev != 3)) {
             g_CamPathNode = cameraNodeIndex;
             g_CamPathFrame = 0;
@@ -576,7 +580,8 @@ block_52:
         g_CameraModePrev = nextPrevMode;
         break;
     case 5:
-        *(Block16 *)&scratch[2] = *(Block16 *)car;
+        playerAddress.renderObject = car;
+        *(Block16 *)&scratch[2] = playerAddress.blocks[0];
         BuildRotMatrixY(cameraRotation.halfwords, 0 - g_OrbitCameraYaw);
         BuildRotMatrixY(objectRotation.halfwords, car->angleY);
         BuildRotMatrixX(matrixWork.halfwords, car->bodyPitch);
