@@ -202,5 +202,5 @@ void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
     entryAddress.pointer = row;
     entryAddress.byteOffset = tone * 2 + entryAddress.byteOffset;
     entry = entryAddress.pointer;
-    SsUtKeyOnV((s16)(slot + 0xE), g_VabIds[(s16)vabSlot], *entry, 0, 0x3C, 0, 0, 0);
+    SsUtKeyOnV((s16)(slot + 0xE), g_SoundScale.vabIds[(s16)vabSlot], *entry, 0, 0x3C, 0, 0, 0);
 }

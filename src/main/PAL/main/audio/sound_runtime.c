@@ -114,7 +114,7 @@ void ResetSoundState(void) {
 }
 
 s32 InitSoundWithVab(s32 header, s32 body) {
-    s16 *vabIdPtr = g_VabIds;
+    s16 *vabIdPtr = g_SoundScale.vabIds;
     s16 vabId;
 
     SsSetTableSize(g_SndTableArea, 2, 1);

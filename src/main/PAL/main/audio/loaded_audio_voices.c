@@ -273,7 +273,7 @@ void ForcePanVoiceEnabled(s32 enabled) {
         right = 0xF;
         asm volatile("" : : "r"(voice), "r"(right));
         raw = 0x3C;
-        left = g_VabIds[0];
+        left = g_SoundScale.vabIds[0];
         zeroArg = 0;
         SsUtKeyOnV(voice, left, right, zeroArg, raw, 0, 0, 0);
     } else {
