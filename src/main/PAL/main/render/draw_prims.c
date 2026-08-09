@@ -51,9 +51,9 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
                     rect.y = yReg;
                     rect.w = wReg;
                     rect.h = hReg;
-                    SetDrawArea(packet, &rect);
+                    SetDrawArea((DrawPacket *)packet, &rect);
                     oldPacket = packet;
-                    packet += 12;
+                    packet = (void *)((DrawPacket *)packet + 1);
                     AddPrim(otReg, oldPacket);
                     *scratch = packet;
                 }

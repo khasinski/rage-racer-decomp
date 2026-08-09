@@ -195,9 +195,9 @@ void DrawRearViewMirror(s32 mode) {
 
             DrawSkyBackground();
             packet = DrawMirrorFrame(*scratch);
-            SetDrawArea(packet, g_DrawBuffer + 0x70);
+            SetDrawArea((DrawPacket *)packet, g_DrawBuffer + 0x70);
             prim = packet;
-            packet += 0xC;
+            packet = (void *)((DrawPacket *)packet + 1);
             AddPrim((u32 *)(g_DrawBuffer + 0x16C8), (u32 *)prim);
             *scratch = packet;
             BuildVisibleCells(-0x3000, 0x6000);
@@ -206,9 +206,9 @@ void DrawRearViewMirror(s32 mode) {
             SubmitTerrainCells((void *)SCRATCHPAD_ADDR, (void *)g_VisibleCellList, 0x40);
 
             packet = *scratch;
-            SetDrawArea(packet, g_DrawBuffer);
+            SetDrawArea((DrawPacket *)packet, g_DrawBuffer);
             prim = packet;
-            packet += 0xC;
+            packet = (void *)((DrawPacket *)packet + 1);
             AddPrim((u32 *)(g_DrawBuffer + 0xBD0), (u32 *)prim);
             *scratch = packet;
             DrawCourseObjects();

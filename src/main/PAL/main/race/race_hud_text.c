@@ -106,9 +106,9 @@ void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     rect.y = y + offset;
     rect.w = w;
     rect.h = h;
-    SetDrawArea(packet, &rect);
+    SetDrawArea((DrawPacket *)packet, &rect);
     oldPacket = packet;
-    packet = (u8 *)packet + 12;
+    packet = (DrawPacket *)packet + 1;
     AddPrim(ot, oldPacket);
     return packet;
 }
