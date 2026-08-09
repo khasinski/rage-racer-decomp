@@ -9,6 +9,7 @@
 void UpdateMemoryCardMenu(void) {
     s32 fadeBusy = 0;
     s32 two = 2;
+    u32 fadeTime;
     s32 code;
     s32 tmp;
     u16 pad;
@@ -21,7 +22,8 @@ void UpdateMemoryCardMenu(void) {
         SetDispMask(1);
     }
 
-    if ((u32) g_SceneTimer >= 6) {
+    fadeTime = g_SceneTimer;
+    if (fadeTime >= 6) {
         s32 step = g_McFadeStep;
         if (step < 0) {
             g_McFadeLevel = g_McFadeLevel + g_McFadeStep;
@@ -48,8 +50,8 @@ fade_update_done:
     DrawMenuFadeOverlay(g_McFadeLevel);
 
     {
-    s32 cur = g_SceneTimer;
-    if ((u32) cur < 5) {
+    u32 cur = g_SceneTimer;
+    if (cur < 5) {
         s32 ns = cur + 1;
         g_SceneTimer = ns;
         g_McMenuPhase = MC_PROMPT_ACCESSING;
