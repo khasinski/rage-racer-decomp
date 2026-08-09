@@ -235,6 +235,7 @@ void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
     s32 speed;
     s32 trig;
     s32 product;
+    u32 hitSign;
 
     carReg = car;
     asm("" : : "r"(carReg));
@@ -329,10 +330,12 @@ void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
     hitZ = tmp >> 12;
     tmp = 0xF;
     } else {
-    adjustedReg = (u32)hitX >> 31;
+    hitSign = hitX;
+    adjustedReg = hitSign >> 31;
     adjustedReg = hitX + adjustedReg;
     hitX = adjustedReg >> 1;
-    adjustedReg = (u32)hitZ >> 31;
+    hitSign = hitZ;
+    adjustedReg = hitSign >> 31;
     adjustedReg = hitZ + adjustedReg;
     hitZ = adjustedReg >> 1;
     tmp = 0xF;

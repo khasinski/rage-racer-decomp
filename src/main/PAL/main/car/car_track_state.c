@@ -4,6 +4,7 @@
 #include "game/track.h"
 #include "psyq/gte.h"
 #include "game/render.h"
+#include "game/race.h"
 #include "game/scratchpad.h"
 #include "game/track_internal.h"
 #include "game/vector.h"
@@ -283,7 +284,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         u32 outputProgress;
         s32 useProgress;
 
-        useProgress = *(s32 *)0x801E408C;
+        useProgress = g_RaceSeries;
         obj->trackLateralOffset = lateralOffset;
         if (useProgress != 0)
         {
@@ -368,7 +369,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     {
         s32 finalAngle;
 
-        if (*(s32 *)0x801E408C != 0)
+        if (g_RaceSeries != 0)
         {
             finalAngle = g_TrackLength - obj->trackProgress;
             obj->trackSection = (s16)(finalAngle >> 8);

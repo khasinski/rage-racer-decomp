@@ -2,6 +2,7 @@
 #include "game/track.h"
 #include "psyq/gte.h"
 #include "game/render.h"
+#include "game/race.h"
 #include "game/car.h"
 #include "game/scratchpad.h"
 #include "game/track_internal.h"
@@ -267,7 +268,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
                (point->rightHalfWidth * (segLenA - alongSegment))) /
               segLenA;
     spad->rightHalfWidth = (s16)edgeHeight;
-    useProgress = *(s32 *)0x801E408C;
+    useProgress = g_RaceSeries;
     segLenB = (s16)spad->segmentLength;
     {
         s32 widthSum;
@@ -376,7 +377,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
     {
         s32 finalAngle;
 
-        if (*(s32 *)0x801E408C != 0) {
+        if (g_RaceSeries != 0) {
             finalAngle = g_TrackLength - car->trackProgress;
             car->trackSection = (s16)(finalAngle >> 8);
         } else {
