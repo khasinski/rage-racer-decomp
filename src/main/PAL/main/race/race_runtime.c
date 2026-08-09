@@ -647,11 +647,11 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     lev2_R2 = g_RaceSeries;
     idxoff2_R4 = idx_R8 * 16;
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
-    w = ((TrackEventData *)p2_R3)->rivalAiConfigs[0][0].field_132;
-    sub_R6->field_132 = w;
+    w = ((TrackEventData *)p2_R3)->rivalAiConfigs[0][0].minimumSpeed;
+    sub_R6->minimumSpeed = w;
     if (((s16) w) < 0x3D)
     {
-      sub_R6->field_132 = 0x3C;
+      sub_R6->minimumSpeed = 0x3C;
     }
     lev2_R2 = g_RaceSeries;
     __asm__("" : "=r"(idxoff2_R4) : "0"(idxoff2_R4));

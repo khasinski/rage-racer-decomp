@@ -520,7 +520,7 @@ typedef struct GameCarAiBlock {
     s16 boostAcceleration;  /* clamped to 0..15; the boost-branch step of acceleration */
     s16 boostTimer;  /* +0x72 slipstream-boost countdown, decremented while > 0 */
     s16 accelerationLimit;  /* damped while boxed in; caps acceleration */
-    s16 field_132;  /* clamped to >= 0x3C */
+    s16 minimumSpeed;  /* clamped to >= 0x3C */
     s16 field_134;  /* clamped to >= 0 */
     u8 pad7A[2];
     u16 markerCounter; /* +0x7C */
