@@ -206,8 +206,7 @@ void UpdateOwnedCarNeighbours(void) {
     index = g_PlayerCarIndex - 1;
     if (index >= 0) {
         s32 one = 1;
-        s32 offset = index * 8;
-        ptr = (CarEntry *)(offset + (s32)g_CarTable);
+        ptr = &g_CarTable[index];
         while (index >= 0) {
             if (ptr->enabled == one) {
                 g_PrevOwnedCarIndex = index;
@@ -222,8 +221,7 @@ void UpdateOwnedCarNeighbours(void) {
     index = g_PlayerCarIndex + 1;
     if (index < 13) {
         s32 one = 1;
-        s32 offset = index * 8;
-        ptr = (CarEntry *)(offset + (s32)g_CarTable);
+        ptr = &g_CarTable[index];
         while (index < 13) {
             if (ptr->enabled == one) {
                 g_NextOwnedCarIndex = index;
@@ -240,14 +238,12 @@ void RefreshCarUnlockState(void) {
     CarEntry *ptr;
     CarEntry *enabledPtr;
     s32 byte;
-    s32 enabledBase;
 
     g_ShopCarIndex = -1;
 
     if (g_CarShopUnlockAll != 0) {
         index = 12;
-        enabledBase = (s32)g_CarTable;
-        enabledPtr = (CarEntry *)(enabledBase + 0x60);
+        enabledPtr = &g_CarTable[12];
 while (1) {
         byte = enabledPtr->enabled;
         enabledPtr--;
@@ -265,10 +261,7 @@ while (1) {
 do {
     {
         value = GetCarUnlockLevel(index);
-        {
-            s32 offset = index * 8;
-            ptr = (CarEntry *)(offset + (s32)g_CarTable);
-        }
+        ptr = &g_CarTable[index];
         if (ptr->enabled == 0) {
             if (g_RaceProgress->maxClassReached < 4) {
                 if ((g_RaceProgress->maxClassReached + 1) < value) {
