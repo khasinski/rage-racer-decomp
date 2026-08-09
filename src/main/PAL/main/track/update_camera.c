@@ -47,6 +47,7 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     s32 yawError;
     s32 pathBlend;
     s32 pathYawRelative;
+    s32 *pitchDeltaPtr;
     s32 speedDamping;
     s32 toCarX;
     s32 pathYaw;
@@ -394,17 +395,17 @@ block_52:
             g_CamPathOffsetDelta[1] = pathNode->offset[1] - g_CamPathOffsetStart[1];
             g_CamPathOffsetDelta[2] = pathNode->offset[2] - g_CamPathOffsetStart[2];
             pitchDelta = pathNode->data.orientation.pitch - g_CamPathAngleStart[CAMPATH_PITCH];
-            pathYaw = (s32)&g_CamPathAngleDelta[CAMPATH_PITCH];
-            *(s32 *)pathYaw = pitchDelta;
+            pitchDeltaPtr = &g_CamPathAngleDelta[CAMPATH_PITCH];
+            *pitchDeltaPtr = pitchDelta;
             g_CamPathAngleDelta[CAMPATH_YAW] = pathNode->data.orientation.yaw - g_CamPathAngleStart[CAMPATH_YAW];
             g_CamPathAngleDelta[CAMPATH_ROLL] = pathNode->data.orientation.roll - g_CamPathAngleStart[CAMPATH_ROLL];
             g_CamPathAngleDelta[CAMPATH_DIST] = pathNode->data.orientation.distance - g_CamPathAngleStart[CAMPATH_DIST];
             if (pitchDelta > 0) {
                 if (pitchDelta >= 0x800) {
-                    *(s32 *)pathYaw = pitchDelta - 0x1000;
+                    *pitchDeltaPtr = pitchDelta - 0x1000;
                 }
             } else if (pitchDelta < -0x7FF) {
-                *(s32 *)pathYaw = pitchDelta + 0x1000;
+                *pitchDeltaPtr = pitchDelta + 0x1000;
             }
             case3Angle = &g_CamPathAngleDelta[CAMPATH_YAW];
             if (*case3Angle > 0) {
