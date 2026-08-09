@@ -45,7 +45,6 @@ enum SkyOrderingTableIndex
   SKY_OT_FAR = 702,
   SKY_OT_NEAR = 703
 };
-register u8 *stackPointer asm("$29");
 void DrawSkyBackground(void)
 {
   SkyRenderScratchpad *scratch = (SkyRenderScratchpad *)SCRATCHPAD_ADDR;
@@ -578,7 +577,7 @@ void DrawSkyBackground(void)
         s32 x3Raw;
         s32 doubleStepX;
         asm volatile("" : : "r"(xWork));
-        asm volatile("" : "=r"(screenX0) : "0"(*(s32 *)(stackPointer + 0x90)));
+        asm volatile("" : "=r"(screenX0) : "0"(screenX2));
         doubleStepX = rowStepX * 2;
         screenX1 = screenX3;
         leftXWorkFixed = doubleStepX + rowStepX;
