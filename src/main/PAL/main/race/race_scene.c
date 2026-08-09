@@ -291,6 +291,7 @@ void EnterRaceScene(void) {
     s32 scratch;
     s32 *second;
     SectorTimeTableAddress sectorAddress;
+    SectorTimeTableAddress lastSectorAddress;
 
     SetupDisplay240(0, 0, 0);
     InitRenderState(5);
@@ -338,7 +339,9 @@ void EnterRaceScene(void) {
         scratch = g_GrandPrixMode * 4;
         scratch += count;
         entry = (s32 *)scratch;
-        g_RefSectorTime2 = ((s32 *)((u8 *)g_BestSectorTimes + tableOffset))[2];
+        lastSectorAddress.pointer = (s32 *)g_BestSectorTimes;
+        lastSectorAddress.byteOffset += tableOffset;
+        g_RefSectorTime2 = lastSectorAddress.pointer[2];
     } while (0);
     g_RefLapTime = *entry;
     count = (scratch = g_LapCount);
