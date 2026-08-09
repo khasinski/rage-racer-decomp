@@ -36,7 +36,7 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
         s32 timer;
 
         timer = car->motionModeTimer;
-        product = timer * car->motionValue;
+        product = timer * car->motionValue.value;
         if (product < 0) {
             product += 0x7F;
         }

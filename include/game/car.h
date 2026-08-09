@@ -42,6 +42,11 @@ typedef struct CarTrackLimits {
     s16 leftKnockbackMode;
 } CarTrackLimits;
 
+typedef union CarMotionValue {
+    s16 value;
+    u16 unsignedValue;
+} CarMotionValue;
+
 typedef struct GameCarRuntime {
     s32 x;
     /* +0x04 32 bits wide, not 16: `lw`/`sw` at nine sites in each of
@@ -87,7 +92,7 @@ typedef struct GameCarRuntime {
     u16 motionTimer;
     s16 motionMode;
     s16 motionModeTimer;
-    s16 motionValue;
+    CarMotionValue motionValue;
     s16 collisionFlag;
     s16 tiltCounter;
     s16 reserved8E;
@@ -484,7 +489,7 @@ typedef struct PlayerCarRuntime {
     u16 motionTimer;
     s16 motionMode;
     s16 motionModeTimer;
-    s16 motionValue;
+    CarMotionValue motionValue;
     s16 collisionFlag;
     s16 tiltCounter;
     s16 reserved8E;

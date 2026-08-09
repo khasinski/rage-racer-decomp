@@ -119,7 +119,7 @@ void ClearCarMotionState(GameCarRuntime *car) {
     car->collisionFlag = 0;
     car->motionMode = 0;
     car->motionModeTimer = 0;
-    car->motionValue = 0;
+    car->motionValue.value = 0;
     car->motionActive = 0;
     car->motionTimer = 0;
     car->velocityX = 0;
@@ -370,7 +370,7 @@ void StartCarBodyKick(s32 strength, GameCarRuntime *car) {
     temp = 0x1E;
     obj->motionModeTimer = temp;
     value <<= 3;
-        obj->motionValue = value;
+        obj->motionValue.value = value;
         return;
 
 angled_body_kick:
@@ -382,7 +382,7 @@ angled_body_kick:
 
     distance = obj->speed;
     if (distance < 0x140) {
-        obj->motionValue = 0;
+        obj->motionValue.value = 0;
     } else {
 
     value = distance - 0x140;
@@ -392,7 +392,7 @@ angled_body_kick:
     }
     value >>= 12;
 
-    obj->motionValue = value;
+    obj->motionValue.value = value;
 
     }
     value = 0x1E;
@@ -400,9 +400,9 @@ angled_body_kick:
 
     value = Random15();
     if (value & 0x80) {
-        value = *(u16 *)&obj->motionValue;
+        value = obj->motionValue.unsignedValue;
         value = -value;
 
-        obj->motionValue = value;
+        obj->motionValue.value = value;
     }
 }
