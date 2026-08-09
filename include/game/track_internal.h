@@ -33,11 +33,7 @@ extern s32 g_CourseObjectCount;
 extern StartGridSceneryStep g_StartGridSceneryStep[];
 extern PathSceneryClock g_PathSceneryClock;
 extern Block16 g_PathSceneryX;
-#ifndef GAME_PATH_SCENERY_ROT_DECL
-#define GAME_PATH_SCENERY_ROT_DECL extern SVec g_PathSceneryRot
-#endif
-GAME_PATH_SCENERY_ROT_DECL;
-#undef GAME_PATH_SCENERY_ROT_DECL
+extern SVec g_PathSceneryRot;
 extern PathSceneryCursor g_PathSceneryPosCursor asm("g_PathSceneryPosPhase");
 extern PathSceneryCursor g_PathSceneryRotCursor asm("g_PathSceneryRotPhase");
 

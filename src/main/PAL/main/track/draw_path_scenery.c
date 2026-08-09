@@ -7,7 +7,6 @@
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/track.h"
-#define GAME_PATH_SCENERY_ROT_DECL extern s16 g_PathSceneryRot[3]
 #include "game/track_internal.h"
 #include "psyq/gte.h"
 
@@ -27,14 +26,14 @@ void DrawPathScenery(void) {
 
     mtx0Ptr = &mtx0;
     __asm__("" : "=r"(mtx0Ptr) : "0"(mtx0Ptr));
-    anglePtr = &g_PathSceneryRot[1];
+    anglePtr = &g_PathSceneryRot.vy;
     mtx1Ptr = &mtx1;
 
     BuildRotMatrixY(mtx0Ptr, 0x800 - anglePtr[0]);
-    BuildRotMatrixX(mtx1Ptr, g_PathSceneryRot[0]);
+    BuildRotMatrixX(mtx1Ptr, g_PathSceneryRot.vx);
     MulMatrix2(&mtx0, mtx1Ptr);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, mtx1Ptr);
-    BuildRotMatrixZ(&mtx0, g_PathSceneryRot[2]);
+    BuildRotMatrixZ(&mtx0, g_PathSceneryRot.vz);
     MulMatrix2(mtx1Ptr, &mtx0);
 
     SelectModelBank(1);
