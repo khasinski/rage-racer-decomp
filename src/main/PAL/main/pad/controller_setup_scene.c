@@ -28,6 +28,7 @@ void DrawControllerSetupScene(s32 variant) {
     s32 position[3];
     s32 steer;
     s32 model;
+    u32 setupMode;
     u8 *scratchBase = (u8 *)SCRATCHPAD_ADDR;
 
     g_ScratchViewZVolatile = 0;
@@ -41,7 +42,8 @@ void DrawControllerSetupScene(s32 variant) {
     g_ScratchViewAngleY = 0;
     g_ScratchViewAngleX = 0;
     g_ScratchViewYPointer = 0;
-    if ((u32)(g_GameMode - 10) < 2) {
+    setupMode = g_GameMode - 10;
+    if (setupMode < 2) {
         g_ScratchViewZPointer = (void *)-0xC80;
     } else {
         g_ScratchViewYPointer = (void *)-0x40;
