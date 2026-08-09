@@ -110,14 +110,6 @@ typedef struct SoundModeEntry {
 
 extern SoundModeEntry g_SoundModes[];
 
-typedef struct EffectCueRow {
-    s32 count;
-    s32 scale;
-    s32 cue;
-    s32 tone;
-} EffectCueRow;
-
-
 /*
  * Pre-race BGM picker (scene 0xA, left/right on the pad). Per-file types.
  *   g_BgmSelection    g_BgmSelection  0 = shuffle, else track + 1; saved
