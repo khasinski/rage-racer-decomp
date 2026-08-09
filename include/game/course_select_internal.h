@@ -3,10 +3,6 @@
 
 #include "common.h"
 
-typedef struct CourseSelectPrizeTable {
-    s32 values[4][6][3];
-} CourseSelectPrizeTable;
-
 typedef union CourseSelectScrollState {
     s32 value;
 } CourseSelectScrollState;

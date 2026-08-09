@@ -159,11 +159,11 @@ void DrawRoundScreen(void) {
     col = UpdateRoundScreenFade(2);
     if (g_GrandPrixMode != 0) {
         GameDrawProportionalTextShaded(0x80, 0x88, g_CaptionPrizeMoney2, 0x7812, col);
-        sprintf(buf, g_FmtPrize1st, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][0]);
+        sprintf(buf, g_FmtPrize1st, g_PrizeMoney.values[g_CourseIndex][g_GrandPrixClass][0]);
         GameDrawProportionalTextShaded(0x56, 0x98, buf, 0x7812, col);
-        sprintf(buf, g_FmtPrize2nd, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][1]);
+        sprintf(buf, g_FmtPrize2nd, g_PrizeMoney.values[g_CourseIndex][g_GrandPrixClass][1]);
         GameDrawProportionalTextShaded(0x56, 0xa4, buf, 0x7812, col);
-        sprintf(buf, g_FmtPrize3rd, g_PrizeMoney[g_CourseIndex][g_GrandPrixClass][2]);
+        sprintf(buf, g_FmtPrize3rd, g_PrizeMoney.values[g_CourseIndex][g_GrandPrixClass][2]);
         GameDrawProportionalTextShaded(0x56, 0xb0, buf, 0x7812, col);
     } else {
         GameDrawProportionalTextShaded(0x62, 0x7c, g_CaptionBestTotalTime, 0x7812, col);

@@ -181,7 +181,7 @@ void EnterPrizeScreen(void) {
     mode = g_CourseIndex;
     car = g_GrandPrixClass;
     g_PrizeScreenState = 0;
-    g_PrizeAmount = g_PrizeMoney[mode][car][g_RacePosition - 1];
+    g_PrizeAmount = g_PrizeMoney.values[mode][car][g_RacePosition - 1];
     g_SceneId = 0x13;
 
     if (g_ClassPromoted != 0) {

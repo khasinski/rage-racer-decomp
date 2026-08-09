@@ -31,7 +31,11 @@ extern char *g_GrandPrixNames[];
 extern s16 g_RacePosition;
 
 /* Prize money per [course][class][place], place 0 = 1st. */
-extern s32 g_PrizeMoney[][6][3];
+typedef struct GrandPrixPrizeTable {
+    s32 values[4][6][3];
+} GrandPrixPrizeTable;
+
+extern GrandPrixPrizeTable g_PrizeMoney;
 
 /* Round number within the current class; drives the "R O U N D %d" overlay. */
 extern s32 g_GrandPrixRound;

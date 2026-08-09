@@ -224,7 +224,6 @@ indexed_effect_done:
 #define CHANNEL(byteOffset) (*(MusicChannel *)((u8 *)g_MusicChannels + (byteOffset)))
 
 void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
-    s32 offset;
     s32 count;
     s32 i;
     s32 loopTableOffset;
@@ -326,13 +325,12 @@ after_match:
             activeValue = 1;
             resetCount = resetLoad;
             do {
-                offset = i * 0x18;
-                CHANNEL(offset).left.value = inactiveValue;
-                CHANNEL(offset).right.value = inactiveValue;
-                CHANNEL(offset).mode = activeValue;
+                g_MusicChannels[i].left.value = inactiveValue;
+                g_MusicChannels[i].right.value = inactiveValue;
+                g_MusicChannels[i].mode = activeValue;
                 runtime = &g_AudioRuntimeState;
                 runtime->musicChannels[i].volRight = 0;
-                CHANNEL(offset).volLeft = 0;
+                g_MusicChannels[i].volLeft = 0;
                 i++;
             } while (i < resetCount);
         }

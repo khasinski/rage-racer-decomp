@@ -141,7 +141,7 @@ s32 DrawCourseSelectScreen(s32 step)
     s32 row;
     s32 digitCount;
     s32 prizeOffset;
-    CourseSelectPrizeTable *prizeTable;
+    GrandPrixPrizeTable *prizeTable;
     s32 prizeFade;
     s32 prizeClut;
     s32 gpHeight;
@@ -368,7 +368,7 @@ s32 DrawCourseSelectScreen(s32 step)
 
         row = 0;
         prizeOffset = (s16)slide - 0x140;
-        prizeTable = (CourseSelectPrizeTable *)&g_PrizeMoney;
+        prizeTable = &g_PrizeMoney;
         prizeFade = fade;
         prizeClut = 0x244;
         do {
