@@ -118,15 +118,13 @@ s32 LoadSaveStateBlock(u8 *block) {
 
     {
         register u8 *src asm("$4") = base;
-        s32 offset = 0;
-        for (; offset < 0x2C; offset += 4) {
+        s32 index = 0;
+        for (; index < 11; index++) {
             SavedClassRecord *saved =
                 &((GameSaveBlock *)src)->classRecords[0];
 
-            ((SavedClassRecord *)((u8 *)g_ClassRecords + offset))->grade =
-                saved->grade;
-            ((SavedClassRecord *)((u8 *)g_ClassRecords + offset))->clears =
-                saved->clears;
+            g_ClassRecords[index].place = saved->grade;
+            g_ClassRecords[index].clears = saved->clears;
             src += sizeof(SavedClassRecord);
         }
     }

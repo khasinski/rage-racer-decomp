@@ -96,17 +96,15 @@ void StoreSaveStateBlock(u8 *block) {
         }
 
         {
-            s32 offset;
+            s32 index;
 
             saveValue = (long)block;
-            offset = 0;
-            for (; offset < 0x2C; offset += 4) {
+            index = 0;
+            for (; index < 11; index++) {
                 SavedClassRecord *dst =
                     &((GameSaveBlock *)saveValue)->classRecords[0];
-                dst->grade =
-                    ((SavedClassRecord *)((u8 *)g_ClassRecords + offset))->grade;
-                dst->clears =
-                    ((SavedClassRecord *)((u8 *)g_ClassRecords + offset))->clears;
+                dst->grade = g_ClassRecords[index].place;
+                dst->clears = g_ClassRecords[index].clears;
                 saveValue += sizeof(SavedClassRecord);
             }
         }
