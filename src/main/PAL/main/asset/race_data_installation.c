@@ -16,22 +16,26 @@ void SetCarSpec(u32 spec) {
     g_CarSpec = (GameCarSpec *)spec;
 }
 
-void InstallTrackEventData(u8 *eventData) {
+void InstallTrackEventData(void *resourceData) {
     register s32 offset0 asm("$2");
     s32 offset1;
     u8 *callArg;
     u8 *base;
+    u8 *rawEventData;
+    TrackEventData *eventData;
 
-    offset0 = ((TrackEventData *)eventData)->offsets.flybyScenery;
-    offset1 = ((TrackEventData *)eventData)->offsets.raceIntroCamera;
-    base = (u8 *)&((TrackEventData *)eventData)->offsets;
-    g_TrackEventData = (TrackEventData *)eventData;
+    rawEventData = resourceData;
+    eventData = resourceData;
+    offset0 = eventData->offsets.flybyScenery;
+    offset1 = eventData->offsets.raceIntroCamera;
+    base = (u8 *)&eventData->offsets;
+    g_TrackEventData = eventData;
     g_FlybySceneryData = (SceneryMotionData *)(base + offset0);
-    offset0 = *(s32 *)(eventData + 0xB64);
+    offset0 = *(s32 *)(rawEventData + 0xB64);
     g_RaceIntroCameraScript = base + offset1;
-    offset1 = *(s32 *)(eventData + 0xB70);
+    offset1 = *(s32 *)(rawEventData + 0xB70);
     g_RouteSceneryData = (SceneryMotionData *)(base + offset0);
-    offset0 = *(s32 *)(eventData + 0xB6C);
+    offset0 = *(s32 *)(rawEventData + 0xB6C);
     callArg = g_MsgEventOk;
     offset0 = (s32)(base + offset0);
     base += offset1;
