@@ -460,13 +460,17 @@ after_match:
     *state = neg
 
 #define START_BASIC_EFFECT_VOLUME()                                   \
-    raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);                              \
+    startLeftAddress.wordPointer = &g_MusicChannels[0].volLeft;       \
+    startLeftAddress.byteOffset += offset;                            \
+    raw = *startLeftAddress.wordPointer;                              \
     scale = g_SoundScale.scale;                                                \
     left = raw * scale;                                                \
     raw = i + 8;                                                       \
     asm("" : "=r"(raw) : "0"(raw));                                    \
     voice = raw;                                                       \
-    raw = *(s32 *)((u8 *)&g_MusicChannels[0].volRight + offset);                              \
+    startRightAddress.wordPointer = &g_MusicChannels[0].volRight;     \
+    startRightAddress.byteOffset += offset;                           \
+    raw = *startRightAddress.wordPointer;                             \
     if (left < 0) {                                                    \
         left += 0x7F;                                                  \
     }                                                                 \
@@ -508,6 +512,8 @@ void UpdateBasicEffectVoices(void) {
     MusicChannelAddress rightToneAddress;
     MusicChannelAddress updateLeftAddress;
     MusicChannelAddress updateRightAddress;
+    MusicChannelAddress startLeftAddress;
+    MusicChannelAddress startRightAddress;
 
     i = 0;
     neg = -1;
