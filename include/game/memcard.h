@@ -52,6 +52,11 @@ typedef union GameSaveHeaderRow {
     u16 halfwords[0x40];
 } GameSaveHeaderRow;
 
+typedef union GameSaveHeaderRowAddress {
+    s32 value;
+    GameSaveHeaderRow *pointer;
+} GameSaveHeaderRowAddress;
+
 typedef struct MemoryCardMessageRow {
     s32 text;
     u8 column;
