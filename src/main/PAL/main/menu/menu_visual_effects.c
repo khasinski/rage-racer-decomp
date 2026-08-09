@@ -13,6 +13,13 @@ typedef union TeamLogoRotationBufferAddress {
     u32 *wordPointer;
 } TeamLogoRotationBufferAddress;
 
+static inline TeamLogoColorSlot *GetTeamLogoPenSlot(void) {
+    TeamLogoColorAddress address;
+
+    address.index = &g_TeamLogoPenColor;
+    return address.slot;
+}
+
 /* Identical to the declaration in game/menu.h; this unit cannot include that
  * header yet because four of its own definitions still disagree with it
  * (ScrollTeamLogoUp, GameDrawMenuButton, g_RankingRecords, g_TimeRecords). */
@@ -541,19 +548,19 @@ void UpdateTeamLogoCanvas(void) {
                             switch (rem) {
                             case 0:
                                 *p = (*p & 0xFFF0) |
-                                     ((TeamLogoColorSlot *)&g_TeamLogoPenColor)->low;
+                                     GetTeamLogoPenSlot()->low;
                                 break;
                             case 1:
                                 *p = (*p & 0xFF0F) |
-                                     (((TeamLogoColorSlot *)&g_TeamLogoPenColor)->low << 4);
+                                     (GetTeamLogoPenSlot()->low << 4);
                                 break;
                             case 2:
                                 *p = (*p & 0xF0FF) |
-                                     (((TeamLogoColorSlot *)&g_TeamLogoPenColor)->low << 8);
+                                     (GetTeamLogoPenSlot()->low << 8);
                                 break;
                             case 3:
                                 *p = (*p & 0xFFF) |
-                                     (((TeamLogoColorSlot *)&g_TeamLogoPenColor)->low << 0xC);
+                                     (GetTeamLogoPenSlot()->low << 0xC);
                                 break;
                             }
                     }

@@ -62,13 +62,18 @@ typedef union PaintColorAddress {
     Rgb *pointer;
 } PaintColorAddress;
 
+typedef s32 TeamLogoCoordinate;
+typedef s32 TeamLogoColorIndex;
+
 typedef union TeamLogoColorSlot {
     s32 value;
     u16 low;
 } TeamLogoColorSlot;
 
-typedef s32 TeamLogoCoordinate;
-typedef s32 TeamLogoColorIndex;
+typedef union TeamLogoColorAddress {
+    TeamLogoColorIndex *index;
+    TeamLogoColorSlot *slot;
+} TeamLogoColorAddress;
 
 typedef struct TeamLogoClutPos {
     s16 x;
