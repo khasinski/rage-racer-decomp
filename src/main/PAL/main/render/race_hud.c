@@ -149,18 +149,18 @@ void DrawTimeRemaining(s32 time) {
 void DrawRacePosition(void) {
     u8 *base;
     s32 value;
-    u8 *left;
-    u8 *right;
+    SPRT *left;
+    SPRT *right;
 
     base = g_DrawBuffer;
     value = g_RacePosition;
-    left = base + 0x237AC;
-    right = base + 0x237C0;
+    left = (SPRT *)(base + 0x237AC);
+    right = (SPRT *)(base + 0x237C0);
 
     if (value >= 10) {
-        *(u8 *)(base + 0x237B8) = 0x18;
+        left->u0 = 0x18;
     } else {
-        *(u8 *)(base + 0x237B8) = 0;
+        left->u0 = 0;
     }
 
     {
@@ -169,15 +169,15 @@ void DrawRacePosition(void) {
 
         quotient = value / 10;
         digit = (value - quotient * 10) * 24;
-        *(u8 *)(right + 0xC) = digit;
+        right->u0 = digit;
     }
 
     if (value < 4) {
-        *(s16 *)(left + 0xE) = 0x780B;
-        *(s16 *)(right + 0xE) = 0x780B;
+        left->clut = 0x780B;
+        right->clut = 0x780B;
     } else {
-        *(s16 *)(left + 0xE) = 0x780E;
-        *(s16 *)(right + 0xE) = 0x780E;
+        left->clut = 0x780E;
+        right->clut = 0x780E;
     }
 }
 
