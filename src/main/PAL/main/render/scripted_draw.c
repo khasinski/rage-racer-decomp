@@ -9,7 +9,7 @@ void DrawScriptedSprite(s32 elapsed, ScriptedSpriteShape *shape, ScriptedSpriteM
     register ScriptedSpriteMotion *motionReg asm("$10") = motion;
     register ScriptedSpriteShape *shapeReg asm("$9");
     s32 flags8;
-    void *otBase;
+    u32 *otBase;
     s32 mode;
     s32 flags4;
     register s32 limit asm("$8");
@@ -23,7 +23,7 @@ void DrawScriptedSprite(s32 elapsed, ScriptedSpriteShape *shape, ScriptedSpriteM
 
     /* Match note: materialize motionReg in $t2 before the first load. */
     limit = motionReg->limit;
-    otBase = SCRATCH_OT_BASE_AS(void);
+    otBase = SCRATCH_OT_BASE_AS(u32);
     packed = motionReg->packedVelocity;
     shapeReg = shape;
     if (limit < elapsed) {
@@ -82,7 +82,7 @@ void DrawScriptedSprite(s32 elapsed, ScriptedSpriteShape *shape, ScriptedSpriteM
     }
 
     DrawSprite(
-        (u8 *)otBase + (mode * 4),
+        otBase + mode,
         (s16)x,
         (s16)y,
         shapeReg->width,
@@ -217,7 +217,7 @@ void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion 
 void DrawScriptedTriangle(s32 time, ScriptedTriangleShape *styleArg, ScriptedTriangleMotion *recordArg) {
     ScriptedTriangleShape *style;
     ScriptedTriangleMotion *record;
-    void *ot;
+    u32 *ot;
     s32 limit;
     register s32 packedSpeed asm("$3");
     s32 product;
@@ -235,7 +235,7 @@ void DrawScriptedTriangle(s32 time, ScriptedTriangleShape *styleArg, ScriptedTri
     /* The barrier is load-bearing: without it the scheduler sinks the
      * scratchpad load past the second record load. */
     limit = record->limit;
-    ot = SCRATCH_OT_BASE_AS(void);
+    ot = SCRATCH_OT_BASE_AS(u32);
     asm volatile("");
     packedSpeed = record->packedVelocity;
     if (limit < time) {
@@ -314,7 +314,7 @@ void DrawScriptedTriangle(s32 time, ScriptedTriangleShape *styleArg, ScriptedTri
 
     asm("" : : "r"(packedSpeed));
     DrawFlatTriangle(
-        (u8 *)ot + (mode * 4),
+        ot + mode,
         (s16)x,
         (s16)y,
         (s16)limit,
@@ -540,7 +540,7 @@ timed_commands_done:
 void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     ScriptedSpriteShape *shapePtr;
     register ScriptedSpriteMotion *motionPtr asm("$9");
-    void *ot;
+    u32 *ot;
     register s32 countReg asm("$21");
     register s32 i asm("$18");
     TimedDrawCommand *cmd;
@@ -565,7 +565,7 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     shapePtr = g_MenuRowScript[0].shape.pointer;
     elapsed = progress - g_MenuRowScript[0].time;
     motionPtr = g_MenuRowScript[0].motion.pointer;
-    ot = SCRATCH_OT_BASE_AS(void);
+    ot = SCRATCH_OT_BASE_AS(u32);
     countReg = count;
     packed = motionPtr->packedVelocity;
     i = 0;
@@ -631,7 +631,7 @@ loop:
     drawX >>= 16;
     drawY >>= 16;
 
-    DrawSprite((u8 *)ot + 8,
+    DrawSprite(ot + 2,
                   drawX,
                   drawY,
                   drawW,
