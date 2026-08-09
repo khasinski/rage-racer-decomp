@@ -292,12 +292,12 @@ typedef struct GameCarSpec {
     s16 unk102;           /* +0x102 scale applied to car->acceleration */
     s16 topGear;          /* +0x104 highest selectable gear */
     s16 redline;          /* +0x106 redline warning rpm */
-    s16 unk108;
+    s16 steeringGripResponse;
     u16 steerResponse;    /* +0x10A divisor of the AI heading correction */
     s16 unk10C;           /* +0x10C */
-    s16 unk10E;           /* +0x10E */
+    s16 negconSteeringAssistScale; /* +0x10E */
     s16 unk110;           /* +0x110 */
-    s16 unk112;           /* +0x112 */
+    s16 baseSteeringGrip; /* +0x112 */
     s16 torqueScale[6];
     GameCarSpecShiftPoint shiftPoints[6]; /* +0x120, index = gear - 1 */
     CarTachometerSpec tachometer; /* +0x138 */
@@ -371,7 +371,7 @@ typedef struct GameCarDrive {
     s32 unk7C;
     s32 unk80;
     s32 launchEnergyThreshold;
-    s32 unk88;       /* +0x88 */
+    s32 steeringGripResponse; /* +0x88 */
     s32 speedScale;
     s32 targetHeading;
     s32 drivetrainTorque; /* +0x94 */

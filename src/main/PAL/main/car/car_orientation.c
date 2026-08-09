@@ -189,9 +189,9 @@ void InitPlayerCar(PlayerCarRuntime *car)
 
   }
 
-  if (g_CarSpec->unk112 < 2)
+  if (g_CarSpec->baseSteeringGrip < 2)
   {
-    g_CarSpec->unk112 = 1;
+    g_CarSpec->baseSteeringGrip = 1;
   }
   printf(g_MsgInit2);
   curveSpec = g_CarSpec;
@@ -231,7 +231,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   while (speedBandOffset < 20);
   printf(g_MsgInit4);
   drive->launchEnergyThreshold = g_LaunchEnergyThresholds[drive->launchThresholdIndex % 5] * 0xE;
-  drive->unk88 = g_CarSpec->unk108;
+  drive->steeringGripResponse = g_CarSpec->steeringGripResponse;
   printf(g_MsgInit5);
   player->shiftState = 0;
   drive->brakeLatch = 0;

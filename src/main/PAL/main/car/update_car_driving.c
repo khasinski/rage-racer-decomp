@@ -73,7 +73,7 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
             route->motionState = CAR_MOTION_TAKEOFF;
             route->bodyLiftOffset = 0;
             SetIndexedEffectVoice(0, 0, 0);
-            t = 1000 - (route->unk88 - 1000) * 8;
+            t = 1000 - (route->steeringGripResponse - 1000) * 8;
             if (t < 1000) {
                 t = 1000;
             }

@@ -223,7 +223,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     {
       drive->trackCurveBias = -0x1E;
     }
-    gripBudget += g_CarSpec->unk112 - drive->trackCurveBias * 0xA;
+    gripBudget += g_CarSpec->baseSteeringGrip - drive->trackCurveBias * 0xA;
     drive->steeringGrip = (s16)gripBudget;
   }
   else
@@ -252,7 +252,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       }
       gripBudget += camberLean;
     }
-    drive->steeringGrip = (s16)((drive->steeringGrip + (gripBudget * drive->unk88) / 1000) / 2);
+    drive->steeringGrip = (s16)((drive->steeringGrip + (gripBudget * drive->steeringGripResponse) / 1000) / 2);
   }
   gearTorque = gearRatio * drive->engineRpm;
   steerLoad = 0;
@@ -603,7 +603,7 @@ shift_interpolation_done:
   steerLoad += drive->steeringLoadAngle / 256;
   if ((drive->motionState != CAR_MOTION_TAKEOFF) && (g_PadType == 0x41))
   {
-    assistStep = g_CarSpec->unk10E * drive->unk88 / 1000;
+    assistStep = g_CarSpec->negconSteeringAssistScale * drive->steeringGripResponse / 1000;
     if (assistStep <= 0)
     {
       assistStep = 1;
