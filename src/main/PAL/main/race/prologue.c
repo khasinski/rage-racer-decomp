@@ -113,6 +113,7 @@ void UpdatePrologueLoadStep2(void) {
 void DrawPrologueText(void) {
     s32 i;
     s32 adjusted;
+    u32 timer;
     s32 delta;
     s32 value;
     s32 clamped;
@@ -125,7 +126,8 @@ void DrawPrologueText(void) {
     for (i = 0; i < 14; i++) {
         s32 tableY;
 
-        adjusted = ((u32)g_SceneTimer / 3) - 0xD0;
+        timer = g_SceneTimer;
+        adjusted = (timer / 3) - 0xD0;
         tableY = g_PrologueLines[i].y;
         delta = tableY - adjusted;
 
