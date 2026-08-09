@@ -23,7 +23,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   SVec rotationOffset;
   PlayerCarRuntime *player;
   GameCarDrive *drive;
-  u8 *startData;
+  TrackEventData *eventData;
   s32 speedBandOffset;
   s32 i;
   s32 headingBase;
@@ -41,7 +41,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   s16 *accelBandOut;
   s32 bandSpeed;
   player = car;
-  startData = (u8 *)g_TrackEventData;
+  eventData = g_TrackEventData;
   printf(g_MsgInitCar);
   value = g_GrandPrixSeries;
   g_RacePhase = 2;
@@ -73,10 +73,9 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->progressB = 0;
   player->trackProgress = 0;
   printf(g_MsgHTbl);
-  startData += g_RaceSeries * 0x90;
-  player->trackPointIndex = ((TrackEventData *)startData)->rivalStarts[0][0].trackPointIndex;
-  player->x = ((TrackEventData *)startData)->rivalStarts[0][0].x;
-  player->z = ((TrackEventData *)startData)->rivalStarts[0][0].z;
+  player->trackPointIndex = eventData->rivalStarts[g_RaceSeries][0].trackPointIndex;
+  player->x = eventData->rivalStarts[g_RaceSeries][0].x;
+  player->z = eventData->rivalStarts[g_RaceSeries][0].z;
   player->y = 0;
   player->trackPointIndex = FindTrackSegment(car, player->trackPointIndex);
   player->field_20 = 0;
