@@ -218,6 +218,9 @@ void StoreSaveStateBlock(u8 *block) {
             for (; middle < 4; middle++) {
                 RaceRecordAddress timeDestinationBase;
                 RaceRecordAddress timeDestinationAddress;
+                RaceRecordAddress timeInputBaseAddress;
+                RaceRecordAddress timeInputOuterAddress;
+                RaceRecordAddress timeInputAddress;
                 s32 *timeDst;
                 s32 *timeIn;
                 s32 *rankingOut;
@@ -227,9 +230,12 @@ void StoreSaveStateBlock(u8 *block) {
                 timeDestinationAddress.byteOffset =
                     middleOffset + timeDestinationBase.byteOffset;
                 timeDst = timeDestinationAddress.wordPointer;
-                timeIn =
-                    (s32 *)(middleOffset +
-                            (currentOuterOffset + (s32)timeBase));
+                timeInputBaseAddress.wordPointer = timeBase;
+                timeInputOuterAddress.byteOffset =
+                    currentOuterOffset + timeInputBaseAddress.byteOffset;
+                timeInputAddress.byteOffset =
+                    middleOffset + timeInputOuterAddress.byteOffset;
+                timeIn = timeInputAddress.wordPointer;
                 rankingOut = (s32 *)rankingDst;
                 rankingIn =
                     (s32 *)(middleOffset +
