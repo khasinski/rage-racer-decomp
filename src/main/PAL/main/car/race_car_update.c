@@ -621,26 +621,13 @@ void UpdateAttractCars(void) {
     }
 }
 
-typedef struct Obj {
-    s32 x;
-    s32 y;
-    s32 z;
-    s32 f0C;
-    s32 f10;
-    s32 f14;
-    s32 f18;
-    s32 f1C;
-    s32 f20;
-    s32 f24;
-    s32 f28;
-    s32 f2C;
-} Obj;
-
-void RunRaceIntroCamera(Obj *obj, s32 mode) {
+void RunRaceIntroCamera(PlayerCarRuntime *car, s32 mode) {
+    PlayerCarPositionView target;
     s32 *spad = &SCRATCH_PRIM_CURSOR_WORD;
     register s32 s0v asm("$16");
     s32 delta[3];
 
+    target.car = car;
     __asm__("" : "=r"(s0v) : "0"(28), "r"(spad));
     if (mode < 90) {
         if (mode < 2) {
@@ -666,9 +653,9 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
                 g_RaceIntroCameraCursor = &a[1];
                 g_RaceIntroCameraTimer = a[1].duration;
                 if (a[1].mode == 1) {
-                    g_RaceIntroCameraDelta.vx = -a[1].x.half.value + ((u16 *)obj)[0];
-                    g_RaceIntroCameraDelta.vy = -a[1].y.half.value - 28 + ((u16 *)obj)[2];
-                    g_RaceIntroCameraDelta.vz = -a[1].z.half.value + ((u16 *)obj)[4];
+                    g_RaceIntroCameraDelta.vx = -a[1].x.half.value + target.position->x.half.low;
+                    g_RaceIntroCameraDelta.vy = -a[1].y.half.value - 28 + target.position->y.half.low;
+                    g_RaceIntroCameraDelta.vz = -a[1].z.half.value + target.position->z.half.low;
                 } else {
                     g_RaceIntroCameraDelta.vx = -a[1].x.half.value + a[2].x.half.value;
                     g_RaceIntroCameraDelta.vy = -a[1].y.half.value + a[2].y.half.value;
@@ -690,9 +677,9 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             spad[4] = g_RaceIntroCameraCursor->z.word
                       + (g_RaceIntroCameraDelta.vz * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
 
-            delta[0] = rsin(obj->f24) / 128 + obj->x - spad[2];
-            delta[1] = obj->y - s0v - spad[3];
-            delta[2] = rcos(obj->f24) / 128 + obj->z - spad[4];
+            delta[0] = rsin(car->bodyYaw) / 128 + car->x - spad[2];
+            delta[1] = car->y - s0v - spad[3];
+            delta[2] = rcos(car->bodyYaw) / 128 + car->z - spad[4];
             s0v = 0x400;
             spad[7] = s0v - Atan2(delta[0], delta[2]);
             s0v = s0v - Atan2(delta[1], SquareRoot12(delta[0] * delta[0] + delta[2] * delta[2]) >> 6);
@@ -700,14 +687,14 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             spad[8] = 0;
             SetCameraRotMatrix();
             SelectModelBank(0);
-            DrawPlayerCarModel(obj);
+            DrawPlayerCarModel(car);
         } else {
             DrawFullscreenFadeTile(g_RaceIntroCameraTimer * 26, 0x29);
             {
-                s32 c0 = obj->x;
-                s32 c1 = obj->y;
-                s32 c2 = obj->z;
-                s32 c3 = obj->f0C;
+                s32 c0 = car->x;
+                s32 c1 = car->y;
+                s32 c2 = car->z;
+                s32 c3 = car->positionW;
                 spad[2] = c0;
                 spad[3] = c1;
                 spad[4] = c2;
@@ -716,10 +703,10 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             __asm__ volatile("");
             spad[3] -= s0v;
             {
-                s32 c0 = obj->f20;
-                s32 c1 = obj->f24;
-                s32 c2 = obj->f28;
-                s32 c3 = obj->f2C;
+                s32 c0 = car->bodyPitch;
+                s32 c1 = car->bodyYaw;
+                s32 c2 = car->bodyRoll;
+                s32 c3 = car->bodyRotationW;
                 spad[6] = c0;
                 spad[7] = c1;
                 spad[8] = c2;
@@ -729,7 +716,7 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             SetCameraRotMatrix();
         }
     } else {
-        UpdateCamera(obj, 0);
+        UpdateCamera(car, 0);
     }
 }
 

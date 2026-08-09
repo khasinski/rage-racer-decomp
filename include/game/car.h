@@ -4,8 +4,6 @@
 #include "common.h"
 #include "game/vector.h"
 
-struct Obj;
-
 /*
  * Per-car entry. The two setup bytes are what the CUSTOMIZE screen edits and
  * the save file keeps; whether the transmission row can be opened at all is a
@@ -54,7 +52,7 @@ typedef struct GameCarRuntime {
     s32 z;
     /* +0x10..+0x18: per-frame motion, measured in-race. Not the world
      * velocity GameCarDrive documents at +0xC8/+0xD0. */
-    s32 field_0C;
+    s32 positionW;
     s32 motionX;
     s32 motionY;
     s32 motionZ;
@@ -62,7 +60,7 @@ typedef struct GameCarRuntime {
     s32 bodyPitch;
     s32 bodyYaw;
     s32 bodyRoll;
-    s32 field_2C;
+    s32 bodyRotationW;
     s32 trackPointIndex;
     s32 trackLateralOffset;
     s32 segmentFraction;
@@ -437,7 +435,7 @@ typedef struct PlayerCarRuntime {
     s32 x;
     s32 y;
     s32 z;
-    s32 field_0C;
+    s32 positionW;
     s32 motionX;
     s32 motionY;
     s32 motionZ;
@@ -445,7 +443,7 @@ typedef struct PlayerCarRuntime {
     s32 bodyPitch;
     s32 bodyYaw;
     s32 bodyRoll;
-    s32 field_2C;
+    s32 bodyRotationW;
     s32 trackPointIndex;
     s32 trackLateralOffset;
     s32 segmentFraction;
@@ -499,6 +497,25 @@ typedef struct PlayerCarRuntime {
     s16 field_16A;
     PlayerLapTimes lapTimes;
 } PlayerCarRuntime;
+
+typedef union CarWorldCoordinate {
+    s32 value;
+    struct {
+        u16 low;
+        u16 high;
+    } half;
+} CarWorldCoordinate;
+
+typedef struct CarWorldPosition {
+    CarWorldCoordinate x;
+    CarWorldCoordinate y;
+    CarWorldCoordinate z;
+} CarWorldPosition;
+
+typedef union PlayerCarPositionView {
+    PlayerCarRuntime *car;
+    CarWorldPosition *position;
+} PlayerCarPositionView;
 
 /* A second, halfword-wide view of that same block, for the code that loads
  * 0x104..0x134 as s16 where GameCarDrive declares s32. See names.md 3b. */
@@ -734,7 +751,7 @@ s32 UpdateCarTrackState();
 s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt);
 s32 DrawPlayerTachometer(void);
 void BeginCarStandingStart(PlayerCarRuntime *car, s32 sceneTimer);
-void RunRaceIntroCamera(struct Obj *obj, s32 mode);
+void RunRaceIntroCamera(PlayerCarRuntime *car, s32 mode);
 void UpdatePlayerCar(PlayerCarRuntime *car);
 
 #endif

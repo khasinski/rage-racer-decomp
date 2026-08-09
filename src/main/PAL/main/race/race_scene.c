@@ -573,7 +573,7 @@ void UpdateRaceScene(void) {
                 goto update_race;
             }
         } else if (g_RacePhase == 0) {
-            RunRaceIntroCamera((struct Obj *)&g_PlayerCar, frameValue);
+            RunRaceIntroCamera(&g_PlayerCar, frameValue);
         } else {
 update_race:
             if ((g_RacePhase == 1) && ((u32)g_SceneTimer >= 0xD3)) {

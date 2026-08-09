@@ -338,7 +338,7 @@ void DrawEndingScreen(void) {
         }
     } else {
         if (g_RacePhase == 0) {
-            RunRaceIntroCamera((struct Obj *)&g_PlayerCar, sceneTimer);
+            RunRaceIntroCamera(&g_PlayerCar, sceneTimer);
             g_EndingSceneLatch = 0;
             g_WaypointsCollected = 0;
             goto race_intro_update_done;
