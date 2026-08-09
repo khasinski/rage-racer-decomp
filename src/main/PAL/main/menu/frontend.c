@@ -297,11 +297,11 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
     offset = 0;
     do {
         stride = 0x20000;
-        g_FrameContexts[offset + 0x16] = one;
-        g_FrameContexts[offset + 0x18] = one;
-        g_FrameContexts[offset + 0x19] = mode;
-        g_FrameContexts[offset + 0x1A] = x;
-        g_FrameContexts[offset + 0x1B] = y;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->draw.dtd = one;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->draw.isbg = one;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->draw.r0 = mode;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->draw.g0 = x;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->draw.b0 = y;
         value = *src0;
         stride |= 0x37E8;
         ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->display.screen.x = value;
