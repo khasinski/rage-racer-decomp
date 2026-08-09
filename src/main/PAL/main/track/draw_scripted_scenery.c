@@ -354,14 +354,14 @@ void UpdatePathScenerySound(void) {
                          (s16)g_PathSceneryRotCursor.rate) /
                     4096 -
                 g_PathSceneryRotHalfDelta[0];
-            g_PathSceneryRotY =
+            g_PathSceneryTransform.rotation.vy =
                 RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index + 1].y) -
                 g_PathSceneryRotHalfDelta[1] *
                     rcos((g_PathSceneryRotCursor.phase << 11) /
                          (s16)g_PathSceneryRotCursor.rate) /
                     4096 -
                 g_PathSceneryRotHalfDelta[1];
-            g_PathSceneryRotZ =
+            g_PathSceneryTransform.rotation.vz =
                 RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index + 1].z) -
                 g_PathSceneryRotHalfDelta[2] *
                     rcos((g_PathSceneryRotCursor.phase << 11) /
@@ -377,7 +377,7 @@ void UpdatePathScenerySound(void) {
                          0x400) /
                     4096 +
                 g_PathSceneryRotHalfDelta[0];
-            g_PathSceneryRotY =
+            g_PathSceneryTransform.rotation.vy =
                 RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index].y) +
                 g_PathSceneryRotHalfDelta[1] *
                     rsin((g_PathSceneryRotCursor.phase << 11) /
@@ -385,7 +385,7 @@ void UpdatePathScenerySound(void) {
                          0x400) /
                     4096 +
                 g_PathSceneryRotHalfDelta[1];
-            g_PathSceneryRotZ =
+            g_PathSceneryTransform.rotation.vz =
                 RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index].z) +
                 g_PathSceneryRotHalfDelta[2] *
                     rsin((g_PathSceneryRotCursor.phase << 11) /
