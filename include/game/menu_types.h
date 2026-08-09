@@ -38,6 +38,11 @@ typedef union TeamLogoCanvas {
     u32 words[64][8];
 } TeamLogoCanvas;
 
+typedef union TeamLogoCanvasAddress {
+    s32 byteOffset;
+    u32 *wordPointer;
+} TeamLogoCanvasAddress;
+
 typedef struct PaintColorTable {
     Rgb colors[18];
 } PaintColorTable;

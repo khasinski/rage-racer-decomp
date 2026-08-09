@@ -8,6 +8,11 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
+typedef union TeamLogoRotationBufferAddress {
+    s32 byteOffset;
+    u32 *wordPointer;
+} TeamLogoRotationBufferAddress;
+
 /* Identical to the declaration in game/menu.h; this unit cannot include that
  * header yet because four of its own definitions still disagree with it
  * (ScrollTeamLogoUp, GameDrawMenuButton, g_RankingRecords, g_TimeRecords). */
@@ -43,16 +48,22 @@ void FlipTeamLogoHorizontal(void) {
         do {
             s32 addr;
             s32 highOffset;
+            TeamLogoCanvasAddress lowAddress;
+            TeamLogoCanvasAddress highAddress;
 
             nibble = 0;
             lowPacked = 0;
             highPacked = 0;
-            addr = rowOffset + (s32)lowWordPtr;
-            lowWord = *(u32 *)addr;
+            lowAddress.wordPointer = lowWordPtr;
+            addr = rowOffset + lowAddress.byteOffset;
+            lowAddress.byteOffset = addr;
+            lowWord = *lowAddress.wordPointer;
             addr = highIndex << 2;
-            highOffset = addr + (s32)base;
+            highAddress.wordPointer = base;
+            highOffset = addr + highAddress.byteOffset;
             addr = rowOffset + highOffset;
-            highWord = *(u32 *)addr;
+            highAddress.byteOffset = addr;
+            highWord = *highAddress.wordPointer;
             do {
                 lowPacked <<= 4;
                 shift = nibble * 4;
@@ -64,16 +75,22 @@ void FlipTeamLogoHorizontal(void) {
             {
                 s32 lowAddr;
                 s32 highAddr;
+                TeamLogoCanvasAddress lowStoreAddress;
+                TeamLogoCanvasAddress highStoreAddress;
 
-                lowAddr = rowOffset + (s32)lowWordPtr;
+                lowStoreAddress.wordPointer = lowWordPtr;
+                lowAddr = rowOffset + lowStoreAddress.byteOffset;
                 lowWordPtr++;
                 colOffset += 4;
                 highAddr = highIndex << 2;
-                highAddr += (s32)base;
+                highStoreAddress.wordPointer = base;
+                highAddr += highStoreAddress.byteOffset;
                 highOffset = highAddr;
                 highAddr = rowOffset + highOffset;
-                *(u32 *)highAddr = lowPacked;
-                *(u32 *)lowAddr = highPacked;
+                highStoreAddress.byteOffset = highAddr;
+                lowStoreAddress.byteOffset = lowAddr;
+                *highStoreAddress.wordPointer = lowPacked;
+                *lowStoreAddress.wordPointer = highPacked;
             }
             highIndex--;
         } while (colOffset < 0x10);
@@ -95,6 +112,10 @@ void RotateTeamLogoCcw(void) {
     register u32 value1 asm("$3");
     u32 value2;
     u32 saved[512];
+    TeamLogoCanvasAddress sourceAddress;
+    TeamLogoRotationBufferAddress copyAddress;
+    TeamLogoRotationBufferAddress destinationIndex;
+    TeamLogoRotationBufferAddress destinationBase;
 
     PlaySoundCue(8);
 
@@ -105,12 +126,18 @@ void RotateTeamLogoCcw(void) {
         j = 0;
         value2 = limit - i;
         value2 <<= 2;
-        srcStart = (u32 *)(value2 + (s32)base);
+        sourceAddress.wordPointer = base;
+        sourceAddress.byteOffset = value2 + sourceAddress.byteOffset;
+        srcStart = sourceAddress.wordPointer;
         do {
             k = 0;
             src = srcStart;
             do {
-                dst = (u32 *)((((i * 8 + k) * 8 + j) << 2) + (s32)(stackBase = saved));
+                dst = (u32 *)(((i * 8 + k) * 8 + j) << 2);
+                destinationIndex.wordPointer = dst;
+                destinationBase.wordPointer = (stackBase = saved);
+                destinationIndex.byteOffset += destinationBase.byteOffset;
+                dst = destinationIndex.wordPointer;
                 shift = (limit - k) << 2;
                 *dst = 0;
                 value1 = (src[0x38] >> shift) & 0xF;
@@ -153,7 +180,8 @@ void RotateTeamLogoCcw(void) {
 
     i = 0;
     dst = base;
-    value1 = (u32)stackBase;
+    copyAddress.wordPointer = stackBase;
+    value1 = copyAddress.byteOffset;
     do {
         value2 = *(u32 *)value1;
         value1 += 4;
@@ -177,6 +205,8 @@ void RotateTeamLogoCw(void) {
     register u32 value1 asm("$3");
     register u32 value2 asm("$2");
     u32 saved[512];
+    TeamLogoRotationBufferAddress copyAddress;
+    TeamLogoRotationBufferAddress indexAddress;
 
     PlaySoundCue(8);
 
@@ -192,9 +222,17 @@ void RotateTeamLogoCw(void) {
             do {
                 dst = (u32 *)((i * 8 + k) * 8);
                 asm("" : "=r"(dst) : "0"(dst));
-                dst = (u32 *)((u8 *)dst + 7);
-                dst = (u32 *)((s32)dst - j);
-                dst = (u32 *)(((s32)dst * 4) + (s32)(stackBase = saved));
+                indexAddress.wordPointer = dst;
+                indexAddress.byteOffset += 7;
+                dst = indexAddress.wordPointer;
+                indexAddress.wordPointer = dst;
+                indexAddress.byteOffset -= j;
+                dst = indexAddress.wordPointer;
+                indexAddress.wordPointer = dst;
+                indexAddress.byteOffset *= 4;
+                copyAddress.wordPointer = (stackBase = saved);
+                indexAddress.byteOffset += copyAddress.byteOffset;
+                dst = indexAddress.wordPointer;
                 *dst = 0;
                 value1 = src[0x00];
                 shift = k * 4;
@@ -240,7 +278,8 @@ void RotateTeamLogoCw(void) {
 
     i = 0;
     dst = base;
-    value1 = (u32)stackBase;
+    copyAddress.wordPointer = stackBase;
+    value1 = copyAddress.byteOffset;
     do {
         value2 = *(u32 *)value1;
         value1 += 4;
