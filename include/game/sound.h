@@ -26,9 +26,14 @@ extern SoundScale g_SoundScale;
 
 /* Music / sound-mode channel; `left` and `right` are also read as their low
  * halves. Reset to left=right=-1, mode=1, vols=0. */
+typedef union MusicChannelValue {
+    s32 value;
+    s16 half[2];
+} MusicChannelValue;
+
 typedef struct MusicChannel {
-    s32 left;      /* +0x00 current left/tone value (g_MusicChannels) */
-    s32 right;     /* +0x04 current right value     (g_MusicChannelTone) */
+    MusicChannelValue left; /* +0x00 current left/tone value */
+    MusicChannelValue right; /* +0x04 current right value */
     s32 mode;      /* +0x08 state/mode 0/1/2/-1      (g_MusicChannelMode) */
     s32 reserved;  /* +0x0C unused                              */
     s32 volLeft;   /* +0x10 scaled left volume       (g_MusicChannelVolLeft) */

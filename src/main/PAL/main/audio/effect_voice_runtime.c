@@ -275,35 +275,35 @@ void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
     }
 
     if ((left <= 0) && (right <= 0)) {
-        left = g_MusicChannels[0].left;
+        left = g_MusicChannels[0].left.value;
         right = 0;
         if (left < 0) {
-            if (g_MusicChannels[1].left < 0) {
+            if (g_MusicChannels[1].left.value < 0) {
                 return;
             }
         }
 
         if ((u32)cue < 2) {
             if (left == g_SoundModes[0].slots[0].left) {
-                currentB = g_MusicChannels[1].left;
+                currentB = g_MusicChannels[1].left.value;
                 if (currentB == g_SoundModes[0].slots[1].left) {
                     goto found_match;
                 }
             }
             if (left == g_SoundModes[1].slots[0].left) {
-                currentB = g_MusicChannels[1].left;
+                currentB = g_MusicChannels[1].left.value;
                 matchValue = g_SoundModes[1].slots[1].left;
                 goto compare_mode_match;
             }
         } else {
             if (left == g_SoundModes[2].slots[0].left) {
-                currentB = g_MusicChannels[1].left;
+                currentB = g_MusicChannels[1].left.value;
                 if (currentB == g_SoundModes[2].slots[1].left) {
                     goto found_match;
                 }
             }
             if (left == g_SoundModes[3].slots[0].left) {
-                currentB = g_MusicChannels[1].left;
+                currentB = g_MusicChannels[1].left.value;
                 matchValue = g_SoundModes[3].slots[1].left;
                 goto compare_mode_match;
             }
@@ -333,8 +333,8 @@ after_match:
             resetCount = resetLoad;
             do {
                 offset = i * 0x18;
-                CHANNEL(offset).left = inactiveValue;
-                CHANNEL(offset).right = inactiveValue;
+                CHANNEL(offset).left.value = inactiveValue;
+                CHANNEL(offset).right.value = inactiveValue;
                 CHANNEL(offset).mode = activeValue;
                 table = (s32 *)((u8 *)&g_AudioSlotMask + offset);
                 *(s32 *)((s32)table + 0x78) = 0;
@@ -345,9 +345,9 @@ after_match:
         return;
     }
 
-    currentA = g_MusicChannels[0].left;
+    currentA = g_MusicChannels[0].left.value;
     if (currentA == MODE((cue * 3) << 3).slots[0].left) {
-        currentB = g_MusicChannels[1].left;
+        currentB = g_MusicChannels[1].left.value;
         if (currentB == MODE((cue * 3) << 3).slots[1].left) {
             g_MusicChannels[0].mode = 2;
         } else {
@@ -382,8 +382,8 @@ after_match:
         }
 
         flag = g_StereoOutput;
-        CHANNEL(cue).left = entry->slots[0].left;
-        CHANNEL(cue).right = entry->slots[0].right;
+        CHANNEL(cue).left.value = entry->slots[0].left;
+        CHANNEL(cue).right.value = entry->slots[0].right;
         if (flag != 0) {
             currentB = MODE(entryOffset).factor;
             scaledLeft = left * currentB;

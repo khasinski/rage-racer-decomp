@@ -4,7 +4,6 @@
 #include "psyq/snd.h"
 
 void ForceBasicEffectVoicesEnabled(s32 enabled) {
-    s32 offset;
     s32 voicePacked;
     s32 voice;
     s32 i;
@@ -20,21 +19,20 @@ void ForceBasicEffectVoicesEnabled(s32 enabled) {
     i = 0;
     voicePacked = 0x80000;
     voice = 8;
-    offset = 0;
     do {
         if (enabled != 0) {
             voiceArg = voicePacked >> 16;
             raw = 0x3C;
             left = g_VabIds[0];
-            right = *(s16 *)((u8 *)&g_MusicChannels[0].left + offset);
+            right = g_MusicChannels[i].left.half[0];
             zeroArg = 0;
             SsUtKeyOnV(voiceArg, left, right, zeroArg, raw, 0, 0, 0);
             asm volatile("" : : "r"(unused));
 
-            raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);
+            raw = g_MusicChannels[i].volLeft;
             scale = g_SoundScale.scale;
             left = raw * scale;
-            raw = *(s32 *)((u8 *)&g_MusicChannels[0].volRight + offset);
+            raw = g_MusicChannels[i].volRight;
             voiceArg = voice;
             if (left < 0) {
                 left += 0x7F;
@@ -70,7 +68,6 @@ void ForceBasicEffectVoicesEnabled(s32 enabled) {
         voicePacked += 0x10000;
         voice++;
         i++;
-        offset += 0x18;
     } while (i < 2);
 }
 
