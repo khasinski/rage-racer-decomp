@@ -401,6 +401,7 @@ void EnterRaceScene(void) {
 void UpdateRaceScene(void) {
     s32 option;
     s32 value;
+    u32 timerValue;
     s16 selection;
     s32 next;
     u16 mode;
@@ -408,7 +409,8 @@ void UpdateRaceScene(void) {
     value = g_SceneTimer + 1;
     g_SceneTimer = value;
     option = 0;
-    if ((u32)value < 0x3D) {
+    timerValue = value;
+    if (timerValue < 0x3D) {
         DrawRoundScreen();
         DrawFullscreenFadeTile(0xFF - ((g_SceneTimer - 6) * 0xB), 0x49);
     }
