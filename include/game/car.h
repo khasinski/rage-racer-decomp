@@ -348,12 +348,12 @@ typedef struct GameCarDrive {
     s16 unk36;
     s16 jumpTimer;
     s16 unk3A;
-    s16 unk3C;
+    s16 shiftRpmDelta;
     s16 unk3E;
-    s16 unk40;
-    s16 unk42;
+    s16 trackCurveMode;
+    s16 trackCurveBias;
     s32 groundedFrames;
-    s32 unk48;
+    s32 launchEnergy;
     s32 unk4C;
     s32 spinRate;
     s32 launchDirection;

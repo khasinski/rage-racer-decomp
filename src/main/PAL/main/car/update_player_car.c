@@ -280,7 +280,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         skid = 0;
     }
 
-    if (p->unk3C != 0) {
+    if (p->shiftRpmDelta != 0) {
         s32 d = (g_CarSpec->revLimit + g_CarSpec->redline) / 2 - g_ShiftTargetRpm;
         if (d > 0) {
             car->bodyPitch += (d * Random15()) / 3276700;
@@ -361,7 +361,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                 p->jumpTimer = 0x14;
                 p->motionState = CAR_MOTION_AIRBORNE;
                 g_ShiftTargetRpm = rpm;
-                p->unk3C = (u16)g_ShiftTargetRpm - (u16)p->engineRpm;
+                p->shiftRpmDelta = (u16)g_ShiftTargetRpm - (u16)p->engineRpm;
                 {
                     s32 *loadRow = props->gearLoad;
 
@@ -384,7 +384,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         slip = GetAngleDistance(0xC00 - g_TrackPoints[car->trackPointIndex].angle,
                              car->headingAngle);
         if (crash != 0) {
-            p->unk48 -= 1000;
+            p->launchEnergy -= 1000;
             if (car->speed >= 81) {
                 p->unk94 = p->unk94 * 98 / 100;
                 car->speed = car->speed * 97 / 100;
@@ -392,7 +392,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                 g_ShiftTargetRpm = g_ShiftTargetRpm * 95 / 100;
             }
         } else {
-            p->unk48 -= 5000;
+            p->launchEnergy -= 5000;
             p->unk94 = (85 - rsin(slip) * 20 / 4096) * p->unk94 / 100;
             car->speed = (87 - rsin(slip) * 40 / 4096) * car->speed / 100;
             p->engineLoad = p->engineLoad * (85 - rsin(slip) * 20 / 4096) / 100;

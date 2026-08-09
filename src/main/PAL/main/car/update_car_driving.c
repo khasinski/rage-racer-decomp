@@ -66,10 +66,10 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
     }
 
     if (route->acceleratorLatch == 1) {
-        route->unk48 = car->speed * route->groundedFrames;
+        route->launchEnergy = car->speed * route->groundedFrames;
         route->groundedFrames = 0;
         if (g_LaunchSpeedThresholds[route->launchThresholdIndex].initial < car->speed &&
-            route->unk48 > route->launchEnergyThreshold) {
+            route->launchEnergy > route->launchEnergyThreshold) {
             route->motionState = CAR_MOTION_TAKEOFF;
             route->unk3E = 0;
             SetIndexedEffectVoice(0, 0, 0);
@@ -86,7 +86,7 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
             if (m9e == 1) {
                 s32 av = coords[0] < 0 ? -coords[0] : coords[0];
                 s32 aval = av * car->speed / 64;
-                route->unk48 = aval;
+                route->launchEnergy = aval;
                 if (g_LaunchSpeedThresholds[route->launchThresholdIndex].sustain < car->speed &&
                     route->launchEnergyThreshold < aval) {
                     route->motionState = m9e;
@@ -97,11 +97,11 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
                 }
             } else {
                 route->groundedFrames = route->groundedFrames + 1;
-                route->unk48 = 0;
+                route->launchEnergy = 0;
             }
         } else {
             route->groundedFrames = 0;
-            route->unk48 = 0;
+            route->launchEnergy = 0;
         }
     }
 }

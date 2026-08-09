@@ -188,13 +188,13 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   gripBudget += (drive->brakeInput * 0x64) / 256;
   if (drive->motionState == CAR_MOTION_TAKEOFF)
   {
-    driveCurveMode = drive->unk40;
+    driveCurveMode = drive->trackCurveMode;
     pointCurveMode = g_TrackPoints[car->trackPointIndex].arcRef & 3;
     if (driveCurveMode != pointCurveMode)
     {
       if (driveCurveMode != 0)
       {
-        steerBiasNext = (u16)drive->unk42 - 1;
+        steerBiasNext = (u16)drive->trackCurveBias - 1;
         goto block_29;
       }
       if (pointCurveMode == 0)
@@ -205,31 +205,31 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     else
     {
       block_27:
-      if (drive->unk40 != 0)
+      if (drive->trackCurveMode != 0)
       {
-        steerBiasNext = (u16)drive->unk42 + 2;
+        steerBiasNext = (u16)drive->trackCurveBias + 2;
         block_29:
-        drive->unk42 = steerBiasNext;
+        drive->trackCurveBias = steerBiasNext;
 
       }
 
     }
-    steerBias = drive->unk42;
+    steerBias = drive->trackCurveBias;
     if (steerBias >= 0x1F)
     {
-      drive->unk42 = 0x1E;
+      drive->trackCurveBias = 0x1E;
     }
     else if (steerBias < (-0x1E))
     {
-      drive->unk42 = -0x1E;
+      drive->trackCurveBias = -0x1E;
     }
-    gripBudget += g_CarSpec->unk112 - drive->unk42 * 0xA;
+    gripBudget += g_CarSpec->unk112 - drive->trackCurveBias * 0xA;
     drive->unk32 = (s16)gripBudget;
   }
   else
   {
     trackPoint = &g_TrackPoints[car->trackPointIndex];
-    curveModeNow = drive->unk40;
+    curveModeNow = drive->trackCurveMode;
     if ((curveModeNow != (trackPoint->arcRef & 3)) && (curveModeNow != 0))
     {
       camber = trackPoint->crossSlope;
@@ -462,9 +462,9 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
                            ((GameCarSpec *)((u8 *)g_CarSpec - (-(targetGear * 4))))->gearRatio[0];
           currentSpeed = (u16)drive->engineRpm;
           g_ShiftTargetRpm = shiftTargetRpm;
-          drive->unk3C = (s16)((u16)g_ShiftTargetRpm - currentSpeed);
+          drive->shiftRpmDelta = (s16)((u16)g_ShiftTargetRpm - currentSpeed);
         }
-        bandEnd = drive->unk3C * drive->jumpTimer / 20;
+        bandEnd = drive->shiftRpmDelta * drive->jumpTimer / 20;
         shiftedSpeed = bandEnd;
         shiftedSpeed = shiftedSpeed + g_ShiftTargetRpm;
         goto block_129;

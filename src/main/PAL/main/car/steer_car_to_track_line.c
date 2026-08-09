@@ -140,13 +140,13 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
     }
 
     if (res < 0x80 && s4val < 0x800) {
-        drive->unk48 -= (0x800 - s4val) * 4000 / 256;
+        drive->launchEnergy -= (0x800 - s4val) * 4000 / 256;
     }
     if (car->speed < 0x190) {
-        drive->unk48 -= (0x190 - car->speed) * 100;
+        drive->launchEnergy -= (0x190 - car->speed) * 100;
     }
 
-    if (drive->unk48 > 0) {
+    if (drive->launchEnergy > 0) {
         s32 s2;
 
         drive->unk3E += 10;
@@ -177,22 +177,22 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
         }
 
         car->bodyYaw = drive->spinRate / 256 + car->bodyYaw;
-        drive->unk48 -= 64;
+        drive->launchEnergy -= 64;
 
         res = GetAngleDistance(car->bodyYaw, car->headingAngle);
-        drive->unk48 -= res * res / 65536;
-        drive->unk48 -= (0x3600 - s4val) / 64;
+        drive->launchEnergy -= res * res / 65536;
+        drive->launchEnergy -= (0x3600 - s4val) / 64;
 
         {
             s32 a4 = car->speed;
             s32 half = drive->speedScale / 2;
             if (a4 < half) {
-                drive->unk48 -= (half - a4) / 8;
+                drive->launchEnergy -= (half - a4) / 8;
             }
         }
 
-        drive->unk48 -= drive->brakeInput * 4;
-        drive->unk48 -= (0x100 - drive->acceleratorInput) * 4;
+        drive->launchEnergy -= drive->brakeInput * 4;
+        drive->launchEnergy -= (0x100 - drive->acceleratorInput) * 4;
         car->speed -= drive->brakeInput * 10 / 256;
         car->speed -= (0x100 - drive->acceleratorInput) * 10 / 256;
     } else {
@@ -244,7 +244,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                 RAW(drive->jumpTimer) = 0x14;
                 RAW(drive->motionState) = CAR_MOTION_AIRBORNE;
                 g_ShiftTargetRpm = lo;
-                RAW(drive->unk3C) = *(u16 *)&g_ShiftTargetRpm - firstHeading;
+                RAW(drive->shiftRpmDelta) = *(u16 *)&g_ShiftTargetRpm - firstHeading;
                 specBase += offset;
             }
             {
@@ -256,7 +256,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                 }
             }
 
-            if ((u32)(((u16)drive->unk3C + 99) & 0xFFFF) < 199) {
+            if ((u32)(((u16)drive->shiftRpmDelta + 99) & 0xFFFF) < 199) {
                 g_ShiftSoundLevel = 1;
             } else {
                 g_ShiftSoundLevel = 0;
@@ -360,7 +360,7 @@ void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
         SetIndexedEffectVoice(-1, 0, 0);
         car->bodyYaw -= r->spinRate;
         g_ShiftSoundLevel = 0;
-        r->unk3C = 0;
+        r->shiftRpmDelta = 0;
         r->yawOffset = 0;
         r->launchSpeed = 0;
         r->motionState = CAR_MOTION_DRIVING;
