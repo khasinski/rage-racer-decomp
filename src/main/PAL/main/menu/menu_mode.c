@@ -353,13 +353,13 @@ void InitMenuMode(void) {
     SetCameraRotMatrix();
     ScaleMatrix(SCRATCH_VIEW_MATRIX_GTE, &g_MenuViewScale);
 
-    g_CourseSelectModalScript = &g_UiEmptyScript;
-    g_CarSelectPopupScript = &g_UiEmptyScript;
-    g_CustomizePopupScript = &g_UiEmptyScript;
-    g_TeamLogoSubPanelScript = &g_UiEmptyScript;
-    g_LogoSampleSubPanelScript = &g_UiEmptyScript;
-    g_CarShopModalScript = &g_UiEmptyScript;
-    g_EngineerShopModalScript = &g_UiEmptyScript;
+    g_CourseSelectModalScript = g_UiEmptyScript;
+    g_CarSelectPopupScript = g_UiEmptyScript;
+    g_CustomizePopupScript = g_UiEmptyScript;
+    g_TeamLogoSubPanelScript = g_UiEmptyScript;
+    g_LogoSampleSubPanelScript = g_UiEmptyScript;
+    g_CarShopModalScript = g_UiEmptyScript;
+    g_EngineerShopModalScript = g_UiEmptyScript;
     g_MenuViewAngle = 500000;
     g_MenuViewAngleTarget = 500000;
     g_UiScriptProgress = 0;

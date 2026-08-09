@@ -474,7 +474,7 @@ extern u32 g_TeamNameScreenScript;
 extern u8 g_PaintColorScreenScript;
 extern u8 g_CarShopScreenScript;
 extern u8 g_EngineerShopScreenScript;
-extern s32 g_UiEmptyScript;
+extern u8 g_UiEmptyScript[];
 extern u8 g_CourseSelectSavePromptScript;
 extern u8 g_MenuRow0MarkerScript;
 extern u8 g_RankingMenuScript;
