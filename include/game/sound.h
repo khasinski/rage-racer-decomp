@@ -118,10 +118,6 @@ typedef struct EffectCueRow {
 } EffectCueRow;
 
 
-/* Byte-offset view: the retail code keeps i * 12 in a register rather than
- * indexing, so the scaled offset is passed in directly. */
-#define INDEXED_EFFECT(byteOffset) (*(IndexedEffect *)((s32)g_IndexedEffects + (byteOffset)))
-
 /*
  * Pre-race BGM picker (scene 0xA, left/right on the pad). Per-file types.
  *   g_BgmSelection    g_BgmSelection  0 = shuffle, else track + 1; saved

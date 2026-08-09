@@ -160,24 +160,22 @@ void UpdateIndexedEffectVoice(void) {
         if (index < 0) {
             goto indexed_effect_done;
         }
-            raw = (index * 3) << 2;
-            StartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
+            StartIndexedEffectVoice(g_IndexedEffects[index].tone);
             } else {
         index = g_IndexedEffectIndex;
         if (index < 0) {
             StopIndexedEffectVoice();
         } else if (index != raw) {
-            raw = (index * 3) << 2;
-            StartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
+            StartIndexedEffectVoice(g_IndexedEffects[index].tone);
         }
     }
 
     raw = g_IndexedEffectIndex;
     if (raw >= 0) {
-        index = (raw * 3) << 2;
-        product = g_IndexedEffectVolume * INDEXED_EFFECT(index).volume;
+        index = raw;
+        product = g_IndexedEffectVolume * g_IndexedEffects[index].volume;
         raw = g_IndexedEffectPitch;
-        base = INDEXED_EFFECT(index).tone;
+        base = g_IndexedEffects[index].tone;
         center = raw >> 7;
         fine = raw & 0x7F;
         if (product < 0) {

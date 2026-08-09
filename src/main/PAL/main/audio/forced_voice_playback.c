@@ -88,18 +88,17 @@ void ForceIndexedEffectVoiceEnabled(s32 enabled) {
         if (index < 0) {
             return;
         }
-        raw = (index * 3) << 2;
-        StartIndexedEffectVoice(INDEXED_EFFECT(raw).tone);
+        StartIndexedEffectVoice(g_IndexedEffects[index].tone);
     } else {
         StopIndexedEffectVoice();
     }
 
     raw = g_IndexedEffectIndexPrev;
     if (raw >= 0) {
-        index = (raw * 3) << 2;
-        product = g_IndexedEffectVolume * INDEXED_EFFECT(index).volume;
+        index = raw;
+        product = g_IndexedEffectVolume * g_IndexedEffects[index].volume;
         raw = g_IndexedEffectPitch;
-        base = INDEXED_EFFECT(index).tone;
+        base = g_IndexedEffects[index].tone;
         center = raw >> 7;
         fine = raw & 0x7F;
         if (product < 0) {
