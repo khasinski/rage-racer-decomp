@@ -165,7 +165,6 @@ void UpdatePathScenerySound(void) {
     s32 delta[3];
     PathSceneryPositionKey *positionKeys;
     PathSceneryRotationKey *rotationKeys;
-    register PathSceneryKey *rec asm("$4");
     s16 rate;
     register s16 idx asm("$2");
     s32 dx;
@@ -180,23 +179,23 @@ void UpdatePathScenerySound(void) {
     PathSceneryPositionKey *sinRec;
     s32 product;
     register s32 oldVolume;
-    PathSceneryKey *stepRec;
     PathSceneryKeyAddress positionStepAddress;
     PathSceneryKeyAddress rotationStepAddress;
 
     if (g_PathSceneryClock.posFrame == g_PathSceneryPosSpan) {
+        PathSceneryPositionKey *rec;
+        PathSceneryPositionKey *stepRec;
         idx = (u16)g_PathSceneryPosIndex;
         positionKeys = g_PathSceneryPosKeys;
         g_PathSceneryPosPhase = 0;
         idx = idx + 1;
         g_PathSceneryPosIndex = idx;
-        __asm__ volatile("" : "=r"(idx) : "0"(idx));
         positionStepAddress.positionPointer = positionKeys;
         positionStepAddress.byteOffset =
             idx * sizeof(PathSceneryPositionKey) + positionStepAddress.byteOffset;
-        stepRec = positionStepAddress.pointer;
-        if (stepRec->position.fields.span == -1) {
-            idx = stepRec->position.fields.loopIndex;
+        stepRec = positionStepAddress.positionPointer;
+        if (stepRec->fields.span == -1) {
+            idx = stepRec->fields.loopIndex;
             g_PathSceneryClock.posFrame = 0;
             g_PathSceneryPosIndex = idx;
             if (idx > 0) {
@@ -216,15 +215,15 @@ void UpdatePathScenerySound(void) {
             g_PathSceneryPosRate = rate;
             g_PathSceneryClock.posRateNeg = 0;
         }
-        rec = (PathSceneryKey *)&g_PathSceneryPosKeys[g_PathSceneryPosIndex];
+        rec = &g_PathSceneryPosKeys[g_PathSceneryPosIndex];
         g_PathSceneryPosSpan =
-            RAW(rec->position.fields.span);
+            RAW(rec->fields.span);
         g_PathSceneryHalfDelta[0] =
-            (RAW(rec[1].position.fields.x) - RAW(rec[0].position.fields.x)) / 2;
+            (RAW(rec[1].fields.x) - RAW(rec[0].fields.x)) / 2;
         g_PathSceneryHalfDelta[1] =
-            (RAW(rec[1].position.fields.y) - RAW(rec[0].position.fields.y)) / 2;
+            (RAW(rec[1].fields.y) - RAW(rec[0].fields.y)) / 2;
         g_PathSceneryHalfDelta[2] =
-            (RAW(rec[1].position.fields.z) - RAW(rec[0].position.fields.z)) / 2;
+            (RAW(rec[1].fields.z) - RAW(rec[0].fields.z)) / 2;
     } else {
         g_PathSceneryPosPhase = g_PathSceneryPosPhase + 1;
     }
@@ -295,18 +294,19 @@ void UpdatePathScenerySound(void) {
     }
 
     if (g_PathSceneryClock.rotFrame == g_PathSceneryRotSpan) {
+        PathSceneryRotationKey *rec;
+        PathSceneryRotationKey *stepRec;
         idx = (u16)g_PathSceneryRotIndex;
         rotationKeys = g_PathSceneryRotKeys;
         g_PathSceneryRotPhase = 0;
         idx = idx + 1;
         g_PathSceneryRotIndex = idx;
-        __asm__ volatile("" : "=r"(idx) : "0"(idx));
         rotationStepAddress.rotationPointer = rotationKeys;
         rotationStepAddress.byteOffset =
             idx * sizeof(PathSceneryRotationKey) + rotationStepAddress.byteOffset;
-        stepRec = rotationStepAddress.pointer;
-        if (stepRec->rotation.fields.span == -1) {
-            idx = stepRec->rotation.fields.loopIndex;
+        stepRec = rotationStepAddress.rotationPointer;
+        if (stepRec->fields.span == -1) {
+            idx = stepRec->fields.loopIndex;
             g_PathSceneryClock.rotFrame = 0;
             g_PathSceneryRotIndex = idx;
             if (idx > 0) {
@@ -326,20 +326,17 @@ void UpdatePathScenerySound(void) {
             g_PathSceneryRotRate = rate;
             g_PathSceneryClock.rotRateNeg = 0;
         }
-        rec = (PathSceneryKey *)&g_PathSceneryRotKeys[g_PathSceneryRotIndex];
+        rec = &g_PathSceneryRotKeys[g_PathSceneryRotIndex];
         g_PathSceneryRotRate =
-            RAW(rec->rotation.fields.rate);
+            RAW(rec->fields.rate);
         g_PathSceneryRotSpan =
-            RAW(rec->rotation.fields.span);
+            RAW(rec->fields.span);
         g_PathSceneryRotHalfDelta[0] =
-            (RAW(((PathSceneryRotationKey *)rec)[1].fields.x) -
-             RAW(rec[0].rotation.fields.x)) / 2;
+            (RAW(rec[1].fields.x) - RAW(rec[0].fields.x)) / 2;
         g_PathSceneryRotHalfDelta[1] =
-            (RAW(((PathSceneryRotationKey *)rec)[1].fields.y) -
-             RAW(rec[0].rotation.fields.y)) / 2;
+            (RAW(rec[1].fields.y) - RAW(rec[0].fields.y)) / 2;
         g_PathSceneryRotHalfDelta[2] =
-            (RAW(((PathSceneryRotationKey *)rec)[1].fields.z) -
-             RAW(rec[0].rotation.fields.z)) / 2;
+            (RAW(rec[1].fields.z) - RAW(rec[0].fields.z)) / 2;
     } else {
         g_PathSceneryRotPhase = g_PathSceneryRotPhase + 1;
     }

@@ -432,16 +432,10 @@ typedef union PathSceneryRotationKey {
     SVec rotation;
 } PathSceneryRotationKey;
 
-typedef union PathSceneryKey {
-    PathSceneryPositionKey position;
-    PathSceneryRotationKey rotation;
-} PathSceneryKey;
-
 typedef union PathSceneryKeyAddress {
     s32 byteOffset;
     PathSceneryPositionKey *positionPointer;
     PathSceneryRotationKey *rotationPointer;
-    PathSceneryKey *pointer;
 } PathSceneryKeyAddress;
 
 typedef union SpinningSceneryAngleAddress {
