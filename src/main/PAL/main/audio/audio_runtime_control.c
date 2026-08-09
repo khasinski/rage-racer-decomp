@@ -24,15 +24,20 @@ void TickSequenceAudio(void) {
 
 
 s32 IsSpuTransferDone(void) {
-    u8 *base;
+    typedef struct SpuTransferSampleBuffer {
+        u8 transferArea[0x800];
+        s16 channelA[2][0x100];
+        s16 channelB[2][0x100];
+    } SpuTransferSampleBuffer;
+
+    SpuTransferSampleBuffer *buffer;
     s32 value0;
     s32 value1;
 
-    base = &g_ReplayFrameBuffer;
-    value1 = SpuTransferStatus(base, 0);
-    value1 = (value1 << 9) + (s32)base;
-    value0 = *(s16 *)(value1 + 0x800);
-    value1 = *(s16 *)(value1 + 0xC00);
+    buffer = (SpuTransferSampleBuffer *)&g_ReplayFrameBuffer;
+    value1 = SpuTransferStatus(buffer, 0);
+    value0 = buffer->channelA[value1][0];
+    value1 = buffer->channelB[value1][0];
 
     value0 = value0 < 0 ? -value0 : value0;
     value1 = value1 < 0 ? -value1 : value1;
