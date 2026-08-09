@@ -50,7 +50,7 @@ void StCdInterrupt(void);
  * CdControlB additionally waits on CD_sync (blocking), CdControlF sends the
  * command without collecting a result.
  */
-long CdControl(long com, void *param, long result);
+long CdControl(long com, void *param, u_char *result);
 long CdControlF(long com, void *param);
 long CdControlB(long com, void *param, void *result);
 long CdSync(long mode, long result);

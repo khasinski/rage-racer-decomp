@@ -11,9 +11,9 @@
  * pinned to match; the C identifiers may be renamed but the asm("$N") pins and
  * offsets must not change.
  */
-long CdControl(long com, void *param, long result) {
+long CdControl(long com, void *param, u_char *result) {
     void *arg;
-    long resultReg;
+    u_char *resultReg;
     register long cmd asm("$20");
     long retries;
     long command;

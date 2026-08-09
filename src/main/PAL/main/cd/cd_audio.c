@@ -27,7 +27,7 @@ void StepCdPauseRequest(void) {
         /* fallthrough */
 
     case 1:
-        if (CdControl(0x11, 0, (s32)&g_CdLocResult) != 0) {
+        if (CdControl(0x11, 0, &g_CdLocResult) != 0) {
             g_CdCommandStep = 2;
         }
         break;
