@@ -47,7 +47,7 @@ void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
                 fontUCell = (u8 *)(index + (s32)font);
                 fontV = &g_Font8x8Cells[1];
                 u = *fontUCell * 8;
-                v = *(u8 *)(index + (s32)fontV) * 8;
+                v = *(index + fontV) * 8;
 
                 SetSprt8(packet);
                 SetShadeTex(packet, 1);
@@ -102,7 +102,7 @@ void GameDrawText8x8Shaded(
                     fontUCell = (u8 *)(index + (s32)font);
                     fontV = &g_Font8x8Cells[1];
                     u = *fontUCell * 8;
-                    v = *(u8 *)(index + (s32)fontV) * 8;
+                    v = *(index + fontV) * 8;
                 }
 
                 SetSprt8(packet);
@@ -155,7 +155,7 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
                 fontUCell = (u8 *)(index + (s32)font);
                 fontV = &g_Font8x8Cells[1];
                 u = *fontUCell * 8;
-                v = *(u8 *)(index + (s32)fontV) * 8;
+                v = *(index + fontV) * 8;
 
                 SetSprt8(packet);
                 SetShadeTex(packet, 1);
