@@ -213,7 +213,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
     accelBandOut = accelBand;
     while (i < 10)
     {
-      if ((((s32 *)curveSpec->torqueLossRpm)[i] / bandSpeed) > 0)
+      if ((curveSpec->torqueLossRpm[i] / bandSpeed) > 0)
       {
         *accelBandOut = i;
         break;

@@ -79,7 +79,11 @@ typedef union AssetAddress {
 } AssetAddress;
 
 static __inline__ void *ResolveAssetAddress(void *base, s32 offset) {
-    return (u8 *)base + offset;
+    AssetAddress address;
+
+    address.pointer = base;
+    address.offset += offset;
+    return address.pointer;
 }
 
 typedef struct CarModelAsset {
