@@ -6,7 +6,6 @@
 #include "game/cd.h"
 #include "game/audio.h"
 #include "game/menu.h"
-#define GAME_CLASS_WIN_COUNT_QUALIFIER volatile
 #include "game/save_internal.h"
 
 void UpdateBgmTrackCount(void) {

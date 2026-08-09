@@ -14,10 +14,7 @@ typedef struct CourseProgressState {
     s16 unlockPending;
     s16 retriesRemaining;
 } CourseProgressState;
-#ifndef GAME_CLASS_WIN_COUNT_QUALIFIER
-#define GAME_CLASS_WIN_COUNT_QUALIFIER
-#endif
-extern GAME_CLASS_WIN_COUNT_QUALIFIER s32 g_ClassWinCount;
+extern s32 g_ClassWinCount;
 extern CourseProgressState g_GrandPrixCourseProgress;
 extern CourseProgressState g_ExtraGrandPrixCourseProgress;
 extern CourseProgressState *g_CourseProgress;
@@ -27,5 +24,4 @@ extern s32 g_BestLapTimes[2][4][2];
 extern s32 g_BestTotalTimes[2][4][2];
 extern s32 g_BestSectorTimes[2][4][3];
 
-#undef GAME_CLASS_WIN_COUNT_QUALIFIER
 #endif
