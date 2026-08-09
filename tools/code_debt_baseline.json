@@ -1,6 +1,6 @@
 {
   "asm_aliases": 0,
-  "byte_pointer_arithmetic": 57,
+  "byte_pointer_arithmetic": 52,
   "declaration_overrides": 0,
   "empty_barriers": 142,
   "externs_in_c": 0,

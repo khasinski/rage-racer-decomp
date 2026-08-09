@@ -66,6 +66,7 @@ s32 UpdateLapAndFinish(PlayerCarRuntime *car, s32 grandPrixMode) {
     s32 oldTimer;
     s32 timer;
     PlayerCarRaceState *route;
+    SectorTimeTableAddress sectorAddress;
 
     route = (PlayerCarRaceState *)&car->drive;
     if (route->timing.fields.lap > 0) {
@@ -173,11 +174,15 @@ timing_done:
                 }
                 if (grandPrixMode == 0) {
                     tableOffset = g_CourseIndex * 12 + ReadStableRaceSeries() * 48;
-                    *(s32 *)((u8 *)g_BestSectorTimes + tableOffset) = g_RefSectorTimes.fields.first;
-                    *(s32 *)((u8 *)&g_BestSectorTimes[0][0][1] + tableOffset) =
-                        g_RefSectorTime1;
-                    *(s32 *)((u8 *)&g_BestSectorTimes[0][0][2] + tableOffset) =
-                        g_RefSectorTime2;
+                    sectorAddress.pointer = (s32 *)g_BestSectorTimes;
+                    sectorAddress.byteOffset += tableOffset;
+                    sectorAddress.pointer[0] = g_RefSectorTimes.fields.first;
+                    sectorAddress.pointer = &g_BestSectorTimes[0][0][1];
+                    sectorAddress.byteOffset += tableOffset;
+                    sectorAddress.pointer[0] = g_RefSectorTime1;
+                    sectorAddress.pointer = &g_BestSectorTimes[0][0][2];
+                    sectorAddress.byteOffset += tableOffset;
+                    sectorAddress.pointer[0] = g_RefSectorTime2;
                 }
                 g_RacePhase = 4;
                 StartCdVolumeFade(8);
@@ -285,6 +290,7 @@ void EnterRaceScene(void) {
     s32 *first;
     s32 scratch;
     s32 *second;
+    SectorTimeTableAddress sectorAddress;
 
     SetupDisplay240(0, 0, 0);
     InitRenderState(5);
@@ -311,9 +317,13 @@ void EnterRaceScene(void) {
     g_SectorEndDistance[0] = trackLength / 3;
     g_SectorEndDistance[1] = g_SectorEndDistance[0] * 2;
     tableOffset = (mode * 12) + (scene * 48);
-    g_RefSectorTimes.fields.first = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset);
+    sectorAddress.pointer = (s32 *)g_BestSectorTimes;
+    sectorAddress.byteOffset += tableOffset;
+    g_RefSectorTimes.fields.first = sectorAddress.pointer[0];
     scene *= 32;
-    g_RefSectorTime1 = ((s32 *)((u8 *)g_BestSectorTimes + tableOffset))[1];
+    sectorAddress.pointer = (s32 *)g_BestSectorTimes;
+    sectorAddress.byteOffset += tableOffset;
+    g_RefSectorTime1 = sectorAddress.pointer[1];
     mode *= 8;
     do {
         do {

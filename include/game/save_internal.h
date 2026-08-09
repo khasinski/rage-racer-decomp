@@ -24,4 +24,9 @@ extern s32 g_BestLapTimes[2][4][2];
 extern s32 g_BestTotalTimes[2][4][2];
 extern s32 g_BestSectorTimes[2][4][3];
 
+typedef union SectorTimeTableAddress {
+    s32 byteOffset;
+    s32 *pointer;
+} SectorTimeTableAddress;
+
 #endif
