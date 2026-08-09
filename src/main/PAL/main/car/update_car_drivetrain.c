@@ -8,14 +8,6 @@
 #include "game/render.h"
 
 /*
- * AI target-speed / drivetrain physics driver (called by UpdatePlayerCar). Reads
- * the per-car spec block g_CarSpec to compute a target speed, applies steering
- * assist and RPM, and dispatches the motionState motion handlers. `base` is the car
- * runtime, accessed via raw byte-offset pointer arithmetic (e.g.
- * *(s16*)((u8*)base+0x132)) with the drive sub-block at base+0xBC; the raw
- * offsets are what make it match, so it is intentionally left as void*.
- */
-/*
  * Note on `gearCurve`: m2c merged two values into one temporary, so it starts
  * out as the per-gear torque curve pointer and is later reused to carry the
  * shift target speed. Splitting it changes the register assignment.
