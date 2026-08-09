@@ -35,7 +35,7 @@ void CommitClassProgress(void) {
     s32 i;
     s32 done;
     s32 value;
-    s32 *state;
+    GameRaceProgress *state;
 
     slots = &g_CourseProgress->bestPlace[g_CourseIndex];
     g_ClassClearFanfareTimer = 0;
@@ -114,8 +114,8 @@ void CommitClassProgress(void) {
 
     g_ClassPromoted = 0;
     if (g_ClassCompleted != 0 && g_SeriesCleared == 0) {
-        state = (s32 *)g_RaceProgress;
-        if (state[3] < g_GrandPrixClass + 1) {
+        state = g_RaceProgress;
+        if (state->maxClassReached < g_GrandPrixClass + 1) {
             g_ClassPromoted = 1;
         }
     }
