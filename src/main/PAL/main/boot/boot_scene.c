@@ -70,13 +70,17 @@ void UpdateBootLogoScene(void) {
 
     state = g_BootLogoState;
     switch (state) {
-    case 0:
-        if ((u32)g_SceneTimer < 0x100) {
+    case 0: {
+        u32 sceneTime;
+
+        sceneTime = g_SceneTimer;
+        if (sceneTime < 0x100) {
             g_SceneTimer += 8;
         } else {
             g_BootLogoState = 1;
         }
         break;
+    }
     case 1:
         if (g_BootLogoHoldTimer == 0) {
             g_BootLogoState = 2;
@@ -89,17 +93,24 @@ void UpdateBootLogoScene(void) {
             SetupDisplay240(0, 0, 0);
         }
         break;
-    case 3:
+    case 3: {
+        u32 sceneTime;
+
         g_SceneTimer++;
-        if ((u32)g_SceneTimer >= 21) {
+        sceneTime = g_SceneTimer;
+        if (sceneTime >= 21) {
             BeginIntroFmv(3);
         }
         break;
     }
+    }
 
     if (g_BootLogoState != 3) {
+        u32 sceneTime;
+
         DrawBootLogo();
-        if ((u32)g_SceneTimer >= 10) {
+        sceneTime = g_SceneTimer;
+        if (sceneTime >= 10) {
             SetDispMask(1);
         }
     }
