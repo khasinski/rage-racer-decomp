@@ -383,7 +383,7 @@ after_match:
                 scaledLeft += 0x7F;
             }
             scaledLeft >>= 7;
-            *(volatile s32 *)&CHANNEL(cue).volLeft = scaledLeft;
+            ((MusicChannelWordValue *)&CHANNEL(cue).volLeft)->updated = scaledLeft;
             scaledRight = right * currentB;
             entryAddress.pointer = entry;
             entryAddress.byteOffset += sizeof(SoundModeSlot);
@@ -392,7 +392,7 @@ after_match:
                 scaledRight += 0x7F;
             }
             scaledRight >>= 7;
-            *(volatile s32 *)&CHANNEL(cue).volRight = scaledRight;
+            ((MusicChannelWordValue *)&CHANNEL(cue).volRight)->updated = scaledRight;
             i++;
         } else {
             if ((scaledLeft = average * GetSoundModeAtByteOffset(entryOffset)->factor) < 0) {
@@ -401,7 +401,7 @@ after_match:
                 currentB = scaledLeft;
             }
             currentB >>= 7;
-            *(volatile s32 *)&CHANNEL(cue).volLeft = currentB;
+            ((MusicChannelWordValue *)&CHANNEL(cue).volLeft)->updated = currentB;
             *(volatile s32 *)&CHANNEL(cue).volRight = currentB;
             /* Load-bearing: removal changes eight linked scheduler words. */
             asm volatile("");

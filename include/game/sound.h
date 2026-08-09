@@ -47,6 +47,11 @@ typedef union MusicChannelAddress {
     MusicChannel *pointer;
 } MusicChannelAddress;
 
+typedef union MusicChannelWordValue {
+    s32 value;
+    volatile s32 updated;
+} MusicChannelWordValue;
+
 extern MusicChannel g_MusicChannels[];
 
 /* Contiguous game-owned sound state beginning at 0x801E6C9C.  Several legacy
