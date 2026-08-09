@@ -67,7 +67,7 @@ typedef struct GameCarRuntime {
     s32 field_54;
     s32 field_58;
     s32 field_5C;
-    s32 field_60;
+    s32 modelY;
     s32 field_64;
     s32 field_68;
     s32 field_6C;
@@ -423,7 +423,7 @@ typedef struct PlayerCarRuntime {
     s32 field_54;
     s32 field_58;
     s32 field_5C;
-    s32 field_60;
+    s32 modelY;
     s32 field_64;
     s32 progressA;
     s32 progressB;
@@ -545,7 +545,6 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car);
 s32 CollideRivalCars(GameCarRuntime *car, s32 index);
 /* Draws one car, from the DrawCars loop; two LOD tiers plus the mirrored
  * wheel pass, submitted through SubmitModel. */
-void DrawCar(void *car);
 /* Selects model bank 1 and calls DrawCar for each of the 11 runtime cars
  * whose activeFlag != -1 and field_BC == 1. */
 void DrawCars(void);

@@ -103,7 +103,7 @@ void DrawCars(void) {
     do {
         if (base->activeFlag != (i++, minus_one)) {
             if (base->field_BC == one) {
-                DrawCar(base);
+                DrawCar((GameRenderObject *)base);
             }
         }
         base++;
@@ -112,7 +112,7 @@ void DrawCars(void) {
 
 void DrawPlayerCarOnly(void) {
     SelectModelBank(1);
-    DrawCar(g_Cars);
+    DrawCar((GameRenderObject *)g_Cars);
 }
 
 void ClearCarMotionState(GameCarRuntime *car) {

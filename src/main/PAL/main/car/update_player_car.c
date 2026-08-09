@@ -297,7 +297,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
 
         *(Vec4 *)&car->field_50 = *(Vec4 *)&car->field_20;
         car->field_28 = car->field_28 + car->field_64;
-        car->field_60 = car->y;
+        car->modelY = car->y;
         limit = fuel - 8;
     }
 

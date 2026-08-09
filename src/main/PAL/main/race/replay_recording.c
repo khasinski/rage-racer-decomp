@@ -50,7 +50,7 @@ void StoreReplayCarFrame(s32 pairIndex, const GameRenderSourcePoint *srcA,
     dst->x0 = first;
     dst->y0 = src1->y;
     dst->z0 = src1->z;
-    dst->z20 = src1->field_60;
+    dst->z20 = src1->modelY;
     dst->rotX0 = src1->bodyPitch;
     dst->rotY0 = src1->bodyYaw;
     dst->rotZ0 = src1->bodyRoll;
@@ -59,7 +59,7 @@ void StoreReplayCarFrame(s32 pairIndex, const GameRenderSourcePoint *srcA,
     dst->x1 = src2->x;
     dst->y1 = src2->y;
     dst->z1 = src2->z;
-    dst->z21 = src2->field_60;
+    dst->z21 = src2->modelY;
     dst->rotX1 = src2->bodyPitch;
     dst->rotY1 = src2->bodyYaw;
     dst->rotZ1 = src2->bodyRoll;
@@ -87,7 +87,7 @@ void StoreReplayTimeAttackFrame(s32 pointIndex, const GameRenderSourcePoint *src
     dst->x = first;
     dst->y = src->y;
     dst->z = src->z;
-    dst->z2 = src->field_60;
+    dst->z2 = src->modelY;
     dst->rotX = src->bodyPitch;
     dst->rotY = src->bodyYaw;
     dst->rotZ = src->bodyRoll;

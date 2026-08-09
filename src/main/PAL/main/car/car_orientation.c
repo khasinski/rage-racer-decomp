@@ -92,7 +92,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   UpdateCarTrackState(car, player->trackPointIndex, trackState);
   player->previousTrackProgress = player->trackProgress;
   *(Vec4 *)(&player->field_50) = *(Vec4 *)(&player->field_20);
-  player->field_60 = player->y;
+  player->modelY = player->y;
   BuildRotMatrixY(&rotationMatrix, player->bodyYaw);
   BuildRotMatrixX(&axisMatrix, player->field_20);
   MulMatrix2(&axisMatrix, &rotationMatrix);

@@ -557,7 +557,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
             pair.a = 20;
             pair.b = -20;
             UpdateCarTrackState((u8 *)ent, ent->trackPointIndex, &pair.a);
-            ent->field_60 = ent->y;
+            ent->modelY = ent->y;
             ent->previousTrackProgress = ent->trackProgress;
         }
     }
@@ -579,7 +579,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->field_40 = 0;
         ent->field_44 = 0;
         ent->field_48 = 0;
-        ent->field_60 = lateral;
+        ent->modelY = lateral;
     }
 }
 

@@ -329,7 +329,7 @@ void UpdateRaceCars(void) {
             limit = lastBase->y - 8;
             *(Vec4 *)&lastBase->field_50 = *(Vec4 *)&lastBase->field_20;
             lastBase->field_28 = lastBase->field_28 + lastBase->field_64;
-            lastBase->field_60 = lastBase->y;
+            lastBase->modelY = lastBase->y;
             if (lastBase->field_98 != 0) {
                 s32 tick;
                 s32 state;
@@ -569,7 +569,7 @@ void UpdateAttractCars(void) {
             limit = base->y - 8;
             *(Vec4 *)&base->field_50 = *(Vec4 *)&base->field_20;
             base->field_28 = base->field_28 + base->field_64;
-            base->field_60 = base->y;
+            base->modelY = base->y;
             if (base->field_98 != 0) {
                 s32 tick;
                 s32 state;

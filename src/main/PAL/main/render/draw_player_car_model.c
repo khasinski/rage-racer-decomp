@@ -37,7 +37,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     s32 i;
 
     obj->y -= view->horizon;
-    obj->field_60 -= view->horizon;
+    obj->modelY -= view->horizon;
     BuildRotMatrixY(&m_10, 0x800 - obj->angleY);
     BuildRotMatrixX(&m_30, obj->angleX);
     MulMatrix2(&m_10, &m_30);
@@ -70,7 +70,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
 
     v_138[0] = obj->x;
     v_138[2] = obj->z;
-    v_138[1] = obj->field_60;
+    v_138[1] = obj->modelY;
     SetGteObjectMatrix((void *)0x1F80011C, v_138, &m_10);
     g_ScratchRenderMode = 0;
     SubmitModel((void *)SCRATCHPAD_ADDR, 1);
@@ -133,7 +133,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     }
 
     obj->y += g_CarModelAsset->horizon;
-    obj->field_60 += g_CarModelAsset->horizon;
+    obj->modelY += g_CarModelAsset->horizon;
     if (clipHandle != 0) {
         RestoreColorMatrix();
     }
@@ -160,10 +160,10 @@ void DrawCar(GameRenderObject *obj) {
     s32 *cam = &SCRATCH_PRIM_CURSOR_WORD;
     s16 *lod;
 
-    model = g_CarModelByCourse[g_CourseIndex][((GameRenderSourcePoint *)obj)->modelIndex];
+    model = g_CarModelByCourse[g_CourseIndex][obj->modelIndex];
     lod = g_CarModelBankTable[model];
     obj->y -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;
-    obj->field_60 -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;
+    obj->modelY -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;
 
     v_128[0] = obj->x - cam[2];
     v_128[1] = 0;
@@ -207,7 +207,7 @@ void DrawCar(GameRenderObject *obj) {
 
             v_138[0] = obj->x;
             v_138[2] = obj->z;
-            v_138[1] = obj->field_60;
+            v_138[1] = obj->modelY;
             SetGteObjectMatrix((void *)0x1F80011C, v_138, &m_10);
             g_ScratchRenderMode = 0;
             SubmitModel((void *)SCRATCHPAD_ADDR,
@@ -290,7 +290,7 @@ void DrawCar(GameRenderObject *obj) {
     }
 
     obj->y += ((CamRow *)(g_CamRow + (model << 3)))->horizon;
-    obj->field_60 += ((CamRow *)(g_CamRow + (model << 3)))->horizon;
+    obj->modelY += ((CamRow *)(g_CamRow + (model << 3)))->horizon;
     if (clipHandle != 0) {
         RestoreColorMatrix();
     }

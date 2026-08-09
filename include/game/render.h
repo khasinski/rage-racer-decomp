@@ -202,7 +202,7 @@ typedef struct GameRenderObject {
     s32 angle_54;   /* 0x54 */
     s32 angle_58;   /* 0x58 */
     s32 field_5C;
-    s32 field_60;   /* 0x60 */
+    s32 modelY;     /* 0x60 secondary model origin, normally copied from y */
     s32 field_64;   /* 0x64 */
     s32 progressA;
     s32 progressB;
@@ -231,7 +231,8 @@ typedef struct GameRenderObject {
     s32 headingAngle;
     s32 speed;
     s32 speedRamp;
-    s32 field_AC;
+    s16 activeFlag;
+    s16 modelIndex;
     s32 field_B0;
     s32 field_B4;
     s16 facingBackwards;
@@ -248,6 +249,8 @@ typedef struct GameRenderObject {
     s32 field_E0;
     s32 field_E4;   /* 0xE4 */
 } GameRenderObject;
+
+void DrawCar(GameRenderObject *obj);
 
 typedef struct GameRenderSourcePoint {
     u16 x;
@@ -268,7 +271,7 @@ typedef struct GameRenderSourcePoint {
     u8 pad46[2];
     u16 field_48;
     u8 pad4A[0x16];
-    u16 field_60;
+    u16 modelY;
     u8 pad62[0x2A];
     s16 field_8C;
     u8 pad8E[0x20];
