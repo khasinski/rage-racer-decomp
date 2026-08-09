@@ -22,6 +22,18 @@ typedef struct FmvDecodeContext {
     s32 decodeComplete;
 } FmvDecodeContext;
 
+typedef struct FmvWorkBuffers {
+    volatile u32 vlc[2][0xA000];
+    volatile u32 strips[2][0xB40];
+    u8 ring[1];
+} FmvWorkBuffers;
+
+typedef union FmvWorkBufferAddress {
+    u32 address;
+    volatile u32 *words;
+    FmvWorkBuffers *buffers;
+} FmvWorkBufferAddress;
+
 typedef union FmvStripCursorAddress {
     volatile s32 *index;
     volatile u32 **bufferEnd;
@@ -29,9 +41,10 @@ typedef union FmvStripCursorAddress {
 } FmvStripCursorAddress;
 
 extern FmvDecodeContext g_FmvDecodeContext asm("g_FmvVlcBuffers");
-extern u32 g_FmvRingBuffer;
+extern volatile u32 *g_FmvRingBuffer;
 
-void StartFmvPlayback();
+void StartFmvPlayback(FmvWorkBuffers *buffers);
+void SetupFmvBuffers(FmvWorkBuffers *buffers);
 void InitFmvContext();
 void OpenFmvStream();
 s32 PresentFmvFrame(FmvDecodeContext *ctx);

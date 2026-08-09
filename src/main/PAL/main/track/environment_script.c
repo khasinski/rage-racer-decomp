@@ -9,7 +9,7 @@
 
 void SeekEnvironmentScript(s32 targetTime) {
     s32 clock;
-    u32 count;
+    s32 count;
     s32 tailCount;
     s32 nextId;
     s32 duration;
@@ -35,7 +35,7 @@ void SeekEnvironmentScript(s32 targetTime) {
         }
     }
 
-    if ((s32)count >= 2) {
+    if (count >= 2) {
         g_EnvScriptCursor += count - 2;
     } else {
         scriptLocation.pointer = g_EnvScriptCursor;

@@ -7,7 +7,7 @@
 #include "game/cd.h"
 #include "psyq/kernel.h"
 
-void StartFmvPlayback(s32 bufferBase) {
+void StartFmvPlayback(FmvWorkBuffers *buffers) {
     s32 fail;
     char frame_pad[8];
 
@@ -20,7 +20,7 @@ void StartFmvPlayback(s32 bufferBase) {
     g_DrawEnv0Dither = 0;
     g_DispEnv1Rgb24 = 1;
     g_DispEnv0Rgb24 = 1;
-    SetupFmvBuffers(bufferBase);
+    SetupFmvBuffers(buffers);
     {
         FmvDecodeContext *buf = &g_FmvDecodeContext;
         InitFmvContext(buf, 0, 0x18, 0, 0x108);

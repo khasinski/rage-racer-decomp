@@ -22,7 +22,7 @@ void BeginFmv(s32 returnScene) {
 void UpdateFmv(void) {
     switch (g_FmvState) {
     case 0:
-        StartFmvPlayback(g_AssetBase);
+        StartFmvPlayback((FmvWorkBuffers *)g_AssetBase);
         /* fall through */
     case 1:
         DecodeFmvFrame();

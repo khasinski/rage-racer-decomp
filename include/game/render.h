@@ -1032,7 +1032,6 @@ void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *
 void MatrixApplyZRotation(Matrix* mtx, s32 degrees);
 void MdecUnpackStatus(void *ctx, volatile u32 *slot);
 s32 SetGraphReverse(s32 mode);
-void SetupFmvBuffers(s32 base);
 void SwapTrackTexturePageNow(void);
 void SwapTrackTextureRow(void);
 
