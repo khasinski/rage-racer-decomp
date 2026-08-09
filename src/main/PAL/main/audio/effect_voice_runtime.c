@@ -146,7 +146,7 @@ void UpdateIndexedEffectVoice(void) {
     s32 base;
     s32 center;
     s32 fine;
-    register s32 index asm("$3");
+    s32 index;
     register s32 raw asm("$2");
     s32 product;
     s32 scale;
