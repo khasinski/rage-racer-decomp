@@ -8,6 +8,11 @@
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
+typedef union MirrorPanelPositionAddress {
+    s32 *position;
+    u16 *screenY;
+} MirrorPanelPositionAddress;
+
 void ResetMirrorState(void) {
     g_MirrorViewEnabled = 1;
     g_MirrorPanelY = -0x2C;
@@ -29,6 +34,7 @@ s32 BeginMirrorPass(void) {
     register s32 v0reg asm("$2");
     s32 v1reg;
     s32 y0;
+    MirrorPanelPositionAddress panelPosition;
     RenderBufferAddress drawBuffer;
 
     mirrorEnabled = 0;
@@ -55,7 +61,8 @@ s32 BeginMirrorPass(void) {
         scratch->x0 = v0reg;
         drawBuffer.bytes = g_DrawBuffer;
         v0reg = drawBuffer.byteOffset;
-        y0 = *(u16 *)&g_MirrorPanelY;
+        panelPosition.position = &g_MirrorPanelY;
+        y0 = *panelPosition.screenY;
         scratch->x1 = 0xEA;
         __asm__("");
         v1reg = g_MirrorPanelY;
@@ -141,6 +148,7 @@ void EndMirrorPass(void) {
 }
 
 u8 *DrawMirrorFrame(u8 *packet) {
+    MirrorPanelPositionAddress panelPosition;
     u8 *otArg;
     u8 *prim;
     u8 *ot;
@@ -166,7 +174,8 @@ u8 *DrawMirrorFrame(u8 *packet) {
     tile->t.g0 = 0;
     tile->t.b0 = 0;
     tile->w = color;
-    tile->y0 = *(u16 *)&g_MirrorPanelY - 2;
+    panelPosition.position = &g_MirrorPanelY;
+    tile->y0 = *panelPosition.screenY - 2;
     tile->h = 0x28;
     packet = (void *)(tile + 1);
     AddPrim((u32 *)otArg, (u32 *)prim);
