@@ -166,7 +166,8 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
             return;
         }
 
-        if (*(s16 *)(ptr + 0xA2) >= 0x81 || *(s16 *)(ptr + 0x34) > 0) {
+        if (((GameCarAiBlock *)ptr)->field_15E >= 0x81 ||
+            ((GameCarAiBlock *)ptr)->slideInput.halves.low > 0) {
             if (obj->field_A4 >= 0x51) {
                 value = (u16)obj->field_8C + 2;
                 obj->field_8C = value;

@@ -266,20 +266,20 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
             return;
         }
         }
-        temp = ai->slideInput;
+        temp = ai->slideInput.value;
         if (temp == 0) {
             goto slide_input_done;
         }
     }
 
-    value = ai->slideInput;
+    value = ai->slideInput.value;
     value = value * 31;
     if (value < 0) {
         value += 0x1F;
     }
     temp = value >> 5;
     value = (u32)value >> 31;
-    ai->slideInput = temp;
+    ai->slideInput.value = temp;
     temp += value;
     value = ai->field_F4;
     temp >>= 1;

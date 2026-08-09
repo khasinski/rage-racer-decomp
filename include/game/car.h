@@ -474,7 +474,7 @@ typedef struct GameCarAiBlock {
     s32 field_D0;   /* +0x14 world velocity z, cos(headingAngle) * field_A4 / 256 */
     u8 pad18[0x18];
     s32 field_EC;   /* +0x30 target angle: field_24 += GetAngleDelta(field_24, this) / 5 */
-    s32 slideInput; /* +0x34 */
+    CarSlideInput slideInput; /* +0x34 */
     s32 field_F4;   /* +0x38 yaw rate, added to both field_44 and field_24 */
     u8 pad3C[8];
     s32 routeIndex; /* +0x44 */
@@ -499,7 +499,9 @@ typedef struct GameCarAiBlock {
     u8 pad7A[2];
     u16 markerCounter; /* +0x7C */
     s16 markerDirection; /* +0x7E */
-    u8 pad80[0x60];
+    u8 pad80[0x22];
+    s16 field_15E;  /* +0xA2 */
+    u8 padA4[0x3C];
 } GameCarAiBlock;
 
 typedef union RaceGridSlot {
