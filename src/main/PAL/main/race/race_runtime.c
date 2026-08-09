@@ -288,11 +288,17 @@ void DrawEndingScreen(void) {
     s32 x = 0;
 
     g_SceneTimer = g_SceneTimer + 1;
-    if ((u32)g_SceneTimer < 61) {
-        DrawFullscreenFadeTile(255 - (g_SceneTimer - 6) * 11, 0x49);
+    {
+        u32 openingFrame = g_SceneTimer;
+        if (openingFrame < 61) {
+            DrawFullscreenFadeTile(255 - (g_SceneTimer - 6) * 11, 0x49);
+        }
     }
-    if ((u32)g_SceneTimer >= 571 && g_EndingSceneLatch == 0) {
-        g_EndingSceneLatch = 1;
+    {
+        u32 endingFrame = g_SceneTimer;
+        if (endingFrame >= 571 && g_EndingSceneLatch == 0) {
+            g_EndingSceneLatch = 1;
+        }
     }
 
     if (g_PlayerCar.progressB + g_PlayerCar.progressA >= g_PlayerCar.lap * g_TrackLength) {
@@ -345,7 +351,8 @@ void DrawEndingScreen(void) {
         }
     }
     if (g_RacePhase == 1) {
-        if ((u32)g_SceneTimer >= 211) {
+        u32 standingStartFrame = g_SceneTimer;
+        if (standingStartFrame >= 211) {
             BeginCarStandingStart(&g_PlayerCar, sceneTimer);
             g_RacePhase = 2;
         }
