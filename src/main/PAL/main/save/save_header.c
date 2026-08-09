@@ -85,6 +85,7 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
 void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     u8 *rowBytes;
     s32 i;
+    u32 checksumIndex;
     u32 checksum;
     u16 *scan;
 
@@ -103,7 +104,8 @@ void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     do {
         checksum += *scan++;
         i++;
-    } while ((u32)i < 0x3E);
+        checksumIndex = i;
+    } while (checksumIndex < 0x3E);
 
     checksum = ~checksum;
     row->fields.checksum = checksum;
