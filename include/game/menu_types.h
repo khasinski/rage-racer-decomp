@@ -20,6 +20,7 @@ typedef union RaceRecordAddress {
     s32 byteOffset;
     RaceRecord *pointer;
     s32 *wordPointer;
+    u8 *bytePointer;
 } RaceRecordAddress;
 
 typedef struct TeamLogoSample {
