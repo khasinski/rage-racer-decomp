@@ -82,10 +82,13 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
         i = 0;
         colorIndex = 1;
         do {
+            PaintColorAddress colorAddress;
+
+            colorAddress.pointer = localTable.colors;
+            colorAddress.byteOffset += i;
             DrawSolidRect(ot, (s16)(xBaseHalf + colorIndex), (s16)(yBase + 0x210), 8,
-                          0x10, ((Rgb *)((u8 *)localTable.colors + i))->r,
-                          ((Rgb *)((u8 *)localTable.colors + i))->g,
-                          ((Rgb *)((u8 *)localTable.colors + i))->b, 0xFF);
+                          0x10, colorAddress.pointer->r, colorAddress.pointer->g,
+                          colorAddress.pointer->b, 0xFF);
             i += 3;
             colorIndex += 8;
             xOffset++;

@@ -48,6 +48,11 @@ typedef struct PaintColorTable {
     Rgb colors[18];
 } PaintColorTable;
 
+typedef union PaintColorAddress {
+    s32 byteOffset;
+    Rgb *pointer;
+} PaintColorAddress;
+
 typedef union TeamLogoColorSlot {
     s32 value;
     u16 low;
