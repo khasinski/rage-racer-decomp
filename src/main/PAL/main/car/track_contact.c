@@ -8,16 +8,7 @@
 #include "game/track_internal.h"
 #include "psyq/gpu.h"
 
-typedef struct TrackSurfaceSample {
-    u16 x;
-    u8 pad2[6];
-    u16 z;
-    u8 padA[0x26];
-    s32 trackPointIndex;
-} TrackSurfaceSample;
-
-
-s32 GetTrackSurfaceHeight(TrackSurfaceSample *sample) {
+s32 GetTrackSurfaceHeight(CarSurfaceSampleView *sample) {
     s32 index;
     s32 nextIndex;
     GameTrackPoint *cur;
