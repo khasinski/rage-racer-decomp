@@ -17,6 +17,7 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
     s32 y = 0xD8;
     s32 row_bit = 1;
     GameSaveHeaderRowAddress row;
+    GameSaveHeaderRowAddress end;
 
     row.pointer = rows;
 
@@ -65,7 +66,8 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
         row.pointer++;
         y += 0x30;
         flags_reg >>= 1;
-    } while (row.value < (s32)(rows + 3));
+        end.pointer = rows + 3;
+    } while (row.value < end.value);
 }
 
 void AdjustMenuSelectionHorizontal(s32 *value, s32 min, s32 max) {
