@@ -32,7 +32,7 @@ s32 OpenVabSequenceSlot(s32 slot, u8 *header, u8 *body, void *seq) {
 }
 
 s32 CloseAudioSlot(s32 slot) {
-    AudioRuntimeState *runtime = (AudioRuntimeState *)&g_AudioLoadedSlotMask;
+    AudioRuntimeState *runtime = &g_AudioRuntimeState;
     s32 *flagsPtr = &runtime->loadedSlotMask;
     s32 bit = 1;
     s32 flags = *flagsPtr;

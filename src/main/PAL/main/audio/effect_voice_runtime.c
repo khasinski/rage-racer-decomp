@@ -330,7 +330,7 @@ after_match:
                 CHANNEL(offset).left.value = inactiveValue;
                 CHANNEL(offset).right.value = inactiveValue;
                 CHANNEL(offset).mode = activeValue;
-                runtime = (AudioRuntimeState *)&g_AudioLoadedSlotMask;
+                runtime = &g_AudioRuntimeState;
                 runtime->musicChannels[i].volRight = 0;
                 CHANNEL(offset).volLeft = 0;
                 i++;

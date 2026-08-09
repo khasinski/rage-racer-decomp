@@ -70,7 +70,7 @@ s32 PollAudioSlotLoad(void) {
 }
 
 s32 CloseVabOnlyAudioSlot(s32 slot) {
-    AudioRuntimeState *runtime = (AudioRuntimeState *)&g_AudioLoadedSlotMask;
+    AudioRuntimeState *runtime = &g_AudioRuntimeState;
     s32 *flagsPtr = &runtime->loadedSlotMask;
     s32 bit = 1;
     s32 flags = *flagsPtr;

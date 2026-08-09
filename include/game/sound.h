@@ -77,6 +77,8 @@ typedef struct AudioRuntimeState {
     MusicChannel musicChannels[2];      /* +0x64 */
 } AudioRuntimeState;
 
+extern AudioRuntimeState g_AudioRuntimeState;
+
 /* Effect voice, 4 elements for hardware voices 10..13. SetPitchedSoundCue walks it
  * with a pointer to `.state`. */
 typedef union EffectVoicePitch {
