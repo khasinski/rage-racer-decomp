@@ -19,17 +19,10 @@ void DrawPathScenery(void) {
     volatile s32 pad[4];
     s32 drawId;
     s32 frameValue;
-    register s16 *anglePtr asm("$16");
     Matrix *mtx1Ptr;
-    Matrix *mtx0Ptr;
-    void *scratchVec;
-
-    mtx0Ptr = &mtx0;
-    __asm__("" : "=r"(mtx0Ptr) : "0"(mtx0Ptr));
-    anglePtr = &g_PathSceneryTransform.rotation.vy;
     mtx1Ptr = &mtx1;
 
-    BuildRotMatrixY(mtx0Ptr, 0x800 - anglePtr[0]);
+    BuildRotMatrixY(&mtx0, 0x800 - g_PathSceneryTransform.rotation.vy);
     BuildRotMatrixX(mtx1Ptr, g_PathSceneryTransform.rotation.vx);
     MulMatrix2(&mtx0, mtx1Ptr);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, mtx1Ptr);
@@ -37,10 +30,7 @@ void DrawPathScenery(void) {
     MulMatrix2(mtx1Ptr, &mtx0);
 
     SelectModelBank(1);
-    scratchVec = (void *)0x1F80011C;
-    __asm__("" : "=r"(scratchVec) : "0"(scratchVec));
-    anglePtr = (s16 *)&g_PathSceneryTransform.position;
-    SetGteObjectMatrix(scratchVec, anglePtr, &mtx0);
+    SetGteObjectMatrix((void *)0x1F80011C, &g_PathSceneryTransform.position, &mtx0);
     frameValue = g_ModelBankCount;
     SCRATCH_ENV_MODE4 = 0;
     drawId = 1;
@@ -64,7 +54,7 @@ void DrawPathScenery(void) {
         BuildRotMatrixY(mtx1Ptr, acc & 0xFFF);
     }
     MulMatrix2(&mtx0, mtx1Ptr);
-    SetGteObjectMatrix((void *)0x1F80011C, anglePtr, mtx1Ptr);
+    SetGteObjectMatrix((void *)0x1F80011C, &g_PathSceneryTransform.position, mtx1Ptr);
     frameValue = g_ModelBankCount;
     g_ScratchRenderMode = 0;
     drawId = 1;
