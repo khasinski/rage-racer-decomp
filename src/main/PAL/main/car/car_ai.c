@@ -328,7 +328,7 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
     TrackRacingLineHint *entry;
     s32 value;
     s32 valueRaw;
-    register s32 raw asm("$2");
+    s32 raw;
     s32 stack[2];
 
     raw = objReg->trackProgress;
