@@ -743,11 +743,11 @@ void DrawMenuLightBurst(s32 arg) {
         s2 = 0;
         s1 = 0x00300000;
         do {
-            s32 cnt = g_MenuLightBurstLevel;
+            u32 cnt = g_MenuLightBurstLevel;
             u8 c1;
             value = cnt * 11;
-            scaled = (u32)value / 256;
-            c1 = (u32)(cnt * 75) / 256;
+            scaled = value / 256U;
+            c1 = (cnt * 75) / 256;
             value = (u8)scaled;
             DrawGradientLine(s3, s1 >> 16, 0xAA, s2 >> 16, 0x1E0, value, value, value, c1, c1, c1, 0x60);
             s2 += 0x000A0000;
@@ -760,9 +760,9 @@ void DrawMenuLightBurst(s32 arg) {
             s32 x0 = l1.values[s0];
             s32 y0 = l2.values[s0];
             s16 x1 = (0xA0 - (u16)l1.values[s0]) * 2;
-            s32 v = (((s32)((u16)l2.values[s0] - 0xAA) << 7) / 309 + 0x16) * g_MenuLightBurstLevel;
+            s32 v = ((((u16)l2.values[s0] - 0xAA) << 7) / 309 + 0x16) * g_MenuLightBurstLevel;
             value = v;
-            scaled = (u32)value / 512;
+            scaled = value / 512U;
             value = (u8)scaled;
             DrawSolidRect(s3, x0, y0, x1, 2, value, value, value, 0x60);
             s0++;
