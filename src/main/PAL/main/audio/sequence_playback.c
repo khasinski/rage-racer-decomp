@@ -2,9 +2,9 @@
 #include "game/audio.h"
 #include "game/sound.h"
 
-void PlaySequence(void) { SsSeqPlay(g_SeqHandle, 1, 0); }
+void PlaySequence(void) { SsSeqPlay(g_SeqHandle.value, 1, 0); }
 
-void StopSequence(void) { SsSeqStop(g_SeqHandle); }
+void StopSequence(void) { SsSeqStop(g_SeqHandle.value); }
 
 void StartSequenceFadeOut(void) {
     g_SeqVolumeFadeStep = -4;
@@ -67,7 +67,7 @@ void ApplyDuckedSequenceAudio(void) {
     s32 volume;
 
     value = g_SeqVolume;
-    seq = g_SeqHandle;
+    seq = g_SeqHandle.value;
     scaled = value * 2;
     {
         s32 rel = value;

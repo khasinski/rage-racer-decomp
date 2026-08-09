@@ -30,9 +30,7 @@ s32 OpenVabSequenceSlot(s32 slot, u8 *header, u8 *body, void *seq) {
         BiosExit(1);
     }
 
-    /* g_SeqHandle is a word (sym.bss size 0x4); the header calls it s16
-       because every other reader wants the low half. */
-    *(s32 *)&g_SeqHandle = (s16)SsSeqOpen((long)seq);
+    g_SeqHandle.storage = (s16)SsSeqOpen((long)seq);
     g_SeqVolumeFadeStep = 0;
     g_VabTransferDone = SsVabTransCompleted(0);
     return g_VabTransferDone;
@@ -53,7 +51,7 @@ s32 CloseAudioSlot(s32 slot) {
         *flagsPtr = bit ^ flags;
         SsUtSetReverbDepth(0, 0);
         _SsVmInit(0);
-        SsSeqCloseWrapper(g_SeqHandle);
+        SsSeqCloseWrapper(g_SeqHandle.value);
         ids = banks->vabIds;
         SsVabClose(ids[slot]);
         ret = 1;

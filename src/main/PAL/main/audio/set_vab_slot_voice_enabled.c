@@ -27,5 +27,5 @@ void SetVabSlotVoiceEnabled(s32 voice, s32 enabled, s32 vabSlot) {
 
 void SetSequenceVolume(s32 volume) {
     g_SeqVolume = volume;
-    SsSeqSetVol(g_SeqHandle, (s16)volume, (s16)volume);
+    SsSeqSetVol(g_SeqHandle.value, (s16)volume, (s16)volume);
 }

@@ -90,9 +90,12 @@ extern s32 g_ReverbDepthR; /* reverb depth right */
  * because ForceBasicEffectVoicesEnabled also uses &g_ReverbFadeStep as the end
  * address of g_EffectVoices (= &g_EffectVoices[4].pitch). */
 extern s32 g_ReverbFadeStep;
-/* libsnd access number of the open SEQ, returned by SsSeqOpen in
- * OpenVabSequenceSlot; the `seq` handle for SsSeqPlay/Stop/SetVol. */
-extern s16 g_SeqHandle;
+typedef union SequenceHandle {
+    s32 storage;
+    s16 value;
+} SequenceHandle;
+
+extern SequenceHandle g_SeqHandle;
 extern s32 g_SeqVolume; /* current SEQ volume, also read as s16 */
 extern s32 g_SeqVolumeSetting; /* 0..15 OPTIONS level; volume = n * 114 / 15 */
 extern s32 g_SeqVolumeFadeStep; /* step added to g_SeqVolume each frame; -4 while fading out */

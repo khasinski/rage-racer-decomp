@@ -3,7 +3,7 @@
 #include "game/sound.h"
 
 void ApplyCurrentSequenceAudio(void) {
-    SsSeqSetVol(g_SeqHandle, *(s16 *)&g_SeqVolume, *(s16 *)&g_SeqVolume);
+    SsSeqSetVol(g_SeqHandle.value, *(s16 *)&g_SeqVolume, *(s16 *)&g_SeqVolume);
     SetReverbDepth(0x28, 0x28);
 }
 
