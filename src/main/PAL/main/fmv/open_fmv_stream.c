@@ -17,12 +17,12 @@ void OpenFmvStream(s32 callback) {
 
 void UploadFmvSlice(void) {
     Rect rect;
-    register volatile s32 *bufferPtr asm("$6");
+    register FmvStripCursorAddress bufferCursor asm("$6");
+    FmvStripCursorAddress bufferAddress;
     s32 oldBuffer;
     s32 state;
     s32 bufferIndex;
     s32 bufferAddr;
-    volatile u32 **bufferAddress;
     s32 pixelCount;
     s32 next;
     s32 index;
@@ -37,12 +37,12 @@ void UploadFmvSlice(void) {
 
     rect = *(Rect *)&g_FmvUploadRectX;
 
-    bufferPtr = &g_FmvStripIndex;
-    oldBuffer = *bufferPtr;
-    state = *bufferPtr;
+    bufferCursor.index = &g_FmvStripIndex;
+    oldBuffer = *bufferCursor.index;
+    state = *bufferCursor.index;
     x = g_FmvUploadRectX;
     step = g_FmvStripWidth;
-    *bufferPtr = state == 0;
+    *bufferCursor.index = state == 0;
 
     index = g_FmvStripRectIndex;
     x += step;
@@ -54,13 +54,13 @@ void UploadFmvSlice(void) {
         pixelCount = signedStep * g_FmvStripHeight;
         bufferIndex = g_FmvStripIndex;
         bufferAddr = bufferIndex << 2;
-        asm("" : "=r"(bufferPtr) : "0"(bufferPtr));
+        asm("" : "=r"(bufferCursor) : "0"(bufferCursor));
         {
-            s32 rel = bufferAddr;
-            bufferAddr = (s32)bufferPtr + rel;
+            s32 relativeAddress = bufferAddr;
+            bufferAddr = bufferCursor.byteAddress + relativeAddress;
         }
-        bufferAddress = (volatile u32 **)bufferAddr;
-        DecDCTout(bufferAddress[-2], pixelCount / 2);
+        bufferAddress.byteAddress = bufferAddr;
+        DecDCTout(bufferAddress.bufferEnd[-2], pixelCount / 2);
     } else {
         g_FmvStripDone = 1;
         next = index == 0;

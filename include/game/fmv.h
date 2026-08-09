@@ -22,6 +22,12 @@ typedef struct FmvDecodeContext {
     s32 decodeComplete;
 } FmvDecodeContext;
 
+typedef union FmvStripCursorAddress {
+    volatile s32 *index;
+    volatile u32 **bufferEnd;
+    s32 byteAddress;
+} FmvStripCursorAddress;
+
 extern FmvDecodeContext g_FmvDecodeContext asm("g_FmvVlcBuffers");
 extern u32 g_FmvRingBuffer;
 
