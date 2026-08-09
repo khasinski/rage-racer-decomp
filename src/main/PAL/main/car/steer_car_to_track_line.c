@@ -99,6 +99,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
     register s32 firstHeading asm("$5");
     s32 sinF24;
     s32 cosF24;
+    u32 shiftRpmRange;
     /* The two adjacent motion-state handlers use this same vector at sp+0x10. */
     s32 coords[3];
 
@@ -260,7 +261,8 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                 }
             }
 
-            if ((u32)(((u16)drive->shiftRpmDelta + 99) & 0xFFFF) < 199) {
+            shiftRpmRange = ((u16)drive->shiftRpmDelta + 99) & 0xFFFF;
+            if (shiftRpmRange < 199) {
                 g_ShiftSoundLevel = 1;
             } else {
                 g_ShiftSoundLevel = 0;
