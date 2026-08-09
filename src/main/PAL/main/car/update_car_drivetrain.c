@@ -334,13 +334,14 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
 
       if ((engineSpeed >= bandTorque) && ((gearCurve = (u8 *)((GameCarSpec *)specSlot)->torqueBand.values[1], (((s32) gearCurve) < engineSpeed) == 0)))
       {
+        s32 *curveValues = curveSlot;
         bandCurve = ((s32) gearCurve) - bandTorque;
         if (bandCurve <= 0)
         {
           bandCurve = 1;
         }
-        frontLoadScaled = ((engineSpeed - bandTorque) * (*(s32 *)(((u8 *)curveSlot) + 4)));
-        frontLoadScaled += (((s32) gearCurve) - engineSpeed) * (*(s32 *)(((u8 *)curveSlot) + 0));
+        frontLoadScaled = (engineSpeed - bandTorque) * curveValues[1];
+        frontLoadScaled += (((s32) gearCurve) - engineSpeed) * curveValues[0];
         netTorque = frontLoadScaled / ((s32) (bandCurve * 0xA));
       }
       else
