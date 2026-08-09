@@ -904,10 +904,13 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
 
     phase = *progress;
     if (phase >= 0) {
+        u32 slidePhase;
+
         if (phase >= 13) {
             phase = 12;
         }
-        slide = ((u32)(phase * -1120)) >> 5;
+        slidePhase = phase;
+        slide = (slidePhase * -1120) >> 5;
         panelY = slide + 0x21A;
 
         if (g_CourseIndex >= 4) {

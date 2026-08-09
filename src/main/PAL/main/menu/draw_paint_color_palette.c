@@ -134,10 +134,13 @@ void DrawOwnedCarCounter(s32 owned, s32 step) {
     v0 = g_OwnedCarCounterSlide;
     v1 = v0 - 11;
     if (v1 >= 0 && g_MenuAltLayout == 0) {
+        u32 slidePhase;
+
         if (v1 >= 11) {
             v1 = 10;
         }
-        t = ((u32)(v1 * -1120)) >> 5;
+        slidePhase = v1;
+        t = (slidePhase * -1120) >> 5;
         y = t + 0x21B;
         t2 = t + 0x211;
         GameDrawNumber(0x2C, y, 7, a1v, 0x7F, 0x7F, 0x7F, 0x259, 0x20);

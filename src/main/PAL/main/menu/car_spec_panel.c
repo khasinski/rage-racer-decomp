@@ -139,11 +139,14 @@ void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
     }
     phase = g_BrowseArrowsFade - 11;
     if (phase >= 0) {
+        u32 slidePhase;
+
         if (phase >= 11) {
             phase = 10;
         }
 
-        leftX = (((u32)(phase * 0x250)) >> 5) + 0xFFE7;
+        slidePhase = phase;
+        leftX = ((slidePhase * 0x250) >> 5) + 0xFFE7;
         wave = rsin(g_BrowseArrowsPulsePhase % 0x1000);
         intensity = (wave / 64) - intensityBias;
         leftEdge = leftX - halfWidth;
