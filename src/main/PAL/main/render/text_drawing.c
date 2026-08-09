@@ -19,7 +19,7 @@ void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
     u8 *str;
     s32 x;
     u8 fl = flags;
-    void *ot;
+    u32 *ot;
     s32 fixed;
     s32 idx;
     s32 u0;
@@ -30,7 +30,7 @@ void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
 
     str = str0;
     x = x0;
-    ot = SCRATCH_OT_BASE_AS(void);
+    ot = SCRATCH_OT_BASE_AS(u32);
 
     while (*str) {
         fixed = flags & 0x80;
@@ -98,7 +98,7 @@ void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
         v0 = fixed ? (idx / 42) * 12 : g_SmallFontGlyphs[idx].v;
 
         DrawSprite(
-            (u8 *)ot + 4,
+            ot + 1,
             (s16)x,
             (s16)y,
             (s16)w,
@@ -122,7 +122,7 @@ void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
 
     {
         void *next = QueueDrawModePrim(
-            (u8 *)ot + 4, SCRATCH_PRIM_CURSOR_AS(u8), (fl & 0x7f) + 27);
+            ot + 1, SCRATCH_PRIM_CURSOR_AS(u8), (fl & 0x7f) + 27);
         SCRATCH_PRIM_CURSOR_AS(void) = next;
     }
 }
@@ -143,7 +143,7 @@ void DrawLargeText(x0, y, str0, color, g, b, clut, flags)
     s32 x;
     u8 fl = flags;
     s32 fixed;
-    void *ot;
+    u32 *ot;
     s32 idx;
     s32 u0;
     s32 v0;
@@ -152,7 +152,7 @@ void DrawLargeText(x0, y, str0, color, g, b, clut, flags)
 
     str = str0;
     x = x0;
-    ot = SCRATCH_OT_BASE_AS(void);
+    ot = SCRATCH_OT_BASE_AS(u32);
 
     while (*str) {
         fixed = flags & 0x80;
@@ -212,7 +212,7 @@ void DrawLargeText(x0, y, str0, color, g, b, clut, flags)
         v0 = fixed ? (idx / 32) * 16 + 24 : g_LargeFontGlyphs[idx].v;
 
         DrawSprite(
-            (u8 *)ot + 4,
+            ot + 1,
             (s16)x,
             (s16)y,
             (s16)w,
@@ -235,7 +235,7 @@ void DrawLargeText(x0, y, str0, color, g, b, clut, flags)
     }
 
     SCRATCH_PRIM_CURSOR_AS(void) =
-        QueueDrawModePrim((u8 *)ot + 4, SCRATCH_PRIM_CURSOR_AS(void), (fl & 0x7f) + 27);
+        QueueDrawModePrim(ot + 1, SCRATCH_PRIM_CURSOR_AS(void), (fl & 0x7f) + 27);
 }
 
 
@@ -252,7 +252,7 @@ s32 GameDrawNumber(x, y, flags, value, r, g, b, clut, primitiveCount)
 {
     u8 digits[11];
     u16 drawVValue;
-    void *ot;
+    u32 *ot;
     s32 width;
     s32 height;
     s32 v;
@@ -268,9 +268,9 @@ s32 GameDrawNumber(x, y, flags, value, r, g, b, clut, primitiveCount)
 
     i = 9;
     if (flags & 8) {
-        ot = (u8 *)SCRATCH_OT_BASE_AS(void) + 4;
+        ot = SCRATCH_OT_BASE_AS(u32) + 1;
     } else {
-        ot = SCRATCH_OT_BASE_AS(void);
+        ot = SCRATCH_OT_BASE_AS(u32);
     }
 
     height = 16;
@@ -357,7 +357,7 @@ s32 GameDrawNumber(x, y, flags, value, r, g, b, clut, primitiveCount)
 
 
 void DrawBitPatternOverlay(s32 pattern) {
-    void *ot = SCRATCH_OT_BASE_AS(void);
+    u32 *ot = SCRATCH_OT_BASE_AS(u32);
     u8 *row = g_MenuOverlayPatternTable;
     s32 y;
     s32 outer;
@@ -394,7 +394,7 @@ void DrawBitPatternOverlay(s32 pattern) {
         do {
             if (((*row << bit) & 0x80) != 0) {
                 DrawSprite(
-                    (u8 *)ot + 4,
+                    ot + 1,
                     (s16)x,
                     (s16)y,
                     4,
@@ -422,7 +422,7 @@ void DrawBitPatternOverlay(s32 pattern) {
     bit = 0x4C0000;
     do {
         DrawSprite(
-            (u8 *)ot + 4,
+            ot + 1,
             (s16)(bit >> 16),
             0x33,
             4,
@@ -440,5 +440,5 @@ void DrawBitPatternOverlay(s32 pattern) {
         outer++;
     } while (outer < 0x10);
 
-    SCRATCH_PRIM_CURSOR_AS(void) = QueueDrawModePrim((u8 *)ot + 4, SCRATCH_PRIM_CURSOR_AS(void), 0x39);
+    SCRATCH_PRIM_CURSOR_AS(void) = QueueDrawModePrim(ot + 1, SCRATCH_PRIM_CURSOR_AS(void), 0x39);
 }
