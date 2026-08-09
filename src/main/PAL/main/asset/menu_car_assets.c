@@ -150,8 +150,8 @@ void LoadRoundAssets(void) {
             s32 shared;
 
             header = g_AssetBlockPtr2;
-            first = header + *(s32 *)(header + 4);
-            second = header + *(s32 *)(header + 8);
+            first = header + ((s32 *)header)[1];
+            second = header + ((s32 *)header)[2];
             g_AssetBlockPtr = first;
             g_AssetSubBlockPtr = second;
             shared = *(s32 *)header;
