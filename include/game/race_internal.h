@@ -19,11 +19,7 @@ typedef struct ResultPlaceSpriteLayout {
     u8 width;
 } ResultPlaceSpriteLayout;
 
-#ifndef GAME_RACE_TOTAL_TIME_QUALIFIER
-#define GAME_RACE_TOTAL_TIME_QUALIFIER
-#endif
-
-extern GAME_RACE_TOTAL_TIME_QUALIFIER s32 g_RaceTotalTime;
+extern s32 g_RaceTotalTime;
 #ifndef GAME_REF_SECTOR_DECL
 #define GAME_REF_SECTOR_DECL extern s32 g_RefSectorTimes[3]
 #endif
@@ -33,7 +29,6 @@ extern PrologueCameraCut g_PrologueCameraCuts[];
 extern ResultPlaceSpriteLayout g_ResultPlaceSprites[];
 extern ResultPlaceBarPosition g_ClassPlaceBarSizes[];
 
-#undef GAME_RACE_TOTAL_TIME_QUALIFIER
 #undef GAME_REF_SECTOR_DECL
 
 #endif

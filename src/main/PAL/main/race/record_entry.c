@@ -8,7 +8,6 @@
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/records_internal.h"
-#define GAME_RACE_TOTAL_TIME_QUALIFIER volatile
 #include "game/race_internal.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
