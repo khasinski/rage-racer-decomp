@@ -8,7 +8,7 @@
 /* GetCarAssetIndex(model, owned grade) written out longhand; indexes the price and engine tables. */
 s32 GetOwnedCarAssetIndex(s32 model) {
     s32 state;
-    s32 value;
+    u32 value;
 
     state = GetCarUnlockLevel() + 1;
 
@@ -48,7 +48,7 @@ s32 GetOwnedCarAssetIndex(s32 model) {
 
     case 3:
         value = state - 1;
-        if ((u32)value < 5) {
+        if (value < 5) {
             switch (value) {
             case 0:
                 return 9;
