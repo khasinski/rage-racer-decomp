@@ -13,24 +13,24 @@
  * TeamLogoClutPos / TeamLogoTexturePos structs, so there is no single type
  * to hoist without rewriting those indices. */
 void LoadBootAssets(void) {
-    u8 *loaded;
+    s32 loadedSize;
     u8 *base;
 
     switch (g_AssetLoadState) {
     case 1:
         base = (u8 *)g_LoadBuffer;
-        loaded = (u8 *)LoadAsset(1, base);
-        if (loaded != 0) {
+        loadedSize = LoadAsset(1, base);
+        if (loadedSize != 0) {
             UploadLoadBufferImage();
-            g_AssetBlockPtr = loaded + (s32)base;
+            g_AssetBlockPtr = base + loadedSize;
             g_AssetLoadState = 2;
         }
         break;
     case 2:
-        loaded = (u8 *)LoadAsset(2, g_AssetBlockPtr);
-        if (loaded != 0) {
+        loadedSize = LoadAsset(2, g_AssetBlockPtr);
+        if (loadedSize != 0) {
             g_AssetLoadState = 3;
-            g_AssetLoadCursor = loaded + (s32)g_AssetBlockPtr;
+            g_AssetLoadCursor = g_AssetBlockPtr + loadedSize;
         }
         break;
     case 3:
@@ -45,11 +45,11 @@ void LoadBootAssets(void) {
         }
         break;
     case 5:
-        loaded = (u8 *)LoadAsset(4, g_AssetLoadCursor);
-        if (loaded != 0) {
+        loadedSize = LoadAsset(4, g_AssetLoadCursor);
+        if (loadedSize != 0) {
             InstallResourceData(g_AssetLoadCursor);
             g_AssetLoadState = 6;
-            g_AssetLoadCursor = loaded + (s32)g_AssetLoadCursor;
+            g_AssetLoadCursor += loadedSize;
         }
         break;
     case 6:
