@@ -76,13 +76,14 @@ void UnrelocateModelBank(ModelBankHeader *base, s32 offset) {
  * retail's base-first addu; `&g_ModelBanks[index]` loses it.
  */
 void SelectModelBank(s32 index) {
-    s32 banks;
+    ModelBankTableAddress banks;
     ModelBankHeader **entry;
     ModelBankHeader *bank;
     s32 count;
 
-    banks = (s32)g_ModelBanks;
-    entry = (ModelBankHeader **)((index * sizeof(*entry)) + banks);
+    banks.pointer = g_ModelBanks;
+    banks.byteAddress += index * sizeof(*entry);
+    entry = banks.pointer;
     count = (s32)*entry;
     count = *(s32 *)count;
     bank = *entry;

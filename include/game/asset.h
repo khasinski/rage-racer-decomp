@@ -237,6 +237,11 @@ typedef struct ModelBankHeader {
     AssetAddress models[1];
 } ModelBankHeader;
 
+typedef union ModelBankTableAddress {
+    s32 byteAddress;
+    ModelBankHeader **pointer;
+} ModelBankTableAddress;
+
 typedef struct TerrainCellAssetHeader {
     s32 cellCount;
     AssetAddress faces;
