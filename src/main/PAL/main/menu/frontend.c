@@ -4,7 +4,6 @@
 #include "game/audio.h"
 #include "game/menu.h"
 #include "game/menu_internal.h"
-#define GAME_FRONTEND_IDLE_TYPE u32
 #define GAME_DISP_ENV1_X_DECL extern u8 g_DispEnv1X[]
 #include "game/frontend_internal.h"
 #include "game/race.h"

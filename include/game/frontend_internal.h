@@ -3,11 +3,7 @@
 
 #include "common.h"
 
-#ifndef GAME_FRONTEND_IDLE_TYPE
-#define GAME_FRONTEND_IDLE_TYPE s32
-#endif
-extern GAME_FRONTEND_IDLE_TYPE g_FrontendIdleTimer;
-#undef GAME_FRONTEND_IDLE_TYPE
+extern u32 g_FrontendIdleTimer;
 
 #ifndef GAME_DISP_ENV1_X_DECL
 #define GAME_DISP_ENV1_X_DECL extern u16 g_DispEnv1X
