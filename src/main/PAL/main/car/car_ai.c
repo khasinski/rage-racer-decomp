@@ -77,7 +77,7 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
 }
 
 s32 GetCarCrestTrigger(GameCarRuntime *car) {
-    u8 *base;
+    TrackEventData *base;
     s32 pos0;
     s32 pos1;
     s32 row;
@@ -86,14 +86,14 @@ s32 GetCarCrestTrigger(GameCarRuntime *car) {
     register s32 i asm("a2");
     s32 offset;
     s32 sentinel;
-    u8 *cursor;
+    TrackEventDataAddress cursor;
     s32 diff;
     s32 cmp;
     s32 threshold;
     s32 resultOffset;
-    register u8 *resultCursor asm("v0");
+    register TrackEventDataAddress resultCursor asm("v0");
 
-    base = (u8 *)g_TrackEventData;
+    base = g_TrackEventData;
     if (car->speed < 0x320) {
         return 0;
     }
@@ -132,11 +132,12 @@ not_crossed:
     i = 0;
     sentinel = -1;
     offset = row * sizeof(TrackCrestEvent[8]);
-    cursor = base + offset;
+    cursor.pointer = base;
+    cursor.byteOffset += offset;
 
 for (;;) {
-    if (!(((TrackCrestEvent *)(cursor + sizeof(s32)))->motionValue == sentinel)) {
-    threshold = ((TrackCrestEvent *)(cursor + sizeof(s32)))->progress;
+    if (!(cursor.pointer->crestEvents[0][0].motionValue == sentinel)) {
+    threshold = cursor.pointer->crestEvents[0][0].progress;
     cmp = temp < threshold;
     offset += sizeof(TrackCrestEvent);
     if (!(cmp != 0)) {
@@ -148,7 +149,8 @@ for (;;) {
     }
     i++;
     if (i < 8) {
-        cursor = base + offset;
+        cursor.pointer = base;
+        cursor.byteOffset += offset;
         continue;
     }
 
@@ -159,8 +161,9 @@ crest_scan_done:
     if (crossed != 0) {
         resultOffset = i * sizeof(TrackCrestEvent);
         resultOffset += row * sizeof(TrackCrestEvent[8]);
-        resultCursor = base + resultOffset;
-        return ((TrackCrestEvent *)(resultCursor + sizeof(s32)))->motionValue;
+        resultCursor.pointer = base;
+        resultCursor.byteOffset += resultOffset;
+        return resultCursor.pointer->crestEvents[0][0].motionValue;
     }
     return 0;
 }

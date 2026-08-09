@@ -169,6 +169,11 @@ typedef struct TrackEventData {
     TrackRaceCueData raceCues;
 } TrackEventData;
 
+typedef union TrackEventDataAddress {
+    s32 byteOffset;
+    TrackEventData *pointer;
+} TrackEventDataAddress;
+
 /*
  * One corner's centre of curvature. `GameTrackPoint.arcRef >> 4` indexes this
  * array, which InstallTrackPoints publishes at `g_TrackArcCenters`
