@@ -226,10 +226,10 @@ s32 LoadSaveStateBlock(u8 *block) {
                         __asm__("" : "=r"(src1) : "0"(src1), "r"(k));
                         src1 += 4;
                     } while (k < 5);
-                    d1 = (s32 *)((u8 *)d1 + 0x50);
+                    d1 += sizeof(g_RankingRecords[0][0]) / sizeof(*d1);
                     joff += 0x50;
                 }
-                d1base = (s32 *)((u8 *)d1base + 0x140);
+                d1base += sizeof(g_RankingRecords[0]) / sizeof(*d1base);
                 ioff += 0x140;
             }
         }
@@ -260,10 +260,10 @@ s32 LoadSaveStateBlock(u8 *block) {
                     for (; k < 3; k++) {
                         *dst++ = *src++;
                     }
-                    dbase = (s32 *)((u8 *)dbase + 0xC);
+                    dbase += sizeof(g_BestSectorTimes[0][0]) / sizeof(*dbase);
                     joff += 0xC;
                 }
-                e41e8 = (s32 *)((u8 *)e41e8 + 0x30);
+                e41e8 += sizeof(g_BestSectorTimes[0]) / sizeof(*e41e8);
                 ioff += 0x30;
             }
         }
