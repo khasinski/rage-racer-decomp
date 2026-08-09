@@ -165,7 +165,7 @@ void BuildSaveIconBlock(
     s32 imageX,
     s32 imageY);
 void WriteSaveHeaderRow(GameSaveHeaderRow *row);
-s32 LoadSaveStateBlock(u8 *block);
+s32 LoadSaveStateBlock(GameSaveBlock *block);
 s32 WriteMemoryCardSaveFile(
     char *path,
     char *title,
@@ -302,7 +302,7 @@ void DrawMemoryCardMessage(s32 message);
 void InitCARD(s32 padEnable);
 s32 PollMemoryCardStatus(s32 a, s32 b);
 void StartCARD(void);
-void StoreSaveStateBlock(u8 *block);
+void StoreSaveStateBlock(GameSaveBlock *block);
 void DrawMemoryCardScreen(s32 showBar, s32 variant, s32 cursor, s32 barRow);
 
 /* Declared identically by 1 translation units before this

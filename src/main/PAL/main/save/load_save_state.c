@@ -7,8 +7,8 @@
 #include "game/input_internal.h"
 #include "game/save_internal.h"
 
-s32 LoadSaveStateBlock(u8 *block) {
-    register u8 *base asm("$17") = block;
+s32 LoadSaveStateBlock(GameSaveBlock *block) {
+    register GameSaveBlock *base asm("$17") = block;
     s32 i;
     __asm__("" : "=r"(base) : "0"(base));
     {
@@ -27,8 +27,8 @@ s32 LoadSaveStateBlock(u8 *block) {
         } while (checksumIndex < 0x7FE);
         printf(g_MsgSaveChecksumOk);
         sum = ~sum;
-        printf(g_FmtSaveChecksum, ((GameSaveBlock *)base)->checksum, sum);
-        if (((GameSaveBlock *)base)->checksum != sum) {
+        printf(g_FmtSaveChecksum, base->checksum, sum);
+        if (base->checksum != sum) {
             return 0;
         }
     }
@@ -45,36 +45,36 @@ s32 LoadSaveStateBlock(u8 *block) {
         u16 negconSteerNeutral;
         u16 negconSteerPlay;
 
-        padMappingAddress.halfwordPointer = &((GameSaveBlock *)base)->padMappingIndex;
+        padMappingAddress.halfwordPointer = &base->padMappingIndex;
         padMappingIndex = *padMappingAddress.halfwordPointer;
-        negconMappingAddress.halfwordPointer = &((GameSaveBlock *)base)->negconMappingIndex;
+        negconMappingAddress.halfwordPointer = &base->negconMappingIndex;
         negconMappingIndex = *negconMappingAddress.halfwordPointer;
-        steerNeutralAddress.halfwordPointer = &((GameSaveBlock *)base)->negconSteerNeutral;
+        steerNeutralAddress.halfwordPointer = &base->negconSteerNeutral;
         negconSteerNeutral = *steerNeutralAddress.halfwordPointer;
-        steerPlayAddress.halfwordPointer = &((GameSaveBlock *)base)->negconSteerPlay;
+        steerPlayAddress.halfwordPointer = &base->negconSteerPlay;
         negconSteerPlay = *steerPlayAddress.halfwordPointer;
-        g_NegconNeutralI = ((GameSaveBlock *)base)->negconNeutralI;
-        neutralIIAddress.halfwordPointer = &((GameSaveBlock *)base)->negconNeutralII;
+        g_NegconNeutralI = base->negconNeutralI;
+        neutralIIAddress.halfwordPointer = &base->negconNeutralII;
         g_NegconNeutralII = *neutralIIAddress.halfwordPointer;
-        neutralLAddress.halfwordPointer = &((GameSaveBlock *)base)->negconNeutralL;
+        neutralLAddress.halfwordPointer = &base->negconNeutralL;
         g_NegconNeutralL = *neutralLAddress.halfwordPointer;
         {
             GameSaveBlockAddress maxTwistAddress;
             u16 hE;
             s32 extraMaxClass;
 
-            maxTwistAddress.halfwordPointer = &((GameSaveBlock *)base)->negconMaxTwist;
+            maxTwistAddress.halfwordPointer = &base->negconMaxTwist;
             hE = *maxTwistAddress.halfwordPointer;
-            g_GrandPrixSave.course = ((GameSaveBlock *)base)->grandPrixProgress.course;
-            g_GrandPrixSave.carIndex = ((GameSaveBlock *)base)->grandPrixProgress.carIndex;
-            g_GrandPrixSave.classIndex = ((GameSaveBlock *)base)->grandPrixProgress.classIndex;
-            g_GrandPrixSave.maxClassReached = ((GameSaveBlock *)base)->grandPrixProgress.maxClassReached;
+            g_GrandPrixSave.course = base->grandPrixProgress.course;
+            g_GrandPrixSave.carIndex = base->grandPrixProgress.carIndex;
+            g_GrandPrixSave.classIndex = base->grandPrixProgress.classIndex;
+            g_GrandPrixSave.maxClassReached = base->grandPrixProgress.maxClassReached;
             g_GrandPrixSave.money.value =
-                ((GameSaveBlock *)base)->grandPrixProgress.money;
-            g_ExtraGrandPrixSave.course = ((GameSaveBlock *)base)->extraGrandPrixProgress.course;
-            g_ExtraGrandPrixSave.carIndex = ((GameSaveBlock *)base)->extraGrandPrixProgress.carIndex;
-            g_ExtraGrandPrixSave.classIndex = ((GameSaveBlock *)base)->extraGrandPrixProgress.classIndex;
-            extraMaxClass = ((GameSaveBlock *)base)->extraGrandPrixProgress.maxClassReached;
+                base->grandPrixProgress.money;
+            g_ExtraGrandPrixSave.course = base->extraGrandPrixProgress.course;
+            g_ExtraGrandPrixSave.carIndex = base->extraGrandPrixProgress.carIndex;
+            g_ExtraGrandPrixSave.classIndex = base->extraGrandPrixProgress.classIndex;
+            extraMaxClass = base->extraGrandPrixProgress.maxClassReached;
             g_PadMappingIndex = padMappingIndex;
             g_NegconMappingIndex = negconMappingIndex;
             g_NegconSteerNeutral = negconSteerNeutral;
@@ -83,19 +83,19 @@ s32 LoadSaveStateBlock(u8 *block) {
             g_ExtraGrandPrixSave.maxClassReached = extraMaxClass;
         }
         g_ExtraGrandPrixSave.money.value =
-            ((GameSaveBlock *)base)->extraGrandPrixProgress.money;
-        g_TimeAttackSave.course = ((GameSaveBlock *)base)->timeAttackProgress.course;
-        g_TimeAttackSave.carIndex = ((GameSaveBlock *)base)->timeAttackProgress.carIndex;
-        g_TimeAttackSave.classIndex = ((GameSaveBlock *)base)->timeAttackProgress.classIndex;
-        g_TimeAttackSave.maxClassReached = ((GameSaveBlock *)base)->timeAttackProgress.maxClassReached;
+            base->extraGrandPrixProgress.money;
+        g_TimeAttackSave.course = base->timeAttackProgress.course;
+        g_TimeAttackSave.carIndex = base->timeAttackProgress.carIndex;
+        g_TimeAttackSave.classIndex = base->timeAttackProgress.classIndex;
+        g_TimeAttackSave.maxClassReached = base->timeAttackProgress.maxClassReached;
         g_TimeAttackSave.money.value =
-            ((GameSaveBlock *)base)->timeAttackProgress.money;
+            base->timeAttackProgress.money;
         {
-            s32 bgmSelection = ((GameSaveBlock *)base)->bgmSelection;
-            u16 advancedUnlocked = ((GameSaveBlock *)base)->advancedUnlocked;
+            s32 bgmSelection = base->bgmSelection;
+            u16 advancedUnlocked = base->advancedUnlocked;
             s32 maxClassReached1;
-            g_MaxClassReached[0] = ((GameSaveBlock *)base)->maxClassReached[0];
-            maxClassReached1 = ((GameSaveBlock *)base)->maxClassReached[1];
+            g_MaxClassReached[0] = base->maxClassReached[0];
+            maxClassReached1 = base->maxClassReached[1];
             g_BgmSelection = bgmSelection;
             g_AdvancedSeriesUnlocked = advancedUnlocked;
             g_MaxClassReached[1] = maxClassReached1;
@@ -103,7 +103,7 @@ s32 LoadSaveStateBlock(u8 *block) {
     }
 
     {
-        register u8 *src asm("$6") = base;
+        register u8 *src asm("$6") = (u8 *)base;
         s32 i;
         for (i = 0; i < 13; i++) {
             SavedCarSetup *grandPrixCar =
@@ -136,7 +136,7 @@ s32 LoadSaveStateBlock(u8 *block) {
     }
 
     {
-        register u8 *src asm("$4") = base;
+        register u8 *src asm("$4") = (u8 *)base;
         s32 index = 0;
         for (; index < 11; index++) {
             SavedClassRecord *saved =
@@ -158,7 +158,7 @@ s32 LoadSaveStateBlock(u8 *block) {
 
             i = 0;
             dst = g_TeamLogoClut;
-            src = base;
+            src = (u8 *)base;
             for (; i < 0x10; i++) {
                 *dst++ = ((GameSaveBlock *)src)->teamLogoClut[0];
                 src += 2;
@@ -171,7 +171,7 @@ s32 LoadSaveStateBlock(u8 *block) {
 
             i = 0;
             dst = g_TeamLogoCanvas.halfwords;
-            src = base;
+            src = (u8 *)base;
             for (; i < 0x400; i++) {
                 *dst++ = ((GameSaveBlock *)src)->teamLogoCanvas[0];
                 src += 2;
@@ -225,7 +225,7 @@ s32 LoadSaveStateBlock(u8 *block) {
                     timeAddress.byteOffset = iofc + timeAddress.byteOffset;
                     destinationAddress.byteOffset = joff + timeAddress.byteOffset;
                     dst2 = destinationAddress.wordPointer;
-                    saveAddress.bytePointer = base;
+                    saveAddress.bytePointer = (u8 *)base;
                     saveAddress.offset = iofc + saveAddress.offset;
                     timeSourceAddress.pointer = &saveAddress.pointer->timeRecords[0][0][0];
                     sourceAddress.byteOffset = joff + timeSourceAddress.byteOffset;
@@ -306,7 +306,7 @@ s32 LoadSaveStateBlock(u8 *block) {
 
     /* g_BgmVolumeSetting / g_SfxVolumeSetting / g_MonoOutput clamps */
     {
-        s32 v = ((GameSaveBlock *)base)->bgmVolume;
+        s32 v = base->bgmVolume;
         s32 c;
         g_BgmVolumeSetting = v;
         if (v >= 0) {
@@ -317,7 +317,7 @@ s32 LoadSaveStateBlock(u8 *block) {
         } else {
             c = 0;
         }
-        v = ((GameSaveBlock *)base)->sfxVolume;
+        v = base->sfxVolume;
         g_BgmVolumeSetting = c;
         g_SfxVolumeSetting = v;
         if (v >= 0) {
@@ -328,7 +328,7 @@ s32 LoadSaveStateBlock(u8 *block) {
         } else {
             c = 0;
         }
-        v = ((GameSaveBlock *)base)->monoOutput;
+        v = base->monoOutput;
         g_SfxVolumeSetting = c;
         g_MonoOutput = v;
         if (v != 0) {
@@ -337,8 +337,8 @@ s32 LoadSaveStateBlock(u8 *block) {
     }
 
     /* g_GrandPrixCourseProgress / g_ExtraGrandPrixCourseProgress unaligned copies */
-    memcpy(&g_GrandPrixCourseProgress, ((GameSaveBlock *)base)->grandPrixCourseProgress, 8);
-    memcpy(&g_ExtraGrandPrixCourseProgress, ((GameSaveBlock *)base)->extraGrandPrixCourseProgress, 8);
+    memcpy(&g_GrandPrixCourseProgress, base->grandPrixCourseProgress, 8);
+    memcpy(&g_ExtraGrandPrixCourseProgress, base->extraGrandPrixCourseProgress, 8);
 
     LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
     ApplyAudioSettings();

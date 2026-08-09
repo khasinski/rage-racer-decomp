@@ -253,7 +253,7 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
 
     BiosFileClose(fd);
     GameMenuLoadPhase = 0x3700;
-    if (LoadSaveStateBlock(block) == 0) {
+    if (LoadSaveStateBlock((GameSaveBlock *)block) == 0) {
         return 0;
     }
 
