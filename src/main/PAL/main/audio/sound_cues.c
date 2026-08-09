@@ -251,12 +251,12 @@ void UpdateEffectVoiceStates(void) {
             *statePtr = neg;
             break;
         }
-        statePtr = (s32 *)((u8 *)statePtr + 0x14);
+        statePtr += sizeof(EffectVoice) / sizeof(*statePtr);
         voice += 1 << 16;
         voiceCopy++;
-        pitchPtr = (s32 *)((u8 *)pitchPtr + 0x14);
-        f0Ptr = (s16 *)((u8 *)f0Ptr + 0x14);
-        offset += 0x14;
+        pitchPtr += sizeof(EffectVoice) / sizeof(*pitchPtr);
+        f0Ptr += sizeof(EffectVoice) / sizeof(*f0Ptr);
+        offset += sizeof(EffectVoice);
     } while ((s32)statePtr < (s32)&g_EffectVoices[4].state);
 }
 
