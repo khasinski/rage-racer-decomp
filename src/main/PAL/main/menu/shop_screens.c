@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/audio.h"
 #include "game/car.h"
 #include "game/asset_internal.h"
@@ -90,7 +91,7 @@ void UpdateCarShopScreen(void) {
                     }
                 }
             }
-            if (((u8 *)g_CarModelAsset)[8] == 0) {
+            if (((CarModelAsset *)g_CarModelAsset)->transmissionAvailable == 0) {
                 g_MenuAltPanelStep = 1;
             } else {
                 g_MenuAltPanelStep = -1;

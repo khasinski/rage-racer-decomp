@@ -29,7 +29,7 @@ void LoadCarSelectAssets(void) {
     u8 *carModelBase;
     GameSceneAssetHeader *header;
     GameSceneAssetHeader *imageHeader;
-    GameCarModelAsset *model;
+    CarModelAsset *model;
     s32 carIndex;
     s32 firstOffset;
     s32 secondOffset;
@@ -82,13 +82,13 @@ void LoadCarSelectAssets(void) {
                 SetCarModelSlot(carModelBase, 0);
                 SelectCarModelSlot(0);
 
-                model = (GameCarModelAsset *)g_CarModelAsset;
+                model = (CarModelAsset *)g_CarModelAsset;
                 relOffset = model->modelDataOffset;
                 modelPtr = (s32)(carModelBase + relOffset);
                 model->modelDataOffset = modelPtr;
                 RegisterModelBank((s32 *)modelPtr, 0);
 
-                model = (GameCarModelAsset *)g_CarModelAsset;
+                model = (CarModelAsset *)g_CarModelAsset;
                 relOffset = model->imageDataOffset;
                 modelPtr = (s32)(carModelBase + relOffset);
                 model->imageDataOffset = modelPtr;
@@ -96,8 +96,8 @@ void LoadCarSelectAssets(void) {
 
                 carIndex = g_PlayerCarIndex;
                 if (carIndex < 10) {
-                    ApplyBodyColor1(g_CarTable[carIndex].paintColor1, ((GameCarModelAsset *)g_CarModelAsset)->imageDataOffset);
-                    ApplyBodyColor2(g_CarTable[g_PlayerCarIndex].paintColor2, ((GameCarModelAsset *)g_CarModelAsset)->imageDataOffset);
+                    ApplyBodyColor1(g_CarTable[carIndex].paintColor1, ((CarModelAsset *)g_CarModelAsset)->imageDataOffset);
+                    ApplyBodyColor2(g_CarTable[g_PlayerCarIndex].paintColor2, ((CarModelAsset *)g_CarModelAsset)->imageDataOffset);
                 }
 
                 g_CarModelSlot = 0;
@@ -128,7 +128,7 @@ void LoadCarModelNow(s32 carIndex) {
 
 void LoadCarModel(s32 carIndex) {
     u8 *ptr;
-    GameCarModelAsset *asset;
+    CarModelAsset *asset;
     s32 assetId;
 
     assetId = (GetCarAssetIndex(carIndex, g_CarTable[carIndex].modelVariant) * 2) + 0xA;
@@ -140,7 +140,7 @@ void LoadCarModel(s32 carIndex) {
         }
 
         if (LoadAsset(assetId, ptr) != 0) {
-            asset = (GameCarModelAsset *)ptr;
+            asset = (CarModelAsset *)ptr;
             SetCarModelSlot(ptr, g_CarModelSlot < 1);
 
             asset->modelDataOffset = (s32)ptr + asset->modelDataOffset;

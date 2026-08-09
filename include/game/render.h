@@ -167,13 +167,6 @@ typedef struct CamRow {
 #define SCREEN_WIDTH   0x140
 #define SCREEN_HEIGHT  0xF0
 
-typedef struct GameRenderView {
-    s16 angle_0;    /* 0x00 */
-    s16 angle_2;    /* 0x02 */
-    s16 angle_4;    /* 0x04 */
-    s16 horizon_6;  /* 0x06 */
-} GameRenderView;
-
 /*
  * The camera car object at g_CameraCar. Eleven of its words are also declared
  * as standalone globals (g_CameraCarY, g_CameraCarAngleY, g_CameraCarSpeed and

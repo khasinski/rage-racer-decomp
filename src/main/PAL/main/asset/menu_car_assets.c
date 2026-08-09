@@ -15,7 +15,7 @@
 
 void LoadUpgradedCarModel(s32 carIndex) {
     u8 *ptr;
-    GameCarModelAsset *asset;
+    CarModelAsset *asset;
     s32 offset;
     s32 assetId;
     u32 mode;
@@ -31,7 +31,7 @@ void LoadUpgradedCarModel(s32 carIndex) {
         }
 
         if (LoadAsset(assetId, ptr) != 0) {
-            asset = (GameCarModelAsset *)ptr;
+            asset = (CarModelAsset *)ptr;
             SetCarModelSlot(ptr, g_CarModelSlot < 1);
 
             asset->modelDataOffset = (s32)ptr + asset->modelDataOffset;
@@ -190,9 +190,9 @@ void RelocateCarModel(void) {
     }
 
     SetCarModelSlot(g_AssetBase, 0);
-    temp = ((GameCarModelAsset *)g_CarModelAsset)->modelDataOffset;
+    temp = ((CarModelAsset *)g_CarModelAsset)->modelDataOffset;
     UnrelocateModelBank((s32 *)(g_AssetBase + 0x28), temp);
     SelectCarModelSlot(0);
-    ((GameCarModelAsset *)g_CarModelAsset)->modelDataOffset = (u32)(g_AssetBase + 0x28);
+    ((CarModelAsset *)g_CarModelAsset)->modelDataOffset = (u32)(g_AssetBase + 0x28);
     RegisterModelBank((s32 *)(g_AssetBase + 0x28), 0);
 }

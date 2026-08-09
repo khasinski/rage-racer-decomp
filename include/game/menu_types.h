@@ -60,16 +60,6 @@ enum MenuPalette {
     MENU_PAINT_COLOR_COUNT = 18
 };
 
-/* Layout of the 0x18-byte engine specification block in a car model asset. */
-typedef struct CarEngineSpec {
-    u8 reserved00[0x10];
-    s16 maxPower;
-    s16 maxPowerRpm;
-    u8 maxTorqueFraction;
-    u8 maxTorqueWhole;
-    s16 maxTorqueRpm;
-} CarEngineSpec;
-
 /* 6x6 mask selecting the DESIGN MODE script cells to draw. */
 typedef struct DesignModeCellMask {
     u8 cells[6][6];

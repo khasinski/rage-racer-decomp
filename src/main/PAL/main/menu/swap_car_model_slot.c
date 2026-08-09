@@ -141,7 +141,7 @@ void DrawMenuCarView(void) {
     p = &g_PlayerCar.pose.rotation.y;
     *p = *p + g_MenuViewSpin;
     BuildRotMatrixY(&mtxA, *p);
-    vec.z = (s16)(-((s16)((ShowroomCarModel *)g_CarModelAsset)->height / 2));
+    vec.z = (s16)(-((s16)((CarModelAsset *)g_CarModelAsset)->modelOffsetZ / 2));
     ApplyMatrixLV(&mtxA, &vec, &out);
     BuildRotMatrixY(&mtxB, 0x800 - *p);
     BuildRotMatrixX(&mtxA, g_PlayerCar.pose.rotation.x);

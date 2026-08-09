@@ -5,11 +5,6 @@
 #include "game/car.h"
 #include "game/vector.h"
 
-typedef struct ShowroomCarModel {
-    s32 unk0;
-    u16 height;
-} ShowroomCarModel;
-
 typedef struct ShowroomCarPose {
     s32 position[4];
     s32 unk10[4];

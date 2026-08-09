@@ -71,11 +71,25 @@ extern GameCdLoadEntry *g_StreamLoc;
 /* Boot CD scratch buffer: the RAGE.BIN index first, then asset 0. */
 extern s32 g_LoadBuffer[];
 
-typedef struct GameCarModelAsset {
-    u8 pad0[0x20];
+typedef struct CarModelAsset {
+    s16 modelOffsetX;
+    s16 modelOffsetY;
+    s16 modelOffsetZ;
+    s16 horizon;
+    u8 transmissionAvailable;
+    u8 gearCount;
+    u8 upgradesAvailable;
+    u8 performanceRatings[3];
+    u8 reserved0E[2];
+    s16 maxPower;
+    s16 maxPowerRpm;
+    u8 maxTorqueFraction;
+    u8 maxTorqueWhole;
+    s16 maxTorqueRpm;
+    u8 reserved1A[6];
     s32 modelDataOffset;
     s32 imageDataOffset;
-} GameCarModelAsset;
+} CarModelAsset;
 
 /* One VRAM upload record inside an image asset; UploadImageAsset walks a chain of
  * them and UploadImageBlock uploads each. */
@@ -134,13 +148,6 @@ extern u8 *g_AssetBase;
 extern u8 *g_AssetLoadCursor;
 /* Second sub-block cursor: base + header->offsets[n + 1]. */
 extern u8 *g_AssetSubBlockPtr;
-
-/*
- * g_CarModelAsset, by contrast, is a slot whose pointee type really does change
- * with the screen, so its several spellings are not a naming slip to unify: the
- * model viewer reads a GameCarModelAsset header, the spec screen reads an
- * EngineSpecData block and the car-select camera reads a GameRenderView.
- */
 
 /*
  * Asset-load state machine. ServiceAssetLoad runs once per frame and

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/race.h"
 #include "game/render.h"
 #include "game/render_internal.h"
@@ -19,7 +20,7 @@
  * base OT bucket; clipHandle is the optional clip volume from GetTrackZoneBlend.
  */
 void DrawPlayerCarModel(GameRenderObject *obj) {
-    GameRenderView *view = (GameRenderView *)g_CarModelAsset;
+    CarModelAsset *view = g_CarModelAsset;
     Matrix m_10;
     Matrix m_30;
     Matrix m_50;
@@ -35,8 +36,8 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     s32 otDepth;
     s32 i;
 
-    obj->y -= view->horizon_6;
-    obj->field_60 -= view->horizon_6;
+    obj->y -= view->horizon;
+    obj->field_60 -= view->horizon;
     BuildRotMatrixY(&m_10, 0x800 - obj->angleY);
     BuildRotMatrixX(&m_30, obj->angleX);
     MulMatrix2(&m_10, &m_30);
@@ -113,14 +114,14 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     SubmitModel((void *)SCRATCHPAD_ADDR, (otDepth + 3 < g_ModelBankCount) ? (otDepth + 3) : 1);
 
     for (i = 0; i < 2; i++) {
-        GameRenderView *v = (GameRenderView *)g_CarModelAsset;
-        s32 ax = v->angle_0;
+        CarModelAsset *v = g_CarModelAsset;
+        s32 ax = v->modelOffsetX;
         if (i % 2) {
             ax = -ax;
         }
         v_110[0] = ax;
-        v_110[1] = v->angle_2;
-        v_110[2] = v->angle_4;
+        v_110[1] = v->modelOffsetY;
+        v_110[2] = v->modelOffsetZ;
         ApplyMatrix((s32 *)&m_50, (s32 *)v_110, m_118);
         m_118[0] += obj->x;
         m_118[1] += obj->y;
@@ -131,8 +132,8 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
         SetLightMatrix(&m_90);
     }
 
-    obj->y += ((GameRenderView *)g_CarModelAsset)->horizon_6;
-    obj->field_60 += ((GameRenderView *)g_CarModelAsset)->horizon_6;
+    obj->y += ((CarModelAsset *)g_CarModelAsset)->horizon;
+    obj->field_60 += ((CarModelAsset *)g_CarModelAsset)->horizon;
     if (clipHandle != 0) {
         RestoreColorMatrix();
     }

@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/menu.h"
 #include "game/asset_internal.h"
 #include "game/scratchpad.h"
@@ -248,27 +249,27 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
 
     {
         s32 *value = &g_CarSpecBars[0];
-        if ((*value < ((u8 *)g_CarModelAsset)[0xB]) && (*value < 0x60)) {
+        if ((*value < ((CarModelAsset *)g_CarModelAsset)->performanceRatings[0]) && (*value < 0x60)) {
             (*value)++;
-        } else if ((((u8 *)g_CarModelAsset)[0xB] < *value) && (*value > 0)) {
+        } else if ((((CarModelAsset *)g_CarModelAsset)->performanceRatings[0] < *value) && (*value > 0)) {
             (*value)--;
         }
     }
 
     {
         s32 *value = &g_CarSpecBars[1];
-        if ((*value < ((u8 *)g_CarModelAsset)[0xC]) && (*value < 0x60)) {
+        if ((*value < ((CarModelAsset *)g_CarModelAsset)->performanceRatings[1]) && (*value < 0x60)) {
             (*value)++;
-        } else if ((((u8 *)g_CarModelAsset)[0xC] < *value) && (*value > 0)) {
+        } else if ((((CarModelAsset *)g_CarModelAsset)->performanceRatings[1] < *value) && (*value > 0)) {
             (*value)--;
         }
     }
 
     {
         s32 *value = &g_CarSpecBars[2];
-        if ((*value < ((u8 *)g_CarModelAsset)[0xD]) && (*value < 0x60)) {
+        if ((*value < ((CarModelAsset *)g_CarModelAsset)->performanceRatings[2]) && (*value < 0x60)) {
             (*value)++;
-        } else if ((((u8 *)g_CarModelAsset)[0xD] < *value) && (*value > 0)) {
+        } else if ((((CarModelAsset *)g_CarModelAsset)->performanceRatings[2] < *value) && (*value > 0)) {
             (*value)--;
         }
     }
