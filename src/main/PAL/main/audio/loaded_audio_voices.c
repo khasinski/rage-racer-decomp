@@ -177,7 +177,7 @@ void InitEffectVoiceRuntime(void) {
             g_EffectVoices[i].state = neg;
             g_EffectVoices[i].note = neg;
             g_EffectVoices[i].tone = neg;
-            g_EffectVoices[i].pitch = value;
+            g_EffectVoices[i].pitch.value = value;
             g_EffectVoices[i].volume = 0;
         }
     }

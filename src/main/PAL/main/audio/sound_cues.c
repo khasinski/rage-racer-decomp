@@ -56,7 +56,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                         g_EffectVoices[resetIndex].state = active;
                         g_EffectVoices[resetIndex].note = inactive;
                         g_EffectVoices[resetIndex].tone = inactive;
-                        g_EffectVoices[resetIndex].pitch = defaultPitch;
+                        g_EffectVoices[resetIndex].pitch.value = defaultPitch;
                         g_EffectVoices[resetIndex].volume = 0;
                         resetIndex++;
                     } while (resetIndex < volume);
@@ -98,7 +98,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     cueValue = cueCursor->programs[0].note;
                     g_EffectVoices[i].note = cueValue;
                     toneValue = cueCursor->programs[0].tone;
-                    g_EffectVoices[i].pitch = pitch;
+                    g_EffectVoices[i].pitch.value = pitch;
                     g_EffectVoices[i].tone = toneValue;
                     cueCursor = (const EffectCueBank *)&cueCursor->programs[0];
                     if (scaled < 0) {
@@ -138,7 +138,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                             g_EffectVoices[i + 2].state = active;
                             g_EffectVoices[i + 2].note = inactive;
                             g_EffectVoices[i + 2].tone = inactive;
-                            g_EffectVoices[i + 2].pitch = defaultPitch;
+                            g_EffectVoices[i + 2].pitch.value = defaultPitch;
                             g_EffectVoices[i + 2].volume = 0;
                             i++;
                         } while (i < volume);
@@ -186,7 +186,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     cueValue = cueCursor->programs[0].note;
                     g_EffectVoices[i + 2].note = cueValue;
                     toneValue = cueCursor->programs[0].tone;
-                    g_EffectVoices[i + 2].pitch = pitch;
+                    g_EffectVoices[i + 2].pitch.value = pitch;
                     g_EffectVoices[i + 2].tone = toneValue;
                     cueCursor = (const EffectCueBank *)&cueCursor->programs[0];
                     if (scaled < 0) {
@@ -230,7 +230,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     }                                                                 \
     SsUtSetVVol((s16)svArg, left, right);                             \
     SsUtChangePitch(voice >> 16, 0, *f0Ptr, 0x3C, 0,                  \
-                    (s16)(*pitchPtr >> 7), *(u16 *)pitchPtr & 0x7F);  \
+                    (s16)(pitchPtr->value >> 7), pitchPtr->half.fraction & 0x7F); \
     *statePtr = neg
 
 void UpdateEffectVoiceStates(void) {
@@ -238,7 +238,7 @@ void UpdateEffectVoiceStates(void) {
     EffectVoiceAddress endAddress;
     EffectVoiceAddress toneAddress;
     s32 *statePtr;
-    s32 *pitchPtr;
+    EffectVoicePitch *pitchPtr;
     s16 *f0Ptr;
     s32 offset;
     s32 voiceCopy;
@@ -254,8 +254,8 @@ void UpdateEffectVoiceStates(void) {
     statePtr = &g_EffectVoices[0].state;
     voice = 10 << 16;
     voiceCopy = 10;
-    pitchPtr = statePtr + 1;
-    f0Ptr = (s16 *)statePtr - 4;
+    pitchPtr = GetEffectVoicePitchFromState(statePtr);
+    f0Ptr = GetEffectVoiceHalfwordsFromState(statePtr) - 4;
     offset = 0;
     do {
         state = *statePtr;

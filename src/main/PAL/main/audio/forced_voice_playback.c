@@ -159,7 +159,7 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
     state = enabled;
     voicePacked = 0xA0000;
     voice = 0xA;
-    pitchCursor = &g_EffectVoices[0].pitch;
+    pitchCursor = &g_EffectVoices[0].pitch.value;
     noteCursor = &g_EffectVoices[0].note;
     offset = 0;
     do {
