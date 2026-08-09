@@ -15,9 +15,14 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
+typedef union SignedDivisionWork {
+    s32 value;
+    u32 unsignedValue;
+} SignedDivisionWork;
+
 void DrawRankingPanel(s32 slideX) {
     s32 panel;
-    s32 iter;
+    SignedDivisionWork iter;
     s32 countOrIndex;
     s32 xOrField;
     s32 destination;
@@ -39,7 +44,7 @@ void DrawRankingPanel(s32 slideX) {
     if (mode != 3) {
         limit = 3;
     }
-    iter = 0;
+    iter.value = 0;
     if (limit > 0) {
         scoreOrX.timePointer = g_PlayerCar.lapTimes.table.milliseconds;
         do {
@@ -47,13 +52,13 @@ void DrawRankingPanel(s32 slideX) {
              * table row, the odd one 8 px to the right. This is gcc's own
              * expansion of the signed divide; writing it back as `iter / 2`
              * does not re-expand to the same code here, so it stays. */
-            scoreValue = iter + (((u32)iter) >> 31);
+            scoreValue = iter.value + (iter.unsignedValue >> 31);
             row = scoreValue >> 1;
             doubledRow = row * 2;
-            value = iter - doubledRow;
+            value = iter.value - doubledRow;
             value <<= 3;
             xOrField = value + 0x58;
-            *(volatile char *)&text[0] = iter + 0x31;
+            *(volatile char *)&text[0] = iter.value + 0x31;
             doubledRow = (doubledRow + row) << 5;
             scoreValue = *scoreOrX.timePointer;
             value = (destination = panel + 0x14);
@@ -61,13 +66,13 @@ void DrawRankingPanel(s32 slideX) {
             destination = doubledRow;
             destination = destination + value;
             color = 0x78CC;
-            if (g_BestLapIndex == iter) {
+            if (g_BestLapIndex == iter.value) {
                 color = 0x780F;
             }
             DrawText8x8(destination, xOrField, text, color);
-            iter++;
+            iter.value++;
             scoreOrX.byteOffset += 4;
-        } while (iter < limit);
+        } while (iter.value < limit);
     }
     DrawProportionalText(panel + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
     countOrIndex = 0;
