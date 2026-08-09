@@ -282,7 +282,7 @@ s32 GetCarAssetIndex(s32 model, s32 grade);
 /* Declared identically by 19 translation units before this
  * header carried them. */
 
-extern s32 g_StreamSectorLimit;
+extern u32 g_StreamSectorLimit;
 extern s32 g_TerrainCellCount;
 extern u32 g_CarImageRect;
 struct CarImageData;

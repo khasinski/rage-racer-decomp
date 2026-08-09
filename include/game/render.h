@@ -893,7 +893,7 @@ extern s16 g_NegconSteer;
 extern s16 g_NegconSteerRange[];
 extern s32 g_SetupArrowPulse;
 extern s16 g_SinTable[];
-extern s32 g_StreamSectorCount;
+extern u32 g_StreamSectorCount;
 extern s32 g_TrackTextureSectionHi;
 extern s32 g_TrackTextureSectionLo;
 

@@ -83,7 +83,7 @@ void LoadTrackDataAssets(void) {
 }
 
 void BeginIntroFmv(s32 returnScene) {
-    s32 sectors;
+    u32 sectors;
 
     BeginFmv(returnScene);
 
@@ -95,7 +95,7 @@ void BeginIntroFmv(s32 returnScene) {
 
 void BeginClassFmv(s32 returnScene) {
     s32 index;
-    s32 sectors;
+    u32 sectors;
 
     BeginFmv(returnScene);
 
@@ -113,7 +113,7 @@ void BeginClassFmv(s32 returnScene) {
 }
 
 void BeginEndingFmv(s32 returnScene) {
-    s32 sectors;
+    u32 sectors;
 
     BeginFmv(returnScene);
 

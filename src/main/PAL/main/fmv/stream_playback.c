@@ -53,7 +53,7 @@ void *GetFmvFrame(FmvDecodeContext *ctx) {
     }
 
     entry = slot[1];
-    if (entry->frame >= (u32)g_StreamSectorCount) {
+    if (entry->frame >= g_StreamSectorCount) {
         g_FmvStreamEnded = 1;
     }
     w = entry->width;
