@@ -84,7 +84,7 @@ void ResetSoundState(void) {
             offset = 0;
             for (; i < 4; i++) {
                 GetEffectVoiceAtByteOffset(offset)->state = neg;
-                GetEffectVoiceAtByteOffset(offset)->note = neg;
+                GetEffectVoiceAtByteOffset(offset)->note.value = neg;
                 GetEffectVoiceAtByteOffset(offset)->tone = neg;
                 GetEffectVoiceAtByteOffset(offset)->pitch.value = value;
                 GetEffectVoiceAtByteOffset(offset)->volume = 0;

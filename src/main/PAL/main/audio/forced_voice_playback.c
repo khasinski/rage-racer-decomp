@@ -145,8 +145,8 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
     EffectVoiceAddress endAddress;
     s32 voicePacked;
     s32 voice;
-    s32 *pitchCursor;
-    s32 *noteCursor;
+    EffectVoicePitch *pitchCursor;
+    EffectVoiceNote *noteCursor;
     s32 offset;
     s32 state;
     register s32 raw asm("$2");
@@ -159,14 +159,14 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
     state = enabled;
     voicePacked = 0xA0000;
     voice = 0xA;
-    pitchCursor = &g_EffectVoices[0].pitch.value;
+    pitchCursor = &g_EffectVoices[0].pitch;
     noteCursor = &g_EffectVoices[0].note;
     offset = 0;
     do {
         if (state != 0) {
             voiceArg = voicePacked >> 16;
             left = g_VabIds[0];
-            right = *(s16 *)noteCursor;
+            right = noteCursor->half.value;
             keyTone = (s16)GetEffectVoiceAtByteOffset(offset)->tone;
             raw = 0x3C;
             SsUtKeyOnV(voiceArg, left, right, keyTone, raw, 0, 0, 0);
@@ -201,11 +201,11 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
 
             SsUtSetVVol((s16)voiceArg, left, right);
 
-            right = *(s16 *)noteCursor;
+            right = noteCursor->half.value;
             voiceArg = voicePacked >> 16;
             SsUtChangePitch(voiceArg, 0, right, 0x3C, 0,
-                            (*pitchCursor << 9) >> 16,
-                            *(u16 *)pitchCursor & 0x7F);
+                            (pitchCursor->value << 9) >> 16,
+                            pitchCursor->half.fraction & 0x7F);
         } else {
             SsUtKeyOffV(voicePacked >> 16);
         }
@@ -215,7 +215,7 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
         pitchCursor += sizeof(EffectVoice) / sizeof(*pitchCursor);
         noteCursor += sizeof(EffectVoice) / sizeof(*noteCursor);
         offset += 0x14;
-        cursorAddress.wordPointer = pitchCursor;
+        cursorAddress.pitchPointer = pitchCursor;
         endAddress.wordPointer = &g_ReverbFadeStep;
     } while (cursorAddress.byteOffset < endAddress.byteOffset);
 }

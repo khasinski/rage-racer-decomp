@@ -64,8 +64,16 @@ typedef union EffectVoicePitch {
     } half;
 } EffectVoicePitch;
 
+typedef union EffectVoiceNote {
+    s32 value;
+    struct {
+        s16 value;
+        s16 upper;
+    } half;
+} EffectVoiceNote;
+
 typedef struct EffectVoice {
-    s32 note;      /* +0x00 note/detune base */
+    EffectVoiceNote note; /* +0x00 note/detune base */
     s32 tone;      /* +0x04 tone */
     s32 state;     /* +0x08 state 0/1/2/-1 */
     EffectVoicePitch pitch; /* +0x0C pitch */

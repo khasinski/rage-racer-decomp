@@ -45,7 +45,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
             s32 resetIndex;
 
             resetIndex = 0;
-            if ((g_EffectVoices[0].note >= 0) || (g_EffectVoices[1].note >= 0)) {
+            if ((g_EffectVoices[0].note.value >= 0) || (g_EffectVoices[1].note.value >= 0)) {
                 count = g_EffectCueTable[0].voiceCount;
                 if (count > 0) {
                     active = 1;
@@ -54,7 +54,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     volume = count;
                     do {
                         g_EffectVoices[resetIndex].state = active;
-                        g_EffectVoices[resetIndex].note = inactive;
+                        g_EffectVoices[resetIndex].note.value = inactive;
                         g_EffectVoices[resetIndex].tone = inactive;
                         g_EffectVoices[resetIndex].pitch.value = defaultPitch;
                         g_EffectVoices[resetIndex].volume = 0;
@@ -63,8 +63,8 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                 }
             }
         } else {
-            if ((g_EffectVoices[0].note == g_EffectCueTable[0].programs[0].note) &&
-                (g_EffectVoices[1].note == g_EffectCueTable[0].programs[1].note)) {
+            if ((g_EffectVoices[0].note.value == g_EffectCueTable[0].programs[0].note) &&
+                (g_EffectVoices[1].note.value == g_EffectCueTable[0].programs[1].note)) {
                 g_EffectVoices[0].state = 2;
             } else {
                 g_EffectVoices[0].state = 0;
@@ -96,7 +96,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     scaleValue = scaleAddress.pointer->volumeScale;
                     scaled = volume * scaleValue;
                     cueValue = cueCursor->programs[0].note;
-                    g_EffectVoices[i].note = cueValue;
+                    g_EffectVoices[i].note.value = cueValue;
                     toneValue = cueCursor->programs[0].tone;
                     g_EffectVoices[i].pitch.value = pitch;
                     g_EffectVoices[i].tone = toneValue;
@@ -114,16 +114,16 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     case 1:
     case 2:
         if (volume <= 0) {
-            hasActiveVoice = g_EffectVoices[2].note >= 0;
+            hasActiveVoice = g_EffectVoices[2].note.value >= 0;
             ok = 0;
-            if (hasActiveVoice || (g_EffectVoices[3].note >= 0)) {
+            if (hasActiveVoice || (g_EffectVoices[3].note.value >= 0)) {
                 if (bank == 1) {
-                    if (g_EffectVoices[2].note == g_EffectCueTable[1].programs[0].note) {
-                        ok = g_EffectVoices[3].note == g_EffectCueTable[1].programs[1].note;
+                    if (g_EffectVoices[2].note.value == g_EffectCueTable[1].programs[0].note) {
+                        ok = g_EffectVoices[3].note.value == g_EffectCueTable[1].programs[1].note;
                     }
                 } else if ((bank == 2) &&
-                           (g_EffectVoices[2].note == g_EffectCueTable[2].programs[0].note) &&
-                           (g_EffectVoices[3].note == g_EffectCueTable[2].programs[1].note)) {
+                           (g_EffectVoices[2].note.value == g_EffectCueTable[2].programs[0].note) &&
+                           (g_EffectVoices[3].note.value == g_EffectCueTable[2].programs[1].note)) {
                     ok = 1;
                 }
                 if (ok != 0) {
@@ -136,7 +136,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                         volume = count;
                         do {
                             g_EffectVoices[i + 2].state = active;
-                            g_EffectVoices[i + 2].note = inactive;
+                            g_EffectVoices[i + 2].note.value = inactive;
                             g_EffectVoices[i + 2].tone = inactive;
                             g_EffectVoices[i + 2].pitch.value = defaultPitch;
                             g_EffectVoices[i + 2].volume = 0;
@@ -146,9 +146,9 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                 }
             }
         } else {
-            if ((g_EffectVoices[2].note ==
+            if ((g_EffectVoices[2].note.value ==
                  g_EffectCueTable[bank].programs[0].note) &&
-                (g_EffectVoices[3].note ==
+                (g_EffectVoices[3].note.value ==
                  g_EffectCueTable[bank].programs[1].note)) {
                 g_EffectVoice2State = 2;
                 tblOff = bank * 2;
@@ -184,7 +184,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     scaleValue = scaleAddress.pointer->volumeScale;
                     scaled = volume * scaleValue;
                     cueValue = cueCursor->programs[0].note;
-                    g_EffectVoices[i + 2].note = cueValue;
+                    g_EffectVoices[i + 2].note.value = cueValue;
                     toneValue = cueCursor->programs[0].tone;
                     g_EffectVoices[i + 2].pitch.value = pitch;
                     g_EffectVoices[i + 2].tone = toneValue;
