@@ -35,10 +35,18 @@ typedef struct GameScratchpadRenderState {
     s16 y1;
 } GameScratchpadRenderState;
 
+typedef union ScratchViewCoordinate {
+    s32 value;
+    struct {
+        u16 low;
+        u16 high;
+    } half;
+} ScratchViewCoordinate;
+
 typedef struct ScratchViewState {
-    s32 x;
-    s32 y;
-    s32 z;
+    ScratchViewCoordinate x;
+    ScratchViewCoordinate y;
+    ScratchViewCoordinate z;
     s32 reserved14;
     s32 angleX;
     s32 angleY;
