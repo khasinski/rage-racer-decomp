@@ -83,6 +83,16 @@ void f(void *pointer, s32 value) {
 
         self.assertEqual(counts["pointer_integer_casts"], 2)
 
+    def test_counts_asm_aliases_in_game_headers(self):
+        with tempfile.TemporaryDirectory() as source_directory, tempfile.TemporaryDirectory() as header_directory:
+            Path(source_directory, "sample.c").write_text("void f(void) {}\n")
+            Path(header_directory, "sample.h").write_text(
+                'extern s32 alias asm("canonical");\nextern s32 ordinary;\n'
+            )
+            counts = count_debt(Path(source_directory), Path(header_directory))
+
+        self.assertEqual(counts["header_asm_aliases"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

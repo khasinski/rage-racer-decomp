@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_ROOT = ROOT / "src/main/PAL/main"
+HEADER_ROOT = ROOT / "include/game"
 BASELINE = ROOT / "tools/code_debt_baseline.json"
 
 PATTERNS = {
@@ -41,6 +42,7 @@ PATTERNS = {
     ),
     "statement_expressions": re.compile(r"\(\s*\{"),
     "asm_aliases": re.compile(r"\.globl\s+func_[0-9A-Fa-f]+"),
+    "header_asm_aliases": re.compile(r"^\s*extern\b[^;\n]*\basm\s*\(", re.MULTILINE),
     "unknown_fields": re.compile(r"\b(?:field_[0-9A-Fa-f]+|unk[0-9A-Fa-f]+)\b"),
     "externs_in_c": re.compile(r"^\s*extern\b", re.MULTILINE),
     "declaration_overrides": re.compile(
@@ -54,12 +56,18 @@ def strip_comments(text: str) -> str:
     return re.sub(r"//[^\n]*", "", text)
 
 
-def count_debt(source_root: Path = SOURCE_ROOT) -> dict[str, int]:
+def count_debt(source_root: Path = SOURCE_ROOT, header_root: Path | None = None) -> dict[str, int]:
     totals = {name: 0 for name in PATTERNS}
     for path in sorted(source_root.rglob("*.c")):
         text = strip_comments(path.read_text(errors="ignore"))
         for name, pattern in PATTERNS.items():
             totals[name] += len(pattern.findall(text))
+    if header_root is None and source_root == SOURCE_ROOT:
+        header_root = HEADER_ROOT
+    if header_root is not None:
+        pattern = PATTERNS["header_asm_aliases"]
+        for path in sorted(header_root.rglob("*.h")):
+            totals["header_asm_aliases"] += len(pattern.findall(strip_comments(path.read_text(errors="ignore"))))
     return totals
 
 
