@@ -197,8 +197,11 @@ void UpdatePrologue(void) {
         SetDispMask(1);
     }
 
-    if ((u32)g_SceneTimer >= 0x79 && (g_PadPressed & PAD_CONFIRM)) {
-        ExitPrologue();
+    {
+        u32 sceneFrame = g_SceneTimer;
+        if (sceneFrame >= 0x79 && (g_PadPressed & PAD_CONFIRM)) {
+            ExitPrologue();
+        }
     }
 
     timer = g_SceneTimer;
