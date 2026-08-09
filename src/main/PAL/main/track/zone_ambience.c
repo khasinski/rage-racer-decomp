@@ -88,7 +88,7 @@ void UpdateZoneAmbience(s32 zone) {
 
 
 void TriggerRaceCues(void) {
-    u8 *base;
+    TrackRaceCueAddress base;
     s32 i;
     s32 mask;
     PlayerRaceCueState *state;
@@ -97,15 +97,15 @@ void TriggerRaceCues(void) {
     register s32 loopFlags asm("t0");
     register s32 current asm("a0");
     s32 product;
-    TrackRaceCueAddress baseAddress;
+    TrackRaceCueAddress finishAddress;
 
     current = g_RaceCueFlags;
-    base = (u8 *)&g_TrackEventData->raceCues;
+    base.pointer = &g_TrackEventData->raceCues;
 
     if (!(current & 8)) {
-        if (g_PlayerCar.trackSection ==
-            ((TrackFinishCue *)((g_RaceSeries * sizeof(TrackFinishCue)) +
-                                (s32)base))->trackSection) {
+        finishAddress.byteOffset = g_RaceSeries * sizeof(TrackFinishCue);
+        finishAddress.byteOffset += base.byteOffset;
+        if (g_PlayerCar.trackSection == finishAddress.finishPointer->trackSection) {
             entry.byteOffset = g_PlayerCar.lap;
             if (entry.byteOffset == g_LapCount) {
                 entry.byteOffset = current | 8;
@@ -131,8 +131,7 @@ void TriggerRaceCues(void) {
         if (temp == 0) {
             temp = g_RaceSeries;
             entry.byteOffset = ((temp * 3) + i) << 2;
-            baseAddress.bytePointer = base;
-            entry.byteOffset += baseAddress.byteOffset;
+            entry.byteOffset += base.byteOffset;
             current = entry.pointer->speed[0][0].trackSection;
             temp = -1;
             if (current == temp) {
