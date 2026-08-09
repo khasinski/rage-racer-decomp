@@ -29,6 +29,14 @@ typedef union CarSlideInput {
     } halves;
 } CarSlideInput;
 
+typedef union CarTrackHeading {
+    s32 value;
+    struct {
+        u16 low;
+        u16 high;
+    } half;
+} CarTrackHeading;
+
 typedef struct CarTrackLimits {
     s16 rightInset;
     s16 leftInset;
@@ -58,7 +66,7 @@ typedef struct GameCarRuntime {
     s32 trackPointIndex;
     s32 trackLateralOffset;
     s32 segmentFraction;
-    s32 field_3C;
+    s32 normalizedLateralOffset;
     s32 field_40;
     s32 steeringAngle;
     s32 wheelRotation;
@@ -99,7 +107,7 @@ typedef struct GameCarRuntime {
     s16 activeFlag;
     s16 modelIndex;
     s32 field_B0;
-    s32 field_B4;
+    CarTrackHeading trackHeading;
     /* +0xB8 0 = travelling with the course, 1 = against it. Seeded to
      * g_RaceSeries for every car by BuildStartingGrid and recomputed each
      * frame for the player from IsCarFacingBackwards; `!= g_RaceSeries`
@@ -414,7 +422,7 @@ typedef struct PlayerCarRuntime {
     s32 trackPointIndex;
     s32 trackLateralOffset;
     s32 segmentFraction;
-    s32 field_3C;
+    s32 normalizedLateralOffset;
     s32 field_40;
     s32 steeringAngle;
     s32 wheelRotation;
@@ -455,7 +463,7 @@ typedef struct PlayerCarRuntime {
     s16 activeFlag;
     s16 modelIndex;
     s32 field_B0;
-    s32 field_B4;
+    CarTrackHeading trackHeading;
     s16 facingBackwards;
     u8 padBA[2];
     GameCarDrive drive;

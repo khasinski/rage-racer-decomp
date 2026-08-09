@@ -386,7 +386,7 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     } else {
     {
         s32 target = (ctx->facingBackwards << 11) + 3072;
-        r = GetAngleDelta(ctx->bodyYaw, target - ctx->field_B4);
+        r = GetAngleDelta(ctx->bodyYaw, target - ctx->trackHeading.value);
     }
     s2v = r * 32;
     r = rcos(ctx->trackLateralOffset * 2);

@@ -240,7 +240,7 @@ void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
     carReg->motionActive = 1;
     if (mode < 2) {
 
-    adjustedReg = *(u16 *)&carReg->field_B4;
+    adjustedReg = carReg->trackHeading.half.low;
     raw = 0xC00;
     raw -= adjustedReg;
     rawArg = raw;
@@ -300,7 +300,7 @@ void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
     hitZ = adjustedReg >> 12;
     tmp = 0x1E;
     } else if (mode < 4) {
-    adjustedReg = *(u16 *)&carReg->field_B4;
+    adjustedReg = carReg->trackHeading.half.low;
     raw = 0xC00;
     raw -= adjustedReg;
     raw <<= 16;

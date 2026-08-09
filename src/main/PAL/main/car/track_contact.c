@@ -363,7 +363,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
             combinedComponent = firstComponent + (lateralProduct >> 0xC);
             car->modelRoll = combinedComponent;
             car->modelYaw = car->bodyYaw;
-            car->field_B4 = spad->heading;
+            car->trackHeading.value = spad->heading;
             car->previousTrackProgress = car->trackProgress;
             car->trackProgress = progress;
             if (progress < 0) {

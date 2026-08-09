@@ -55,7 +55,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
 
     point = &g_TrackPoints[index];
     if (point->rightHalfWidth < lateral) {
-        value = point->rightHalfWidth * car->field_3C;
+        value = point->rightHalfWidth * car->normalizedLateralOffset;
         if (value < 0) {
             value += 0x7FF;
         }
@@ -64,7 +64,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
         value = point->leftHalfWidth;
         lowerLimit = -value;
         if (lateral < lowerLimit) {
-            value = lowerLimit * car->field_3C;
+            value = lowerLimit * car->normalizedLateralOffset;
             if (value < 0) {
                 value += 0x7FF;
             }
@@ -90,7 +90,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
     angle = 0x400 - Atan2(coords[0] - car->x, coords[2] - car->z);
 
     callArg = g_RaceSeries;
-    value = car->field_B4;
+    value = car->trackHeading.value;
     callArg = (callArg << 11) + 0xC00;
     value = -GetAngleDelta(callArg - value, angle);
     car->steeringAngle = value * 3;
