@@ -116,7 +116,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->drive.engineLoad = 0;
   player->drive.unk2E = 1;
   player->drive.unk36 = 0;
-  player->drive.unk32 = 0;
+  player->drive.steeringGrip = 0;
   player->drive.trackCurveBias = 0;
   player->drive.trackCurveMode = 0;
   player->drive.jumpTimer = 0;
@@ -128,7 +128,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->drive.gear = 1;
   player->drive.engineRpm = 0;
   player->drive.unk80 = 0;
-  player->drive.unk94 = 0;
+  player->drive.drivetrainTorque = 0;
   player->drive.unk7C = 0;
   player->drive.bodyLiftOffset = 0;
   player->drive.unkA4 = 1;
@@ -705,13 +705,13 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   {
     if (car->facingBackwards != g_RaceSeries)
     {
-      car->drive.unk94 = 0;
+      car->drive.drivetrainTorque = 0;
       car->acceleration = 0;
     }
     else
     {
       car->acceleration = car->acceleration / 2;
-      car->drive.unk94 = car->drive.unk94 * 0x50 / 100;
+      car->drive.drivetrainTorque = car->drive.drivetrainTorque * 0x50 / 100;
     }
     if ((car->speed - opponent->speed) >= 0x191)
     {

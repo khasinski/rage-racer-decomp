@@ -224,7 +224,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       drive->trackCurveBias = -0x1E;
     }
     gripBudget += g_CarSpec->unk112 - drive->trackCurveBias * 0xA;
-    drive->unk32 = (s16)gripBudget;
+    drive->steeringGrip = (s16)gripBudget;
   }
   else
   {
@@ -252,11 +252,11 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       }
       gripBudget += camberLean;
     }
-    drive->unk32 = (s16)((drive->unk32 + (gripBudget * drive->unk88) / 1000) / 2);
+    drive->steeringGrip = (s16)((drive->steeringGrip + (gripBudget * drive->unk88) / 1000) / 2);
   }
   gearTorque = gearRatio * drive->engineRpm;
   steerLoad = 0;
-  loadTorque = drive->unk94;
+  loadTorque = drive->drivetrainTorque;
   netTorque = gearTorque - loadTorque;
   driveMode = drive->motionState;
   accel = 0;
@@ -595,12 +595,12 @@ shift_interpolation_done:
     accel -= netTorque / 2;
   }
   headingError = GetAngleDistance(car->bodyYaw, car->headingAngle, (s32) gearCurve, curveSlot);
-  drive->unk4C = headingError;
+  drive->steeringLoadAngle = headingError;
   if (headingError >= 0x401)
   {
-    drive->unk4C = 0x800 - headingError;
+    drive->steeringLoadAngle = 0x800 - headingError;
   }
-  steerLoad += drive->unk4C / 256;
+  steerLoad += drive->steeringLoadAngle / 256;
   if ((drive->motionState != CAR_MOTION_TAKEOFF) && (g_PadType == 0x41))
   {
     assistStep = g_CarSpec->unk10E * drive->unk88 / 1000;
@@ -711,7 +711,7 @@ shift_interpolation_done:
     drive->engineRpm = 0x3A98;
   }
   gearTorqueLate = gearRatio * drive->engineRpm;
-  drive->unk94 = gearTorqueLate;
+  drive->drivetrainTorque = gearTorqueLate;
   if (drive->motionState == CAR_MOTION_TAKEOFF)
   {
     arcPointIndex = car->trackPointIndex;
@@ -752,7 +752,7 @@ shift_interpolation_done:
       dragTerm += 0xFF;
     }
     car->speed = (coefficient - (dragTerm >> 8)) * car->speed / 10000;
-    arcPointIndex = drive->unk94;
+    arcPointIndex = drive->drivetrainTorque;
     if (arcPointIndex < 0)
     {
       arcPointIndex += 0x1FFFFF;

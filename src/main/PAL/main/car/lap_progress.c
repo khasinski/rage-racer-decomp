@@ -20,7 +20,7 @@ void BeginCarStandingStart(PlayerCarRuntime *car, s32 sceneTimer) {
     } else {
         index = car->drive.gear;
         value *= g_PeakOutputValue / ((index * 200) + 300);
-        car->drive.unk94 = car->drive.unk94 / index;
+        car->drive.drivetrainTorque = car->drive.drivetrainTorque / index;
         if (car->drive.gear >= 2) {
             g_GripLossTimer = 200;
         }

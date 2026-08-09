@@ -129,11 +129,11 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         s32 spd = car->speed;
 
         if (spd < 256 && p->motionState == CAR_MOTION_DRIVING) {
-            p->targetHeading += ((p->steerPos * 6) / 5 * p->unk32 / 256) * spd / 0x10000;
+            p->targetHeading += ((p->steerPos * 6) / 5 * p->steeringGrip / 256) * spd / 0x10000;
         } else if (spd < 512 && p->motionState == CAR_MOTION_STANDING_START) {
-            p->targetHeading += ((p->steerPos * 6) / 5 * p->unk32 / 256) * spd / 0x20000;
+            p->targetHeading += ((p->steerPos * 6) / 5 * p->steeringGrip / 256) * spd / 0x20000;
         } else {
-            p->targetHeading += (p->steerPos * 6) / 5 * p->unk32 / 0x10000;
+            p->targetHeading += (p->steerPos * 6) / 5 * p->steeringGrip / 0x10000;
         }
     }
 
@@ -346,7 +346,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                 GameCarSpec *props;
                 s32 v = (100 - (p->gear - 1) * 4) * 10000;
 
-                p->unk94 = v * car->speed / 100;
+                p->drivetrainTorque = v * car->speed / 100;
                 g_ShiftSoundLevel = car->shiftTick & 0x3F;
                 p->yawOffset = 0;
                 p->launchHeading = car->headingAngle;
@@ -386,14 +386,14 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         if (crash != 0) {
             p->launchEnergy -= 1000;
             if (car->speed >= 81) {
-                p->unk94 = p->unk94 * 98 / 100;
+                p->drivetrainTorque = p->drivetrainTorque * 98 / 100;
                 car->speed = car->speed * 97 / 100;
                 p->engineLoad = p->engineLoad * 95 / 100;
                 g_ShiftTargetRpm = g_ShiftTargetRpm * 95 / 100;
             }
         } else {
             p->launchEnergy -= 5000;
-            p->unk94 = (85 - rsin(slip) * 20 / 4096) * p->unk94 / 100;
+            p->drivetrainTorque = (85 - rsin(slip) * 20 / 4096) * p->drivetrainTorque / 100;
             car->speed = (87 - rsin(slip) * 40 / 4096) * car->speed / 100;
             p->engineLoad = p->engineLoad * (85 - rsin(slip) * 20 / 4096) / 100;
             g_ShiftTargetRpm = (85 - rsin(slip) * 20 / 4096) * g_ShiftTargetRpm / 100;

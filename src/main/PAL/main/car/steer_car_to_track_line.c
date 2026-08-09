@@ -155,7 +155,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
         }
 
         res = GetAngleDelta(car->bodyYaw, drive->targetHeading) * 98 / 100;
-        s2 = res * (drive->unk4C + 0x800);
+        s2 = res * (drive->steeringLoadAngle + 0x800);
         res = s2 / 2048;
         drive->spinRate += res * 16;
 
@@ -203,7 +203,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
 
             {
                 s32 gain = (100 - (drive->gear - 1) * 4) * 10000;
-                drive->unk94 = gain * car->speed / 100;
+                drive->drivetrainTorque = gain * car->speed / 100;
             }
             drive->yawOffset = GetAngleDelta(car->headingAngle, car->bodyYaw);
             drive->launchHeading = car->headingAngle;

@@ -343,7 +343,7 @@ typedef struct GameCarDrive {
     s16 engineLoad;
     s16 unk2E;
     s16 gearDisp;    /* +0x30 */
-    s16 unk32;
+    s16 steeringGrip;
     s16 clutch;      /* +0x34 */
     s16 unk36;
     s16 jumpTimer;
@@ -354,7 +354,7 @@ typedef struct GameCarDrive {
     s16 trackCurveBias;
     s32 groundedFrames;
     s32 launchEnergy;
-    s32 unk4C;
+    s32 steeringLoadAngle;
     s32 spinRate;
     s32 launchDirection;
     s32 launchHeading;
@@ -374,7 +374,7 @@ typedef struct GameCarDrive {
     s32 unk88;       /* +0x88 */
     s32 speedScale;
     s32 targetHeading;
-    s32 unk94;       /* +0x94 */
+    s32 drivetrainTorque; /* +0x94 */
     CarMotionState motionState; /* +0x98 */
     s16 acceleratorLatch;
     s16 brakeLatch;
