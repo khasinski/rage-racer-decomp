@@ -4,6 +4,7 @@
 #include "common.h"
 #include "game/car.h"
 #include "game/menu_types.h"
+#include "game/team_logo.h"
 #include "psyq/gpu.h"
 
 #ifndef GAME_SAVE_BGM_TYPE
@@ -28,12 +29,8 @@ extern GAME_SAVE_BGM_TYPE g_BgmSelection;
 #ifndef GAME_TEAM_LOGO_RECT_DECL
 #define GAME_TEAM_LOGO_RECT_DECL extern Rect g_TeamLogoRect
 #endif
-#ifndef GAME_TEAM_LOGO_CLUT_RECT_DECL
-#define GAME_TEAM_LOGO_CLUT_RECT_DECL extern Rect g_TeamLogoClutRect
-#endif
 extern TeamLogoCanvas g_TeamLogoCanvas;
 GAME_TEAM_LOGO_RECT_DECL;
-GAME_TEAM_LOGO_CLUT_RECT_DECL;
 extern s32 g_BestLapTimes[2][4][2];
 extern s32 g_BestTotalTimes[2][4][2];
 extern s32 g_BestSectorTimes[2][4][3];
@@ -41,6 +38,4 @@ extern s32 g_BestSectorTimes[2][4][3];
 #undef GAME_SAVE_BGM_TYPE
 #undef GAME_CLASS_WIN_COUNT_QUALIFIER
 #undef GAME_TEAM_LOGO_RECT_DECL
-#undef GAME_TEAM_LOGO_CLUT_RECT_DECL
-
 #endif

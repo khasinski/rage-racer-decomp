@@ -705,9 +705,9 @@ void UpdateTeamLogoCanvas(void) {
 }
 
 
-void RestoreTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, &g_TeamLogoBlankClut); }
+void RestoreTeamLogoClut(void) { LoadImage(&g_TeamLogoClutRect, &g_TeamLogoBlankClut); }
 
-void UploadTeamLogoClut(void) { LoadImage((Rect *)&g_TeamLogoClutRect, g_TeamLogoClut); }
+void UploadTeamLogoClut(void) { LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut); }
 
 
 

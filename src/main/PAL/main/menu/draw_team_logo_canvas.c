@@ -3,7 +3,6 @@
 #include "game/menu.h"
 #define GAME_TEAM_LOGO_WORD_TYPE TeamLogoWord
 #define GAME_TEAM_LOGO_PEN_TYPE s32
-#define GAME_TEAM_LOGO_CLUT_POS_TYPE Rect
 #include "game/menu_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"

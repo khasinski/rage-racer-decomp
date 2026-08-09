@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "game/menu_types.h"
+#include "game/team_logo.h"
 #include "psyq/gpu.h"
 
 extern PaintColorTable g_PaintColorTable;
@@ -22,9 +23,6 @@ extern s32 g_TeamLogoBrushSize;
 #ifndef GAME_TEAM_LOGO_PEN_TYPE
 #define GAME_TEAM_LOGO_PEN_TYPE TeamLogoColorSlot
 #endif
-#ifndef GAME_TEAM_LOGO_CLUT_POS_TYPE
-#define GAME_TEAM_LOGO_CLUT_POS_TYPE s32
-#endif
 extern GAME_TEAM_LOGO_WORD_TYPE g_TeamLogoCursorX;
 extern GAME_TEAM_LOGO_WORD_TYPE g_TeamLogoViewX;
 extern GAME_TEAM_LOGO_PEN_TYPE g_TeamLogoPenColor;
@@ -34,7 +32,6 @@ extern s32 g_TeamLogoDpadRepeatTimer;
 extern s32 g_TeamLogoDpadRepeatMask;
 extern s32 g_TeamLogoGuideModePrev;
 extern s32 g_TeamLogoPaintArmed;
-extern GAME_TEAM_LOGO_CLUT_POS_TYPE g_TeamLogoClutRect;
 extern Rect g_TeamLogoRect;
 extern s32 g_TeamLogoBlankClut;
 extern s32 g_MenuLightBurstLevel;
@@ -55,6 +52,4 @@ extern DesignModeCellMask g_DesignModeCellMask;
 
 #undef GAME_TEAM_LOGO_WORD_TYPE
 #undef GAME_TEAM_LOGO_PEN_TYPE
-#undef GAME_TEAM_LOGO_CLUT_POS_TYPE
-
 #endif

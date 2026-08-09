@@ -1,6 +1,5 @@
 #include "common.h"
 #include "game/menu.h"
-#define GAME_TEAM_LOGO_CLUT_POS_TYPE Rect
 #include "game/menu_internal.h"
 #include "game/state.h"
 #include "game/asset.h"
