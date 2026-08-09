@@ -192,7 +192,7 @@ void RelocateCarModel(void) {
 
     SetCarModelSlot(g_AssetBase, 0);
     temp = ((CarModelAsset *)g_CarModelAsset)->modelDataOffset;
-    UnrelocateModelBank((s32 *)(g_AssetBase + 0x28), temp);
+    UnrelocateModelBank((ModelBankHeader *)(g_AssetBase + 0x28), temp);
     SelectCarModelSlot(0);
     ((CarModelAsset *)g_CarModelAsset)->modelDataOffset = (u32)(g_AssetBase + 0x28);
     RegisterModelBank((ModelBankHeader *)(g_AssetBase + 0x28), 0);

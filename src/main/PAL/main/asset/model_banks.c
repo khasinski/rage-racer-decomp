@@ -55,15 +55,15 @@ void RegisterModelBank(ModelBankHeader *base, s32 index) {
     }
 }
 
-void UnrelocateModelBank(s32 *base, s32 offset) {
-    s32 *ptr;
+void UnrelocateModelBank(ModelBankHeader *base, s32 offset) {
+    AssetAddress *ptr;
     s32 i;
 
-    ptr = base + 3;
-    base[1] -= offset;
-    base[2] -= offset;
-    for (i = 0; (u32)i < (u32)base[0]; i++) {
-        *ptr -= offset;
+    ptr = base->models;
+    base->table.offset -= offset;
+    base->normals.offset -= offset;
+    for (i = 0; (u32)i < (u32)base->modelCount; i++) {
+        ptr->offset -= offset;
         ptr++;
     }
 }
