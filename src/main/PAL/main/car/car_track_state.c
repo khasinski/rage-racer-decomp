@@ -357,14 +357,14 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         lateralProduct += 0xFFF;
     }
     trackLength = g_TrackLength;
-    lapProgress = (s32)(obj->progressA + obj->progressB) % trackLength;
-    obj->bodyRoll = (s32)(forwardComponent + (lateralProduct >> 0xC));
+    lapProgress = (obj->progressA + obj->progressB) % trackLength;
+    obj->bodyRoll = forwardComponent + (lateralProduct >> 0xC);
     obj->trackHeading.value = spad->heading;
     obj->previousTrackProgress = obj->trackProgress;
     obj->trackProgress = lapProgress;
     if (lapProgress < 0)
     {
-        obj->trackProgress = (s32)(lapProgress + trackLength);
+        obj->trackProgress = lapProgress + trackLength;
     }
     {
         s32 finalAngle;
