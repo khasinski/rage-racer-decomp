@@ -82,6 +82,11 @@ typedef struct TrackEventOffsets {
     s32 flybyScenery;
 } TrackEventOffsets;
 
+typedef union TrackEventOffsetBase {
+    volatile TrackEventOffsets *offsets;
+    u8 *bytes;
+} TrackEventOffsetBase;
+
 typedef struct TrackAmbienceZone {
     s32 start;
     s32 end;
