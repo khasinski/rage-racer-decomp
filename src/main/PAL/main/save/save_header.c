@@ -83,7 +83,7 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
 }
 
 void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
-    u8 *rowBytes = (u8 *)row;
+    u8 *rowBytes = row->bytes;
     s32 i;
     u32 checksum;
     u16 *scan;

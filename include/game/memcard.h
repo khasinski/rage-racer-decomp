@@ -40,12 +40,16 @@
 #define MC_PROMPT_FORMAT_OK     0x13  /* "FORMAT DATA OK!" */
 #define MC_PROMPT_NO_FILE       0x14  /* "No file found." */
 
-typedef struct GameSaveHeaderRow {
-    u8 nameLength;
-    u8 name[7];
-    s32 saveCounter;
-    u8 reserved[0x70];
-    u32 checksum;
+typedef union GameSaveHeaderRow {
+    struct {
+        u8 nameLength;
+        u8 name[7];
+        s32 saveCounter;
+        u8 reserved[0x70];
+        u32 checksum;
+    } fields;
+    u8 bytes[0x80];
+    u16 halfwords[0x40];
 } GameSaveHeaderRow;
 
 typedef struct MemoryCardMessageRow {

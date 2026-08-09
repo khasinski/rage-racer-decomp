@@ -119,7 +119,7 @@ s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
     }
 
     GameMenuLoadPhase = 0x140;
-    ptr = buffer;
+    ptr = buffer->halfwords;
     for (i = 0; (u32)i < 0x3E; i++) {
         sum += ptr[i];
     }
@@ -127,7 +127,7 @@ s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
      * register; a `== ~sum` in the test needs a second one. */
     sum = ~sum;
 
-    if (buffer->checksum == sum) {
+    if (buffer->fields.checksum == sum) {
         return 1;
     }
 
@@ -143,7 +143,7 @@ s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
 
     GameMenuLoadPhase = 0x170;
     sum = 0;
-    ptr = buffer;
+    ptr = buffer->halfwords;
     for (i = 0; (u32)i < 0x3E; i++) {
         sum += ptr[i];
     }
@@ -151,7 +151,7 @@ s32 ReadVerifiedSaveHeader(s32 slot, GameSaveHeaderRow *header) {
      * register; a `== ~sum` in the test needs a second one. */
     sum = ~sum;
 
-    if (buffer->checksum == sum) {
+    if (buffer->fields.checksum == sum) {
         return 1;
     }
 
@@ -258,10 +258,10 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     }
 
     GameMenuLoadPhase = 0x3800;
-    g_TeamNameLength = header->nameLength;
+    g_TeamNameLength = header->fields.nameLength;
     i = 0;
     do {
-        g_TeamNameChars[i] = header->name[i];
+        g_TeamNameChars[i] = header->fields.name[i];
         i++;
     } while (i < 7);
 
@@ -270,7 +270,7 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
         s32 word;
         s32 status;
 
-        word = header->saveCounter;
+        word = header->fields.saveCounter;
         status = tries | 0x3900;
         GameMenuLoadPhase = status;
         g_SaveElapsedTicks = word;

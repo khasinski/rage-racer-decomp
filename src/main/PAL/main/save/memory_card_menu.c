@@ -25,15 +25,15 @@ void DrawMemoryCardSaveRows(s32 flags, GameSaveHeaderRow *rows) {
             sprintf(text, g_FmtSaveRow, row_bit);
             DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
 
-            for (i = 0; i < row->nameLength; i++) {
-                text_ptr[i] = g_SaveNameCharset[row->name[i]];
+            for (i = 0; i < row->fields.nameLength; i++) {
+                text_ptr[i] = g_SaveNameCharset[row->fields.name[i]];
             }
             while (i < 7) {
                 text_ptr[i++] = ' ';
             }
             sprintf(text + 6, g_FmtSaveRowTail);
             DrawLargeText(0x68, y, text, 0x7F, color, color, width, height);
-            DrawLargeText(0xB0, y, FormatSaveElapsedTime(text, row->saveCounter), 0x7F, color, color, width, height);
+            DrawLargeText(0xB0, y, FormatSaveElapsedTime(text, row->fields.saveCounter), 0x7F, color, color, width, height);
         } else if (flags_reg & 0x10000) {
             sprintf(text, g_FmtSaveRow, row_bit);
             DrawLargeText(0x48, y, text, 0x7F, color, color, width, height);
