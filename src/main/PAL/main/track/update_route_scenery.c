@@ -34,11 +34,8 @@ void UpdateRouteScenery(void) {
     kp = g_RouteSceneryKeyframe;
     counter = counter + 1;
     {
-        SceneryMotionKeyframe *rec0 =
-            (SceneryMotionKeyframe *)(i * sizeof(*rec0) + (s32)kp);
-
         g_RouteSceneryFrame = counter;
-        if (RAW(rec0->duration) == counter) {
+        if (RAW(kp[i].duration) == counter) {
             c = i + 1;
             g_RouteSceneryKeyIndex = c;
             g_RouteSceneryFrame = 0;
