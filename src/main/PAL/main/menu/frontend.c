@@ -251,7 +251,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
         g_FrameContexts[offset + 0x1B] = b;
         value = *src0;
         stride |= 0x37E8;
-        *(volatile u16 *)(g_FrameContexts + offset + 0x64) = value;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->display.screen.x = value;
         value2 = *src1;
         i++;
         g_FrameContexts[offset + 0x86] = one;
@@ -259,7 +259,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
         g_FrameContexts[offset + 0x89] = r;
         g_FrameContexts[offset + 0x8A] = g;
         g_FrameContexts[offset + 0x8B] = b;
-        *(volatile u16 *)(g_FrameContexts + offset + 0x66) = value2 + 0x1D;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->display.screen.y = value2 + 0x1D;
         offset += stride;
     } while (i < 2);
 
@@ -304,7 +304,7 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
         g_FrameContexts[offset + 0x1B] = y;
         value = *src0;
         stride |= 0x37E8;
-        *(volatile u16 *)(g_FrameContexts + offset + 0x64) = value;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->display.screen.x = value;
         value2 = *src1;
         i++;
         g_FrameContexts[offset + 0x86] = one;
@@ -312,7 +312,7 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
         g_FrameContexts[offset + 0x89] = mode;
         g_FrameContexts[offset + 0x8A] = x;
         g_FrameContexts[offset + 0x8B] = y;
-        *(volatile u16 *)(g_FrameContexts + offset + 0x66) = value2 + 0x1D;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->display.screen.y = value2 + 0x1D;
         offset += stride;
     } while (i < 2);
 

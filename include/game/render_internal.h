@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "game/vector.h"
+#include "psyq/gpu.h"
 #include "psyq/gte.h"
 
 typedef struct FontGlyph {
@@ -21,6 +22,14 @@ typedef struct CameraKey {
     s32 duration;
     s32 control;
 } CameraKey;
+
+/* The environment block at the head of each 0x237E8-byte frame context. */
+typedef struct GameFrameEnvironmentHeader {
+    DrawEnv draw;
+    u8 reserved1C[0x40];
+    DispEnv display;
+    DrawEnv mirrorDraw;
+} GameFrameEnvironmentHeader;
 
 extern Matrix g_MirrorViewMatrix;
 extern struct GameRenderObject g_CameraCar;
