@@ -313,6 +313,7 @@ typedef struct GameCarSpec {
 
 typedef union GameCarSpecAddress {
     s32 byteOffset;
+    u8 *bytes;
     GameCarSpec *pointer;
 } GameCarSpecAddress;
 
