@@ -11,6 +11,11 @@
  * primitive at this address and bumps it past what it wrote. */
 #define SCRATCH (SCRATCH_PRIM_CURSOR_AS(u8))
 
+typedef union TachometerSpriteClutAddress {
+    s16 *halfwordPointer;
+    SPRT *spritePointer;
+} TachometerSpriteClutAddress;
+
 void DrawWrongWayWarning(void) {
     register SPRT *packet __asm("$16");
     SPRT *next;
@@ -103,6 +108,8 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         prim->t.g0 = (amt * 32 + p->needleColor[1] * (96 - amt)) / 96;
         prim->t.b0 = (amt * 32 + p->needleColor[2] * (96 - amt)) / 96;
     } else if (type == 3) {
+        TachometerSpriteClutAddress clutAddress;
+
         amt -= 32;
         if (amt < 0) amt = 0;
         g_TachoFaceB = amt + 32;
@@ -111,16 +118,23 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         prim->t.r0 = ((96 - amt) * 32 + p->needleColor[0] * amt) / 96;
         prim->t.g0 = ((96 - amt) * 32 + p->needleColor[1] * amt) / 96;
         prim->t.b0 = ((96 - amt) * 32 + p->needleColor[2] * amt) / 96;
-        *(s16 *)(g_DrawBuffer + 0x236F2) = 0x33A8;
+        clutAddress.halfwordPointer = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
+        *clutAddress.halfwordPointer = 0x33A8;
     } else if (type == 2) {
-        *(s16 *)(g_DrawBuffer + 0x236F2) = 0x33E8;
+        TachometerSpriteClutAddress clutAddress;
+
+        clutAddress.halfwordPointer = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
+        *clutAddress.halfwordPointer = 0x33E8;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
         g_TachoFaceR = 0x80;
         *(s32 *)&prim->t.r0 = *(s32 *)p->needleColorAlt;
     } else {
+        TachometerSpriteClutAddress clutAddress;
         s16 rv = 0x33A8;
-        *(s16 *)(g_DrawBuffer + 0x236F2) = rv;
+
+        clutAddress.halfwordPointer = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
+        *clutAddress.halfwordPointer = rv;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
         g_TachoFaceR = 0x80;
