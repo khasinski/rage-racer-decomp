@@ -187,13 +187,13 @@ void SetHudBlinkColor(s32 phase) {
 
 void DrawSplitDelta(s32 delta, s32 y) {
     u8 *base;
-    register u8 *prim;
-    s32 firstOffset;
+    u8 *prim;
+    RenderBufferAddress firstPrim;
     s32 value;
     s32 temp;
     u8 *ot;
 
-    firstOffset = 0x237AC;
+    firstPrim.byteOffset = 0x237AC;
     temp = 0x237C0;
     value = delta * 8;
     base = g_DrawBuffer;
@@ -201,8 +201,8 @@ void DrawSplitDelta(s32 delta, s32 y) {
     prim = base + temp;
 
     ((SPRT *)(base + 0x237AC))->u0 = value;
-    AddPrim(g_DrawBuffer + 0xCC, base + firstOffset);
-    firstOffset = (s32)prim;
+    AddPrim(g_DrawBuffer + 0xCC, base + firstPrim.byteOffset);
+    firstPrim.bytes = prim;
 
     if (y > 0) {
         ((volatile SPRT *)prim)->u0 = 0x88;
@@ -219,5 +219,5 @@ void DrawSplitDelta(s32 delta, s32 y) {
     }
 
     ((SPRT *)(base + 0x23770))[4].clut = temp;
-    AddPrim(ot + 0xCC, (void *)firstOffset);
+    AddPrim(ot + 0xCC, firstPrim.pointer);
 }
