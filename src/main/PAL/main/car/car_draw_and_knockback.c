@@ -44,15 +44,15 @@ void BuildStartingGrid(void) {
         cursor = table;
         do {
             track = *(u16 *)&g_RaceSeries;
-            *(s16 *)flagPtr = 0;
-            *(s16 *)(flagPtr + 6) = track;
+            *flagPtr = 0;
+            flagPtr[6] = track;
             if (cursor->value >= 0) {
                 ClearCarMotionState(entryBase);
-                *(s16 *)flagPtr = one;
+                *flagPtr = one;
                 InitRivalCar(entryBase, i, table);
                 InitRivalCarAi(entryBase, i, table);
             } else {
-                *(s16 *)flagPtr = 0;
+                *flagPtr = 0;
             }
             cursor++;
             i++;
@@ -68,15 +68,15 @@ void BuildStartingGrid(void) {
         cursor = table;
         do {
             track = *(u16 *)&g_RaceSeries;
-            *(s16 *)flagPtr = 0;
-            *(s16 *)(flagPtr + 6) = track;
+            *flagPtr = 0;
+            flagPtr[6] = track;
             if (cursor->value >= 0) {
                 ClearCarMotionState(entryBase);
-                *(s16 *)flagPtr = one;
+                *flagPtr = one;
                 InitRivalCar(entryBase, i, table);
                 InitRivalCarAi(entryBase, i, table);
             } else {
-                *(s16 *)flagPtr = 0;
+                *flagPtr = 0;
             }
             cursor++;
             i++;
@@ -91,7 +91,6 @@ void BuildStartingGrid(void) {
 void DrawCars(void) {
     GameCarRuntime *base;
     s32 i;
-    u8 *entry;
     s32 one;
     s32 minus_one;
 
@@ -101,14 +100,12 @@ void DrawCars(void) {
     i = 0;
     minus_one = -1;
     one = 1;
-    entry = (u8 *)&base->field_BC;
     do {
-        if (*(s16 *)(entry - 0x10) != (i++, minus_one)) {
-            if (*(s32 *)entry == one) {
+        if (base->activeFlag != (i++, minus_one)) {
+            if (base->field_BC == one) {
                 DrawCar(base);
             }
         }
-        entry += 0x19C;
         base++;
     } while (i < 11);
 }

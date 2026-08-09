@@ -126,19 +126,17 @@ void UpdateRaceCars(void) {
     register Matrix *pm1;
     register Matrix *pm2;
     s16 i;
-    register u8 *q asm("$5");
+    GameCarRuntime *q;
     s32 t;
     i = 0;
-    q = (u8 *)g_Cars + 0x8A;
-#define qCar ((GameCarRuntime *)(q - 0x8A))
+    q = g_Cars;
     do {
-        qCar->field_F8 = 0;
-        qCar->field_24 = qCar->field_108;
-        qCar->field_8A = (u16)qCar->field_8A & 1;
+        q->field_F8 = 0;
+        q->field_24 = q->field_108;
+        q->field_8A = (u16)q->field_8A & 1;
         i++;
-        q += 0x19C;
+        q++;
     } while ((s16)i < 11);
-#undef qCar
     RankContenders();
     for (i = 0; i < 11; i++) {
         s32 j = (s16)i;
@@ -395,7 +393,7 @@ void UpdateAttractCars(void) {
     Matrix matrixScratch3;
     /* These pins reproduce the retail induction registers. */
     register GameCarRuntime *car;
-    register GameCarRuntime *sub asm("$16");
+    GameCarRuntime *sub;
     s16 i;
     GameCarRuntime *c0;
     c0 = g_Cars;
@@ -432,27 +430,25 @@ void UpdateAttractCars(void) {
         register GameCarAiBlock *drive;
         i = 0;
         car = g_Cars;
-        sub = (GameCarRuntime *)((u8 *)g_Cars + 0x24);
-#define subCar ((GameCarRuntime *)((u8 *)sub - 0x24))
+        sub = g_Cars;
         do {
-        if (subCar->activeFlag != -1) {
+        if (sub->activeFlag != -1) {
             drive = (GameCarAiBlock *)&car->field_BC;
 
-            if (subCar->field_A8 < subCar->field_130) {
-                subCar->field_A8 = subCar->field_126 + subCar->field_A8;
+            if (sub->field_A8 < sub->field_130) {
+                sub->field_A8 = sub->field_126 + sub->field_A8;
             } else {
-                subCar->field_A8 = subCar->field_130;
+                sub->field_A8 = sub->field_130;
             }
-            subCar->field_A4 = subCar->field_A4 * 94 / 100;
-            subCar->field_A4 = subCar->field_A4 + subCar->field_A8;
-            subCar->field_24 =
-                GetAngleDelta(subCar->field_24, drive->field_EC) / 5 + subCar->field_24;
+            sub->field_A4 = sub->field_A4 * 94 / 100;
+            sub->field_A4 = sub->field_A4 + sub->field_A8;
+            sub->field_24 =
+                GetAngleDelta(sub->field_24, drive->field_EC) / 5 + sub->field_24;
         }
         i++;
-        sub = (GameCarRuntime *)((u8 *)sub + 0x19C);
+        sub++;
         car++;
         } while (i < 11);
-#undef subCar
         {
         GameCarRuntime *base;
         i = 0;
