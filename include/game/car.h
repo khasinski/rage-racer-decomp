@@ -186,6 +186,19 @@ typedef struct CarHullPoint {
     u16 z;
 } CarHullPoint;
 
+typedef union CarPaintPalette {
+    u16 entries[0x2CB];
+    struct {
+        u16 reserved[0x81];
+        u16 bodyColor1;
+    } fixed;
+} CarPaintPalette;
+
+typedef struct CarImageData {
+    u8 reserved[0x7060];
+    CarPaintPalette paintPalette;
+} CarImageData;
+
 extern CarHullPoint g_PlayerHullPoints[6];
 extern CarHullPoint g_OpponentHullCorners[4];
 extern CarHullPoint g_CarCornerOffsets[4];

@@ -119,11 +119,11 @@ void ApplyBodyColor1(u32 colour, u32 imageData) {
     raw = imageData;
     primary = &g_BodyColorPrimary[colour];
     secondary = &g_BodyColorSecondary[colour];
-    base = (u16 *)(raw + 0x7060);
+    base = ((CarImageData *)raw)->paintPalette.entries;
     s1 = *primary;
     s2 = *secondary;
 
-    *(u16 *)(raw + 0x7162) = s1;
+    ((CarImageData *)raw)->paintPalette.fixed.bodyColor1 = s1;
     BlendPaintColor(s1, s2);
 
     i = 0;
@@ -175,7 +175,7 @@ void ApplyBodyColor2(u32 colour, u32 imageData) {
     u16 c;
     s32 i;
 
-    base = (u16 *)(imageData + 0x7060);
+    base = ((CarImageData *)imageData)->paintPalette.entries;
     s1 = g_BodyColorPrimary[colour];
     s2 = g_BodyColorSecondary[colour];
 
