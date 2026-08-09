@@ -46,11 +46,7 @@ extern u32 *g_VisibleCellMask;
 extern Vec4 *g_VisibleCellList;
 extern s32 g_CameraViewMode;
 extern s16 g_AtanTable[];
-#ifndef GAME_DRAW_BUFFER_QUALIFIER
-#define GAME_DRAW_BUFFER_QUALIFIER
-#endif
-extern u8 *GAME_DRAW_BUFFER_QUALIFIER g_DrawBuffer;
-#undef GAME_DRAW_BUFFER_QUALIFIER
+extern u8 *g_DrawBuffer;
 #ifndef GAME_FRAME_CONTEXT_QUALIFIER
 #define GAME_FRAME_CONTEXT_QUALIFIER
 #endif

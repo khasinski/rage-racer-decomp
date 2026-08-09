@@ -1,6 +1,5 @@
 #include "common.h"
 #include "game/prim.h"
-#define GAME_DRAW_BUFFER_QUALIFIER volatile
 #include "game/render_internal.h"
 #include "game/memcard.h"
 #include "game/menu.h"
