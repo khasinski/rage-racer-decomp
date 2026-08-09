@@ -93,9 +93,6 @@ void UpdateWaypoints(void) {
     TrackWaypointRuntime *waypoint;
     s32 i;
     s32 activeState;
-    register char *tail asm("$16");
-#define CURRENT_WAYPOINT \
-    ((TrackWaypointMotion *)(tail - (sizeof(TrackWaypointMotion) - sizeof(s32))))
 
     if (g_WaypointSpawnCooldown != 0) {
         g_WaypointSpawnCooldown--;
@@ -104,7 +101,6 @@ void UpdateWaypoints(void) {
     waypoint = g_Waypoints;
     i = 0;
     activeState = 1;
-    tail = (char *)&waypoint->motion.velocityMagnitude;
     do {
         if (waypoint->active == 0) {
             if (IsCarNearWaypoint(waypoint) != 0) {
@@ -112,38 +108,36 @@ void UpdateWaypoints(void) {
                 PlaySoundCue(0xA);
 
                 waypoint->active = activeState;
-                CURRENT_WAYPOINT->velocity.vector = g_PlayerVelocity[0];
+                waypoint->motion.velocity.vector = g_PlayerVelocity[0];
 
-                CURRENT_WAYPOINT->velocity.fields.x *= 2;
-                CURRENT_WAYPOINT->velocity.fields.y *= 2;
-                CURRENT_WAYPOINT->velocityMagnitude =
-                    ((CURRENT_WAYPOINT->velocity.fields.x * CURRENT_WAYPOINT->velocity.fields.x) + (CURRENT_WAYPOINT->velocity.fields.y * CURRENT_WAYPOINT->velocity.fields.y)) /
+                waypoint->motion.velocity.fields.x *= 2;
+                waypoint->motion.velocity.fields.y *= 2;
+                waypoint->motion.velocityMagnitude =
+                    ((waypoint->motion.velocity.fields.x * waypoint->motion.velocity.fields.x) + (waypoint->motion.velocity.fields.y * waypoint->motion.velocity.fields.y)) /
                     0x2000;
             }
         } else if (waypoint->active == activeState) {
-            CURRENT_WAYPOINT->x += CURRENT_WAYPOINT->velocity.fields.x / 0x100;
-            CURRENT_WAYPOINT->y += CURRENT_WAYPOINT->velocity.fields.y / 0x100;
-            CURRENT_WAYPOINT->velocity.fields.x = (CURRENT_WAYPOINT->velocity.fields.x * 15) / 16;
-            CURRENT_WAYPOINT->velocity.fields.y = (CURRENT_WAYPOINT->velocity.fields.y * 15) / 16;
-            CURRENT_WAYPOINT->rotationY += CURRENT_WAYPOINT->velocityMagnitude / 0x100;
-            CURRENT_WAYPOINT->velocityMagnitude = (CURRENT_WAYPOINT->velocityMagnitude * 15) / 16;
+            waypoint->motion.x += waypoint->motion.velocity.fields.x / 0x100;
+            waypoint->motion.y += waypoint->motion.velocity.fields.y / 0x100;
+            waypoint->motion.velocity.fields.x = (waypoint->motion.velocity.fields.x * 15) / 16;
+            waypoint->motion.velocity.fields.y = (waypoint->motion.velocity.fields.y * 15) / 16;
+            waypoint->motion.rotationY += waypoint->motion.velocityMagnitude / 0x100;
+            waypoint->motion.velocityMagnitude = (waypoint->motion.velocityMagnitude * 15) / 16;
 
-            if (CURRENT_WAYPOINT->rotationZ < 0x400) {
-                CURRENT_WAYPOINT->rotationZ += 0x80;
+            if (waypoint->motion.rotationZ < 0x400) {
+                waypoint->motion.rotationZ += 0x80;
             } else {
-                CURRENT_WAYPOINT->rotationZ = 0x400;
+                waypoint->motion.rotationZ = 0x400;
             }
 
-            if ((CURRENT_WAYPOINT->velocity.fields.x == 0) && (CURRENT_WAYPOINT->velocity.fields.y == 0) && (CURRENT_WAYPOINT->velocityMagnitude == 0)) {
+            if ((waypoint->motion.velocity.fields.x == 0) && (waypoint->motion.velocity.fields.y == 0) && (waypoint->motion.velocityMagnitude == 0)) {
                 waypoint->active = 2;
             }
         }
 
         i++;
-        tail += sizeof(*waypoint);
         waypoint++;
     } while (i < 6);
-#undef CURRENT_WAYPOINT
 }
 
 static inline void ClearScratchRenderMode37AAC(void) {
