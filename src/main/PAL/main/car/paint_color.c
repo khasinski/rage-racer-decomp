@@ -104,8 +104,7 @@ void BlendPaintColorQuarters(u32 color0, u32 color1) {
  * compiler into the jal delay slot; no hand-written asm is needed.
  */
 
-void ApplyBodyColor1(u32 colour, void *imageData) {
-    u32 raw;
+void ApplyBodyColor1(u32 colour, CarImageData *imageData) {
     u16 *base;
     u16 s1;
     u16 s2;
@@ -116,14 +115,13 @@ void ApplyBodyColor1(u32 colour, void *imageData) {
     u16 c;
     s32 i;
 
-    raw = (u32)imageData;
     primary = &g_BodyColorPrimary[colour];
     secondary = &g_BodyColorSecondary[colour];
-    base = ((CarImageData *)raw)->paintPalette.entries;
+    base = imageData->paintPalette.entries;
     s1 = *primary;
     s2 = *secondary;
 
-    ((CarImageData *)raw)->paintPalette.fixed.bodyColor1 = s1;
+    imageData->paintPalette.fixed.bodyColor1 = s1;
     BlendPaintColor(s1, s2);
 
     i = 0;
@@ -162,11 +160,11 @@ void ApplyBodyColor1(u32 colour, void *imageData) {
 
 
 void SetBodyColor1(u32 colour) {
-    ApplyBodyColor1(colour, g_CarModelAsset->imageData.pointer);
+    ApplyBodyColor1(colour, (CarImageData *)g_CarModelAsset->imageData.pointer);
     UploadCarImage(g_CarModelSlot);
 }
 
-void ApplyBodyColor2(u32 colour, void *imageData) {
+void ApplyBodyColor2(u32 colour, CarImageData *imageData) {
     u16 *base;
     u16 s1;
     u16 s2;
@@ -175,7 +173,7 @@ void ApplyBodyColor2(u32 colour, void *imageData) {
     u16 c;
     s32 i;
 
-    base = ((CarImageData *)imageData)->paintPalette.entries;
+    base = imageData->paintPalette.entries;
     s1 = g_BodyColorPrimary[colour];
     s2 = g_BodyColorSecondary[colour];
 
@@ -217,6 +215,6 @@ void ApplyBodyColor2(u32 colour, void *imageData) {
 
 
 void SetBodyColor2(u32 colour) {
-    ApplyBodyColor2(colour, g_CarModelAsset->imageData.pointer);
+    ApplyBodyColor2(colour, (CarImageData *)g_CarModelAsset->imageData.pointer);
     UploadCarImage(g_CarModelSlot);
 }

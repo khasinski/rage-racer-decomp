@@ -97,8 +97,10 @@ void LoadCarSelectAssets(void) {
 
                 carIndex = g_PlayerCarIndex;
                 if (carIndex < 10) {
-                    ApplyBodyColor1(g_CarTable[carIndex].paintColor1, g_CarModelAsset->imageData.pointer);
-                    ApplyBodyColor2(g_CarTable[g_PlayerCarIndex].paintColor2, g_CarModelAsset->imageData.pointer);
+                    ApplyBodyColor1(g_CarTable[carIndex].paintColor1,
+                                    (CarImageData *)g_CarModelAsset->imageData.pointer);
+                    ApplyBodyColor2(g_CarTable[g_PlayerCarIndex].paintColor2,
+                                    (CarImageData *)g_CarModelAsset->imageData.pointer);
                 }
 
                 g_CarModelSlot = 0;
@@ -153,8 +155,10 @@ void LoadCarModel(s32 carIndex) {
                             g_CarModelSlot < 1);
 
             if (carIndex < 10) {
-                ApplyBodyColor1(g_CarTable[carIndex].paintColor1, asset->imageData.pointer);
-                ApplyBodyColor2(g_CarTable[carIndex].paintColor2, asset->imageData.pointer);
+                ApplyBodyColor1(g_CarTable[carIndex].paintColor1,
+                                (CarImageData *)asset->imageData.pointer);
+                ApplyBodyColor2(g_CarTable[carIndex].paintColor2,
+                                (CarImageData *)asset->imageData.pointer);
             }
 
             g_AssetLoadState = 0;
