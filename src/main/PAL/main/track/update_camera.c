@@ -114,7 +114,7 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     switch (cameraMode) {
     case 0:
         *(Block16 *)&scratch[2] = *(Block16 *)car;
-        *(Block16 *)&scratch[6] = *(Block16 *)&car->angleX;
+        *(Block16 *)&scratch[6] = *(Block16 *)&car->bodyPitch;
         BuildRotMatrixY(&sp48[0], scratch[7]);
         BuildRotMatrixX(&sp68[0], scratch[6]);
         MulMatrix2(&sp68[0], &sp48[0]);
@@ -281,9 +281,9 @@ block_36:
         MulMatrix2(&sp68[0], &sp88[0]);
         g_ChaseYawPrev = g_ChaseYaw;
         BuildRotMatrixY(&sp48[0], RAW(car->angleY));
-        BuildRotMatrixX(&sp68[0], car->angleX);
+        BuildRotMatrixX(&sp68[0], car->bodyPitch);
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], car->angleZ);
+        BuildRotMatrixZ(&sp68[0], car->bodyRoll);
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         MulMatrix2(angleState, &sp48[0]);
@@ -320,7 +320,7 @@ block_52:
         sp38[3] = chaseDistance;
         scratch[6] = 0x400 - (Atan2(sp38[1] + 0x28, chaseDistance) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
-        scratch[8] = car->angleZ - car->field_64;
+        scratch[8] = car->bodyRoll - car->field_64;
         if (g_ChaseCameraPreset == 0) {
             negatedAccel = scratch[6] - 0x90;
         } else {
@@ -334,9 +334,9 @@ block_52:
         chaseNode = &g_TrackCameras[cameraNodeIndex];
         *(Block16 *)&scratch[2] = *(Block16 *)chaseNode;
         BuildRotMatrixY(&sp48[0], car->angleY);
-        BuildRotMatrixX(&sp68[0], car->angleX);
+        BuildRotMatrixX(&sp68[0], car->bodyPitch);
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], car->angleZ);
+        BuildRotMatrixZ(&sp68[0], car->bodyRoll);
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         chaseNodeOffsets = &g_TrackCameras[cameraNodeIndex];
@@ -483,9 +483,9 @@ block_52:
         BuildRotMatrixZ(&sp68[0], sp38[2]);
         MulMatrix2(&sp68[0], &sp88[0]);
         BuildRotMatrixY(&sp48[0], car->angleY);
-        BuildRotMatrixX(&sp68[0], car->angleX);
+        BuildRotMatrixX(&sp68[0], car->bodyPitch);
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], car->angleZ);
+        BuildRotMatrixZ(&sp68[0], car->bodyRoll);
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
@@ -528,9 +528,9 @@ block_52:
             g_CamPathFrame += 1;
         }
         BuildRotMatrixY(&sp48[0], car->angleY);
-        BuildRotMatrixX(&sp68[0], car->angleX);
+        BuildRotMatrixX(&sp68[0], car->bodyPitch);
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], car->angleZ);
+        BuildRotMatrixZ(&sp68[0], car->bodyRoll);
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         sp18[0] = 0;
@@ -566,9 +566,9 @@ block_52:
         *(Block16 *)&scratch[2] = *(Block16 *)car;
         BuildRotMatrixY(&sp88[0], 0 - g_OrbitCameraYaw);
         BuildRotMatrixY(&sp48[0], car->angleY);
-        BuildRotMatrixX(&sp68[0], car->angleX);
+        BuildRotMatrixX(&sp68[0], car->bodyPitch);
         MulMatrix2(&sp68[0], &sp48[0]);
-        BuildRotMatrixZ(&sp68[0], car->angleZ);
+        BuildRotMatrixZ(&sp68[0], car->bodyRoll);
         MulMatrix2(&sp68[0], &sp48[0]);
         TransposeMatrix((Matrix *)&sp48[0], (Matrix *)&spA8[0]);
         MulMatrix2(&sp88[0], &sp48[0]);
@@ -586,7 +586,7 @@ block_52:
         ApplyMatrixLV(&sp68[0], &sp18[0], &sp38[0]);
         scratch[6] = 0x400 - (Atan2(sp38[1], g_OrbitCameraDistance) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
-        scratch[8] = car->angleZ;
+        scratch[8] = car->bodyRoll;
         g_CameraModePrev = 5;
         scratch[2] -= sp38[0];
         adjustedY = scratch[3] - 0x28;

@@ -51,9 +51,9 @@ typedef struct GameCarRuntime {
     s32 motionY;
     s32 motionZ;
     s32 field_1C;
-    s32 field_20;
+    s32 bodyPitch;
     s32 bodyYaw;
-    s32 field_28;
+    s32 bodyRoll;
     s32 field_2C;
     s32 trackPointIndex;
     s32 field_34;
@@ -407,9 +407,9 @@ typedef struct PlayerCarRuntime {
     s32 motionY;
     s32 motionZ;
     s32 field_1C;
-    s32 field_20;
+    s32 bodyPitch;
     s32 bodyYaw;
-    s32 field_28;
+    s32 bodyRoll;
     s32 field_2C;
     s32 trackPointIndex;
     s32 field_34;

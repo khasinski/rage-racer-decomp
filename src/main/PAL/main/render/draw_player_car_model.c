@@ -39,7 +39,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     obj->y -= view->horizon;
     obj->modelY -= view->horizon;
     BuildRotMatrixY(&m_10, 0x800 - obj->angleY);
-    BuildRotMatrixX(&m_30, obj->angleX);
+    BuildRotMatrixX(&m_30, obj->bodyPitch);
     MulMatrix2(&m_10, &m_30);
     MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
 
@@ -79,7 +79,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     g_ScratchRenderMode = 0;
     SubmitModel((void *)SCRATCHPAD_ADDR, 1);
 
-    BuildRotMatrixZ(&m_70, obj->angleZ);
+    BuildRotMatrixZ(&m_70, obj->bodyRoll);
     MulMatrix2(&m_30, &m_70);
     SetGteObjectMatrix((void *)0x1F80011C, obj, &m_70);
     g_ScratchRenderMode = 0;
@@ -89,7 +89,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     if (obj->flags_48 & 0x1000) {
         otDepth += 10;
     }
-    BuildRotMatrixZ(&m_10, obj->angleZ - obj->field_64);
+    BuildRotMatrixZ(&m_10, obj->bodyRoll - obj->field_64);
     MulMatrix(&m_50, &m_10);
     MulMatrix(&m_30, &m_10);
     BuildRotMatrixX(&m_F0, obj->flags_48);
@@ -179,7 +179,7 @@ void DrawCar(GameRenderObject *obj) {
     if (v_148[2] >= 0) {
         if (otDepth < 0xD00) {
             BuildRotMatrixY(&m_10, 0x800 - obj->angleY);
-            BuildRotMatrixX(&m_30, obj->angleX);
+            BuildRotMatrixX(&m_30, obj->bodyPitch);
             MulMatrix2(&m_10, &m_30);
             MulMatrix0(&g_SceneLightMatrix, &m_30, &m_90);
             clipHandle = GetTrackZoneBlend(obj->trackProgress);
@@ -218,14 +218,14 @@ void DrawCar(GameRenderObject *obj) {
             SubmitModel((void *)SCRATCHPAD_ADDR,
                             (lod[0] + 1 < g_ModelBankCount) ? (lod[0] + 1) : 1);
 
-            BuildRotMatrixZ(&m_70, obj->angleZ);
+            BuildRotMatrixZ(&m_70, obj->bodyRoll);
             MulMatrix2(&m_30, &m_70);
             SetGteObjectMatrix((void *)0x1F80011C, obj, &m_70);
             g_ScratchRenderMode = lod[1] << 16;
             SubmitModel((void *)SCRATCHPAD_ADDR,
                             (lod[0] < g_ModelBankCount) ? lod[0] : 1);
 
-            BuildRotMatrixZ(&m_10, obj->angleZ - obj->field_64);
+            BuildRotMatrixZ(&m_10, obj->bodyRoll - obj->field_64);
             MulMatrix(&m_50, &m_10);
             MulMatrix(&m_30, &m_10);
             BuildRotMatrixX(&m_F0, obj->flags_48);
@@ -270,7 +270,7 @@ void DrawCar(GameRenderObject *obj) {
             }
         } else if (otDepth < 0x2500) {
             BuildRotMatrixY(&m_10, 0x800 - obj->angleY);
-            BuildRotMatrixX(&m_50, obj->angleX);
+            BuildRotMatrixX(&m_50, obj->bodyPitch);
             MulMatrix2(&m_10, &m_50);
             MulMatrix0(&g_SceneLightMatrix, &m_50, &m_90);
             clipHandle = GetTrackZoneBlend(obj->trackProgress);
@@ -279,7 +279,7 @@ void DrawCar(GameRenderObject *obj) {
             }
             SetLightMatrix(&m_90);
 
-            BuildRotMatrixZ(&m_10, obj->angleZ);
+            BuildRotMatrixZ(&m_10, obj->bodyRoll);
             MulMatrix2(&m_50, &m_10);
             MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &m_10);
             SetGteObjectMatrix((void *)0x1F80011C, obj, &m_10);

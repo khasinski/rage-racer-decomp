@@ -12,7 +12,7 @@ typedef struct GameCollisionPointBytes {
 /*
  * Jump / launch setup: when GetCarCrestTrigger reports a marker crossing, seeds the
  * launch trajectory (field_90/94/98/9A/9C/9E) and snapshots the car's render
- * offsets (field_20/28 and y). field_98 holds the launch state (1 = jump). The
+ * offsets (bodyPitch/28 and y). field_98 holds the launch state (1 = jump). The
  * inline mult/mfhi block is the compiler's divide idiom; keep it verbatim.
  */
 
@@ -53,25 +53,25 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
     case 1:
     case 5:
         car->field_92 = value + amplitude;
-        car->field_20 += car->field_92;
+        car->bodyPitch += car->field_92;
         car->field_92 = value + amplitude / 2;
-        car->field_28 += car->field_92 / 2;
+        car->bodyRoll += car->field_92 / 2;
         break;
 
     case 2:
         if (car->field_98 != 0) {
             break;
         }
-        car->field_28 += value;
+        car->bodyRoll += value;
         break;
 
     case 3:
         car->field_92 = value + amplitude;
-        car->field_20 += car->field_92;
+        car->bodyPitch += car->field_92;
         break;
 
     case 4:
-        car->field_28 += value;
+        car->bodyRoll += value;
         break;
     }
 }
@@ -205,8 +205,8 @@ void UpdateCarCrestHop(GameCarRuntime *car) {
 
         result = obj->field_90;
         temp = obj->field_94;
-        obj->field_20 = result;
-        obj->field_28 = temp;
+        obj->bodyPitch = result;
+        obj->bodyRoll = temp;
         return;
     }
 
@@ -229,8 +229,8 @@ void UpdateCarCrestHop(GameCarRuntime *car) {
         obj->field_9C = result;
     }
 
-    result = (u16)obj->field_20;
-    temp = (u16)obj->field_28;
+    result = (u16)obj->bodyPitch;
+    temp = (u16)obj->bodyRoll;
     value = (u16)obj->y;
     obj->field_9A = 0;
     obj->field_90 = result;
@@ -583,8 +583,8 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                 velocityDelta[0] = (u16)other->x - (u16)car->x;
                 velocityDelta[1] = (u16)other->z - (u16)car->z;
 
-                rotation[0] = (u16)car->field_20;
-                rotation[2] = (u16)car->field_28;
+                rotation[0] = (u16)car->bodyPitch;
+                rotation[2] = (u16)car->bodyRoll;
                 rotation[1] = (u16)car->bodyYaw;
                 RotMatrix(rotation, &matrix);
                 SetRotMatrix(&matrix);
@@ -656,8 +656,8 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                 ((CarCollisionPoint *)&quads[1][2])->z = centerZ;
                 ((CarCollisionPoint *)&quads[0][3])->z = centerZ;
 
-                rotation[0] = (u16)other->field_20;
-                rotation[2] = (u16)other->field_28;
+                rotation[0] = (u16)other->bodyPitch;
+                rotation[2] = (u16)other->bodyRoll;
                 rotation[1] = (u16)other->bodyYaw;
                 RotMatrix(rotation, &matrix);
                 SetRotMatrix(&matrix);

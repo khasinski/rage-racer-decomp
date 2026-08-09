@@ -55,9 +55,9 @@ void EnterCourseSelectScreen(void) {
     g_PlayerCar.x = 0;
     g_PlayerCar.y = 0;
     g_PlayerCar.z = 0;
-    g_PlayerCar.field_20 = 0;
+    g_PlayerCar.bodyPitch = 0;
     g_PlayerCar.bodyYaw = 0;
-    g_PlayerCar.field_28 = 0;
+    g_PlayerCar.bodyRoll = 0;
     g_PlayerCar.trackProgress = 0;
     g_PlayerSteerAngle = 0;
     g_PlayerCarWheelAngle = 0;

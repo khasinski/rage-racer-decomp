@@ -277,7 +277,7 @@ void DrawMenuCourseView(void) {
     p = &g_PlayerCar.runtime.bodyYaw;
     *p = *p + g_MenuViewSpin;
     BuildRotMatrixY(&mtxB, 0x800 - *p);
-    BuildRotMatrixX(&mtxA, g_PlayerCar.runtime.field_20);
+    BuildRotMatrixX(&mtxA, g_PlayerCar.runtime.bodyPitch);
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtxA);
     SelectModelBank(14);

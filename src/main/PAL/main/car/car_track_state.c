@@ -343,7 +343,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         {
             secondProduct += 0xFFF;
         }
-        obj->field_20 = firstProduct + (secondProduct >> 0xC);
+        obj->bodyPitch = firstProduct + (secondProduct >> 0xC);
     }
     forwardProduct = (0 - spad->field_38) * spad->field_94;
     if (forwardProduct < 0)
@@ -358,7 +358,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     }
     trackLength = g_TrackLength;
     lapProgress = (s32)(obj->field_68 + obj->field_6C) % trackLength;
-    obj->field_28 = (s32)(forwardComponent + (lateralProduct >> 0xC));
+    obj->bodyRoll = (s32)(forwardComponent + (lateralProduct >> 0xC));
     obj->field_B4 = spad->heading;
     obj->previousTrackProgress = obj->trackProgress;
     obj->trackProgress = lapProgress;

@@ -499,7 +499,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         s32 angle;
 
         ent->trackPointIndex = ret;
-        ent->field_20 = 0;
+        ent->bodyPitch = 0;
         idx = ent->trackPointIndex;
         acc = 0xC00;
         levShift = lev << 11;
@@ -507,7 +507,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         acc -= levShift;
         ent->bodyYaw = (acc - angle) & 0xFFF;
 
-        ent->field_28 = 0;
+        ent->bodyRoll = 0;
         ent->field_64 = 0;
         ent->field_6C = 0;
         ent->field_68 = 0;
@@ -571,7 +571,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->field_11E = height;
         ent->field_11C = height;
     }
-    *(Vec4 *)&ent->field_50 = *(Vec4 *)&ent->field_20;
+    *(Vec4 *)&ent->field_50 = *(Vec4 *)&ent->bodyPitch;
     {
         s32 lateral;
 

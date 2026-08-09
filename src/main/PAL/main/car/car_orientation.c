@@ -78,10 +78,10 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->z = eventData->rivalStarts[g_RaceSeries][0].z;
   player->y = 0;
   player->trackPointIndex = FindTrackSegment(car, player->trackPointIndex);
-  player->field_20 = 0;
+  player->bodyPitch = 0;
   headingBase = 0xC00 - (g_RaceSeries << 11);
   player->bodyYaw = (headingBase - g_TrackPoints[player->trackPointIndex].angle) & 0xFFF;
-  player->field_28 = 0;
+  player->bodyRoll = 0;
   player->field_64 = 0;
   player->field_164 = player->trackPointIndex;
   player->headingAngle = player->bodyYaw;
@@ -91,12 +91,12 @@ void InitPlayerCar(PlayerCarRuntime *car)
   trackState[1] = 0;
   UpdateCarTrackState(car, player->trackPointIndex, trackState);
   player->previousTrackProgress = player->trackProgress;
-  *(Vec4 *)(&player->field_50) = *(Vec4 *)(&player->field_20);
+  *(Vec4 *)(&player->field_50) = *(Vec4 *)(&player->bodyPitch);
   player->modelY = player->y;
   BuildRotMatrixY(&rotationMatrix, player->bodyYaw);
-  BuildRotMatrixX(&axisMatrix, player->field_20);
+  BuildRotMatrixX(&axisMatrix, player->bodyPitch);
   MulMatrix2(&axisMatrix, &rotationMatrix);
-  BuildRotMatrixZ(&axisMatrix, player->field_28);
+  BuildRotMatrixZ(&axisMatrix, player->bodyRoll);
   MulMatrix2(&axisMatrix, &rotationMatrix);
   rotationOffset.vx = 0;
   rotationOffset.vy = 0;
@@ -490,8 +490,8 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   }
   opponent = g_Cars;
   collisionRegion = 0;
-  rotation.vx = (u16)car->field_20;
-  rotation.vz = (u16)car->field_28;
+  rotation.vx = (u16)car->bodyPitch;
+  rotation.vz = (u16)car->bodyRoll;
   rotation.vy = (u16)car->bodyYaw;
   RotMatrix(&rotation, &rotationMatrix);
   index = 0;
@@ -553,8 +553,8 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
           }
           velocityDelta.x = (u16)opponent->x - (u16)car->x;
           velocityDelta.z = (u16)opponent->z - (u16)car->z;
-          rotation.vx = (u16)opponent->field_20;
-          rotation.vz = (u16)opponent->field_28;
+          rotation.vx = (u16)opponent->bodyPitch;
+          rotation.vz = (u16)opponent->bodyRoll;
           rotation.vy = (u16)opponent->bodyYaw;
           RotMatrix(&rotation, &rotationMatrix);
           for (cornerIndex = 0; cornerIndex < 4; cornerIndex++)

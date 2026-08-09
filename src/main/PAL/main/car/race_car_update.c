@@ -239,9 +239,9 @@ void UpdateRaceCars(void) {
                     sixth = f4 / 6;
                 }
                 BuildRotMatrixY(pm1, walk->bodyYaw);
-                BuildRotMatrixX(pm2, walk->field_20);
+                BuildRotMatrixX(pm2, walk->bodyPitch);
                 MulMatrix2(pm2, pm1);
-                BuildRotMatrixZ(pm2, walk->field_28);
+                BuildRotMatrixZ(pm2, walk->bodyRoll);
                 MulMatrix2(pm2, pm1);
                 sv.vx = 0;
                 sv.vy = 0;
@@ -327,8 +327,8 @@ void UpdateRaceCars(void) {
                 lastBase->field_48 = spin | 0x1000;
             }
             limit = lastBase->y - 8;
-            *(Vec4 *)&lastBase->field_50 = *(Vec4 *)&lastBase->field_20;
-            lastBase->field_28 = lastBase->field_28 + lastBase->field_64;
+            *(Vec4 *)&lastBase->field_50 = *(Vec4 *)&lastBase->bodyPitch;
+            lastBase->bodyRoll = lastBase->bodyRoll + lastBase->field_64;
             lastBase->modelY = lastBase->y;
             if (lastBase->field_98 != 0) {
                 s32 tick;
@@ -478,9 +478,9 @@ void UpdateAttractCars(void) {
                     sixth = f4 / 6;
                 }
                 BuildRotMatrixY(&m1, base->bodyYaw);
-                BuildRotMatrixX(&m2, base->field_20);
+                BuildRotMatrixX(&m2, base->bodyPitch);
                 MulMatrix2(&m2, &m1);
-                BuildRotMatrixZ(&m2, base->field_28);
+                BuildRotMatrixZ(&m2, base->bodyRoll);
                 MulMatrix2(&m2, &m1);
                 sv1.vx = 0;
                 sv1.vy = 0;
@@ -567,8 +567,8 @@ void UpdateAttractCars(void) {
                 base->field_48 = spin | 0x1000;
             }
             limit = base->y - 8;
-            *(Vec4 *)&base->field_50 = *(Vec4 *)&base->field_20;
-            base->field_28 = base->field_28 + base->field_64;
+            *(Vec4 *)&base->field_50 = *(Vec4 *)&base->bodyPitch;
+            base->bodyRoll = base->bodyRoll + base->field_64;
             base->modelY = base->y;
             if (base->field_98 != 0) {
                 s32 tick;

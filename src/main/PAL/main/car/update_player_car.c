@@ -220,9 +220,9 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     car->x -= car->motionX;
     car->z -= car->motionZ;
     BuildRotMatrixY(&m1, car->bodyYaw);
-    BuildRotMatrixX(&m2, car->field_20);
+    BuildRotMatrixX(&m2, car->bodyPitch);
     MulMatrix2(&m2, &m1);
-    BuildRotMatrixZ(&m2, car->field_28);
+    BuildRotMatrixZ(&m2, car->bodyRoll);
     MulMatrix2(&m2, &m1);
 
     sv1.vx = 0;
@@ -283,7 +283,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     if (p->unk3C != 0) {
         s32 d = (g_CarSpec->revLimit + g_CarSpec->redline) / 2 - g_ShiftTargetRpm;
         if (d > 0) {
-            car->field_20 += (d * Random15()) / 3276700;
+            car->bodyPitch += (d * Random15()) / 3276700;
         }
     }
 
@@ -295,8 +295,8 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     {
         s32 fuel = car->y;
 
-        *(Vec4 *)&car->field_50 = *(Vec4 *)&car->field_20;
-        car->field_28 = car->field_28 + car->field_64;
+        *(Vec4 *)&car->field_50 = *(Vec4 *)&car->bodyPitch;
+        car->bodyRoll = car->bodyRoll + car->field_64;
         car->modelY = car->y;
         limit = fuel - 8;
     }

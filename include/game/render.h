@@ -186,9 +186,9 @@ typedef struct GameRenderObject {
     s32 motionY;
     s32 motionZ;
     s32 field_1C;
-    s32 angleX;   /* 0x20 */
+    s32 bodyPitch; /* 0x20 */
     s32 angleY;   /* 0x24 */
-    s32 angleZ;   /* 0x28 */
+    s32 bodyRoll;  /* 0x28 */
     s32 field_2C;
     s32 trackPointIndex;
     s32 field_34;
