@@ -35,10 +35,13 @@ void UpdateWaypointRaceScene(void) {
 
     option = 0;
     g_SceneTimer++;
-    if ((u32)g_SceneTimer < 0x3D) {
-        DrawRoundScreen();
-        value = g_SceneTimer - 6;
-        DrawFullscreenFadeTile(0xFF - (((value * 3) * 4) - value), 0x49);
+    {
+        u32 sceneFrame = g_SceneTimer;
+        if (sceneFrame < 0x3D) {
+            DrawRoundScreen();
+            value = g_SceneTimer - 6;
+            DrawFullscreenFadeTile(0xFF - (((value * 3) * 4) - value), 0x49);
+        }
     }
 
     if (g_PauseDebounce > 0) {
@@ -112,10 +115,13 @@ void UpdateWaypointRaceScene(void) {
 
     g_AnimTimer++;
 
-    if ((u32)g_SceneTimer >= 0x1F && g_RacePhase == 0) {
-        StartCdAudio();
-        g_RacePhase = 2;
-        g_PauseDebounce = 0xA;
+    {
+        u32 sceneFrame = g_SceneTimer;
+        if (sceneFrame >= 0x1F && g_RacePhase == 0) {
+            StartCdAudio();
+            g_RacePhase = 2;
+            g_PauseDebounce = 0xA;
+        }
     }
 
     if (g_CameraCarProgressA >= g_TrackLength && g_RacePhase < 3) {
