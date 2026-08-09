@@ -226,26 +226,29 @@ void UpdateRoundScreen(void) {
         if (RequestRaceAssets() == 0) {
             g_FadeLevel = 0x80;
         }
-    } else if ((u32)g_SceneTimer >= 121) {
-        g_SceneId = 0xb;
-        if ((ReadStablePadHeld() & (PAD_START | PAD_R1 | PAD_L1)) == 0x80c) {
-            g_MirrorMode = 1;
-        } else {
-            g_MirrorMode = 0;
-        }
-        if (g_BgmSelection == 0) {
-            s32 idx = g_BgmShuffleIndex;
-            u8 val = g_BgmShuffleOrder[idx];
-            g_BgmShuffleIndex = idx + 1;
-            g_BgmTrack = val;
-            if (g_BgmShuffleIndex == g_BgmTrackCount) {
-                g_BgmShuffleIndex = 0;
+    } else {
+        u32 sceneTime = g_SceneTimer;
+        if (sceneTime >= 121) {
+            g_SceneId = 0xb;
+            if ((ReadStablePadHeld() & (PAD_START | PAD_R1 | PAD_L1)) == 0x80c) {
+                g_MirrorMode = 1;
+            } else {
+                g_MirrorMode = 0;
             }
-        } else {
-            g_BgmTrack = g_BgmSelection - 1;
-        }
-        if (g_BgmTrack == 9) {
-            g_BgmTrack = 0xe;
+            if (g_BgmSelection == 0) {
+                s32 idx = g_BgmShuffleIndex;
+                u8 val = g_BgmShuffleOrder[idx];
+                g_BgmShuffleIndex = idx + 1;
+                g_BgmTrack = val;
+                if (g_BgmShuffleIndex == g_BgmTrackCount) {
+                    g_BgmShuffleIndex = 0;
+                }
+            } else {
+                g_BgmTrack = g_BgmSelection - 1;
+            }
+            if (g_BgmTrack == 9) {
+                g_BgmTrack = 0xe;
+            }
         }
     }
     if (g_SceneId == 0xa) {
