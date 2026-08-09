@@ -7,13 +7,18 @@
 #include "game/sound.h"
 #include "game/car.h"
 
+typedef union PrizeScreenWork {
+    s32 value;
+    u32 unsignedValue;
+} PrizeScreenWork;
+
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
 void UpdatePrizeMoneyScreen(void) {
     s32 lim1 = g_PrizeCountStep;
     s32 lim0 = g_BonusCountStep;
     s32 st;
-    s32 t;
+    PrizeScreenWork t;
 
     if (g_PadHeld & PAD_CONFIRM) {
         lim1 <<= 2;
@@ -50,7 +55,8 @@ void UpdatePrizeMoneyScreen(void) {
         return;
     case 4:
         g_SceneTimer += 1;
-        if (!((u32)g_SceneTimer < 121)) {
+        t.value = g_SceneTimer;
+        if (!(t.unsignedValue < 121)) {
         if (g_PrizeAmount == 0) {
         g_SceneTimer = 0;
         if (g_PromotionBonus == 0) goto Lstore7;
@@ -58,14 +64,14 @@ void UpdatePrizeMoneyScreen(void) {
         goto Lstore;
         }
         PlaySoundCue((g_PadHeld & PAD_CONFIRM) ? 0x10 : 0xf);
-        t = g_PrizeAmount;
-        if (t >= lim1) {
-            g_PrizeAmount = t - lim1;
+        t.value = g_PrizeAmount;
+        if (t.value >= lim1) {
+            g_PrizeAmount = t.value - lim1;
             g_RaceProgress->money += lim1;
         } else {
             s32 e = g_RaceProgress->money;
             g_PrizeAmount = 0;
-            g_RaceProgress->money = e + t;
+            g_RaceProgress->money = e + t.value;
         }
         }
         if (g_PrizeAmount != 0) break;
@@ -84,14 +90,14 @@ void UpdatePrizeMoneyScreen(void) {
         TickClassClearFanfare();
         if (g_PromotionBonus == 0) { st = 7; goto Lstore; }
         PlaySoundCue((g_PadHeld & PAD_CONFIRM) ? 0x10 : 0xf);
-        t = g_PromotionBonus;
-        if (t >= lim0) {
-            g_PromotionBonus = t - lim0;
+        t.value = g_PromotionBonus;
+        if (t.value >= lim0) {
+            g_PromotionBonus = t.value - lim0;
             g_RaceProgress->money += lim0;
         } else {
             s32 e = g_RaceProgress->money;
             g_PromotionBonus = 0;
-            g_RaceProgress->money = e + t;
+            g_RaceProgress->money = e + t.value;
         }
         if (g_PromotionBonus != 0) break;
     Lstore7:
