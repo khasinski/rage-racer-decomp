@@ -1,6 +1,5 @@
 #include "common.h"
 #include "game/car.h"
-#define GAME_PLAYER_CAR_DECL extern GameCarRuntime g_PlayerCar
 #include "game/player_car_internal.h"
 #include "game/track.h"
 #include "psyq/gte.h"
@@ -223,7 +222,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         spad->offsetZ = lateralOffset;
         BuildRotMatrixY(clampSource, spad->heading);
         ApplyMatrix(clampSource, &spad->offsetX, &spad->field_68);
-        if (obj == &g_PlayerCar)
+        if (obj == (GameCarRuntime *)&g_PlayerCar)
         {
             SetCarKnockback(obj, spad->field_68, spad->field_70, limits->leftKnockbackMode);
         }
@@ -243,7 +242,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         spad->offsetZ = lateralOffset;
         BuildRotMatrixY(clampSource, spad->heading);
         ApplyMatrix(clampSource, &spad->offsetX, &spad->field_68);
-        if (obj == &g_PlayerCar)
+        if (obj == (GameCarRuntime *)&g_PlayerCar)
         {
             SetCarKnockback(obj, spad->field_68, spad->field_70, limits->rightKnockbackMode);
         }

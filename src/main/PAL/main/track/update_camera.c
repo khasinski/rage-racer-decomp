@@ -5,7 +5,6 @@
 #define GAME_SKY_ROW_BASE_TYPE u32
 #define GAME_ENV_SCRIPT_LENGTH_TYPE u32
 #include "game/track_internal.h"
-#define GAME_PLAYER_CAR_DECL extern GameRenderObject g_PlayerCar
 #include "game/player_car_internal.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
@@ -598,7 +597,7 @@ block_52:
         break;
     }
     SetCameraRotMatrix();
-    if ((cameraModeSel > 0) && (car == &g_PlayerCar)) {
+    if ((cameraModeSel > 0) && (car == (GameRenderObject *)&g_PlayerCar)) {
         SelectModelBank(0);
         DrawPlayerCarModel(car);
     }
