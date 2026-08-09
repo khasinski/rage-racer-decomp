@@ -2,6 +2,12 @@
 #define GAME_FMV_H
 
 #include "common.h"
+#include "psyq/gpu.h"
+
+typedef union FmvUploadRectAddress {
+    volatile s16 *componentPointer;
+    Rect *rectPointer;
+} FmvUploadRectAddress;
 
 typedef struct FmvDecodeContext {
     volatile u32 *vlcBuffers[2];
