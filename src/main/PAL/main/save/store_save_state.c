@@ -153,11 +153,11 @@ void StoreSaveStateBlock(u8 *block) {
             for (; outer < 2; outer++) {
                 register s32 outerOffset asm("$9") = (middle = 0, outer * 32);
                 register u8 *middleDst asm("$11") = outerDst;
-                u8 *lapDst = outerDst + 0x9DC;
+                u8 *lapDst = (u8 *)((GameSaveBlock *)outerDst)->bestLapTimes;
 
             for (; middle < 4; middle++) {
                 s32 middleOffset = (inner = 0, middle * 8);
-                s32 *totalOutBase = (s32 *)(middleDst + 0xA1C);
+                s32 *totalOutBase = (s32 *)((GameSaveBlock *)middleDst)->bestTotalTimes;
                 s32 *totalOut =
                     (s32 *)(middleOffset + (s32)totalOutBase);
                 s32 *totalIn =
@@ -192,11 +192,11 @@ void StoreSaveStateBlock(u8 *block) {
             s32 middle = 0;
             register s32 currentOuterOffset asm("$15") = outerOffset;
             register u8 *middleDst asm("$17") = outerDst;
-            register u8 *rankingDst asm("$14") = outerDst + 0xA5C;
+            register u8 *rankingDst asm("$14") = (u8 *)((GameSaveBlock *)outerDst)->rankingRecords;
             s32 middleOffset = 0;
 
             for (; middle < 4; middle++) {
-                s32 *timeDstBase = (inner = 0, (s32 *)(middleDst + 0xCDC));
+                s32 *timeDstBase = (inner = 0, (s32 *)((GameSaveBlock *)middleDst)->timeRecords);
                 s32 *timeDst =
                     (s32 *)(middleOffset + (s32)timeDstBase);
                 s32 *timeIn =
@@ -232,7 +232,7 @@ void StoreSaveStateBlock(u8 *block) {
 
         for (; outer < 2; outer++) {
             s32 currentOuterOffset = (middle = 0, outerOffset);
-            u8 *sectorDst = outerDst + 0xF5C;
+            u8 *sectorDst = (u8 *)((GameSaveBlock *)outerDst)->bestSectorTimes;
             s32 middleOffset = 0;
 
             for (; middle < 4; middle++) {
