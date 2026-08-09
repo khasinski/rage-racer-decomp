@@ -150,10 +150,10 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                  g_EffectCueTable[bank].programs[0].note) &&
                 (g_EffectVoices[3].note.value ==
                  g_EffectCueTable[bank].programs[1].note)) {
-                g_EffectVoice2State = 2;
+                g_EffectVoices[2].state = 2;
                 tblOff = bank * 2;
             } else {
-                g_EffectVoice2State = 0;
+                g_EffectVoices[2].state = 0;
                 tblOff = bank * 2;
             }
             tblOff = (tblOff + bank) * 8;
@@ -162,7 +162,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
             count = g_EffectCueTable[bank].voiceCount;
             i = 0;
             if (count > i) {
-                stateBase = &g_EffectVoice2State;
+                stateBase = &g_EffectVoices[2].state;
                 loopCount = count;
                 tableBase = g_EffectCueTable;
                 loopTblOff = tblOff;

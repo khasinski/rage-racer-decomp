@@ -149,7 +149,6 @@ s32 GetOwnedCarAssetIndex(s32 model);
 
 extern s32 g_SpecialVoiceBits4;
 extern const char g_MsgTooManyVoices[];
-extern s32 g_EffectVoice2State;
 extern s32 g_ActiveSpecialCue;
 extern s32 g_AudioLoadSlot;
 extern s32 g_AudioLoadedSlotMask;
