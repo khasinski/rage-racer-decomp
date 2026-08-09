@@ -278,7 +278,7 @@ timing_done:
 
 void EnterRaceScene(void) {
     s32 pad[2];
-    u8 *lapTableRow;
+    LapTimeTableAddress lapTableRow;
     PlayerCarRuntime *player;
     s32 mode;
     s32 scene;
@@ -334,11 +334,11 @@ void EnterRaceScene(void) {
         /* g_BestLapTimes[g_RaceSeries][g_CourseIndex][g_GrandPrixMode],
          * which is how the same table is spelled four times elsewhere in
          * this file. Written indexed here, or with the three offsets folded
-         * together, the schedule around these barriers changes. */
+         * together, the schedule around these address calculations changes. */
         lapAddress.pointer = (s32 *)g_BestLapTimes;
         lapAddress.byteOffset += scene;
-        lapTableRow = lapAddress.bytes;
-        count = mode + (s32)lapTableRow;
+        lapTableRow.bytes = lapAddress.bytes;
+        count = mode + lapTableRow.byteOffset;
         scratch = g_GrandPrixMode * 4;
         scratch += count;
         entry = (s32 *)scratch;
