@@ -112,7 +112,6 @@ void UpdatePrologueLoadStep2(void) {
 
 void DrawPrologueText(void) {
     s32 i;
-    s32 offset;
     s32 adjusted;
     s32 delta;
     s32 value;
@@ -123,14 +122,11 @@ void DrawPrologueText(void) {
     s32 blueScale;
     s32 blue;
 
-#define PROLOGUE_LINE(byteOffset) \
-    (*(PrologueLine *)((u8 *)g_PrologueLines + (byteOffset)))
-
-    for (i = 0, offset = 0; i < 14; offset += sizeof(PrologueLine)) {
+    for (i = 0; i < 14; i++) {
         s32 tableY;
 
         adjusted = ((u32)g_SceneTimer / 3) - 0xD0;
-        tableY = PROLOGUE_LINE(offset).y;
+        tableY = g_PrologueLines[i].y;
         delta = tableY - adjusted;
 
         if (delta < 0x60) {
@@ -151,18 +147,15 @@ void DrawPrologueText(void) {
         }
 
         value = 0x7F - clamped;
-        i++;
         if (value != 0) {
             GameDrawText8x8Shaded(
-                PROLOGUE_LINE(offset).x,
+                g_PrologueLines[i].x,
                 delta,
-                (u8 *)PROLOGUE_LINE(offset).text,
+                (u8 *)g_PrologueLines[i].text,
                 0x78CC,
                 value);
         }
     }
-#undef PROLOGUE_LINE
-
     {
         s32 fadeLevel;
         u8 **scratch;
