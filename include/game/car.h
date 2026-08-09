@@ -555,7 +555,7 @@ void DrawCars(void);
  * hands over to the airborne handler UpdateCarAirborne.  Declared K&R because
  * the UpdateCarDrivetrain dispatch passes two arguments to every handler in
  * the table and this one reads only the first. */
-void UpdateCarLaunch();
+void UpdateCarLaunch(PlayerCarRuntime *car, s32 unused);
 
 /*
  * The player's own 0x19C-byte car object. See docs/names.md 12c.
@@ -671,12 +671,12 @@ void InitRivalCarAi(GameCarRuntime* ent, s32 pos, RaceGridSlot* slots);
 void RankContenders(void);
 void SeedCarRouteMarkers(void);
 void SlowRivalAhead();
-void SteerCarToTrackLine(GameCarRuntime *car);
+void SteerCarToTrackLine(PlayerCarRuntime *car);
 void TransformCollisionVector(s32 *input, s32 *output);
 void UpdateCarAiTargetSpeed();
 void UpdateCarDrivetrain(PlayerCarRuntime *car);
-void UpdateCarDriving();
-void UpdateCarStandingStart();
+void UpdateCarDriving(PlayerCarRuntime *car, s32 unused);
+void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused);
 void UpdateCarTrafficAvoidance();
 void AccumulateLapProgress();
 void AdvanceCarPosition();
@@ -690,7 +690,7 @@ s32 IsPointInQuad();
 void SeedCarLapProgress(GameCarRuntime *car, s32 mode);
 void SetCarKnockback();
 void StartCarBodyKick();
-void UpdateCarAirborne();
+void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused);
 void UpdateCarBodyKick();
 void UpdateCarBodyRoll(PlayerCarRuntime *car);
 void UpdateCarCrestHop();

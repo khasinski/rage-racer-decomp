@@ -12,8 +12,8 @@
  * (AdvanceCarPosition), and detects the jump/launch trigger. The drive sub-block is
  * the GameCarDrive view of car->field_BC.
  */
-void UpdateCarDriving(GameCarRuntime *car) {
-    GameCarDrive *route = (GameCarDrive *)&car->field_BC;
+void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
+    GameCarDrive *route = &car->drive;
     s32 sinA;
     s32 cosA;
     s32 base;
@@ -24,7 +24,7 @@ void UpdateCarDriving(GameCarRuntime *car) {
     s32 t;
     s32 idx;
 
-    r = GetAngleDelta(car->field_24, *(s32 *)&car->field_14C);
+    r = GetAngleDelta(car->field_24, route->unk90);
     base = car->field_24;
     car->field_24 = r / 5 + base;
     AdvanceCarPosition(car, base);
@@ -32,18 +32,18 @@ void UpdateCarDriving(GameCarRuntime *car) {
     sinA = rsin(car->field_24);
     cosA = rcos(car->field_24);
 
-    car->field_C4 = rsin(car->headingAngle) * car->field_A4 / 256;
-    car->field_CC = rcos(car->headingAngle) * car->field_A4 / 256;
+    route->accelPos = rsin(car->headingAngle) * car->speed / 256;
+    route->brakePos = rcos(car->headingAngle) * car->speed / 256;
 
-    coords[0] = (cosA * car->field_C4 - sinA * car->field_CC) / 4096;
-    coords[2] = (sinA * car->field_C4 + cosA * car->field_CC) / 4096;
-    car->field_C4 = sinA * coords[2] / 4096;
-    car->field_CC = cosA * coords[2] / 4096;
+    coords[0] = (cosA * route->accelPos - sinA * route->brakePos) / 4096;
+    coords[2] = (sinA * route->accelPos + cosA * route->brakePos) / 4096;
+    route->accelPos = sinA * coords[2] / 4096;
+    route->brakePos = cosA * coords[2] / 4096;
 
     spec1 = g_CarSpec;
-    if (spec1->revLimit + 2000 < car->field_134 && g_RacePhase >= 2) {
+    if (spec1->revLimit + 2000 < route->unk78 && g_RacePhase >= 2) {
         SetIndexedEffectVoice(0, 0x1800,
-                      (car->field_134 - spec1->revLimit) / 100 + 128);
+                      (route->unk78 - spec1->revLimit) / 100 + 128);
     } else {
         SetIndexedEffectVoice(-1, 0, 0);
     }
@@ -52,7 +52,7 @@ void UpdateCarDriving(GameCarRuntime *car) {
     if (spec->redline + 1000 < route->unk78) {
         s16 v = g_SteerHoldFrames;
         if (v >= 41 && route->gear == spec->topGear &&
-            car->field_98 == 0) {
+            car->shiftState == 0) {
             idx = v + 24;
             if (idx >= 101) {
                 idx = 100;
@@ -66,9 +66,9 @@ void UpdateCarDriving(GameCarRuntime *car) {
     }
 
     if (route->unk9C == 1) {
-        route->unk48 = car->field_A4 * route->unk44;
+        route->unk48 = car->speed * route->unk44;
         route->unk44 = 0;
-        if ((s32) g_LaunchSpeedThresholds[route->unk28].initial < car->field_A4 &&
+        if ((s32) g_LaunchSpeedThresholds[route->unk28].initial < car->speed &&
             route->unk48 > route->unk84) {
             route->state98 = 1;
             route->unk3E = 0;
@@ -85,9 +85,9 @@ void UpdateCarDriving(GameCarRuntime *car) {
             s16 m9e = route->unk9E;
             if (m9e == 1) {
                 s32 av = coords[0] < 0 ? -coords[0] : coords[0];
-                s32 aval = av * car->field_A4 / 64;
+                s32 aval = av * car->speed / 64;
                 route->unk48 = aval;
-                if ((s32) g_LaunchSpeedThresholds[route->unk28].sustain < car->field_A4 &&
+                if ((s32) g_LaunchSpeedThresholds[route->unk28].sustain < car->speed &&
                     route->unk84 < aval) {
                     route->state98 = m9e;
                     route->unk3E = 0;

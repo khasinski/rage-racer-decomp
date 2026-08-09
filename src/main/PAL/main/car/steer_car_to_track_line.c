@@ -15,7 +15,7 @@
  * divided by the spec block's steerResponse. Register pins are
  * match-load-bearing.
  */
-void SteerCarToTrackLine(GameCarRuntime *car) {
+void SteerCarToTrackLine(PlayerCarRuntime *car) {
     GameCarSpec *spec;
     s32 timer;
     s32 index;
@@ -35,7 +35,7 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
     spec = g_CarSpec;
     lateral = car->field_34;
     timer = spec->steerResponse;
-    directionFlag = *(s32 *)((u8 *)car + 0x110);
+    directionFlag = car->drive.unk54;
 
     asm volatile("" : "=r"(timer) : "0"(timer));
     baseIndex = car->trackPointIndex;
@@ -68,7 +68,7 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
 
     finalAngle = 0x400 - Atan2(coords[0] - car->x, coords[2] - car->z);
 
-    if (car->field_98 == 0) {
+    if (car->shiftState == 0) {
         xValue = timer << 16;
         divisor = xValue >> 16;
         if (divisor <= 0) {
@@ -89,9 +89,9 @@ void SteerCarToTrackLine(GameCarRuntime *car) {
  */
 
 
-void UpdateCarLaunch(GameCarRuntime *carArg) {
-    register GameCarRuntime *car = carArg;
-    register u8 *r;
+void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
+    register PlayerCarRuntime *car = carArg;
+    register GameCarDrive *drive;
     register s32 s4val;
     s32 res;
     register s32 v0 asm("$2");
@@ -103,7 +103,7 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
     s32 coords[3];
 
     first24 = car->field_24;
-    v0 = *(s32 *)((u8 *)car + 0x10C);
+    v0 = car->drive.unk50;
     firstHeading = car->headingAngle;
     s4val = v0;
     if (v0 < 0) {
@@ -111,13 +111,12 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
     }
 
     res = GetAngleDistance(first24, firstHeading);
-    r = (u8 *)car + 188;
-#define drive ((GameCarDrive *)r)
+    drive = &car->drive;
     if (res >= 0x600) {
-        car->field_A4 = car->field_A4 * 990 / 1000;
+        car->speed = car->speed * 990 / 1000;
     }
 
-    if (car->field_98 == 0) {
+    if (car->shiftState == 0) {
         s32 near;
         s32 phase;
         s32 volume;
@@ -143,8 +142,8 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
     if (res < 0x80 && s4val < 0x800) {
         drive->unk48 -= (0x800 - s4val) * 4000 / 256;
     }
-    if (car->field_A4 < 0x190) {
-        drive->unk48 -= (0x190 - car->field_A4) * 100;
+    if (car->speed < 0x190) {
+        drive->unk48 -= (0x190 - car->speed) * 100;
     }
 
     if (drive->unk48 > 0) {
@@ -185,7 +184,7 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
         drive->unk48 -= (0x3600 - s4val) / 64;
 
         {
-            s32 a4 = car->field_A4;
+            s32 a4 = car->speed;
             s32 half = drive->unk8C / 2;
             if (a4 < half) {
                 drive->unk48 -= (half - a4) / 8;
@@ -194,8 +193,8 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
 
         drive->unk48 -= drive->brakeBtn * 4;
         drive->unk48 -= (0x100 - drive->accelBtn) * 4;
-        car->field_A4 -= drive->brakeBtn * 10 / 256;
-        car->field_A4 -= (0x100 - drive->accelBtn) * 10 / 256;
+        car->speed -= drive->brakeBtn * 10 / 256;
+        car->speed -= (0x100 - drive->accelBtn) * 10 / 256;
     } else {
         drive->unk50 = drive->unk50 * 15 / 16;
         if (s4val < 0x1000) {
@@ -204,7 +203,7 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
 
             {
                 s32 gain = (100 - (drive->gear - 1) * 4) * 10000;
-                drive->unk94 = gain * car->field_A4 / 100;
+                drive->unk94 = gain * car->speed / 100;
             }
             drive->unk60 = GetAngleDelta(car->headingAngle, car->field_24);
             drive->unk58 = car->headingAngle;
@@ -225,13 +224,13 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
                     sq = 0x800 - sq;
                     sq = sq * sq;
                 }
-                drive->unk5C = sq * car->field_A4 / 0x100000;
+                drive->unk5C = sq * car->speed / 0x100000;
             }
 
             drive->unk50 = 0;
 
             specBase = (u8 *)g_CarSpec;
-            lo = car->field_A4 * 0xA0 / 1168 * 10000 /
+            lo = car->speed * 0xA0 / 1168 * 10000 /
                  *(s32 *)((u8 *)specBase +
                           (drive->gear << 2) + 0xE4);
             {
@@ -242,11 +241,10 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
                 firstHeading = (u16)drive->unk78;
                 offset <<= 2;
                 asm volatile("" : :);
-                *(s16 *)(r + 0x38) = 0x14;
-                *(s32 *)(r + 0x98) = 2;
+                RAW(drive->unk38) = 0x14;
+                RAW(drive->state98) = 2;
                 g_ShiftTargetRpm = lo;
-                *(s16 *)(r + 0x3C) =
-                    *(u16 *)&g_ShiftTargetRpm - firstHeading;
+                RAW(drive->unk3C) = *(u16 *)&g_ShiftTargetRpm - firstHeading;
                 specBase += offset;
             }
             {
@@ -293,9 +291,8 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
 
     sinF24 = rsin(car->field_24);
     cosF24 = rcos(car->field_24);
-    drive->accelPos = rsin(car->headingAngle) * car->field_A4 / 256;
-    drive->brakePos = rcos(car->headingAngle) * car->field_A4 / 256;
-#undef drive
+    drive->accelPos = rsin(car->headingAngle) * car->speed / 256;
+    drive->brakePos = rcos(car->headingAngle) * car->speed / 256;
 }
 
 /*
@@ -303,8 +300,8 @@ void UpdateCarLaunch(GameCarRuntime *carArg) {
  * spin, advances the car (AdvanceCarPosition), and lands it when it returns to the
  * ground. The drive sub-block is the GameCarDrive view of car->field_BC.
  */
-void UpdateCarAirborne(GameCarRuntime *car) {
-    GameCarDrive *r = (GameCarDrive *)&car->field_BC;
+void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
+    GameCarDrive *r = &car->drive;
     s32 sinF24;
     s32 cosF24;
     volatile s32 coords[3];
@@ -312,7 +309,7 @@ void UpdateCarAirborne(GameCarRuntime *car) {
 
     if (flag == 0) {
         s32 phase;
-        s32 f11c = *(s32 *)((u8 *)car + 0x11C);
+        s32 f11c = car->drive.unk60;
         if (f11c < 513) {
             phase = f11c * 3 + 6144;
         } else {
@@ -333,8 +330,8 @@ void UpdateCarAirborne(GameCarRuntime *car) {
     sinF24 = rsin(car->field_24);
     cosF24 = rcos(car->field_24);
 
-    r->accelPos = rsin(car->headingAngle + r->unk60) * car->field_A4 / 256;
-    r->brakePos = rcos(car->headingAngle + r->unk60) * car->field_A4 / 256;
+    r->accelPos = rsin(car->headingAngle + r->unk60) * car->speed / 256;
+    r->brakePos = rcos(car->headingAngle + r->unk60) * car->speed / 256;
 
     coords[0] = (cosF24 * r->accelPos - sinF24 * r->brakePos) / 4096;
     coords[2] = (sinF24 * r->accelPos + cosF24 * r->brakePos) / 4096;
@@ -356,7 +353,7 @@ void UpdateCarAirborne(GameCarRuntime *car) {
 
     r->unk3E = r->unk3E * 2 / 3;
     if (r->unk60 >= 1537) {
-        car->field_A4 = car->field_A4 * 4 / 5;
+        car->speed = car->speed * 4 / 5;
     }
 
     if (r->unk38 <= 0) {
@@ -377,15 +374,15 @@ void UpdateCarAirborne(GameCarRuntime *car) {
  * car (AdvanceCarPosition), and resets the car once the budget expires. field_15C /
  * field_15E hold the shake magnitude.
  */
-void UpdateCarStandingStart(GameCarRuntime *car) {
-    GameCarRuntime *route = (GameCarRuntime *)&car->field_BC;
+void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused) {
+    GameCarDrive *route = &car->drive;
     s32 sinA;
     s32 cosA;
     s32 base;
     s32 r;
     s32 coords[3];
 
-    r = GetAngleDelta(car->field_24, *(s32 *)&car->field_14C);
+    r = GetAngleDelta(car->field_24, route->unk90);
     base = car->field_24;
     car->field_24 = r / 5 + base;
     AdvanceCarPosition(car, base);
@@ -393,44 +390,46 @@ void UpdateCarStandingStart(GameCarRuntime *car) {
     sinA = rsin(car->field_24);
     cosA = rcos(car->field_24);
 
-    car->field_C4 = rsin(car->headingAngle) * car->field_A4 / 256;
-    car->field_CC = rcos(car->headingAngle) * car->field_A4 / 256;
+    route->accelPos = rsin(car->headingAngle) * car->speed / 256;
+    route->brakePos = rcos(car->headingAngle) * car->speed / 256;
 
-    coords[0] = (cosA * car->field_C4 - sinA * car->field_CC) / 4096;
-    coords[2] = (sinA * car->field_C4 + cosA * car->field_CC) / 4096;
-    car->field_C4 = sinA * coords[2] / 16384;
-    car->field_CC = cosA * coords[2] / 16384;
+    coords[0] = (cosA * route->accelPos - sinA * route->brakePos) / 4096;
+    coords[2] = (sinA * route->accelPos + cosA * route->brakePos) / 4096;
+    route->accelPos = sinA * coords[2] / 16384;
+    route->brakePos = cosA * coords[2] / 16384;
 
-    SetIndexedEffectVoice(0, 0x1A80, (0x60 - (g_StandingStartSpin & 0x1F) * 2) * car->field_15C / 256);
+    SetIndexedEffectVoice(0, 0x1A80,
+                          (0x60 - (g_StandingStartSpin & 0x1F) * 2) *
+                              route->accelBtn / 256);
 
-    car->field_A4 = car->field_A4 / 10;
+    car->speed = car->speed / 10;
 
     if (g_StandingStartSpin >= 11) {
-        s32 f15c = car->field_15C;
-        s32 f134 = car->field_134;
+        s32 f15c = route->accelBtn;
+        s32 f134 = route->unk78;
 
         sinA = f15c + 32;
-        g_StandingStartSpin -= car->field_15E * 2;
+        g_StandingStartSpin -= route->brakeBtn * 2;
         if (f134 < 2000) {
             sinA = f15c + 1032;
         }
         if (f15c < 127 && f134 >= 2001) {
             sinA += 127;
         }
-        route->field_68 = (Random15() & 3) * sinA / 256;
-        route->field_6C = (Random15() & 7) * sinA / 256;
+        route->unk68 = (Random15() & 3) * sinA / 256;
+        route->unk6C = (Random15() & 7) * sinA / 256;
         g_StandingStartSpin -= sinA;
         if (g_StandingStartSpin <= 0) {
-            route->field_68 = 0;
-            route->field_6C = 0;
-            *(s32 *)&route->field_98 = 0;
+            route->unk68 = 0;
+            route->unk6C = 0;
+            route->state98 = 0;
             SetIndexedEffectVoice(-1, 0, 0);
         }
     } else {
         SetIndexedEffectVoice(-1, 0, 0);
-        car->field_154 = 0;
-        *(s32 *)&car->field_124 = 0;
-        *(s32 *)&car->field_128 = 0;
+        route->state98 = 0;
+        route->unk68 = 0;
+        route->unk6C = 0;
     }
 }
 
