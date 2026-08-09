@@ -128,7 +128,7 @@ timing_done:
         step = candidateTime < tableOffset;
         if (step && (recordIndex != 1)) {
             routeProgress = (u16)route->timing.fields.lap;
-            route->drive.unkA6 = routeProgress - 2;
+            route->drive.bestLapIndex = routeProgress - 2;
             result = route->timing.fields.lapTimes.table
                          .milliseconds[route->timing.fields.lap - 2];
             g_BestLapThisRace = candidateTime;

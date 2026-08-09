@@ -111,7 +111,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   axisMatrix.m[2][2] = rotationMatrix.m[2][2];
   rotationOffset.vz = -player->drive.bodyLiftOffset - 0x32;
   ApplyMatrix(&axisMatrix, &rotationOffset, &player->motionX);
-  player->drive.unkA6 = -1;
+  player->drive.bestLapIndex = -1;
   player->drive.motionState = CAR_MOTION_STANDING_START;
   player->drive.engineLoad = 0;
   player->drive.drivetrainCoupled = 1;
