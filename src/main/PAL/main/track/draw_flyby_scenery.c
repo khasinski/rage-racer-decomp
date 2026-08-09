@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/render.h"
 #include "game/track_internal.h"
-#define GAME_RACE_SERIES_QUALIFIER volatile
 #include "game/race.h"
 #include "game/scratchpad.h"
 #include "game/track.h"

@@ -44,11 +44,11 @@ extern s16 g_GrandPrixMode;
 /* In-race copy of g_GrandPrixSeries, latched when the grid is built. Outer
  * index of the per-series tables and, because the advanced series runs the
  * courses backwards, also the lap-direction flag. See names.md 3. */
-#ifndef GAME_RACE_SERIES_QUALIFIER
-#define GAME_RACE_SERIES_QUALIFIER
-#endif
-extern GAME_RACE_SERIES_QUALIFIER s32 g_RaceSeries;
-#undef GAME_RACE_SERIES_QUALIFIER
+extern volatile s32 g_RaceSeries;
+
+static inline s32 ReadStableRaceSeries(void) {
+    return *(const s32 *)&g_RaceSeries;
+}
 
 /* Race phase: 0 pre-start (physics frozen), 1 countdown, 2 racing, 4/5
  * finished, 7 goal/retire, 8 aborted. */

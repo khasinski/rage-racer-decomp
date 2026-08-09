@@ -155,13 +155,14 @@ void DrawStartGridScenery(s32 flags) {
     s32 lim;
 
     if (g_RacePhase < 2 && flags >= 0x51) {
-        BuildRotMatrixY(&mtx, g_StartGridSceneryAngle[g_RaceSeries]);
+        BuildRotMatrixY(&mtx, g_StartGridSceneryAngle[ReadStableRaceSeries()]);
         MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
         if (flags - 90 > 0) {
-            state = g_StartGridSceneryPos[g_RaceSeries];
+            state = g_StartGridSceneryPos[ReadStableRaceSeries()];
             s1 = (flags - 90) / 3;
-            state.x += g_StartGridSceneryStep[g_RaceSeries].x * (s0 = s1 / 15);
-            state.z += g_StartGridSceneryStep[g_RaceSeries].y * s0;
+            state.x +=
+                g_StartGridSceneryStep[ReadStableRaceSeries()].x * (s0 = s1 / 15);
+            state.z += g_StartGridSceneryStep[ReadStableRaceSeries()].y * s0;
             if (g_CourseIndex % 4 == 3) {
                 state.z += 0x5000;
             }
@@ -173,7 +174,7 @@ void DrawStartGridScenery(s32 flags) {
             SCRATCH_ENV_MODE4 = 0;
             drawArg = (value < lim) ? value : 1;
         } else {
-            state = g_StartGridSceneryPos[g_RaceSeries];
+            state = g_StartGridSceneryPos[ReadStableRaceSeries()];
             if (g_CourseIndex % 4 == 3) {
                 state.z += 0x5000;
             }

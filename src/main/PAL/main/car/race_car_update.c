@@ -41,7 +41,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
     ai = (GameCarAiBlock *)&car->aiEnabled;
     car->reservedDC = 0;
 
-    if (g_RaceSeries != 0) {
+    if (ReadStableRaceSeries() != 0) {
         index = offset + 2;
     } else {
         index = offset - 2;
@@ -89,7 +89,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
 
     angle = 0x400 - Atan2(coords[0] - car->x, coords[2] - car->z);
 
-    callArg = g_RaceSeries;
+    callArg = ReadStableRaceSeries();
     value = car->trackHeading.value;
     callArg = (callArg << 11) + 0xC00;
     value = -GetAngleDelta(callArg - value, angle);
@@ -644,7 +644,7 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
     if (mode < 90) {
         if (mode < 2) {
             RaceIntroCameraScript *script = g_RaceIntroCameraScript;
-            s16 n = script->firstKeyIndex[g_RaceSeries];
+            s16 n = script->firstKeyIndex[ReadStableRaceSeries()];
             s32 off = n * sizeof(RaceIntroCameraKey) + sizeof(script->firstKeyIndex);
             RaceIntroCameraKey *p = (RaceIntroCameraKey *)(off + (s32)script);
             RaceIntroCameraKey *q;

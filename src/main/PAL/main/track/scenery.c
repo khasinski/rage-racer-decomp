@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/menu.h"
-#define GAME_RACE_SERIES_QUALIFIER volatile
 #include "game/race.h"
 #include "game/random.h"
 #include "game/render.h"

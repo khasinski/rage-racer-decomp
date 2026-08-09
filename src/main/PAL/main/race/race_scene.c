@@ -95,8 +95,8 @@ s32 UpdateLapAndFinish(PlayerCarRuntime *car, s32 grandPrixMode) {
     }
     if (g_LapCount < route->timing.fields.lap) {
         if (g_RaceTotalTime <
-            g_BestTotalTimes[g_RaceSeries][g_CourseIndex][grandPrixMode]) {
-            g_BestTotalTimes[g_RaceSeries][g_CourseIndex][grandPrixMode] = g_RaceTotalTime;
+            g_BestTotalTimes[ReadStableRaceSeries()][g_CourseIndex][grandPrixMode]) {
+            g_BestTotalTimes[ReadStableRaceSeries()][g_CourseIndex][grandPrixMode] = g_RaceTotalTime;
         }
     }
 
@@ -167,12 +167,12 @@ timing_done:
                 if (g_RaceTotalTime > 0x927BE) {
                     g_RaceTotalTime = 0x927BF;
                 }
-                if (g_BestLapTimes[g_RaceSeries][g_CourseIndex][grandPrixMode] >
+                if (g_BestLapTimes[ReadStableRaceSeries()][g_CourseIndex][grandPrixMode] >
                     g_BestLapThisRace) {
-                    g_BestLapTimes[g_RaceSeries][g_CourseIndex][grandPrixMode] = g_BestLapThisRace;
+                    g_BestLapTimes[ReadStableRaceSeries()][g_CourseIndex][grandPrixMode] = g_BestLapThisRace;
                 }
                 if (grandPrixMode == 0) {
-                    tableOffset = g_CourseIndex * 12 + g_RaceSeries * 48;
+                    tableOffset = g_CourseIndex * 12 + ReadStableRaceSeries() * 48;
                     *(s32 *)((u8 *)g_BestSectorTimes + tableOffset) = g_RefSectorTimes.fields.first;
                     *(s32 *)((u8 *)&g_BestSectorTimes[0][0][1] + tableOffset) =
                         g_RefSectorTime1;
@@ -235,8 +235,8 @@ timing_done:
                (((car->progressB + car->progressA) <= -g_TrackLength) ||
                 ((g_PlayerCar.lap == 0) && (g_WrongWayTimer >= 0x3C)))) {
         g_RacePhase = 5;
-        g_BestLapTimes[g_RaceSeries][g_CourseIndex][0] =
-            g_RankingRecords[g_RaceSeries][g_CourseIndex][0].raceTime;
+        g_BestLapTimes[ReadStableRaceSeries()][g_CourseIndex][0] =
+            g_RankingRecords[ReadStableRaceSeries()][g_CourseIndex][0].raceTime;
         StartCdVolumeFade(8);
         ForceAllEffectVoicesEnabled(0);
         g_RaceFadeTimer = 0;
@@ -303,7 +303,7 @@ void EnterRaceScene(void) {
     BuildStartingGrid();
     trackLength = g_TrackLength;
     mode = (count = g_CourseIndex);
-    scene = g_RaceSeries;
+    scene = ReadStableRaceSeries();
     g_LapTimeMs = 0;
     D_801E4248 = 0;
     g_LapTimeSaturated = 0;
@@ -417,8 +417,8 @@ void UpdateRaceScene(void) {
             if (g_GrandPrixMode == 0 || (s16)mode < 2) {
                 g_RacePhase = 7;
                 if (g_GrandPrixMode == 0) {
-                    g_BestLapTimes[g_RaceSeries][g_CourseIndex][0] =
-                        g_RankingRecords[g_RaceSeries][g_CourseIndex][0].raceTime;
+                    g_BestLapTimes[ReadStableRaceSeries()][g_CourseIndex][0] =
+                        g_RankingRecords[ReadStableRaceSeries()][g_CourseIndex][0].raceTime;
                 }
             } else {
                 value = g_CourseProgress->retriesRemaining;
@@ -521,7 +521,7 @@ void UpdateRaceScene(void) {
         if (g_GrandPrixMode != 0) {
             DrawCars();
         }
-        if ((g_PlayerFacingBackwards != g_RaceSeries) && (g_WrongWayTimer >= 0xA)) {
+        if ((g_PlayerFacingBackwards != ReadStableRaceSeries()) && (g_WrongWayTimer >= 0xA)) {
             DrawWrongWayWarning();
         }
         DrawSkyBackground();
@@ -649,7 +649,7 @@ update_race:
         UpdateEnvironment();
         DrawSkyBackground();
 
-        if ((g_PlayerFacingBackwards != g_RaceSeries) && (g_RacePhase < 4)) {
+        if ((g_PlayerFacingBackwards != ReadStableRaceSeries()) && (g_RacePhase < 4)) {
             s16 counter;
 
             counter = g_WrongWayTimer + 1;

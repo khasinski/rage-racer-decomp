@@ -71,13 +71,13 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->progressB = 0;
   player->trackProgress = 0;
   printf(g_MsgHTbl);
-  player->trackPointIndex = eventData->rivalStarts[g_RaceSeries][0].trackPointIndex;
-  player->x = eventData->rivalStarts[g_RaceSeries][0].x;
-  player->z = eventData->rivalStarts[g_RaceSeries][0].z;
+  player->trackPointIndex = eventData->rivalStarts[ReadStableRaceSeries()][0].trackPointIndex;
+  player->x = eventData->rivalStarts[ReadStableRaceSeries()][0].x;
+  player->z = eventData->rivalStarts[ReadStableRaceSeries()][0].z;
   player->y = 0;
   player->trackPointIndex = FindTrackSegment(car, player->trackPointIndex);
   player->bodyPitch = 0;
-  headingBase = 0xC00 - (g_RaceSeries << 11);
+  headingBase = 0xC00 - (ReadStableRaceSeries() << 11);
   player->bodyYaw = (headingBase - g_TrackPoints[player->trackPointIndex].angle) & 0xFFF;
   player->bodyRoll = 0;
   player->bodyRollVelocity = 0;
@@ -701,7 +701,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   ((CollisionContext *) &rotation)->trackDelta = trackDelta;
   if (collisionRegion < 3)
   {
-    if (car->facingBackwards != g_RaceSeries)
+    if (car->facingBackwards != ReadStableRaceSeries())
     {
       car->drive.drivetrainTorque = 0;
       car->acceleration = 0;
@@ -727,7 +727,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
       vz = (s16)((u16)opponent->worldVelocityZ - (u16)car->drive.brakePos);
       velocityDelta.z = vz / 0x20;
     }
-    if (((car->facingBackwards != g_RaceSeries) && (car->speed >= 0x51)) && (g_WrongWayTimer >= 0xA))
+    if (((car->facingBackwards != ReadStableRaceSeries()) && (car->speed >= 0x51)) && (g_WrongWayTimer >= 0xA))
     {
       SetCarKnockback(opponent, 0, 0, 4);
       SetCarKnockback(car, 0, 0, 4);
@@ -758,7 +758,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
     velocityDelta.z = vz / 0x20;
     velocityDelta.x = velocityDelta.x - (u16)opponent->velocityX;
     velocityDelta.z = velocityDelta.z - (u16)opponent->velocityZ;
-    if (((car->facingBackwards != g_RaceSeries) && (car->speed >= 0x51)) && (g_WrongWayTimer >= 0xA))
+    if (((car->facingBackwards != ReadStableRaceSeries()) && (car->speed >= 0x51)) && (g_WrongWayTimer >= 0xA))
     {
       SetCarKnockback(opponent, 0, 0, 4);
       SetCarKnockback(car, 0, 0, 4);
