@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/car.h"
 #include "game/car_internal.h"
 #include "game/race.h"
@@ -735,6 +736,7 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
     Block16 *end;
     u32 *base;
     GameTrackPoint *track;
+    AssetAddress pointAddress;
     GameTrackPoint *point;
     register s32 index asm("$3");
     s32 lastIndex;
@@ -753,18 +755,21 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
 
     index = car->trackPointIndex;
     track = g_TrackPoints;
-    point = (GameTrackPoint *)((index * 3) << 3);
-    point = (GameTrackPoint *)((u8 *)point + (s32)track);
+    pointAddress.offset = (index * 3) << 3;
+    pointAddress.offset += (s32)track;
+    point = pointAddress.pointer;
     g_CameraCar.x = point->x;
 
     index = car->trackPointIndex;
-    point = (GameTrackPoint *)((index * 3) << 3);
-    point = (GameTrackPoint *)((u8 *)point + (s32)track);
+    pointAddress.offset = (index * 3) << 3;
+    pointAddress.offset += (s32)track;
+    point = pointAddress.pointer;
     g_CameraCar.z = point->z;
 
     index = car->trackPointIndex;
-    point = (GameTrackPoint *)((index * 3) << 3);
-    point = (GameTrackPoint *)((u8 *)point + (s32)track);
+    pointAddress.offset = (index * 3) << 3;
+    pointAddress.offset += (s32)track;
+    point = pointAddress.pointer;
     index = g_CameraCar.speed;
     word0 = point->y;
     index += 0x40;
@@ -775,8 +780,9 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
     index = car->facingBackwards;
     lastIndex = car->trackPointIndex;
     index <<= 11;
-    point = (GameTrackPoint *)((lastIndex * 3) << 3);
-    point = (GameTrackPoint *)((u8 *)point + (s32)track);
+    pointAddress.offset = (lastIndex * 3) << 3;
+    pointAddress.offset += (s32)track;
+    point = pointAddress.pointer;
     index += 0xC00;
     index -= point->angle;
     g_CameraCar.headingAngle = index;
