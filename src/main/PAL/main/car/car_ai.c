@@ -86,7 +86,7 @@ s32 GetCarCrestTrigger(GameCarRuntime *car) {
     register s32 i asm("a2");
     s32 offset;
     s32 sentinel;
-    s32 cursor;
+    u8 *cursor;
     s32 diff;
     s32 cmp;
     s32 threshold;
@@ -131,7 +131,7 @@ not_crossed:
     i = 0;
     sentinel = -1;
     offset = row * 64;
-    cursor = (s32)(base + offset);
+    cursor = base + offset;
 
 for (;;) {
     if (!(((TrackCrestEvent *)(cursor + 4))->motionValue == sentinel)) {
@@ -147,7 +147,7 @@ for (;;) {
     }
     i++;
     if (i < 8) {
-        cursor = (s32)(base + offset);
+        cursor = base + offset;
         continue;
     }
 
