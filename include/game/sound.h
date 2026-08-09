@@ -142,6 +142,14 @@ typedef union SoundModeEntryAddress {
 
 extern SoundModeEntry g_SoundModes[];
 
+static __inline__ SoundModeEntry *GetSoundModeAtByteOffset(s32 byteOffset) {
+    SoundModeEntryAddress address;
+
+    address.pointer = g_SoundModes;
+    address.byteOffset += byteOffset;
+    return address.pointer;
+}
+
 /*
  * Pre-race BGM picker (scene 0xA, left/right on the pad). Per-file types.
  *   g_BgmSelection    g_BgmSelection  0 = shuffle, else track + 1; saved

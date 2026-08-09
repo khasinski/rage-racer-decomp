@@ -224,12 +224,6 @@ indexed_effect_done:
  * keeps i * 0x18 in a register rather than indexing. */
 #define CHANNEL(byteOffset) (*(MusicChannel *)((u8 *)g_MusicChannels + (byteOffset)))
 
-/* Byte-offset view of the sound-mode table: the retail code keeps
- * (mode * 3) << 3 in a register rather than indexing, so the scaled offset is
- * passed in. The comparison sites below index normally and were previously
- * spelled as word offsets off a s32 * -- D_800126D0 + 14 is entry 2, slot 0. */
-#define MODE(byteOffset) (*(SoundModeEntry *)((u8 *)g_SoundModes + (byteOffset)))
-
 void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
     s32 offset;
     s32 count;
@@ -322,7 +316,7 @@ after_match:
             s32 inactiveValue;
             s32 activeValue;
 
-            resetLoad = MODE((cue * 3) << 3).count;
+            resetLoad = GetSoundModeAtByteOffset((cue * 3) << 3)->count;
             i = 0;
             if (resetLoad <= i) {
                 return;
@@ -345,9 +339,9 @@ after_match:
     }
 
     currentA = g_MusicChannels[0].left.value;
-    if (currentA == MODE((cue * 3) << 3).slots[0].left) {
+    if (currentA == GetSoundModeAtByteOffset((cue * 3) << 3)->slots[0].left) {
         currentB = g_MusicChannels[1].left.value;
-        if (currentB == MODE((cue * 3) << 3).slots[1].left) {
+        if (currentB == GetSoundModeAtByteOffset((cue * 3) << 3)->slots[1].left) {
             g_MusicChannels[0].mode = 2;
         } else {
             g_MusicChannels[0].mode = 0;
@@ -358,7 +352,7 @@ after_match:
 
     i = 0;
     loopTableOffset = (cue * 3) << 3;
-    cue = MODE(loopTableOffset).count;
+    cue = GetSoundModeAtByteOffset(loopTableOffset)->count;
     if (cue <= i) {
         return;
     }
@@ -386,7 +380,7 @@ after_match:
         CHANNEL(cue).left.value = entry->slots[0].left;
         CHANNEL(cue).right.value = entry->slots[0].right;
         if (flag != 0) {
-            currentB = MODE(entryOffset).factor;
+            currentB = GetSoundModeAtByteOffset(entryOffset)->factor;
             scaledLeft = left * currentB;
             if (scaledLeft < 0) {
                 scaledLeft += 0x7F;
@@ -404,7 +398,7 @@ after_match:
             *(volatile s32 *)&CHANNEL(cue).volRight = scaledRight;
             i++;
         } else {
-            if ((scaledLeft = average * MODE(entryOffset).factor) < 0) {
+            if ((scaledLeft = average * GetSoundModeAtByteOffset(entryOffset)->factor) < 0) {
                 currentB = scaledLeft + 0x7F;
             } else {
                 currentB = scaledLeft;
