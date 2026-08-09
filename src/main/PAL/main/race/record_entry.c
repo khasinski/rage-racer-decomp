@@ -389,8 +389,8 @@ void UpdateRecordEntry(void) {
 
     case 1: {
         u8 *timeName;
-        u8 *timeRecordBase;
-        u8 *record;
+        RaceRecordAddress timeRecordBase;
+        RaceRecordAddress recordAddress;
         s32 previous;
         u16 buttons;
 
@@ -415,16 +415,17 @@ void UpdateRecordEntry(void) {
                 g_RecordEntryState = 2;
                 i = 0;
                 if (g_TimeRecordInsertRow < 5) {
-                    timeRecordBase = (u8 *)g_TimeRecords;
+                    timeRecordBase.pointer = &g_TimeRecords[0][0][0];
                     timeName = g_TimeRecordNameCodes;
                     do {
                         *timeName = g_RankingNameCodes[i];
-                        record = (u8 *)((((g_CourseIndex * 5) + g_TimeRecordInsertRow) *
-                                         0x10) +
-                                        (g_GrandPrixSeries * 0x140) +
-                                        (s32)timeRecordBase + i);
+                        recordAddress.byteOffset =
+                            (((g_CourseIndex * 5) + g_TimeRecordInsertRow) * 0x10) +
+                            (g_GrandPrixSeries * 0x140);
+                        recordAddress.byteOffset += timeRecordBase.byteOffset;
+                        recordAddress.byteOffset += i;
                         i++;
-                        *record = g_NameEntryCharset[*timeName];
+                        *recordAddress.bytePointer = g_NameEntryCharset[*timeName];
                         timeName++;
                     } while (i < 6);
                 }
