@@ -106,7 +106,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         colour -= 0x41;
         DrawSolidRect(ot + 4, (s16)(((cursorIndex % 11) * 0xC) + 0x54),
                      (s16)(rowY + ((cursorIndex / 11) * 0x18)), 0xB,
-                     (s32)(s16)(animationStep * 2), 0, colour & 0xFF, 0, 0xFF);
+                     (s16)(animationStep * 2), 0, colour & 0xFF, 0, 0xFF);
         g_TeamNameCursorPhase += 0x60;
     }
     animationStep = g_TeamNameEntrySlide - 0x11;
@@ -118,21 +118,21 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         if (cursorIndex < 0xA) {
             DrawSprite(ot, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
                            (s16)(gridY + ((cursorIndex / 11) * 0x18)), 8,
-                           (s32)(s16)(animationStep * 2), (s32)(s16)((cursorIndex % 32) * 8),
-                           (s32)(s16)((cursorIndex / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1, 0x5B);
+                           (s16)(animationStep * 2), (s16)((cursorIndex % 32) * 8),
+                           (s16)((cursorIndex / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1, 0x5B);
         } else if (cursorIndex >= 0xB) {
             DrawSprite(ot, (s16)(((cursorIndex % 11) * 0xC) + 0x56),
                            (s16)(gridY + ((cursorIndex / 11) * 0x18)), 8,
-                           (s32)(s16)(animationStep * 2),
-                           (s32)(s16)(((cursorIndex - 1) % 32) * 8),
-                           (s32)(s16)(((cursorIndex - 1) / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1,
+                           (s16)(animationStep * 2),
+                           (s16)(((cursorIndex - 1) % 32) * 8),
+                           (s16)(((cursorIndex - 1) / 32) * 16 + 0x18), 0, 0, 0, 0x244, 1, 1,
                            0x5B);
         }
         rowI = 0;
         do {
             rowX = (rowI * 0xC) + 0x56;
             DrawSprite(ot + 4, (rowX << 16) >> 16, gridY, 8,
-                           (s32)(s16)(animationStep * 2), (s32)(s16)(rowI * 8), 0x18, 0, 0, 0,
+                           (s16)(animationStep * 2), (s16)(rowI * 8), 0x18, 0, 0, 0,
                            0x244, 1, 1, 0x3B);
             rowI += 1;
         } while (rowI < 0xA);
@@ -140,7 +140,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         do {
             rowX = (i * 0xC) + 0x56;
             DrawSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x18), 8,
-                           (s32)(s16)(animationStep * 2), (s32)(s16)((i * 8) + 0x50), 0x18, 0,
+                           (s16)(animationStep * 2), (s16)((i * 8) + 0x50), 0x18, 0,
                            0, 0, 0x244, 1, 1, 0x3B);
             i += 1;
         } while (i < 0xB);
@@ -148,7 +148,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         do {
             rowX = (i * 0xC) + 0x56;
             DrawSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x30), 8,
-                           (s32)(s16)(animationStep * 2), (s32)(s16)((i * 8) + 0xA8), 0x18, 0,
+                           (s16)(animationStep * 2), (s16)((i * 8) + 0xA8), 0x18, 0,
                            0, 0, 0x244, 1, 1, 0x3B);
             i += 1;
         } while (i < 0xB);
@@ -156,7 +156,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         do {
             rowX = (i * 0xC) + 0x56;
             DrawSprite(ot + 4, (rowX << 16) >> 16, (s16)(gridY + 0x48), 8,
-                           (s32)(s16)(animationStep * 2), (s32)(s16)(i * 8), 0x28, 0, 0, 0,
+                           (s16)(animationStep * 2), (s16)(i * 8), 0x28, 0, 0, 0,
                            0x244, 1, 1, 0x3B);
             i += 1;
         } while (i < 0xB);
@@ -188,16 +188,16 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
                 if (ch < 0xAU) {
                     xFirst = (i * 0xC) + 0x56;
                     DrawSprite(ot, (xFirst << 16) >> 16, nameY, 8,
-                                   (s32)(s16)(animationStep * 2),
-                                   (s32)(s16)((g_TeamNameChars[i] & 0x1F) * 8),
-                                   (s32)(s16)((g_TeamNameChars[i] >> 5) * 16 + 0x18), 0, 0, 0,
+                                   (s16)(animationStep * 2),
+                                   (s16)((g_TeamNameChars[i] & 0x1F) * 8),
+                                   (s16)((g_TeamNameChars[i] >> 5) * 16 + 0x18), 0, 0, 0,
                                    0x244, 1, 1, 0x3B);
                 } else if (ch >= 0xBU) {
                     xSecond = (i * 0xC) + 0x56;
                     DrawSprite(ot, (xSecond << 16) >> 16, nameY, 8,
-                                   (s32)(s16)(animationStep * 2),
-                                   (s32)(s16)(((g_TeamNameChars[i] - 1) % 32) * 8),
-                                   (s32)(s16)(((g_TeamNameChars[i] - 1) / 32) * 16 + 0x18), 0, 0, 0,
+                                   (s16)(animationStep * 2),
+                                   (s16)(((g_TeamNameChars[i] - 1) % 32) * 8),
+                                   (s16)(((g_TeamNameChars[i] - 1) / 32) * 16 + 0x18), 0, 0, 0,
                                    0x244, 1, 1, 0x3B);
                 }
                 i += 1;
