@@ -725,7 +725,7 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
     Block16 *src;
     Block16 *dst;
     Block16 *end;
-    u32 *base;
+    GameCarRuntimeAddress sourceAddress;
     GameTrackPoint *track;
     TrackPointTableAddress pointAddress;
     TrackPointTableAddress trackAddress;
@@ -734,10 +734,10 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
     register s32 index asm("$3");
     s32 lastIndex;
 
-    base = (u32 *)car;
+    sourceAddress.runtime = car;
     destinationAddress.runtime = &g_CameraCar;
     dst = destinationAddress.blocks;
-    src = (Block16 *)base;
+    src = sourceAddress.blocks;
     end = src + sizeof(GameCarRuntime) / sizeof(*src);
     do {
         *dst = *src;
