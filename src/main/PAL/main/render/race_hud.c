@@ -200,7 +200,7 @@ void DrawSplitDelta(s32 delta, s32 y) {
     value += 0x50;
     prim = base + temp;
 
-    *(base + 0x237B8) = value;
+    ((SPRT *)(base + 0x237AC))->u0 = value;
     AddPrim(g_DrawBuffer + 0xCC, base + firstOffset);
     firstOffset = (s32)prim;
 
