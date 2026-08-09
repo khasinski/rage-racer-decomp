@@ -9,6 +9,7 @@ void UpdateMenuMode(void) {
     u32 *scratch;
     s32 c0;
     s32 c1;
+    u32 screenRange;
 
     c0 = g_AnimTimer;
     c1 = g_SceneTimer;
@@ -22,7 +23,8 @@ void UpdateMenuMode(void) {
     }
     DrawSolidRect(scratch, 0, 0, 0x140, 2, 0, 0, 0, 0xFF);
 
-    if ((u32)(g_MenuScreen - 1) < 2) {
+    screenRange = g_MenuScreen - 1;
+    if (screenRange < 2) {
         SCRATCH_OT_SHIFT = 1;
     } else {
         SCRATCH_OT_SHIFT = 5;
