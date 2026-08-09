@@ -368,11 +368,7 @@ void GameDrawProportionalTextShaded(
     }
     SetDrawMode((DrawPacket *)packet, 0, 1, 0x29, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, packet);
-    SCRATCH_PRIM_CURSOR_AS(u8) = ({
-        u8 *next = packet + 12;
-
-        next;
-    });
+    SCRATCH_PRIM_CURSOR_AS(u8) = packet + 12;
 #undef OPAQUE_VALUE
 }
 

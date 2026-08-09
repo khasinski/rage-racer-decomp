@@ -19,6 +19,7 @@ void f(u8 *base, void *ptr) {
     value += (s32)ptr;
     value += FIELD32(base, 4);
     asm volatile("");
+    value += ({ s32 temporary = 2; temporary; });
     asm(".globl func_80001234\nfunc_80001234 = f + 4");
     value += object->field_20 + object->unk14;
 }
@@ -33,6 +34,7 @@ void f(u8 *base, void *ptr) {
         self.assertEqual(counts["field_macros"], 1)
         self.assertEqual(counts["register_pins"], 2)
         self.assertEqual(counts["empty_barriers"], 1)
+        self.assertEqual(counts["statement_expressions"], 1)
         self.assertEqual(counts["asm_aliases"], 1)
         self.assertEqual(counts["unknown_fields"], 2)
         self.assertEqual(counts["externs_in_c"], 1)

@@ -28,6 +28,7 @@ PATTERNS = {
     "empty_barriers": re.compile(
         r"\b(?:__asm__|asm)\s*(?:volatile\s*)?\(\s*\"\""
     ),
+    "statement_expressions": re.compile(r"\(\s*\{"),
     "asm_aliases": re.compile(r"\.globl\s+func_[0-9A-Fa-f]+"),
     "unknown_fields": re.compile(r"\b(?:field_[0-9A-Fa-f]+|unk[0-9A-Fa-f]+)\b"),
     "externs_in_c": re.compile(r"^\s*extern\b", re.MULTILINE),
