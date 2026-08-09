@@ -89,9 +89,19 @@ typedef struct TrackAmbienceZone {
     u16 flags;
 } TrackAmbienceZone;
 
+typedef struct TrackRacingLineHint {
+    s16 start;
+    s16 end;
+    s16 minHeight;
+    s16 maxHeight;
+    u16 heightAdjustment;
+    u16 reserved;
+} TrackRacingLineHint;
+
 typedef struct TrackEventData {
     s32 trackWalkStart;
-    u8 reserved004[0x350];
+    u8 reserved004[0x80];
+    TrackRacingLineHint racingLineHints[2][30];
     TrackRivalStart rivalStarts[2][12];
     TrackAiSpeedKey aiSpeedKeys[2][48];
     TrackRivalAiConfig rivalAiConfigs[2][12];

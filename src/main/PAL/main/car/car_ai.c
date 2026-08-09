@@ -318,10 +318,8 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
     s32 target;
     GameCarAiBlock *state;
     s32 index;
-    s32 advanceOffset;
     s32 scene;
-    register s32 offset asm("$3");
-    s16 *entry;
+    TrackRacingLineHint *entry;
     s32 value;
     s32 valueRaw;
     register s32 raw asm("$2");
@@ -332,15 +330,7 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
     scene = g_RaceSeries;
     target = raw >> 4;
     index = objReg->routeIndex;
-    raw = scene * 3;
-    offset = (raw << 4) - raw;
-    offset <<= 3;
-    raw = (s32)g_TrackEventData;
-    offset += 0x84;
-    entry = (s16 *)(offset + raw);
-    raw = index * 3;
-    raw <<= 2;
-    entry = (s16 *)((u8 *)entry + raw);
+    entry = &g_TrackEventData->racingLineHints[scene][index];
 
     if (target < 0x20) {
         state = (GameCarAiBlock *)&objReg->field_BC;
@@ -350,20 +340,20 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
         state = (GameCarAiBlock *)&objReg->field_BC;
     }
 
-    if (target < entry[0]) {
+    if (target < entry->start) {
     } else {
-    if (entry[1] < target) {
+    if (entry->end < target) {
         goto advance;
     }
     if (carIndex < 4 && objReg->field_10C == 0) {
         valueRaw = objReg->field_11C;
-        if (entry[2] < valueRaw) {
+        if (entry->minHeight < valueRaw) {
             value = valueRaw;
             asm volatile("" : "=r"(valueRaw) : "0"(valueRaw));
-            raw = entry[3];
+            raw = entry->maxHeight;
             raw = valueRaw < raw;
             if (raw != 0) {
-                raw = value + *(u16 *)(entry + 4);
+                raw = value + entry->heightAdjustment;
                 objReg->field_11C = raw;
             }
         }
@@ -371,7 +361,7 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
     return;
 
     }
-    if (!(entry[1] < target)) {
+    if (!(entry->end < target)) {
 
     } else {
 advance:
@@ -379,17 +369,9 @@ advance:
         raw = state->routeIndex;
         scene = g_RaceSeries;
         raw++;
-        advanceOffset = raw * 3;
-        advanceOffset <<= 2;
         state->routeIndex = raw;
     }
-    raw = scene * 3;
-    offset = (raw << 4) - raw;
-    offset <<= 3;
-    raw = (s32)g_TrackEventData;
-    advanceOffset += offset;
-    raw += advanceOffset;
-    if (*(s16 *)(raw + 0x84) == -1) {
+    if (g_TrackEventData->racingLineHints[scene][raw].start == -1) {
         state->routeIndex = 0;
     }
     state->field_10E = 0;
