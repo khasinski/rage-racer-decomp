@@ -500,6 +500,8 @@ void UpdateBasicEffectVoices(void) {
     s32 voice;
     s32 left;
     s32 right;
+    MusicChannelAddress leftToneAddress;
+    MusicChannelAddress rightToneAddress;
 
     i = 0;
     neg = -1;
@@ -509,9 +511,13 @@ void UpdateBasicEffectVoices(void) {
     do {
         switch (*state) {
         case 0:
+            leftToneAddress.halfwordPointer = &g_MusicChannels[0].left.half[0];
+            leftToneAddress.byteOffset += offset;
+            rightToneAddress.halfwordPointer = &g_MusicChannels[0].right.half[0];
+            rightToneAddress.byteOffset += offset;
             SsUtKeyOnV(voicePacked >> 16, g_VabIds[0],
-                          *(s16 *)((u8 *)&g_MusicChannels[0].left + offset),
-                          *(s16 *)((u8 *)&g_MusicChannels[0].right + offset), 0x3C, 0, 0, 0);
+                          *leftToneAddress.halfwordPointer,
+                          *rightToneAddress.halfwordPointer, 0x3C, 0, 0, 0);
             START_BASIC_EFFECT_VOLUME();
             break;
         case 2:

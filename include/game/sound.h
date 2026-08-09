@@ -40,6 +40,13 @@ typedef struct MusicChannel {
     s32 volRight;  /* +0x14 scaled right volume      (g_MusicChannelVolRight) */
 } MusicChannel; /* sizeof 0x18 */
 
+typedef union MusicChannelAddress {
+    s32 byteOffset;
+    s16 *halfwordPointer;
+    s32 *wordPointer;
+    MusicChannel *pointer;
+} MusicChannelAddress;
+
 typedef struct AudioSlotChannelView {
     u8 reserved[0x64];
     MusicChannel channel;
