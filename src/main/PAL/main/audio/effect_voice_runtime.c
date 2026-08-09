@@ -517,9 +517,9 @@ void UpdateBasicEffectVoices(void) {
             *state = neg;
             break;
         }
-        state = (s32 *)((u8 *)state + 0x18);
+        state += sizeof(MusicChannel) / sizeof(*state);
         voicePacked += 0x10000;
         i++;
-        offset += 0x18;
+        offset += sizeof(MusicChannel);
     } while (i < 2);
 }
