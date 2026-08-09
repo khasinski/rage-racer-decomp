@@ -10,21 +10,21 @@
 #include "game/save_internal.h"
 
 void UpdateBgmTrackCount(void) {
-    s32 offset;
+    s32 index;
     s32 current;
     s32 one;
     s32 value;
 
     g_ClassWinCount = 0;
     one = 1;
-    offset = 0;
+    index = 0;
     do {
-        current = *(s16 *)((u8 *)g_ClassRecords + offset);
-        offset += 4;
+        current = g_ClassRecords[index].place;
+        index++;
         if (current == one) {
             g_ClassWinCount = g_ClassWinCount + 1;
         }
-    } while (offset < 0x2C);
+    } while (index < 11);
 
     value = g_ClassWinCount;
     value = value < 5;
