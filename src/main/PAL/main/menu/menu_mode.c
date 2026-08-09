@@ -340,7 +340,7 @@ void InitMenuMode(void) {
     } else {
         g_GrandPrixSeries = *(u16 *)&g_RaceProgress->money;
     }
-    g_CourseIndex = ((s32)g_GrandPrixSeries << 2) | g_CourseIndex;
+    g_CourseIndex = (g_GrandPrixSeries << 2) | g_CourseIndex;
     InitMenuLighting();
 
     scratch = &SCRATCH_PRIM_CURSOR_WORD;

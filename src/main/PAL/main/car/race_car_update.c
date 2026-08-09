@@ -679,11 +679,11 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
 
         if (g_RaceIntroCameraCursor->mode == 0) {
             spad[2] = ((s32 *)g_RaceIntroCameraCursor)[0]
-                      + ((s32) g_RaceIntroCameraDelta.vx * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
+                      + (g_RaceIntroCameraDelta.vx * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
             spad[3] = ((s32 *)g_RaceIntroCameraCursor)[1]
-                      + ((s32) g_RaceIntroCameraDelta.vy * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
+                      + (g_RaceIntroCameraDelta.vy * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
             spad[4] = ((s32 *)g_RaceIntroCameraCursor)[2]
-                      + ((s32) g_RaceIntroCameraDelta.vz * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
+                      + (g_RaceIntroCameraDelta.vz * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
 
             delta[0] = rsin(obj->f24) / 128 + obj->x - spad[2];
             delta[1] = obj->y - s0v - spad[3];

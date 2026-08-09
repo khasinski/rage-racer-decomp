@@ -363,7 +363,7 @@ void UpdateCarSelectScreen(void) {
                             s32 prev;
 
                             PlaySoundCue(8);
-                            g_PlayerCarIndex = (s32)g_PrevOwnedCarIndex;
+                            g_PlayerCarIndex = g_PrevOwnedCarIndex;
                             RequestCarModel(g_PrevOwnedCarIndex);
                             prev = g_MenuViewAngleTarget;
                             g_CarSwapFromIndex = sel;
@@ -384,7 +384,7 @@ void UpdateCarSelectScreen(void) {
                             s32 prev;
 
                             PlaySoundCue(8);
-                            g_PlayerCarIndex = (s32)g_NextOwnedCarIndex;
+                            g_PlayerCarIndex = g_NextOwnedCarIndex;
                             RequestCarModel(g_NextOwnedCarIndex);
                             base = 0x927C0;
                             prev = g_MenuViewAngleTarget;
