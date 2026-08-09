@@ -87,6 +87,7 @@ BiosExit = g_BiosCallStubs;
 ChangeClearRCnt = ChangeClearRCntStub;
 ChangeClearInterruptMask = ChangeClearInterruptMaskStub;
 SysEnqIntRP = SysEnqIntRPStub;
+ExitCriticalSection = ExitCriticalSectionStub;
 
 /* Branch targets inside a function, reached from a sibling function that
    is still hand-written assembly. */
