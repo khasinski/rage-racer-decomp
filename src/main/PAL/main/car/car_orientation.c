@@ -124,7 +124,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->drive.groundedFrames = 0;
   player->drive.launchEnergy = 0;
   player->drive.standingStartBounceY = 0;
-  player->drive.unk6C = 0;
+  player->drive.standingStartBounceX = 0;
   player->drive.gear = 1;
   player->drive.engineRpm = 0;
   player->drive.reserved80 = 0;

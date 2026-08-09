@@ -198,7 +198,6 @@ void SlowRivalAhead(GameCarRuntime *car, s32 carIndex) {
  */
 void RankContenders(void) {
     s32 i;
-    s32 offset;
     s32 maxValue;
     s32 minValue;
     s32 value;
@@ -208,10 +207,8 @@ void RankContenders(void) {
 
     i = 0;
     sumPtr = sums;
-    offset = 0;
     do {
         *sumPtr = g_Cars[i].progressA + g_Cars[i].progressB;
-        offset += sizeof(GameCarRuntime);
         i++;
         sumPtr++;
     } while (i < 4);
