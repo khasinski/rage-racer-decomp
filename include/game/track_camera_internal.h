@@ -32,6 +32,11 @@ typedef struct GameTrackCameraNode {
     TrackCameraSection trackSection;
 } GameTrackCameraNode;
 
+typedef union GameTrackCameraNodeAddress {
+    u32 value;
+    GameTrackCameraNode *pointer;
+} GameTrackCameraNodeAddress;
+
 typedef struct TrackCameraTable {
     s32 seriesOffset[2];
     s32 defaultOffset;

@@ -34,7 +34,6 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     s32 previousMode;
     s32 rawAngle;
     s32 adjustedY;
-    u32 case4Base;
     s32 turnLimit;
     s32 turnAccel;
     s32 turnFactor;
@@ -43,6 +42,7 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     s32 *modeAngle;
     s32 *scratch;
     s32 cameraMode;
+    GameTrackCameraNodeAddress case4Base;
     s32 chaseTargetYaw;
     s32 yawError;
     s32 pathBlend;
@@ -52,7 +52,6 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     s32 toCarX;
     s32 pathYaw;
     s32 pathPitch;
-    s32 introNodeOffset;
     s32 squaredX;
     s32 squaredZ;
     s32 orbitNodeOffset;
@@ -70,6 +69,7 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     s32 chaseYawDamping;
     s32 chaseYawStepLimit;
     s32 cameraNodeIndex;
+    s32 introNodeOffset;
     s32 yawStepAhead;
     s32 yawStepWrapped;
     s32 yawStepBehind;
@@ -100,7 +100,7 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     GameTrackCameraNode *chaseNode;
     GameTrackCameraNode *chaseNodeOffsets;
     GameTrackCameraNode *prevNode;
-    u32 introNode;
+    GameTrackCameraNodeAddress introNode;
 
     cameraNodeIndex = FindNearestTrackCamera(car);
     scratch = &SCRATCH_PRIM_CURSOR_WORD;
@@ -519,10 +519,10 @@ block_52:
         g_CameraModePrev = 3;
         break;
     case 4:
-        case4Base = (u32)g_TrackCameras;
-        introNodeOffset = cameraNodeIndex * 0x24;
-        introNode = introNodeOffset + case4Base;
-        *(Block16 *)&scratch[2] = *(Block16 *)introNode;
+        case4Base.pointer = g_TrackCameras;
+        introNodeOffset = cameraNodeIndex * sizeof(GameTrackCameraNode);
+        introNode.value = introNodeOffset + case4Base.value;
+        *(Block16 *)&scratch[2] = *(Block16 *)introNode.pointer;
         if (((u8)nodeChanged) || (g_CameraModePrev != 4)) {
             g_CamPathFrame = 0;
         } else if (g_CamPathFrame < g_TrackCameras[cameraNodeIndex].duration) {
