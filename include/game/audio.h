@@ -14,6 +14,11 @@ typedef struct EffectCueBank {
     EffectCueProgram programs[2];
 } EffectCueBank;
 
+typedef union EffectCueBankAddress {
+    s32 byteOffset;
+    const EffectCueBank *pointer;
+} EffectCueBankAddress;
+
 typedef struct VabSlotVoice {
     s16 tone;
     s16 reserved;

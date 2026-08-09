@@ -78,12 +78,22 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                 loopCount = count;
                 tableBase = g_EffectCueTable;
                 loopTblOff = tblOff;
-                cueCursor = (const EffectCueBank *)((const u8 *)tableBase + loopTblOff);
+                {
+                    EffectCueBankAddress cueAddress;
+
+                    cueAddress.pointer = tableBase;
+                    cueAddress.byteOffset += loopTblOff;
+                    cueCursor = cueAddress.pointer;
+                }
                 do {
+                    EffectCueBankAddress scaleAddress;
+
                     if (i != 0) {
                         g_EffectVoices[i].state = *stateBase;
                     }
-                    scaleValue = *(s32 *)((u8 *)&g_EffectCueTable[0].volumeScale + loopTblOff);
+                    scaleAddress.pointer = g_EffectCueTable;
+                    scaleAddress.byteOffset += loopTblOff;
+                    scaleValue = scaleAddress.pointer->volumeScale;
                     scaled = volume * scaleValue;
                     cueValue = cueCursor->programs[0].note;
                     g_EffectVoices[i].note = cueValue;
@@ -156,12 +166,22 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                 loopCount = count;
                 tableBase = g_EffectCueTable;
                 loopTblOff = tblOff;
-                cueCursor = (const EffectCueBank *)((const u8 *)tableBase + loopTblOff);
+                {
+                    EffectCueBankAddress cueAddress;
+
+                    cueAddress.pointer = tableBase;
+                    cueAddress.byteOffset += loopTblOff;
+                    cueCursor = cueAddress.pointer;
+                }
                 do {
+                    EffectCueBankAddress scaleAddress;
+
                     if (i != 0) {
                         g_EffectVoices[i + 2].state = *stateBase;
                     }
-                    scaleValue = *(s32 *)((u8 *)&g_EffectCueTable[0].volumeScale + loopTblOff);
+                    scaleAddress.pointer = g_EffectCueTable;
+                    scaleAddress.byteOffset += loopTblOff;
+                    scaleValue = scaleAddress.pointer->volumeScale;
                     scaled = volume * scaleValue;
                     cueValue = cueCursor->programs[0].note;
                     g_EffectVoices[i + 2].note = cueValue;
