@@ -249,27 +249,27 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
 
     {
         s32 *value = &g_CarSpecBars[0];
-        if ((*value < ((CarModelAsset *)g_CarModelAsset)->performanceRatings[0]) && (*value < 0x60)) {
+        if ((*value < g_CarModelAsset->performanceRatings[0]) && (*value < 0x60)) {
             (*value)++;
-        } else if ((((CarModelAsset *)g_CarModelAsset)->performanceRatings[0] < *value) && (*value > 0)) {
+        } else if ((g_CarModelAsset->performanceRatings[0] < *value) && (*value > 0)) {
             (*value)--;
         }
     }
 
     {
         s32 *value = &g_CarSpecBars[1];
-        if ((*value < ((CarModelAsset *)g_CarModelAsset)->performanceRatings[1]) && (*value < 0x60)) {
+        if ((*value < g_CarModelAsset->performanceRatings[1]) && (*value < 0x60)) {
             (*value)++;
-        } else if ((((CarModelAsset *)g_CarModelAsset)->performanceRatings[1] < *value) && (*value > 0)) {
+        } else if ((g_CarModelAsset->performanceRatings[1] < *value) && (*value > 0)) {
             (*value)--;
         }
     }
 
     {
         s32 *value = &g_CarSpecBars[2];
-        if ((*value < ((CarModelAsset *)g_CarModelAsset)->performanceRatings[2]) && (*value < 0x60)) {
+        if ((*value < g_CarModelAsset->performanceRatings[2]) && (*value < 0x60)) {
             (*value)++;
-        } else if ((((CarModelAsset *)g_CarModelAsset)->performanceRatings[2] < *value) && (*value > 0)) {
+        } else if ((g_CarModelAsset->performanceRatings[2] < *value) && (*value > 0)) {
             (*value)--;
         }
     }

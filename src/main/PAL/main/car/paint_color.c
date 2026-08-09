@@ -162,7 +162,7 @@ void ApplyBodyColor1(u32 colour, void *imageData) {
 
 
 void SetBodyColor1(u32 colour) {
-    ApplyBodyColor1(colour, ((CarModelAsset *)g_CarModelAsset)->imageData.pointer);
+    ApplyBodyColor1(colour, g_CarModelAsset->imageData.pointer);
     UploadCarImage(g_CarModelSlot);
 }
 
@@ -217,6 +217,6 @@ void ApplyBodyColor2(u32 colour, void *imageData) {
 
 
 void SetBodyColor2(u32 colour) {
-    ApplyBodyColor2(colour, ((CarModelAsset *)g_CarModelAsset)->imageData.pointer);
+    ApplyBodyColor2(colour, g_CarModelAsset->imageData.pointer);
     UploadCarImage(g_CarModelSlot);
 }

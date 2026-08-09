@@ -4,7 +4,6 @@
 #include "common.h"
 #include "game/menu_types.h"
 
-extern void *g_CarModelAsset;
 extern TeamLogoSample *g_TeamLogoSampleData;
 extern u8 g_TextNowLoading[];
 

@@ -191,9 +191,9 @@ void RelocateCarModel(void) {
     }
 
     SetCarModelSlot(g_AssetBase, 0);
-    temp = (s32)((CarModelAsset *)g_CarModelAsset)->modelData.pointer;
+    temp = (s32)g_CarModelAsset->modelData.pointer;
     UnrelocateModelBank((ModelBankHeader *)(g_AssetBase + 0x28), temp);
     SelectCarModelSlot(0);
-    ((CarModelAsset *)g_CarModelAsset)->modelData.pointer = g_AssetBase + 0x28;
+    g_CarModelAsset->modelData.pointer = g_AssetBase + 0x28;
     RegisterModelBank((ModelBankHeader *)(g_AssetBase + 0x28), 0);
 }

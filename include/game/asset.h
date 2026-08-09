@@ -98,6 +98,8 @@ typedef struct CarModelAsset {
     AssetAddress imageData;
 } CarModelAsset;
 
+extern CarModelAsset *g_CarModelAsset;
+
 /* One VRAM upload record inside an image asset; UploadImageAsset walks a chain of
  * them and UploadImageBlock uploads each. */
 typedef struct GameImageBlock {

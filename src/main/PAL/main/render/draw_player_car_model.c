@@ -132,8 +132,8 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
         SetLightMatrix(&m_90);
     }
 
-    obj->y += ((CarModelAsset *)g_CarModelAsset)->horizon;
-    obj->field_60 += ((CarModelAsset *)g_CarModelAsset)->horizon;
+    obj->y += g_CarModelAsset->horizon;
+    obj->field_60 += g_CarModelAsset->horizon;
     if (clipHandle != 0) {
         RestoreColorMatrix();
     }

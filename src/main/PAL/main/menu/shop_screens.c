@@ -90,7 +90,7 @@ void UpdateCarShopScreen(void) {
                     }
                 }
             }
-            if (((CarModelAsset *)g_CarModelAsset)->transmissionAvailable == 0) {
+            if (g_CarModelAsset->transmissionAvailable == 0) {
                 g_MenuAltPanelStep = 1;
             } else {
                 g_MenuAltPanelStep = -1;
