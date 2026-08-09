@@ -405,6 +405,7 @@ void UpdateRaceScene(void) {
     s16 selection;
     s32 next;
     u16 mode;
+    u32 pausePhase;
 
     value = g_SceneTimer + 1;
     g_SceneTimer = value;
@@ -420,7 +421,8 @@ void UpdateRaceScene(void) {
     }
 
     mode = g_RacePhase;
-    if ((u32)(mode - 1) < 2 && (g_PadPressed & PAD_START) && g_PauseDebounce <= 0) {
+    pausePhase = mode - 1;
+    if (pausePhase < 2 && (g_PadPressed & PAD_START) && g_PauseDebounce <= 0) {
         g_PauseDebounce = 5;
         value = (u32)g_RacePaused < 1;
         g_RacePaused = value;
