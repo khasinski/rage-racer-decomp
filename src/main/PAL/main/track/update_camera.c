@@ -139,7 +139,7 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
         scratch[2] += sp38[0] >> 4;
         scratch[3] += sp38[1] >> 4;
         scratch[4] += sp38[2] >> 4;
-        scratch[6] += (s16)car->field_8C;
+        scratch[6] += car->field_8C;
         g_CameraModePrev = 0;
         break;
     case 1:

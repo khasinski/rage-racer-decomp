@@ -28,7 +28,7 @@ void UpdateFinishCamera(GameRenderObject *obj) {
     s32 zValue;
 
     offset = g_CameraCarTrackPoint;
-    if (*(s16 *)&obj->field_B8 != 0) {
+    if (obj->facingBackwards != 0) {
         index = offset + 2;
     } else {
         index = offset - 2;

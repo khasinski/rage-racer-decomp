@@ -25,7 +25,7 @@ s32 FindNearestTrackCamera(GameRenderObject *car) {
 
     if (dist != -1) {
         tmp = g_TrackSectionCount;
-        target = *(s16 *)&car->trackSection;
+        target = car->trackSection;
         tmp <<= 16;
         span = tmp >> 16;
         tmp = (u32)tmp >> 31;
