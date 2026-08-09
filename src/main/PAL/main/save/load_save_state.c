@@ -60,11 +60,11 @@ s32 LoadSaveStateBlock(u8 *block) {
             g_ExtraGrandPrixSave.maxClassReached = extraMaxClass;
         }
         g_ExtraGrandPrixSave.money = *(s32 *)(base + 0x34);
-        g_TimeAttackSave.course = *(s32 *)(base + 0x38);
-        g_TimeAttackSave.carIndex = *(s32 *)(base + 0x3C);
-        g_TimeAttackSave.classIndex = *(s32 *)(base + 0x40);
-        g_TimeAttackSave.maxClassReached = *(s32 *)(base + 0x44);
-        g_TimeAttackSave.money = *(s32 *)(base + 0x48);
+        g_TimeAttackSave.course = ((GameSaveBlock *)base)->timeAttackProgress.course;
+        g_TimeAttackSave.carIndex = ((GameSaveBlock *)base)->timeAttackProgress.carIndex;
+        g_TimeAttackSave.classIndex = ((GameSaveBlock *)base)->timeAttackProgress.classIndex;
+        g_TimeAttackSave.maxClassReached = ((GameSaveBlock *)base)->timeAttackProgress.maxClassReached;
+        g_TimeAttackSave.money = ((GameSaveBlock *)base)->timeAttackProgress.money;
         {
             s32 bgmSelection = *(s16 *)(base + 0x4C);
             u16 advancedUnlocked = *(u16 *)(base + 0x4E);
