@@ -39,7 +39,7 @@ void UpdateFinishCamera(GameRenderObject *obj) {
     }
     index = rem % g_TrackPointCount;
 
-    InterpolateTrackPoint(index, coords, g_CameraCar.field_38);
+    InterpolateTrackPoint(index, coords, g_CameraCar.segmentFraction);
     angle = 0x400 - Atan2(coords[0] - g_CameraCar.x, coords[2] - g_CameraCarZ);
 
     g_CameraCarHeading += GetAngleDelta(g_CameraCarHeading, angle);

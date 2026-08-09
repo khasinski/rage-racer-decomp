@@ -72,8 +72,8 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
         }
     }
 
-    InterpolateTrackPoint(index, coords, car->field_38);
-    angle = 0x1000 - SmoothTrackAngle(index, car->field_38);
+    InterpolateTrackPoint(index, coords, car->segmentFraction);
+    angle = 0x1000 - SmoothTrackAngle(index, car->segmentFraction);
 
     value = rsin(angle) * lateral;
     if (value < 0) {

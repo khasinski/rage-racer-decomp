@@ -33,7 +33,7 @@ void SteerCarToTrackLine(PlayerCarRuntime *car) {
     s32 divisor;
 
     spec = g_CarSpec;
-    lateral = car->field_34;
+    lateral = car->trackLateralOffset;
     timer = spec->steerResponse;
     directionFlag = car->drive.unk54;
 
@@ -51,8 +51,8 @@ void SteerCarToTrackLine(PlayerCarRuntime *car) {
     trackCount = g_TrackPointCount;
     index = rawIndex % trackCount;
 
-    InterpolateTrackPoint(index, coords, car->field_38);
-    angle = 0x1000 - SmoothTrackAngle(index, car->field_38);
+    InterpolateTrackPoint(index, coords, car->segmentFraction);
+    angle = 0x1000 - SmoothTrackAngle(index, car->segmentFraction);
 
     xValue = rsin(angle) * lateral;
     if (xValue < 0) {

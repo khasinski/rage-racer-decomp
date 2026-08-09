@@ -623,7 +623,7 @@ shift_interpolation_done:
                                        0xC00 - g_TrackPoints[car->trackPointIndex].angle);
   frontLoadScaled = trackHeadingError;
   pointIndex = car->trackPointIndex;
-  lateralOffset = car->field_38;
+  lateralOffset = car->segmentFraction;
   engineSpeed = g_TrackPoints[pointIndex].field_C * (0x400 - lateralOffset);
   pointIndex += 1;
   lateralSum = engineSpeed +

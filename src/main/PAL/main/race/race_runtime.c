@@ -565,7 +565,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     {
         s32 height;
 
-        height = ent->field_34;
+        height = ent->trackLateralOffset;
         ent->field_120 = 0;
         ent->field_FC = height;
         ent->field_11E = height;

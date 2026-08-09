@@ -245,7 +245,7 @@ void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
     raw -= adjustedReg;
     rawArg = raw;
     raw <<= 16;
-    adjustedReg = carReg->field_34;
+    adjustedReg = carReg->trackLateralOffset;
     raw >>= 16;
     if (adjustedReg < 0) {
         adjusted = raw - 0x400;
@@ -304,7 +304,7 @@ void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
     raw = 0xC00;
     raw -= adjustedReg;
     raw <<= 16;
-    adjustedReg = carReg->field_34;
+    adjustedReg = carReg->trackLateralOffset;
     raw >>= 16;
     if (adjustedReg < 0) {
         adjusted = raw - 0x400;

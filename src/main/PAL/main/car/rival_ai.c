@@ -27,7 +27,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     s32 sums[4];
 
     carProgress = car->trackProgress;
-    carField34 = car->field_34;
+    carField34 = car->trackLateralOffset;
     carA4low = (u16)car->speed;
     block = (u8 *)&g_Cars[0].speed;
     car->field_120 = 0;
@@ -79,7 +79,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
             t6 = 0x1800 - (g_PlayerCar.speed * 2);
         } else {
             s32 op;
-            otherField34 = *(s32 *)(block - 0x70); /* g_Cars[i].field_34 */
+            otherField34 = *(s32 *)(block - 0x70); /* g_Cars[i].trackLateralOffset */
             otherA4 = *(u16 *)block; /* g_Cars[i].speed, low half */
             op = *(s32 *)(block - 0x34); /* g_Cars[i].trackProgress */
             a2 = op + track;

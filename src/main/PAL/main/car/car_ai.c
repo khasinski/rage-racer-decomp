@@ -568,13 +568,13 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
     nextIndex = index + 1;
     hit = 0;
     carProgress = car->trackProgress;
-    carField34 = car->field_34;
+    carField34 = car->trackLateralOffset;
 
     while (nextIndex < 11) {
         if (other->activeFlag != -1 && other->field_98 == car->field_98) {
             progressDelta =
                 (other->trackProgress + g_TrackLength - carProgress) % g_TrackLength;
-            distance = other->field_34 - carField34;
+            distance = other->trackLateralOffset - carField34;
             if (distance < 0) {
                 distance = -distance;
             }

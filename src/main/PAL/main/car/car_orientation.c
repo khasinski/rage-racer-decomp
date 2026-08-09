@@ -389,7 +389,7 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
         r = GetAngleDelta(ctx->bodyYaw, target - ctx->field_B4);
     }
     s2v = r * 32;
-    r = rcos(ctx->field_34 * 2);
+    r = rcos(ctx->trackLateralOffset * 2);
     a0v = 4096 - r;
     if (ctx->speed < 800) {
         a0v = a0v * 6;
@@ -398,9 +398,9 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     }
     if (ctx->speed >= 81) {
         if (ctx->facingBackwards != 0) {
-            if (ctx->field_34 < 0) a0v = -a0v;
+            if (ctx->trackLateralOffset < 0) a0v = -a0v;
         } else {
-            if (ctx->field_34 > 0) a0v = -a0v;
+            if (ctx->trackLateralOffset > 0) a0v = -a0v;
         }
         a0v = a0v + s2v;
     } else {
@@ -523,7 +523,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   playerProgress = car->trackProgress;
   index = 0;
   context = (CollisionContext *)&rotation;
-  playerTrackOffset = car->field_34;
+  playerTrackOffset = car->trackLateralOffset;
   playerX = car->y;
   for (; index < 11; index++, opponent++)
   {
@@ -533,7 +533,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
       opponent->field_8A = 0;
       progressDelta = (opponent->trackProgress + g_TrackLength - playerProgress) % g_TrackLength;
       opponentX = opponent->y;
-      trackDelta = opponent->field_34 - playerTrackOffset;
+      trackDelta = opponent->trackLateralOffset - playerTrackOffset;
       if (trackDelta < 0)
       {
         trackDelta = -trackDelta;
@@ -698,7 +698,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
     PlaySoundCue(sid);
   }
 
-  trackDelta = car->field_34 - opponent->field_34;
+  trackDelta = car->trackLateralOffset - opponent->trackLateralOffset;
   g_GripLossTimer = 0;
   ((CollisionContext *) &rotation)->trackDelta = trackDelta;
   if (collisionRegion < 3)
