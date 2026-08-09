@@ -22,6 +22,11 @@ typedef struct FmvDecodeContext {
     s32 decodeComplete;
 } FmvDecodeContext;
 
+typedef union FmvDecodeContextAddress {
+    FmvDecodeContext *pointer;
+    volatile FmvDecodeContext *volatilePointer;
+} FmvDecodeContextAddress;
+
 typedef struct FmvWorkBuffers {
     volatile u32 vlc[2][0xA000];
     volatile u32 strips[2][0xB40];
@@ -45,7 +50,8 @@ extern volatile u32 *g_FmvRingBuffer;
 
 void StartFmvPlayback(FmvWorkBuffers *buffers);
 void SetupFmvBuffers(FmvWorkBuffers *buffers);
-void InitFmvContext();
+void InitFmvContext(volatile FmvDecodeContext *ctx, s32 width, s32 height,
+                    s32 displayX, s32 displayWidth);
 void OpenFmvStream();
 s32 PresentFmvFrame(FmvDecodeContext *ctx);
 void *GetFmvFrame(FmvDecodeContext *ctx);

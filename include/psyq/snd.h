@@ -53,10 +53,7 @@ void _SsVmInit(int voices);
 void SsSetMVol(short left, short right);
 void SsSetSerialVol(u_char source, short left, short right);
 void SsSetSpuInputAttr(u_char source, u_char field, u_char value);
-/* LibRef47 14-13 gives `short SsSeqOpen(u_long *addr, short vab_id)`. The body
- * here takes one argument, so this is the one-argument internal entry, not the
- * documented API. */
-long SsSeqOpen(long seq_data);
+long SsSeqOpen(u_char *seqData, long vabId);
 void SsSeqAdvanceChannelDelta(long seq, long channel);
 void SsSeqSetChannelPitchBend(long seq, long channel, long pitch, long amount);
 void SsSeqApplyProgramChange(long seq, long channel);
@@ -195,7 +192,7 @@ short SpuVmGetSeqVolLeft(long seq_sep);
 short SpuVmGetSeqVolRight(long seq_sep);
 void SpuVmInit(long voices);
 long SsSeqIndexChannel(long seq_sep, short vab_id, u_char program, short volume, long pan);
-long SsSeqParseHeader(long slot, long vabId, long data);
+long SsSeqParseHeader(long slot, long vabId, u_char *data);
 void SsSeqSetPortamento(short seq, short sep, u_char value);
 void func_80076C50(void);
 void ContDataEntry(short seq, short sep, u_char value);

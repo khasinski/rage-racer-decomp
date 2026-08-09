@@ -5,7 +5,7 @@
 
 #include "psyq/snd_internal.h"
 
-long SsSeqOpen(long seq_data, long vab_id) {
+long SsSeqOpen(u_char *seqData, long vabId) {
     long used;
     long i;
     u_char found;
@@ -29,7 +29,7 @@ long SsSeqOpen(long seq_data, long vab_id) {
 
     g_SndSeqOpenMask = (1 << (short)slot) | g_SndSeqOpenMask;
 
-    if ((short)SsSeqParseHeader((short)slot, (short)vab_id, seq_data) == -1) {
+    if ((short)SsSeqParseHeader((short)slot, (short)vabId, seqData) == -1) {
         return -1;
     }
     return (short)slot;

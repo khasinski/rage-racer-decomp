@@ -48,7 +48,9 @@ void EndFmv(void) {
     g_StreamReturnScene = g_FmvStreamEnded;
 }
 
-void InitFmvContext(volatile FmvDecodeContext *ctx, s32 width, s32 height) {
+void InitFmvContext(volatile FmvDecodeContext *ctx, s32 width, s32 height,
+                    s32 displayX, s32 displayWidth) {
+    FmvDecodeContextAddress contextAddress;
     volatile u32 *word0;
     volatile u32 *word1;
     volatile u32 *word3;
@@ -59,6 +61,7 @@ void InitFmvContext(volatile FmvDecodeContext *ctx, s32 width, s32 height) {
     u32 word28;
     u16 half22;
 
+    contextAddress.volatilePointer = ctx;
     word0 = g_FmvVlcBuffer0;
     word1 = g_FmvVlcBuffer1;
     word3 = g_FmvStripBuffer0;
@@ -82,5 +85,5 @@ void InitFmvContext(volatile FmvDecodeContext *ctx, s32 width, s32 height) {
     ctx->decodeComplete = 0;
     ctx->frameParity = word28;
     ctx->sliceHeight = 0x18;
-    ((FmvDecodeContext *)ctx)->displayRects[1].y = half22;
+    contextAddress.pointer->displayRects[1].y = half22;
 }

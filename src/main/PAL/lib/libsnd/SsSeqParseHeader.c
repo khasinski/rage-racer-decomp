@@ -5,9 +5,8 @@
 #include "psyq/snd_internal.h"
 
 
-long SsSeqParseHeader(long slot, long vabId, long data) {
+long SsSeqParseHeader(long slot, long vabId, u_char *seqBytes) {
     SeqStruct *s;
-    u_char *seqBytes;
     u_char *p;
     long i;
     long hi, lo, b0, b1, b2;
@@ -19,7 +18,6 @@ long SsSeqParseHeader(long slot, long vabId, long data) {
     register long vabReg asm("$4");
     register long slotReg;
 
-    seqBytes = (u_char *)data;
     slotReg = slot;
     vabReg = slot;
     __asm__("" : "=r"(vabReg) : "0"(vabReg));

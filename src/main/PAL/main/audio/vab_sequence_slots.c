@@ -8,11 +8,7 @@
 
 s32 OpenVabSequenceSlot(s32 slot, u8 *header, u8 *body, void *seq) {
     s16 vabId;
-    /* $5 only matters for this second read. The first one is a cross-block
-       value whose only use is SsVabTransBody's second argument, so it lands in
-       a1 on its own; this one lives and dies inside one block, has no argument
-       use to prefer a1, and local-alloc hands it v0. Retail keeps both in a1. */
-    register s32 vabIdAgain asm("$5");
+    s32 vabIdAgain;
 
     g_AudioLoadSlot = slot;
     g_VabIds[slot] = SsVabOpenHeadSticky(header, -1, g_VabSpuAddress[slot]);
@@ -29,7 +25,7 @@ s32 OpenVabSequenceSlot(s32 slot, u8 *header, u8 *body, void *seq) {
         BiosExit(1);
     }
 
-    g_SeqHandle.storage = (s16)SsSeqOpen((long)seq);
+    g_SeqHandle.storage = (s16)SsSeqOpen(seq, vabIdAgain);
     g_SeqVolumeFadeStep = 0;
     g_VabTransferDone = SsVabTransCompleted(0);
     return g_VabTransferDone;
