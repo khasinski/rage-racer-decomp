@@ -274,8 +274,6 @@ extern s32 g_CarClassNames[];
 extern s32 g_CarNames[];
 extern s16 g_ChanceDigits[];
 extern s32 g_ClassPromoted;
-extern s16 g_ClassRecord5;
-extern s16 g_ClassRecord6;
 extern u8 g_ClockTextBuffer;
 extern u8 g_ClockTextMinUnits[];
 extern u8 g_ClockTextSecTens;

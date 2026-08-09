@@ -65,19 +65,15 @@ void CommitClassProgress(void) {
     g_ClassCompleted = done;
 
     if (done != 0) {
-        s16 *record;
-
         score_index = (g_GrandPrixSeries * 6) + g_GrandPrixClass;
 
         if (score_index == 4) {
-            record = &g_ClassRecord6;
-            if (*record == -1) {
-                *record = 0;
+            if (g_ClassRecords[6].place == -1) {
+                g_ClassRecords[6].place = 0;
             }
         } else if (score_index == 10) {
-            record = &g_ClassRecord5;
-            if (*record == -1) {
-                *record = 0;
+            if (g_ClassRecords[5].place == -1) {
+                g_ClassRecords[5].place = 0;
             }
         } else {
             if (score_index != 5) {
@@ -100,11 +96,8 @@ void CommitClassProgress(void) {
 
         UpdateBgmTrackCount();
         if (g_ClassResultPlace == 1) {
-            s32 offset;
-
-            offset = score_index * 4;
-            if (*(s16 *)((char *)g_ClassClears + offset) < 99) {
-                (*(s16 *)((char *)g_ClassClears + offset))++;
+            if ((s16)g_ClassRecords[score_index].clears < 99) {
+                g_ClassRecords[score_index].clears++;
             }
         }
     } else {
