@@ -54,7 +54,7 @@ void UpdateReplayCars(void) {
 }
 
 s32 GetTrackZoneBlend(s32 position) {
-    u8 *base;
+    TrackEventData *data;
     s32 scene;
     TrackZone *first;
     register TrackZone *zone asm("$6");
@@ -65,9 +65,9 @@ s32 GetTrackZoneBlend(s32 position) {
     s32 code;
     u16 rawCode;
 
-    base = (u8 *)g_TrackEventData;
+    data = g_TrackEventData;
     scene = g_RaceSeries;
-    first = ((TrackEventData *)base)->zones;
+    first = data->zones;
     if (scene != 0) {
         position = g_TrackLength - position;
     }
