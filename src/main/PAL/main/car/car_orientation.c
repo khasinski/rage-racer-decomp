@@ -114,8 +114,8 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->drive.unkA6 = -1;
   player->drive.motionState = CAR_MOTION_STANDING_START;
   player->drive.engineLoad = 0;
-  player->drive.unk2E = 1;
-  player->drive.unk36 = 0;
+  player->drive.drivetrainCoupled = 1;
+  player->drive.shiftSpeedDelta = 0;
   player->drive.steeringGrip = 0;
   player->drive.trackCurveBias = 0;
   player->drive.trackCurveMode = 0;

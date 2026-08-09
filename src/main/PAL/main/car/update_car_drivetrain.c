@@ -531,8 +531,8 @@ grade_adjust_done:
         u16 targetSpeed = (u16) g_ShiftTargetSpeed;
         u16 currentSpeed = (u16)drive->engineRpm;
         drive->clutch = 0xA;
-        drive->unk2E = 0;
-        drive->unk36 = (s16)(targetSpeed - currentSpeed);
+        drive->drivetrainCoupled = 0;
+        drive->shiftSpeedDelta = (s16)(targetSpeed - currentSpeed);
       }
     }
     else
@@ -541,18 +541,18 @@ grade_adjust_done:
         s32 countdown = --drive->clutch;
       if (((s16) countdown) <= 0)
       {
-        drive->unk2E = 1;
+        drive->drivetrainCoupled = 1;
         drive->engineLoad = 0;
         drive->clutch = 0;
       }
       else
         if (drive->manual != 0)
       {
-        drive->engineRpm = g_ShiftTargetSpeed - drive->unk36 * (s16)countdown / 15;
+        drive->engineRpm = g_ShiftTargetSpeed - drive->shiftSpeedDelta * (s16)countdown / 15;
       }
       else
       {
-        shiftRemaining = drive->unk36 * (s16)countdown;
+        shiftRemaining = drive->shiftSpeedDelta * (s16)countdown;
         lossBase = shiftRemaining / 10;
         drive->engineRpm = g_ShiftTargetSpeed - lossBase;
         goto shift_interpolation_done;
@@ -564,7 +564,7 @@ shift_interpolation_done:
       }
     }
   }
-  throttleTorque = netTorque * drive->acceleratorInput * drive->unk2E;
+  throttleTorque = netTorque * drive->acceleratorInput * drive->drivetrainCoupled;
   if (throttleTorque < 0)
   {
     throttleTorque += 0xFF;

@@ -341,11 +341,11 @@ typedef struct GameCarDrive {
     s32 unk24;
     s32 launchThresholdIndex;
     s16 engineLoad;
-    s16 unk2E;
+    s16 drivetrainCoupled;
     s16 gearDisp;    /* +0x30 */
     s16 steeringGrip;
     s16 clutch;      /* +0x34 */
-    s16 unk36;
+    s16 shiftSpeedDelta;
     s16 jumpTimer;
     s16 unk3A;
     s16 shiftRpmDelta;
