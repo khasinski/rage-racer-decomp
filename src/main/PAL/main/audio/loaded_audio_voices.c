@@ -140,32 +140,29 @@ void InitSequenceAudio(void) {
 }
 
 void InitEffectVoiceRuntime(void) {
+    s32 i;
+
     _SsVmInit(0);
     SsSetVoiceCount(8);
 
     {
-        s32 i;
         s32 neg;
-        register s32 *ptr asm("$5");
-        s32 offset;
+        s32 *ptr;
 
         i = 0;
         neg = -1;
         ptr = &g_AudioSlotMask;
-        offset = 0;
         for (; i < 2; i++) {
-            *(s32 *)((u8 *)&g_MusicChannels[0].mode + offset) = neg;
-            *(s32 *)((u8 *)&g_MusicChannels[0].left + offset) = neg;
-            *(s32 *)((u8 *)&g_MusicChannels[0].right + offset) = neg;
+            g_MusicChannels[i].mode = neg;
+            g_MusicChannels[i].left.value = neg;
+            g_MusicChannels[i].right.value = neg;
             ptr[0x78 / 4] = 0;
             ptr = (s32 *)((u8 *)ptr + 0x18);
-            *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset) = 0;
-            offset += 0x18;
+            g_MusicChannels[i].volLeft = 0;
         }
     }
 
     {
-        s32 i;
         s32 neg;
         s32 value;
 
