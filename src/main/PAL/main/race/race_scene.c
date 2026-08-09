@@ -560,7 +560,7 @@ void UpdateRaceScene(void) {
             EndMirrorPass();
         }
     } else {
-        s32 frameValue;
+        u32 frameValue;
 
         g_AnimTimer++;
         if ((g_RacePhase >= 2) && (g_GrandPrixMode != 0)) {
@@ -568,7 +568,7 @@ void UpdateRaceScene(void) {
         }
 
         frameValue = g_SceneTimer;
-        if ((u32)frameValue >= 0x5A) {
+        if (frameValue >= 0x5A) {
             if (g_RacePhase == 0) {
                 g_RacePhase = 1;
             } else {
