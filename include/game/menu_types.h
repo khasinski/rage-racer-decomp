@@ -42,6 +42,9 @@ typedef union TeamLogoColorSlot {
     u16 low;
 } TeamLogoColorSlot;
 
+typedef s32 TeamLogoCoordinate;
+typedef s32 TeamLogoColorIndex;
+
 typedef struct TeamLogoClutPos {
     s16 x;
     s16 y;
@@ -51,12 +54,6 @@ typedef struct TeamLogoTexturePos {
     s16 x;
     u16 y;
 } TeamLogoTexturePos;
-
-typedef union TeamLogoWord {
-    s32 value;
-    u16 low;
-    s16 signedLow;
-} TeamLogoWord;
 
 typedef struct MenuLightBurstBand {
     s16 values[33];

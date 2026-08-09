@@ -17,15 +17,9 @@ extern s32 g_TeamLogoCursorY;
 extern s32 g_TeamLogoViewY;
 extern s32 g_TeamLogoGuideMode;
 extern s32 g_TeamLogoBrushSize;
-#ifndef GAME_TEAM_LOGO_WORD_TYPE
-#define GAME_TEAM_LOGO_WORD_TYPE s32
-#endif
-#ifndef GAME_TEAM_LOGO_PEN_TYPE
-#define GAME_TEAM_LOGO_PEN_TYPE TeamLogoColorSlot
-#endif
-extern GAME_TEAM_LOGO_WORD_TYPE g_TeamLogoCursorX;
-extern GAME_TEAM_LOGO_WORD_TYPE g_TeamLogoViewX;
-extern GAME_TEAM_LOGO_PEN_TYPE g_TeamLogoPenColor;
+extern TeamLogoCoordinate g_TeamLogoCursorX;
+extern TeamLogoCoordinate g_TeamLogoViewX;
+extern TeamLogoColorIndex g_TeamLogoPenColor;
 extern s32 g_TeamLogoPaletteMode;
 extern s32 g_TeamLogoColorChannel;
 extern s32 g_TeamLogoDpadRepeatTimer;
@@ -49,6 +43,4 @@ extern NegconUvTemplate g_NegconSteerPlayUvQuad;
 extern NegconUvTemplate g_NegconMaxTwistUvQuad;
 extern DesignModeCellMask g_DesignModeCellMask;
 
-#undef GAME_TEAM_LOGO_WORD_TYPE
-#undef GAME_TEAM_LOGO_PEN_TYPE
 #endif

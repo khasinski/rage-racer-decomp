@@ -1,8 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
 #include "game/menu.h"
-#define GAME_TEAM_LOGO_WORD_TYPE TeamLogoWord
-#define GAME_TEAM_LOGO_PEN_TYPE s32
 #include "game/menu_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
@@ -174,7 +172,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
         register s32 angleSource;
         register s32 angleValue;
         angleSource = g_TeamLogoColorCycleAngle;
-        secondaryValue = g_TeamLogoCursorX.value;
+        secondaryValue = g_TeamLogoCursorX;
         angleValue = angleSource * 2;
         drawValue = angleValue;
         secondaryValue *= 4;
@@ -203,7 +201,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     w1 = sx + 0x110;
     x88 = x2 + 0x88;
     delta = 0x220 - g_TeamLogoZoomSpan;
-    scaleDelta = (delta * g_TeamLogoViewX.value) / 272;
+    scaleDelta = (delta * g_TeamLogoViewX) / 272;
     phaseValue = (g_TeamLogoRect.x * 4) - 1;
     drawValue = phaseValue + scaleDelta;
     gx = drawValue;
@@ -245,7 +243,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     kreg = sy;
     if ((g_TeamLogoZoomLevel >= 0x100) && (g_TeamLogoGuideMode != 0))
     {
-      x1 = g_TeamLogoViewX.low + 0x30;
+      x1 = (u16)g_TeamLogoViewX + 0x30;
       y1 = sy + ((g_TeamLogoViewY * 2) + 2);
       clut = (rsin((g_TeamLogoColorCycleAngle * 2) % 0x1000) / 64) - 0x41;
       if (g_TeamLogoGuideMode == 2)
@@ -255,9 +253,9 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
         s16 xa;
         ya = su + 0x1FD;
         yb = su + 0x27D;
-        xa = x1 + g_TeamLogoCursorX.low;
+        xa = x1 + (u16)g_TeamLogoCursorX;
         DrawLine((void *)ot, (s16)xa, (s16)ya, (s16)xa, (s16)yb, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
-        xa = ((x1 + g_TeamLogoCursorX.low) + ((u16) g_TeamLogoBrushSize)) - 1;
+        xa = ((x1 + (u16)g_TeamLogoCursorX) + ((u16) g_TeamLogoBrushSize)) - 1;
         DrawLine((void *)ot, (s16)xa, (s16)ya, (s16)xa, (s16)yb, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
         xa = y1 + (g_TeamLogoCursorY * 2);
         DrawLine((void *)ot, (s16)0x30, (s16)xa, (s16)0x70, (s16)xa, (u8)clut, (u8)clut, (u8)clut, (u8)ff);
@@ -279,13 +277,13 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       else
         if (g_TeamLogoBrushSize == 1)
       {
-        s16 xa = x1 + g_TeamLogoCursorX.low;
+        s16 xa = x1 + (u16)g_TeamLogoCursorX;
         s16 ya = y1 + (g_TeamLogoCursorY * 2);
         DrawLine((void *)ot, (s16)xa, (s16)ya, (s16)xa, (s16)(ya + 1), (u8)clut, (u8)clut, (u8)clut, (u8)ff);
       }
       else
       {
-        DrawRectOutline((void *)ot, (s16)(x1 + g_TeamLogoCursorX.low), (s16)(y1 + g_TeamLogoCursorY * 2), (s16)g_TeamLogoBrushSize, (s16)(g_TeamLogoBrushSize * 2), (u8)clut, (u8)clut, (u8)clut, (u8)0xFF);
+        DrawRectOutline((void *)ot, (s16)(x1 + (u16)g_TeamLogoCursorX), (s16)(y1 + g_TeamLogoCursorY * 2), (s16)g_TeamLogoBrushSize, (s16)(g_TeamLogoBrushSize * 2), (u8)clut, (u8)clut, (u8)clut, (u8)0xFF);
       }
       DrawRectOutline((void *)ot, (s16)x1, (s16)y1, (s16)0x20, 0x40, 0, (u8)clut, 0, (u8)0xFF);
     }

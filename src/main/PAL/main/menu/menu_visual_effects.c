@@ -343,33 +343,33 @@ void UpdateTeamLogoCanvas(void) {
                 s32 selected;
 
                 PlaySoundCue(1);
-                selected = g_TeamLogoPenColor.value;
+                selected = g_TeamLogoPenColor;
                 prevSlot = 0xF;
                 if (selected >= 2) {
                     prevSlot = selected - 1;
                 }
                 output.value = prevSlot;
-                g_TeamLogoPenColor = output;
+                g_TeamLogoPenColor = output.value;
             }
             if (g_PadHeld & PAD_RIGHT) {
                 TeamLogoColorSlot output;
                 s32 selected;
 
                 PlaySoundCue(1);
-                selected = g_TeamLogoPenColor.value;
+                selected = g_TeamLogoPenColor;
                 nextSlot = 1;
                 if (selected < 0xF) {
                     nextSlot = selected + 1;
                 }
                 output.value = nextSlot;
-                g_TeamLogoPenColor = output;
+                g_TeamLogoPenColor = output.value;
             }
         }
         if (g_TeamLogoExpertMode != 0) {
             if (g_PadHeld & (PAD_R1 | PAD_R2)) {
                 if (g_PadPressedRepeat & PAD_UP) {
                     PlaySoundCue(4);
-                    slotValue = g_TeamLogoPenColor.value;
+                    slotValue = g_TeamLogoPenColor;
                     clutEntry = g_TeamLogoClut + slotValue;
                     opaqueColour = *clutEntry | 0x8000;
                     *clutEntry = opaqueColour;
@@ -382,9 +382,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             darker = redUp - 1;
                         }
-                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor] =
                             darker |
-                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0xFFE0);
+                            (g_TeamLogoClut[g_TeamLogoPenColor] & 0xFFE0);
                         break;
                     case 1:
                         greenUp = (colour >> 5) & 0x1F;
@@ -393,9 +393,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             darker = 0x3E0;
                         }
-                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor] =
                             darker |
-                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0xFC1F);
+                            (g_TeamLogoClut[g_TeamLogoPenColor] & 0xFC1F);
                         break;
                     case 2:
                         blueUp = (colour >> 0xA) & 0x1F;
@@ -404,9 +404,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             darker = 0x7C00;
                         }
-                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor] =
                             darker |
-                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0x83FF);
+                            (g_TeamLogoClut[g_TeamLogoPenColor] & 0x83FF);
                         break;
                     default:
                         break;
@@ -414,7 +414,7 @@ void UpdateTeamLogoCanvas(void) {
                 }
                 if (g_PadPressedRepeat & PAD_DOWN) {
                     PlaySoundCue(4);
-                    slotValue = g_TeamLogoPenColor.value;
+                    slotValue = g_TeamLogoPenColor;
                     clutEntry = g_TeamLogoClut + slotValue;
                     opaqueColour = *clutEntry | 0x8000;
                     *clutEntry = opaqueColour;
@@ -427,9 +427,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             brighter = redDown + 1;
                         }
-                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor] =
                             brighter |
-                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0xFFE0);
+                            (g_TeamLogoClut[g_TeamLogoPenColor] & 0xFFE0);
                         return;
                     case 1:
                         slotValue = (colour >> 5) & 0x1F;
@@ -438,9 +438,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             brighter = 0;
                         }
-                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor] =
                             brighter |
-                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0xFC1F);
+                            (g_TeamLogoClut[g_TeamLogoPenColor] & 0xFC1F);
                         return;
                     case 2:
                         blueDown = (colour >> 0xA) & 0x1F;
@@ -449,9 +449,9 @@ void UpdateTeamLogoCanvas(void) {
                         } else {
                             brighter = 0;
                         }
-                        g_TeamLogoClut[g_TeamLogoPenColor.value] =
+                        g_TeamLogoClut[g_TeamLogoPenColor] =
                             brighter |
-                            (g_TeamLogoClut[g_TeamLogoPenColor.value] & 0x83FF);
+                            (g_TeamLogoClut[g_TeamLogoPenColor] & 0x83FF);
                         return;
                     default:
                         return;
@@ -502,16 +502,16 @@ void UpdateTeamLogoCanvas(void) {
                             rem = sum - (q * 4);
                             switch (rem) {
                             case 0:
-                                *p = (*p & 0xFFF0) | g_TeamLogoPenColor.low;
+                                *p = (*p & 0xFFF0) | *(u16 *)&g_TeamLogoPenColor;
                                 break;
                             case 1:
-                                *p = (*p & 0xFF0F) | (g_TeamLogoPenColor.low << 4);
+                                *p = (*p & 0xFF0F) | (*(u16 *)&g_TeamLogoPenColor << 4);
                                 break;
                             case 2:
-                                *p = (*p & 0xF0FF) | (g_TeamLogoPenColor.low << 8);
+                                *p = (*p & 0xF0FF) | (*(u16 *)&g_TeamLogoPenColor << 8);
                                 break;
                             case 3:
-                                *p = (*p & 0xFFF) | (g_TeamLogoPenColor.low << 0xC);
+                                *p = (*p & 0xFFF) | (*(u16 *)&g_TeamLogoPenColor << 0xC);
                                 break;
                             }
                     }
@@ -695,9 +695,9 @@ void UpdateTeamLogoCanvas(void) {
                 return;
             }
             if (pixelValue == 0) {
-                pixelValue = (u32)g_TeamLogoPenColor.value;
+                pixelValue = g_TeamLogoPenColor;
             }
-            g_TeamLogoPenColor.value = pixelValue;
+            g_TeamLogoPenColor = pixelValue;
         }
     }
 }
