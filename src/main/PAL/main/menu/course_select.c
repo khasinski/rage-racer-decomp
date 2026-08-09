@@ -134,7 +134,7 @@ s32 DrawCourseSelectScreen(s32 step)
     u8 fade;
     u16 slide;
     s16 headerWidth;
-    s32 deltaY;
+    u32 deltaY;
     /* Load-bearing in the prize loop: without this pin the function is 848 words. */
     register s32 coordinateY asm("$16");
     s32 lineColor;
@@ -149,7 +149,7 @@ s32 DrawCourseSelectScreen(s32 step)
     s32 gpSemiTrans;
     s32 gpFlags;
     s32 gpSlide;
-    s32 gpFade;
+    u32 gpFade;
     OrderingTableAddress otAddress;
 
     otBase = SCRATCH_OT_BASE_AS(u32);
@@ -172,7 +172,7 @@ s32 DrawCourseSelectScreen(s32 step)
             g_CourseSelectScrollValue = 0;
         }
         deltaY = 0x1FC - g_CourseSelectScrollValue;
-        slide = (u16)((u32)(deltaY * deltaY) / 2048);
+        slide = (u16)(deltaY * deltaY / 2048);
     }
 
     if (g_MenuAltLayout != 0) {
@@ -276,7 +276,7 @@ s32 DrawCourseSelectScreen(s32 step)
             g_GrandPrixClass * 8 + 8, 0x18,
             gpFade, gpFade, gpFade, gpClut, 0, gpSemiTrans, gpFlags);
 
-        lineColor = (u32)gpFade * 2;
+        lineColor = gpFade * 2;
         DrawLine(
             ot, 0x48, 0xAA - gpSlide, 0xAF, 0xAA - gpSlide,
             lineColor, lineColor, lineColor, 0x40);
@@ -286,7 +286,7 @@ s32 DrawCourseSelectScreen(s32 step)
         DrawSolidRect(
             ot, 0x48, 0x94 - gpSlide, 0x68, 0x30,
             lineColor, lineColor, lineColor,
-            (u32)gpFade < 0x7F ? 0x20 : 0xFF);
+            gpFade < 0x7F ? 0x20 : 0xFF);
         DrawSprite(
             ot, 0xB0, 0x94 - (s16)slide, 0x20, 0x30,
             0x60, 0x88, fade, fade, fade, 0x25B, 0, 1, 0x39);
