@@ -225,10 +225,7 @@ typedef struct GameShuttleScenery {
     s32 travelStep;    /* +0x08 progress along the leg, capped at g_ShuttlePathTravelMax[path] */
     s16 startEndpoint; /* +0x0C which of the path's two endpoints this leg started from */
     s16 pathIndex;     /* +0x0E path: 0 OVER PASS CITY, 1 and 2 LAKESIDE GATE */
-    s32 x;             /* +0x10 interpolated world position; also the cull key */
-    s32 y;             /* +0x14 */
-    s32 z;             /* +0x18 */
-    s32 positionW;     /* +0x1C fourth word copied out of the endpoint Vec4 */
+    Vec4 position;     /* +0x10 interpolated world position; x/z also select the visibility cell */
     s32 angleX;        /* +0x20 seeded from g_ShuttlePathAngles, never read by the drawer */
     s32 angleY;        /* +0x24 Y rotation (BuildRotMatrixY) */
     s32 angleZ;        /* +0x28 Z rotation (BuildRotMatrixZ) */

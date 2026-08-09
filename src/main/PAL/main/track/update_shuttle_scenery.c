@@ -31,16 +31,16 @@ void UpdateShuttleScenery(s32 instance) {
     denom = *limitPtr;
     altIndex = (1 - side) << 4;
     altIndex += phaseShift;
-    entry->x = ((denom - step) * ((Vec4 *)((u8 *)g_ShuttlePathPoints + baseIndex))->x +
-                step * ((Vec4 *)((u8 *)g_ShuttlePathPoints + altIndex))->x) / denom;
+    entry->position.x = ((denom - step) * ((Vec4 *)((u8 *)g_ShuttlePathPoints + baseIndex))->x +
+                         step * ((Vec4 *)((u8 *)g_ShuttlePathPoints + altIndex))->x) / denom;
 
     denom = *limitPtr;
-    entry->y = ((denom - step) * ((Vec4 *)((u8 *)g_ShuttlePathPoints + baseIndex))->y +
-                step * ((Vec4 *)((u8 *)g_ShuttlePathPoints + altIndex))->y) / denom;
+    entry->position.y = ((denom - step) * ((Vec4 *)((u8 *)g_ShuttlePathPoints + baseIndex))->y +
+                         step * ((Vec4 *)((u8 *)g_ShuttlePathPoints + altIndex))->y) / denom;
 
     denom = *limitPtr;
-    entry->z = ((denom - step) * ((Vec4 *)((u8 *)g_ShuttlePathPoints + baseIndex))->z +
-                step * ((Vec4 *)((u8 *)g_ShuttlePathPoints + altIndex))->z) / denom;
+    entry->position.z = ((denom - step) * ((Vec4 *)((u8 *)g_ShuttlePathPoints + baseIndex))->z +
+                         step * ((Vec4 *)((u8 *)g_ShuttlePathPoints + altIndex))->z) / denom;
 
     if (entry->travelStep >= *limitPtr) {
         entry->travelStep = 0;
@@ -77,13 +77,13 @@ void DrawShuttleScenery(s32 instance) {
     s32 frameValue;
 
     state = &g_ShuttleScenery[instance];
-    firstValue = state->z;
+    firstValue = state->position.z;
     wordIndex = firstValue + 0x400;
     if (wordIndex < 0) {
         wordIndex = firstValue + 0xBFF;
     }
     wordIndex >>= 11;
-    value = state->x;
+    value = state->position.x;
     visibility = g_VisibleCellMask;
     bit = value + 0x400;
     wordPtr = (u32 *)((wordIndex << 2) + (s32)visibility);
@@ -104,7 +104,7 @@ void DrawShuttleScenery(s32 instance) {
         if ((g_CourseIndex & 3) >= 2) {
             drawArg = 0x3C;
         }
-        SetGteObjectMatrix((void *)0x1F80011C, &state->x, mtx1Ptr);
+        SetGteObjectMatrix((void *)0x1F80011C, &state->position, mtx1Ptr);
         frameValue = g_CourseModelCount;
         SCRATCH_ENV_MODE4 = 0;
         drawValue = 1;

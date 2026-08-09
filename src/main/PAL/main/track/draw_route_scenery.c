@@ -43,7 +43,7 @@ void InitShuttleScenery(void) {
     state = &g_ShuttleScenery[0];
     if ((g_CourseIndex & 3) == 2) {
         g_ShuttleScenery[1].pathIndex = 2;
-        *(Vec4 *)&g_ShuttleScenery[1].x = g_ShuttlePath2Points.endpoint[0];
+        g_ShuttleScenery[1].position = g_ShuttlePath2Points.endpoint[0];
 
         index = g_ShuttleScenery[1].pathIndex;
         g_ShuttleScenery[1].angleX = g_ShuttlePathAngles[index].vx;
@@ -59,7 +59,7 @@ void InitShuttleScenery(void) {
 
     state->pathIndex = 0;
     }
-    *(Vec4 *)&state->x = g_ShuttlePathPoints[state->pathIndex].endpoint[0];
+    state->position = g_ShuttlePathPoints[state->pathIndex].endpoint[0];
     value = state->pathIndex;
     value <<= 3;
     v1 = RAW(ANGLES(value).vx);
