@@ -35,7 +35,7 @@ void LoadBootAssets(void) {
         break;
     case 3:
         if (LoadAsset(3, g_AssetLoadCursor) != 0) {
-            StartAudioSlotLoad(0, (s32)g_AssetBlockPtr, (s32)g_AssetLoadCursor, 0);
+            StartAudioSlotLoad(0, g_AssetBlockPtr, g_AssetLoadCursor, 0);
             g_AssetLoadState = 4;
         }
         break;

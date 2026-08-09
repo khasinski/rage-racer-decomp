@@ -81,12 +81,10 @@ u32 GetLoadedAudioStep(void);
 s32 GetActiveAudioSlots(void);
 s32 SetSoundToneTableEntry(s32 row, s32 bank, s32 value);
 void LoadAudioParameterTable(u16 *table);
-s32 StartVabTransferWithTable(s32 header, s32 body, u16 *table);
-/* Open audio slot `slot` on a VAB header/body pair (and, for slot 3, a tone
- * table). The three block pointers are spelled s32 throughout this subsystem;
- * the asset loader casts its u8 * cursors at the call. */
-s32 StartAudioSlotLoad(s32 slot, s32 header, s32 body, s32 table);
-s32 LoadExtraVabSlotWithTable(s32 header, s32 body, s32 table);
+s32 StartVabTransferWithTable(u8 *header, u8 *body, u16 *table);
+/* Open audio slot `slot` on a VAB header/body pair and optional tone table. */
+s32 StartAudioSlotLoad(s32 slot, u8 *header, u8 *body, u16 *table);
+s32 LoadExtraVabSlotWithTable(u8 *header, u8 *body, u16 *table);
 void SetPanVoiceTargetVolume(s32 left, s32 right);
 void ApplyPanVoiceVolume(void);
 void StartIndexedEffectVoice(s32 baseTone);
@@ -113,7 +111,7 @@ void ForceBasicEffectVoicesEnabled(s32 enabled);
 void ForcePitchEffectVoicesEnabled(s32 enabled);
 void ForceSoundSlotVoicePlayback(s32 enabled);
 void ForceAllEffectVoicesEnabled(s32 enabled);
-s32 OpenVabSequenceSlot(s32 slot, s32 vabHeader, s32 vabBody, s32 seqData);
+s32 OpenVabSequenceSlot(s32 slot, u8 *vabHeader, u8 *vabBody, void *seqData);
 void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot);
 void StopDirectVoice(s32 voice);
 void SetVabSlotVoiceEnabled(s32 voice, s32 enabled, s32 vabSlot);

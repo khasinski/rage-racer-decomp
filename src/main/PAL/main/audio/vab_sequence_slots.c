@@ -7,7 +7,7 @@
 #include "psyq/snd.h"
 
 
-s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
+s32 OpenVabSequenceSlot(s32 slot, u8 *header, u8 *body, void *seq) {
     s16 vabId;
     /* $5 only matters for this second read. The first one is a cross-block
        value whose only use is SsVabTransBody's second argument, so it lands in
@@ -16,14 +16,14 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
     register s32 vabIdAgain asm("$5");
 
     g_AudioLoadSlot = slot;
-    g_VabIds[slot] = SsVabOpenHeadSticky((u_char *)header, -1, g_VabSpuAddress[slot]);
+    g_VabIds[slot] = SsVabOpenHeadSticky(header, -1, g_VabSpuAddress[slot]);
     vabId = g_VabIds[slot];
     if (vabId == -1) {
         printf(g_MsgSeqVabOpenHeadError);
         BiosExit(1);
     }
 
-    g_VabIds[slot] = SsVabTransBody((u_char *)body, vabId);
+    g_VabIds[slot] = SsVabTransBody(body, vabId);
     vabIdAgain = g_VabIds[slot];
     if (vabIdAgain == -1) {
         printf(g_MsgSeqVabTransBodyError);
@@ -32,7 +32,7 @@ s32 OpenVabSequenceSlot(s32 slot, s32 header, s32 body, s32 seq) {
 
     /* g_SeqHandle is a word (sym.bss size 0x4); the header calls it s16
        because every other reader wants the low half. */
-    *(s32 *)&g_SeqHandle = (s16)SsSeqOpen(seq);
+    *(s32 *)&g_SeqHandle = (s16)SsSeqOpen((long)seq);
     g_SeqVolumeFadeStep = 0;
     g_VabTransferDone = SsVabTransCompleted(0);
     return g_VabTransferDone;

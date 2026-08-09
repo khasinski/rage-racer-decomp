@@ -40,7 +40,8 @@ void LoadCarSelectAssets(void) {
 
     switch (state) {
     case 1:
-        StartAudioSlotLoad(1, (s32)g_AssetBlockPtr, (s32)g_AssetSubBlockPtr, (s32)g_AssetBlockPtr2);
+        StartAudioSlotLoad(1, g_AssetBlockPtr, g_AssetSubBlockPtr,
+                           (u16 *)g_AssetBlockPtr2);
         g_AssetLoadState = 2;
         return;
     case 2:
