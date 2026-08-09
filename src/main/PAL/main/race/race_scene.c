@@ -124,7 +124,7 @@ timing_done:
         step = candidateTime < tableOffset;
         if (step && (recordIndex != 1)) {
             routeProgress = (u16)route->timing.fields.lap;
-            route->drive.bestLapIndex = routeProgress - 2;
+            route->drive.hudLapHighlightRow = routeProgress - 2;
             result = route->timing.fields.lapTimes.table
                          .milliseconds[route->timing.fields.lap - 2];
             g_BestLapThisRace = candidateTime;
@@ -144,7 +144,7 @@ timing_done:
         count = g_LapCount;
         step = route->timing.fields.lap;
         if (step == count + 1) {
-                if (route->drive.unkA4 < 4) {
+                if (route->drive.racePosition < 4) {
                     {
                         s32 *cursor;
                         s32 element;

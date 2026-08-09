@@ -390,8 +390,8 @@ typedef struct GameCarDrive {
     s16 brakeLatch;
     s16 acceleratorInput; /* +0xA0 */
     s16 brakeInput;       /* +0xA2 */
-    s16 unkA4;
-    s16 bestLapIndex;
+    s16 racePosition;
+    s16 hudLapHighlightRow;
 } GameCarDrive;
 
 typedef union PlayerLapTimes {
