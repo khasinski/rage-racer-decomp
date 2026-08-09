@@ -174,7 +174,7 @@ void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
     PlayerCarRaceState *raceState;
     SectorTimeTableAddress sectorAddress;
 
-    raceState = (PlayerCarRaceState *)&car->drive;
+    raceState = GetPlayerCarRaceState(car);
 
     if (lapEvent == 2 || grandPrixMode != 0) {
         return;

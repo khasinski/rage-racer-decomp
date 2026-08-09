@@ -68,7 +68,7 @@ s32 UpdateLapAndFinish(PlayerCarRuntime *car, s32 grandPrixMode) {
     PlayerCarRaceState *route;
     SectorTimeTableAddress sectorAddress;
 
-    route = (PlayerCarRaceState *)&car->drive;
+    route = GetPlayerCarRaceState(car);
     if (route->timing.fields.lap > 0) {
         if (g_LapCount >= route->timing.fields.lap) {
             route->timing.fields.lapTimes.table

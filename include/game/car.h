@@ -532,6 +532,10 @@ typedef struct PlayerCarRuntime {
     PlayerLapTimes lapTimes;
 } PlayerCarRuntime;
 
+static inline PlayerCarRaceState *GetPlayerCarRaceState(PlayerCarRuntime *car) {
+    return (PlayerCarRaceState *)&car->drive;
+}
+
 typedef union CarWorldCoordinate {
     s32 value;
     struct {
