@@ -270,12 +270,15 @@ s32 LoadSaveStateBlock(u8 *block) {
                 joff = 0;
                 for (; j < 4; j++) {
                     s32 *dst;
-                    s32 sb;
+                    SectorTimeTableAddress sourceAddress;
                     s32 *src;
                     k = 0;
                     dst = dbase;
-                    sb = iofc + (s32)base + 0xF5C;
-                    src = (s32 *)(joff + sb);
+                    sourceAddress.pointer = (s32 *)base;
+                    sourceAddress.byteOffset =
+                        iofc + sourceAddress.byteOffset + 0xF5C;
+                    sourceAddress.byteOffset = joff + sourceAddress.byteOffset;
+                    src = sourceAddress.pointer;
                     for (; k < 3; k++) {
                         *dst++ = *src++;
                     }
