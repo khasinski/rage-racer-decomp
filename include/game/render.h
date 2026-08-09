@@ -991,7 +991,6 @@ extern volatile s32 g_FmvStripDone;
 extern volatile s32 g_FmvStripRectIndex;
 extern volatile s16 g_FmvUploadRectX;
 extern volatile s16 g_FmvUploadRectY;
-extern s32 g_FmvVlcIndex;
 extern u8 g_Font8x8Cells[];
 extern u8 g_GpuJumpTable[];
 extern u8 g_HighFontU[];

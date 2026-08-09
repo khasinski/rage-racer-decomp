@@ -19,7 +19,7 @@ void DecodeFmvFrame(void) {
         SetDispMask(1);
     }
 
-    DecDCTin(g_FmvVlcBuffers[g_FmvVlcIndex], 3);
+    DecDCTin(g_FmvDecodeContext.vlcBuffers[g_FmvDecodeContext.vlcIndex], 3);
     DecDCTout(g_FmvStripBuffers[g_FmvStripIndex], (g_FmvStripWidth * g_FmvStripHeight) / 2);
 
     while (PresentFmvFrame(&g_FmvDecodeContext) == -1) {

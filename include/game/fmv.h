@@ -51,7 +51,7 @@ typedef union FmvStripCursorAddress {
     s32 byteAddress;
 } FmvStripCursorAddress;
 
-extern FmvDecodeContext g_FmvDecodeContext asm("g_FmvVlcBuffers");
+extern FmvDecodeContext g_FmvDecodeContext;
 extern volatile u32 *g_FmvRingBuffer;
 
 void StartFmvPlayback(FmvWorkBuffers *buffers);
