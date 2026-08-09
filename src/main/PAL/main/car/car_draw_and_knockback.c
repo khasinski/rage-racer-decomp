@@ -138,13 +138,13 @@ void ClearCarMotionState(GameCarRuntime *car) {
 
 void UpdateCarTiltCounter(GameCarRuntime *car) {
     GameCarRuntime *obj;
-    register u8 *ptr asm("$4");
+    GameCarAiBlock *state;
     s32 value;
     register s32 limit asm("$3");
 
     obj = car;
 
-    ptr = (u8 *)&obj->aiEnabled;
+    state = (GameCarAiBlock *)&obj->aiEnabled;
     if (g_RacePhase < 2) {
         value = 8;
     } else {
@@ -152,22 +152,24 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
         if (obj->engineRpm >= g_CarSpec->redline &&
             obj->acceleratorInput >= 0x81 &&
             obj->slideInput.halves.low == 0) {
-            ptr = (u8 *)(s32)(u16)obj->tiltCounter;
+            register s32 tilt asm("$4");
+
+            tilt = (u16)obj->tiltCounter;
             value = obj->currentGear;
-            ptr -= 4;
-            obj->tiltCounter = (s32)ptr;
-            ptr = (u8 *)((s32)ptr << 16 >> 16);
+            tilt -= 4;
+            obj->tiltCounter = tilt;
+            tilt = (s16)tilt;
             limit = 9 - value;
             value = (limit << 2) + limit;
             value = -value;
-            if ((s32)ptr < value) {
+            if (tilt < value) {
                 obj->tiltCounter = value;
             }
             return;
         }
 
-        if (((GameCarAiBlock *)ptr)->brakeInput >= 0x81 ||
-            ((GameCarAiBlock *)ptr)->slideInput.halves.low > 0) {
+        if (state->brakeInput >= 0x81 ||
+            state->slideInput.halves.low > 0) {
             if (obj->speed >= 0x51) {
                 value = (u16)obj->tiltCounter + 2;
                 obj->tiltCounter = value;
