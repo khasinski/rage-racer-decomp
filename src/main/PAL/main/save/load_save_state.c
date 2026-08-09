@@ -32,16 +32,37 @@ s32 LoadSaveStateBlock(u8 *block) {
     }
 
     {
-        u16 padMappingIndex = *(u16 *)(base + 0x0);
-        u16 negconMappingIndex = *(u16 *)(base + 0x2);
-        u16 negconSteerNeutral = *(u16 *)(base + 0x4);
-        u16 negconSteerPlay = *(u16 *)(base + 0x6);
+        GameSaveBlockAddress padMappingAddress;
+        GameSaveBlockAddress negconMappingAddress;
+        GameSaveBlockAddress steerNeutralAddress;
+        GameSaveBlockAddress steerPlayAddress;
+        GameSaveBlockAddress neutralIIAddress;
+        GameSaveBlockAddress neutralLAddress;
+        u16 padMappingIndex;
+        u16 negconMappingIndex;
+        u16 negconSteerNeutral;
+        u16 negconSteerPlay;
+
+        padMappingAddress.halfwordPointer = &((GameSaveBlock *)base)->padMappingIndex;
+        padMappingIndex = *padMappingAddress.halfwordPointer;
+        negconMappingAddress.halfwordPointer = &((GameSaveBlock *)base)->negconMappingIndex;
+        negconMappingIndex = *negconMappingAddress.halfwordPointer;
+        steerNeutralAddress.halfwordPointer = &((GameSaveBlock *)base)->negconSteerNeutral;
+        negconSteerNeutral = *steerNeutralAddress.halfwordPointer;
+        steerPlayAddress.halfwordPointer = &((GameSaveBlock *)base)->negconSteerPlay;
+        negconSteerPlay = *steerPlayAddress.halfwordPointer;
         g_NegconNeutralI = ((GameSaveBlock *)base)->negconNeutralI;
-        g_NegconNeutralII = *(u16 *)(base + 0xA);
-        g_NegconNeutralL = *(u16 *)(base + 0xC);
+        neutralIIAddress.halfwordPointer = &((GameSaveBlock *)base)->negconNeutralII;
+        g_NegconNeutralII = *neutralIIAddress.halfwordPointer;
+        neutralLAddress.halfwordPointer = &((GameSaveBlock *)base)->negconNeutralL;
+        g_NegconNeutralL = *neutralLAddress.halfwordPointer;
         {
-            u16 hE = *(u16 *)(base + 0xE);
+            GameSaveBlockAddress maxTwistAddress;
+            u16 hE;
             s32 extraMaxClass;
+
+            maxTwistAddress.halfwordPointer = &((GameSaveBlock *)base)->negconMaxTwist;
+            hE = *maxTwistAddress.halfwordPointer;
             g_GrandPrixSave.course = ((GameSaveBlock *)base)->grandPrixProgress.course;
             g_GrandPrixSave.carIndex = ((GameSaveBlock *)base)->grandPrixProgress.carIndex;
             g_GrandPrixSave.classIndex = ((GameSaveBlock *)base)->grandPrixProgress.classIndex;
