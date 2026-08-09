@@ -176,17 +176,40 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
                 u8 *lapDst = (u8 *)((GameSaveBlock *)outerDst)->bestLapTimes;
 
             for (; middle < 4; middle++) {
+                LapTimeTableAddress totalOutputBaseAddress;
+                LapTimeTableAddress totalOutputAddress;
+                LapTimeTableAddress totalInputBaseAddress;
+                LapTimeTableAddress totalInputOuterAddress;
+                LapTimeTableAddress totalInputAddress;
+                LapTimeTableAddress lapOutputAddress;
+                LapTimeTableAddress lapInputBaseAddress;
+                LapTimeTableAddress lapInputOuterAddress;
+                LapTimeTableAddress lapInputAddress;
                 s32 middleOffset = (inner = 0, middle * 8);
-                s32 *totalOutBase = (s32 *)((GameSaveBlock *)middleDst)->bestTotalTimes;
-                s32 *totalOut =
-                    (s32 *)(middleOffset + (s32)totalOutBase);
-                s32 *totalIn =
-                    (s32 *)(middleOffset +
-                            (outerOffset + (s32)totalBase));
-                s32 *lapOut = (s32 *)lapDst;
-                s32 *lapIn =
-                    (s32 *)(middleOffset +
-                            (outerOffset + (s32)lapBase));
+                s32 *totalOut;
+                s32 *totalIn;
+                s32 *lapOut;
+                s32 *lapIn;
+
+                totalOutputBaseAddress.pointer =
+                    &((GameSaveBlock *)middleDst)->bestTotalTimes[0][0][0];
+                totalOutputAddress.byteOffset =
+                    middleOffset + totalOutputBaseAddress.byteOffset;
+                totalOut = totalOutputAddress.pointer;
+                totalInputBaseAddress.pointer = totalBase;
+                totalInputOuterAddress.byteOffset =
+                    outerOffset + totalInputBaseAddress.byteOffset;
+                totalInputAddress.byteOffset =
+                    middleOffset + totalInputOuterAddress.byteOffset;
+                totalIn = totalInputAddress.pointer;
+                lapOutputAddress.bytes = lapDst;
+                lapOut = lapOutputAddress.pointer;
+                lapInputBaseAddress.pointer = lapBase;
+                lapInputOuterAddress.byteOffset =
+                    outerOffset + lapInputBaseAddress.byteOffset;
+                lapInputAddress.byteOffset =
+                    middleOffset + lapInputOuterAddress.byteOffset;
+                lapIn = lapInputAddress.pointer;
 
                 for (; inner < 2; inner++) {
                     *lapOut = *lapIn++;
