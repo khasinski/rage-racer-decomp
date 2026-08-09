@@ -454,7 +454,8 @@ s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     }
 
     nextProgress = (index * 3) << 2;
-    commandAddress.byteOffset = nextProgress + (s32)base;
+    commandAddress.pointer = base;
+    commandAddress.byteOffset = nextProgress + commandAddress.byteOffset;
     if (commandAddress.pointer->time < 0) {
         goto timed_commands_done;
     }
