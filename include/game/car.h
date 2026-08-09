@@ -94,7 +94,7 @@ typedef struct GameCarRuntime {
     s16 field_9C;
     s16 field_9E;
     s32 headingAngle;
-    s32 field_A4;    /* +0xA4 speed; km/h readout is field_A4 * 160 / 1168 */
+    s32 speed;       /* +0xA4 longitudinal speed; km/h readout is speed * 160 / 1168 */
     s32 field_A8;
     s16 activeFlag;
     s16 field_AE;
@@ -469,9 +469,9 @@ typedef struct PlayerCarRuntime {
  * 0x104..0x134 as s16 where GameCarDrive declares s32. See names.md 3b. */
 typedef struct GameCarAiBlock {
     u8 pad0[0xC];
-    s32 field_C8;   /* +0x0C world velocity x, sin(headingAngle) * field_A4 / 256 */
+    s32 field_C8;   /* +0x0C world velocity x, sin(headingAngle) * speed / 256 */
     u8 pad10[4];
-    s32 field_D0;   /* +0x14 world velocity z, cos(headingAngle) * field_A4 / 256 */
+    s32 field_D0;   /* +0x14 world velocity z, cos(headingAngle) * speed / 256 */
     u8 pad18[0x18];
     s32 field_EC;   /* +0x30 target angle: field_24 += GetAngleDelta(field_24, this) / 5 */
     CarSlideInput slideInput; /* +0x34 */

@@ -28,8 +28,8 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
 
     carProgress = car->trackProgress;
     carField34 = car->field_34;
-    carA4low = (u16)car->field_A4;
-    block = (u8 *)&g_Cars[0].field_A4;
+    carA4low = (u16)car->speed;
+    block = (u8 *)&g_Cars[0].speed;
     car->field_120 = 0;
     car->field_10C = 0;
     sums[3] = 0;
@@ -38,7 +38,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     sums[0] = 0;
     track = g_TrackLength;
     {
-        s32 tmp = car->field_A4 * 2;
+        s32 tmp = car->speed * 2;
         t6 = tmp + 0xC00;
     }
     field34minus = (s16)(carField34 - 0x30);
@@ -80,7 +80,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
         } else {
             s32 op;
             otherField34 = *(s32 *)(block - 0x70); /* g_Cars[i].field_34 */
-            otherA4 = *(u16 *)block; /* g_Cars[i].field_A4, low half */
+            otherA4 = *(u16 *)block; /* g_Cars[i].speed, low half */
             op = *(s32 *)(block - 0x34); /* g_Cars[i].trackProgress */
             a2 = op + track;
             t1 = (u16)state->field_104;
@@ -183,7 +183,7 @@ void SlowRivalAhead(GameCarRuntime *car, s32 carIndex) {
         return;
     }
 
-    if (entry->field_A4 >= 0x385) {
+    if (entry->speed >= 0x385) {
         value = entry->field_130;
         value = ((value * 5) + ((value * 5) << 4)) / 100;
         entry->field_130 = value;
@@ -295,7 +295,7 @@ void UpdateRivalRubberBand(void) {
             g_ClosestRivalRank = s1;
             if (s4 < a0) {
                 g_RivalCueFlags &= ~(0x200 >> s0);
-                if (g_RankedCars[s1]->field_A4 >= 0x321) {
+                if (g_RankedCars[s1]->speed >= 0x321) {
                     g_RankedCars[s1]->field_130 = g_RankedCars[s1]->field_130 * 90 / 100;
                 }
                 return;
@@ -303,7 +303,7 @@ void UpdateRivalRubberBand(void) {
             if (s5 < a0) {
                 s32 counter;
 
-                if (g_RankedCars[s1]->field_A4 >= 0x3E9) {
+                if (g_RankedCars[s1]->speed >= 0x3E9) {
                     g_RankedCars[s1]->field_130 = g_RankedCars[s1]->field_130 * 98 / 100;
                 }
                 counter = *s2;

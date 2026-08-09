@@ -168,7 +168,7 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
 
         if (((GameCarAiBlock *)ptr)->field_15E >= 0x81 ||
             ((GameCarAiBlock *)ptr)->slideInput.halves.low > 0) {
-            if (obj->field_A4 >= 0x51) {
+            if (obj->speed >= 0x51) {
                 value = (u16)obj->field_8C + 2;
                 obj->field_8C = value;
                 value = (s16)value;
@@ -254,13 +254,13 @@ void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
     }
     adjustedReg = adjusted & 0xFFF;
     asm("" : "=r"(adjustedReg) : "0"(adjustedReg));
-    fieldA4 = carReg->field_A4;
+    fieldA4 = carReg->speed;
     angle = adjustedReg;
     if (fieldA4 >= 0x321) {
         if (fieldA4 >= 0x709) {
             speed = 0x708;
         } else {
-            speed = *(u16 *)&carReg->field_A4;
+            speed = *(u16 *)&carReg->speed;
         }
         trig = rsin(GetAngleDistance((s16)rawArg, carReg->field_24));
         product = (s16)speed * trig;
@@ -375,7 +375,7 @@ angled_body_kick:
         temp = 0x800 - temp;
     }
 
-    distance = obj->field_A4;
+    distance = obj->speed;
     if (distance < 0x140) {
         obj->motionValue = 0;
     } else {

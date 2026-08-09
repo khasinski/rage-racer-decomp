@@ -713,7 +713,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
       car->field_A8 = car->field_A8 / 2;
       car->drive.unk94 = car->drive.unk94 * 0x50 / 100;
     }
-    if ((car->speed - opponent->field_A4) >= 0x191)
+    if ((car->speed - opponent->speed) >= 0x191)
     {
       g_GripLossTimer = 0x1E;
     }
@@ -751,7 +751,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   {
     s32 vx;
     s32 vz;
-    opponent->field_A4 = opponent->field_A4 / 2;
+    opponent->speed = opponent->speed / 2;
     opponent->field_A8 = opponent->field_A8 / 2;
     opponent->field_12E = opponent->field_12A;
     vx = (s16)((u16)opponent->field_C8 - (u16)car->drive.accelPos);

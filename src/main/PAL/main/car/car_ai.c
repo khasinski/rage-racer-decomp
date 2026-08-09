@@ -93,7 +93,7 @@ s32 GetCarCrestTrigger(GameCarRuntime *car) {
     register s32 resultOffset asm("v0");
 
     base = (u8 *)g_TrackEventData;
-    if (car->field_A4 < 0x320) {
+    if (car->speed < 0x320) {
         return 0;
     }
 
@@ -218,7 +218,7 @@ void UpdateCarCrestHop(GameCarRuntime *car) {
     one = 1;
     obj->field_98 = one;
     if (value > 0) {
-        temp = value * obj->field_A4;
+        temp = value * obj->speed;
         temp = temp / -4800;
         obj->field_98 = one;
         obj->field_9C = temp;
@@ -249,7 +249,7 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
     if (obj->slideInput.value == 0) {
         if (!(obj->field_F4 != 0)) {
         if (carIndex != 0) {
-            value = obj->field_A4;
+            value = obj->speed;
             if (value < 0x3C1) {
                 return;
             }

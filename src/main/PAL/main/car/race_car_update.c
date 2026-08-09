@@ -183,7 +183,7 @@ void UpdateRaceCars(void) {
         if (walk->activeFlag != -1) {
             drive = (GameCarAiBlock *)&base->field_BC;
             if (walk->field_12E > 0) {
-                if (walk->field_128 < walk->field_12E && walk->field_A4 >= 0x321) {
+                if (walk->field_128 < walk->field_12E && walk->speed >= 0x321) {
                     walk->field_A8 = 0;
                 } else if (drive->field_130 >= walk->field_A8) {
                     walk->field_A8 = drive->field_12C + walk->field_A8;
@@ -196,8 +196,8 @@ void UpdateRaceCars(void) {
             } else {
                 walk->field_A8 = walk->field_130;
             }
-            walk->field_A4 = walk->field_A4 * 0x5E / 100;
-            walk->field_A4 = walk->field_A4 + walk->field_A8;
+            walk->speed = walk->speed * 0x5E / 100;
+            walk->speed = walk->speed + walk->field_A8;
             walk->field_24 =
                 GetAngleDelta(walk->field_24, drive->field_EC) / 5 + walk->field_24;
         }
@@ -217,12 +217,12 @@ void UpdateRaceCars(void) {
         drive = (GameCarAiBlock *)&base->field_BC;
         if (walk->activeFlag != -1) {
             walk->field_108 = walk->field_24;
-            t = rsin(walk->headingAngle) * walk->field_A4;
+            t = rsin(walk->headingAngle) * walk->speed;
             if (t < 0) {
                 t += 0xFF;
             }
             walk->field_C8 = t >> 8;
-            t = rcos(walk->headingAngle) * walk->field_A4;
+            t = rcos(walk->headingAngle) * walk->speed;
             if (t < 0) {
                 t += 0xFF;
             }
@@ -316,14 +316,14 @@ void UpdateRaceCars(void) {
             register s32 spin asm("$2");
             s32 scaled;
             s32 limit;
-            scaled = lastBase->field_A4 * 3;
+            scaled = lastBase->speed * 3;
             step = scaled;
             if ((s16)scaled >= 0x1001) {
                 step = 0x249;
             }
             spin = (step + lastBase->field_48) & 0xFFF;
             lastBase->field_48 = spin;
-            if (lastBase->field_A4 >= 0x321) {
+            if (lastBase->speed >= 0x321) {
                 lastBase->field_48 = spin | 0x1000;
             }
             limit = lastBase->y - 8;
@@ -371,7 +371,7 @@ void UpdateRaceCars(void) {
                 UpdateCarBodyKick(base);
                 UpdateCarCrestHop(base);
             } else {
-                lastBase->field_A4 = lastBase->field_A4 * 97 / 100 * 97 / 100;
+                lastBase->speed = lastBase->speed * 97 / 100 * 97 / 100;
             }
         }
         i++;
@@ -440,8 +440,8 @@ void UpdateAttractCars(void) {
             } else {
                 sub->field_A8 = sub->field_130;
             }
-            sub->field_A4 = sub->field_A4 * 94 / 100;
-            sub->field_A4 = sub->field_A4 + sub->field_A8;
+            sub->speed = sub->speed * 94 / 100;
+            sub->speed = sub->speed + sub->field_A8;
             sub->field_24 =
                 GetAngleDelta(sub->field_24, drive->field_EC) / 5 + sub->field_24;
         }
@@ -460,12 +460,12 @@ void UpdateAttractCars(void) {
         if (base->activeFlag != -1) {
             s32 t;
             base->field_108 = base->field_24;
-            t = rsin(base->headingAngle) * base->field_A4;
+            t = rsin(base->headingAngle) * base->speed;
             if (t < 0) {
                 t += 0xFF;
             }
             base->field_C8 = t >> 8;
-            base->field_D0 = rcos(base->headingAngle) * base->field_A4 / 256;
+            base->field_D0 = rcos(base->headingAngle) * base->speed / 256;
             if ((s16)i < 4) {
                 s32 sixth;
                 s32 f4;
@@ -556,14 +556,14 @@ void UpdateAttractCars(void) {
             register s32 spin asm("$2");
             s32 scaled;
             s32 limit;
-            scaled = base->field_A4 * 3;
+            scaled = base->speed * 3;
             step = scaled;
             if ((s16)scaled >= 0x1001) {
                 step = 0x249;
             }
             spin = (step + base->field_48) & 0xFFF;
             base->field_48 = spin;
-            if (base->field_A4 >= 0x321) {
+            if (base->speed >= 0x321) {
                 base->field_48 = spin | 0x1000;
             }
             limit = base->y - 8;
@@ -610,7 +610,7 @@ void UpdateAttractCars(void) {
                 UpdateCarBodyKick(car);
                 UpdateCarCrestHop(car);
             } else {
-                base->field_A4 = base->field_A4 * 97 / 100 * 97 / 100;
+                base->speed = base->speed * 97 / 100 * 97 / 100;
             }
         }
         i++;
