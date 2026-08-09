@@ -591,11 +591,11 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
             for (quadIndex = 0; quadIndex < 4; quadIndex++)
             {
               collisionRegion = IsPointInQuad(
-                *(s32 *)&context->grid[quadIndex][2],
-                *(s32 *)&context->grid[quadIndex][3],
-                *(s32 *)&context->grid[quadIndex][0],
-                *(s32 *)&context->grid[quadIndex][1],
-                *(s32 *)&context->opponentPolygon[sampleIndex]);
+                ((CarCollisionPointValue *)&context->grid[quadIndex][2])->packed,
+                ((CarCollisionPointValue *)&context->grid[quadIndex][3])->packed,
+                ((CarCollisionPointValue *)&context->grid[quadIndex][0])->packed,
+                ((CarCollisionPointValue *)&context->grid[quadIndex][1])->packed,
+                ((CarCollisionPointValue *)&context->opponentPolygon[sampleIndex])->packed);
               if (collisionRegion > 0)
               {
                 collisionRegion = quadIndex + 1;
@@ -614,11 +614,11 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
             for (quadIndex = 0; quadIndex < 4; quadIndex++)
             {
               collisionRegion = IsPointInQuad(
-                *(s32 *)&context->grid[quadIndex][2],
-                *(s32 *)&context->grid[quadIndex][3],
-                *(s32 *)&context->grid[quadIndex][0],
-                *(s32 *)&context->grid[quadIndex][1],
-                *(s32 *)&context->opponentGrid[sampleIndex]);
+                ((CarCollisionPointValue *)&context->grid[quadIndex][2])->packed,
+                ((CarCollisionPointValue *)&context->grid[quadIndex][3])->packed,
+                ((CarCollisionPointValue *)&context->grid[quadIndex][0])->packed,
+                ((CarCollisionPointValue *)&context->grid[quadIndex][1])->packed,
+                ((CarCollisionPointValue *)&context->opponentGrid[sampleIndex])->packed);
               if (collisionRegion > 0)
               {
                 collisionRegion = quadIndex + 1;
@@ -637,11 +637,11 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
             for (quadIndex = 0; quadIndex < 4; quadIndex++)
             {
               collisionRegion = IsPointInQuad(
-                *(s32 *)&context->grid[quadIndex][2],
-                *(s32 *)&context->grid[quadIndex][3],
-                *(s32 *)&context->grid[quadIndex][0],
-                *(s32 *)&context->grid[quadIndex][1],
-                *(s32 *)&context->opponentGrid[sampleIndex + 6]);
+                ((CarCollisionPointValue *)&context->grid[quadIndex][2])->packed,
+                ((CarCollisionPointValue *)&context->grid[quadIndex][3])->packed,
+                ((CarCollisionPointValue *)&context->grid[quadIndex][0])->packed,
+                ((CarCollisionPointValue *)&context->grid[quadIndex][1])->packed,
+                ((CarCollisionPointValue *)&context->opponentGrid[sampleIndex + 6])->packed);
               if (collisionRegion > 0)
               {
                 collisionRegion = quadIndex + 1;

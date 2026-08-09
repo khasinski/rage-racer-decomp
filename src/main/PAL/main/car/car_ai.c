@@ -686,11 +686,11 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                     quadIndex = 0;
                     do {
                         hit = IsPointInQuad(
-                            *(s32 *)&quads[quadIndex][2],
-                            *(s32 *)&quads[quadIndex][3],
-                            *(s32 *)&quads[quadIndex][0],
-                            *(s32 *)&quads[quadIndex][1],
-                            *(s32 *)&otherCorners[corner]);
+                            ((CarCollisionPointValue *)&quads[quadIndex][2])->packed,
+                            ((CarCollisionPointValue *)&quads[quadIndex][3])->packed,
+                            ((CarCollisionPointValue *)&quads[quadIndex][0])->packed,
+                            ((CarCollisionPointValue *)&quads[quadIndex][1])->packed,
+                            ((CarCollisionPointValue *)&otherCorners[corner])->packed);
                         if (hit > 0) {
                             hit = quadIndex + 1;
                             break;
@@ -709,11 +709,11 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                         quadIndex = 0;
                         do {
                             hit = IsPointInQuad(
-                                *(s32 *)&quads[quadIndex][2],
-                                *(s32 *)&quads[quadIndex][3],
-                                *(s32 *)&quads[quadIndex][0],
-                                *(s32 *)&quads[quadIndex][1],
-                                *(s32 *)&samples[corner]);
+                                ((CarCollisionPointValue *)&quads[quadIndex][2])->packed,
+                                ((CarCollisionPointValue *)&quads[quadIndex][3])->packed,
+                                ((CarCollisionPointValue *)&quads[quadIndex][0])->packed,
+                                ((CarCollisionPointValue *)&quads[quadIndex][1])->packed,
+                                ((CarCollisionPointValue *)&samples[corner])->packed);
                             if (hit > 0) {
                                 hit = quadIndex + 1;
                                 break;

@@ -202,6 +202,11 @@ typedef struct CarCollisionPoint {
     s16 z;
 } CarCollisionPoint;
 
+typedef union CarCollisionPointValue {
+    CarCollisionPoint point;
+    s32 packed;
+} CarCollisionPointValue;
+
 typedef struct CarHullPoint {
     u16 x;
     u16 z;
