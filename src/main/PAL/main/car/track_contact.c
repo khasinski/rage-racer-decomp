@@ -287,7 +287,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
         } else {
             outputProgress = (s16)spad->segmentLength - alongSegment;
         }
-        car->field_6C = outputProgress;
+        car->progressB = outputProgress;
     }
     segLenC = (s16)spad->segmentLength;
     spad->field_8E =
@@ -359,7 +359,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
 
             trackLength = g_TrackLength;
             progress =
-                (car->field_68 + car->field_6C) % trackLength;
+                (car->progressA + car->progressB) % trackLength;
             combinedComponent = firstComponent + (lateralProduct >> 0xC);
             car->modelRoll = combinedComponent;
             car->modelYaw = car->bodyYaw;

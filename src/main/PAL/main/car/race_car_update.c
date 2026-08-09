@@ -401,7 +401,7 @@ void UpdateAttractCars(void) {
         c0->field_F8 = 0;
         c0->field_8A = 0;
         c0->bodyYaw = c0->field_108;
-        c0->field_68 = ((c0->field_68) % (g_TrackLength));
+        c0->progressA = ((c0->progressA) % (g_TrackLength));
         c0++;
     }
     for (i = 0; i < 11; i++) {

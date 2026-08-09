@@ -69,8 +69,8 @@ typedef struct GameCarRuntime {
     s32 field_5C;
     s32 modelY;
     s32 bodyRollVelocity;
-    s32 field_68;
-    s32 field_6C;
+    s32 progressA;
+    s32 progressB;
     s32 trackProgress;
     s32 previousTrackProgress;
     s16 trackSection;
@@ -170,7 +170,7 @@ typedef struct GameCarRuntime {
 } GameCarRuntime;
 
 typedef struct CarProgressWindow {
-    s32 field_6C;
+    s32 progressB;
     u8 reserved[0x3C];
     s16 activeFlag;
     u8 trailing[0x15A];
@@ -208,7 +208,7 @@ extern CarCollisionPoint g_CarCollisionCorners[4];
  * also have their own split symbols; see docs/names.md section 3b. */
 extern GameCarRuntime g_Cars[11];
 
-/* The four contenders ordered by race progress (`field_68 + field_6C`), best
+/* The four contenders ordered by race progress (`progressA + progressB`), best
  * first; re-sorted every frame by RankContenders to rubber-band the AI. */
 extern GameCarRuntime *g_RankedCars[4];
 

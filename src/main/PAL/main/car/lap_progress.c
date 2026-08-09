@@ -31,7 +31,7 @@ void BeginCarStandingStart(PlayerCarRuntime *car, s32 sceneTimer) {
 
 /*
  * Walks the track-point ring from the event's start point to the car's current
- * point, summing segment lengths into field_68. `mode` picks which way round
+ * point, summing segment lengths into progressA. `mode` picks which way round
  * to walk; the backwards arm then reuses the parameter as its own cursor.
  */
 void SeedCarLapProgress(GameCarRuntime *car, s32 mode) {
@@ -41,7 +41,7 @@ void SeedCarLapProgress(GameCarRuntime *car, s32 mode) {
     s32 total = 0;
     s32 index;
 
-    obj->field_68 = 0;
+    obj->progressA = 0;
     if (state != 0) {
         index = g_TrackEventData->trackWalkStart;
         if (mode == 1) {
@@ -118,7 +118,7 @@ while (1) {
             } while (1);
         }
     }
-    obj->field_68 = total;
+    obj->progressA = total;
 }
 
 
@@ -126,7 +126,7 @@ while (1) {
  * Lap-progress accumulator. Relocates the car's trackPointIndex to the segment
  * that now contains it (FindTrackSegment), then walks the intervening points and
  * adds (forward) or subtracts (backward) their segmentLength into
- * car->field_68 (progress). The two mirror-image branches select forward vs
+ * car->progressA (progress). The two mirror-image branches select forward vs
  * reverse lap direction from the direction flag g_RaceSeries. Register-pinned
  * locals (bv/ir) are load-bearing for the match.
  */
@@ -168,13 +168,13 @@ void AccumulateLapProgress(GameCarRuntime *car) {
                         if (j < 0) {
                             ir = j + count;
                         }
-                        car->field_68 += (s16)array[ir].segmentLength;
+                        car->progressA += (s16)array[ir].segmentLength;
                     }
                     break;
                 }
                 if (r == fwd) {
                     for (i = 1; i <= n; i++) {
-                        car->field_68 -= (s16)array[(car->trackPointIndex + i) % count].segmentLength;
+                        car->progressA -= (s16)array[(car->trackPointIndex + i) % count].segmentLength;
                     }
                     break;
                 }
@@ -195,7 +195,7 @@ void AccumulateLapProgress(GameCarRuntime *car) {
                 bv = back;
                 if (r == fwd) {
                     for (i = 0; i < n; i++) {
-                        car->field_68 += (s16)array[(car->trackPointIndex + i) % count].segmentLength;
+                        car->progressA += (s16)array[(car->trackPointIndex + i) % count].segmentLength;
                     }
                     break;
                 }
@@ -207,7 +207,7 @@ void AccumulateLapProgress(GameCarRuntime *car) {
                         if (j < 0) {
                             ir = j + count;
                         }
-                        car->field_68 -= (s16)array[ir].segmentLength;
+                        car->progressA -= (s16)array[ir].segmentLength;
                     }
                     break;
                 }

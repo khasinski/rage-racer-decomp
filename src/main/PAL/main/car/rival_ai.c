@@ -174,10 +174,10 @@ void SlowRivalAhead(GameCarRuntime *car, s32 carIndex) {
     s32 value;
 
     offset = carIndex * 4;
-    pos0Base = car->field_68;
+    pos0Base = car->progressA;
     entry = g_RankedCars[carIndex - 1];
-    pos0 = pos0Base + car->field_6C;
-    pos1 = entry->field_68 + entry->field_6C;
+    pos0 = pos0Base + car->progressB;
+    pos1 = entry->progressA + entry->progressB;
 
     if ((pos1 - pos0) < 0x2800) {
         return;
@@ -191,7 +191,7 @@ void SlowRivalAhead(GameCarRuntime *car, s32 carIndex) {
 }
 
 /*
- * Ranks the first four cars by race progress (`field_68 + field_6C`) and
+ * Ranks the first four cars by race progress (`progressA + progressB`) and
  * publishes the ordering into g_RankedCars: slot 0 the leader, slot 3 the
  * last of the four, slots 1/2 the middle pair in order. UpdateRivalRubberBand reads
  * the result to rubber-band the AI.
@@ -210,7 +210,7 @@ void RankContenders(void) {
     sumPtr = sums;
     offset = 0;
     do {
-        *sumPtr = g_Cars[i].field_68 + g_Cars[i].field_6C;
+        *sumPtr = g_Cars[i].progressA + g_Cars[i].progressB;
         offset += sizeof(GameCarRuntime);
         i++;
         sumPtr++;
@@ -286,7 +286,7 @@ void UpdateRivalRubberBand(void) {
     s0 = 4;
 
     do {
-        s32 a0 = g_RankedCars[s1]->field_68 + g_RankedCars[s1]->field_6C - s6;
+        s32 a0 = g_RankedCars[s1]->progressA + g_RankedCars[s1]->progressB - s6;
 
         if (a0 >= 0) {
             if (s1 == 0) {
