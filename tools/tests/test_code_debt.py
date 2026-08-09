@@ -9,6 +9,7 @@ class CodeDebtTest(unittest.TestCase):
     def test_counts_each_scaffolding_family(self):
         source = r'''
 extern s32 misplaced;
+#define GAME_SAMPLE_TYPE s16
 void f(u8 *base, void *ptr) {
     register s32 value asm("$4");
     register s32 named asm("v0");
@@ -34,6 +35,7 @@ void f(u8 *base, void *ptr) {
         self.assertEqual(counts["asm_aliases"], 1)
         self.assertEqual(counts["unknown_fields"], 2)
         self.assertEqual(counts["externs_in_c"], 1)
+        self.assertEqual(counts["declaration_overrides"], 1)
 
     def test_ignores_comments(self):
         with tempfile.TemporaryDirectory() as directory:

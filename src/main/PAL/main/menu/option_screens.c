@@ -7,7 +7,6 @@
 #include "game/menu.h"
 #include "game/race.h"
 #include "game/render.h"
-#define GAME_CAM_ROW_TYPE s32
 #include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
@@ -253,7 +252,7 @@ void InitTrackScene(void) {
     g_TrackWalkStart = g_TrackEventData->trackWalkStart;
     BuildStartingGrid();
     SetTrackTexturePageNow(g_Cars[g_CameraCarIndex].trackSection);
-    SeekEnvironmentScript(g_CamRow[2]);
+    SeekEnvironmentScript(((CamRow *)g_CamRow)->environmentScriptOffset);
     g_CameraViewMode = 2;
     g_AnimTimer = 0;
     g_SceneTimer = 0;

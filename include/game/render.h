@@ -2,6 +2,7 @@
 #define GAME_RENDER_H
 
 #include "common.h"
+#include "game/camera_types.h"
 #include "game/environment.h"
 #include "game/vector.h"
 
@@ -149,16 +150,6 @@ typedef struct GameRenderAxisMatrix {
  * Camera / horizon row. Base g_CamRow, indexed +8*screen. `horizon` is added
  * to / subtracted from a GameRenderObject's y during the view transform.
  */
-typedef struct CamRow {
-    u8 pad0[8];
-    s32 environmentScriptOffset;
-    s16 axis0;   /* 0x0C */
-    u16 axis1;   /* 0x0E */
-    u16 axis2;   /* 0x10 */
-    s16 horizon; /* 0x12 */
-} CamRow;
-
-
 /* One display buffer, which is what InitRenderState sets that rectangle to.
  * See SetupDisplay240 below: the 240 mode is "two 320x240 buffers stacked at
  * y=0 / y=0xF0" and sets the GTE projection with SetGeomScreen(0x140). The

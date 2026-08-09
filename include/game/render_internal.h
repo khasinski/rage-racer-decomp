@@ -2,6 +2,7 @@
 #define GAME_RENDER_INTERNAL_H
 
 #include "common.h"
+#include "game/camera_types.h"
 #include "game/vector.h"
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
@@ -35,11 +36,7 @@ extern Matrix g_MirrorViewMatrix;
 extern struct GameRenderObject g_CameraCar;
 extern Matrix g_SceneLightMatrix;
 extern u32 g_ScratchRenderMode;
-#ifndef GAME_CAM_ROW_TYPE
-#define GAME_CAM_ROW_TYPE u8
-#endif
-extern GAME_CAM_ROW_TYPE *g_CamRow;
-#undef GAME_CAM_ROW_TYPE
+extern u8 *g_CamRow;
 extern FontGlyph g_SmallFontGlyphs[];
 extern FontGlyph g_LargeFontGlyphs[];
 extern CameraKey g_CameraPath[];

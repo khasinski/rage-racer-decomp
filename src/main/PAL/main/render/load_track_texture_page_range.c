@@ -7,9 +7,8 @@
  * pointer to the current CamRow) into the active view-param globals.
  */
 void LoadTrackTexturePageRange(void) {
-    s32 *camRow;
+    CamRow *camRow = (CamRow *)g_CamRow;
 
-    camRow = (s32 *)g_CamRow;
-    g_TrackTextureSectionLo = camRow[0];
-    g_TrackTextureSectionHi = camRow[1];
+    g_TrackTextureSectionLo = camRow->textureSectionLo;
+    g_TrackTextureSectionHi = camRow->textureSectionHi;
 }

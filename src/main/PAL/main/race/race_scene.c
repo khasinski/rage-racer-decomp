@@ -9,7 +9,6 @@
 #include "game/random.h"
 #include "game/records_internal.h"
 #include "game/render.h"
-#define GAME_CAM_ROW_TYPE CamRow
 #include "game/render_internal.h"
 #include "game/save_internal.h"
 #define GAME_REF_SECTOR_DECL extern s32 g_RefSectorTimes
@@ -352,7 +351,7 @@ void EnterRaceScene(void) {
     }
     g_RaceTotalTime = 0;
     ResetMirrorState();
-    SeekEnvironmentScript(g_CamRow->environmentScriptOffset);
+    SeekEnvironmentScript(((CamRow *)g_CamRow)->environmentScriptOffset);
     BuildTileStrips();
     BuildRaceHudPrims(g_GrandPrixMode);
     g_AnimTimer = 0;
