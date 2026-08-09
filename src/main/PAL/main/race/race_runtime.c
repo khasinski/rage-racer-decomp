@@ -456,7 +456,6 @@ s32 GetWaypointAngle(s32 position) {
         if (value < 0) {
             value += 0xFFF;
         }
-        asm(".globl func_80038368\nfunc_80038368 = GetWaypointAngle + 0xE0");
         return temp;
     }
 }

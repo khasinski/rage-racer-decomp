@@ -22,11 +22,13 @@ PATTERNS = {
         r"\(\s*(?:s32|u32|long|unsigned\s+long)\s*\)\s*(?:[A-Za-z_&]|\()"
     ),
     "field_macros": re.compile(r"\b(?:FIELD|RAW_FIELD)\w*\s*\("),
-    "register_pins": re.compile(r"\bregister\b[^;\n]*\basm\s*\(\s*\"\$"),
+    "register_pins": re.compile(
+        r"\bregister\b[^;\n]*\basm\s*\(\s*\"(?:\$\d+|zero|at|v[01]|a[0-3]|t[0-9]|s[0-8]|k[01]|gp|sp|fp|ra)\""
+    ),
     "empty_barriers": re.compile(
         r"\b(?:__asm__|asm)\s*(?:volatile\s*)?\(\s*\"\""
     ),
-    "asm_aliases": re.compile(r"\basm\s*\(\s*\"(?!\$)[A-Za-z_]\w*\"\s*\)"),
+    "asm_aliases": re.compile(r"\.globl\s+func_[0-9A-Fa-f]+"),
     "unknown_fields": re.compile(r"\b(?:field_[0-9A-Fa-f]+|unk[0-9A-Fa-f]+)\b"),
     "externs_in_c": re.compile(r"^\s*extern\b", re.MULTILINE),
 }

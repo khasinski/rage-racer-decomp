@@ -826,8 +826,6 @@ typedef union {
 /* GCC 2.6.3 needs the concrete outer bound for the indexed view below. */
 
 /* The animated five-row ranking/time-record panel. */
-asm(".globl func_8004E07C\nfunc_8004E07C = DrawRankingTable + 0xCF8");
-
 s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
     u8 text[16];
     u32 *ot;

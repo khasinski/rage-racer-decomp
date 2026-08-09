@@ -218,17 +218,6 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
     } while (pitchBase < (s32)&g_ReverbFadeStep);
 }
 
-/* Mid-function labels the retail build exports (see docs/ASM_AND_GTE_POLICY.md,
- * "symbol labels"). They define symbols only and emit no code. */
-asm(".globl func_8005E078\n"
-    "func_8005E078 = ForceIndexedEffectVoiceEnabled + 0x20\n"
-    ".globl func_8005E1B8\n"
-    "func_8005E1B8 = ForceIndexedEffectVoiceEnabled + 0x160\n"
-    ".globl func_8005E200\n"
-    "func_8005E200 = ForcePitchEffectVoicesEnabled + 0x30\n"
-    ".globl func_8005E314\n"
-    "func_8005E314 = ForcePitchEffectVoicesEnabled + 0x144");
-
 void ForceSoundSlotVoicePlayback(s32 enabled) {
     s32 saved = enabled;
     s32 i;

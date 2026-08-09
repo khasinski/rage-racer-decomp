@@ -405,7 +405,6 @@ void DrawScriptedQuad(s32 time, u8 *desc, ScriptedQuadMotion *ctx) {
 
     switch (((ScriptedQuadShape *)entry)->flags & 3) {
     case 0:
-        asm(".globl func_800486C0\nfunc_800486C0 = . + 4");
         index = 0;
         break;
     case 1:

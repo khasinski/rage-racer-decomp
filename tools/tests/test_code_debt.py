@@ -11,12 +11,13 @@ class CodeDebtTest(unittest.TestCase):
 extern s32 misplaced;
 void f(u8 *base, void *ptr) {
     register s32 value asm("$4");
+    register s32 named asm("v0");
     value = *(s16 *)(base + 0x10);
     ptr = (void *)((u8 *)ptr + 4);
     value += (s32)ptr;
     value += FIELD32(base, 4);
     asm volatile("");
-    value += thing asm("symbol");
+    asm(".globl func_80001234\nfunc_80001234 = f + 4");
     value += object->field_20 + object->unk14;
 }
 '''
@@ -28,7 +29,7 @@ void f(u8 *base, void *ptr) {
         self.assertEqual(counts["raw_offset_dereferences"], 1)
         self.assertEqual(counts["pointer_integer_casts"], 1)
         self.assertEqual(counts["field_macros"], 1)
-        self.assertEqual(counts["register_pins"], 1)
+        self.assertEqual(counts["register_pins"], 2)
         self.assertEqual(counts["empty_barriers"], 1)
         self.assertEqual(counts["asm_aliases"], 1)
         self.assertEqual(counts["unknown_fields"], 2)
