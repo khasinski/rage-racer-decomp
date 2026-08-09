@@ -37,6 +37,7 @@ void f(u8 *base, void *ptr) {
         self.assertEqual(counts["pointer_integer_casts"], 1)
         self.assertEqual(counts["address_reinterpret_casts"], 2)
         self.assertEqual(counts["aggregate_address_casts"], 1)
+        self.assertEqual(counts["explicit_pointer_casts"], 7)
         self.assertEqual(counts["field_macros"], 1)
         self.assertEqual(counts["register_pins"], 2)
         self.assertEqual(counts["empty_barriers"], 1)
@@ -68,6 +69,7 @@ void f(u8 *bytes, Packet *packet, u8 value) {
             counts = count_debt(Path(directory))
 
         self.assertEqual(counts["byte_pointer_arithmetic"], 1)
+        self.assertEqual(counts["explicit_pointer_casts"], 3)
 
     def test_pointer_integer_casts_ignore_integer_expressions(self):
         source = r'''
