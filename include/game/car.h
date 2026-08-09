@@ -325,6 +325,13 @@ typedef struct GearCurveRow {
     s32 values[16];
 } GearCurveRow;
 
+typedef union GearCurveAddress {
+    s32 byteOffset;
+    u8 *bytes;
+    s32 *valuePointer;
+    GearCurveRow *rowPointer;
+} GearCurveAddress;
+
 extern GearCurveRow g_GearTorqueCurve[];
 
 typedef enum CarMotionState {
