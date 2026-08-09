@@ -15,6 +15,12 @@ typedef union OrderingTableAddress {
     void *pointer;
 } OrderingTableAddress;
 
+typedef union RenderBufferAddress {
+    s32 byteOffset;
+    u8 *bytes;
+    void *pointer;
+} RenderBufferAddress;
+
 typedef union VisibilityMaskAddress {
     s32 byteOffset;
     u32 *pointer;

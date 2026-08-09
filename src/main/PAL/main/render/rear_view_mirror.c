@@ -29,6 +29,7 @@ s32 BeginMirrorPass(void) {
     register s32 v0reg asm("$2");
     s32 v1reg;
     s32 y0;
+    RenderBufferAddress drawBuffer;
 
     mirrorEnabled = 0;
     scratch = SCRATCHPAD;
@@ -52,13 +53,15 @@ s32 BeginMirrorPass(void) {
         scratch->mode = v0reg;
         v0reg = 0x56;
         scratch->x0 = v0reg;
-        v0reg = (s32)g_DrawBuffer;
+        drawBuffer.bytes = g_DrawBuffer;
+        v0reg = drawBuffer.byteOffset;
         y0 = *(u16 *)&g_MirrorPanelY;
         scratch->x1 = 0xEA;
         __asm__("");
         v1reg = g_MirrorPanelY;
         v0reg += 0xBCC;
-        scratch->primData = (void *)v0reg;
+        drawBuffer.byteOffset = v0reg;
+        scratch->primData = drawBuffer.pointer;
         v0reg = scratch->orderingFlag;
         scratch->y0 = y0;
         v0reg ^= 1;
@@ -104,6 +107,8 @@ void EndMirrorPass(void) {
     GameScratchpadRenderState *scratch;
     register s32 v0reg asm("$2");
     s32 v1reg;
+    VisibilityMaskAddress visibilityMask;
+    RenderBufferAddress drawBuffer;
 
     scratch = SCRATCHPAD;
 
@@ -116,15 +121,19 @@ void EndMirrorPass(void) {
     scratch->x1 = v0reg;
     v0reg = 0xF0;
     scratch->y1 = v0reg;
-    v0reg = (s32)g_MainVisibleCellMask;
-    g_VisibleCellMask = (u32 *)v0reg;
-    v0reg = (s32)g_DrawBuffer;
+    visibilityMask.pointer = g_MainVisibleCellMask;
+    v0reg = visibilityMask.byteOffset;
+    visibilityMask.byteOffset = v0reg;
+    g_VisibleCellMask = visibilityMask.pointer;
+    drawBuffer.bytes = g_DrawBuffer;
+    v0reg = drawBuffer.byteOffset;
     g_VisibleCellList = g_MainVisibleCellList;
     v1reg = scratch->depth;
     scratch->x0 = 0;
     scratch->y0 = 0;
     v0reg += 0xCC;
-    scratch->primData = (void *)v0reg;
+    drawBuffer.byteOffset = v0reg;
+    scratch->primData = drawBuffer.pointer;
     v0reg = scratch->orderingFlag;
     scratch->depth = v1reg - 0x800;
     scratch->orderingFlag = v0reg ^ 1;
