@@ -138,11 +138,11 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
 
     if (g_RacePhase < 4) {
         if (g_PadType == 0x41) {
-            ((CarInputValue *)&p->acceleratorInput)->sampled =
+            p->acceleratorInput.sampled =
                 ((g_PadHeld & g_PadAccelMask) != 0) << 8;
             p->brakeInput = ((g_PadHeld & g_PadBrakeMask) != 0) << 8;
         } else if (g_PadType == 0x23) {
-            ((CarInputValue *)&p->acceleratorInput)->sampled =
+            p->acceleratorInput.sampled =
                 ((g_PadHeld & g_NegconAccelMask) != 0) << 8;
             p->brakeInput = ((g_PadHeld & g_NegconBrakeMask) != 0) << 8;
             switch (g_NegconMappingIndex) {
@@ -151,7 +151,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
             {
                 CarInputAddress acceleratorInput;
 
-                acceleratorInput.pointer = &p->acceleratorInput;
+                acceleratorInput.pointer = &p->acceleratorInput.value;
                 *acceleratorInput.sampled = (g_NegconAnalogI << 8) / 106;
                 p->brakeInput = (g_NegconAnalogII << 8) / 106;
                 break;
@@ -161,7 +161,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
             {
                 CarInputAddress acceleratorInput;
 
-                acceleratorInput.pointer = &p->acceleratorInput;
+                acceleratorInput.pointer = &p->acceleratorInput.value;
                 *acceleratorInput.sampled = (g_NegconAnalogII << 8) / 106;
                 p->brakeInput = (g_NegconAnalogI << 8) / 106;
                 break;
@@ -173,7 +173,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
             {
                 CarInputAddress acceleratorInput;
 
-                acceleratorInput.pointer = &p->acceleratorInput;
+                acceleratorInput.pointer = &p->acceleratorInput.value;
                 *acceleratorInput.sampled = (g_NegconAnalogII << 8) / 106;
                 p->brakeInput = (g_NegconAnalogL << 8) / 106;
                 break;
@@ -184,10 +184,10 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
             }
         } else {
             p->brakeInput = 0;
-            p->acceleratorInput = 0;
+            p->acceleratorInput.value = 0;
         }
     } else {
-        p->acceleratorInput = 0;
+        p->acceleratorInput.value = 0;
         p->brakeInput = 0;
     }
 

@@ -420,7 +420,7 @@ typedef struct GameCarDrive {
     CarMotionState motionState; /* +0x98 */
     s16 acceleratorLatch;
     s16 brakeLatch;
-    s16 acceleratorInput; /* +0xA0 */
+    CarInputValue acceleratorInput; /* +0xA0 */
     s16 brakeInput;       /* +0xA2 */
     s16 racePosition;
     s16 hudLapHighlightRow;

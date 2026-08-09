@@ -200,9 +200,9 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
         }
 
         drive->launchEnergy -= drive->brakeInput * 4;
-        drive->launchEnergy -= (0x100 - drive->acceleratorInput) * 4;
+        drive->launchEnergy -= (0x100 - drive->acceleratorInput.value) * 4;
         car->speed -= drive->brakeInput * 10 / 256;
-        car->speed -= (0x100 - drive->acceleratorInput) * 10 / 256;
+        car->speed -= (0x100 - drive->acceleratorInput.value) * 10 / 256;
     } else {
         drive->spinRate = drive->spinRate * 15 / 16;
         if (s4val < 0x1000) {
@@ -355,7 +355,7 @@ void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
     r->brakePos =
         rcos(r->launchHeading) * r->launchSpeed / 256 + cosF24 * coords[2] / 4096;
 
-    if (r->acceleratorLatch != 1 && r->brakeLatch != 1 && r->acceleratorInput < 128) {
+    if (r->acceleratorLatch != 1 && r->brakeLatch != 1 && r->acceleratorInput.value < 128) {
         r->groundedFrames += 1;
     } else {
         r->groundedFrames = 0;
@@ -408,12 +408,12 @@ void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused) {
 
     SetIndexedEffectVoice(0, 0x1A80,
                           (0x60 - (g_StandingStartSpin & 0x1F) * 2) *
-                              route->acceleratorInput / 256);
+                              route->acceleratorInput.value / 256);
 
     car->speed = car->speed / 10;
 
     if (g_StandingStartSpin >= 11) {
-        s32 f15c = route->acceleratorInput;
+        s32 f15c = route->acceleratorInput.value;
         s32 f134 = route->engineRpm;
 
         sinA = f15c + 32;

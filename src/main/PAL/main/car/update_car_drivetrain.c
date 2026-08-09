@@ -135,14 +135,14 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     gearCurve.valuePointer = base.rowPointer[0].values;
   }
   else
-    if ((car->drive.motionState == CAR_MOTION_STANDING_START) && ((car->drive.acceleratorInput < 0x40) || (car->drive.brakeInput >= 0x80)))
+    if ((car->drive.motionState == CAR_MOTION_STANDING_START) && ((car->drive.acceleratorInput.value < 0x40) || (car->drive.brakeInput >= 0x80)))
   {
     gearCurve.valuePointer = base.rowPointer[0].values;
   }
   leftWheelState = drive->acceleratorLatch;
   if (leftWheelState == 0)
   {
-    if (drive->acceleratorInput >= 0x85)
+    if (drive->acceleratorInput.value >= 0x85)
     {
       drive->acceleratorLatch = 1;
     }
@@ -153,7 +153,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     drive->acceleratorLatch = 2;
   }
   else
-    if (drive->acceleratorInput < 0x7C)
+    if (drive->acceleratorInput.value < 0x7C)
   {
     drive->acceleratorLatch = 0;
   }
@@ -175,7 +175,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   {
     drive->brakeLatch = 0;
   }
-  frontLoad = drive->acceleratorInput * 0x64;
+  frontLoad = drive->acceleratorInput.value * 0x64;
   frontLoadScaled = frontLoad >> 8;
   if (frontLoad < 0)
   {
@@ -561,7 +561,7 @@ shift_interpolation_done:
       }
     }
   }
-  throttleTorque = netTorque * drive->acceleratorInput * drive->drivetrainCoupled;
+  throttleTorque = netTorque * drive->acceleratorInput.value * drive->drivetrainCoupled;
   if (throttleTorque < 0)
   {
     throttleTorque += 0xFF;
@@ -582,7 +582,7 @@ shift_interpolation_done:
   accel += drive->brakeInput * drive->engineRpm / 8192;
   if (netTorque > 0)
   {
-    if (drive->acceleratorInput < 0x7F)
+    if (drive->acceleratorInput.value < 0x7F)
     {
       accel += netTorque / 2;
     }

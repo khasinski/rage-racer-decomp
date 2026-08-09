@@ -81,7 +81,7 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
             route->launchDirection = car->facingBackwards;
         }
     } else {
-        if (route->acceleratorInput < 128) {
+        if (route->acceleratorInput.value < 128) {
             s16 m9e = route->brakeLatch;
             if (m9e == 1) {
                 s32 av = coords[0] < 0 ? -coords[0] : coords[0];
