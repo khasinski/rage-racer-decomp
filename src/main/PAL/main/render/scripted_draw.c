@@ -550,7 +550,6 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     register s32 value asm("$2");
     s32 temporary;
     void *basePtr;
-    s32 offset;
     s32 done;
     s32 timerValue;
     u32 fade;
@@ -605,15 +604,12 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
         return;
     }
 
-    offset = i * 2;
     basePtr = g_MenuRowScript;
-    offset = (offset + i) << 2;
-    cmd = (TimedDrawCommand *)((u8 *)basePtr + offset);
+    cmd = &((TimedDrawCommand *)basePtr)[i];
 
 loop:
     basePtr = g_MenuRowFlashLevels;
-    offset = i * 4;
-    timer = (s32 *)((u8 *)basePtr + offset);
+    timer = &((s32 *)basePtr)[i];
 
     fade = *timer & 0x1FF;
     *timer = fade;
