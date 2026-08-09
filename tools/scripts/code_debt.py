@@ -25,7 +25,8 @@ PATTERNS = {
         r"(?:[A-Za-z_&]|\(\s*[A-Za-z_&])"
     ),
     "address_reinterpret_casts": re.compile(
-        r"\*\s*\(\s*(?:u8|s8|u16|s16|u32|s32)\s*\*\s*\)\s*\(?\s*&"
+        r"\*\s*\(\s*(?:(?:const|volatile)\s+)*"
+        r"(?:u8|s8|u16|s16|u32|s32)\s*\*\s*\)\s*\(?\s*&"
     ),
     "field_macros": re.compile(r"\b(?:FIELD|RAW_FIELD)\w*\s*\("),
     "register_pins": re.compile(
