@@ -138,8 +138,9 @@ pos:
 }
 
 s32 DrawCarSelectScreen(s32 step) {
-    s32 p = (s32) SCRATCH_OT_BASE_AS(void);
-    u8 *buf = (u8 *)p + 4;
+    u32 *ot = SCRATCH_OT_BASE_AS(u32);
+    s32 p = (s32)ot;
+    u32 *buf = ot + 1;
     s32 v;
     s32 col;
     s32 xpos;
