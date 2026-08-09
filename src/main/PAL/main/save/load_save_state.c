@@ -162,7 +162,8 @@ s32 LoadSaveStateBlock(u8 *block) {
                 off = i * 32;
                 for (; j < 4; j++) {
                     *(s32 *)((u8 *)g_BestLapTimes + off) = *(s32 *)(base + off + 0x9DC);
-                    *(s32 *)((u8 *)g_BestTotalTimes + off) = *(s32 *)(base + off + 0xA1C);
+                    *(s32 *)((u8 *)g_BestTotalTimes + off) =
+                        *(s32 *)((u8 *)((GameSaveBlock *)base)->bestTotalTimes + off);
                     off += 8;
                 }
             }
