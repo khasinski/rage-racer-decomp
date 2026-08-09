@@ -153,6 +153,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     s32 scaleDelta;
     s32 texY;
     s32 gyTemp;
+    u32 slidePhase;
     if (d >= 0xC)
     {
       d = 0xB;
@@ -160,7 +161,8 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     x0 = 0x87;
     drawX = 0x87;
     asm("" : : "r"(drawX));
-    sy = (((u32) (d * 0x460)) >> 5) + 0xFEC9;
+    slidePhase = d;
+    sy = ((slidePhase * 0x460) >> 5) + 0xFEC9;
     ff = 0xFF;
     DrawRectOutline((void *)ot, (s16)drawX, (s16)sy, (s16)0x82, 0x104, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)ff);
     kreg = sy;
@@ -231,11 +233,13 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     s32 ff;
     s16 w1;
     s16 xb;
+    u32 slidePhase;
     if (d >= 8)
     {
       d = 7;
     }
-    su = ((u32) (-(d * 0x460))) >> 5;
+    slidePhase = d;
+    su = (slidePhase * -0x460) >> 5;
     sy = su + 0x1FB;
     x0 = 0x2F;
     ff = 0xFF;
@@ -315,12 +319,14 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     register s32 vs7 asm("$23");
     register s32 vs6 asm("$22");
     u32 panelY;
+    u32 slidePhase;
     if (d >= 6)
     {
       d = 5;
     }
     x0 = 0x8A;
-    panelY = ((u32) (-(d * 0x3C0))) >> 5;
+    slidePhase = d;
+    panelY = (slidePhase * -0x3C0) >> 5;
     kreg = panelY + 0x1EA;
     y1 = panelY + 0x1E7;
     x1 = (g_TeamLogoPenColor * 8) + 0x80;
@@ -409,11 +415,14 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
   d = g_TeamLogoEditorStep - 7;
   if (d >= 0)
   {
+    u32 slidePhase;
+
     if (d >= 7)
     {
       d = 6;
     }
-    DrawSprite((void *)ot, (s16)((((u32)(d * 0x250)) >> 5) + 0xFFA1), (s16)0xC0, (s16)0x61, (s16)0x32,
+    slidePhase = d;
+    DrawSprite((void *)ot, (s16)(((slidePhase * 0x250) >> 5) + 0xFFA1), (s16)0xC0, (s16)0x61, (s16)0x32,
                (u8)0x90, (u8)0xC0, 0, 0, 0, 0x1F5, 1, 0, 0x1D);
   }
   d = g_TeamLogoEditorStep - 8;
@@ -427,12 +436,14 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     s32 x0Calc;
     s32 syBase;
     register s32 tileSize;
+    u32 slidePhase;
     kreg = 0xC8;
     if (d >= 6)
     {
       d = 5;
     }
-    x0Calc = (((u32) (-(d * 0x140))) >> 5) + 0x140;
+    slidePhase = d;
+    x0Calc = ((slidePhase * -0x140) >> 5) + 0x140;
     asm("" : : "r"(x0Calc));
     syBase = g_TeamLogoColorChannel;
     x0 = (u16) x0Calc;
