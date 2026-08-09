@@ -428,9 +428,13 @@ extern ShuttlePath g_ShuttlePath2Points;
 extern s16 g_ShuttlePathTravelMax[];
 extern s16 g_SkyTileMap[][16];
 extern u16 g_SpinningSceneryAngle[];
-extern u8 g_SpinningSceneryPos[];
+extern Vec4 g_SpinningSceneryPos[];
 extern u16 g_SpinningSceneryRate[];
-extern u8 g_SpinningSceneryYaw[];
+typedef struct SpinningSceneryOrientation {
+    s32 yaw;
+    u8 reserved[12];
+} SpinningSceneryOrientation;
+extern SpinningSceneryOrientation g_SpinningSceneryYaw[];
 extern s32 g_StartGridSceneryAngle[];
 extern s32 g_StaticSceneryYaw;
 

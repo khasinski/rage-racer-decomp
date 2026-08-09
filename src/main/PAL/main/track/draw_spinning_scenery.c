@@ -54,11 +54,16 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
             }
             *dst &= 0xFFF;
 
-            BuildRotMatrixY(yawMatrix, *(s32 *)(g_SpinningSceneryYaw + offset));
+            BuildRotMatrixY(
+                yawMatrix,
+                ((SpinningSceneryOrientation *)((u8 *)g_SpinningSceneryYaw + offset))->yaw);
             MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, yawMatrix);
             BuildRotMatrixZ(work, *(s16 *)dst);
             MulMatrix2(yawMatrix, work);
-            SetGteObjectMatrix((void *)0x1F80011C, g_SpinningSceneryPos + offset, work);
+            SetGteObjectMatrix(
+                (void *)0x1F80011C,
+                (u8 *)g_SpinningSceneryPos + offset,
+                work);
 
             SCRATCH_ENV_MODE4 = 0;
             limit = 1;
