@@ -27,6 +27,9 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
     s32 activeValue;
     s32 frameMask;
     AssetAddress dataAddress;
+    SpinningSceneryAngleAddress startAddress;
+    SpinningSceneryAngleAddress cursorAddress;
+    SpinningSceneryAngleAddress endAddress;
 
     activeValue = g_CourseIndex;
     active = activeValue & 3;
@@ -47,7 +50,9 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
         work = objectMatrix;
         base = g_SpinningSceneryAngle;
         dstOffset = loopIndex * 2;
-        dst = (u16 *)(dstOffset + (s32)base);
+        startAddress.pointer = base;
+        startAddress.byteOffset = dstOffset + startAddress.byteOffset;
+        dst = startAddress.pointer;
         offset = loopIndex * 0x10;
 
         do {
@@ -76,7 +81,10 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
 
             dst++;
             offset += 0x10;
-        } while ((s32)dst < ((end * 2) + (s32)base));
+            cursorAddress.pointer = dst;
+            endAddress.pointer = base;
+            endAddress.byteOffset = (end * 2) + endAddress.byteOffset;
+        } while (cursorAddress.byteOffset < endAddress.byteOffset);
     }
 
     frameMask = frame & 0x1FF;
