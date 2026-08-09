@@ -41,7 +41,7 @@ void StoreSaveStateBlock(u8 *block) {
         s32 extraMoney = g_ExtraGrandPrixSave.money;
         u16 bgmSelection = g_BgmSelection;
         ((GameSaveBlock *)block)->extraGrandPrixProgress.money = extraMoney;
-        *(s32 *)(block + 0x38) = g_TimeAttackSave.course;
+        ((GameSaveBlock *)block)->timeAttackProgress.course = g_TimeAttackSave.course;
         *(s32 *)(block + 0x3C) = g_TimeAttackSave.carIndex;
         *(s32 *)(block + 0x40) = g_TimeAttackSave.classIndex;
         *(s32 *)(block + 0x44) = g_TimeAttackSave.maxClassReached;
