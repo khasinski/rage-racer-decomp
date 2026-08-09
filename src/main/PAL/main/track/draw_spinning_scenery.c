@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/race.h"
 #include "game/random.h"
 #include "game/render.h"
@@ -25,6 +26,7 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
     s32 active;
     s32 activeValue;
     s32 frameMask;
+    AssetAddress dataAddress;
 
     activeValue = g_CourseIndex;
     active = activeValue & 3;
@@ -54,16 +56,16 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
             }
             *dst &= 0xFFF;
 
-            BuildRotMatrixY(
-                yawMatrix,
-                ((SpinningSceneryOrientation *)((u8 *)g_SpinningSceneryYaw + offset))->yaw);
+            dataAddress.pointer = g_SpinningSceneryYaw;
+            dataAddress.offset += offset;
+            BuildRotMatrixY(yawMatrix,
+                            ((SpinningSceneryOrientation *)dataAddress.pointer)->yaw);
             MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, yawMatrix);
             BuildRotMatrixZ(work, *(s16 *)dst);
             MulMatrix2(yawMatrix, work);
-            SetGteObjectMatrix(
-                (void *)0x1F80011C,
-                (u8 *)g_SpinningSceneryPos + offset,
-                work);
+            dataAddress.pointer = g_SpinningSceneryPos;
+            dataAddress.offset += offset;
+            SetGteObjectMatrix((void *)0x1F80011C, dataAddress.pointer, work);
 
             SCRATCH_ENV_MODE4 = 0;
             limit = 1;
