@@ -8,19 +8,8 @@
 #include "psyq/gpu.h"
 
 
-typedef struct CdReadSprite {
-    u_char tag[8];
-    volatile short x;
-    volatile short y;
-    volatile u_char u;
-    volatile u_char v;
-    volatile u_short clut;
-    volatile short w;
-    volatile short h;
-} CdReadSprite;
-
 void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
-    CdReadSprite *packet;
+    volatile SPRT *packet;
     long idx;
     u_char *next;
     register u_char *sr __asm("$21");
@@ -28,7 +17,7 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
     long ga;
     long gb;
     long w;
-    CdReadSprite *oldPacket;
+    volatile SPRT *oldPacket;
     u_char *otv;
     u_char *tableB;
 
@@ -37,7 +26,7 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
     if (*sr != 0) {
         tableA = g_SpriteFontU;
         tableB = g_SpriteFontV;
-        packet = (CdReadSprite *)next;
+        packet = (volatile SPRT *)next;
         do {
             idx = *sr++ - 0x20;
             if (idx != 0) {
@@ -47,17 +36,17 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
                 SetShadeTex(next, 1);
                 next += 0x14;
                 oldPacket = packet;
-                packet->x = x;
-                packet->y = y;
-                packet->u = ga;
-                packet->v = gb;
+                packet->x0 = x;
+                packet->y0 = y;
+                packet->u0 = ga;
+                packet->v0 = gb;
                 w = g_SpriteFontWidth[idx];
                 packet->h = 0x18;
                 otv = g_DrawBuffer;
                 packet->clut = clutIndex;
                 packet->w = w;
                 packet++;
-                AddPrim(otv + 0xCC, oldPacket);
+                AddPrim(otv + 0xCC, (SPRT *)oldPacket);
             }
             x += g_SpriteFontWidth[idx];
         } while (*sr != 0);
