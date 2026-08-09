@@ -98,15 +98,15 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
 
 void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     void *oldPacket;
-    s16 rect[4];
+    Rect rect;
     s32 offset;
 
     offset = (g_FrameParity * 15) << 4;
-    rect[0] = x;
-    rect[1] = y + offset;
-    rect[2] = w;
-    rect[3] = h;
-    SetDrawArea(packet, rect);
+    rect.x = x;
+    rect.y = y + offset;
+    rect.w = w;
+    rect.h = h;
+    SetDrawArea(packet, &rect);
     oldPacket = packet;
     packet = (u8 *)packet + 12;
     AddPrim(ot, oldPacket);
