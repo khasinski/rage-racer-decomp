@@ -117,7 +117,8 @@ void UpdateAttractDemoRace(void) {
     s32 index;
 
     g_SceneTimer++;
-    if ((u32)g_SceneTimer < 0x3D) {
+    timer = g_SceneTimer;
+    if (timer < 0x3D) {
         DrawAttractTitle();
         value = g_SceneTimer - 6;
         DrawFullscreenFadeTile(0xFF - (((value * 3) * 4) - value), 0x49);
