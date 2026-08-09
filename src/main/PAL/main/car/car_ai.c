@@ -564,7 +564,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
     u32 centerX;
     u32 centerZ;
 
-    other = (GameCarRuntime *)((index * sizeof(GameCarRuntime)) + (s32)&g_Cars[1]);
+    other = &g_Cars[index + 1];
     nextIndex = index + 1;
     hit = 0;
     carProgress = car->trackProgress;
