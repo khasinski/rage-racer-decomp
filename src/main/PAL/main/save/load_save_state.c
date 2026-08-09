@@ -135,7 +135,7 @@ s32 LoadSaveStateBlock(u8 *block) {
             dst = g_TeamLogoClut;
             src = base;
             for (; i < 0x10; i++) {
-                *dst++ = *(u16 *)(src + 0x1BC);
+                *dst++ = ((GameSaveBlock *)src)->teamLogoClut[0];
                 src += 2;
             }
         }
@@ -148,7 +148,7 @@ s32 LoadSaveStateBlock(u8 *block) {
             dst = g_TeamLogoCanvas.halfwords;
             src = base;
             for (; i < 0x400; i++) {
-                *dst++ = *(u16 *)(src + 0x1DC);
+                *dst++ = ((GameSaveBlock *)src)->teamLogoCanvas[0];
                 src += 2;
             }
         }
