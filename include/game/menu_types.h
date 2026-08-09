@@ -29,6 +29,12 @@ typedef struct TeamLogoSample {
     u16 canvas[64][16];
 } TeamLogoSample;
 
+typedef union TeamLogoSampleAddress {
+    s32 byteOffset;
+    TeamLogoSample *samplePointer;
+    u16 *halfwordPointer;
+} TeamLogoSampleAddress;
+
 typedef union TeamLogoPixelWord {
     u16 value;
     u8 bytes[2];
