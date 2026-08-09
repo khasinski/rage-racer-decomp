@@ -11,7 +11,6 @@
 #include "game/render.h"
 #include "game/render_internal.h"
 #include "game/save_internal.h"
-#define GAME_REF_SECTOR_DECL extern s32 g_RefSectorTimes
 #include "game/race_internal.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
@@ -19,11 +18,9 @@
 #include "game/track.h"
 #include "psyq/gte.h"
 
-/* Elements 0, 1 and 2 of g_RefSectorTimes. They CANNOT be spelled
- * g_RefSectorTimes[k] here: with one array symbol GCC 2.6.3 CSEs the base
- * address into a and reschedules around it, which shifts the
- * allocation of the whole surrounding block. Three symbols keep three separate
- * %hi/%lo pairs, which is what the retail code has. */
+/* The first union field and the two trailing split symbols keep separate
+ * %hi/%lo accesses. Indexing the union here makes GCC 2.6.3 CSE its base and
+ * shifts the allocation of the surrounding block. */
 
 /*
  * Optional trace for the state returned by the lap/finish update. A null
@@ -134,7 +131,7 @@ timing_done:
             g_SectorTimes[2] = result;
             if (grandPrixMode == 0) {
                 g_RefSectorTime2 = result;
-                g_RefSectorTimes = g_SectorTimes[0];
+                g_RefSectorTimes.fields.first = g_SectorTimes[0];
                 g_RefSectorTime1 = g_SectorTimes[1];
             }
 
@@ -176,7 +173,7 @@ timing_done:
                 }
                 if (grandPrixMode == 0) {
                     tableOffset = g_CourseIndex * 12 + g_RaceSeries * 48;
-                    *(s32 *)((u8 *)g_BestSectorTimes + tableOffset) = g_RefSectorTimes;
+                    *(s32 *)((u8 *)g_BestSectorTimes + tableOffset) = g_RefSectorTimes.fields.first;
                     *(s32 *)((u8 *)&g_BestSectorTimes[0][0][1] + tableOffset) =
                         g_RefSectorTime1;
                     *(s32 *)((u8 *)&g_BestSectorTimes[0][0][2] + tableOffset) =
@@ -314,7 +311,7 @@ void EnterRaceScene(void) {
     g_SectorEndDistance[0] = trackLength / 3;
     g_SectorEndDistance[1] = g_SectorEndDistance[0] * 2;
     tableOffset = (mode * 12) + (scene * 48);
-    g_RefSectorTimes = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset);
+    g_RefSectorTimes.fields.first = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset);
     scene *= 32;
     g_RefSectorTime1 = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset + 4);
     mode *= 8;

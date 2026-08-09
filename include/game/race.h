@@ -149,11 +149,10 @@ extern s32 g_RefLapTime;
  *   g_SectorEndDistance[3]  g_SectorEndDistance/9C/A0  lap distance ending each sector
  *                                             (L/3, 2L/3, L)
  *   g_RefSectorTimes[3]     g_RefSectorTimes/94/98  the best lap's sector times
- * g_RefSectorTimes is the one exception to one-address-one-name in this header:
- * race/UpdateLapAndFinish.c must spell its three elements as the separate
- * scalars g_RefSectorTimes/1/2 or gcc 2.6.3 CSEs the array base into a register
- * and reschedules the surrounding block. g_SectorEndDistance was checked the
- * same way and does not need it, so it is indexed everywhere.
+ * UpdateLapAndFinish uses the scalar fields of SectorReferenceTimes plus the
+ * two trailing split symbols: indexing all three values there makes gcc 2.6.3
+ * CSE the array base and reschedule the surrounding block. Other users use the
+ * union's indexed view. g_SectorEndDistance does not need a split view.
  */
 
 /* Split readout: the sector time just recorded, the unsigned difference from

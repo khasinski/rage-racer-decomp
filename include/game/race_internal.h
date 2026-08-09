@@ -19,16 +19,20 @@ typedef struct ResultPlaceSpriteLayout {
     u8 width;
 } ResultPlaceSpriteLayout;
 
+typedef union SectorReferenceTimes {
+    s32 values[3];
+    struct {
+        s32 first;
+        s32 second;
+        s32 third;
+    } fields;
+} SectorReferenceTimes;
+
 extern s32 g_RaceTotalTime;
-#ifndef GAME_REF_SECTOR_DECL
-#define GAME_REF_SECTOR_DECL extern s32 g_RefSectorTimes[3]
-#endif
-GAME_REF_SECTOR_DECL;
+extern SectorReferenceTimes g_RefSectorTimes;
 extern s32 g_PrologueStep;
 extern PrologueCameraCut g_PrologueCameraCuts[];
 extern ResultPlaceSpriteLayout g_ResultPlaceSprites[];
 extern ResultPlaceBarPosition g_ClassPlaceBarSizes[];
-
-#undef GAME_REF_SECTOR_DECL
 
 #endif

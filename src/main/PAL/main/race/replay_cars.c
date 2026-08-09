@@ -190,7 +190,7 @@ void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
                 if (lapEvent != 0) {
                     delta = g_RefLapTime - g_LapTimeMs;
                 } else {
-                    delta = g_RefSectorTimes[slot] - g_LapTimeMs;
+                    delta = g_RefSectorTimes.values[slot] - g_LapTimeMs;
                 }
 
                 g_SplitSign = 1;
@@ -222,7 +222,7 @@ void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
                 nextSlot += 2;
                 nextSlot %= 3;
                 g_SplitSector = nextSlot;
-                g_SplitTargetTime = g_RefSectorTimes[nextSlot];
+                g_SplitTargetTime = g_RefSectorTimes.values[nextSlot];
             }
 
             nextSlot = g_SectorIndex;
@@ -246,7 +246,7 @@ void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
         if (g_SplitTimer < 0x3C) {
             g_SplitTimer++;
             if (g_SplitTimer == 0x3C) {
-                g_SplitTargetTime = g_RefSectorTimes[nextSlot];
+                g_SplitTargetTime = g_RefSectorTimes.values[nextSlot];
                 g_SplitSign = 0;
                 g_SplitSector = (u16)g_SectorIndex;
             }
@@ -255,7 +255,7 @@ void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
         g_SplitSector = 0;
         g_SplitTimer = 0;
         g_SplitSign = 0;
-        g_SplitTargetTime = g_RefSectorTimes[0];
+        g_SplitTargetTime = g_RefSectorTimes.values[0];
     }
 split_update_done:
 
