@@ -56,7 +56,7 @@ void BuildStartingGrid(void) {
             }
             cursor++;
             i++;
-            flagPtr = (s16 *)((u8 *)flagPtr + 0x19C);
+            flagPtr += sizeof(GameCarRuntime) / sizeof(*flagPtr);
             entryBase++;
         } while (i < 0xB);
     } else {
@@ -80,7 +80,7 @@ void BuildStartingGrid(void) {
             }
             cursor++;
             i++;
-            flagPtr = (s16 *)((u8 *)flagPtr + 0x19C);
+            flagPtr += sizeof(GameCarRuntime) / sizeof(*flagPtr);
             entryBase++;
         } while (i < 0xB);
     }
