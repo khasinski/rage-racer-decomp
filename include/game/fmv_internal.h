@@ -8,7 +8,12 @@
 #define GAME_FMV_STATE_QUALIFIER
 #endif
 
-extern Rect g_FmvStripRects[2];
+typedef union FmvStripRectTable {
+    Rect rects[2];
+    volatile s16 components[2][4];
+} FmvStripRectTable;
+
+extern FmvStripRectTable g_FmvStripRects;
 extern volatile u32 *g_FmvVlcBuffer0;
 extern volatile u32 *g_FmvVlcBuffer1;
 extern volatile u32 *g_FmvStripBuffer0;

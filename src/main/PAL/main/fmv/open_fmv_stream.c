@@ -49,7 +49,8 @@ void UploadFmvSlice(void) {
     x += step;
     g_FmvUploadRectX = x;
 
-    if ((s16)x < (g_FmvStripRects[index].x + g_FmvStripRects[index].w)) {
+    if ((s16)x < (g_FmvStripRects.rects[index].x +
+                  g_FmvStripRects.rects[index].w)) {
         signedStep = (s16)step;
         pixelCount = signedStep * g_FmvStripHeight;
         bufferIndex = g_FmvStripIndex;
@@ -61,16 +62,8 @@ void UploadFmvSlice(void) {
         g_FmvStripDone = 1;
         next = index == 0;
         g_FmvStripRectIndex = next;
-        {
-            /* Both halves are read out of the rect by hand.  Written as
-             * g_FmvStripRects[next].x/.y the loads carry the struct alias
-             * mark, so gcc 2.6.3 lets them float above the plain-global
-             * stores that surround them and the four accesses interleave
-             * the wrong way; addressed as offsets they stay put. */
-            s32 rectOffset = next * 8;
-            g_FmvUploadRectX = *(s16 *)((s32)g_FmvStripRects + rectOffset);
-            g_FmvUploadRectY = *(s16 *)((s32)g_FmvStripRects + rectOffset + 2);
-        }
+        g_FmvUploadRectX = g_FmvStripRects.components[next][0];
+        g_FmvUploadRectY = g_FmvStripRects.components[next][1];
     }
 
     LoadImage(&rect, (void *)g_FmvStripBuffers[oldBuffer]);
