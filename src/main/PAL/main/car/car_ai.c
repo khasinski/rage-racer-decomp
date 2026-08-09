@@ -408,7 +408,7 @@ outer:
     target = raw >> 4;
 
 inner:
-    value = *(s16 *)(base + tableOffset + 0x474);
+    value = ((TrackEventData *)(base + tableOffset))->aiSpeedKeys[0][0].progress;
     if (target >= value) {
         ((GameCarRuntime *)((u8 *)g_Cars + offset))->routeMarkerIndex = index;
         offset += 0x19C;
