@@ -182,7 +182,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
         }
         i = 0;
         nameY = ((u32)-(animationStep * 0x178) >> 5) + 0xF9;
-        if (i < (s32)g_TeamNameLength) {
+        if (i < g_TeamNameLength) {
             do {
                 ch = g_TeamNameChars[i];
                 if (ch < 0xAU) {
@@ -201,7 +201,7 @@ void DrawTeamNameEntry(s32 step, s32 cursorIndex) {
                                    0x244, 1, 1, 0x3B);
                 }
                 i += 1;
-            } while (i < (s32)g_TeamNameLength);
+            } while (i < g_TeamNameLength);
         }
     }
     if (step > 0) {
