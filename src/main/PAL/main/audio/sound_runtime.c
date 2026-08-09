@@ -11,14 +11,14 @@ void SetSoundSlotVoiceEnabled(s32 slot, s32 enabled) {
 
     if (enabled != 0) {
         s32 *base = g_SoundSlotActive;
-        entry = (s32 *)((slot * 4) + (u8 *)base);
+        entry = base + slot;
         if (*entry == 0) {
             PlaySoundSlotVoice(slot, 0, 3);
             *entry = 1;
         }
     } else {
         s32 *base = g_SoundSlotActive;
-        entry = (s32 *)((slot * 4) + (s32)base);
+        entry = base + slot;
         if (*entry != 0) {
             StopSoundSlotVoice(slot);
             *entry = 0;
