@@ -57,13 +57,15 @@ void DrawMemoryCardMessage(s32 message) {
     u8 code;
     u8 *next;
     u8 *base;
-    s32 delta;
+    u32 messageRange;
+    u32 delta;
 
     index = message;
     entry = g_McMessageRows[index];
     x = 0x60;
     y = 0x40;
-    if ((u32)(index - 0x10) >= 2 && index != 0x12) {
+    messageRange = index - 0x10;
+    if (messageRange >= 2 && index != 0x12) {
         one = 1;
         table = g_McMessageColumnX;
         code = 1;
@@ -90,7 +92,7 @@ void DrawMemoryCardMessage(s32 message) {
         next = GameQueueSprite(base, next, 0x108, 0x60, 0xC, 0x18, 0x90, 0x48, 0x7F81);
     }
     delta = index - 0x10;
-    if ((u32)delta < 2 || index == 0x12) {
+    if (delta < 2 || index == 0x12) {
         next = GameQueueSprite(base, next, x, y, 0x6C, 0x18, 0, delta * 0x18, 0x7F81);
         next = QueueDrawModePrim(base, next, 0x3F);
     } else {
