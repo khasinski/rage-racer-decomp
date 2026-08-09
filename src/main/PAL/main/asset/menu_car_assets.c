@@ -39,7 +39,8 @@ void LoadUpgradedCarModel(s32 carIndex) {
                               g_CarModelSlot < 1);
 
             asset->imageData.pointer = ptr + asset->imageData.offset;
-            SetCarImageSlot(asset->imageData.pointer, g_CarModelSlot < 1);
+            SetCarImageSlot((CarImageData *)asset->imageData.pointer,
+                            g_CarModelSlot < 1);
 
             if (g_PlayerCarIndex < 10) {
                 ApplyBodyColor1(g_CarTable[carIndex].paintColor1, asset->imageData.pointer);

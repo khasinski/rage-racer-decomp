@@ -93,7 +93,7 @@ void LoadCarSelectAssets(void) {
                 relOffset = model->imageData.offset;
                 modelPtr = carModelBase + relOffset;
                 model->imageData.pointer = modelPtr;
-                SetCarImageSlot(modelPtr, 0);
+                SetCarImageSlot((CarImageData *)modelPtr, 0);
 
                 carIndex = g_PlayerCarIndex;
                 if (carIndex < 10) {
@@ -149,7 +149,8 @@ void LoadCarModel(s32 carIndex) {
                               g_CarModelSlot < 1);
 
             asset->imageData.pointer = ptr + asset->imageData.offset;
-            SetCarImageSlot(asset->imageData.pointer, g_CarModelSlot < 1);
+            SetCarImageSlot((CarImageData *)asset->imageData.pointer,
+                            g_CarModelSlot < 1);
 
             if (carIndex < 10) {
                 ApplyBodyColor1(g_CarTable[carIndex].paintColor1, asset->imageData.pointer);

@@ -145,7 +145,7 @@ void InstallTerrainCellData(u8 *base) {
     }
 }
 
-void SetCarImageSlot(void *asset, s32 index) {
+void SetCarImageSlot(CarImageData *asset, s32 index) {
     g_CarImageSlots[index] = asset;
 }
 
