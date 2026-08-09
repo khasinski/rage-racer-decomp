@@ -22,7 +22,7 @@ void DecodeFmvFrame(void) {
     DecDCTin(g_FmvVlcBuffers[g_FmvVlcIndex], 3);
     DecDCTout(g_FmvStripBuffers[g_FmvStripIndex], (g_FmvStripWidth * g_FmvStripHeight) / 2);
 
-    while (PresentFmvFrame(g_FmvVlcBuffers) == -1) {
+    while (PresentFmvFrame(&g_FmvDecodeContext) == -1) {
         value = StGetBackloc(streamLoc);
         printf(g_MsgFmvSector, value);
         if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
@@ -32,7 +32,7 @@ void DecodeFmvFrame(void) {
         }
     }
 
-    WaitFmvDecode(g_FmvVlcBuffers, 0);
+    WaitFmvDecode(&g_FmvDecodeContext, 0);
     if (g_FmvStreamEnded == 1) {
         g_FmvState = 2;
     }
@@ -49,7 +49,7 @@ void EndFmv(void) {
     g_StreamReturnScene = g_FmvStreamEnded;
 }
 
-void InitFmvContext(void *ctx, s32 width, s32 height) {
+void InitFmvContext(FmvDecodeContext *ctx, s32 width, s32 height) {
     volatile u32 *words;
     volatile u16 *halves;
     u32 word0;

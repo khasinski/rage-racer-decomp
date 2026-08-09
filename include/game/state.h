@@ -162,7 +162,6 @@ void DecodeFmvFrame(void);
 void EndFmv(void);
 /* Pull the next ready ring frame and resize the display when the stream's
  * frame size changes; returns 0 when nothing is ready. */
-void *GetFmvFrame(s32 *ctx);
 /* The DMA1 (MDECout) callback: LoadImage one decoded strip into VRAM and queue
  * the next strip, or flip to the other frame buffer at the end of a frame. */
 void UploadFmvSlice(void);

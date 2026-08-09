@@ -22,13 +22,13 @@ void StartFmvPlayback(s32 bufferBase) {
     g_DispEnv0Rgb24 = 1;
     SetupFmvBuffers(bufferBase);
     {
-        volatile void *buf = &g_FmvDecodeContext;
+        FmvDecodeContext *buf = &g_FmvDecodeContext;
         InitFmvContext(buf, 0, 0x18, 0, 0x108);
     }
     OpenFmvStream(UploadFmvSlice);
     fail = -1;
     while (1) {
-        volatile void *buf = &g_FmvDecodeContext;
+        FmvDecodeContext *buf = &g_FmvDecodeContext;
         if (PresentFmvFrame(buf) != fail) {
             break;
         }

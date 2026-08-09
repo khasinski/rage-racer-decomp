@@ -1,6 +1,7 @@
 #include "common.h"
 #include <stdio.h>
 #include "game/render.h"
+#include "game/fmv.h"
 #include "psyq/cd.h"
 #include "game/race.h"
 #include "game/state.h"
@@ -8,31 +9,21 @@
 #include "psyq/kernel.h"
 #include "game/fmv_internal.h"
 
-typedef struct FmvDisplayState {
-    u8 pad0[0x18];
-    u16 displayRects[2][4];
-    s32 field_28;
-    u16 field_2C;
-    u16 field_2E;
-    u8 pad2[0x4];
-    s32 field_34;
-} FmvDisplayState;
-
-s32 PresentFmvFrame(s32 *ctx) {
+s32 PresentFmvFrame(FmvDecodeContext *ctx) {
     void *p;
     s32 retry;
     for (retry = 1; retry != 0; retry--) {
         p = GetFmvFrame(ctx);
         if (p != 0) {
-            ctx[2] = (ctx[2] == 0);
-            MdecUnpackStatus(p, ctx[ctx[2]]);
+            ctx->vlcIndex = (ctx->vlcIndex == 0);
+            MdecUnpackStatus(p, ctx->vlcBuffers[ctx->vlcIndex]);
             return StFreeRing(p);
         }
     }
     return -1;
 }
 
-void *GetFmvFrame(s32 *ctx) {
+void *GetFmvFrame(FmvDecodeContext *ctx) {
     StRingEventRecord *slot[2];
     u16 rect[4];
     s32 count;
@@ -107,27 +98,27 @@ void *GetFmvFrame(s32 *ctx) {
     return ret;
 }
 
-void WaitFmvDecode(FmvDisplayState *state) {
+void WaitFmvDecode(FmvDecodeContext *state, s32 mode) {
     volatile s32 timeout = 0x800000;
     s32 one;
     u16 x;
 
-    if (state->field_34 == 0) {
+    if (state->decodeComplete == 0) {
         one = 1;
         do {
             timeout = timeout - 1;
             if (timeout == 0) {
                 printf(g_MsgFmvDecodeTimeout);
-                state->field_34 = one;
-                state->field_28 = state->field_28 < 1U;
-                x = state->displayRects[state->field_28][0];
-                state->field_2C = x;
-                state->field_2E = state->displayRects[state->field_28][1];
+                state->decodeComplete = one;
+                state->frameParity = state->frameParity < 1U;
+                x = state->displayRects[state->frameParity].x;
+                state->stripWidth = x;
+                state->stripHeight = state->displayRects[state->frameParity].y;
             }
-        } while (state->field_34 == 0);
+        } while (state->decodeComplete == 0);
     }
 
-    state->field_34 = 0;
+    state->decodeComplete = 0;
 }
 
 void StartStreamRead(void *loc) {

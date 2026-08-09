@@ -8,6 +8,18 @@ typedef struct FmvDecodeContext {
     s32 vlcIndex;
     volatile u32 *stripBuffers[2];
     s32 stripIndex;
+    struct {
+        u16 x;
+        u16 y;
+        u16 w;
+        u16 h;
+    } displayRects[2];
+    s32 frameParity;
+    u16 stripWidth;
+    u16 stripHeight;
+    u16 sliceHeight;
+    u16 decodedHeight;
+    s32 decodeComplete;
 } FmvDecodeContext;
 
 extern FmvDecodeContext g_FmvDecodeContext asm("g_FmvVlcBuffers");
@@ -16,15 +28,9 @@ extern u32 g_FmvRingBuffer;
 void StartFmvPlayback();
 void InitFmvContext();
 void OpenFmvStream();
-s32 PresentFmvFrame();
+s32 PresentFmvFrame(FmvDecodeContext *ctx);
+void *GetFmvFrame(FmvDecodeContext *ctx);
 void StartStreamRead();
-void WaitFmvDecode();
-void DecDCTout(volatile u32 *out, s32 words);
-void DecDCToutCallback(s32 callback);
-s32 StGetBackloc(void *loc);
-void StSetRing(s32 base, s32 sectors);
-void StSetStream(s32 mode, s32 startFrame, s32 endFrame, s32 doneCallback, s32 errorCallback);
-void StCdInterrupt(void);
-void StUnSetRing(void);
+void WaitFmvDecode(FmvDecodeContext *ctx, s32 mode);
 
 #endif

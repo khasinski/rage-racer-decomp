@@ -989,7 +989,7 @@ void Gpu_BuildDrawEnvCmds(void* packet, void* env);
 s32 Gpu_Reset(s32 mode);
 void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ);
 void MatrixApplyZRotation(Matrix* mtx, s32 degrees);
-void MdecUnpackStatus(void *ctx, s32 slot);
+void MdecUnpackStatus(void *ctx, volatile u32 *slot);
 s32 SetGraphReverse(s32 mode);
 void SetupFmvBuffers(s32 base);
 void SwapTrackTexturePageNow(void);
