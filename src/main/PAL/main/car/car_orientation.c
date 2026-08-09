@@ -460,6 +460,11 @@ typedef struct CollisionContext
   s32 opponentPolygonOffset;
   s32 trackDelta;
 } CollisionContext;
+
+static inline CollisionContext *GetCollisionContext(SVec *rotation) {
+  return (CollisionContext *)rotation;
+}
+
 s32 CollidePlayerWithCars(PlayerCarRuntime *car)
 {
   SVec rotation;
@@ -521,7 +526,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   playerGrid[0][3].z = (playerGrid[1][2].z = (playerGrid[2][1].z = (playerGrid[3][0].z = (playerOutline[4].z + playerOutline[5].z) / 2)));
   playerProgress = car->trackProgress;
   index = 0;
-  context = (CollisionContext *)&rotation;
+  context = GetCollisionContext(&rotation);
   playerTrackOffset = car->trackLateralOffset;
   playerX = car->y;
   for (; index < 11; index++, opponent++)
@@ -701,7 +706,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
 
   trackDelta = car->trackLateralOffset - opponent->trackLateralOffset;
   g_GripLossTimer = 0;
-  ((CollisionContext *) &rotation)->trackDelta = trackDelta;
+  GetCollisionContext(&rotation)->trackDelta = trackDelta;
   if (collisionRegion < 3)
   {
     if (car->facingBackwards != ReadStableRaceSeries())
