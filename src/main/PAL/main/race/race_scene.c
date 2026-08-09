@@ -582,7 +582,7 @@ void UpdateRaceScene(void) {
             RunRaceIntroCamera(&g_PlayerCar, frameValue);
         } else {
 update_race:
-            if ((g_RacePhase == 1) && ((u32)g_SceneTimer >= 0xD3)) {
+            if ((g_RacePhase == 1) && (g_SceneTimer >= 0xD3U)) {
                 BeginCarStandingStart(&g_PlayerCar, frameValue);
                 StartCdAudio();
                 g_RacePhase = 2;
@@ -647,7 +647,7 @@ update_race:
             inputMask = g_PadPressed;
             selectorMask = selectorMask == 0x23;
             if ((inputMask & g_PadMirrorMasks[selectorMask * 8]) &&
-                (u32)((u16)g_RacePhase - 2) < 2) {
+            ((u16)g_RacePhase - 2) < 2U) {
                 g_CameraViewMode ^= 1;
             }
         }

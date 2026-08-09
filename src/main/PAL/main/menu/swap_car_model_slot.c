@@ -377,7 +377,7 @@ void DrawTeamNameCharModel(void) {
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtxA);
     ScaleMatrix(&mtxA, &vcopy);
 
-    if (g_TeamNameCharModel != 10 && (u32)(g_TeamNameCharModel - 42) >= 2) {
+    if (g_TeamNameCharModel != 10 && g_TeamNameCharModel - 42 >= 2U) {
         s32 a1;
         SetGteObjectMatrix((void *)0x1F80011C, &poly, &mtxA);
         SCRATCH_ENV_MODE4 = 0;

@@ -44,7 +44,7 @@ void UpdatePrizeMoneyScreen(void) {
     case 2:
         g_SceneTimer += 8;
         DrawRaceTimePanel(g_SceneTimer);
-        if ((u32)g_SceneTimer >= 129) g_PrizeScreenState = 3;
+        if (g_SceneTimer >= 129U) g_PrizeScreenState = 3;
         DrawGrandprixIntro();
         return;
     case 3:
@@ -117,7 +117,7 @@ void UpdatePrizeMoneyScreen(void) {
         else
             g_SceneTimer += 2;
         DrawFullscreenFadeTile(g_SceneTimer, 0x49);
-        if ((u32)g_SceneTimer < 0x100) break;
+        if (g_SceneTimer < 0x100U) break;
         AdvanceGrandPrixClass();
         break;
     default:
