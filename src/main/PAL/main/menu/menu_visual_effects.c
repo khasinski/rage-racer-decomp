@@ -862,7 +862,7 @@ void DrawMenuLightBurst(s32 arg) {
     }
 }
 
-typedef union {
+typedef union PackedCoordinate {
     s32 value;
     struct {
         u16 fraction;

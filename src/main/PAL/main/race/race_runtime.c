@@ -14,6 +14,11 @@
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
+typedef struct CarTrackLimitWork {
+    s32 reserved[4];
+    CarTrackLimits limits;
+} CarTrackLimitWork;
+
 
 /*
  * Waypoint proximity test: returns 1 if the waypoint's (x,y) lies within a
@@ -547,10 +552,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         model = ((TrackEventData *)base)->rivalStarts[0][0].modelId;
         ent->activeFlag = model;
         if ((s16)model != -1) {
-            struct {
-                s32 pad[4];
-                CarTrackLimits limits;
-            } pair;
+            CarTrackLimitWork pair;
 
             pair.limits.rightInset = 20;
             pair.limits.leftInset = -20;

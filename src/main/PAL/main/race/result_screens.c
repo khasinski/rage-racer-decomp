@@ -16,7 +16,7 @@
 #include "game/player_car_internal.h"
 #include "game/track.h"
 
-typedef union {
+typedef union GrandPrixIntroSelection {
     s16 palette;
     s16 layout;
     s16 width;
