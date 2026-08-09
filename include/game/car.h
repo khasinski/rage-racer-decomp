@@ -124,7 +124,7 @@ typedef struct GameCarRuntime {
     s32 field_D8;
     s32 field_DC;
     s32 field_E0;
-    s32 field_E4;
+    s32 renderDepth;
     s16 field_E8;
     s16 field_EA;
     s32 targetYaw;
