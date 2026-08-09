@@ -27,6 +27,7 @@ void UpdateFinishCamera(GameRenderObject *obj) {
     s32 angle;
     s32 value;
     s32 zValue;
+    GameCarRuntimeAddress cameraAddress;
 
     offset = g_CameraCarTrackPoint;
     if (obj->facingBackwards != 0) {
@@ -65,7 +66,8 @@ void UpdateFinishCamera(GameRenderObject *obj) {
     markerClamp[1] = 0;
     UpdateCarTrackState(&g_CameraCar, g_CameraCarTrackPoint, markerClamp);
 
-    *(Block16 *)&view[2] = *(Block16 *)&g_CameraCar;
+    cameraAddress.runtime = &g_CameraCar;
+    *(Block16 *)&view[2] = cameraAddress.blocks[0];
     view[3] -= 64;
 
     delta[0] = obj->x - view[2];
