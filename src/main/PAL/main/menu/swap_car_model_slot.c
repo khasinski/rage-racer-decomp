@@ -292,14 +292,22 @@ void DrawMenuCourseView(void) {
     }
 }
 
-typedef struct Poly { s32 f0, f1, f2, f3, f4, f5, f6; } Poly;
+typedef struct MenuModelTransform {
+    s32 positionX;
+    s32 positionY;
+    s32 positionZ;
+    s32 reserved0C;
+    s32 rotationX;
+    s32 rotationY;
+    s32 rotationZ;
+} MenuModelTransform;
 
 
 /* The 3D character model under the TEAM NAME grid cursor; skips the BS and ED cells. */
 void DrawTeamNameCharModel(void) {
     Matrix mtxA;
     Matrix mtxB;
-    Poly poly;
+    MenuModelTransform transform;
     Vec4 vcopy;
     s32 s1;
     s32 s0;
@@ -364,22 +372,24 @@ void DrawTeamNameCharModel(void) {
         s2 = 64;
     }
 
-    poly.f0 = 0;
-    poly.f1 = (s0 - s2) + rsin((g_AnimTimer * 32) & 0xFE0) * 12 / 4096;
-    poly.f2 = 0;
-    poly.f4 = 0;
-    poly.f5 = s1;
-    poly.f6 = rsin((g_AnimTimer * 20) & 0xFFC) * 72 / 4096;
+    transform.positionX = 0;
+    transform.positionY =
+        (s0 - s2) + rsin((g_AnimTimer * 32) & 0xFE0) * 12 / 4096;
+    transform.positionZ = 0;
+    transform.rotationX = 0;
+    transform.rotationY = s1;
+    transform.rotationZ =
+        rsin((g_AnimTimer * 20) & 0xFFC) * 72 / 4096;
 
-    BuildRotMatrixY(&mtxB, 0x800 - poly.f5);
-    BuildRotMatrixZ(&mtxA, poly.f6);
+    BuildRotMatrixY(&mtxB, 0x800 - transform.rotationY);
+    BuildRotMatrixZ(&mtxA, transform.rotationZ);
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtxA);
     ScaleMatrix(&mtxA, &vcopy);
 
     if (g_TeamNameCharModel != 10 && g_TeamNameCharModel - 42 >= 2U) {
         s32 a1;
-        SetGteObjectMatrix((void *)0x1F80011C, &poly, &mtxA);
+        SetGteObjectMatrix((void *)0x1F80011C, &transform, &mtxA);
         SCRATCH_ENV_MODE4 = 0;
         a1 = 1;
         if (g_TeamNameCharModel < g_CourseModelCount) {
