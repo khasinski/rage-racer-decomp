@@ -96,8 +96,8 @@ void MainLoop(void) {
 
         g_DrawBuffer = frame;
         g_FrameParity = parity;
-        SCRATCH_OT_BASE_WORD = (s32)(frame + 0xCC);
-        SCRATCH_PRIM_CURSOR_WORD = (s32)(frame + 0x16CC);
+        SCRATCH_OT_BASE_AS(u8) = frame + 0xCC;
+        SCRATCH_PRIM_CURSOR_AS(u8) = frame + 0x16CC;
         ClearOTagR((u_long *)(frame + 0xCC), 0x2C0);
         ClearOTagR((u_long *)(g_DrawBuffer + 0xBCC), 0x2C0);
         TickCdAudio();

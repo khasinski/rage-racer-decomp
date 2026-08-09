@@ -42,6 +42,7 @@ typedef struct ScratchViewState {
     s32 reserved14;
     s32 angleX;
     s32 angleY;
+    s32 angleZ;
 } ScratchViewState;
 
 typedef union CarTrackRadius {
