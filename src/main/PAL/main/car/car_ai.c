@@ -131,14 +131,14 @@ not_crossed:
     crossed = 0;
     i = 0;
     sentinel = -1;
-    offset = row * 64;
+    offset = row * sizeof(TrackCrestEvent[8]);
     cursor = base + offset;
 
 for (;;) {
-    if (!(((TrackCrestEvent *)(cursor + 4))->motionValue == sentinel)) {
-    threshold = ((TrackCrestEvent *)(cursor + 4))->progress;
+    if (!(((TrackCrestEvent *)(cursor + sizeof(s32)))->motionValue == sentinel)) {
+    threshold = ((TrackCrestEvent *)(cursor + sizeof(s32)))->progress;
     cmp = temp < threshold;
-    offset += 8;
+    offset += sizeof(TrackCrestEvent);
     if (!(cmp != 0)) {
     cmp = pos1 < threshold;
     if (cmp != 0) {
@@ -157,10 +157,10 @@ break;
 }
 crest_scan_done:
     if (crossed != 0) {
-        resultOffset = i * 8;
-        resultOffset += row * 64;
+        resultOffset = i * sizeof(TrackCrestEvent);
+        resultOffset += row * sizeof(TrackCrestEvent[8]);
         resultCursor = base + resultOffset;
-        return ((TrackCrestEvent *)(resultCursor + 4))->motionValue;
+        return ((TrackCrestEvent *)(resultCursor + sizeof(s32)))->motionValue;
     }
     return 0;
 }

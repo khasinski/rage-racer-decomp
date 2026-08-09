@@ -5,7 +5,7 @@
   "empty_barriers": 144,
   "externs_in_c": 0,
   "field_macros": 0,
-  "pointer_integer_casts": 283,
+  "pointer_integer_casts": 282,
   "raw_offset_dereferences": 33,
   "register_pins": 230,
   "statement_expressions": 0,
