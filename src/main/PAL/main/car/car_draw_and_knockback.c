@@ -116,7 +116,7 @@ void DrawPlayerCarOnly(void) {
 }
 
 void ClearCarMotionState(GameCarRuntime *car) {
-    car->field_8A = 0;
+    car->collisionFlag = 0;
     car->motionMode = 0;
     car->motionModeTimer = 0;
     car->motionValue = 0;

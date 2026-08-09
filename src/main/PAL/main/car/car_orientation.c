@@ -530,7 +530,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
     if (opponent->activeFlag != -1)
     {
       s32 aDist;
-      opponent->field_8A = 0;
+      opponent->collisionFlag = 0;
       progressDelta = (opponent->trackProgress + g_TrackLength - playerProgress) % g_TrackLength;
       opponentX = opponent->y;
       trackDelta = opponent->trackLateralOffset - playerTrackOffset;
@@ -771,6 +771,6 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
       SetCarKnockback(opponent, 0, 0, 4);
     }
   }
-  opponent->field_8A = 1;
+  opponent->collisionFlag = 1;
   return collisionRegion;
 }

@@ -133,7 +133,7 @@ void UpdateRaceCars(void) {
     do {
         q->field_F8 = 0;
         q->bodyYaw = q->field_108;
-        q->field_8A = (u16)q->field_8A & 1;
+        q->collisionFlag = (u16)q->collisionFlag & 1;
         i++;
         q++;
     } while ((s16)i < 11);
@@ -367,7 +367,7 @@ void UpdateRaceCars(void) {
                     StartCarBodyKick(1, base);
                 }
             }
-            if (lastBase->field_8A == 0) {
+            if (lastBase->collisionFlag == 0) {
                 UpdateCarBodyKick(base);
                 UpdateCarCrestHop(base);
             } else {
@@ -399,7 +399,7 @@ void UpdateAttractCars(void) {
     c0 = g_Cars;
     for (i = 0; i < 11; i++) {
         c0->field_F8 = 0;
-        c0->field_8A = 0;
+        c0->collisionFlag = 0;
         c0->bodyYaw = c0->field_108;
         c0->progressA = ((c0->progressA) % (g_TrackLength));
         c0++;
@@ -606,7 +606,7 @@ void UpdateAttractCars(void) {
                     StartCarBodyKick(1, car);
                 }
             }
-            if (base->field_8A == 0) {
+            if (base->collisionFlag == 0) {
                 UpdateCarBodyKick(car);
                 UpdateCarCrestHop(car);
             } else {

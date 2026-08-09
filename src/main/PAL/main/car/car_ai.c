@@ -768,9 +768,9 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
             SetCarKnockback(car, 0, 0, 4);
             SetCarKnockback(
                 other, velocityDelta[0], velocityDelta[1], 4);
-            car->field_8A = 1;
+            car->collisionFlag = 1;
             car->acceleration = (car->acceleration * 90) / 100;
-            other->field_8A = 1;
+            other->collisionFlag = 1;
         } else {
             s32 deltaX;
             s32 deltaZ;
@@ -791,8 +791,8 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                 car, -velocityDelta[0], -velocityDelta[1], 4);
             SetCarKnockback(other, 0, 0, 4);
             other->acceleration = (other->acceleration * 90) / 100;
-            car->field_8A = 1;
-            other->field_8A = 1;
+            car->collisionFlag = 1;
+            other->collisionFlag = 1;
         }
     }
     return hit;

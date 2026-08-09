@@ -475,7 +475,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         u8 *baseValue = (u8 *)g_TrackEventData;
         base = baseValue;
     }
-    ent->field_8A = 0;
+    ent->collisionFlag = 0;
     ent->field_BC = 1;
     ent->modelIndex = av;
     val122 = slots[pos].halves.modelId;
