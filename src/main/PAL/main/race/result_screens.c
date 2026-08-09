@@ -99,9 +99,9 @@ void UpdateReplayScene(void) {
         DrawFullscreenFadeTile(g_FadeLevel, 0x29);
     } else {
         if (g_SeriesCleared != 0) {
-            s32 cb = g_ReplayFrameCount;
-            s32 fc = g_SceneTimer;
-            if ((u32)(cb - 600) < (u32)fc) {
+            u32 cb = g_ReplayFrameCount;
+            u32 fc = g_SceneTimer;
+            if (cb - 600 < fc) {
                 s32 t = fc + 600;
                 s32 c;
                 t = t - cb;
@@ -138,7 +138,9 @@ void UpdateReplayScene(void) {
         }
 
         if (g_SeriesCleared != 0) {
-            if (((u32)(g_ReplayFrameCount - 600) < (u32)g_SceneTimer) || (g_FadeLevel != 0)) {
+            u32 replayEnd = g_ReplayFrameCount - 600;
+            u32 sceneFrame = g_SceneTimer;
+            if ((replayEnd < sceneFrame) || (g_FadeLevel != 0)) {
                 DrawSeriesClearedWash(g_EndingWashLevel, g_FadeLevel);
             }
         } else {
