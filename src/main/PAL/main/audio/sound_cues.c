@@ -216,6 +216,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
 void UpdateEffectVoiceStates(void) {
     EffectVoiceAddress cursorAddress;
     EffectVoiceAddress endAddress;
+    EffectVoiceAddress toneAddress;
     s32 *statePtr;
     s32 *pitchPtr;
     s16 *f0Ptr;
@@ -240,8 +241,10 @@ void UpdateEffectVoiceStates(void) {
         state = *statePtr;
         switch (state) {
         case 0:
+            toneAddress.pointer = g_EffectVoices;
+            toneAddress.byteOffset += offset;
             SsUtKeyOnV(voice >> 16, g_VabIds[0], *f0Ptr,
-                          (s16)((EffectVoice *)((u8 *)g_EffectVoices + offset))->tone,
+                          (s16)toneAddress.pointer->tone,
                           0x3C, 0, 0, 0);
             VOLPITCH();
             break;
