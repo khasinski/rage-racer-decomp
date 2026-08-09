@@ -74,7 +74,7 @@ void EnterCourseSelectScreen(void) {
         g_TimeAttackPlateStep = -1;
     }
 
-    LoadImage(&g_TeamLogoRect, &g_TeamLogoCanvas);
+    LoadImage(&g_TeamLogoRect.rect, &g_TeamLogoCanvas);
     LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
     UploadTeamNameTexture(g_TeamNameChars, g_TeamNameLength);
 }

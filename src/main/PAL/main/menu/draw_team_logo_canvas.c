@@ -119,7 +119,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     }
 
   }
-  LoadImage(&g_TeamLogoRect, &g_TeamLogoCanvas);
+  LoadImage(&g_TeamLogoRect.rect, &g_TeamLogoCanvas);
   LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
   LoadImage(&g_TeamLogoFadedClutRect, g_TeamLogoFadedClut);
   if (a0v < 0)
@@ -204,19 +204,19 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     x88 = x2 + 0x88;
     delta = 0x220 - g_TeamLogoZoomSpan;
     scaleDelta = (delta * g_TeamLogoViewX) / 272;
-    phaseValue = (g_TeamLogoRect.x * 4) - 1;
+    phaseValue = (g_TeamLogoRect.coordinate.x.value * 4) - 1;
     drawValue = phaseValue + scaleDelta;
     gx = drawValue;
     scaleDelta = (delta * g_TeamLogoViewY) / 272;
-    texY = (*(u8 *)(&g_TeamLogoRect.y)) - 1;
+    texY = g_TeamLogoRect.coordinate.y.byte.low - 1;
     gyTemp = texY + scaleDelta;
     phaseValue = gyTemp;
     gy = phaseValue;
     gx2 = drawValue + (g_TeamLogoZoomSpan / 8);
     asm("" : : "r"(scaleDelta));
     gy2 = phaseValue + (g_TeamLogoZoomSpan / 8);
-    clut = (g_TeamLogoRect.y >> 4) & 0x10;
-    clut |= (g_TeamLogoRect.x & 0x3FF) >> 6;
+    clut = (g_TeamLogoRect.coordinate.y.value >> 4) & 0x10;
+    clut |= (g_TeamLogoRect.coordinate.x.value & 0x3FF) >> 6;
     SetDrawClipRect((void *)ot, (s16)0, (s16)0, (s16)0x140, (s16)0x1E0);
     GameDrawTexturedQuad(ot, (s16)x2, (s16)sx, (s16)x88, (s16)sx,
                          (s16)x2, (s16)w1, (s16)x88, (s16)w1,
@@ -291,15 +291,15 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       }
       DrawRectOutline((void *)ot, (s16)x1, (s16)y1, (s16)0x20, 0x40, 0, (u8)clut, 0, (u8)0xFF);
     }
-    gx = (g_TeamLogoRect.x * 4) - 1;
-    gy = (*(u8 *)(&g_TeamLogoRect.y)) - 1;
+    gx = (g_TeamLogoRect.coordinate.x.value * 4) - 1;
+    gy = g_TeamLogoRect.coordinate.y.byte.low - 1;
     gx2 = gx;
     gx2 += 0x41;
     gy2 = gy;
     gy2 += 0x41;
     pal = GetClut(g_TeamLogoClutRect.x, g_TeamLogoClutRect.y);
-    clut = (g_TeamLogoRect.y >> 4) & 0x10;
-    clut |= (g_TeamLogoRect.x & 0x3FF) >> 6;
+    clut = (g_TeamLogoRect.coordinate.y.value >> 4) & 0x10;
+    clut |= (g_TeamLogoRect.coordinate.x.value & 0x3FF) >> 6;
     w1 = kreg + 0x83;
     xb = x0 + 0x41;
     SetDrawClipRect((void *)ot, (s16)0, (s16)0, (s16)0x140, (s16)0x1E0);

@@ -339,7 +339,7 @@ s32 LoadSaveStateBlock(u8 *block) {
 
     LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
     ApplyAudioSettings();
-    LoadImage(&g_TeamLogoRect, &g_TeamLogoCanvas);
+    LoadImage(&g_TeamLogoRect.rect, &g_TeamLogoCanvas);
     LoadImage(&g_TeamLogoClutRect, g_TeamLogoClut);
     return 1;
 }
