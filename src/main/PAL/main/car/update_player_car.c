@@ -402,7 +402,8 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                 case 1:
                 case 3:
                     if ((s16)car->motionTimer >= 15) {
-                        if ((u32)(slip - 768) < 257U) {
+                        u32 slipRange = slip - 768;
+                        if (slipRange < 257U) {
                             if (skid == 1) {
                                 PlaySoundCue(0xA);
                             } else if (car->speed >= 81) {
@@ -416,7 +417,8 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                 case 2:
                 case 4:
                     if ((s16)car->motionTimer >= 15) {
-                        if ((u32)(slip - 768) < 257U) {
+                        u32 slipRange = slip - 768;
+                        if (slipRange < 257U) {
                             if (skid == 2) {
                                 PlaySoundCue(0xA);
                             } else if (car->speed >= 81) {
