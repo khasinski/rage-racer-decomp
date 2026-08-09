@@ -15,6 +15,7 @@ void f(u8 *base, void *ptr) {
     register s32 value asm("$4");
     register s32 named asm("v0");
     value = *(s16 *)(base + 0x10);
+    value += *(s32 *)(base - 8);
     ptr = (void *)((u8 *)ptr + 4);
     value += (s32)ptr;
     value += FIELD32(base, 4);
@@ -29,7 +30,7 @@ void f(u8 *base, void *ptr) {
             counts = count_debt(Path(directory))
 
         self.assertEqual(counts["byte_pointer_arithmetic"], 1)
-        self.assertEqual(counts["raw_offset_dereferences"], 1)
+        self.assertEqual(counts["raw_offset_dereferences"], 2)
         self.assertEqual(counts["pointer_integer_casts"], 1)
         self.assertEqual(counts["field_macros"], 1)
         self.assertEqual(counts["register_pins"], 2)
