@@ -2,6 +2,7 @@
 #define GAME_CAR_INTERNAL_H
 
 #include "common.h"
+#include "game/vector.h"
 
 typedef union RaceIntroCameraCoordinate {
     s32 word;
@@ -29,6 +30,7 @@ typedef union RaceIntroCameraScriptAddress {
     s32 byteOffset;
     struct RaceIntroCameraScript *scriptPointer;
     RaceIntroCameraKey *keyPointer;
+    Vec4 *vectorPointer;
 } RaceIntroCameraScriptAddress;
 
 typedef struct LaunchSpeedThreshold {
