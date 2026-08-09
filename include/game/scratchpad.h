@@ -147,6 +147,7 @@ typedef struct CarTrackScratch {
 #define SCRATCH_VIEW_ANGLE_X (*(s32 *)0x1F800018)
 #define SCRATCH_VIEW_ANGLE_Y (*(s32 *)0x1F80001C)
 #define SCRATCH_VIEW_ANGLE_Z (*(s32 *)0x1F800020)
+#define SCRATCH_VIEW_POSITION_BLOCK ((Vec4 *)0x1F800008)
 #define SCRATCH_VIEW_STATE   ((ScratchViewState *)0x1F800008)
 #define SCRATCH_VIEW_MATRIX_GTE ((Matrix *)0x1F800028)
 
