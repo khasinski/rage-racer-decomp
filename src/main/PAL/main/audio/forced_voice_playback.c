@@ -143,8 +143,8 @@ void ForceIndexedEffectVoiceEnabled(s32 enabled) {
 void ForcePitchEffectVoicesEnabled(s32 enabled) {
     s32 voicePacked;
     s32 voice;
-    s32 pitchBase;
-    s32 toneBase;
+    s32 *pitchCursor;
+    s32 *noteCursor;
     s32 offset;
     s32 state;
     register s32 raw asm("$2");
@@ -157,14 +157,14 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
     state = enabled;
     voicePacked = 0xA0000;
     voice = 0xA;
-    pitchBase = (s32)&g_EffectVoices[0].pitch;
-    toneBase = pitchBase - 0xC;
+    pitchCursor = &g_EffectVoices[0].pitch;
+    noteCursor = &g_EffectVoices[0].note;
     offset = 0;
     do {
         if (state != 0) {
             voiceArg = voicePacked >> 16;
             left = g_VabIds[0];
-            right = *(s16 *)toneBase;
+            right = *(s16 *)noteCursor;
             keyTone =
                 (s16)((EffectVoice *)((u8 *)g_EffectVoices + offset))->tone;
             raw = 0x3C;
@@ -200,21 +200,21 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
 
             SsUtSetVVol((s16)voiceArg, left, right);
 
-            right = *(s16 *)toneBase;
+            right = *(s16 *)noteCursor;
             voiceArg = voicePacked >> 16;
             SsUtChangePitch(voiceArg, 0, right, 0x3C, 0,
-                            (*(s32 *)pitchBase << 9) >> 16,
-                            *(u16 *)pitchBase & 0x7F);
+                            (*pitchCursor << 9) >> 16,
+                            *(u16 *)pitchCursor & 0x7F);
         } else {
             SsUtKeyOffV(voicePacked >> 16);
         }
 
         voicePacked += 0x10000;
         voice++;
-        pitchBase += 0x14;
-        toneBase += 0x14;
+        pitchCursor += sizeof(EffectVoice) / sizeof(*pitchCursor);
+        noteCursor += sizeof(EffectVoice) / sizeof(*noteCursor);
         offset += 0x14;
-    } while (pitchBase < (s32)&g_ReverbFadeStep);
+    } while ((s32)pitchCursor < (s32)&g_ReverbFadeStep);
 }
 
 void ForceSoundSlotVoicePlayback(s32 enabled) {
