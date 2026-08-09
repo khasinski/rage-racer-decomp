@@ -30,7 +30,7 @@ void ResetProgressSlot(void *slot, s32 *progress) {
 void ResetCourseProgress(s32 mode) {
     u8 *ptr = g_CourseProgress->bestPlace;
 
-    *(s16 *)(ptr + 6) = 5;
+    g_CourseProgress->retriesRemaining = 5;
     ptr[3] = 0;
     ptr[2] = 0;
     ptr[1] = 0;
