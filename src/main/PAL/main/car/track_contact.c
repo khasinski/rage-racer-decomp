@@ -6,16 +6,16 @@
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
-typedef struct TrackSurfaceCell {
-    u16 field_0;
+typedef struct TrackSurfaceSample {
+    u16 x;
     u8 pad2[6];
-    u16 field_8;
+    u16 z;
     u8 padA[0x26];
-    s32 field_30;
-} TrackSurfaceCell;
+    s32 trackPointIndex;
+} TrackSurfaceSample;
 
 
-s32 GetTrackSurfaceHeight(TrackSurfaceCell *cell) {
+s32 GetTrackSurfaceHeight(TrackSurfaceSample *sample) {
     s32 index;
     s32 nextIndex;
     GameTrackPoint *cur;
@@ -37,17 +37,17 @@ s32 GetTrackSurfaceHeight(TrackSurfaceCell *cell) {
     s32 curZ;
     s32 angle;
 
-    index = FindTrackSegment(cell, cell->field_30);
+    index = FindTrackSegment(sample, sample->trackPointIndex);
     nextIndex = (index + 1) % g_TrackPointCount;
 
     cur = &g_TrackPoints[index];
 
-    argX = cell->field_0;
+    argX = sample->x;
     curX = (u16)cur->x;
     segmentLengthRaw = cur->segmentLength;
     vec[0] = argX - curX;
 
-    argZ = cell->field_8;
+    argZ = sample->z;
     curZ = (u16)cur->z;
     vec[1] = 0;
     vec[2] = argZ - curZ;

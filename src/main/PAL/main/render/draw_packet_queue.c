@@ -16,7 +16,7 @@ u8 *QueueDrawModePrim(void *ot, u8 *prim, s32 tpage) {
 
     SetDrawMode((DrawPacket *)prim, 0, 1, (u16)tpage, g_DrawModeEnv);
     pkt = prim;
-    prim = (void *)((DrawPacket *)prim + 1);
+    prim += sizeof(DrawPacket);
     AddPrim(ot, pkt);
     return prim;
 }
