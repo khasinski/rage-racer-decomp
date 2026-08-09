@@ -543,7 +543,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
       {
         aDist = -aDist;
       }
-      if ((opponent->field_98 == car->shiftState) || (aDist < 0x1A))
+      if ((opponent->verticalMotionState == car->shiftState) || (aDist < 0x1A))
       {
         if (((trackDelta < 0x64) && ((progressDelta < 0xC8) || ((g_TrackLength - 0xC8) < progressDelta))) && (aDist < 0x3C))
         {

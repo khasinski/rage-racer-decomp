@@ -11,8 +11,8 @@ typedef struct GameCollisionPointBytes {
 
 /*
  * Jump / launch setup: when GetCarCrestTrigger reports a marker crossing, seeds the
- * launch trajectory (field_90/94/98/9A/9C/9E) and snapshots the car's render
- * offsets (bodyPitch/28 and y). field_98 holds the launch state (1 = jump). The
+ * launch trajectory and snapshots the car's render offsets (bodyPitch/bodyRoll
+ * and y). verticalMotionState 1 is the rising jump phase.
  * inline mult/mfhi block is the compiler's divide idiom; keep it verbatim.
  */
 
@@ -59,7 +59,7 @@ void UpdateCarBodyKick(GameCarRuntime *car) {
         break;
 
     case 2:
-        if (car->field_98 != 0) {
+        if (car->verticalMotionState != 0) {
             break;
         }
         car->bodyRoll += value;
@@ -176,8 +176,8 @@ void UpdateCarCrestHop(GameCarRuntime *car) {
     obj = car;
     (void)stack;
 
-    if (obj->field_98 != 0) {
-        result = obj->field_9A;
+    if (obj->verticalMotionState != 0) {
+        result = obj->verticalMotionTimer;
         value = result * result;
         temp = obj->field_90;
         /* /6 is the retail `mult` by 0x2AAAAAAB + `mfhi` - (x >> 31); gcc
@@ -216,26 +216,26 @@ void UpdateCarCrestHop(GameCarRuntime *car) {
     }
 
     one = 1;
-    obj->field_98 = one;
+    obj->verticalMotionState = one;
     if (value > 0) {
         temp = value * obj->speed;
         temp = temp / -4800;
-        obj->field_98 = one;
-        obj->field_9C = temp;
+        obj->verticalMotionState = one;
+        obj->verticalMotionRate = temp;
     } else {
         result = 2;
-        obj->field_98 = result;
+        obj->verticalMotionState = result;
         result = -value;
-        obj->field_9C = result;
+        obj->verticalMotionRate = result;
     }
 
     result = (u16)obj->bodyPitch;
     temp = (u16)obj->bodyRoll;
     value = (u16)obj->y;
-    obj->field_9A = 0;
+    obj->verticalMotionTimer = 0;
     obj->field_90 = result;
     obj->field_94 = temp;
-    obj->field_9E = value;
+    obj->verticalTargetY = value;
 }
 
 void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
@@ -571,7 +571,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
     carField34 = car->trackLateralOffset;
 
     while (nextIndex < 11) {
-        if (other->activeFlag != -1 && other->field_98 == car->field_98) {
+        if (other->activeFlag != -1 && other->verticalMotionState == car->verticalMotionState) {
             progressDelta =
                 (other->trackProgress + g_TrackLength - carProgress) % g_TrackLength;
             distance = other->trackLateralOffset - carField34;

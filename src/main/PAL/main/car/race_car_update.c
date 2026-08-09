@@ -95,7 +95,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
     value = -GetAngleDelta(callArg - value, angle);
     car->steeringAngle = value * 3;
 
-    if (car->field_98 == 0) {
+    if (car->verticalMotionState == 0) {
         value = GetAngleDelta(car->headingAngle, angle);
         value += car->headingAngle;
         car->headingAngle = value;
@@ -330,40 +330,40 @@ void UpdateRaceCars(void) {
             *(Vec4 *)&lastBase->modelPitch = *(Vec4 *)&lastBase->bodyPitch;
             lastBase->bodyRoll = lastBase->bodyRoll + lastBase->bodyRollVelocity;
             lastBase->modelY = lastBase->y;
-            if (lastBase->field_98 != 0) {
+            if (lastBase->verticalMotionState != 0) {
                 s32 tick;
                 s32 state;
-                tick = (u16)lastBase->field_9A + 1;
-                lastBase->field_9A = tick;
-                state = lastBase->field_98;
+                tick = (u16)lastBase->verticalMotionTimer + 1;
+                lastBase->verticalMotionTimer = tick;
+                state = lastBase->verticalMotionState;
                 if (state == 1) {
                     s32 n = (s16)tick;
                     lastBase->y =
-                        lastBase->field_9C * n + n * n * 72 / 100
+                        lastBase->verticalMotionRate * n + n * n * 72 / 100
                         + lastBase->y;
                     if (lastBase->y >= limit) {
-                        lastBase->field_98 = 0;
+                        lastBase->verticalMotionState = 0;
                     }
                 } else if (state == 2) {
-                    if (lastBase->field_9E >= limit - lastBase->field_9C) {
-                        lastBase->y = lastBase->field_9E;
+                    if (lastBase->verticalTargetY >= limit - lastBase->verticalMotionRate) {
+                        lastBase->y = lastBase->verticalTargetY;
                     } else {
-                        lastBase->field_98 = 3;
-                        lastBase->field_9C = lastBase->field_9A;
-                        lastBase->y = lastBase->field_9E;
+                        lastBase->verticalMotionState = 3;
+                        lastBase->verticalMotionRate = lastBase->verticalMotionTimer;
+                        lastBase->y = lastBase->verticalTargetY;
                     }
                 } else {
-                    s16 n = tick - (u16)lastBase->field_9C;
-                    lastBase->y = lastBase->field_9E + n * n * 216 / 100;
+                    s16 n = tick - (u16)lastBase->verticalMotionRate;
+                    lastBase->y = lastBase->verticalTargetY + n * n * 216 / 100;
                     if (lastBase->y >= limit) {
-                        lastBase->field_98 = 0;
+                        lastBase->verticalMotionState = 0;
                     }
                 }
-                if (lastBase->field_98 == 0) {
+                if (lastBase->verticalMotionState == 0) {
                     lastBase->y = limit + 8;
                     lastBase->field_90 = 0;
                     lastBase->field_94 = 0;
-                    lastBase->field_98 = 0;
+                    lastBase->verticalMotionState = 0;
                     StartCarBodyKick(1, base);
                 }
             }
@@ -570,39 +570,39 @@ void UpdateAttractCars(void) {
             *(Vec4 *)&base->modelPitch = *(Vec4 *)&base->bodyPitch;
             base->bodyRoll = base->bodyRoll + base->bodyRollVelocity;
             base->modelY = base->y;
-            if (base->field_98 != 0) {
+            if (base->verticalMotionState != 0) {
                 s32 tick;
                 s32 state;
-                tick = (u16)base->field_9A + 1;
-                base->field_9A = tick;
-                state = base->field_98;
+                tick = (u16)base->verticalMotionTimer + 1;
+                base->verticalMotionTimer = tick;
+                state = base->verticalMotionState;
                 if (state == 1) {
                     s32 t = (s16)tick;
                     base->y =
-                        base->field_9C * t + t * t * 72 / 100 + base->y;
+                        base->verticalMotionRate * t + t * t * 72 / 100 + base->y;
                     if (base->y >= limit) {
-                        base->field_98 = 0;
+                        base->verticalMotionState = 0;
                     }
                 } else if (state == 2) {
-                    if (base->field_9E >= limit - base->field_9C) {
-                        base->y = base->field_9E;
+                    if (base->verticalTargetY >= limit - base->verticalMotionRate) {
+                        base->y = base->verticalTargetY;
                     } else {
-                        base->field_98 = 3;
-                        base->field_9C = base->field_9A;
-                        base->y = base->field_9E;
+                        base->verticalMotionState = 3;
+                        base->verticalMotionRate = base->verticalMotionTimer;
+                        base->y = base->verticalTargetY;
                     }
                 } else {
-                    s16 n = tick - (u16)base->field_9C;
-                    base->y = base->field_9E + n * n * 216 / 100;
+                    s16 n = tick - (u16)base->verticalMotionRate;
+                    base->y = base->verticalTargetY + n * n * 216 / 100;
                     if (base->y >= limit) {
-                        base->field_98 = 0;
+                        base->verticalMotionState = 0;
                     }
                 }
-                if (base->field_98 == 0) {
+                if (base->verticalMotionState == 0) {
                     base->y = limit + 8;
                     base->field_90 = 0;
                     base->field_94 = 0;
-                    base->field_98 = 0;
+                    base->verticalMotionState = 0;
                     StartCarBodyKick(1, car);
                 }
             }

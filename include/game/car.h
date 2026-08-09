@@ -89,10 +89,10 @@ typedef struct GameCarRuntime {
     s16 field_92;
     s16 field_94;
     s16 field_96;
-    s16 field_98;
-    s16 field_9A;
-    s16 field_9C;
-    s16 field_9E;
+    s16 verticalMotionState;
+    s16 verticalMotionTimer;
+    s16 verticalMotionRate;
+    s16 verticalTargetY;
     s32 headingAngle;
     s32 speed;        /* +0xA4 longitudinal speed; km/h readout is speed * 160 / 1168 */
     s32 acceleration; /* +0xA8 per-frame acceleration ramp / drivetrain force */

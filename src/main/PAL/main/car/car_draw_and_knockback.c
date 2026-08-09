@@ -130,10 +130,10 @@ void ClearCarMotionState(GameCarRuntime *car) {
     car->field_92 = 0;
     car->field_94 = 0;
     car->field_96 = 0;
-    car->field_98 = 0;
-    car->field_9A = 0;
-    car->field_9C = 0;
-    car->field_9E = 0;
+    car->verticalMotionState = 0;
+    car->verticalMotionTimer = 0;
+    car->verticalMotionRate = 0;
+    car->verticalTargetY = 0;
 }
 
 void UpdateCarTiltCounter(GameCarRuntime *car) {
@@ -148,7 +148,7 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
     if (g_RacePhase < 2) {
         value = 8;
     } else {
-    if (obj->field_98 == 0) {
+    if (obj->verticalMotionState == 0) {
         if (obj->engineRpm >= g_CarSpec->redline &&
             obj->field_15C >= 0x81 &&
             obj->slideInput.halves.low == 0) {
@@ -361,7 +361,7 @@ void StartCarBodyKick(s32 strength, GameCarRuntime *car) {
     return;
 
     }
-    value = obj->field_9A;
+    value = obj->verticalMotionTimer;
     temp = 0x1E;
     obj->motionModeTimer = temp;
     value <<= 3;
