@@ -13,7 +13,19 @@
 /* The strip buffers hold back-to-back 0x10-byte TILEs; SetTile is
  * SetTile. The retail code reloads the buffer base before each field store,
  * so the base is passed in rather than held in a pointer. */
-#define TILE_AT(base, byteOffset) (*(TILE *)((s32)(byteOffset) + (s32)(base)))
+typedef union TileStripAddress {
+    s32 byteOffset;
+    u8 *bytes;
+    TILE *tile;
+} TileStripAddress;
+
+static __inline__ TILE *GetTileAtByteOffset(u8 *base, s32 byteOffset) {
+    TileStripAddress address;
+
+    address.bytes = base;
+    address.byteOffset = byteOffset + address.byteOffset;
+    return address.tile;
+}
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
     s32 savedX;
@@ -152,23 +164,24 @@ void BuildTileStrips(void) {
                 linear = (row * 32) + col;
                 buffer = buffers[0];
                 offset = linear * 16;
-                SetTile((u8 *)((u8 *)offset + (s32)buffer));
+                SetTile(GetTileAtByteOffset(buffer, offset));
                 storeBaseV1 = buffers[0];
-                TILE_AT(storeBaseV1, offset).w = 2;
+                GetTileAtByteOffset(storeBaseV1, offset)->w = 2;
                 storeBaseV1 = buffers[0];
-                TILE_AT(storeBaseV1, offset).h = 1;
+                GetTileAtByteOffset(storeBaseV1, offset)->h = 1;
                 storeBaseV1 = buffers[0];
-                TILE_AT(storeBaseV1, offset).x0 = 0xCD - xStep;
+                GetTileAtByteOffset(storeBaseV1, offset)->x0 = 0xCD - xStep;
                 storeBaseV0 = buffers[0];
-                TILE_AT(storeBaseV0, offset).y0 = yStart;
-                TILE_AT(buffers[0], offset).t.r0 = color;
-                TILE_AT(buffers[0], offset).t.g0 = color;
-                TILE_AT(buffers[0], offset).t.b0 = color;
+                GetTileAtByteOffset(storeBaseV0, offset)->y0 = yStart;
+                GetTileAtByteOffset(buffers[0], offset)->t.r0 = color;
+                GetTileAtByteOffset(buffers[0], offset)->t.g0 = color;
+                GetTileAtByteOffset(buffers[0], offset)->t.b0 = color;
 
                 if (linear > 0) {
                     addPrimBase = buffers[0];
                     prevOffset = offset - 0x10;
-                    AddPrim((void *)(prevOffset + (s32)addPrimBase), (void *)((u8 *)offset + (s32)addPrimBase));
+                    AddPrim(GetTileAtByteOffset(addPrimBase, prevOffset),
+                            GetTileAtByteOffset(addPrimBase, offset));
                 }
 
                 col++;
