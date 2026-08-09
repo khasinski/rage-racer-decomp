@@ -32,7 +32,7 @@ void StartFmvPlayback(s32 bufferBase) {
         if (PresentFmvFrame(buf) != fail) {
             break;
         }
-        StartStreamRead((s32)g_StreamLoc);
+        StartStreamRead(g_StreamLoc);
     }
     g_FmvStreamEnded = 0;
     g_SceneTimer = 0;

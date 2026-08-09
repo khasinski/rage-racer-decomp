@@ -14,7 +14,7 @@ void OpenFmvStream(s32 callback) {
     DecDCToutCallback(callback);
     StSetRing(g_FmvRingBuffer, 0x20);
     StSetStream(1, 1, -1, 0, 0);
-    StartStreamRead((s32)g_StreamLoc);
+    StartStreamRead(g_StreamLoc);
 }
 
 void UploadFmvSlice(void) {

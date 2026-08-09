@@ -30,7 +30,7 @@ void InitFmvContext();
 void OpenFmvStream();
 s32 PresentFmvFrame(FmvDecodeContext *ctx);
 void *GetFmvFrame(FmvDecodeContext *ctx);
-void StartStreamRead();
+void StartStreamRead(void *loc);
 void WaitFmvDecode(FmvDecodeContext *ctx, s32 mode);
 
 #endif
