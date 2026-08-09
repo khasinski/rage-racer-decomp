@@ -83,20 +83,21 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
 }
 
 void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
-    u8 *rowBytes = row->bytes;
+    u8 *rowBytes;
     s32 i;
     u32 checksum;
     u16 *scan;
 
-    rowBytes[0] = g_TeamNameLength;
+    row->fields.nameLength = g_TeamNameLength;
 
     for (i = 0; i < 7; i++) {
-        *((rowBytes + i) + 1) = g_TeamNameChars[i];
+        row->fields.name[i] = g_TeamNameChars[i];
     }
 
     i = 0;
     checksum = 0;
-    *(s32 *)(rowBytes + 8) = g_SaveElapsedTicks;
+    row->fields.saveCounter = g_SaveElapsedTicks;
+    rowBytes = row->bytes;
     scan = (u16 *)rowBytes;
 
     do {
@@ -105,5 +106,5 @@ void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     } while ((u32)i < 0x3E);
 
     checksum = ~checksum;
-    *(u32 *)(rowBytes + 0x7C) = checksum;
+    row->fields.checksum = checksum;
 }
