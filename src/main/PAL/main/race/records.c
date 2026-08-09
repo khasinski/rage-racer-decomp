@@ -22,7 +22,7 @@ void InitRecordTables(void) {
     register s32 r13 asm("$13");
     register s32 r14 asm("$14");
     s32 r15;
-    s32 r16;
+    RaceRecordAddress r16;
     register RaceRecordAddress r17 asm("$17");
     register RaceRecordAddress r18 asm("$18");
     s32 r19;
@@ -37,12 +37,12 @@ void InitRecordTables(void) {
     r14 = 0;
     r18.wordPointer = &g_DefaultLapTimes;
     r17.wordPointer = &g_BestTotalTimes[0][0][0];
-    r16 = (s32)&g_BestLapTimes;
+    r16.wordPointer = &g_BestLapTimes[0][0][0];
     do {
         r7 = 0;
         r15 = r14 * 32;
         r12 = r14 << 4;
-        r11 = r16;
+        r11 = r16.byteOffset;
         do {
             r5 = 0;
             r13 = r7 * 8;
@@ -74,7 +74,7 @@ void InitRecordTables(void) {
             r11 += 8;
         } while (r7 < 4);
         r14++;
-        r16 += 0x20;
+        r16.byteOffset += 0x20;
     } while (r14 < 2);
 
     r14 = 0;
@@ -83,7 +83,7 @@ void InitRecordTables(void) {
     r20 = 0;
     do {
         r7 = 0;
-        r16 = r20;
+        r16.byteOffset = r20;
         r15 = 0;
         do {
             r6 = 0;
@@ -103,11 +103,11 @@ void InitRecordTables(void) {
             r9 = (s32)&g_DefaultRecordTimes;
             r8 = (s32)&g_DefaultRecordRows;
             do {
-                r5 = r11 + r16;
+                r5 = r11 + r16.byteOffset;
                 r11 += 0x10;
                 r4 = r6 * 16;
                 r6++;
-                r2 = r16 + r19;
+                r2 = r16.byteOffset + r19;
                 r4 = r4 + r2;
                 r3 = *(s32 *)r8;
                 r2 = r4 + rankingBaseAddress.byteOffset;
