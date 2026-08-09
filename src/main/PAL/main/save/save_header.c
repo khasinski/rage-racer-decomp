@@ -10,6 +10,7 @@ void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
     s32 j;
     u8 *ptr2;
     GameSaveHeaderClearCursor *ptr3;
+    GameSaveHeaderWordAddress clearAddress;
 
     do {
         rowBytes[0] = 0;
@@ -21,7 +22,8 @@ void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
             j--;
         } while (j >= 0);
 
-        *(volatile u32 *)&rowBytes[8] = 0;
+        clearAddress.bytes = &rowBytes[8];
+        *clearAddress.word = 0;
 
         j = 0;
         ptr3 = (GameSaveHeaderClearCursor *)ptr1;
@@ -29,7 +31,8 @@ void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
             j++;
         } while ((ptr3->reservedHalfword = 0, j < 0x38));
 
-        *(volatile u32 *)&rowBytes[0x7C] = 0;
+        clearAddress.bytes = &rowBytes[0x7C];
+        *clearAddress.word = 0;
         rowBytes += 0x80;
         i++;
         ptr1 += 0x82;

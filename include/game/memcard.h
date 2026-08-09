@@ -57,6 +57,11 @@ typedef union GameSaveHeaderRowAddress {
     GameSaveHeaderRow *pointer;
 } GameSaveHeaderRowAddress;
 
+typedef union GameSaveHeaderWordAddress {
+    u8 *bytes;
+    volatile u32 *word;
+} GameSaveHeaderWordAddress;
+
 typedef struct GameSaveHeaderClearCursor {
     u8 prefix[0xC];
     u16 reservedHalfword;
