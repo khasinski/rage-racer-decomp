@@ -120,6 +120,22 @@ typedef struct TrackPointAmbienceZone {
     s32 phase;
 } TrackPointAmbienceZone;
 
+typedef struct TrackFinishCue {
+    s16 trackSection;
+    s16 reserved;
+} TrackFinishCue;
+
+typedef struct TrackSpeedCue {
+    s16 trackSection;
+    s16 speedPercent;
+} TrackSpeedCue;
+
+typedef struct TrackRaceCueData {
+    TrackFinishCue finish[2];
+    u8 reserved08[8];
+    TrackSpeedCue speed[2][3];
+} TrackRaceCueData;
+
 typedef struct TrackEventData {
     s32 trackWalkStart;
     TrackCrestEvent crestEvents[2][8];
@@ -133,6 +149,7 @@ typedef struct TrackEventData {
     TrackEventSoundZone eventSoundZones[30];
     TrackPointAmbienceZone pointAmbienceZones[2];
     TrackAmbienceZone ambienceZones[4];
+    TrackRaceCueData raceCues;
 } TrackEventData;
 
 /*

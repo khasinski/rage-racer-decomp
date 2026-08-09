@@ -88,23 +88,23 @@ void UpdateZoneAmbience(s32 zone) {
 
 
 void TriggerRaceCues(void) {
-    u8 *rawBase;
     u8 *base;
     s32 i;
     s32 mask;
-    u8 *stateBase;
+    PlayerRaceCueState *state;
     register s32 temp asm("v0");
     register s32 entry asm("v1");
     register s32 loopFlags asm("t0");
     register s32 current asm("a0");
     s32 product;
 
-    rawBase = (u8 *)g_TrackEventData;
     current = g_RaceCueFlags;
-    base = rawBase + 0x1CCC;
+    base = (u8 *)&g_TrackEventData->raceCues;
 
     if (!(current & 8)) {
-        if (g_PlayerCar.trackSection == *(s16 *)((g_RaceSeries * 4) + (s32)base)) {
+        if (g_PlayerCar.trackSection ==
+            ((TrackFinishCue *)((g_RaceSeries * sizeof(TrackFinishCue)) +
+                                (s32)base))->trackSection) {
             entry = g_PlayerCar.lap;
             if (entry == g_LapCount) {
                 entry = current | 8;
@@ -120,7 +120,7 @@ void TriggerRaceCues(void) {
         return;
     }
 
-    stateBase = (u8 *)&g_PlayerCar.trackSection;
+    state = (PlayerRaceCueState *)&g_PlayerCar.trackSection;
     i = 0;
     temp = 0x10;
     do {
@@ -131,21 +131,21 @@ void TriggerRaceCues(void) {
             temp = g_RaceSeries;
             entry = ((temp * 3) + i) << 2;
             entry += (s32)base;
-            current = *(s16 *)(entry + 0x10);
+            current = ((TrackRaceCueData *)entry)->speed[0][0].trackSection;
             temp = -1;
             if (current == temp) {
                 return;
             }
 
-            temp = *(s16 *)stateBase;
+            temp = state->trackSection;
             if (temp == current) {
-                entry = *(s16 *)(entry + 0x12);
-                temp = *(s32 *)(stateBase + 0xD0);
+                entry = ((TrackRaceCueData *)entry)->speed[0][0].speedPercent;
+                temp = state->speedScale;
                 product = entry * temp;
                 temp = product / 100;
-                entry = *(s32 *)(stateBase + 0x2C);
+                entry = state->speed;
                 if (temp < entry) {
-                    temp = *(s16 *)(stateBase + 0xA);
+                    temp = state->motionMode;
                     if (temp <= 0) {
                         temp = mask | loopFlags;
                         g_RaceCueFlags = temp;

@@ -184,6 +184,16 @@ typedef struct CarProgressWindow {
     u8 trailing[0x15A];
 } CarProgressWindow;
 
+typedef struct PlayerRaceCueState {
+    s16 trackSection;
+    u8 reserved02[8];
+    s16 motionMode;
+    u8 reserved0C[0x20];
+    s32 speed;
+    u8 reserved30[0xA0];
+    s32 speedScale;
+} PlayerRaceCueState;
+
 typedef struct CarCollisionPoint {
     s16 x;
     s16 z;
