@@ -19,12 +19,17 @@ typedef union GameTrackCameraData {
     s32 value[4];
 } GameTrackCameraData;
 
+typedef union TrackCameraSection {
+    s16 value;
+    u16 raw;
+} TrackCameraSection;
+
 typedef struct GameTrackCameraNode {
     GameTrackCameraData data;
     s32 offset[3];
     s32 duration;
     s16 mode;
-    s16 trackSection;
+    TrackCameraSection trackSection;
 } GameTrackCameraNode;
 
 #ifndef GAME_TRACK_CAMERA_TYPE
@@ -32,10 +37,6 @@ typedef struct GameTrackCameraNode {
 #endif
 extern GAME_TRACK_CAMERA_TYPE *g_TrackCameras;
 #undef GAME_TRACK_CAMERA_TYPE
-#ifndef GAME_TRACK_SECTION_COUNT_TYPE
-#define GAME_TRACK_SECTION_COUNT_TYPE s16
-#endif
-extern GAME_TRACK_SECTION_COUNT_TYPE g_TrackSectionCount;
-#undef GAME_TRACK_SECTION_COUNT_TYPE
+extern u16 g_TrackSectionCount;
 
 #endif

@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/render.h"
 
-#define GAME_TRACK_SECTION_COUNT_TYPE u16
 #include "game/track_camera_internal.h"
 
 s32 FindNearestTrackCamera(GameRenderObject *car) {
@@ -19,8 +18,8 @@ s32 FindNearestTrackCamera(GameRenderObject *car) {
 
     entry = g_TrackCameras;
     best = 0x7FFFFFFF;
-    rawValue = *(u16 *)&entry[0].trackSection;
-    dist = entry[0].trackSection;
+    rawValue = entry[0].trackSection.raw;
+    dist = entry[0].trackSection.value;
     index = 0;
 
     if (dist != -1) {
@@ -56,8 +55,8 @@ s32 FindNearestTrackCamera(GameRenderObject *car) {
 
             tmp = -1;
             index++;
-            rawValue = *(u16 *)&entry[index].trackSection;
-            dist = entry[index].trackSection;
+            rawValue = entry[index].trackSection.raw;
+            dist = entry[index].trackSection.value;
         } while (dist != tmp);
     }
 
