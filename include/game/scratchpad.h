@@ -133,7 +133,7 @@ extern s32 g_ScratchEnvMode4 asm("0x1F800084");
 
 /* Course object bank. SubmitCourseModel / SubmitCourseModel2 (0x800296BC,
  * 0x80029E58) load it and index by model id; size is g_CourseModelCount. */
-#define SCRATCH_COURSE_BANK    (*(s32 *)0x1F800048)
+#define SCRATCH_COURSE_BANK    (*(void **)0x1F800048)
 
 /* Model bank cursor, pointed at one g_ModelBanks entry by SelectModelBank.
  * MODELS is the model pointer array (bank + 0xC) that SubmitModel indexes by
@@ -141,14 +141,14 @@ extern s32 g_ScratchEnvMode4 asm("0x1F800084");
  * Emit*G4 / Emit*GT4 quad builders index by id << 3 and feed to ncct/nccs
  * (0x80029168). TABLE1 is bank[1] rebased; nothing in the disassembled engine
  * reads it, so it is named for where it comes from, not what it holds. */
-#define SCRATCH_MODEL_MODELS   (*(s32 *)0x1F800050)
-#define SCRATCH_MODEL_TABLE1   (*(s32 *)0x1F800054)
-#define SCRATCH_MODEL_NORMALS  (*(s32 *)0x1F800058)
+#define SCRATCH_MODEL_MODELS   (*(void **)0x1F800050)
+#define SCRATCH_MODEL_TABLE1   (*(void **)0x1F800054)
+#define SCRATCH_MODEL_NORMALS  (*(void **)0x1F800058)
 
 /* Terrain: the per-cell record array SubmitTerrainCells indexes by cell id
  * (0x80028078) and the face array SubmitTerrainCellFaces walks (0x80028168). */
-#define SCRATCH_CELL_TABLE     (*(s32 *)0x1F80005C)
-#define SCRATCH_CELL_FACES     (*(s32 *)0x1F800060)
+#define SCRATCH_CELL_TABLE     (*(void **)0x1F80005C)
+#define SCRATCH_CELL_FACES     (*(void **)0x1F800060)
 
 /* The srav amount that turns a transformed Z into an ordering-table index:
  * OT_SHIFT on the cell-face path (0x800283C0), FACE_OT_SHIFT on the mode-1

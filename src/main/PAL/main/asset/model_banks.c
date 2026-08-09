@@ -85,12 +85,12 @@ void SelectModelBank(s32 index) {
     count = *entry;
     count = *(s32 *)count;
     bank = *entry;
-    SCRATCH_MODEL_TABLE1 = (s32)((ModelBankHeader *)bank)->table.pointer;
+    SCRATCH_MODEL_TABLE1 = ((ModelBankHeader *)bank)->table.pointer;
     bank = *entry;
-    SCRATCH_MODEL_NORMALS = (s32)((ModelBankHeader *)bank)->normals.pointer;
+    SCRATCH_MODEL_NORMALS = ((ModelBankHeader *)bank)->normals.pointer;
     bank = *entry;
     g_ModelBankCount = count;
-    SCRATCH_MODEL_MODELS = (s32)((ModelBankHeader *)bank)->models;
+    SCRATCH_MODEL_MODELS = ((ModelBankHeader *)bank)->models;
 }
 
 void RegisterCourseModels(CourseModelAssetHeader *base) {
@@ -108,7 +108,7 @@ void RegisterCourseModels(CourseModelAssetHeader *base) {
     (void)&pad;
     entry = base->models;
     count = base->modelCount;
-    SCRATCH_COURSE_BANK = (s32)entry;
+    SCRATCH_COURSE_BANK = entry;
     g_CourseModelCount = count;
     i = 0;
     if (count > 0) {
@@ -135,9 +135,9 @@ void InstallTerrainCellData(u8 *base) {
     header = (TerrainCellAssetHeader *)base;
     ptr = header->cells;
     count = header->cellCount;
-    SCRATCH_CELL_TABLE = (s32)ptr;
+    SCRATCH_CELL_TABLE = ptr;
     g_TerrainCellCount = count;
-    SCRATCH_CELL_FACES = (s32)(base + header->faces.offset);
+    SCRATCH_CELL_FACES = base + header->faces.offset;
     for (i = 0; i < count; i++) {
         ptr->pointer = base + ptr->offset;
         ptr++;
