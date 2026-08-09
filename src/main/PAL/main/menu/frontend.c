@@ -4,7 +4,6 @@
 #include "game/audio.h"
 #include "game/menu.h"
 #include "game/menu_internal.h"
-#define GAME_DISP_ENV1_X_DECL extern u8 g_DispEnv1X[]
 #include "game/frontend_internal.h"
 #include "game/race.h"
 #include "game/random.h"
@@ -219,7 +218,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
     SetDefDrawEnv((DrawEnv *)base, 0, 0, 0x140, height);
     SetDefDrawEnv((DrawEnv *)g_DrawEnv1, 0, 0xF0, 0x140, height);
     SetDefDispEnv(base + 0x5C, 0, 0xF0, 0x140, height);
-    SetDefDispEnv(g_DispEnv1X, 0, 0, 0x140, height);
+    SetDefDispEnv((u8 *)&g_DispEnv1X, 0, 0, 0x140, height);
 
     {
         register void *ptr;
@@ -287,7 +286,7 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
     SetDefDrawEnv((DrawEnv *)base, 0, 0, 0x140, height);
     SetDefDrawEnv((DrawEnv *)g_DrawEnv1, 0, 0, 0x140, height);
     SetDefDispEnv(base + 0x5C, 0, 0, 0x140, height);
-    SetDefDispEnv(g_DispEnv1X, 0, 0, 0x140, height);
+    SetDefDispEnv((u8 *)&g_DispEnv1X, 0, 0, 0x140, height);
 
     i = 0;
     one = 1;
