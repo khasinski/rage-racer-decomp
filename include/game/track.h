@@ -402,6 +402,13 @@ typedef union PathSceneryKey {
     PathSceneryRotationKey rotation;
 } PathSceneryKey;
 
+typedef union PathSceneryKeyAddress {
+    s32 byteOffset;
+    PathSceneryPositionKey *positionPointer;
+    PathSceneryRotationKey *rotationPointer;
+    PathSceneryKey *pointer;
+} PathSceneryKeyAddress;
+
 typedef struct PathSceneryPositionData {
     s16 firstKey[2];
     PathSceneryPositionKey keys[1];

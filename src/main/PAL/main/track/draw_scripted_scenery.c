@@ -182,6 +182,8 @@ void UpdatePathScenerySound(void) {
     s32 product;
     register s32 oldVolume;
     PathSceneryKey *stepRec;
+    PathSceneryKeyAddress positionStepAddress;
+    PathSceneryKeyAddress rotationStepAddress;
 
     if (g_PathSceneryClock.posFrame == g_PathSceneryPosSpan) {
         idx = (u16)g_PathSceneryPosIndex;
@@ -190,7 +192,10 @@ void UpdatePathScenerySound(void) {
         idx = idx + 1;
         g_PathSceneryPosIndex = idx;
         __asm__ volatile("" : "=r"(idx) : "0"(idx));
-        stepRec = (PathSceneryKey *)(idx * 20 + (s32)positionKeys);
+        positionStepAddress.positionPointer = positionKeys;
+        positionStepAddress.byteOffset =
+            idx * sizeof(PathSceneryPositionKey) + positionStepAddress.byteOffset;
+        stepRec = positionStepAddress.pointer;
         if (stepRec->position.span == -1) {
             idx = stepRec->position.loopIndex;
             g_PathSceneryClock.posFrame = 0;
@@ -297,7 +302,10 @@ void UpdatePathScenerySound(void) {
         idx = idx + 1;
         g_PathSceneryRotIndex = idx;
         __asm__ volatile("" : "=r"(idx) : "0"(idx));
-        stepRec = (PathSceneryKey *)(idx * 12 + (s32)rotationKeys);
+        rotationStepAddress.rotationPointer = rotationKeys;
+        rotationStepAddress.byteOffset =
+            idx * sizeof(PathSceneryRotationKey) + rotationStepAddress.byteOffset;
+        stepRec = rotationStepAddress.pointer;
         if (stepRec->rotation.span == -1) {
             idx = stepRec->rotation.loopIndex;
             g_PathSceneryClock.rotFrame = 0;
