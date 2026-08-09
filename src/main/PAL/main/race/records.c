@@ -9,7 +9,7 @@
 void InitRecordTables(void) {
     RaceRecordAddress recordAddress;
     register RaceRecordAddress r2 asm("$2");
-    s32 r3;
+    RaceRecordAddress r3;
     register s32 r4 asm("$4");
     register s32 r5 asm("$5");
     s32 r6;
@@ -53,10 +53,10 @@ void InitRecordTables(void) {
                 r2.byteOffset = r12 + r18.byteOffset;
                 r6 = r7 * 4;
                 r9.byteOffset = r6 + r2.byteOffset;
-                r3 = r5 * 4;
+                r3.byteOffset = r5 * 4;
                 r2.byteOffset = r15 + r17.byteOffset;
                 r2.byteOffset = r13 + r2.byteOffset;
-                r3 = r3 + r2.byteOffset;
+                r3.byteOffset = r3.byteOffset + r2.byteOffset;
                 do {
                     r2.byteOffset = *r9.wordPointer;
                     *r10.wordPointer = r2.byteOffset;
@@ -65,7 +65,7 @@ void InitRecordTables(void) {
                     r2.byteOffset = r6 + r2.byteOffset;
                     r2.byteOffset = *r2.wordPointer;
                     r4++;
-                    *(s32 *)r3 = r2.byteOffset;
+                    *r3.wordPointer = r2.byteOffset;
                 } while (r4 < 4);
                 r5++;
                 r8.byteOffset += 4;
@@ -109,16 +109,16 @@ void InitRecordTables(void) {
                 r6++;
                 r2.byteOffset = r16.byteOffset + r19;
                 r4 = r4 + r2.byteOffset;
-                r3 = *r8.wordPointer;
+                r3.byteOffset = *r8.wordPointer;
                 r2.byteOffset = r4 + rankingBaseAddress.byteOffset;
-                *r2.wordPointer = r3;
-                r3 = *r9.wordPointer;
+                *r2.wordPointer = r3.byteOffset;
+                r3.byteOffset = *r9.wordPointer;
                 r2.byteOffset = r4 + r30;
-                *r2.wordPointer = r3;
-                r3 = *r8.wordPointer;
+                *r2.wordPointer = r3.byteOffset;
+                r3.byteOffset = *r8.wordPointer;
                 r8.byteOffset += 0xC;
                 r2.byteOffset = r4 + r18.byteOffset;
-                *r2.wordPointer = r3;
+                *r2.wordPointer = r3.byteOffset;
                 r2.byteOffset = *r9.wordPointer;
                 r4 = r4 + r21;
                 *(s32 *)r4 = r2.byteOffset;
@@ -165,12 +165,12 @@ void InitRecordTables(void) {
             r6 = 0;
             r2.byteOffset = r7 * 4;
             r5 = r2.byteOffset + r8.byteOffset;
-            r3 = r4;
+            r3.byteOffset = r4;
             do {
                 r2.byteOffset = *(s32 *)r5;
                 r6++;
-                *(s32 *)r3 = r2.byteOffset;
-                r3 += 4;
+                *r3.wordPointer = r2.byteOffset;
+                r3.byteOffset += 4;
             } while (r6 < 3);
             r7++;
             r4 += 0xC;
