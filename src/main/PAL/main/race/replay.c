@@ -4,7 +4,6 @@
 #include "game/race.h"
 #include "game/render.h"
 #include "game/replay.h"
-#define GAME_REPLAY_MODEL_TYPE u16
 #include "game/replay_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
@@ -19,8 +18,10 @@ void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *r
     ReplayGrandPrixFrame *big;
     ReplayTimeAttackFrame *small;
     if (g_GrandPrixMode != 0) {
-        playerObj->variantAE = g_ReplayPlayerModel;
-        rivalObj->variantAE = g_ReplayRivalModel;
+        u16 playerModel = g_ReplayPlayerModel.model;
+        u16 rivalModel = g_ReplayRivalModel.model;
+        playerObj->variantAE = playerModel;
+        rivalObj->variantAE = rivalModel;
         if ((subframe & 1) == 0) {
             index = subframe >> 1;
             big = &g_ReplayFramesGp[index];
@@ -70,7 +71,7 @@ void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *r
         }
         playerObj->field8C = big->field20;
     } else {
-        playerObj->variantAE = g_ReplayPlayerModel;
+        playerObj->variantAE = g_ReplayPlayerModel.model;
         if ((subframe & 1) == 0) {
             index = subframe >> 1;
             small = &g_ReplayFramesTimeAttack[index];
