@@ -109,7 +109,7 @@ void DrawMenuCarView(void) {
 
     g_MenuViewOffset = s2 + g_MenuViewOffset;
     s2 = g_MenuViewOffset / 1000;
-    g_PlayerCar.runtime.field_AE = GetCarAssetIndex(s1, g_CarTable[s1].modelVariant);
+    g_PlayerCar.runtime.modelIndex = GetCarAssetIndex(s1, g_CarTable[s1].modelVariant);
     g_PlayerTireCompound = g_CarTable[s1].tireCompound;
 
     if (g_PadHeld & 2) {

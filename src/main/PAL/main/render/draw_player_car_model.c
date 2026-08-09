@@ -160,7 +160,7 @@ void DrawCar(GameRenderObject *obj) {
     s32 *cam = &SCRATCH_PRIM_CURSOR_WORD;
     s16 *lod;
 
-    model = g_CarModelByCourse[g_CourseIndex][((GameRenderSourcePoint *)obj)->field_AE];
+    model = g_CarModelByCourse[g_CourseIndex][((GameRenderSourcePoint *)obj)->modelIndex];
     lod = g_CarModelBankTable[model];
     obj->y -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;
     obj->field_60 -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;

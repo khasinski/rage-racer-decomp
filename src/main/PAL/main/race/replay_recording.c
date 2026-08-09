@@ -28,17 +28,17 @@ void StoreReplayCarFrame(s32 pairIndex, const GameRenderSourcePoint *srcA,
     ReplayGrandPrixFrame *dst;
     const GameRenderSourcePoint *src1;
     const GameRenderSourcePoint *src2;
-    s32 sourceField_AE;
+    s32 sourceModelIndex;
     s32 current;
     s32 odd;
     u32 first;
 
-    current = g_PlayerCar.field_AE;
+    current = g_PlayerCar.modelIndex;
     src2 = srcB;
-    sourceField_AE = src2->field_AE;
+    sourceModelIndex = src2->modelIndex;
     g_ReplayPlayerModel.word = current;
     odd = pairIndex & 1;
-    g_ReplayRivalModel.word = sourceField_AE;
+    g_ReplayRivalModel.word = sourceModelIndex;
     if (odd) {
         return;
     }
@@ -75,7 +75,7 @@ void StoreReplayTimeAttackFrame(s32 pointIndex, const GameRenderSourcePoint *src
     const GameRenderSourcePoint *src;
     u32 first;
 
-    g_ReplayPlayerModel.word = g_PlayerCar.field_AE;
+    g_ReplayPlayerModel.word = g_PlayerCar.modelIndex;
     if (pointIndex % 2) {
         return;
     }

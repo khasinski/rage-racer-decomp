@@ -97,7 +97,7 @@ typedef struct GameCarRuntime {
     s32 speed;        /* +0xA4 longitudinal speed; km/h readout is speed * 160 / 1168 */
     s32 acceleration; /* +0xA8 per-frame acceleration ramp / drivetrain force */
     s16 activeFlag;
-    s16 field_AE;
+    s16 modelIndex;
     s32 field_B0;
     s32 field_B4;
     /* +0xB8 0 = travelling with the course, 1 = against it. Seeded to
@@ -453,7 +453,7 @@ typedef struct PlayerCarRuntime {
     s32 speed;
     s32 acceleration;
     s16 activeFlag;
-    s16 field_AE;
+    s16 modelIndex;
     s32 field_B0;
     s32 field_B4;
     s16 facingBackwards;

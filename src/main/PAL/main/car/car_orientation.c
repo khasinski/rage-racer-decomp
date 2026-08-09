@@ -52,7 +52,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   g_TrackZoneDark = 0;
   g_ShiftSoundLevel = 0;
   g_RoadGrade = 0;
-  player->field_AE = 0x17;
+  player->modelIndex = 0x17;
   player->drive.brakePos = 0;
   player->drive.unk0C = 0;
   player->drive.accelPos = 0;

@@ -477,7 +477,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     }
     ent->field_8A = 0;
     ent->field_BC = 1;
-    ent->field_AE = av;
+    ent->modelIndex = av;
     val122 = slots[pos].halves.modelId;
     scene = g_RaceSeries;
     ent->field_122 = val122;
