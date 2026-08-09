@@ -153,7 +153,7 @@ void UploadCarImage(s32 index) {
     LoadImage(&g_CarImageRect, g_CarImageSlots[index]);
 }
 
-void SetCarModelSlot(void *asset, s32 index) {
+void SetCarModelSlot(CarModelAsset *asset, s32 index) {
     g_CarModelSlots[index] = asset;
 }
 

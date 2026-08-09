@@ -588,7 +588,8 @@ s32 GetCarAssetIndex(s32 model, s32 grade);
 /* Progress level needed to buy this model's next grade. */
 s32 GetCarUnlockLevel(s32 model);
 void SetCarImageSlot(void* asset, s32 index);
-void SetCarModelSlot(void* asset, s32 index);
+struct CarModelAsset;
+void SetCarModelSlot(struct CarModelAsset *asset, s32 index);
 /* Which of the two showroom model slots is live, 0 or 1. */
 extern u32 g_CarModelSlot;
 /* Point g_CarModelAsset at g_CarModelSlots[index]. */

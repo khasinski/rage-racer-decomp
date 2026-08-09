@@ -286,7 +286,7 @@ extern s32 g_StreamSectorLimit;
 extern s32 g_TerrainCellCount;
 extern u32 g_CarImageRect;
 extern void *g_CarImageSlots[];
-extern void *g_CarModelSlots[];
+extern CarModelAsset *g_CarModelSlots[];
 extern ModelBankHeader *g_ModelBanks[];
 extern char g_MsgFileNotFound[];
 extern char g_MsgFileReadError[];
