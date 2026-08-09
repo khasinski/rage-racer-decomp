@@ -66,11 +66,11 @@ s32 LoadSaveStateBlock(u8 *block) {
         g_TimeAttackSave.maxClassReached = ((GameSaveBlock *)base)->timeAttackProgress.maxClassReached;
         g_TimeAttackSave.money = ((GameSaveBlock *)base)->timeAttackProgress.money;
         {
-            s32 bgmSelection = *(s16 *)(base + 0x4C);
-            u16 advancedUnlocked = *(u16 *)(base + 0x4E);
+            s32 bgmSelection = ((GameSaveBlock *)base)->bgmSelection;
+            u16 advancedUnlocked = ((GameSaveBlock *)base)->advancedUnlocked;
             s32 maxClassReached1;
-            g_MaxClassReached[0] = *(s32 *)(base + 0x50);
-            maxClassReached1 = *(s32 *)(base + 0x54);
+            g_MaxClassReached[0] = ((GameSaveBlock *)base)->maxClassReached[0];
+            maxClassReached1 = ((GameSaveBlock *)base)->maxClassReached[1];
             g_BgmSelection = bgmSelection;
             g_AdvancedSeriesUnlocked = advancedUnlocked;
             g_MaxClassReached[1] = maxClassReached1;

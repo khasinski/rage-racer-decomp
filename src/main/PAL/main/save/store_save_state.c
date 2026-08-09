@@ -48,13 +48,13 @@ void StoreSaveStateBlock(u8 *block) {
         {
             u16 advancedUnlocked = g_AdvancedSeriesUnlocked;
             saveValue = g_TimeAttackSave.money;
-            *(u16 *)(block + 0x4C) = bgmSelection;
-            *(u16 *)(block + 0x4E) = advancedUnlocked;
+            ((GameSaveBlock *)block)->bgmSelection = bgmSelection;
+            ((GameSaveBlock *)block)->advancedUnlocked = advancedUnlocked;
             ((GameSaveBlock *)block)->timeAttackProgress.money = saveValue;
         }
     }
-    *(s32 *)(block + 0x50) = g_MaxClassReached[0];
-    *(s32 *)(block + 0x54) = g_MaxClassReached[1];
+    ((GameSaveBlock *)block)->maxClassReached[0] = g_MaxClassReached[0];
+    ((GameSaveBlock *)block)->maxClassReached[1] = g_MaxClassReached[1];
 
     {
         {
