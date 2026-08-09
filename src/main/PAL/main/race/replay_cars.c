@@ -173,6 +173,7 @@ void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
     s32 timeout;
     s32 threshold;
     PlayerCarRaceState *raceState;
+    SectorTimeTableAddress sectorAddress;
 
     raceState = (PlayerCarRaceState *)&car->drive;
 
@@ -229,7 +230,9 @@ void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
             nextSlot += 2;
             nextSlot %= 3;
             nextSlot <<= 2;
-            g_LastSectorTime = *(s32 *)((u8 *)g_SectorTimes + nextSlot);
+            sectorAddress.pointer = g_SectorTimes;
+            sectorAddress.byteOffset += nextSlot;
+            g_LastSectorTime = *sectorAddress.pointer;
             goto split_update_done;
         }
     }
