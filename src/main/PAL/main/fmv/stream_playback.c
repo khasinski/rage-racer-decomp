@@ -25,7 +25,7 @@ s32 PresentFmvFrame(FmvDecodeContext *ctx) {
 
 void *GetFmvFrame(FmvDecodeContext *ctx) {
     StRingEventRecord *slot[2];
-    u16 rect[4];
+    Rect rect;
     s32 count;
     StRingEventRecord *entry;
     s32 w;
@@ -59,13 +59,13 @@ void *GetFmvFrame(FmvDecodeContext *ctx) {
     w = entry->width;
     if ((g_FmvFrameWidth != w) || (g_FmvFrameHeight != entry->height)) {
         h = entry->height;
-        rect[0] = 0;
-        rect[1] = 0;
-        rect[2] = w * 3 / 2;
-        rect[3] = 0x1E0;
+        rect.x = 0;
+        rect.y = 0;
+        rect.w = w * 3 / 2;
+        rect.h = 0x1E0;
         g_FmvFrameWidth = w;
         g_FmvFrameHeight = h;
-        ClearImage(rect, 0, 0, 0);
+        ClearImage(&rect, 0, 0, 0);
     }
 
     ret = slot[0];
