@@ -4,7 +4,7 @@
 #include "game/menu.h"
 
 void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
-    u8 *rowBytes = (u8 *)rows;
+    u8 *rowBytes = rows->bytes;
     s32 i = 0;
     u8 *ptr1 = rowBytes;
     s32 j;
@@ -86,7 +86,6 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
 }
 
 void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
-    u8 *rowBytes;
     s32 i;
     u32 checksumIndex;
     u32 checksum;
@@ -101,8 +100,7 @@ void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     i = 0;
     checksum = 0;
     row->fields.saveCounter = g_SaveElapsedTicks;
-    rowBytes = row->bytes;
-    scan = (u16 *)rowBytes;
+    scan = row->halfwords;
 
     do {
         checksum += *scan++;
