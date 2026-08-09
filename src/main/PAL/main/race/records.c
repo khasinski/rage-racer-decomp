@@ -14,7 +14,7 @@ void InitRecordTables(void) {
     register s32 r5 asm("$5");
     s32 r6;
     register s32 r7 asm("$7");
-    s32 r8;
+    RaceRecordAddress r8;
     s32 r9;
     s32 r10;
     s32 r11;
@@ -46,10 +46,10 @@ void InitRecordTables(void) {
         do {
             r5 = 0;
             r13 = r7 * 8;
-            r8 = r11;
+            r8.byteOffset = r11;
             do {
                 r4 = 0;
-                r10 = r8;
+                r10 = r8.byteOffset;
                 r2 = r12 + r18.byteOffset;
                 r6 = r7 * 4;
                 r9 = r6 + r2;
@@ -68,7 +68,7 @@ void InitRecordTables(void) {
                     *(s32 *)r3 = r2;
                 } while (r4 < 4);
                 r5++;
-                r8 += 4;
+                r8.byteOffset += 4;
             } while (r5 < 2);
             r7++;
             r11 += 8;
@@ -101,7 +101,7 @@ void InitRecordTables(void) {
             r12 = 0;
             r11 = r15;
             r9 = (s32)&g_DefaultRecordTimes;
-            r8 = (s32)&g_DefaultRecordRows;
+            r8.wordPointer = &g_DefaultRecordRows;
             do {
                 r5 = r11 + r16.byteOffset;
                 r11 += 0x10;
@@ -109,14 +109,14 @@ void InitRecordTables(void) {
                 r6++;
                 r2 = r16.byteOffset + r19;
                 r4 = r4 + r2;
-                r3 = *(s32 *)r8;
+                r3 = *r8.wordPointer;
                 r2 = r4 + rankingBaseAddress.byteOffset;
                 *(s32 *)r2 = r3;
                 r3 = *(s32 *)r9;
                 r2 = r4 + r30;
                 *(s32 *)r2 = r3;
-                r3 = *(s32 *)r8;
-                r8 += 0xC;
+                r3 = *r8.wordPointer;
+                r8.byteOffset += 0xC;
                 r2 = r4 + r18.byteOffset;
                 *(s32 *)r2 = r3;
                 r2 = *(s32 *)r9;
@@ -155,7 +155,7 @@ void InitRecordTables(void) {
     } while (r14 < 2);
 
     r14 = 0;
-    r8 = (s32)&g_DefaultLapTimes;
+    r8.wordPointer = &g_DefaultLapTimes;
     r9 = (s32)&g_BestSectorTimes;
     do {
         r7 = 0;
@@ -163,7 +163,7 @@ void InitRecordTables(void) {
         do {
             r6 = 0;
             r2 = r7 * 4;
-            r5 = r2 + r8;
+            r5 = r2 + r8.byteOffset;
             r3 = r4;
             do {
                 r2 = *(s32 *)r5;
@@ -174,7 +174,7 @@ void InitRecordTables(void) {
             r7++;
             r4 += 0xC;
         } while (r7 < 4);
-        r8 += 0x10;
+        r8.byteOffset += 0x10;
         r14++;
         r9 += 0x30;
     } while (r14 < 2);
