@@ -107,4 +107,3 @@ void WriteSaveHeaderRow(GameSaveHeaderRow *row) {
     checksum = ~checksum;
     *(u32 *)(rowBytes + 0x7C) = checksum;
 }
-

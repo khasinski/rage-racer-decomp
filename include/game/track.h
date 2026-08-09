@@ -6,6 +6,7 @@
 #include "game/vector.h"
 
 union GameEnvColor;
+struct GameRenderObject;
 typedef struct GameEnvironmentCue GameEnvironmentCue;
 
 
@@ -341,7 +342,7 @@ extern s32 g_StartGridSceneryAngle[];
 extern s32 g_StaticSceneryYaw;
 
 s32 BlendAngle(s32 angleA, s32 angleB, s32 weight);
-extern s32 FindNearestTrackCamera();
+extern s32 FindNearestTrackCamera(struct GameRenderObject *car);
 void LerpEnvColor(union GameEnvColor *from, union GameEnvColor *to,
                   union GameEnvColor *out, s32 blend);
 void LoadEnvironmentCue();
