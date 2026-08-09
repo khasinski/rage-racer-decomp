@@ -112,7 +112,7 @@ void ApplyReplayFrameAndTilt(s32 subframe, ReplayCarState *playerObj,
     ReplayCarState *secondary;
     register s32 next asm("a0");
     register s32 offset asm("v0");
-    register u8 *base asm("v1");
+    register ReplayGrandPrixFrame *base asm("v1");
 
     index = subframe;
     primary = playerObj;
@@ -132,23 +132,26 @@ void ApplyReplayFrameAndTilt(s32 subframe, ReplayCarState *playerObj,
             }
             offset = next * 3;
         }
-        base = (u8 *)((offset * 16) + (s32)g_ReplayFramesGp);
-        primary->trackPointIndex = ((ReplayGrandPrixFrame *)base)->trackPointIndex0;
-        secondary->trackPointIndex = ((ReplayGrandPrixFrame *)base)->trackPointIndex1;
+        base = (ReplayGrandPrixFrame *)((u32 *)g_ReplayFramesGp + offset * 4);
+        primary->trackPointIndex = base->trackPointIndex0;
+        secondary->trackPointIndex = base->trackPointIndex1;
     } else {
         if ((index & 1) == 0) {
             index >>= 1;
-            offset = index * 7;
+            offset = index * (sizeof(ReplayTimeAttackFrame) / sizeof(u32));
         } else {
             index >>= 1;
             next = index + 1;
             if (next == 0x505) {
                 next = 0;
             }
-            offset = next * 7;
+            offset = next * (sizeof(ReplayTimeAttackFrame) / sizeof(u32));
         }
-        offset = (offset * 4) + (s32)g_ReplayFramesTimeAttack;
-        primary->trackPointIndex = ((ReplayTimeAttackFrame *)offset)->trackPointIndex;
+        {
+            ReplayTimeAttackFrame *frame;
+            frame = (ReplayTimeAttackFrame *)((u32 *)g_ReplayFramesTimeAttack + offset);
+            primary->trackPointIndex = frame->trackPointIndex;
+        }
     }
 }
 
