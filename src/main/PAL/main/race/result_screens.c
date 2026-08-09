@@ -23,7 +23,10 @@ typedef union {
     s16 color;
 } GrandPrixIntroSelection;
 
-
+typedef union GrandPrixIntroAddress {
+    s16 *value;
+    GrandPrixIntroSelection *selection;
+} GrandPrixIntroAddress;
 
 void DrawSeriesClearedWash(s32 x, s32 y) {
     void *ot;
@@ -273,6 +276,7 @@ void DrawGrandprixIntro(void) {
     {
         u8 **scratch;
         GrandPrixIntroSelection *selection;
+        GrandPrixIntroAddress selectionAddress;
         u8 *next;
         s32 selectionIndex;
 
@@ -280,7 +284,8 @@ void DrawGrandprixIntro(void) {
         DrawResultScreen();
 
         base = g_DrawBuffer + 0xCC;
-        selection = (GrandPrixIntroSelection *)&g_RacePosition;
+        selectionAddress.value = &g_RacePosition;
+        selection = selectionAddress.selection;
         next = GameQueueSprite(
             base,
             *scratch,
