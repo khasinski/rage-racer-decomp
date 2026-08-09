@@ -10,7 +10,6 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     /* Load-bearing GCC 2.6.3 register roles for the table loops. */
     register s32 tblOff asm("$3");
     register s32 loopTblOff asm("$8");
-    s32 compareOff;
     s32 scaled;
     s32 scaleValue;
     s32 cueValue;
@@ -72,7 +71,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
             }
             bankIndex = bank * 3;
             tblOff = bankIndex * 8;
-            count = *(s32 *)((u8 *)g_EffectCueTable + tblOff);
+            count = g_EffectCueTable[bank].voiceCount;
             i = 0;
             if (count > i) {
                 stateBase = &g_EffectVoices[0].state;
@@ -137,11 +136,10 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                 }
             }
         } else {
-            compareOff = bank * 0x18;
             if ((g_EffectVoices[2].note ==
-                 *(s32 *)((u8 *)&g_EffectCueTable[0].programs[0].note + compareOff)) &&
+                 g_EffectCueTable[bank].programs[0].note) &&
                 (g_EffectVoices[3].note ==
-                 *(s32 *)((u8 *)&g_EffectCueTable[0].programs[1].note + compareOff))) {
+                 g_EffectCueTable[bank].programs[1].note)) {
                 g_EffectVoice2State = 2;
                 tblOff = bank * 2;
             } else {
@@ -151,7 +149,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
             tblOff = (tblOff + bank) * 8;
             bankIndex = bank * 3;
             tblOff = bankIndex * 8;
-            count = *(s32 *)((u8 *)g_EffectCueTable + tblOff);
+            count = g_EffectCueTable[bank].voiceCount;
             i = 0;
             if (count > i) {
                 stateBase = &g_EffectVoice2State;
