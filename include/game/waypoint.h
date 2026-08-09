@@ -10,8 +10,7 @@ typedef struct TrackWaypointSeed {
     s16 stepY;
 } TrackWaypointSeed;
 
-typedef struct TrackWaypointRuntime {
-    s32 active;
+typedef struct TrackWaypointMotion {
     s32 x;
     s32 height;
     s32 y;
@@ -25,6 +24,11 @@ typedef struct TrackWaypointRuntime {
     s32 velocityY;
     s32 field30;
     s32 velocityMagnitude;
+} TrackWaypointMotion;
+
+typedef struct TrackWaypointRuntime {
+    s32 active;
+    TrackWaypointMotion motion;
 } TrackWaypointRuntime;
 
 #endif

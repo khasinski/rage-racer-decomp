@@ -68,7 +68,7 @@
 
 s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint) {
     s32 center_x = g_PlayerCar.x;
-    s32 x = waypoint->x;
+    s32 x = waypoint->motion.x;
     s32 ret = 0;
 
     if ((center_x - 0x40) < x) {
@@ -76,7 +76,7 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint) {
 
         if (x < max_x) {
             s32 center_y = g_PlayerCar.z;
-            s32 y = waypoint->y;
+            s32 y = waypoint->motion.y;
 
             if ((center_y - 0x40) < y) {
                 s32 max_y = center_y + 0x40;
@@ -93,18 +93,9 @@ void UpdateWaypoints(void) {
     TrackWaypointRuntime *waypoint;
     s32 i;
     s32 activeState;
-    /*
-     * Retail addresses the waypoint's velocity block through a base register
-     * biased to &waypoint->velocityMagnitude, so these stay raw:
-     *   tail-0x30 x        tail-0x28 y          tail-0x20 rotationZ
-     *   tail-0x1C rotationY tail-0x10 velocityX tail-0xC field28
-     *   tail-0x8 velocityY tail-0x4  field30    tail      velocityMagnitude
-     * Writing them as waypoint->field drops the second induction variable and
-     * re-bases every store on $17.
-     */
     register char *tail asm("$16");
 #define CURRENT_WAYPOINT \
-    ((TrackWaypointRuntime *)(tail - (sizeof(TrackWaypointRuntime) - sizeof(s32))))
+    ((TrackWaypointMotion *)(tail - (sizeof(TrackWaypointMotion) - sizeof(s32))))
 
     if (g_WaypointSpawnCooldown != 0) {
         g_WaypointSpawnCooldown--;
@@ -113,7 +104,7 @@ void UpdateWaypoints(void) {
     waypoint = g_Waypoints;
     i = 0;
     activeState = 1;
-    tail = (char *)waypoint + 0x34;
+    tail = (char *)&waypoint->motion.velocityMagnitude;
     do {
         if (waypoint->active == 0) {
             if (IsCarNearWaypoint(waypoint) != 0) {
@@ -161,11 +152,11 @@ static inline void ClearScratchRenderMode37AAC(void) {
 
 /*
  * Renders the 6 waypoints. For each active-shaped slot it builds a rotation
- * matrix from the waypoint's angle (point+0x14) and tilt (point+0x10) and emits
+ * matrix from the waypoint's Y and Z rotations and emits
  * two GTE draw primitives (SubmitModel) into the scratchpad OT: the second is
  * the same billboard rotated by 0x800 (180 degrees). `point` walks the
- * TrackWaypointRuntime array g_Waypoints via raw offsets. Register pins are
- * match-load-bearing.
+ * TrackWaypointRuntime array g_Waypoints. The point cursor starts at each
+ * slot's motion subrecord. Its register pin is match-load-bearing.
  */
 void DrawWaypoints(void) {
     Matrix mtx0;
@@ -173,7 +164,7 @@ void DrawWaypoints(void) {
     s32 drawId;
     s32 i;
     Matrix *mtx1Ptr;
-    register char *point asm("$16");
+    register TrackWaypointMotion *point asm("$16");
     s32 frameValue;
     s32 drawArg;
 
@@ -181,12 +172,12 @@ void DrawWaypoints(void) {
     SelectModelBank(0);
     i = 0;
     mtx1Ptr = &mtx1;
-    point = (char *)&g_Waypoints[0].x;
+    point = &g_Waypoints[0].motion;
 
     do {
-        BuildRotMatrixY(&mtx0, *(s32 *)(point + 0x14));
+        BuildRotMatrixY(&mtx0, point->rotationY);
         MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx0);
-        BuildRotMatrixZ(mtx1Ptr, *(s32 *)(point + 0x10));
+        BuildRotMatrixZ(mtx1Ptr, point->rotationZ);
         MulMatrix(&mtx0, mtx1Ptr);
         SetGteObjectMatrix((void *)0x1F80011C, point, &mtx0);
         frameValue = g_ModelBankCount;
@@ -209,7 +200,7 @@ void DrawWaypoints(void) {
         SubmitModel((void *)SCRATCHPAD_ADDR, drawArg);
 
         i++;
-        point += sizeof(TrackWaypointRuntime);
+        point = (TrackWaypointMotion *)((u8 *)point + sizeof(TrackWaypointRuntime));
     } while (i < 6);
 }
 

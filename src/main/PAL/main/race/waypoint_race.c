@@ -162,12 +162,12 @@ void SeedWaypoints(void) {
 
     for (i = 0; i < 6; i++) {
         waypoint->active = 0;
-        waypoint->x = seed->x + seed->stepX * i;
-        waypoint->y = seed->y + seed->stepY * i;
-        waypoint->height = 0x1766;
-        waypoint->rotationY = 0x174;
-        waypoint->rotationZ = 0;
-        waypoint->field1C = 0;
+        waypoint->motion.x = seed->x + seed->stepX * i;
+        waypoint->motion.y = seed->y + seed->stepY * i;
+        waypoint->motion.height = 0x1766;
+        waypoint->motion.rotationY = 0x174;
+        waypoint->motion.rotationZ = 0;
+        waypoint->motion.field1C = 0;
         waypoint++;
     }
 
