@@ -7,6 +7,11 @@
 #include "game/render.h"
 #include "game/render_internal.h"
 
+typedef union FinishCameraCarAddress {
+    u32 *words;
+    GameCarRuntime *car;
+} FinishCameraCarAddress;
+
 void SeedFinishCameraAlt(void *car) {
     register u32 word0 asm("$2");
     u32 word1;
@@ -14,7 +19,7 @@ void SeedFinishCameraAlt(void *car) {
     Block16 *src;
     Block16 *dst;
     Block16 *end;
-    u32 *base;
+    FinishCameraCarAddress source;
     GameTrackPoint *track;
     TrackPointTableAddress pointAddress;
     TrackPointTableAddress trackAddress;
@@ -25,12 +30,12 @@ void SeedFinishCameraAlt(void *car) {
     /* car is a car runtime block: the copy below moves 0x19C bytes of it into
      * g_CameraCar, which is a GameRenderObject -- every one of the eleven
      * g_CameraCar* split symbols lands on one of its fields. Storing through
-     * the object is what lets the index reads below stay plain: both sides
+     * the source view is what lets the index reads below stay plain: both sides
      * carry the aggregate mark now, so 44a's exemption never fires. */
-    base = car;
-    asm("" : "=r"(base) : "0"(base));
+    source.car = car;
+    asm("" : "=r"(source.words) : "0"(source.words));
     dst = (Block16 *)&g_CameraCar;
-    src = (Block16 *)base;
+    src = (Block16 *)source.words;
     end = src + sizeof(GameCarRuntime) / sizeof(*src);
     do {
         *dst = *src;
@@ -45,7 +50,7 @@ void SeedFinishCameraAlt(void *car) {
     ((u32 *)dst)[1] = word1;
     ((u32 *)dst)[2] = word2;
 
-    index = ((GameCarRuntime *)base)->trackPointIndex;
+    index = source.car->trackPointIndex;
     track = g_TrackPoints;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
@@ -53,14 +58,14 @@ void SeedFinishCameraAlt(void *car) {
     point = pointAddress.pointPointer;
     g_CameraCar.x = point->x;
 
-    index = ((GameCarRuntime *)base)->trackPointIndex;
+    index = source.car->trackPointIndex;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
     pointAddress.byteOffset += trackAddress.byteOffset;
     point = pointAddress.pointPointer;
     g_CameraCar.z = point->z;
 
-    index = ((GameCarRuntime *)base)->trackPointIndex;
+    index = source.car->trackPointIndex;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
     pointAddress.byteOffset += trackAddress.byteOffset;
@@ -70,7 +75,7 @@ void SeedFinishCameraAlt(void *car) {
     g_CameraCar.speed = 0;
     g_CameraCar.y = word0 - 0x30;
 
-    lastIndex = ((GameCarRuntime *)base)->trackPointIndex;
+    lastIndex = source.car->trackPointIndex;
     index <<= 11;
     pointAddress.byteOffset = (lastIndex * 3) << 3;
     trackAddress.pointPointer = track;
