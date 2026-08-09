@@ -7,12 +7,6 @@
 #include "game/render.h"
 #include "game/render_internal.h"
 
-typedef union FinishCameraCarAddress {
-    u32 *words;
-    Block16 *blocks;
-    GameCarRuntime *car;
-} FinishCameraCarAddress;
-
 void SeedFinishCameraAlt(void *car) {
     register u32 word0 asm("$2");
     u32 word1;
@@ -20,8 +14,8 @@ void SeedFinishCameraAlt(void *car) {
     Block16 *src;
     Block16 *dst;
     Block16 *end;
-    FinishCameraCarAddress source;
-    FinishCameraCarAddress destination;
+    GameCarRuntimeAddress source;
+    GameCarRuntimeAddress destination;
     GameTrackPoint *track;
     TrackPointTableAddress pointAddress;
     TrackPointTableAddress trackAddress;
@@ -34,11 +28,11 @@ void SeedFinishCameraAlt(void *car) {
      * on one of its fields. Storing through
      * the source view is what lets the index reads below stay plain: both sides
      * carry the aggregate mark now, so 44a's exemption never fires. */
-    source.car = car;
+    source.runtime = car;
     asm("" : "=r"(source.words) : "0"(source.words));
-    destination.car = &g_CameraCar;
+    destination.runtime = &g_CameraCar;
     dst = destination.blocks;
-    src = (Block16 *)source.words;
+    src = source.blocks;
     end = src + sizeof(GameCarRuntime) / sizeof(*src);
     do {
         *dst = *src;
@@ -46,14 +40,14 @@ void SeedFinishCameraAlt(void *car) {
         dst++;
     } while (src != end);
 
-    word0 = ((u32 *)src)[0];
-    word1 = ((u32 *)src)[1];
-    word2 = ((u32 *)src)[2];
-    ((u32 *)dst)[0] = word0;
-    ((u32 *)dst)[1] = word1;
-    ((u32 *)dst)[2] = word2;
+    word0 = src->w[0];
+    word1 = src->w[1];
+    word2 = src->w[2];
+    dst->w[0] = word0;
+    dst->w[1] = word1;
+    dst->w[2] = word2;
 
-    index = source.car->trackPointIndex;
+    index = source.runtime->trackPointIndex;
     track = g_TrackPoints;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
@@ -61,14 +55,14 @@ void SeedFinishCameraAlt(void *car) {
     point = pointAddress.pointPointer;
     g_CameraCar.x = point->x;
 
-    index = source.car->trackPointIndex;
+    index = source.runtime->trackPointIndex;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
     pointAddress.byteOffset += trackAddress.byteOffset;
     point = pointAddress.pointPointer;
     g_CameraCar.z = point->z;
 
-    index = source.car->trackPointIndex;
+    index = source.runtime->trackPointIndex;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
     pointAddress.byteOffset += trackAddress.byteOffset;
@@ -78,7 +72,7 @@ void SeedFinishCameraAlt(void *car) {
     g_CameraCar.speed = 0;
     g_CameraCar.y = word0 - 0x30;
 
-    lastIndex = source.car->trackPointIndex;
+    lastIndex = source.runtime->trackPointIndex;
     index <<= 11;
     pointAddress.byteOffset = (lastIndex * 3) << 3;
     trackAddress.pointPointer = track;
