@@ -41,7 +41,7 @@ OBJS := $(ASM_OBJS) $(C_OBJS)
 C_DEPS := $(C_OBJS:.o=.o.d)
 -include $(C_DEPS)
 
-.PHONY: all setup stage split build check progress clean distclean help
+.PHONY: all setup stage split build check audit-code progress clean distclean help
 
 all: build check
 
@@ -103,6 +103,10 @@ $(OUT_BIN): $(ELF)
 check: $(OUT_BIN)
 	@echo "$(TARGET_SHA)  $(OUT_BIN)" | shasum -c -
 
+audit-code:
+	$(PY) tools/scripts/code_debt.py --check
+	$(PY) -m unittest tools.tests.test_code_debt
+
 progress:
 	$(PY) tools/scripts/progress_report.py
 
@@ -120,6 +124,7 @@ help:
 	@echo "  split VERSION=PAL Run splat for PAL or USA"
 	@echo "  build VERSION=PAL Build split output"
 	@echo "  check VERSION=PAL Verify rebuilt EXE SHA-1"
+	@echo "  audit-code        Check that game-code scaffolding debt did not increase"
 	@echo "  progress          Refresh badge JSON and print the progress table"
 	@echo "  clean             Remove build/ for selected VERSION"
 	@echo "  distclean         Also remove generated asm/linker output"

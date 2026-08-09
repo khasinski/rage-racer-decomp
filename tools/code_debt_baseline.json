@@ -1,0 +1,11 @@
+{
+  "asm_aliases": 17,
+  "byte_pointer_arithmetic": 149,
+  "empty_barriers": 144,
+  "externs_in_c": 0,
+  "field_macros": 0,
+  "pointer_integer_casts": 499,
+  "raw_offset_dereferences": 71,
+  "register_pins": 213,
+  "unknown_fields": 1071
+}
