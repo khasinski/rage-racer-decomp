@@ -330,6 +330,7 @@ typedef union GearCurveAddress {
     u8 *bytes;
     s32 *valuePointer;
     GearCurveRow *rowPointer;
+    GameCarSpec *specPointer;
 } GearCurveAddress;
 
 extern GearCurveRow g_GearTorqueCurve[];
