@@ -13,7 +13,6 @@ void UpdateShuttleScenery(s32 instance) {
     s32 step;
     s32 baseIndex;
     s32 altIndex;
-    s32 phaseOffset;
     s32 phaseShift;
     s16 *limitPtr;
     s16 *tailLimitPtr;
@@ -28,7 +27,6 @@ void UpdateShuttleScenery(s32 instance) {
     baseIndex = side << 4;
     phaseShift = phase * 32;
     baseIndex += phaseShift;
-    phaseOffset = phase << 1;
     limitPtr = &limitPtr[phase];
     denom = *limitPtr;
     altIndex = (1 - side) << 4;
@@ -51,8 +49,7 @@ void UpdateShuttleScenery(s32 instance) {
         return;
     }
 
-    phase = (s32)g_ShuttlePathDwellMax;
-    tailLimitPtr = (s16 *)(phaseOffset + phase);
+    tailLimitPtr = &g_ShuttlePathDwellMax[phase];
     if (entry->dwellCounter >= *tailLimitPtr) {
         entry->travelStep = entry->travelStep + 1;
         entry->dwellCounter = *tailLimitPtr;
