@@ -446,7 +446,7 @@ s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     TimedDrawCommandAddress commandAddress;
     s32 index = 0;
     s32 remaining;
-    s32 type;
+    u32 type;
     s32 nextProgress;
     register s32 updatedProgress asm("$6");
     s32 limit;
@@ -472,7 +472,7 @@ loop_body:
     remaining = *progressPtr - cmd->time;
     if (remaining >= 0) {
         type = cmd->type;
-        if ((u32)type < 40) {
+        if (type < 40) {
             switch (type) {
             case 9:
                 if (g_MenuAltLayout != 0) {
