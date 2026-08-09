@@ -72,7 +72,7 @@ s32 RequestOptionScreenAssets(void) {
 }
 
 void LoadOptionScreenAssets(void) {
-    s32 ptr;
+    u8 *base;
     s32 offset;
 
     if (g_AssetLoadState == 1) {
@@ -80,10 +80,10 @@ void LoadOptionScreenAssets(void) {
             RegisterModelBank((ModelBankHeader *)(g_AssetBase + 4), 0);
             SelectModelBank(0);
 
-            ptr = (s32)g_AssetBase;
-            offset = *(s32 *)ptr;
+            base = g_AssetBase;
+            offset = *(s32 *)base;
             g_AssetLoadState = 0;
-            g_ImageBlockBuffer = (u8 *)(ptr + offset);
+            g_ImageBlockBuffer = base + offset;
         }
     }
 }
