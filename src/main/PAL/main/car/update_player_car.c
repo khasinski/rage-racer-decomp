@@ -138,10 +138,12 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
 
     if (g_RacePhase < 4) {
         if (g_PadType == 0x41) {
-            *(volatile s16 *)&p->acceleratorInput = ((g_PadHeld & g_PadAccelMask) != 0) << 8;
+            ((CarInputValue *)&p->acceleratorInput)->sampled =
+                ((g_PadHeld & g_PadAccelMask) != 0) << 8;
             p->brakeInput = ((g_PadHeld & g_PadBrakeMask) != 0) << 8;
         } else if (g_PadType == 0x23) {
-            *(volatile s16 *)&p->acceleratorInput = ((g_PadHeld & g_NegconAccelMask) != 0) << 8;
+            ((CarInputValue *)&p->acceleratorInput)->sampled =
+                ((g_PadHeld & g_NegconAccelMask) != 0) << 8;
             p->brakeInput = ((g_PadHeld & g_NegconBrakeMask) != 0) << 8;
             switch (g_NegconMappingIndex) {
             case 0:

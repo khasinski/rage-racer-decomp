@@ -352,6 +352,11 @@ typedef enum CarMotionState {
     CAR_MOTION_STANDING_START,
 } CarMotionState;
 
+typedef union CarInputValue {
+    s16 value;
+    volatile s16 sampled;
+} CarInputValue;
+
 /* Drivetrain / input block beginning at +0xBC; the player physics code addresses
  * the car's second half through this rather than through GameCarRuntime.
  *
