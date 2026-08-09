@@ -190,7 +190,7 @@ void ExitPrologue(void) {
 
 void UpdatePrologue(void) {
     s32 timer;
-    s32 active;
+    u32 active;
     s32 eventIndex;
 
     if (g_SceneTimer == 2) {
@@ -224,7 +224,8 @@ void UpdatePrologue(void) {
 
     DrawPrologueText();
 
-    active = (u32)(g_SceneTimer - 0x10) < 0x40F;
+    active = g_SceneTimer - 0x10;
+    active = active < 0x40F;
     if (active) {
         eventIndex = g_PrologueCutIndex;
         g_AnimTimer++;
