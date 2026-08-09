@@ -215,15 +215,15 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         lateralOffset = spad->arcLateral;
     }
     segLenA = (s16)spad->segmentLength;
-    spad->field_8A = (s16)((nextPoint->field_10 * alongSegment +
-                           point->field_10 * (segLenA - alongSegment)) /
+    spad->leftHalfWidth = (s16)((nextPoint->leftHalfWidth * alongSegment +
+                           point->leftHalfWidth * (segLenA - alongSegment)) /
                           segLenA);
     segLenB = (s16)spad->segmentLength;
-    edgeHeight = (nextPoint->field_12 * alongSegment +
-                  point->field_12 * (segLenB - alongSegment)) /
+    edgeHeight = (nextPoint->rightHalfWidth * alongSegment +
+                  point->rightHalfWidth * (segLenB - alongSegment)) /
                  segLenB;
-    spad->field_88 = (s16) edgeHeight;
-    leftLimit = spad->field_8A + limits->leftInset;
+    spad->rightHalfWidth = (s16) edgeHeight;
+    leftLimit = spad->leftHalfWidth + limits->leftInset;
     clampSource = &spad->pad40[0];
     if (lateralOffset < (0 - leftLimit))
     {
@@ -239,7 +239,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         }
         obj->x = obj->x - spad->correctionX;
         obj->z = obj->z - spad->correctionZ;
-        lateralOffset = -spad->field_8A - limits->leftInset;
+        lateralOffset = -spad->leftHalfWidth - limits->leftInset;
         spad->field_3C = limits->leftKnockbackMode;
     }
     else
@@ -259,7 +259,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         }
         obj->x = obj->x - spad->correctionX;
         obj->z = obj->z - spad->correctionZ;
-        lateralOffset = spad->field_88 - limits->rightInset;
+        lateralOffset = spad->rightHalfWidth - limits->rightInset;
         spad->field_3C = limits->rightKnockbackMode;
     }
     }
@@ -274,11 +274,11 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     obj->segmentFraction = (s32)((s32)(alongSegment << 0xA) / (s16)spad->segmentLength);
     if (lateralOffset < 0)
     {
-        obj->field_3C = (lateralOffset * 0x400) / spad->field_8A;
+        obj->field_3C = (lateralOffset * 0x400) / spad->leftHalfWidth;
     }
     else
     {
-        obj->field_3C = (lateralOffset * 0x400) / spad->field_88;
+        obj->field_3C = (lateralOffset * 0x400) / spad->rightHalfWidth;
     }
     {
         u32 outputProgress;
@@ -297,60 +297,60 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         obj->progressB = outputProgress;
     }
     segLenC = (s16)spad->segmentLength;
-    spad->field_8E = (s16)((nextPoint->field_E * alongSegment +
-                           point->field_E * (segLenC - alongSegment)) /
+    spad->crossSlope = (s16)((nextPoint->crossSlope * alongSegment +
+                           point->crossSlope * (segLenC - alongSegment)) /
                           segLenC);
     segLenD = (s16)spad->segmentLength;
     surfaceHeight =
         (nextPoint->y * alongSegment + point->y * (segLenD - alongSegment)) / segLenD;
     obj->y = surfaceHeight;
-    obj->y = ((spad->field_8E * lateralOffset) >> 7) + surfaceHeight;
+    obj->y = ((spad->crossSlope * lateralOffset) >> 7) + surfaceHeight;
     {
         s16 angle;
 
         angle = (u16)obj->bodyYaw;
         angle -= 0xC00;
-        spad->field_8C = angle + (u16)spad->heading;
+        spad->relativeHeading = angle + (u16)spad->heading;
     }
     segLenE = (s16)spad->segmentLength;
-    spad->field_92 = (s16)((nextPoint->field_C * alongSegment +
-                           point->field_C * (segLenE - alongSegment)) /
+    spad->surfacePitch = (s16)((nextPoint->surfacePitch * alongSegment +
+                           point->surfacePitch * (segLenE - alongSegment)) /
                           segLenE);
-    trackWidth = (u16) spad->field_88 + (u16) spad->field_8A;
-    spad->field_86 = trackWidth;
-    nextCamber = Atan2(trackWidth, (nextPoint->field_E * trackWidth) >> 7);
-    trackWidthCopy = spad->field_86;
-    secondResult = Atan2(trackWidthCopy, (point->field_E * trackWidthCopy) >> 7);
+    trackWidth = (u16) spad->rightHalfWidth + (u16) spad->leftHalfWidth;
+    spad->trackWidth = trackWidth;
+    nextCamber = Atan2(trackWidth, (nextPoint->crossSlope * trackWidth) >> 7);
+    trackWidthCopy = spad->trackWidth;
+    secondResult = Atan2(trackWidthCopy, (point->crossSlope * trackWidthCopy) >> 7);
     segLenF = (s16)spad->segmentLength;
-    spad->field_94 =
+    spad->camberAngle =
         (s16)((nextCamber * alongSegment + secondResult * (segLenF - alongSegment)) / segLenF);
-    spad->headingCos = rcos(spad->field_8C);
+    spad->headingCos = rcos(spad->relativeHeading);
     {
         s32 firstProduct;
         s32 sinValue;
         s32 secondProduct;
 
-        sinValue = rsin(spad->field_8C);
+        sinValue = rsin(spad->relativeHeading);
         spad->headingSin = sinValue;
-        firstProduct = spad->field_92 * spad->headingCos;
+        firstProduct = spad->surfacePitch * spad->headingCos;
         if (firstProduct < 0)
         {
             firstProduct += 0xFFF;
         }
         firstProduct >>= 0xC;
-        secondProduct = spad->field_94 * sinValue;
+        secondProduct = spad->camberAngle * sinValue;
         if (secondProduct < 0)
         {
             secondProduct += 0xFFF;
         }
         obj->bodyPitch = firstProduct + (secondProduct >> 0xC);
     }
-    forwardProduct = (0 - spad->headingCos) * spad->field_94;
+    forwardProduct = (0 - spad->headingCos) * spad->camberAngle;
     if (forwardProduct < 0)
     {
         forwardProduct += 0xFFF;
     }
-    lateralProduct = spad->field_92 * spad->headingSin;
+    lateralProduct = spad->surfacePitch * spad->headingSin;
     forwardComponent = forwardProduct >> 0xC;
     if (lateralProduct < 0)
     {
@@ -405,7 +405,7 @@ typedef struct TP {
     s16 y;             /* 0x08 */
     s16 angle;         /* 0x0A */
     u8 padC[2];        /* 0x0C */
-    s16 field_E;       /* 0x0E */
+    s16 crossSlope;    /* 0x0E */
     u8 pad10[6];       /* 0x10 */
     u16 segmentLength; /* 0x16 */
 } TP;
@@ -415,7 +415,7 @@ typedef struct TP {
  * Samples the track surface height under the car. Locates the containing
  * segment (FindTrackSegment), rotates the car position into segment-local space,
  * clamps the along-segment distance `t` to [0, segmentLength], and linearly
- * interpolates the point height `y` and slope `field_E` between the two segment
+ * interpolates the point height `y` and `crossSlope` between the two segment
  * endpoints. Writes the resulting surface height into car->out4 (and out4 into
  * f60 while f98 is idle). The local TP/Car/SVec/LVec structs mirror
  * GameTrackPoint / the render object by raw offset to stay byte-exact.
@@ -454,7 +454,7 @@ void SampleTrackSurfaceHeight(Car *car) {
     }
 
     diff = (s16)seg - t;
-    e = (p2->field_E * t + p1->field_E * diff) / (s16)seg;
+    e = (p2->crossSlope * t + p1->crossSlope * diff) / (s16)seg;
     v8 = (p2->y * t + p1->y * diff) / (s16)seg;
 
     car->out4 = ((s16)e * oz >> 7) + v8;

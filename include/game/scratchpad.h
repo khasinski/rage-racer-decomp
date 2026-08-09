@@ -84,14 +84,14 @@ typedef struct CarTrackScratch {
     s16 pointAngle;
     s16 nextPointAngle;
     s16 arcLateral;
-    s16 field_86;
-    s16 field_88;
-    s16 field_8A;
-    s16 field_8C;
-    s16 field_8E;
+    s16 trackWidth;
+    s16 rightHalfWidth;
+    s16 leftHalfWidth;
+    s16 relativeHeading;
+    s16 crossSlope;
     s16 heading;
-    s16 field_92;
-    s16 field_94;
+    s16 surfacePitch;
+    s16 camberAngle;
     u16 segmentLength;
 } CarTrackScratch;
 

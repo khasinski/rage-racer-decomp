@@ -5,8 +5,8 @@
 
 /*
  * Clamps the car's lateral offset (field_11C) to a fraction of the track
- * half-width at its current point: the left half-width (field_10) when offset
- * is negative, the right half-width (field_12) otherwise. `carIndex` selects the
+ * half-width at its current point: `leftHalfWidth` when offset is negative,
+ * `rightHalfWidth` otherwise. `carIndex` selects the
  * scaling: <4 uses 5/8 of the half-width, else 4/7. Writes the clamped value
  * back into the route sub-block (field_BC + 0x60) only if it would exceed the
  * limit.
@@ -33,11 +33,11 @@ void ClampCarLateralOffset(GameCarRuntime *car, s32 carIndex) {
         if (current < 0) {
             trackIndex = carReg->trackPointIndex;
             point = &g_TrackPoints[trackIndex];
-            limit = point->field_10;
+            limit = point->leftHalfWidth;
         } else {
             trackIndex = carReg->trackPointIndex;
             point = &g_TrackPoints[trackIndex];
-            limit = point->field_12;
+            limit = point->rightHalfWidth;
         }
         scaled = limit * 4;
         scaled += limit;
@@ -51,11 +51,11 @@ void ClampCarLateralOffset(GameCarRuntime *car, s32 carIndex) {
         if (current < 0) {
             trackIndex = carReg->trackPointIndex;
             point = &g_TrackPoints[trackIndex];
-            limit = (point->field_10 * 4) / 7;
+            limit = (point->leftHalfWidth * 4) / 7;
         } else {
             trackIndex = carReg->trackPointIndex;
             point = &g_TrackPoints[trackIndex];
-            limit = (point->field_12 * 4) / 7;
+            limit = (point->rightHalfWidth * 4) / 7;
         }
     }
 

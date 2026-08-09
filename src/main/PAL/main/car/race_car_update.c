@@ -16,7 +16,7 @@
 /*
  * Car route-steering update. Samples a look-ahead track point (two ahead or two
  * behind depending on the lap-direction flag g_RaceSeries), clamps the lateral
- * offset to the track half-width (field_10/field_12), projects the target point
+ * offset to the track half-width (`leftHalfWidth`/`rightHalfWidth`), projects the target point
  * off the centre-line along the inward normal (0x1000 - smoothed track angle),
  * then nudges the car's headingAngle toward that target (GetAngleDelta). Writes
  * the steer value into steeringAngle and the route sub-block (field_BC).
@@ -54,14 +54,14 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
     index = rem % g_TrackPointCount;
 
     point = &g_TrackPoints[index];
-    if (point->field_12 < lateral) {
-        value = point->field_12 * car->field_3C;
+    if (point->rightHalfWidth < lateral) {
+        value = point->rightHalfWidth * car->field_3C;
         if (value < 0) {
             value += 0x7FF;
         }
         lateral = value >> 11;
     } else {
-        value = point->field_10;
+        value = point->leftHalfWidth;
         lowerLimit = -value;
         if (lateral < lowerLimit) {
             value = lowerLimit * car->field_3C;

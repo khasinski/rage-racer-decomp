@@ -11,9 +11,9 @@ typedef struct GameEnvironmentCue GameEnvironmentCue;
 
 
 /*
- * One centreline point, 0x18 bytes. `field_10` / `field_12` are the left and
+ * One centreline point, 0x18 bytes. `leftHalfWidth` / `rightHalfWidth` are the left and
  * right half-widths (SteerCarAlongRoute clamps the lateral offset to
- * [-field_10, field_12]); everything from `field_C` up is interpolated between
+ * [-leftHalfWidth, rightHalfWidth]); the surface fields are interpolated between
  * a segment's two endpoints by UpdateCarTrackState and its non-clamping
  * twin ResetCarTrackState. See docs/names.md 31.
  */
@@ -23,16 +23,16 @@ typedef struct GameTrackPoint {
     s16 y;
     s16 angle;
     /* +0x0C the pitch component of the surface tilt: interpolated, then paired
-     * with the cross-slope angle derived from field_E and rotated by the car's
+     * with the cross-slope angle derived from crossSlope and rotated by the car's
      * track-relative heading to give the two tilt words at obj +0x20 / +0x28. */
-    s16 field_C;
+    s16 surfacePitch;
     /* +0x0E cross-slope gradient in 1/128 of a unit per unit of lateral
-     * offset. `surfaceY = interp(y) + (interp(field_E) * lateral >> 7)` in
+     * offset. `surfaceY = interp(y) + (interp(crossSlope) * lateral >> 7)` in
      * GetTrackSurfaceHeight, SampleTrackSurfaceHeight and
      * UpdateCarTrackState alike. */
-    s16 field_E;
-    s16 field_10;
-    s16 field_12;
+    s16 crossSlope;
+    s16 leftHalfWidth;
+    s16 rightHalfWidth;
     /* +0x14 arc reference, read as one u16 and split: bits 0..1 select the
      * cornering model (0 = straight, the arc block is skipped entirely; 2
      * negates the lateral offset, so it is the mirrored hand), and bits 4..15

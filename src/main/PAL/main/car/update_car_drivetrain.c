@@ -232,7 +232,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     curveModeNow = drive->unk40;
     if ((curveModeNow != (trackPoint->arcRef & 3)) && (curveModeNow != 0))
     {
-      camber = trackPoint->field_E;
+      camber = trackPoint->crossSlope;
       if (camber < (-0x32))
       {
         camber = -0x32;
@@ -624,10 +624,10 @@ shift_interpolation_done:
   frontLoadScaled = trackHeadingError;
   pointIndex = car->trackPointIndex;
   lateralOffset = car->segmentFraction;
-  engineSpeed = g_TrackPoints[pointIndex].field_C * (0x400 - lateralOffset);
+  engineSpeed = g_TrackPoints[pointIndex].surfacePitch * (0x400 - lateralOffset);
   pointIndex += 1;
   lateralSum = engineSpeed +
-               g_TrackPoints[pointIndex % (s32)g_TrackPointCount].field_C * lateralOffset;
+               g_TrackPoints[pointIndex % (s32)g_TrackPointCount].surfacePitch * lateralOffset;
   secondNonnegative = lateralSum >= 0;
   if (!secondNonnegative)
   {

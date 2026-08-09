@@ -69,7 +69,7 @@ s32 GetTrackSurfaceHeight(TrackSurfaceCell *cell) {
 
     segmentLength = (s16)segmentLengthRaw;
     invDistance = segmentLength - distance;
-    fieldE = ((next->field_E * distance) + (cur->field_E * invDistance)) / segmentLength;
+    fieldE = ((next->crossSlope * distance) + (cur->crossSlope * invDistance)) / segmentLength;
     y = ((next->y * distance) + (cur->y * invDistance)) / segmentLength;
 
     return y + (((s16)fieldE * outZ) >> 7);
@@ -264,20 +264,20 @@ void ResetCarTrackState(GameCarRuntime *car) {
         alongSegment = 0;
     }
     segLenA = (s16)spad->segmentLength;
-    edgeHeight = ((nextPoint->field_12 * alongSegment) +
-               (point->field_12 * (segLenA - alongSegment))) /
+    edgeHeight = ((nextPoint->rightHalfWidth * alongSegment) +
+               (point->rightHalfWidth * (segLenA - alongSegment))) /
               segLenA;
-    spad->field_88 = (s16)edgeHeight;
+    spad->rightHalfWidth = (s16)edgeHeight;
     useProgress = *(s32 *)0x801E408C;
     segLenB = (s16)spad->segmentLength;
     {
         s32 widthSum;
         s32 remainingLength;
 
-        widthSum = nextPoint->field_10 * alongSegment;
+        widthSum = nextPoint->leftHalfWidth * alongSegment;
         remainingLength = segLenB - alongSegment;
-        widthSum += point->field_10 * remainingLength;
-        spad->field_8A = (s16)(widthSum / segLenB);
+        widthSum += point->leftHalfWidth * remainingLength;
+        spad->leftHalfWidth = (s16)(widthSum / segLenB);
     }
     {
         u32 outputProgress;
@@ -290,46 +290,46 @@ void ResetCarTrackState(GameCarRuntime *car) {
         car->progressB = outputProgress;
     }
     segLenC = (s16)spad->segmentLength;
-    spad->field_8E =
-        (s16)(((nextPoint->field_E * alongSegment) +
-               (point->field_E * (segLenC - alongSegment))) /
+    spad->crossSlope =
+        (s16)(((nextPoint->crossSlope * alongSegment) +
+               (point->crossSlope * (segLenC - alongSegment))) /
               segLenC);
     {
         s16 angle;
 
         angle = (u16)car->bodyYaw;
         angle -= 0xC00;
-        spad->field_8C = angle + (u16)spad->heading;
+        spad->relativeHeading = angle + (u16)spad->heading;
     }
     segLenD = (s16)spad->segmentLength;
-    spad->field_92 =
-        (s16)(((nextPoint->field_C * alongSegment) +
-               (point->field_C * (segLenD - alongSegment))) /
+    spad->surfacePitch =
+        (s16)(((nextPoint->surfacePitch * alongSegment) +
+               (point->surfacePitch * (segLenD - alongSegment))) /
               segLenD);
-    trackWidth = (u16)spad->field_8A + (u16)spad->field_88;
-    spad->field_86 = trackWidth;
-    nextCamber = Atan2(trackWidth, (nextPoint->field_E * trackWidth) >> 7);
-    trackWidthCopy = spad->field_86;
-    secondResult = Atan2(trackWidthCopy, (point->field_E * trackWidthCopy) >> 7);
+    trackWidth = (u16)spad->leftHalfWidth + (u16)spad->rightHalfWidth;
+    spad->trackWidth = trackWidth;
+    nextCamber = Atan2(trackWidth, (nextPoint->crossSlope * trackWidth) >> 7);
+    trackWidthCopy = spad->trackWidth;
+    secondResult = Atan2(trackWidthCopy, (point->crossSlope * trackWidthCopy) >> 7);
     segLenE = (s16)spad->segmentLength;
-    spad->field_94 =
+    spad->camberAngle =
         (s16)(((nextCamber * alongSegment) +
                (secondResult * (segLenE - alongSegment))) /
               segLenE);
-    spad->headingCos = rcos(spad->field_8C);
+    spad->headingCos = rcos(spad->relativeHeading);
     {
         s32 firstProduct;
         s32 sinValue;
         s32 secondProduct;
 
-        sinValue = rsin(spad->field_8C);
+        sinValue = rsin(spad->relativeHeading);
         spad->headingSin = sinValue;
-        firstProduct = spad->field_92 * spad->headingCos;
+        firstProduct = spad->surfacePitch * spad->headingCos;
         if (firstProduct < 0) {
             firstProduct += 0xFFF;
         }
         firstProduct >>= 0xC;
-        secondProduct = spad->field_94 * sinValue;
+        secondProduct = spad->camberAngle * sinValue;
         if (secondProduct < 0) {
             secondProduct += 0xFFF;
         }
@@ -342,11 +342,11 @@ void ResetCarTrackState(GameCarRuntime *car) {
             s32 firstProduct;
 
             firstProduct =
-                (0 - spad->headingCos) * spad->field_94;
+                (0 - spad->headingCos) * spad->camberAngle;
             if (firstProduct < 0) {
                 firstProduct += 0xFFF;
             }
-            lateralProduct = spad->field_92 * spad->headingSin;
+            lateralProduct = spad->surfacePitch * spad->headingSin;
             firstComponent = firstProduct >> 0xC;
         }
         if (lateralProduct < 0) {

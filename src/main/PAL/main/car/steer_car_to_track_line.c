@@ -437,7 +437,7 @@ void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused) {
  * Finds the track segment whose (rotated, half-width) quad currently contains
  * the car. Starting at `idx` it spirals outward over neighbouring segments
  * (k alternately added/subtracted), and for each builds the segment quad from
- * the two endpoints' angle + left/right half-widths (field_10/field_12) and
+ * the two endpoints' angle plus their left/right half-widths and
  * runs four half-plane cross-product tests (NormalClip). Returns the
  * containing segment index, or -1 (snapping the car onto the track) if none.
  * pts[0] is the car-relative point; pts[1..4] are the quad corners.
@@ -487,10 +487,10 @@ s32 FindTrackSegment(GameCarRuntime *car, s32 idx) {
         cos_n = rcos(0xC00 - pb->angle);
         sin_n = rsin(0xC00 - pb->angle);
 
-        f10a = pa->field_10;
-        f12a = pa->field_12;
-        f12b = pb->field_12;
-        f10b = pb->field_10;
+        f10a = pa->leftHalfWidth;
+        f12a = pa->rightHalfWidth;
+        f12b = pb->rightHalfWidth;
+        f10b = pb->leftHalfWidth;
 
         pts[1].vx =  (s16)(f10a * 2) * (s16)cos_c / 4096;
         pts[1].vy = -(s16)(f10a * 2) * (s16)sin_c / 4096;
