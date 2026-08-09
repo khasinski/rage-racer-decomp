@@ -8,13 +8,14 @@
 #include "game/race.h"
 #include "game/random.h"
 #include "game/render.h"
-#define GAME_FRAME_CONTEXT_QUALIFIER volatile
 #include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
 #include "game/state.h"
 #include "psyq/cd.h"
 #include "psyq/gpu.h"
+
+#define FRAME_CONTEXT_BYTE(offset) (((volatile u8 *)g_FrameContexts)[offset])
 
 
 void UpdateMainMenuExit(void) {
@@ -252,11 +253,11 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
         ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->display.screen.x = value;
         value2 = *src1;
         i++;
-        g_FrameContexts[offset + 0x86] = one;
-        g_FrameContexts[offset + 0x88] = 0;
-        g_FrameContexts[offset + 0x89] = r;
-        g_FrameContexts[offset + 0x8A] = g;
-        g_FrameContexts[offset + 0x8B] = b;
+        FRAME_CONTEXT_BYTE(offset + 0x86) = one;
+        FRAME_CONTEXT_BYTE(offset + 0x88) = 0;
+        FRAME_CONTEXT_BYTE(offset + 0x89) = r;
+        FRAME_CONTEXT_BYTE(offset + 0x8A) = g;
+        FRAME_CONTEXT_BYTE(offset + 0x8B) = b;
         ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->display.screen.y = value2 + 0x1D;
         offset += stride;
     } while (i < 2);
@@ -304,11 +305,11 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
         ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->display.screen.x = value;
         value2 = *src1;
         i++;
-        g_FrameContexts[offset + 0x86] = one;
-        g_FrameContexts[offset + 0x88] = 0;
-        g_FrameContexts[offset + 0x89] = mode;
-        g_FrameContexts[offset + 0x8A] = x;
-        g_FrameContexts[offset + 0x8B] = y;
+        FRAME_CONTEXT_BYTE(offset + 0x86) = one;
+        FRAME_CONTEXT_BYTE(offset + 0x88) = 0;
+        FRAME_CONTEXT_BYTE(offset + 0x89) = mode;
+        FRAME_CONTEXT_BYTE(offset + 0x8A) = x;
+        FRAME_CONTEXT_BYTE(offset + 0x8B) = y;
         ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->display.screen.y = value2 + 0x1D;
         offset += stride;
     } while (i < 2);
@@ -318,3 +319,5 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
 
     SCRATCH_CLIP_Y1 = 0x1E0;
 }
+
+#undef FRAME_CONTEXT_BYTE

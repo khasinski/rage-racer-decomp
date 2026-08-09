@@ -52,11 +52,7 @@ extern Vec4 *g_VisibleCellList;
 extern s32 g_CameraViewMode;
 extern s16 g_AtanTable[];
 extern u8 *g_DrawBuffer;
-#ifndef GAME_FRAME_CONTEXT_QUALIFIER
-#define GAME_FRAME_CONTEXT_QUALIFIER
-#endif
-extern GAME_FRAME_CONTEXT_QUALIFIER u8 g_FrameContexts[];
-#undef GAME_FRAME_CONTEXT_QUALIFIER
+extern u8 g_FrameContexts[];
 extern ScreenOffset g_ScreenOffsetX;
 extern ScreenOffset g_ScreenOffsetY;
 extern s32 g_FrameParity;
