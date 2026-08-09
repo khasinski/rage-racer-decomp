@@ -540,16 +540,20 @@ void UpdateTeamLogoCanvas(void) {
                             rem = sum - (q * 4);
                             switch (rem) {
                             case 0:
-                                *p = (*p & 0xFFF0) | *(u16 *)&g_TeamLogoPenColor;
+                                *p = (*p & 0xFFF0) |
+                                     ((TeamLogoColorSlot *)&g_TeamLogoPenColor)->low;
                                 break;
                             case 1:
-                                *p = (*p & 0xFF0F) | (*(u16 *)&g_TeamLogoPenColor << 4);
+                                *p = (*p & 0xFF0F) |
+                                     (((TeamLogoColorSlot *)&g_TeamLogoPenColor)->low << 4);
                                 break;
                             case 2:
-                                *p = (*p & 0xF0FF) | (*(u16 *)&g_TeamLogoPenColor << 8);
+                                *p = (*p & 0xF0FF) |
+                                     (((TeamLogoColorSlot *)&g_TeamLogoPenColor)->low << 8);
                                 break;
                             case 3:
-                                *p = (*p & 0xFFF) | (*(u16 *)&g_TeamLogoPenColor << 0xC);
+                                *p = (*p & 0xFFF) |
+                                     (((TeamLogoColorSlot *)&g_TeamLogoPenColor)->low << 0xC);
                                 break;
                             }
                     }
