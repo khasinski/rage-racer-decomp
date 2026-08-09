@@ -7,7 +7,7 @@
 
 void UploadImageBlock(void *asset) {
     GameImageBlock *block;
-    u16 rect[4];
+    Rect rect;
     u32 width;
     u32 height;
     s32 flags;
@@ -18,22 +18,22 @@ void UploadImageBlock(void *asset) {
 
     if (flags & 8) {
         block = asset;
-        rect[0] = block->x;
-        rect[1] = block->y;
-        rect[2] = block->w;
-        rect[3] = block->h;
-        LoadImage((Rect *)rect, block->pixels);
+        rect.x = block->x;
+        rect.y = block->y;
+        rect.w = block->w;
+        rect.h = block->h;
+        LoadImage(&rect, block->pixels);
         DrawSync(0);
         asset = (u8 *)block + (((u32)block->size >> 2) << 2);
     }
 
     block = asset;
-    rect[0] = block->x;
-    rect[1] = block->y;
-    width = rect[2] = block->w;
-    rect[3] = height = block->h;
+    rect.x = block->x;
+    rect.y = block->y;
+    width = rect.w = block->w;
+    rect.h = height = block->h;
     if (((s32)(width << 16) > 0) && ((s32)(height << 16) > 0)) {
-        LoadImage((Rect *)rect, block->pixels);
+        LoadImage(&rect, block->pixels);
         DrawSync(0);
     }
 }
