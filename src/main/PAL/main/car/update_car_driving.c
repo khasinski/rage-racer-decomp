@@ -71,7 +71,7 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
         if (g_LaunchSpeedThresholds[route->launchThresholdIndex].initial < car->speed &&
             route->launchEnergy > route->launchEnergyThreshold) {
             route->motionState = CAR_MOTION_TAKEOFF;
-            route->unk3E = 0;
+            route->bodyLiftOffset = 0;
             SetIndexedEffectVoice(0, 0, 0);
             t = 1000 - (route->unk88 - 1000) * 8;
             if (t < 1000) {
@@ -90,7 +90,7 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
                 if (g_LaunchSpeedThresholds[route->launchThresholdIndex].sustain < car->speed &&
                     route->launchEnergyThreshold < aval) {
                     route->motionState = m9e;
-                    route->unk3E = 0;
+                    route->bodyLiftOffset = 0;
                     SetIndexedEffectVoice(0, 0, 0);
                     route->spinRate = -coords[0];
                     route->launchDirection = car->facingBackwards;

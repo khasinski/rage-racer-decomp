@@ -68,7 +68,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->speed = 0;
   player->acceleration = 0;
   player->lap = 0;
-  player->drive.unk3E = 0;
+  player->drive.bodyLiftOffset = 0;
   player->progressA = 0;
   player->progressB = 0;
   player->trackProgress = 0;
@@ -109,7 +109,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   axisMatrix.m[2][0] = rotationMatrix.m[0][2];
   axisMatrix.m[2][1] = rotationMatrix.m[1][2];
   axisMatrix.m[2][2] = rotationMatrix.m[2][2];
-  rotationOffset.vz = -player->drive.unk3E - 0x32;
+  rotationOffset.vz = -player->drive.bodyLiftOffset - 0x32;
   ApplyMatrix(&axisMatrix, &rotationOffset, &player->motionX);
   player->drive.unkA6 = -1;
   player->drive.motionState = CAR_MOTION_STANDING_START;
@@ -130,7 +130,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->drive.unk80 = 0;
   player->drive.unk94 = 0;
   player->drive.unk7C = 0;
-  player->drive.unk3E = 0;
+  player->drive.bodyLiftOffset = 0;
   player->drive.unkA4 = 1;
   player->x = player->x + player->motionX;
   player->z = player->z + player->motionZ;

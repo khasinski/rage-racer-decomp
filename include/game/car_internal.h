@@ -3,13 +3,18 @@
 
 #include "common.h"
 
+typedef union RaceIntroCameraCoordinate {
+    s32 word;
+    struct {
+        u16 value;
+        u16 reserved;
+    } half;
+} RaceIntroCameraCoordinate;
+
 typedef struct RaceIntroCameraKey {
-    u16 x;
-    u16 pad2;
-    u16 y;
-    u16 pad6;
-    u16 z;
-    u16 padA;
+    RaceIntroCameraCoordinate x;
+    RaceIntroCameraCoordinate y;
+    RaceIntroCameraCoordinate z;
     s32 mode;
     s16 startFrame;
     s16 duration;

@@ -651,9 +651,9 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             g_RaceIntroCameraCursor = p;
             *(Vec4 *)&SCRATCH_VIEW_X = *(Vec4 *)p;
             q = g_RaceIntroCameraCursor;
-            g_RaceIntroCameraDelta.vx = -q[0].x + q[1].x;
-            g_RaceIntroCameraDelta.vy = -q[0].y + q[1].y;
-            g_RaceIntroCameraDelta.vz = -q[0].z + q[1].z;
+            g_RaceIntroCameraDelta.vx = -q[0].x.half.value + q[1].x.half.value;
+            g_RaceIntroCameraDelta.vy = -q[0].y.half.value + q[1].y.half.value;
+            g_RaceIntroCameraDelta.vz = -q[0].z.half.value + q[1].z.half.value;
             g_RaceIntroCameraTimer = q[0].duration;
         } else {
             RaceIntroCameraKey *a = g_RaceIntroCameraCursor;
@@ -661,13 +661,13 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
                 g_RaceIntroCameraCursor = &a[1];
                 g_RaceIntroCameraTimer = a[1].duration;
                 if (a[1].mode == 1) {
-                    g_RaceIntroCameraDelta.vx = -a[1].x + ((u16 *)obj)[0];
-                    g_RaceIntroCameraDelta.vy = -a[1].y - 28 + ((u16 *)obj)[2];
-                    g_RaceIntroCameraDelta.vz = -a[1].z + ((u16 *)obj)[4];
+                    g_RaceIntroCameraDelta.vx = -a[1].x.half.value + ((u16 *)obj)[0];
+                    g_RaceIntroCameraDelta.vy = -a[1].y.half.value - 28 + ((u16 *)obj)[2];
+                    g_RaceIntroCameraDelta.vz = -a[1].z.half.value + ((u16 *)obj)[4];
                 } else {
-                    g_RaceIntroCameraDelta.vx = -a[1].x + a[2].x;
-                    g_RaceIntroCameraDelta.vy = -a[1].y + a[2].y;
-                    g_RaceIntroCameraDelta.vz = -a[1].z + a[2].z;
+                    g_RaceIntroCameraDelta.vx = -a[1].x.half.value + a[2].x.half.value;
+                    g_RaceIntroCameraDelta.vy = -a[1].y.half.value + a[2].y.half.value;
+                    g_RaceIntroCameraDelta.vz = -a[1].z.half.value + a[2].z.half.value;
                 }
             }
         }
@@ -678,11 +678,11 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
         }
 
         if (g_RaceIntroCameraCursor->mode == 0) {
-            spad[2] = ((s32 *)g_RaceIntroCameraCursor)[0]
+            spad[2] = g_RaceIntroCameraCursor->x.word
                       + (g_RaceIntroCameraDelta.vx * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
-            spad[3] = ((s32 *)g_RaceIntroCameraCursor)[1]
+            spad[3] = g_RaceIntroCameraCursor->y.word
                       + (g_RaceIntroCameraDelta.vy * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
-            spad[4] = ((s32 *)g_RaceIntroCameraCursor)[2]
+            spad[4] = g_RaceIntroCameraCursor->z.word
                       + (g_RaceIntroCameraDelta.vz * rcos((g_RaceIntroCameraTimer << 10) / g_RaceIntroCameraCursor->duration)) / 4096;
 
             delta[0] = rsin(obj->f24) / 128 + obj->x - spad[2];

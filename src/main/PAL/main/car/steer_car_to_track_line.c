@@ -149,9 +149,9 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
     if (drive->launchEnergy > 0) {
         s32 s2;
 
-        drive->unk3E += 10;
-        if (drive->unk3E >= 100) {
-            drive->unk3E = 100;
+        drive->bodyLiftOffset += 10;
+        if (drive->bodyLiftOffset >= 100) {
+            drive->bodyLiftOffset = 100;
         }
 
         res = GetAngleDelta(car->bodyYaw, drive->targetHeading) * 98 / 100;
@@ -351,7 +351,7 @@ void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
     r->launchSpeed = r->launchSpeed * 31 / 32;
     r->yawOffset = r->yawOffset * 31 / 32;
 
-    r->unk3E = r->unk3E * 2 / 3;
+    r->bodyLiftOffset = r->bodyLiftOffset * 2 / 3;
     if (r->yawOffset >= 1537) {
         car->speed = car->speed * 4 / 5;
     }
@@ -364,7 +364,7 @@ void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
         r->yawOffset = 0;
         r->launchSpeed = 0;
         r->motionState = CAR_MOTION_DRIVING;
-        r->unk3E = 0;
+        r->bodyLiftOffset = 0;
     }
 }
 

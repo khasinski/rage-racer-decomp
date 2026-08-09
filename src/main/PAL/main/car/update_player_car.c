@@ -236,7 +236,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     m2.m[2][0] = m1.m[0][2];
     m2.m[2][1] = m1.m[1][2];
     m2.m[2][2] = m1.m[2][2];
-    sv1.vz = -p->unk3E - 50;
+    sv1.vz = -p->bodyLiftOffset - 50;
     ApplyMatrix(&m2, &sv1, &car->motionX);
 
     tmp.x = (p->accelPos * 6) / 1280 + car->x + car->motionX;
