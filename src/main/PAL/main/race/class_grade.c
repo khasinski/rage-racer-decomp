@@ -3,21 +3,21 @@
 
 
 s32 ComputeClassGrade(void) {
-    u8 *ptr;
+    CourseProgressByteAddress ptr;
     s32 value;
-    u8 *end;
+    CourseProgressByteAddress end;
     u8 extra;
 
-    ptr = g_CourseProgress->bestPlace;
+    ptr.pointer = g_CourseProgress->bestPlace;
     value = 0;
     if (g_CourseProgress->unlockPending != 0) {
         return 0;
     }
 
-    end = ptr + 3;
+    end.pointer = ptr.pointer + 3;
     do {
-        value += *ptr++;
-    } while ((s32)ptr < (s32)end);
+        value += *ptr.pointer++;
+    } while (ptr.value < end.value);
 
     extra = g_CourseProgress->bestPlace[3];
     if (extra == 0xFF) {
