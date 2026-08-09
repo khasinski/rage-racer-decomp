@@ -201,12 +201,17 @@ void GameDrawProportionalTextShaded(
     u8 *str,
     s32 clutIndex,
     s32 intensity) {
-#define OPAQUE_VALUE (t0 = 0x100)
+typedef union TextRenderWork {
+    s32 value;
+    u8 *bytes;
+} TextRenderWork;
+
+#define OPAQUE_VALUE (t0.value = 0x100)
     s32 xPos = x;
     u8 *packet = SCRATCH_PRIM_CURSOR_AS(u8);
     u8 *text = str;
     register s32 shade asm("$23");
-    register s32 t0 asm("$8");
+    register TextRenderWork t0 asm("$8");
     s32 s1;
     u32 first;
     s32 v;
@@ -256,12 +261,12 @@ void GameDrawProportionalTextShaded(
                     sprt->x0 = xPos;
                 }
                 yOffset = g_HighFontYOffset[index];
-                t0 = home.y;
+                t0.value = home.y;
                 asm(
-                    "" : "=r"(yOffset), "=r"(t0) :
-                    "0"(yOffset), "1"(t0));
+                    "" : "=r"(yOffset), "=r"(t0.value) :
+                    "0"(yOffset), "1"(t0.value));
                 packet += 20;
-                sprt->y0 = yOffset + t0;
+                sprt->y0 = yOffset + t0.value;
                 width = g_HighFontWidth[index];
                 prim = (void *)sprt;
                 sprt->u0 = u;
@@ -270,9 +275,9 @@ void GameDrawProportionalTextShaded(
                  * see common.h. */
                 RAW(sprt->h) = height;
                 ot = g_DrawBuffer;
-                t0 = (u16)home.clut;
+                t0.value = (u16)home.clut;
                 ot += 0xCC;
-                sprt->clut = t0;
+                sprt->clut = t0.value;
                 sprt->w = width;
                 AddPrim(ot, prim);
                 advance = g_WordFontWidth[index];
@@ -301,9 +306,9 @@ void GameDrawProportionalTextShaded(
                     sprt->t.b0 = shade;
                     sprt->x0 = xPos;
                 }
-                t0 = (u16)home.y;
+                t0.value = (u16)home.y;
                 packet += 20;
-                sprt->y0 = t0;
+                sprt->y0 = t0.value;
                 width = g_WordFontWidth[s1];
                 prim = (void *)sprt;
                 sprt->u0 = u;
@@ -312,9 +317,9 @@ void GameDrawProportionalTextShaded(
                  * see common.h. */
                 RAW(sprt->h) = height;
                 ot = g_DrawBuffer;
-                t0 = (u16)home.clut;
+                t0.value = (u16)home.clut;
                 ot += 0xCC;
-                sprt->clut = t0;
+                sprt->clut = t0.value;
                 sprt->w = width;
                 AddPrim(ot, prim);
                 advance = g_WordFontAdvance[s1];
@@ -335,10 +340,10 @@ void GameDrawProportionalTextShaded(
                     u8 *ot;
 
                     asm volatile("" : "=r"(index) : "0"(index) : "$2");
-                    t0 = (s32)g_PropFontU;
-                    uCell = (u8 *)(index + t0);
-                    t0 = (s32)g_PropFontV;
-                    vCell = (u8 *)(index + t0);
+                    t0.bytes = g_PropFontU;
+                    uCell = index + t0.bytes;
+                    t0.bytes = g_PropFontV;
+                    vCell = index + t0.bytes;
                     asm("" : "=r"(vCell) : "0"(vCell), "r"(uCell));
                     u = *uCell;
                     v = *vCell;
@@ -353,8 +358,8 @@ void GameDrawProportionalTextShaded(
                         sprt->t.b0 = shade;
                         sprt->x0 = xPos;
                     }
-                    t0 = (u16)home.y;
-                    asm("" : "=r"(t0) : "0"(t0));
+                    t0.value = (u16)home.y;
+                    asm("" : "=r"(t0.value) : "0"(t0.value));
                     prim = (void *)sprt;
                     asm("" : "=r"(prim) : "0"(prim));
                     sprt->u0 = u;
@@ -363,10 +368,10 @@ void GameDrawProportionalTextShaded(
                     packet += 20;
                     sprt->w = height;
                     sprt->h = height;
-                    sprt->y0 = t0;
-                    t0 = (u16)home.clut;
+                    sprt->y0 = t0.value;
+                    t0.value = (u16)home.clut;
                     ot += 0xCC;
-                    sprt->clut = t0;
+                    sprt->clut = t0.value;
                     asm volatile("" ::);
                     sprt++;
                     AddPrim(ot, prim);
