@@ -678,7 +678,9 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   if (((s16)car->motionTimer < 0xB) && (g_RacePhase < 3))
   {
     s32 sid;
-    if (((u32) (trackDelta + 0x1D)) < 0x3B)
+    u32 collisionAngleRange;
+    collisionAngleRange = trackDelta + 0x1D;
+    if (collisionAngleRange < 0x3B)
     {
       sid = 0xA;
       if (collisionRegion >= 3)
