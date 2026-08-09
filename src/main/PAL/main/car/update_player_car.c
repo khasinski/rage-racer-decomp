@@ -80,7 +80,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
             idx = g - 1;
             tableValue = (s32)g_CarSpec;
             tableValue += idx * 4;
-            tableValue = *(s16 *)(tableValue + 0x120); /* shiftPoints[idx].downshiftSpeed */
+            tableValue = ((GameCarSpec *)tableValue)->shiftPoints[0].downshiftSpeed;
             if (car->speed < tableValue &&
                 g_AutoShiftCooldown <= 0 && car->drive.clutch == 0) {
                 if (g >= 2) {
