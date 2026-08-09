@@ -37,7 +37,7 @@ s32 LoadSaveStateBlock(u8 *block) {
         u16 negconMappingIndex = *(u16 *)(base + 0x2);
         u16 negconSteerNeutral = *(u16 *)(base + 0x4);
         u16 negconSteerPlay = *(u16 *)(base + 0x6);
-        g_NegconNeutralI = *(u16 *)(base + 0x8);
+        g_NegconNeutralI = ((GameSaveBlock *)base)->negconNeutralI;
         g_NegconNeutralII = *(u16 *)(base + 0xA);
         g_NegconNeutralL = *(u16 *)(base + 0xC);
         {
