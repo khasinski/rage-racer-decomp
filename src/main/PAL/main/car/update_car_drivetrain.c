@@ -627,7 +627,7 @@ shift_interpolation_done:
   engineSpeed = g_TrackPoints[pointIndex].surfacePitch * (0x400 - lateralOffset);
   pointIndex += 1;
   lateralSum = engineSpeed +
-               g_TrackPoints[pointIndex % (s32)g_TrackPointCount].surfacePitch * lateralOffset;
+               g_TrackPoints[pointIndex % g_TrackPointCount].surfacePitch * lateralOffset;
   secondNonnegative = lateralSum >= 0;
   if (!secondNonnegative)
   {
