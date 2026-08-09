@@ -32,7 +32,6 @@ extern s32 g_TeamLogoDpadRepeatTimer;
 extern s32 g_TeamLogoDpadRepeatMask;
 extern s32 g_TeamLogoGuideModePrev;
 extern s32 g_TeamLogoPaintArmed;
-extern Rect g_TeamLogoRect;
 extern s32 g_TeamLogoBlankClut;
 extern s32 g_MenuLightBurstLevel;
 extern const MenuLightBurstBand g_MenuLightBurstBandX;

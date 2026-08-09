@@ -26,16 +26,11 @@ extern CourseProgressState g_GrandPrixCourseProgress;
 extern CourseProgressState g_ExtraGrandPrixCourseProgress;
 extern CourseProgressState *g_CourseProgress;
 extern GAME_SAVE_BGM_TYPE g_BgmSelection;
-#ifndef GAME_TEAM_LOGO_RECT_DECL
-#define GAME_TEAM_LOGO_RECT_DECL extern Rect g_TeamLogoRect
-#endif
 extern TeamLogoCanvas g_TeamLogoCanvas;
-GAME_TEAM_LOGO_RECT_DECL;
 extern s32 g_BestLapTimes[2][4][2];
 extern s32 g_BestTotalTimes[2][4][2];
 extern s32 g_BestSectorTimes[2][4][3];
 
 #undef GAME_SAVE_BGM_TYPE
 #undef GAME_CLASS_WIN_COUNT_QUALIFIER
-#undef GAME_TEAM_LOGO_RECT_DECL
 #endif

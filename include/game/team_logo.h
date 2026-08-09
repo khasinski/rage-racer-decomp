@@ -3,6 +3,7 @@
 
 #include "psyq/gpu.h"
 
+extern Rect g_TeamLogoRect;
 extern Rect g_TeamLogoClutRect;
 
 #endif
