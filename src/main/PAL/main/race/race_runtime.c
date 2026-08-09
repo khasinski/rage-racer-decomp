@@ -468,7 +468,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     s32 scene;
     u16 av;
 
-    ent->field_B0 = 1;
+    ent->initializedFlag = 1;
     av = slots[pos].halves.modelId;
     sub = (pos + 1) * 12;
     {
@@ -576,7 +576,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         s32 lateral;
 
         lateral = ent->y;
-        ent->field_40 = 0;
+        ent->reserved40 = 0;
         ent->steeringAngle = 0;
         ent->wheelRotation = 0;
         ent->modelY = lateral;

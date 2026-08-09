@@ -374,11 +374,11 @@ advance:
     if (g_TrackEventData->racingLineHints[scene][raw].start == -1) {
         state->routeIndex = 0;
     }
-    state->field_10E = 0;
+    state->racingLineHintState = 0;
     return;
 
     }
-    objReg->field_10E = 0;
+    objReg->racingLineHintState = 0;
 }
 
 void SeedCarRouteMarkers(void) {
