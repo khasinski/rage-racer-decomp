@@ -527,7 +527,7 @@ void UpdateRaceScene(void) {
 
             selectorMask = g_PadType;
             inputMask = g_PadHeld;
-            selectorMask = (u32)(selectorMask ^ 0x23) < 1;
+            selectorMask = selectorMask == 0x23;
             if ((inputMask & g_PadMirrorMasks[selectorMask * 8]) &&
                 g_CameraViewMode == 0 && g_RacePhase == 2) {
                 if (g_PadPressed & 8) {
@@ -645,7 +645,7 @@ update_race:
 
             selectorMask = g_PadType;
             inputMask = g_PadPressed;
-            selectorMask = (u32)(selectorMask ^ 0x23) < 1;
+            selectorMask = selectorMask == 0x23;
             if ((inputMask & g_PadMirrorMasks[selectorMask * 8]) &&
                 (u32)((u16)g_RacePhase - 2) < 2) {
                 g_CameraViewMode ^= 1;
