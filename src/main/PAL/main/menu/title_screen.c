@@ -2,7 +2,6 @@
 #include "game/prim.h"
 #include "game/asset.h"
 #include "game/audio.h"
-#define GAME_BGM_SHUFFLE_INDEX_TYPE s32
 #define GAME_BGM_SHUFFLE_QUALIFIER volatile
 #include "game/audio_internal.h"
 #include "game/cd.h"
