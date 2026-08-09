@@ -267,7 +267,8 @@ s32 IsCarFacingBackwards(GameCarTrackAngleWindow *window) {
     s32 index = window->trackPointIndex;
     s32 complement = 0xC00 - g_TrackPoints[index].angle;
     s32 diff = (window->headingAngle - complement) & 0xFFF;
-    return (u32)(diff - 0x401) < 0x7FFU;
+    u32 backwardRange = diff - 0x401;
+    return backwardRange < 0x7FFU;
 }
 
 /* The live button mapping; masks 0 and 1 steer, g_MirrorMode swaps them. */
