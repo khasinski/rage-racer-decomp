@@ -11,8 +11,8 @@
 s32 DrawDesignModeScreen(s32 step) {
     DesignModeCellMask mask;
     void *ot;
-    s32 limit;
-    s32 offset;
+    u32 limit;
+    u32 offset;
     s32 intensity;
     s32 y;
     s32 row;
@@ -44,7 +44,7 @@ s32 DrawDesignModeScreen(s32 step) {
             g_DesignModeScreenFade = 0;
         }
         limit = MENU_FADE_MAX - g_DesignModeScreenFade;
-        offset = (u32)(limit * limit) / 2048;
+        offset = limit * limit / 2048;
     }
 
     y = 0xB0 - (s16)offset;
