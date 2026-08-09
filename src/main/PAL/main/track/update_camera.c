@@ -425,7 +425,7 @@ block_52:
         } else if (g_CamPathFrame < g_TrackCameras[g_CamPathNode].duration) {
             g_CamPathFrame += 1;
         }
-        pathBlend = 0x1000 - rcos((s32) (g_CamPathFrame << 0xB) / g_TrackCameras[g_CamPathNode].duration);
+        pathBlend = 0x1000 - rcos((g_CamPathFrame << 0xB) / g_TrackCameras[g_CamPathNode].duration);
         offsetXProduct = pathBlend * g_CamPathOffsetDelta[0];
         if (offsetXProduct < 0) {
             offsetXProduct += 0x1FFF;
@@ -545,9 +545,9 @@ block_52:
         sp38[1] = orbitToCarY;
         orbitToCarZ = orbitNode->offset[2] - scratch[4];
         sp38[2] = orbitToCarZ;
-        scratch[2] += (s32) (orbitToCarX * g_CamPathFrame) / orbitNode->duration;
-        scratch[3] += (s32) (sp38[1] * g_CamPathFrame) / orbitNode->duration;
-        scratch[4] += (s32) (sp38[2] * g_CamPathFrame) / orbitNode->duration;
+        scratch[2] += (orbitToCarX * g_CamPathFrame) / orbitNode->duration;
+        scratch[3] += (sp38[1] * g_CamPathFrame) / orbitNode->duration;
+        scratch[4] += (sp38[2] * g_CamPathFrame) / orbitNode->duration;
         orbitDx = scratch[2] - (car->x + sp28[0]);
         squaredX = orbitDx * orbitDx;
         sp38[0] = orbitDx;
