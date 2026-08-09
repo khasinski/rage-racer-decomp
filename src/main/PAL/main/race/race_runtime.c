@@ -164,7 +164,7 @@ void DrawWaypoints(void) {
     s32 drawId;
     s32 i;
     Matrix *mtx1Ptr;
-    register TrackWaypointMotion *point asm("$16");
+    register TrackWaypointMotionCursor *point asm("$16");
     s32 frameValue;
     s32 drawArg;
 
@@ -172,14 +172,14 @@ void DrawWaypoints(void) {
     SelectModelBank(0);
     i = 0;
     mtx1Ptr = &mtx1;
-    point = &g_Waypoints[0].motion;
+    point = (TrackWaypointMotionCursor *)&g_Waypoints[0].motion;
 
     do {
-        BuildRotMatrixY(&mtx0, point->rotationY);
+        BuildRotMatrixY(&mtx0, point->motion.rotationY);
         MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx0);
-        BuildRotMatrixZ(mtx1Ptr, point->rotationZ);
+        BuildRotMatrixZ(mtx1Ptr, point->motion.rotationZ);
         MulMatrix(&mtx0, mtx1Ptr);
-        SetGteObjectMatrix((void *)0x1F80011C, point, &mtx0);
+        SetGteObjectMatrix((void *)0x1F80011C, &point->motion, &mtx0);
         frameValue = g_ModelBankCount;
         ClearScratchRenderMode37AAC();
         drawArg = 1;
@@ -190,7 +190,7 @@ void DrawWaypoints(void) {
 
         BuildRotMatrixY(mtx1Ptr, 0x800);
         MulMatrix2(&mtx0, mtx1Ptr);
-        SetGteObjectMatrix((void *)0x1F80011C, point, mtx1Ptr);
+        SetGteObjectMatrix((void *)0x1F80011C, &point->motion, mtx1Ptr);
         frameValue = g_ModelBankCount;
         ClearScratchRenderMode37AAC();
         drawArg = 1;
@@ -200,7 +200,7 @@ void DrawWaypoints(void) {
         SubmitModel((void *)SCRATCHPAD_ADDR, drawArg);
 
         i++;
-        point = (TrackWaypointMotion *)((u8 *)point + sizeof(TrackWaypointRuntime));
+        point++;
     } while (i < 6);
 }
 

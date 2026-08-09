@@ -31,4 +31,9 @@ typedef struct TrackWaypointRuntime {
     TrackWaypointMotion motion;
 } TrackWaypointRuntime;
 
+typedef struct TrackWaypointMotionCursor {
+    TrackWaypointMotion motion;
+    s32 nextSlotActive;
+} TrackWaypointMotionCursor;
+
 #endif
