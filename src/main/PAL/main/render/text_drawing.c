@@ -358,13 +358,14 @@ s32 GameDrawNumber(x, y, flags, value, r, g, b, clut, primitiveCount)
 
 void DrawBitPatternOverlay(s32 pattern) {
     u32 *ot = SCRATCH_OT_BASE_AS(u32);
-    u8 *row = g_MenuOverlayPatternTable;
+    u8 *patternTable = g_MenuOverlayPatternTable;
+    u8 *row = patternTable;
+    u8 *candidate;
     s32 y;
     s32 outer;
     s32 one;
     s32 x;
     s32 bit;
-    s32 offset;
 
     if (pattern == 0) {
         return;
@@ -375,14 +376,13 @@ void DrawBitPatternOverlay(s32 pattern) {
             g_MenuOverlayPatternAnimOffset += 8;
         }
 
-        offset = g_MenuOverlayPatternAnimOffset;
-        offset += (s32)g_MenuOverlayPatternTable;
-        if (*(u8 *)(offset + 7) != 0) {
+        candidate = &patternTable[g_MenuOverlayPatternAnimOffset];
+        if (candidate[7] != 0) {
             g_MenuOverlayPatternAnimOffset = 0x10;
         }
-        row = (u8 *)(g_MenuOverlayPatternAnimOffset + (s32)g_MenuOverlayPatternTable);
+        row = &patternTable[g_MenuOverlayPatternAnimOffset];
     } else {
-        row += (pattern - 1) * 8;
+        row = &patternTable[(pattern - 1) * 8];
     }
 
     y = 0x150;
