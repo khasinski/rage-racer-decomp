@@ -141,23 +141,25 @@ u8 *DrawMirrorFrame(u8 *packet) {
     s32 paletteIndex;
     s32 color;
     u8 *next;
+    TILE *tile;
 
     base = g_DrawBuffer;
     ot = base + 0xD0;
 
-    SetTile(packet);
+    tile = (TILE *)packet;
+    SetTile(tile);
     otArg = ot;
-    prim = packet;
+    prim = (u8 *)tile;
 
-    *(s16 *)(packet + 8) = 0x54;
+    tile->x0 = 0x54;
     color = 0x98;
-    packet[4] = 0;
-    packet[5] = 0;
-    packet[6] = 0;
-    *(s16 *)(packet + 0xC) = color;
-    *(s16 *)(packet + 0xA) = *(u16 *)&g_MirrorPanelY - 2;
-    *(s16 *)(packet + 0xE) = 0x28;
-    packet += 0x10;
+    tile->t.r0 = 0;
+    tile->t.g0 = 0;
+    tile->t.b0 = 0;
+    tile->w = color;
+    tile->y0 = *(u16 *)&g_MirrorPanelY - 2;
+    tile->h = 0x28;
+    packet = (u8 *)(tile + 1);
     AddPrim((u32 *)otArg, (u32 *)prim);
 
     colorIndex = g_CarMirrorBadgeStyles[g_PlayerCarIndex];
