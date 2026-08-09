@@ -42,16 +42,8 @@ extern FontGlyph g_LargeFontGlyphs[];
 extern CameraKey g_CameraPath[];
 extern u32 g_MainVisibleCellMask[];
 extern Vec4 g_MainVisibleCellList[];
-#ifndef GAME_VISIBLE_CELL_MASK_TYPE
-#define GAME_VISIBLE_CELL_MASK_TYPE u32
-#endif
-extern GAME_VISIBLE_CELL_MASK_TYPE *g_VisibleCellMask;
-#undef GAME_VISIBLE_CELL_MASK_TYPE
-#ifndef GAME_VISIBLE_CELL_LIST_DECL
-#define GAME_VISIBLE_CELL_LIST_DECL extern Vec4 *g_VisibleCellList
-#endif
-GAME_VISIBLE_CELL_LIST_DECL;
-#undef GAME_VISIBLE_CELL_LIST_DECL
+extern u32 *g_VisibleCellMask;
+extern Vec4 *g_VisibleCellList;
 extern s32 g_CameraViewMode;
 extern s16 g_AtanTable[];
 #ifndef GAME_DRAW_BUFFER_QUALIFIER

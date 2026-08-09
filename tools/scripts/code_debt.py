@@ -32,7 +32,7 @@ PATTERNS = {
     "unknown_fields": re.compile(r"\b(?:field_[0-9A-Fa-f]+|unk[0-9A-Fa-f]+)\b"),
     "externs_in_c": re.compile(r"^\s*extern\b", re.MULTILINE),
     "declaration_overrides": re.compile(
-        r"^\s*#define\s+GAME_[A-Z0-9_]+_(?:TYPE|QUALIFIER)\b", re.MULTILINE
+        r"^\s*#define\s+GAME_[A-Z0-9_]+_(?:TYPE|QUALIFIER|DECL)\b", re.MULTILINE
     ),
 }
 

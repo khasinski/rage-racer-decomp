@@ -1,6 +1,5 @@
 #include "common.h"
 #include "game/race.h"
-#define GAME_VISIBLE_CELL_LIST_DECL extern s32 g_VisibleCellList
 #include "game/render_internal.h"
 #include "game/track_internal.h"
 #include "game/terrain_internal.h"

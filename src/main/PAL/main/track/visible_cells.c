@@ -3,7 +3,6 @@
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/track.h"
-#define GAME_VISIBLE_CELL_MASK_TYPE s32
 #include "game/render_internal.h"
 #include "game/track_internal.h"
 #include "game/vector.h"
