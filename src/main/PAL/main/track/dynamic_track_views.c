@@ -78,14 +78,14 @@ void UpdateFreeLookCamera(void *car, s32 updateMotion) {
         g_CameraCar.x = g_CameraCarStepX / 256 + g_CameraCar.x;
         g_CameraCar.z = g_CameraCarStepZ / 256 + g_CameraCar.z;
 
-        if (g_PadHeld & PAD_UP) {
+        if (ReadStablePadHeld() & PAD_UP) {
             g_FreeCameraAngleOffset[0] -= 8;
-        } else if (g_PadHeld & PAD_DOWN) {
+        } else if (ReadStablePadHeld() & PAD_DOWN) {
             g_FreeCameraAngleOffset[0] += 8;
         }
-        if (g_PadHeld & PAD_LEFT) {
+        if (ReadStablePadHeld() & PAD_LEFT) {
             g_FreeCameraAngleOffset[1] -= 16;
-        } else if (g_PadHeld & PAD_RIGHT) {
+        } else if (ReadStablePadHeld() & PAD_RIGHT) {
             g_FreeCameraAngleOffset[1] += 16;
         }
     }

@@ -1,7 +1,6 @@
 #include "common.h"
 #include "game/vector.h"
 #include "psyq/gte.h"
-#define GAME_PAD_HELD_QUALIFIER volatile
 #include "game/state.h"
 #include "game/race.h"
 #include "game/car.h"

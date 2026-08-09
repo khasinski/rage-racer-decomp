@@ -286,7 +286,7 @@ void UpdateTeamLogoCanvas(void) {
         s32 input;
         s32 held;
         s32 repeat;
-        u16 *state = &g_PadHeld;
+        volatile u16 *state = &g_PadHeld;
 
         input = (*state & 5) ? 0 : 3;
         if (*state & g_TeamLogoDpadRepeatMask) {
@@ -588,7 +588,7 @@ void UpdateTeamLogoCanvas(void) {
         }
         }
         {
-            u16 *held = &g_PadHeld;
+            volatile u16 *held = &g_PadHeld;
             u16 heldValue = *held;
 
         if ((heldValue & 8) && (g_TeamLogoExpertMode != 0)) {

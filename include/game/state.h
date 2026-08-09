@@ -217,11 +217,11 @@ extern u16 g_PadButtonPresets[];
 extern u8 g_PadConfigButtonRows[];
 extern u8 g_PadConfigLabelRows[];
 extern u16 g_PadPrevHeld;
-#ifndef GAME_PAD_HELD_QUALIFIER
-#define GAME_PAD_HELD_QUALIFIER
-#endif
-extern GAME_PAD_HELD_QUALIFIER u16 g_PadHeld;
-#undef GAME_PAD_HELD_QUALIFIER
+extern volatile u16 g_PadHeld;
+
+static inline u16 ReadStablePadHeld(void) {
+    return *(const u16 *)&g_PadHeld;
+}
 extern u16 g_PadPressedRepeat;
 extern u16 g_PadPressed;
 extern u8 g_PadRepeatTimer[];

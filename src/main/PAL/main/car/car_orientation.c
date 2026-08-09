@@ -291,11 +291,11 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     if (g_PadType == 0x41) {
 
     if (g_MirrorMode != 0) {
-        a1 = g_PadHeld & (s16)g_PadButtonMapping[0];
-        v1 = g_PadHeld & (s16)g_PadButtonMapping[1];
+        a1 = ReadStablePadHeld() & (s16)g_PadButtonMapping[0];
+        v1 = ReadStablePadHeld() & (s16)g_PadButtonMapping[1];
     } else {
-        v1 = g_PadHeld & (s16)g_PadButtonMapping[0];
-        a1 = g_PadHeld & (s16)g_PadButtonMapping[1];
+        v1 = ReadStablePadHeld() & (s16)g_PadButtonMapping[0];
+        a1 = ReadStablePadHeld() & (s16)g_PadButtonMapping[1];
     }
 
     if (v1 != 0) {
