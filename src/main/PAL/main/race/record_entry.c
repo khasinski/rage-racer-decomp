@@ -324,9 +324,14 @@ void InsertRaceRecords(void) {
             j = 0;
             fill_offset = row_offset;
             for (; j < 6; j++) {
+                RaceRecordAddress nameAddress;
+
                 score_offset = fill_offset + (g_CourseIndex * 0x50);
                 score_offset += g_GrandPrixSeries * 0x140;
-                *((volatile u8 *)((score_offset + (s32)name_base2) + j)) = letter2;
+                nameAddress.bytePointer = name_base2;
+                nameAddress.byteOffset = score_offset + nameAddress.byteOffset;
+                nameAddress.byteOffset = nameAddress.byteOffset + j;
+                *(volatile u8 *)nameAddress.bytePointer = letter2;
                 g_TimeRecordNameCodes[j] = code2;
             }
 
