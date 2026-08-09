@@ -1,6 +1,5 @@
 #include "common.h"
 #include "game/state.h"
-#define GAME_INPUT_MAPPING_TYPE s16
 #define GAME_INPUT_CALIBRATION_TYPE s16
 #include "game/input_internal.h"
 #include "game/render.h"

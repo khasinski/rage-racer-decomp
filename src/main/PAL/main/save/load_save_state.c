@@ -4,7 +4,6 @@
 #include "game/race.h"
 #include "game/menu.h"
 #include "psyq/gpu.h"
-#define GAME_INPUT_MAPPING_TYPE s16
 #include "game/input_internal.h"
 #include "game/save_internal.h"
 

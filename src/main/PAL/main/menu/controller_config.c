@@ -5,7 +5,6 @@
 #include "game/render.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
-#define GAME_INPUT_MAPPING_TYPE s16
 #include "game/input_internal.h"
 
 

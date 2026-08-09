@@ -5,7 +5,6 @@
 #include "game/state.h"
 #include "game/race.h"
 #include "game/car.h"
-#define GAME_INPUT_MAPPING_TYPE s16
 #include "game/input_internal.h"
 #include "game/track.h"
 #include "game/track_internal.h"
