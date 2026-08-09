@@ -281,7 +281,7 @@ void UpdateTeamLogoCanvas(void) {
     u32 slotValue;
     u32 blueDown;
     u32 pixelValue;
-    u16 *canvasWord;
+    TeamLogoPixelWord *canvasWord;
     s32 pixelX;
 
     {
@@ -669,7 +669,7 @@ void UpdateTeamLogoCanvas(void) {
         }
         if ((g_PadPressed & 2) && (g_TeamLogoExpertMode != 0)) {
             PlaySoundCue(4);
-            canvasWord = g_TeamLogoCanvas.halfwords;
+            canvasWord = g_TeamLogoCanvas.pixels;
             cursorX = g_TeamLogoViewX + g_TeamLogoCursorX;
             pixelX = cursorX;
             rowWords = (g_TeamLogoViewY + g_TeamLogoCursorY) * 0x10;
@@ -682,16 +682,16 @@ void UpdateTeamLogoCanvas(void) {
             nibbleShift = nibbleShift - (wordColumn * 4);
             switch (nibbleShift) {
             case 0:
-                pixelValue = canvasWord[0] & 0xF;
+                pixelValue = canvasWord[0].value & 0xF;
                 break;
             case 1:
-                pixelValue = *(u8 *)canvasWord / 16;
+                pixelValue = canvasWord[0].bytes[0] / 16;
                 break;
             case 2:
-                pixelValue = *((u8 *)canvasWord + 1) & 0xF;
+                pixelValue = canvasWord[0].bytes[1] & 0xF;
                 break;
             case 3:
-                pixelValue = canvasWord[0] >> 0xC;
+                pixelValue = canvasWord[0].value >> 0xC;
                 break;
             default:
                 return;
