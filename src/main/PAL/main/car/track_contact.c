@@ -308,13 +308,9 @@ void ResetCarTrackState(GameCarRuntime *car) {
               segLenD);
     trackWidth = (u16)spad->field_8A + (u16)spad->field_88;
     spad->field_86 = trackWidth;
-    nextCamber = Atan2(
-        (s32)trackWidth,
-        (s32)(nextPoint->field_E * trackWidth) >> 7);
+    nextCamber = Atan2(trackWidth, (nextPoint->field_E * trackWidth) >> 7);
     trackWidthCopy = spad->field_86;
-    secondResult = Atan2(
-        (s32)trackWidthCopy,
-        (s32)(point->field_E * trackWidthCopy) >> 7);
+    secondResult = Atan2(trackWidthCopy, (point->field_E * trackWidthCopy) >> 7);
     segLenE = (s16)spad->segmentLength;
     spad->field_94 =
         (s16)(((nextCamber * alongSegment) +
