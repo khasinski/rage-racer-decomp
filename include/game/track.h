@@ -62,7 +62,7 @@ typedef struct TrackRivalAiConfig {
     u16 collisionBoostDuration;
     u16 boostAcceleration;
     u16 minimumSpeed;
-    u16 field_134;
+    u16 initialEngineRpm;
     u16 reserved;
 } TrackRivalAiConfig;
 
