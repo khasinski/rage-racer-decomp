@@ -7,16 +7,6 @@
 #include "game/race.h"
 #include "game/audio.h"
 
-/*
- * Inside the loop these two fields must NOT be reached as struct members.
- * gcc 2.6.3 tags a struct-member MEM with MEM_IN_STRUCT_P and then assumes it
- * cannot alias a plain global scalar, which lets it hoist the g_PlayerSpeed load
- * out of the loop into an extra callee-saved register. Retail reloads the
- * global on every iteration, so the in-loop writes stay raw casts.
- */
-#define AVOID_BLOCKED(w) (*(s16 *)((u8 *)(w) + 0x48)) /* ->field_104 */
-#define AVOID_NEARBY(w) (*(u16 *)((u8 *)(w) + 0x50))  /* ->field_10C */
-
 void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     GameCarAiBlock *state = (GameCarAiBlock *)&car->field_BC;
     s32 acc8 = 0;
@@ -86,14 +76,14 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
                 otherA4 = *(u16 *)(base + 0x34);
             }
             t1 = 0;
-            t6 = 0x1800 - (g_PlayerSpeed * 2);
+            t6 = 0x1800 - (g_PlayerCar.speed * 2);
         } else {
             s32 op;
             otherField34 = *(s32 *)(block - 0x70); /* g_Cars[i].field_34 */
             otherA4 = *(u16 *)block; /* g_Cars[i].field_A4, low half */
             op = *(s32 *)(block - 0x34); /* g_Cars[i].trackProgress */
             a2 = op + track;
-            t1 = *(u16 *)&AVOID_BLOCKED(state); /* unsigned load of ->field_104 */
+            t1 = (u16)state->field_104;
         }
 
         angleDiff = otherField34 - carField34;
@@ -103,10 +93,10 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
         otherA4 -= carA4low;
 
         if (diff > 0 && diff < t6) {
-            AVOID_NEARBY(state)++;
+            state->field_10C++;
             if (field34minus < otherField34 && otherField34 < field34plus) {
                 if (!((s16)otherA4 > 0 && t1 == 0)) {
-                    AVOID_BLOCKED(state) = 1;
+                    state->field_104 = 1;
                     val = angleDiff + 0x30;
                     if (val < 0) {
                         val = angleDiff + 0x4F;
@@ -136,7 +126,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
             }
         } else {
             if (trackMinus < diff) {
-                AVOID_NEARBY(state)++;
+                state->field_10C++;
             }
         }
     }
