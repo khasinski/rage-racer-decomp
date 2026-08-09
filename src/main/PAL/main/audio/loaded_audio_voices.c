@@ -155,7 +155,7 @@ void InitEffectVoiceRuntime(void) {
 
         i = 0;
         neg = -1;
-        ptr = &g_AudioSlotMask;
+        ptr = &g_AudioLoadedSlotMask;
         for (; i < 2; i++) {
             g_MusicChannels[i].mode = neg;
             g_MusicChannels[i].left.value = neg;

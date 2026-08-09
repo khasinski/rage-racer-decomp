@@ -1,6 +1,6 @@
 #include "common.h"
 #include "game/audio.h"
-#include "game/audio_internal.h"
+#include "game/sound.h"
 #include "psyq/snd.h"
 
 
@@ -47,7 +47,7 @@ s32 PollAudioSlotLoad(void) {
     g_VabTransferDone = (s16)completed;
 
     if ((s16)completed != 0) {
-        flagsPtr = &g_AudioSlotMask;
+        flagsPtr = &g_AudioLoadedSlotMask;
         one = 1;
         slot = g_AudioLoadSlot;
         value = *flagsPtr;
@@ -70,8 +70,8 @@ s32 PollAudioSlotLoad(void) {
 }
 
 s32 CloseVabOnlyAudioSlot(s32 slot) {
-    AudioBankRuntime *banks = (AudioBankRuntime *)&g_AudioSlotMask;
-    s32 *flagsPtr = &banks->loadedMask;
+    AudioRuntimeState *runtime = (AudioRuntimeState *)&g_AudioLoadedSlotMask;
+    s32 *flagsPtr = &runtime->loadedSlotMask;
     s32 bit = 1;
     s32 flags = *flagsPtr;
     s32 zeroArg = 0;
@@ -86,7 +86,7 @@ s32 CloseVabOnlyAudioSlot(s32 slot) {
     *flagsPtr = bit ^ flags;
     SsUtSetReverbDepth(zeroArg, 0);
     _SsVmInit(0);
-    ids = banks->vabIds;
+    ids = runtime->soundScale.vabIds;
     SsVabClose(ids[slot]);
     ret = 1;
     }
@@ -166,15 +166,15 @@ s32 LoadExtraVabSlotWithTable(u8 *header, u8 *body, u16 *table) {
         LoadAudioParameterTable(table);
     }
 
-    flags = g_AudioSlotMask;
+    flags = g_AudioLoadedSlotMask;
     g_ExtraVabLoaded = 1;
-    g_AudioSlotMask = flags | 0x20;
+    g_AudioLoadedSlotMask = flags | 0x20;
     return 0;
 }
 
 void CloseExtraVabSlot(void) {
     s32 liveSlot;
-    s32 *flagsPtr = &g_AudioSlotMask;
+    s32 *flagsPtr = &g_AudioLoadedSlotMask;
     s32 flags = *flagsPtr;
     s32 newFlags;
 
@@ -190,7 +190,7 @@ void CloseExtraVabSlot(void) {
 
 void ShutdownSoundSystem(void) {
     s32 i;
-    s32 *flag = &g_AudioSlotMask;
+    s32 *flag = &g_AudioLoadedSlotMask;
 
     if (*flag != 0) {
         *flag = 0;

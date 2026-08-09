@@ -156,7 +156,7 @@ extern u8 g_MusicChannelVolRight[];
 extern s32 g_EffectVoice2State;
 extern s32 g_ActiveSpecialCue;
 extern s32 g_AudioLoadSlot;
-extern s32 g_AudioSlotMask;
+extern s32 g_AudioLoadedSlotMask;
 extern s32 g_CarSoundVolumeScales[];
 extern const EffectCueBank g_EffectCueTable[3];
 extern s32 g_EngineSoundBank;

@@ -234,7 +234,7 @@ void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
     register s32 scaledLeft asm("$2");
     s32 scaledRight;
     s32 entryOffset;
-    s32 *table;
+    AudioRuntimeState *runtime;
     s32 currentA;
     s32 currentB;
     s32 matchValue;
@@ -329,8 +329,8 @@ after_match:
                 CHANNEL(offset).left.value = inactiveValue;
                 CHANNEL(offset).right.value = inactiveValue;
                 CHANNEL(offset).mode = activeValue;
-                table = (s32 *)((u8 *)&g_AudioSlotMask + offset);
-                ((AudioSlotChannelView *)table)->channel.volRight = 0;
+                runtime = (AudioRuntimeState *)((u8 *)&g_AudioLoadedSlotMask + offset);
+                runtime->musicChannels[0].volRight = 0;
                 CHANNEL(offset).volLeft = 0;
                 i++;
             } while (i < resetCount);

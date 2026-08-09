@@ -59,7 +59,7 @@ void ResetSoundState(void) {
 
         i = 0;
         neg = -1;
-        ptr = &g_AudioSlotMask;
+        ptr = &g_AudioLoadedSlotMask;
         for (; i < 2; i++) {
             g_MusicChannels[i].mode = neg;
             g_MusicChannels[i].left.value = neg;
@@ -108,7 +108,7 @@ void ResetSoundState(void) {
             g_SoundScale.scale = offset;
             g_PanVoiceActive = 0;
             g_SoundSlotVolumeScale = offset;
-            g_AudioSlotMask = value;
+            g_AudioLoadedSlotMask = value;
         }
     }
 }

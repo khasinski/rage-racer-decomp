@@ -71,5 +71,5 @@ u32 GetLoadedAudioStep(void) {
 }
 
 s32 GetActiveAudioSlots(void) {
-    return g_AudioSlotMask;
+    return g_AudioLoadedSlotMask;
 }

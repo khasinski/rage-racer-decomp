@@ -1082,7 +1082,7 @@ what the flag is *for* is unrecoverable and any name would be a guess.
 | `D_8019C904` | `g_AssetBase` | `u8 *` | 5 | base of the resident asset block; all sub-block pointers are `base + base[n]` |
 | `D_801E8AB0` | `g_AssetSubBlockPtr` | `u8 *` | 5 | always `base + header->offsets[n + 1]`, the companion of `g_AssetBlockPtr` |
 | `D_80082F28` | `g_SoundSlotTone` | `s16[]` | 5 | `s16[6][2]`, SPU program per sound slot; slot n drives hardware voice n + 14 |
-| `D_801E6C9C` | `g_AudioSlotMask` | `s32` | 5 | `|= 1 << slot` on load, `^= bit` on close; returned by `GetActiveAudioSlots` |
+| `D_801E6C9C` | `g_AudioLoadedSlotMask` | `s32` | 5 | Loaded-slot bitmask at the start of the contiguous `AudioRuntimeState`; updated on load/close and returned by `GetActiveAudioSlots` |
 | `D_801E6CE4` | `g_PanVoiceVolumeL` | `s32` | 5 | left of an L/R pair clamped 0..0x80, `-1` idle, applied to voice `0x15` |
 | `D_801E8A50` | `g_SfxVolumeSetting` | `s32` | 5 | OPTIONS row 1, 0..15, feeds `g_EffectVolumeScale = (n << 7) / 15` |
 | `D_801E6C70` | `g_MonoOutput` | `s32` | 5 | OPTIONS row 2, 0/1; `0 -> SetStereoOutput`, non-zero `-> SetMonoOutput` |
@@ -3099,7 +3099,7 @@ and spelling that loop bound `&g_ReverbFadeStep` would actively mislead. The
 header says so at the declaration.
 
 `D_801E6CAE/B0/B2` are `g_VabIds3/4/5`, split symbols of `g_VabIds` — the same
-`+0xC` off `&g_AudioSlotMask` that `CloseAudioSlot` indexes. Named
+`+0xC` off `&g_AudioLoadedSlotMask` that `CloseAudioSlot` indexes. Named
 mechanically on purpose (the `g_RefSectorTime0/1/2` precedent of 15b), because
 "the extra VAB" is not one slot: the loader writes slot 3 and the closer closes
 slot 5.
