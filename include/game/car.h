@@ -313,6 +313,13 @@ typedef struct GearCurveRow {
 
 extern GearCurveRow g_GearTorqueCurve[];
 
+typedef enum CarMotionState {
+    CAR_MOTION_DRIVING,
+    CAR_MOTION_TAKEOFF,
+    CAR_MOTION_AIRBORNE,
+    CAR_MOTION_STANDING_START,
+} CarMotionState;
+
 /* Drivetrain / input block beginning at +0xBC; the player physics code addresses
  * the car's second half through this rather than through GameCarRuntime.
  *
@@ -368,9 +375,9 @@ typedef struct GameCarDrive {
     s32 speedScale;
     s32 targetHeading;
     s32 unk94;       /* +0x94 */
-    s32 state98;     /* +0x98 0 driving, 1 launching, 2 airborne */
-    s16 unk9C;
-    s16 unk9E;
+    CarMotionState motionState; /* +0x98 */
+    s16 acceleratorLatch;
+    s16 brakeLatch;
     s16 acceleratorInput; /* +0xA0 */
     s16 brakeInput;       /* +0xA2 */
     s16 unkA4;
@@ -557,7 +564,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index);
 /* Selects model bank 1 and calls DrawCar for each of the 11 runtime cars
  * whose activeFlag != -1 and aiEnabled == 1. */
 void DrawCars(void);
-/* Car motion-state handler for state98 == 1: the one-frame jump takeoff, which
+/* Car motion-state handler for CAR_MOTION_TAKEOFF: the one-frame jump takeoff, which
  * hands over to the airborne handler UpdateCarAirborne.  Declared K&R because
  * the UpdateCarDrivetrain dispatch passes two arguments to every handler in
  * the table and this one reads only the first. */

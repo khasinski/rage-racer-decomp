@@ -116,7 +116,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                 g_AutoShiftCooldown = g_AutoShiftCooldown - 1;
             }
         }
-        if (car->speed == 0 && p->gear >= 2 && p->state98 != 3) {
+        if (car->speed == 0 && p->gear >= 2 && p->motionState != CAR_MOTION_STANDING_START) {
             p->gear = 1;
             p->clutch = 0;
             g_AutoShiftCooldown = 0;
@@ -128,9 +128,9 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     if (car->shiftState == 0) {
         s32 spd = car->speed;
 
-        if (spd < 256 && p->state98 == 0) {
+        if (spd < 256 && p->motionState == CAR_MOTION_DRIVING) {
             p->targetHeading += ((p->steerPos * 6) / 5 * p->unk32 / 256) * spd / 0x10000;
-        } else if (spd < 512 && p->state98 == 3) {
+        } else if (spd < 512 && p->motionState == CAR_MOTION_STANDING_START) {
             p->targetHeading += ((p->steerPos * 6) / 5 * p->unk32 / 256) * spd / 0x20000;
         } else {
             p->targetHeading += (p->steerPos * 6) / 5 * p->unk32 / 0x10000;
@@ -340,7 +340,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                     PlaySoundCue(0xE);
                 }
             }
-            if (p->state98 == 0 && (s16)car->shiftTick >= 3) {
+            if (p->motionState == CAR_MOTION_DRIVING && (s16)car->shiftTick >= 3) {
                 s32 rpm;
 
                 GameCarSpec *props;
@@ -359,7 +359,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                     rpm = car->speed * 160 / 1168 * 10000 / ratios[p->gear];
                 }
                 p->jumpTimer = 0x14;
-                p->state98 = 2;
+                p->motionState = CAR_MOTION_AIRBORNE;
                 g_ShiftTargetRpm = rpm;
                 p->unk3C = (u16)g_ShiftTargetRpm - (u16)p->engineRpm;
                 {

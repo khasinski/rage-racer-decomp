@@ -6,7 +6,7 @@
 #include "game/audio.h"
 
 /*
- * Car motion handler for state98 == 0 (normal driving): turns steering into a
+ * Car motion handler for motionState == CAR_MOTION_DRIVING (normal driving): turns steering into a
  * world velocity, triggers over-rev / redline engine-audio cues (comparing
  * against the spec block's redline at +0x100 / +0x106), advances the car
  * (AdvanceCarPosition), and detects the jump/launch trigger. The drive sub-block is
@@ -65,12 +65,12 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
         SetIndexedEffectVoice(-1, 0, 0);
     }
 
-    if (route->unk9C == 1) {
+    if (route->acceleratorLatch == 1) {
         route->unk48 = car->speed * route->groundedFrames;
         route->groundedFrames = 0;
         if (g_LaunchSpeedThresholds[route->launchThresholdIndex].initial < car->speed &&
             route->unk48 > route->launchEnergyThreshold) {
-            route->state98 = 1;
+            route->motionState = CAR_MOTION_TAKEOFF;
             route->unk3E = 0;
             SetIndexedEffectVoice(0, 0, 0);
             t = 1000 - (route->unk88 - 1000) * 8;
@@ -82,14 +82,14 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
         }
     } else {
         if (route->acceleratorInput < 128) {
-            s16 m9e = route->unk9E;
+            s16 m9e = route->brakeLatch;
             if (m9e == 1) {
                 s32 av = coords[0] < 0 ? -coords[0] : coords[0];
                 s32 aval = av * car->speed / 64;
                 route->unk48 = aval;
                 if (g_LaunchSpeedThresholds[route->launchThresholdIndex].sustain < car->speed &&
                     route->launchEnergyThreshold < aval) {
-                    route->state98 = m9e;
+                    route->motionState = m9e;
                     route->unk3E = 0;
                     SetIndexedEffectVoice(0, 0, 0);
                     route->spinRate = -coords[0];

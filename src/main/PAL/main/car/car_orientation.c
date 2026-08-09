@@ -112,7 +112,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   rotationOffset.vz = -player->drive.unk3E - 0x32;
   ApplyMatrix(&axisMatrix, &rotationOffset, &player->motionX);
   player->drive.unkA6 = -1;
-  player->drive.state98 = 3;
+  player->drive.motionState = CAR_MOTION_STANDING_START;
   player->drive.engineLoad = 0;
   player->drive.unk2E = 1;
   player->drive.unk36 = 0;
@@ -234,8 +234,8 @@ void InitPlayerCar(PlayerCarRuntime *car)
   drive->unk88 = g_CarSpec->unk108;
   printf(g_MsgInit5);
   player->shiftState = 0;
-  drive->unk9E = 0;
-  drive->unk9C = 0;
+  drive->brakeLatch = 0;
+  drive->acceleratorLatch = 0;
   g_EngineRpmJitter = 0;
   g_EngineRpm = 0;
   g_EngineRpmSnapshot = 0;

@@ -10,7 +10,7 @@
 /*
  * AI target-speed / drivetrain physics driver (called by UpdatePlayerCar). Reads
  * the per-car spec block g_CarSpec to compute a target speed, applies steering
- * assist and RPM, and dispatches the state98 motion handlers. `base` is the car
+ * assist and RPM, and dispatches the motionState motion handlers. `base` is the car
  * runtime, accessed via raw byte-offset pointer arithmetic (e.g.
  * *(s16*)((u8*)base+0x132)) with the drive sub-block at base+0xBC; the raw
  * offsets are what make it match, so it is intentionally left as void*.
@@ -138,45 +138,45 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     gearCurve = base;
   }
   else
-    if ((car->drive.state98 == 3) && ((car->drive.acceleratorInput < 0x40) || (car->drive.brakeInput >= 0x80)))
+    if ((car->drive.motionState == CAR_MOTION_STANDING_START) && ((car->drive.acceleratorInput < 0x40) || (car->drive.brakeInput >= 0x80)))
   {
     gearCurve = base;
   }
-  leftWheelState = drive->unk9C;
+  leftWheelState = drive->acceleratorLatch;
   if (leftWheelState == 0)
   {
     if (drive->acceleratorInput >= 0x85)
     {
-      drive->unk9C = 1;
+      drive->acceleratorLatch = 1;
     }
   }
   else
     if (leftWheelState == 1)
   {
-    drive->unk9C = 2;
+    drive->acceleratorLatch = 2;
   }
   else
     if (drive->acceleratorInput < 0x7C)
   {
-    drive->unk9C = 0;
+    drive->acceleratorLatch = 0;
   }
-  rightWheelState = drive->unk9E;
+  rightWheelState = drive->brakeLatch;
   if (rightWheelState == 0)
   {
     if (drive->brakeInput >= 0x85)
     {
-      drive->unk9E = 1;
+      drive->brakeLatch = 1;
     }
   }
   else
     if (rightWheelState == 1)
   {
-    drive->unk9E = 2;
+    drive->brakeLatch = 2;
   }
   else
     if (drive->brakeInput < 0x7C)
   {
-    drive->unk9E = 0;
+    drive->brakeLatch = 0;
   }
   frontLoad = drive->acceleratorInput * 0x64;
   frontLoadScaled = frontLoad >> 8;
@@ -186,7 +186,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   }
   gripBudget = 0x17C - frontLoadScaled;
   gripBudget += (drive->brakeInput * 0x64) / 256;
-  if (drive->state98 == 1)
+  if (drive->motionState == CAR_MOTION_TAKEOFF)
   {
     driveCurveMode = drive->unk40;
     pointCurveMode = g_TrackPoints[car->trackPointIndex].arcRef & 3;
@@ -258,7 +258,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   steerLoad = 0;
   loadTorque = drive->unk94;
   netTorque = gearTorque - loadTorque;
-  driveMode = drive->state98;
+  driveMode = drive->motionState;
   accel = 0;
   if (driveMode == 1)
   {
@@ -434,7 +434,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       bandScale *= 2;
     }
   }
-  shiftMode = drive->state98;
+  shiftMode = drive->motionState;
   if ((shiftMode == 1) || (shiftMode == 3))
   {
     drive->jumpTimer = 0;
@@ -601,7 +601,7 @@ shift_interpolation_done:
     drive->unk4C = 0x800 - headingError;
   }
   steerLoad += drive->unk4C / 256;
-  if ((drive->state98 != 1) && (g_PadType == 0x41))
+  if ((drive->motionState != CAR_MOTION_TAKEOFF) && (g_PadType == 0x41))
   {
     assistStep = g_CarSpec->unk10E * drive->unk88 / 1000;
     if (assistStep <= 0)
@@ -661,7 +661,7 @@ shift_interpolation_done:
   {
     steerLoad += frontLoadScaled / 10;
   }
-  if ((g_RacePhase == 2) && (drive->state98 == 3))
+  if ((g_RacePhase == 2) && (drive->motionState == CAR_MOTION_STANDING_START))
   {
     steerLoad += (g_StandingStartSpin & 0x1F) * 5;
   }
@@ -674,7 +674,7 @@ shift_interpolation_done:
       g_DriveBoostTimer = counter - 1;
     }
   }
-  if (drive->state98 == 1)
+  if (drive->motionState == CAR_MOTION_TAKEOFF)
   {
     throttleAccel = (throttleAccel * 4) / 5;
   }
@@ -712,7 +712,7 @@ shift_interpolation_done:
   }
   gearTorqueLate = gearRatio * drive->engineRpm;
   drive->unk94 = gearTorqueLate;
-  if (drive->state98 == 1)
+  if (drive->motionState == CAR_MOTION_TAKEOFF)
   {
     arcPointIndex = car->trackPointIndex;
     arcFlags = g_TrackPoints[arcPointIndex].arcRef;
@@ -810,7 +810,7 @@ shift_interpolation_done:
   }
   if (g_RacePhase >= 2)
   {
-    driveModeLate = drive->state98;
+    driveModeLate = drive->motionState;
     switch (driveModeLate)
     {
       case 0:

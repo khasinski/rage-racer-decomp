@@ -82,7 +82,7 @@ void SteerCarToTrackLine(PlayerCarRuntime *car) {
 }
 
 /*
- * Car motion-state handler for state98 == 1: the one-frame takeoff of a jump.
+ * Car motion-state handler for motionState == CAR_MOTION_TAKEOFF: the one-frame takeoff of a jump.
  * Turns the launch spin UpdateCarDriving seeded into clamped yaw, recomputes revs /
  * tacho / world velocity, then sets route+0x38 = 0x14 and route+0x98 = 2 to hand
  * the car to the airborne handler UpdateCarAirborne. See docs/names.md 1.
@@ -242,7 +242,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                 offset <<= 2;
                 asm volatile("" : :);
                 RAW(drive->jumpTimer) = 0x14;
-                RAW(drive->state98) = 2;
+                RAW(drive->motionState) = CAR_MOTION_AIRBORNE;
                 g_ShiftTargetRpm = lo;
                 RAW(drive->unk3C) = *(u16 *)&g_ShiftTargetRpm - firstHeading;
                 specBase += offset;
@@ -296,7 +296,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
 }
 
 /*
- * Car motion handler for state98 == 2 (airborne / jump): decays velocity and
+ * Car motion handler for motionState == CAR_MOTION_AIRBORNE (airborne / jump): decays velocity and
  * spin, advances the car (AdvanceCarPosition), and lands it when it returns to the
  * ground. The drive sub-block is the GameCarDrive view beginning at +0xBC.
  */
@@ -341,7 +341,7 @@ void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
     r->brakePos =
         rcos(r->launchHeading) * r->launchSpeed / 256 + cosF24 * coords[2] / 4096;
 
-    if (r->unk9C != 1 && r->unk9E != 1 && r->acceleratorInput < 128) {
+    if (r->acceleratorLatch != 1 && r->brakeLatch != 1 && r->acceleratorInput < 128) {
         r->groundedFrames += 1;
     } else {
         r->groundedFrames = 0;
@@ -363,7 +363,7 @@ void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
         r->unk3C = 0;
         r->yawOffset = 0;
         r->launchSpeed = 0;
-        r->state98 = 0;
+        r->motionState = CAR_MOTION_DRIVING;
         r->unk3E = 0;
     }
 }
@@ -416,12 +416,12 @@ void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused) {
         if (g_StandingStartSpin <= 0) {
             route->unk68 = 0;
             route->unk6C = 0;
-            route->state98 = 0;
+            route->motionState = CAR_MOTION_DRIVING;
             SetIndexedEffectVoice(-1, 0, 0);
         }
     } else {
         SetIndexedEffectVoice(-1, 0, 0);
-        route->state98 = 0;
+        route->motionState = CAR_MOTION_DRIVING;
         route->unk68 = 0;
         route->unk6C = 0;
     }

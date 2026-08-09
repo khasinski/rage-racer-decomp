@@ -7,7 +7,7 @@
  * Shared "advance car position/heading" helper. Integrates the car's speed
  * longitudinal speed and acceleration along the car's body yaw into
  * the world position, then recomputes headingAngle. Called by each of the
- * state98 motion handlers. Register pins and the single-param/two-arg call
+ * motionState motion handlers. Register pins and the single-param/two-arg call
  * mismatch are deliberate to match; do not "fix".
  */
 void AdvanceCarPosition(GameCarRuntime *car) {
