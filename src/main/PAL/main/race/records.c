@@ -15,7 +15,7 @@ void InitRecordTables(void) {
     s32 r6;
     register s32 r7 asm("$7");
     RaceRecordAddress r8;
-    s32 r9;
+    RaceRecordAddress r9;
     s32 r10;
     s32 r11;
     s32 r12;
@@ -52,13 +52,13 @@ void InitRecordTables(void) {
                 r10 = r8.byteOffset;
                 r2 = r12 + r18.byteOffset;
                 r6 = r7 * 4;
-                r9 = r6 + r2;
+                r9.byteOffset = r6 + r2;
                 r3 = r5 * 4;
                 r2 = r15 + r17.byteOffset;
                 r2 = r13 + r2;
                 r3 = r3 + r2;
                 do {
-                    r2 = *(s32 *)r9;
+                    r2 = *r9.wordPointer;
                     *(s32 *)r10 = r2;
                     r2 = (s32)&g_DefaultTotalTimes;
                     r2 = r12 + r2;
@@ -100,7 +100,7 @@ void InitRecordTables(void) {
             r13 = 0;
             r12 = 0;
             r11 = r15;
-            r9 = (s32)&g_DefaultRecordTimes;
+            r9.wordPointer = &g_DefaultRecordTimes;
             r8.wordPointer = &g_DefaultRecordRows;
             do {
                 r5 = r11 + r16.byteOffset;
@@ -112,18 +112,18 @@ void InitRecordTables(void) {
                 r3 = *r8.wordPointer;
                 r2 = r4 + rankingBaseAddress.byteOffset;
                 *(s32 *)r2 = r3;
-                r3 = *(s32 *)r9;
+                r3 = *r9.wordPointer;
                 r2 = r4 + r30;
                 *(s32 *)r2 = r3;
                 r3 = *r8.wordPointer;
                 r8.byteOffset += 0xC;
                 r2 = r4 + r18.byteOffset;
                 *(s32 *)r2 = r3;
-                r2 = *(s32 *)r9;
+                r2 = *r9.wordPointer;
                 r4 = r4 + r21;
                 *(s32 *)r4 = r2;
                 r2 = *r17.wordPointer;
-                r9 += 0xC;
+                r9.byteOffset += 0xC;
                 r2 = r12 + r2;
                 recordAddress.pointer = (RaceRecord *)g_RankingRecords;
                 recordAddress.byteOffset += r5;
@@ -156,10 +156,10 @@ void InitRecordTables(void) {
 
     r14 = 0;
     r8.wordPointer = &g_DefaultLapTimes;
-    r9 = (s32)&g_BestSectorTimes;
+    r9.wordPointer = &g_BestSectorTimes[0][0][0];
     do {
         r7 = 0;
-        r4 = r9;
+        r4 = r9.byteOffset;
         do {
             r6 = 0;
             r2 = r7 * 4;
@@ -176,7 +176,7 @@ void InitRecordTables(void) {
         } while (r7 < 4);
         r8.byteOffset += 0x10;
         r14++;
-        r9 += 0x30;
+        r9.byteOffset += 0x30;
     } while (r14 < 2);
 
     __asm__("" : : "r"(r23));
