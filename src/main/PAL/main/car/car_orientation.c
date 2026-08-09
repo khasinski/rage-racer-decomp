@@ -468,8 +468,6 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   Vec4 transformed;
   Matrix rotationMatrix;
   CarCollisionPoint velocityDelta;
-  u8 *diagonalWalk;
-  u8 *pointWalk;
   CarCollisionPoint playerOutline[6];
   CarCollisionPoint playerGrid[4][4];
   CarCollisionPoint opponentSamples[10];
@@ -478,8 +476,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   s32 index;
   s32 sampleIndex;
   s32 quadIndex;
-  s32 pointOffset;
-  s32 cornerOffset;
+  s32 cornerIndex;
   s32 collisionRegion;
   s32 progressDelta;
   s32 playerProgress;
@@ -498,30 +495,18 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   rotation.vy = (u16)car->field_24;
   RotMatrix(&rotation, &rotationMatrix);
   index = 0;
-  pointWalk = (u8 *)(&rotation);
-  diagonalWalk = pointWalk;
-  pointOffset = 0;
   do
   {
-    rotation.vx =
-        ((CarHullPoint *)((u8 *)g_PlayerHullPoints + pointOffset))->x;
-    rotation.vz =
-        ((CarHullPoint *)((u8 *)g_PlayerHullPoints + pointOffset))->z;
+    rotation.vx = g_PlayerHullPoints[index].x;
+    rotation.vz = g_PlayerHullPoints[index].z;
     rotation.vy = 0;
     ApplyMatrix(&rotationMatrix, &rotation, &transformed);
-    ((CarCollisionPoint *)((u8 *)playerOutline + pointOffset))->x =
-        transformed.x >> 1;
-    ((CarCollisionPoint *)((u8 *)playerOutline + pointOffset))->z =
-        transformed.z >> 1;
+    playerOutline[index].x = transformed.x >> 1;
+    playerOutline[index].z = transformed.z >> 1;
     if (index < 4)
     {
-      u8 *diagonalBase = diagonalWalk + 0x58;
-      *(CarCollisionPoint *)((u32) pointOffset + (u32) diagonalBase) =
-          *(CarCollisionPoint *)(pointWalk + 0x40);
+      playerGrid[index][index] = playerOutline[index];
     }
-    pointWalk += 4;
-    diagonalWalk += 16;
-    pointOffset += 4;
     index++;
   }
   while (index < 6);
@@ -537,8 +522,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
   playerGrid[0][3].z = (playerGrid[1][2].z = (playerGrid[2][1].z = (playerGrid[3][0].z = (playerOutline[4].z + playerOutline[5].z) / 2)));
   playerProgress = car->trackProgress;
   index = 0;
-  pointWalk = (u8 *)(&rotation);
-  context = (CollisionContext *)pointWalk;
+  context = (CollisionContext *)&rotation;
   playerTrackOffset = car->field_34;
   playerX = car->y;
   for (; index < 11; index++, opponent++)
@@ -573,17 +557,15 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
           rotation.vz = (u16)opponent->field_28;
           rotation.vy = (u16)opponent->field_24;
           RotMatrix(&rotation, &rotationMatrix);
-          for (cornerOffset = 0; cornerOffset < 16; cornerOffset += 4)
+          for (cornerIndex = 0; cornerIndex < 4; cornerIndex++)
           {
-            rotation.vx =
-                ((CarHullPoint *)((u8 *)g_OpponentHullCorners + cornerOffset))->x;
-            rotation.vz =
-                ((CarHullPoint *)((u8 *)g_OpponentHullCorners + cornerOffset))->z;
+            rotation.vx = g_OpponentHullCorners[cornerIndex].x;
+            rotation.vz = g_OpponentHullCorners[cornerIndex].z;
             rotation.vy = 0;
             ApplyMatrix(&rotationMatrix, &rotation, &transformed);
-            ((CarCollisionPoint *)(((u8 *)(&opponentCorners[0])) + cornerOffset))->x =
+            opponentCorners[cornerIndex].x =
                 (transformed.x >> 1) + (velocityDelta.x / 2);
-            ((CarCollisionPoint *)(((u8 *)(&opponentCorners[0])) + cornerOffset))->z =
+            opponentCorners[cornerIndex].z =
                 (transformed.z >> 1) + (velocityDelta.z / 2);
           }
 

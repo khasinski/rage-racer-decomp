@@ -48,7 +48,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     s32 crash;
     s32 revFlag;
     s32 i;
-    s32 off;
+    s32 cornerIndex;
 
     mode23 = g_PadType == 0x23;
     car->facingBackwards = IsCarFacingBackwards(car);
@@ -259,11 +259,9 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     arr[1] = 0;
     arr[0] = -1;
     arr[1] = -1;
-    for (i = 1, off = 0; off < 16; off += 4, i++) {
-        sv2.vx =
-            ((CarHullPoint *)((u8 *)g_CarCornerOffsets + off))->x * 4;
-        sv2.vz =
-            ((CarHullPoint *)((u8 *)g_CarCornerOffsets + off))->z * 4;
+    for (i = 1, cornerIndex = 0; cornerIndex < 4; cornerIndex++, i++) {
+        sv2.vx = g_CarCornerOffsets[cornerIndex].x * 4;
+        sv2.vz = g_CarCornerOffsets[cornerIndex].z * 4;
         sv2.vy = 0;
         ApplyMatrix(&mA, &sv2, &vout);
         if (arr[0] < vout.x) {
