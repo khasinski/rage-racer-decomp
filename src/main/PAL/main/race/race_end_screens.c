@@ -144,9 +144,9 @@ void EnterRaceEndScreen(void) {
 }
 
 void UpdateRaceEndScreen(void) {
-    s32 v = g_SceneTimer - 1;
+    u32 v = g_SceneTimer - 1;
     g_SceneTimer = v;
-    if ((g_PadPressed & PAD_CONFIRM) && (u32)v >= 261) {
+    if ((g_PadPressed & PAD_CONFIRM) && v >= 261) {
         StartCdVolumeFade(0xFA);
         g_SceneTimer = 0xFF;
     }
