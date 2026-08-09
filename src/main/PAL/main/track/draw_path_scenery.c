@@ -77,10 +77,9 @@ void DrawPathScenery(void) {
 
 
 void UpdateTrackEventSound(s16 arg) {
-    s32 base;
-    s16 *p;
-    s16 *cur;
-    s16 *end;
+    TrackEventSoundZone *p;
+    TrackEventSoundZone *cur;
+    TrackEventSoundZone *end;
     s32 data;
     s16 lo;
     s32 s0, s1, s2, s3;
@@ -89,23 +88,22 @@ void UpdateTrackEventSound(s16 arg) {
     s32 a0v, a1v;
 
     data = 0;
-    base = (s32)g_TrackEventData;
-    p = (s16 *)(base + 0x1B7C);
-    end = (s16 *)(base + 0x1C6C);
+    p = g_TrackEventData->eventSoundZones;
+    end = g_TrackEventData->eventSoundZones + 30;
     cur = p;
     do {
-        lo = cur[0];
+        lo = cur->start;
         if (arg < lo) {
         } else {
-        if (cur[1] >= arg) {
-            data = p[2];
+        if (cur->end >= arg) {
+            data = p->flags;
             break;
         }
         }
         if (lo == -1) {
             break;
         }
-        p = cur + 4;
+        p = cur + 1;
         cur = p;
     } while ((s32)p < (s32)end);
 
@@ -174,20 +172,10 @@ track_event_motion_done:
 }
 
 
-typedef struct TrackSeg {
-    s32 lo;    /* 0x00 */
-    s32 hi;    /* 0x04 */
-    u16 f08;   /* 0x08 */
-    u16 f0A;   /* 0x0A */
-    s32 f0C;   /* 0x0C */
-    s32 f10;   /* 0x10 */
-    s32 f14;   /* 0x14 */
-} TrackSeg;    /* size 0x18 */
-
 void UpdatePointAmbience(s32 arg) {
-    s32 base;
-    s32 startp;
-    TrackSeg *seg;
+    TrackEventData *base;
+    TrackPointAmbienceZone *startp;
+    TrackPointAmbienceZone *seg;
     register s32 v1 asm("v1");
     s32 t0;
     u16 a1raw;
@@ -205,8 +193,8 @@ void UpdatePointAmbience(s32 arg) {
     s32 v0;
     s32 angle, sinv;
 
-    base = (s32)g_TrackEventData;
-    startp = base + 0x1C6C;
+    base = g_TrackEventData;
+    startp = base->pointAmbienceZones;
     if (g_RaceSeries != 0) {
         arg = g_TrackLength - arg;
     }
@@ -216,13 +204,13 @@ void UpdatePointAmbience(s32 arg) {
     s2 = 0;
     s0v = 0;
     sentinel = -1;
-    seg = (TrackSeg *)startp;
+    seg = startp;
 loop:
-    v1 = seg->lo;
-    t0 = seg->hi;
+    v1 = seg->start;
+    t0 = seg->end;
     if (!(v1 == sentinel)) {
-    a1raw = seg->f08;
-    t1raw = seg->f0A;
+    a1raw = seg->fadeInDistance;
+    t1raw = seg->fadeOutDistance;
     if (!(arg < v1)) {
     if (!(t0 < arg)) {
     v0 = a1raw << 16;
@@ -242,9 +230,9 @@ loop:
             s2 = 0x30;
         }
     }
-    s3 = seg->f0C;
-    s4 = seg->f10;
-    s6 = seg->f14;
+    s3 = seg->leftVolume;
+    s4 = seg->rightVolume;
+    s6 = seg->phase;
     goto track_segment_found;
     }
     }

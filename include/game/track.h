@@ -98,6 +98,23 @@ typedef struct TrackRacingLineHint {
     u16 reserved;
 } TrackRacingLineHint;
 
+typedef struct TrackEventSoundZone {
+    s16 start;
+    s16 end;
+    s16 flags;
+    u16 reserved;
+} TrackEventSoundZone;
+
+typedef struct TrackPointAmbienceZone {
+    s32 start;
+    s32 end;
+    u16 fadeInDistance;
+    u16 fadeOutDistance;
+    s32 leftVolume;
+    s32 rightVolume;
+    s32 phase;
+} TrackPointAmbienceZone;
+
 typedef struct TrackEventData {
     s32 trackWalkStart;
     u8 reserved004[0x80];
@@ -107,7 +124,9 @@ typedef struct TrackEventData {
     TrackRivalAiConfig rivalAiConfigs[2][12];
     TrackZone zones[20];
     TrackEventOffsets offsets;
-    u8 reservedB7C[0x1120];
+    u8 reservedB7C[0x1000];
+    TrackEventSoundZone eventSoundZones[30];
+    TrackPointAmbienceZone pointAmbienceZones[2];
     TrackAmbienceZone ambienceZones[4];
 } TrackEventData;
 
