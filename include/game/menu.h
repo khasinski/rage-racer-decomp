@@ -580,7 +580,6 @@ void DrawSpriteString();
 void RampTeamLogoCanvas(s32 from, s32 to);
 void RequestCarModel(s32 carIndex);
 void RequestOptionScreenAssets(void);
-void ResetProgressSlot();
 void ShuffleBgmOrder(void);
 void StartOptionMenuExit(u32 scene);
 void UploadTeamNameTexture();

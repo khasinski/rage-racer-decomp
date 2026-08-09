@@ -7,6 +7,7 @@
 #include "game/replay.h"
 
 struct PlayerCarRuntime;
+struct CarEntry;
 
 /* Grand Prix class index, 0-based; displayed as CLASS(n+1). Also the track
  * tier: course asset index = 0x57 + (course << 1) + (class << 3). OVAL is
@@ -91,6 +92,8 @@ extern GameRaceProgress *g_RaceProgress;
 extern GameRaceProgress g_GrandPrixSave;
 extern GameRaceProgress g_ExtraGrandPrixSave;
 extern GameRaceProgress g_TimeAttackSave;
+
+void ResetProgressSlot(struct CarEntry *cars, GameRaceProgress *progress);
 
 typedef struct GameRaceRanking {
     s16 count;

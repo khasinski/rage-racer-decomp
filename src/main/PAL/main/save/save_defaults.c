@@ -6,7 +6,7 @@
 #include "game/state.h"
 #include "game/save_internal.h"
 
-void ResetProgressSlot(void *slot, s32 *progress) {
+void ResetProgressSlot(CarEntry *slot, GameRaceProgress *progress) {
     CarEntry *dst;
     CarEntry *src;
     s32 i;
@@ -20,11 +20,11 @@ void ResetProgressSlot(void *slot, s32 *progress) {
         i++;
     } while (src++, i < 13);
 
-    progress[1] = 3;
-    progress[0] = 0;
-    progress[2] = 0;
-    progress[3] = -1;
-    progress[4] = 0;
+    progress->carIndex = 3;
+    progress->course = 0;
+    progress->classIndex = 0;
+    progress->maxClassReached = -1;
+    progress->money = 0;
 }
 
 void ResetCourseProgress(s32 mode) {
@@ -74,8 +74,8 @@ void InitSaveDefaults(void) {
     g_TimeAttackSave.classIndex = 0;
     g_TimeAttackSave.maxClassReached = 0;
     g_TimeAttackSave.money = 0;
-    ResetProgressSlot(&g_GrandPrixCars, (s32 *)&g_GrandPrixSave);
-    ResetProgressSlot(&g_ExtraGrandPrixCars, (s32 *)&g_ExtraGrandPrixSave);
+    ResetProgressSlot(g_GrandPrixCars, &g_GrandPrixSave);
+    ResetProgressSlot(g_ExtraGrandPrixCars, &g_ExtraGrandPrixSave);
 
     g_CourseProgress = &g_ExtraGrandPrixCourseProgress;
     ResetCourseProgress(0);

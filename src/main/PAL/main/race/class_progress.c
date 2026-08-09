@@ -133,7 +133,7 @@ void AdvanceGrandPrixClass(void) {
 
             ptr = g_RaceProgress;
             oldValue = ptr->maxClassReached;
-            ResetProgressSlot((s32)g_CarTable, (s32)ptr);
+            ResetProgressSlot(g_CarTable, ptr);
             magic = 0x3B9AC9FF;
             afterPtr = g_RaceProgress;
             afterPtr->money = magic;
