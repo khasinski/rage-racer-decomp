@@ -149,11 +149,11 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
         value = 8;
     } else {
     if (obj->field_98 == 0) {
-        if (obj->field_134 >= g_CarSpec->redline &&
+        if (obj->engineRpm >= g_CarSpec->redline &&
             obj->field_15C >= 0x81 &&
             obj->slideInput.halves.low == 0) {
             ptr = (u8 *)(s32)(u16)obj->field_8C;
-            value = obj->field_132;
+            value = obj->currentGear;
             ptr -= 4;
             obj->field_8C = (s32)ptr;
             ptr = (u8 *)((s32)ptr << 16 >> 16);

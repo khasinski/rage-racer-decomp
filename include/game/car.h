@@ -147,8 +147,8 @@ typedef struct GameCarRuntime {
     s16 field_12C;
     s16 field_12E;
     s16 field_130;
-    s16 field_132;   /* +0x132 current gear */
-    s32 field_134;
+    s16 currentGear;
+    s32 engineRpm;
     s16 routeMarkerIndex;
     s16 routeMarkerActive;
     s32 field_13C;
