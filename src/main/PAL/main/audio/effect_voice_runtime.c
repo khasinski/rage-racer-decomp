@@ -247,6 +247,7 @@ void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
     s32 flag;
     s32 *base;
     SoundModeEntry *entry;
+    SoundModeEntryAddress entryAddress;
 
     if (cue >= 0) {
         if (cue >= 4) {
@@ -368,7 +369,9 @@ after_match:
     asm("" : "=r"(count) : "0"(count));
     base = (s32 *)g_SoundModes;
     entryOffset = loopTableOffset;
-    entry = (SoundModeEntry *)((s32)base + entryOffset);
+    entryAddress.wordPointer = base;
+    entryAddress.byteOffset += entryOffset;
+    entry = entryAddress.pointer;
     cue = 0;
     do {
         if (i != 0) {
@@ -391,7 +394,9 @@ after_match:
             scaledLeft >>= 7;
             *(volatile s32 *)&CHANNEL(cue).volLeft = scaledLeft;
             scaledRight = right * currentB;
-            entry = (SoundModeEntry *)((u8 *)entry + 8);
+            entryAddress.pointer = entry;
+            entryAddress.byteOffset += sizeof(SoundModeSlot);
+            entry = entryAddress.pointer;
             if (scaledRight < 0) {
                 scaledRight += 0x7F;
             }
@@ -409,7 +414,9 @@ after_match:
             *(volatile s32 *)&CHANNEL(cue).volRight = currentB;
             /* Load-bearing: removal changes eight linked scheduler words. */
             asm volatile("");
-            entry = (SoundModeEntry *)((s32)entry + 8);
+            entryAddress.pointer = entry;
+            entryAddress.byteOffset += sizeof(SoundModeSlot);
+            entry = entryAddress.pointer;
             i++;
         }
         cue += 0x18;

@@ -127,6 +127,12 @@ typedef struct SoundModeEntry {
     SoundModeSlot slots[2];
 } SoundModeEntry;
 
+typedef union SoundModeEntryAddress {
+    s32 byteOffset;
+    s32 *wordPointer;
+    SoundModeEntry *pointer;
+} SoundModeEntryAddress;
+
 extern SoundModeEntry g_SoundModes[];
 
 /*
