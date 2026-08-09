@@ -250,7 +250,7 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
     s32 scene;
     u32 slideSign;
 
-    ai = (GameCarAiBlock *)&obj->aiEnabled;
+    ai = GetCarAiBlock(obj);
     if (obj->slideInput.value == 0) {
         if (!(obj->yawRate != 0)) {
         if (carIndex != 0) {
@@ -339,11 +339,11 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
     entry = &g_TrackEventData->racingLineHints[scene][index];
 
     if (target < 0x20) {
-        state = (GameCarAiBlock *)&objReg->aiEnabled;
+        state = GetCarAiBlock(objReg);
         objReg->routeIndex = 0;
         target = 0;
     } else {
-        state = (GameCarAiBlock *)&objReg->aiEnabled;
+        state = GetCarAiBlock(objReg);
     }
 
     if (target < entry->start) {
@@ -439,7 +439,7 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
   raw = car->trackProgress;
   rpm = raw >> 4;
   g0 = car->routeMarkerIndex;
-  sub_R9 = (GameCarAiBlock *)&car->aiEnabled;
+  sub_R9 = GetCarAiBlock(car);
   if (rpm < 0x20)
   {
     car->routeMarkerIndex = 0;

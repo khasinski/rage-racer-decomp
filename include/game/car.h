@@ -591,6 +591,10 @@ typedef struct GameCarAiBlock {
     u8 padA4[0x3C];
 } GameCarAiBlock;
 
+static inline GameCarAiBlock *GetCarAiBlock(GameCarRuntime *car) {
+    return (GameCarAiBlock *)&car->aiEnabled;
+}
+
 typedef union RaceGridSlot {
     s32 value;
     struct {

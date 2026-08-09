@@ -20,7 +20,7 @@ void ClampCarLateralOffset(GameCarRuntime *car, s32 carIndex) {
     s32 trackIndex;
 
     current = carReg->aiLateralOffset;
-    state = (GameCarAiBlock *)&carReg->aiEnabled;
+    state = GetCarAiBlock(carReg);
     magnitude = current;
     if (current < 0) {
         magnitude = -current;

@@ -39,7 +39,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
 
     lateral = car->aiLateralOffset;
     offset = car->trackPointIndex;
-    ai = (GameCarAiBlock *)&car->aiEnabled;
+    ai = GetCarAiBlock(car);
     car->reservedDC = 0;
 
     if (ReadStableRaceSeries() != 0) {
@@ -182,7 +182,7 @@ void UpdateRaceCars(void) {
     walk = g_Cars;
     do {
         if (walk->activeFlag != -1) {
-            drive = (GameCarAiBlock *)&base->aiEnabled;
+            drive = GetCarAiBlock(base);
             if (walk->boostTimer > 0) {
                 if (walk->boostAccelerationThreshold < walk->boostTimer && walk->speed >= 0x321) {
                     walk->acceleration = 0;
@@ -215,7 +215,7 @@ void UpdateRaceCars(void) {
     pm2 = &m2;
     walk = g_Cars;
     do {
-        drive = (GameCarAiBlock *)&base->aiEnabled;
+        drive = GetCarAiBlock(base);
         if (walk->activeFlag != -1) {
             walk->baseBodyYaw = walk->bodyYaw;
             t = rsin(walk->headingAngle) * walk->speed;
@@ -434,7 +434,7 @@ void UpdateAttractCars(void) {
         sub = g_Cars;
         do {
         if (sub->activeFlag != -1) {
-            drive = (GameCarAiBlock *)&car->aiEnabled;
+            drive = GetCarAiBlock(car);
 
             if (sub->acceleration < sub->accelerationLimit) {
                 sub->acceleration = sub->accelerationStep + sub->acceleration;
@@ -456,7 +456,7 @@ void UpdateAttractCars(void) {
         car = g_Cars;
         base = g_Cars;
         do {
-        drive = (GameCarAiBlock *)&car->aiEnabled;
+        drive = GetCarAiBlock(car);
 
         if (base->activeFlag != -1) {
             s32 t;

@@ -16,7 +16,7 @@ enum TrafficAvoidanceAnchorIndex {
 };
 
 void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
-    GameCarAiBlock *state = (GameCarAiBlock *)&car->aiEnabled;
+    GameCarAiBlock *state = GetCarAiBlock(car);
     s32 acc8 = 0;
     s32 acc9 = 0;
     register s32 i asm("$10") = 0;

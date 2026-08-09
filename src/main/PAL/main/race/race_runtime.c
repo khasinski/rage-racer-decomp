@@ -613,7 +613,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
   }
   __asm__ volatile("");
   c = ent2_R7->boostAccelerationThreshold;
-  sub_R6 = (GameCarAiBlock *)&ent2_R7->aiEnabled;
+  sub_R6 = GetCarAiBlock(ent2_R7);
   ent2_R7->boostTimer = 0;
   if (c < 0)
   {

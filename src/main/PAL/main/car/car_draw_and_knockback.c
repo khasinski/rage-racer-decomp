@@ -148,7 +148,7 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
 
     obj = car;
 
-    state = (GameCarAiBlock *)&obj->aiEnabled;
+    state = GetCarAiBlock(obj);
     if (g_RacePhase < 2) {
         value = 8;
     } else {
