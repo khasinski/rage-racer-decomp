@@ -143,7 +143,11 @@ typedef union GameSceneAssetAddress {
 } GameSceneAssetAddress;
 
 static __inline__ void *GetSceneAssetAddress(GameSceneAssetHeader *header, s32 offset) {
-    return (u8 *)header + offset;
+    GameSceneAssetAddress address;
+
+    address.header = header;
+    address.byteOffset += offset;
+    return address.pointer;
 }
 
 /*
