@@ -11,6 +11,7 @@
 
 void DecodeFmvFrame(void) {
     s32 value;
+    u32 sector;
     u8 streamLoc[16];
 
     g_SceneTimer++;
@@ -24,7 +25,8 @@ void DecodeFmvFrame(void) {
     while (PresentFmvFrame(&g_FmvDecodeContext) == -1) {
         value = StGetBackloc(streamLoc);
         printf(g_MsgFmvSector, value);
-        if ((g_StreamSectorCount < (u32)value) || (value < 0)) {
+        sector = value;
+        if ((g_StreamSectorCount < sector) || (value < 0)) {
             StartStreamRead(g_StreamLoc);
         } else {
             StartStreamRead(streamLoc);
