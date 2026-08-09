@@ -424,10 +424,14 @@ after_match:
 }
 
 #define UPDATE_BASIC_EFFECT_VOLUME()                                  \
-    raw = *(s32 *)((u8 *)&g_MusicChannels[0].volLeft + offset);                              \
+    updateLeftAddress.wordPointer = &g_MusicChannels[0].volLeft;      \
+    updateLeftAddress.byteOffset += offset;                           \
+    raw = *updateLeftAddress.wordPointer;                             \
     scale = g_SoundScale.scale;                                                \
     left = raw * scale;                                                \
-    raw = *(s32 *)((u8 *)&g_MusicChannels[0].volRight + offset);                              \
+    updateRightAddress.wordPointer = &g_MusicChannels[0].volRight;    \
+    updateRightAddress.byteOffset += offset;                          \
+    raw = *updateRightAddress.wordPointer;                            \
     voice = i + 8;                                                     \
     if (left < 0) {                                                    \
         left += 0x7F;                                                  \
@@ -502,6 +506,8 @@ void UpdateBasicEffectVoices(void) {
     s32 right;
     MusicChannelAddress leftToneAddress;
     MusicChannelAddress rightToneAddress;
+    MusicChannelAddress updateLeftAddress;
+    MusicChannelAddress updateRightAddress;
 
     i = 0;
     neg = -1;
