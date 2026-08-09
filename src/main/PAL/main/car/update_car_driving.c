@@ -68,7 +68,7 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
     if (route->unk9C == 1) {
         route->unk48 = car->speed * route->unk44;
         route->unk44 = 0;
-        if ((s32) g_LaunchSpeedThresholds[route->unk28].initial < car->speed &&
+        if (g_LaunchSpeedThresholds[route->unk28].initial < car->speed &&
             route->unk48 > route->unk84) {
             route->state98 = 1;
             route->unk3E = 0;
@@ -87,7 +87,7 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
                 s32 av = coords[0] < 0 ? -coords[0] : coords[0];
                 s32 aval = av * car->speed / 64;
                 route->unk48 = aval;
-                if ((s32) g_LaunchSpeedThresholds[route->unk28].sustain < car->speed &&
+                if (g_LaunchSpeedThresholds[route->unk28].sustain < car->speed &&
                     route->unk84 < aval) {
                     route->state98 = m9e;
                     route->unk3E = 0;
