@@ -16,6 +16,11 @@ typedef struct RaceRecord {
     s16 unused;
 } RaceRecord;
 
+typedef union RaceRecordAddress {
+    s32 byteOffset;
+    RaceRecord *pointer;
+} RaceRecordAddress;
+
 typedef struct TeamLogoSample {
     u16 clut[2][16];
     u16 canvas[64][16];

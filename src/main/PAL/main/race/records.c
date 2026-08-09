@@ -7,6 +7,7 @@
 #include "game/records_internal.h"
 
 void InitRecordTables(void) {
+    RaceRecordAddress recordAddress;
     register s32 r2 asm("$2");
     s32 r3;
     register s32 r4 asm("$4");
@@ -124,18 +125,26 @@ void InitRecordTables(void) {
                 r2 = *(s32 *)r17;
                 r9 += 0xC;
                 r2 = r12 + r2;
-                ((RaceRecord *)((u8 *)g_RankingRecords + r5))->raceTime = r2;
+                recordAddress.pointer = (RaceRecord *)g_RankingRecords;
+                recordAddress.byteOffset += r5;
+                recordAddress.pointer->raceTime = r2;
                 r2 = r24 + (s32)&g_DefaultTotalTimes;
                 r2 = r25 + r2;
                 r2 = *(s32 *)r2;
                 r12 += 0x7D0;
                 r2 = r13 + r2;
-                ((RaceRecord *)((u8 *)g_TimeRecords + r5))->raceTime = r2;
+                recordAddress.pointer = (RaceRecord *)g_TimeRecords;
+                recordAddress.byteOffset += r5;
+                recordAddress.pointer->raceTime = r2;
                 r2 = *(u16 *)r10;
                 r13 += 0x2710;
-                ((RaceRecord *)((u8 *)g_RankingRecords + r5))->carIndex = r2;
+                recordAddress.pointer = (RaceRecord *)g_RankingRecords;
+                recordAddress.byteOffset += r5;
+                recordAddress.pointer->carIndex = r2;
                 r2 = *(u16 *)r10;
-                ((RaceRecord *)((u8 *)g_TimeRecords + r5))->carIndex = r2;
+                recordAddress.pointer = (RaceRecord *)g_TimeRecords;
+                recordAddress.byteOffset += r5;
+                recordAddress.pointer->carIndex = r2;
                 r10 += 0xC;
             } while (r6 < 5);
             r7++;
