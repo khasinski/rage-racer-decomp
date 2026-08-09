@@ -175,8 +175,8 @@ void InsertRaceRecords(void) {
     s32 *entry;
     s32 mode;
     register s32 base_addr asm("$2");
-    u8 *name_base;
-    u8 *name_base2;
+    RaceRecordAddress rankingBaseAddress;
+    RaceRecordAddress timeBaseAddress;
     s32 letter;
     s32 code;
     s32 letter2;
@@ -203,7 +203,7 @@ void InsertRaceRecords(void) {
     }
 
     i = 0;
-    name_base = (u8 *)g_RankingRecords;
+    rankingBaseAddress.pointer = &g_RankingRecords[0][0][0];
     letter = 0x41;
     code = 0xB;
     row_offset = 0;
@@ -219,7 +219,8 @@ void InsertRaceRecords(void) {
                     entry_addr = j * 0x10;
                     j--;
                     mode = g_CourseIndex;
-                    score_offset = (g_GrandPrixSeries * 0x140) + (s32)name_base;
+                    score_offset =
+                        (g_GrandPrixSeries * 0x140) + rankingBaseAddress.byteOffset;
                     base_addr = (mode * 0x50) + score_offset;
                     entry_addr += base_addr;
                     entry = (s32 *)entry_addr;
@@ -251,7 +252,7 @@ void InsertRaceRecords(void) {
 
                 score_offset = fill_offset + (g_CourseIndex * 0x50);
                 score_offset += g_GrandPrixSeries * 0x140;
-                nameAddress.bytePointer = name_base;
+                nameAddress.bytePointer = rankingBaseAddress.bytePointer;
                 nameAddress.byteOffset = score_offset + nameAddress.byteOffset;
                 nameAddress.byteOffset = nameAddress.byteOffset + j;
                 *(volatile u8 *)nameAddress.bytePointer = letter;
@@ -275,7 +276,7 @@ void InsertRaceRecords(void) {
 
     g_RankingInsertRow = i;
     i = 0;
-    name_base2 = (u8 *)g_TimeRecords;
+    timeBaseAddress.pointer = &g_TimeRecords[0][0][0];
     letter2 = 0x41;
     code2 = 0xB;
     row_offset = 0;
@@ -296,7 +297,8 @@ void InsertRaceRecords(void) {
                     entry_addr = j * 0x10;
                     j--;
                     mode = g_CourseIndex;
-                    score_offset = (g_GrandPrixSeries * 0x140) + (s32)name_base2;
+                    score_offset =
+                        (g_GrandPrixSeries * 0x140) + timeBaseAddress.byteOffset;
                     base_addr = (mode * 0x50) + score_offset;
                     entry_addr += base_addr;
                     entry = (s32 *)entry_addr;
@@ -328,7 +330,7 @@ void InsertRaceRecords(void) {
 
                 score_offset = fill_offset + (g_CourseIndex * 0x50);
                 score_offset += g_GrandPrixSeries * 0x140;
-                nameAddress.bytePointer = name_base2;
+                nameAddress.bytePointer = timeBaseAddress.bytePointer;
                 nameAddress.byteOffset = score_offset + nameAddress.byteOffset;
                 nameAddress.byteOffset = nameAddress.byteOffset + j;
                 *(volatile u8 *)nameAddress.bytePointer = letter2;
