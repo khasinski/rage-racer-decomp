@@ -459,7 +459,7 @@ s32 DrawCarShopScreen(s32 step) {
     amount = value << 16;
     amount >>= 16;
     limit = g_PlayerCarIndex;
-    phase = (u8)((u32)g_CarShopScreenProgress / 4);
+    phase = (u8)(g_CarShopScreenProgress / 4U);
     channel = limit;
     DrawCarEngineSpec(amount, phase, channel);
 

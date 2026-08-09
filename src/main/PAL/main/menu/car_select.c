@@ -164,7 +164,7 @@ s32 DrawCarSelectScreen(s32 step) {
         }
     }
 
-    v = (u32) g_CarSelectFadeAccum / 4;
+    v = g_CarSelectFadeAccum / 4U;
     col = v & 0xff;
     DrawRectOutline(buf, 0xa3, 0x180, 0x1a, 0x19, col, col, col, 0x20);
 
@@ -644,7 +644,7 @@ s32 DrawCustomizeScreen(s32 step) {
         value = product / 2048;
     }
 
-    DrawCarEngineSpec((s16)value, ((u32)g_CustomizeFadeAccum / 4) & 0xFF, g_PlayerCarIndex);
+    DrawCarEngineSpec((s16)value, (g_CustomizeFadeAccum / 4U) & 0xFF, g_PlayerCarIndex);
     return g_CustomizeFadeAccum;
 }
 

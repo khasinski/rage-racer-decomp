@@ -21,7 +21,7 @@ void DrawCarNamePlate(s32 step, s32 model, s32 grade) {
         }
     }
 
-    shade = (u32)g_CarNamePlateFade / 4;
+    shade = g_CarNamePlateFade / 4U;
     DrawSprite(ot, 0x100, 0x168, 0x20, 0x10, 0x7C, 0x7C, (u8)shade,
                   (u8)shade, (u8)shade, 0x244, 0, 1, 0x3B);
 
