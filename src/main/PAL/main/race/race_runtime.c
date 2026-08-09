@@ -480,7 +480,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     ent->modelIndex = av;
     val122 = slots[pos].halves.modelId;
     scene = g_RaceSeries;
-    ent->field_122 = val122;
+    ent->rivalModelId = val122;
     {
         TrackRivalStart *p1;
 
@@ -567,7 +567,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
 
         height = ent->trackLateralOffset;
         ent->avoidanceStep = 0;
-        ent->field_FC = height;
+        ent->initialLateralOffset = height;
         ent->avoidanceTargetOffset = height;
         ent->aiLateralOffset = height;
     }

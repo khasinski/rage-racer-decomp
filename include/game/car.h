@@ -131,7 +131,7 @@ typedef struct GameCarRuntime {
     CarSlideInput slideInput;
     s32 yawRate;
     s32 field_F8;
-    s32 field_FC;
+    s32 initialLateralOffset;
     s32 routeIndex;
     s16 avoidanceActive;
     u8 pad106[2];
@@ -147,7 +147,7 @@ typedef struct GameCarRuntime {
     s16 aiLateralOffset;
     s16 avoidanceTargetOffset;
     s16 avoidanceStep;
-    s16 field_122;
+    s16 rivalModelId;
     s16 targetSpeed;
     s16 accelerationStep;
     s16 boostAccelerationThreshold;
