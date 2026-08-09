@@ -92,11 +92,11 @@ typedef struct GameCarRuntime {
     s16 motionValue;
     s16 collisionFlag;
     s16 tiltCounter;
-    s16 field_8E;
+    s16 reserved8E;
     s16 verticalPitch;
     s16 bodyKickOffset;
     s16 verticalRoll;
-    s16 field_96;
+    s16 reserved96;
     s16 verticalMotionState;
     s16 verticalMotionTimer;
     s16 verticalMotionRate;
@@ -465,11 +465,11 @@ typedef struct PlayerCarRuntime {
     s16 motionValue;
     s16 collisionFlag;
     s16 tiltCounter;
-    s16 field_8E;
+    s16 reserved8E;
     s16 verticalPitch;
     s16 bodyKickOffset;
     s16 verticalRoll;
-    s16 field_96;
+    s16 reserved96;
     s16 shiftState;
     u16 shiftTick;
     s16 shiftRef;

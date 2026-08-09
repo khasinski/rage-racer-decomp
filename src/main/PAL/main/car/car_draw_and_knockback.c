@@ -8,7 +8,7 @@
 
 
 /*
- * Updates the car's skid/tilt counter (tiltCounter / field_8E), clamping it
+ * Updates the car's skid/tilt counter, clamping it
  * against the spec block's redline value (g_CarSpec + 0x106). Register-pinned,
  * goto-structured; the raw drive-block reads (+0xA2 / +0x34) preserve the match.
  */
@@ -125,11 +125,11 @@ void ClearCarMotionState(GameCarRuntime *car) {
     car->velocityX = 0;
     car->velocityZ = 0;
     car->tiltCounter = 0;
-    car->field_8E = 0;
+    car->reserved8E = 0;
     car->verticalPitch = 0;
     car->bodyKickOffset = 0;
     car->verticalRoll = 0;
-    car->field_96 = 0;
+    car->reserved96 = 0;
     car->verticalMotionState = 0;
     car->verticalMotionTimer = 0;
     car->verticalMotionRate = 0;
