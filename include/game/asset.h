@@ -126,6 +126,11 @@ typedef struct GameSceneAssetHeader {
     s32 offsets[11];
 } GameSceneAssetHeader;
 
+typedef union GameSceneAssetOffsetAddress {
+    s32 *pointer;
+    volatile s32 *volatilePointer;
+} GameSceneAssetOffsetAddress;
+
 typedef union GameSceneAssetAddress {
     s32 byteOffset;
     u8 *bytes;
