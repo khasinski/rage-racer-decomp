@@ -7,6 +7,11 @@
 #include "game/track_internal.h"
 #include "game/render.h"
 
+typedef union DrivetrainWheelSpeed {
+  s32 value;
+  u32 unsignedValue;
+} DrivetrainWheelSpeed;
+
 /*
  * Note on `gearCurve`: m2c merged two values into one temporary, so it starts
  * out as the per-gear torque curve pointer and is later reused to carry the
@@ -103,7 +108,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   s32 torqueLate;
   s32 coefficientBase;
   s32 coefficient;
-  s32 wheelSpeedScaled;
+  DrivetrainWheelSpeed wheelSpeedScaled;
   u16 arcFlags;
   u16 currentSpeed;
   u16 steerBiasNext;
@@ -468,9 +473,9 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       gearCurve.byteOffset = (car->speed * 0x2710) /
                             (((GameCarSpec *)(config.bytes - (-(targetGearAgain * 4))))->gearRatio[0] * 0x490 / 160);
       wheelSpeed = (u16)car->acceleration;
-      wheelSpeedScaled = wheelSpeed;
+      wheelSpeedScaled.value = wheelSpeed;
       assistEnabled = drive->manual;
-      drive->engineLoad = wheelSpeedScaled;
+      drive->engineLoad = wheelSpeedScaled.value;
       g_ShiftTargetSpeed = gearCurve.byteOffset;
       if (assistEnabled != 0)
       {
@@ -484,29 +489,29 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
           if (targetGearCheck == 4)
           {
             gradePenalty = (-g_RoadGrade) / 120;
-      wheelSpeedScaled = (u32)wheelSpeedScaled << 16;
-            wheelSpeedScaled >>= 16;
+      wheelSpeedScaled.unsignedValue <<= 16;
+            wheelSpeedScaled.value >>= 16;
           }
           else
             if (targetGearCheck == 5)
           {
             gradePenalty = (-g_RoadGrade) / 48;
-      wheelSpeedScaled = (u32)wheelSpeedScaled << 16;
-            wheelSpeedScaled >>= 16;
+      wheelSpeedScaled.unsignedValue <<= 16;
+            wheelSpeedScaled.value >>= 16;
           }
           else
             if (targetGearCheck >= 6)
           {
             gradePenalty = (g_RoadGrade * (-7)) / 240;
-        wheelSpeedScaled = (u32)wheelSpeedScaled << 16;
-            wheelSpeedScaled >>= 16;
+        wheelSpeedScaled.unsignedValue <<= 16;
+            wheelSpeedScaled.value >>= 16;
           }
           else
           {
             goto grade_adjust_done;
           }
           gradeScale = 0x64 - gradePenalty;
-          drive->engineLoad = (u16)((wheelSpeedScaled * gradeScale) / 100);
+          drive->engineLoad = (u16)((wheelSpeedScaled.value * gradeScale) / 100);
           g_ShiftTargetSpeed = (gradeScale * gearCurve.byteOffset) / 100;
         }
       }
