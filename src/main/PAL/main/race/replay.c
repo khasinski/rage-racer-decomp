@@ -69,7 +69,7 @@ void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *r
             rivalObj->wheelRotation = AVG(big->wheelRotation1, rivalObj->wheelRotation);
             rivalObj->steeringAngle = AVG(big->steeringAngle1, rivalObj->steeringAngle);
         }
-        playerObj->field8C = big->field20;
+        playerObj->tiltCounter = big->tiltCounter;
     } else {
         playerObj->modelIndex = g_ReplayPlayerModel.model;
         if ((subframe & 1) == 0) {
@@ -101,7 +101,7 @@ void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *r
             playerObj->wheelRotation = AVG(small->wheelRotation, playerObj->wheelRotation);
             playerObj->steeringAngle = AVG(small->steeringAngle, playerObj->steeringAngle);
         }
-        playerObj->field8C = small->field10;
+        playerObj->tiltCounter = small->tiltCounter;
     }
 }
 

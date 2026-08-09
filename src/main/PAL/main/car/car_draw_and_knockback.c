@@ -8,7 +8,7 @@
 
 
 /*
- * Updates the car's skid/tilt counter (field_8C / field_8E), clamping it
+ * Updates the car's skid/tilt counter (tiltCounter / field_8E), clamping it
  * against the spec block's redline value (g_CarSpec + 0x106). Register-pinned,
  * goto-structured; the raw drive-block reads (+0xA2 / +0x34) preserve the match.
  */
@@ -124,7 +124,7 @@ void ClearCarMotionState(GameCarRuntime *car) {
     car->motionTimer = 0;
     car->velocityX = 0;
     car->velocityZ = 0;
-    car->field_8C = 0;
+    car->tiltCounter = 0;
     car->field_8E = 0;
     car->field_90 = 0;
     car->field_92 = 0;
@@ -152,16 +152,16 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
         if (obj->engineRpm >= g_CarSpec->redline &&
             obj->field_15C >= 0x81 &&
             obj->slideInput.halves.low == 0) {
-            ptr = (u8 *)(s32)(u16)obj->field_8C;
+            ptr = (u8 *)(s32)(u16)obj->tiltCounter;
             value = obj->currentGear;
             ptr -= 4;
-            obj->field_8C = (s32)ptr;
+            obj->tiltCounter = (s32)ptr;
             ptr = (u8 *)((s32)ptr << 16 >> 16);
             limit = 9 - value;
             value = (limit << 2) + limit;
             value = -value;
             if ((s32)ptr < value) {
-                obj->field_8C = value;
+                obj->tiltCounter = value;
             }
             return;
         }
@@ -169,25 +169,25 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
         if (((GameCarAiBlock *)ptr)->field_15E >= 0x81 ||
             ((GameCarAiBlock *)ptr)->slideInput.halves.low > 0) {
             if (obj->speed >= 0x51) {
-                value = (u16)obj->field_8C + 2;
-                obj->field_8C = value;
+                value = (u16)obj->tiltCounter + 2;
+                obj->tiltCounter = value;
                 value = (s16)value;
                 if (value >= 9) {
-                    obj->field_8C = 8;
+                    obj->tiltCounter = 8;
                 }
                 return;
             }
         }
     }
 
-    limit = obj->field_8C;
+    limit = obj->tiltCounter;
     value = limit * 3;
     if (value < 0) {
         value += 3;
     }
     value >>= 2;
     }
-    obj->field_8C = value;
+    obj->tiltCounter = value;
 }
 
 void ApplyCarKnockback(GameCarRuntime *car) {

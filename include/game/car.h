@@ -83,7 +83,7 @@ typedef struct GameCarRuntime {
     s16 motionModeTimer;
     s16 motionValue;
     s16 field_8A;
-    s16 field_8C;
+    s16 tiltCounter;
     s16 field_8E;
     s16 field_90;
     s16 field_92;
@@ -439,7 +439,7 @@ typedef struct PlayerCarRuntime {
     s16 motionModeTimer;
     s16 motionValue;
     s16 field_8A;
-    s16 field_8C;
+    s16 tiltCounter;
     s16 field_8E;
     s16 field_90;
     s16 field_92;

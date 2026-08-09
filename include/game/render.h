@@ -231,7 +231,7 @@ typedef struct GameRenderObject {
     s16 motionModeTimer;
     s16 motionValue;
     s16 field_8A;
-    s16 field_8C;
+    s16 tiltCounter;
     s16 field_8E;
     s16 field_90;
     s16 field_92;
@@ -286,7 +286,7 @@ typedef struct GameRenderSourcePoint {
     u8 pad4A[0x16];
     u16 modelY;
     u8 pad62[0x2A];
-    s16 field_8C;
+    s16 tiltCounter;
     u8 pad8E[0x20];
     s16 modelIndex;
 } GameRenderSourcePoint;
