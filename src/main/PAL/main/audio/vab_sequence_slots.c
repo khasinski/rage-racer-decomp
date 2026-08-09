@@ -11,15 +11,15 @@ s32 OpenVabSequenceSlot(s32 slot, u8 *header, u8 *body, void *seq) {
     s32 vabIdAgain;
 
     g_AudioLoadSlot = slot;
-    g_VabIds[slot] = SsVabOpenHeadSticky(header, -1, g_VabSpuAddress[slot]);
-    vabId = g_VabIds[slot];
+    g_SoundScale.vabIds[slot] = SsVabOpenHeadSticky(header, -1, g_VabSpuAddress[slot]);
+    vabId = g_SoundScale.vabIds[slot];
     if (vabId == -1) {
         printf(g_MsgSeqVabOpenHeadError);
         BiosExit(1);
     }
 
-    g_VabIds[slot] = SsVabTransBody(body, vabId);
-    vabIdAgain = g_VabIds[slot];
+    g_SoundScale.vabIds[slot] = SsVabTransBody(body, vabId);
+    vabIdAgain = g_SoundScale.vabIds[slot];
     if (vabIdAgain == -1) {
         printf(g_MsgSeqVabTransBodyError);
         BiosExit(1);
@@ -57,7 +57,7 @@ s32 CloseAudioSlot(s32 slot) {
 void StartVabSlotVoice(s32 voice, s32 unused, s16 vabSlot) {
     VabSlotVoice *slotVoice = &g_VabSlotVoices[voice];
 
-    SsUtKeyOnV((s16)voice, g_VabIds[(s16)vabSlot], slotVoice->tone, 0, 0x3C, 0,
+    SsUtKeyOnV((s16)voice, g_SoundScale.vabIds[(s16)vabSlot], slotVoice->tone, 0, 0x3C, 0,
                0, 0);
 }
 

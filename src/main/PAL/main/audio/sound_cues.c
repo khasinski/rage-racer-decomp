@@ -600,5 +600,5 @@ void SetSoundSlotTone(s32 slot, s32 bend, s32 volume, s32 toneIndex, u16 vabSlot
     }
     SsUtSetVVol((s16)voiceCopy, left, right);
     voice = slot + 0xE;
-    SsUtPitchBend((s16)voice, g_VabIds[(s16)vab], g_SoundSlotTone[slot][toneIndex], 0x3C, (s16)bend);
+    SsUtPitchBend((s16)voice, g_SoundScale.vabIds[(s16)vab], g_SoundSlotTone[slot][toneIndex], 0x3C, (s16)bend);
 }

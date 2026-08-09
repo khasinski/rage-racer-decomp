@@ -15,18 +15,18 @@ s32 StartAudioSlotLoad(s32 slot, u8 *header, u8 *body, u16 *table) {
     }
 
     g_AudioLoadSlot = slot;
-    g_VabIds[slot] = SsVabOpenHeadSticky(header, -1, g_VabSpuAddress[slot]);
+    g_SoundScale.vabIds[slot] = SsVabOpenHeadSticky(header, -1, g_VabSpuAddress[slot]);
     /* Reading the slot back is what keeps the opened id in a register: the
        store is a halfword, so the reload is folded into a sign-extend of the
        call result and that value is still there to hand to SsVabTransBody. */
-    vabId = g_VabIds[slot];
+    vabId = g_SoundScale.vabIds[slot];
     if (vabId == -1) {
         printf(g_MsgVabOpenHeadError);
         BiosExit(1);
     }
 
-    g_VabIds[slot] = SsVabTransBody(body, vabId);
-    if (g_VabIds[slot] == -1) {
+    g_SoundScale.vabIds[slot] = SsVabTransBody(body, vabId);
+    if (g_SoundScale.vabIds[slot] == -1) {
         printf(g_MsgVabTransBodyError);
         BiosExit(1);
     }
@@ -116,7 +116,7 @@ s32 StartVabTransferWithTable(u8 *header, u8 *body, u16 *table) {
        sequence, and every shape tried (pointer vs array vs global, local copies
        of every parameter, declaration order, the check reading the pointer or
        the global or a second local) leaves 23 against 24 unchanged. */
-    register s16 *vabIdPtr asm("$18") = &g_VabIds[3];
+    register s16 *vabIdPtr asm("$18") = &g_SoundScale.vabIds[3];
     s16 vabId;
 
     g_AudioLoadSlot = 3;
@@ -144,7 +144,7 @@ s32 StartVabTransferWithTable(u8 *header, u8 *body, u16 *table) {
 
 s32 LoadExtraVabSlotWithTable(u8 *header, u8 *body, u16 *table) {
     /* Same allocation tie as StartVabTransferWithTable: see the note there. */
-    register s16 *vabIdPtr asm("$18") = &g_VabIds[3];
+    register s16 *vabIdPtr asm("$18") = &g_SoundScale.vabIds[3];
     s16 vabId;
     s32 flags;
 
@@ -184,7 +184,7 @@ void CloseExtraVabSlot(void) {
         SsUtReverbOff();
         SsUtSetReverbDepth(0x28, 0x28);
         SsUtKeyOffV((s16)liveSlot);
-        SsVabClose(g_VabIds[5]);
+        SsVabClose(g_SoundScale.vabIds[5]);
     }
 }
 
@@ -203,8 +203,8 @@ void ShutdownSoundSystem(void) {
             i++;
         }
         VSync(2);
-        SsVabClose(g_VabIds[4]);
-        SsVabClose(g_VabIds[5]);
+        SsVabClose(g_SoundScale.vabIds[4]);
+        SsVabClose(g_SoundScale.vabIds[5]);
         SsStopSoundTick();
         SsQuit();
     }
