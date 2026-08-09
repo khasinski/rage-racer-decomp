@@ -34,25 +34,20 @@ void DrawRaceHudLabels(s32 mode) {
     *scratch = QueueDrawModePrim(g_DrawBuffer + 0xCC, *scratch, 9);
 }
 
-/*
- * Packs a TILE (SetTile + AddPrim) at `prim`, links it into `ot` and returns
- * the cursor advanced past the 0x10-byte packet. Declared per translation unit
- * rather than in a header: callers disagree on whether `ot`/`prim` are pointers
- * or s32, and gcc 2.6.3 will not take both against one prototype.
- */
 u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) {
+    TILE *tile = (TILE *)prim;
     u8 *oldPrim;
 
-    SetTile(prim);
+    SetTile(tile);
 
     oldPrim = prim;
-    *(s16 *)(prim + 0x08) = x;
-    *(s16 *)(prim + 0x0A) = y;
-    *(s16 *)(prim + 0x0C) = w;
-    *(s16 *)(prim + 0x0E) = h;
-    prim[0x04] = r;
-    prim[0x05] = g;
-    prim[0x06] = b;
+    tile->x0 = x;
+    tile->y0 = y;
+    tile->w = w;
+    tile->h = h;
+    tile->t.r0 = r;
+    tile->t.g0 = g;
+    tile->t.b0 = b;
 
     prim += 0x10;
     AddPrim(ot, oldPrim);
