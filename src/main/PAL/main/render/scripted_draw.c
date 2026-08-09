@@ -18,6 +18,7 @@ void DrawScriptedSprite(s32 elapsed, ScriptedSpriteShape *shape, ScriptedSpriteM
     s32 y;
     s32 temp;
     s32 interp;
+    u32 interpProduct;
     s32 flagByte;
     s32 alpha;
 
@@ -36,7 +37,8 @@ void DrawScriptedSprite(s32 elapsed, ScriptedSpriteShape *shape, ScriptedSpriteM
     } else {
         temp = packed & 0x7FFF;
     }
-    interp = (u32)(elapsed * temp) / 32;
+    interpProduct = elapsed * temp;
+    interp = interpProduct / 32;
 
     asm volatile("");
     y = motionReg->y;
@@ -51,7 +53,8 @@ void DrawScriptedSprite(s32 elapsed, ScriptedSpriteShape *shape, ScriptedSpriteM
     } else {
         temp = (packed >> 16) & 0x7FFF;
     }
-    interp = (u32)(elapsed * temp) / 32;
+    interpProduct = elapsed * temp;
+    interp = interpProduct / 32;
     y += interp;
     asm("" : "=r"(y) : "0"(y));
 
@@ -115,6 +118,7 @@ void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion 
     s32 yPacked;
     s32 temp;
     s32 interp;
+    u32 interpProduct;
     s32 alpha;
     OrderingTableAddress otAddress;
 
@@ -134,7 +138,8 @@ void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion 
     } else {
         temp = xPacked & 0x7FFF;
     }
-    interp = (u32)(elapsed * temp) / 32;
+    interpProduct = elapsed * temp;
+    interp = interpProduct / 32;
     x0 = y1 + interp;
 
     y1 = motionReg->y0;
@@ -147,7 +152,8 @@ void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion 
     } else {
         temp = (xPacked >> 16) & 0x7FFF;
     }
-    interp = (u32)(elapsed * temp) / 32;
+    interpProduct = elapsed * temp;
+    interp = interpProduct / 32;
     y1 += interp;
 
     asm volatile("");
@@ -159,7 +165,8 @@ void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion 
         y0Call = y1;
         temp = yPacked & 0x7FFF;
     }
-    interp = (u32)(elapsed * temp) / 32;
+    interpProduct = elapsed * temp;
+    interp = interpProduct / 32;
 
     asm volatile("");
     y1 = motionReg->y1;
@@ -171,7 +178,8 @@ void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion 
     } else {
         temp = (yPacked >> 16) & 0x7FFF;
     }
-    interp = (u32)(elapsed * temp) / 32;
+    interpProduct = elapsed * temp;
+    interp = interpProduct / 32;
     y1 += interp;
     asm("" : "=r"(y1) : "0"(y1));
 
@@ -230,7 +238,7 @@ void DrawScriptedTriangle(s32 time, ScriptedTriangleShape *styleArg, ScriptedTri
     s32 mode;
     s32 semiTrans;
     s32 flags;
-    s32 productResult;
+    u32 productResult;
 
     style = styleArg;
     record = recordArg;
@@ -251,8 +259,7 @@ void DrawScriptedTriangle(s32 time, ScriptedTriangleShape *styleArg, ScriptedTri
         product = packedSpeed & 0x7FFF;
     }
     productResult = time * product;
-    product = productResult;
-    product = (u32)product / 32;
+    product = productResult / 32;
     productResult = limit + product;
     product = productResult;
     asm("" : "=r"(product), "=r"(record) : "0"(product), "1"(record));
@@ -270,7 +277,8 @@ void DrawScriptedTriangle(s32 time, ScriptedTriangleShape *styleArg, ScriptedTri
     productResult = time * product;
     product = productResult;
     asm("" : "=r"(product), "=r"(style) : "0"(product), "1"(style));
-    product = (u32)product / 32;
+    productResult = product;
+    product = productResult / 32;
     y += product;
 
     product = style->y1;
@@ -562,6 +570,8 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     s32 elapsed;
     s32 limit;
     s32 packed;
+    u32 offsetProduct;
+    u32 packedDrawY;
 
     shapePtr = g_MenuRowScript[0].shape.pointer;
     elapsed = progress - g_MenuRowScript[0].time;
@@ -588,7 +598,8 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
         value = packed & 0x7FFF;
     }
     value = elapsed * value;
-    xOffset = (u32)value / 32;
+    offsetProduct = value;
+    xOffset = offsetProduct / 32;
 
     if (packed < 0) {
         value = packed >> 0x10;
@@ -601,7 +612,8 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     countReg++;
     countReg--;
     value = elapsed * value;
-    yOffset = (u32)value / 32;
+    offsetProduct = value;
+    yOffset = offsetProduct / 32;
 
     if (countReg < i) {
         return;
@@ -625,7 +637,8 @@ loop:
     drawX = drawX + xOffset;
     drawX <<= 0x10;
     drawY = drawY + yOffset;
-    drawY = (u32)drawY << 16;
+    packedDrawY = drawY;
+    drawY = packedDrawY << 16;
     drawX >>= 16;
     drawY >>= 16;
 
