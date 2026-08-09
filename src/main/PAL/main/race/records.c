@@ -28,7 +28,7 @@ void InitRecordTables(void) {
     s32 r19;
     s32 r20;
     register s32 r21 asm("$21");
-    s32 r22;
+    RaceRecordAddress rankingBaseAddress;
     register s32 r24 asm("$24");
     register s32 r25 asm("$25");
     register s32 r23 asm("$23");
@@ -78,8 +78,8 @@ void InitRecordTables(void) {
     } while (r14 < 2);
 
     r14 = 0;
-    r22 = (s32)&g_RankingRecords;
-    r30 = r22 + 4;
+    rankingBaseAddress.pointer = &g_RankingRecords[0][0][0];
+    r30 = rankingBaseAddress.byteOffset + 4;
     r20 = 0;
     do {
         r7 = 0;
@@ -110,7 +110,7 @@ void InitRecordTables(void) {
                 r2 = r16 + r19;
                 r4 = r4 + r2;
                 r3 = *(s32 *)r8;
-                r2 = r4 + r22;
+                r2 = r4 + rankingBaseAddress.byteOffset;
                 *(s32 *)r2 = r3;
                 r3 = *(s32 *)r9;
                 r2 = r4 + r30;
