@@ -697,7 +697,7 @@ void UpdateTeamLogoCanvas(void) {
             if (pixelValue == 0) {
                 pixelValue = (u32)g_TeamLogoPenColor.value;
             }
-            g_TeamLogoPenColor.value = (s32)pixelValue;
+            g_TeamLogoPenColor.value = pixelValue;
         }
     }
 }
