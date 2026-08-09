@@ -233,7 +233,7 @@ void LoadGrandPrixScreen(void) {
     if (g_AssetLoadState == 1) {
         offset = g_GrandPrixSeries * 6;
         base = g_GrandPrixClass + ASSET_ROUND_SCREEN_BASE;
-        loaded = LoadAsset((s32)(offset + base), g_ImageBlockBuffer);
+        loaded = LoadAsset(offset + base, g_ImageBlockBuffer);
         if (loaded != 0) {
             g_AssetLoadState = 0;
         }
@@ -262,7 +262,7 @@ void LoadCourseAssets(void) {
         s32 courseOffset = g_CourseIndex * 2;
         s32 classBase = (g_GrandPrixClass * 8) + ASSET_TRACK_1ST_BASE;
 
-        loaded = LoadAsset((s32)(courseOffset + classBase), g_AssetBase);
+        loaded = LoadAsset(courseOffset + classBase, g_AssetBase);
         if (loaded != 0) {
             g_AssetLoadState = 0;
             g_ImageBlockBuffer = g_AssetBase + loaded;
