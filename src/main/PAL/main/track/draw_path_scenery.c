@@ -85,6 +85,8 @@ void UpdateTrackEventSound(s16 arg) {
     s32 val;
     s32 t;
     s32 a0v, a1v;
+    TrackEventSoundZoneAddress cursorAddress;
+    TrackEventSoundZoneAddress endAddress;
 
     data = 0;
     p = g_TrackEventData->eventSoundZones;
@@ -104,7 +106,9 @@ void UpdateTrackEventSound(s16 arg) {
         }
         p = cur + 1;
         cur = p;
-    } while ((s32)p < (s32)end);
+        cursorAddress.pointer = p;
+        endAddress.pointer = end;
+    } while (cursorAddress.byteOffset < endAddress.byteOffset);
 
     if (!(data == 0)) {
     s0 = g_PlayerField3C;

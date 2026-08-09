@@ -110,6 +110,11 @@ typedef struct TrackEventSoundZone {
     u16 reserved;
 } TrackEventSoundZone;
 
+typedef union TrackEventSoundZoneAddress {
+    s32 byteOffset;
+    TrackEventSoundZone *pointer;
+} TrackEventSoundZoneAddress;
+
 typedef struct TrackPointAmbienceZone {
     s32 start;
     s32 end;
