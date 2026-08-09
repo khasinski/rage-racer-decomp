@@ -121,7 +121,7 @@ void TriggerRaceCues(void) {
         return;
     }
 
-    state = (PlayerRaceCueState *)&g_PlayerCar.trackSection;
+    state = GetPlayerRaceCueState(&g_PlayerCar);
     i = 0;
     temp = 0x10;
     do {

@@ -536,6 +536,11 @@ static inline PlayerCarRaceState *GetPlayerCarRaceState(PlayerCarRuntime *car) {
     return (PlayerCarRaceState *)&car->drive;
 }
 
+static inline PlayerRaceCueState *GetPlayerRaceCueState(PlayerCarRuntime *car) {
+    return (PlayerRaceCueState *)&car->trackSection;
+}
+
+
 typedef union CarWorldCoordinate {
     s32 value;
     struct {
