@@ -181,6 +181,7 @@ void InsertRaceRecords(void) {
     s32 code;
     s32 letter2;
     s32 code2;
+    RaceRecordAddress recordAddress;
 
     count = 3;
     if (g_CourseIndex == 3) {
@@ -209,7 +210,9 @@ void InsertRaceRecords(void) {
     while (i < 5) {
         score_offset = row_offset + (g_CourseIndex * 0x50);
         score_offset += g_GrandPrixSeries * 0x140;
-        if (best < ((RaceRecord *)((u8 *)g_RankingRecords + score_offset))->raceTime) {
+        recordAddress.pointer = (RaceRecord *)g_RankingRecords;
+        recordAddress.byteOffset += score_offset;
+        if (best < recordAddress.pointer->raceTime) {
             if (i < 4) {
                 j = 4;
                 do {
