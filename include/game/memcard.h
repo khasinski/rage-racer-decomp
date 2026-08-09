@@ -133,6 +133,13 @@ typedef struct GameSaveBlock {
     u32 checksum;          /* +0xFFC */
 } GameSaveBlock;
 
+typedef union GameSaveBlockAddress {
+    u8 *bytePointer;
+    u16 *halfwordPointer;
+    s32 *wordPointer;
+    GameSaveBlock *pointer;
+} GameSaveBlockAddress;
+
 void AdvanceSaveHeaderCounter(void);
 void ClearSaveHeaderRows(GameSaveHeaderRow *rows);
 void BuildSaveIconBlock(

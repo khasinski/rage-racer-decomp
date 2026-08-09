@@ -9,17 +9,32 @@
 void StoreSaveStateBlock(u8 *block) {
     register long saveValue asm("$4");
     {
+        GameSaveBlockAddress padMappingAddress;
+        GameSaveBlockAddress negconMappingAddress;
+        GameSaveBlockAddress steerNeutralAddress;
+        GameSaveBlockAddress steerPlayAddress;
         u16 padMappingIndex = g_PadMappingIndex;
         u16 negconMappingIndex = g_NegconMappingIndex;
         u16 negconSteerNeutral = g_NegconSteerNeutral;
         u16 negconSteerPlay = g_NegconSteerPlay;
-        *(u16 *)(block + 0x0) = padMappingIndex;
-        *(u16 *)(block + 0x2) = negconMappingIndex;
-        *(u16 *)(block + 0x4) = negconSteerNeutral;
-        *(u16 *)(block + 0x6) = negconSteerPlay;
+        padMappingAddress.halfwordPointer = &((GameSaveBlock *)block)->padMappingIndex;
+        negconMappingAddress.halfwordPointer = &((GameSaveBlock *)block)->negconMappingIndex;
+        steerNeutralAddress.halfwordPointer = &((GameSaveBlock *)block)->negconSteerNeutral;
+        steerPlayAddress.halfwordPointer = &((GameSaveBlock *)block)->negconSteerPlay;
+        *padMappingAddress.halfwordPointer = padMappingIndex;
+        *negconMappingAddress.halfwordPointer = negconMappingIndex;
+        *steerNeutralAddress.halfwordPointer = negconSteerNeutral;
+        *steerPlayAddress.halfwordPointer = negconSteerPlay;
     }
-    *(u16 *)(block + 0x8) = g_NegconNeutralI;
-    *(u16 *)(block + 0xA) = g_NegconNeutralII;
+    {
+        GameSaveBlockAddress neutralIAddress;
+        GameSaveBlockAddress neutralIIAddress;
+
+        neutralIAddress.halfwordPointer = &((GameSaveBlock *)block)->negconNeutralI;
+        neutralIIAddress.halfwordPointer = &((GameSaveBlock *)block)->negconNeutralII;
+        *neutralIAddress.halfwordPointer = g_NegconNeutralI;
+        *neutralIIAddress.halfwordPointer = g_NegconNeutralII;
+    }
     {
         u16 negconMaxTwist = g_NegconMaxTwist;
         u16 negconNeutralL = g_NegconNeutralL;
@@ -43,7 +58,13 @@ void StoreSaveStateBlock(u8 *block) {
         ((GameSaveBlock *)block)->timeAttackProgress.course = g_TimeAttackSave.course;
         ((GameSaveBlock *)block)->timeAttackProgress.carIndex = g_TimeAttackSave.carIndex;
         ((GameSaveBlock *)block)->timeAttackProgress.classIndex = g_TimeAttackSave.classIndex;
-        *(s32 *)(block + 0x44) = g_TimeAttackSave.maxClassReached;
+        {
+            GameSaveBlockAddress maxClassAddress;
+
+            maxClassAddress.wordPointer =
+                &((GameSaveBlock *)block)->timeAttackProgress.maxClassReached;
+            *maxClassAddress.wordPointer = g_TimeAttackSave.maxClassReached;
+        }
         {
             u16 advancedUnlocked = g_AdvancedSeriesUnlocked;
             saveValue = g_TimeAttackSave.money;
