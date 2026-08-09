@@ -420,13 +420,16 @@ typedef union PathSceneryPositionKey {
     Block16 position;
 } PathSceneryPositionKey;
 
-typedef struct PathSceneryRotationKey {
-    s16 x;
-    s16 y;
-    s16 z;
-    u16 loopIndex;
-    s16 span;
-    s16 rate;
+typedef union PathSceneryRotationKey {
+    struct {
+        s16 x;
+        s16 y;
+        s16 z;
+        u16 loopIndex;
+        s16 span;
+        s16 rate;
+    } fields;
+    SVec rotation;
 } PathSceneryRotationKey;
 
 typedef union PathSceneryKey {
