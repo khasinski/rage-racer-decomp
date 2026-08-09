@@ -44,7 +44,7 @@ void LoadTrackDataAssets(void) {
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[5];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
-            RegisterCourseModels((s32 *)g_AssetBlockPtr);
+            RegisterCourseModels((CourseModelAssetHeader *)g_AssetBlockPtr);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[6];

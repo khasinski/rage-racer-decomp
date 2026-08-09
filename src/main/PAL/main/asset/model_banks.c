@@ -93,12 +93,11 @@ void SelectModelBank(s32 index) {
     SCRATCH_MODEL_MODELS = (s32)((ModelBankHeader *)bank)->models;
 }
 
-void RegisterCourseModels(s32 *base) {
-    s32 *ptr;
+void RegisterCourseModels(CourseModelAssetHeader *base) {
+    CourseModelAssetEntry *entry;
     s32 count;
     s32 i;
     s32 limit;
-    s32 *item;
     /* The 8-byte frame retail has. Its three sibling loops here get it from
      * being pre-test loops (gcc 2.6.3 spills a dead ST_REGS pseudo after
      * duplicate_loop_exit_test); this one cannot, because every pre-test
@@ -107,19 +106,17 @@ void RegisterCourseModels(s32 *base) {
     s32 pad[2];
 
     (void)&pad;
-    ptr = base + 1;
-    count = base[0];
-    SCRATCH_COURSE_BANK = (s32)ptr;
+    entry = base->models;
+    count = base->modelCount;
+    SCRATCH_COURSE_BANK = (s32)entry;
     g_CourseModelCount = count;
     i = 0;
     if (count > 0) {
         limit = count;
-        item = base + 3;
         do {
-            *ptr = (s32)((u8 *)base + *ptr);
-            *item = (s32)((u8 *)base + *item);
-            ptr += 3;
-            item += 3;
+            entry->geometry.pointer = (u8 *)base + entry->geometry.offset;
+            entry->model.pointer = (u8 *)base + entry->model.offset;
+            entry++;
             i++;
         } while (i < limit);
     }

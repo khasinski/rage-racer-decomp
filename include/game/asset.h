@@ -230,6 +230,17 @@ typedef struct TerrainCellAssetHeader {
     AssetAddress cells[1];
 } TerrainCellAssetHeader;
 
+typedef struct CourseModelAssetEntry {
+    AssetAddress geometry;
+    s32 reserved;
+    AssetAddress model;
+} CourseModelAssetEntry;
+
+typedef struct CourseModelAssetHeader {
+    s32 modelCount;
+    CourseModelAssetEntry models[1];
+} CourseModelAssetHeader;
+
 /* Asset-installation helpers. RegisterModelBank/RegisterCourseModels
  * rebase a pack's internal offsets to absolute addresses; UnrelocateModelBank
  * is the exact inverse (used before a bank is copied elsewhere). The Set*Slot
@@ -250,7 +261,7 @@ void LoadCourseAssets(void);
 void LoadGrandPrixScreen(void);
 s32 PollAudioSlotLoad(void);
 void RegisterModelBank(ModelBankHeader *base, s32 index);
-void RegisterCourseModels(s32 *base);
+void RegisterCourseModels(CourseModelAssetHeader *base);
 s32 RequestRaceStart(void);
 void ResetTrackTextureSwap(void);
 void SelectTrackCameraTable(void* block, s32 variant);

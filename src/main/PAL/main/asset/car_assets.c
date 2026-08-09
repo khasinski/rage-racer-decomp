@@ -62,7 +62,7 @@ void LoadCarSelectAssets(void) {
                 header = (GameSceneAssetHeader *)((u8 *)header + firstOffset);
                 g_TeamLogoSampleData = (TeamLogoSample *)header;
                 g_AssetBlockPtr = (u8 *)secondOffset;
-                RegisterCourseModels((s32 *)g_AssetBlockPtr);
+                RegisterCourseModels((CourseModelAssetHeader *)g_AssetBlockPtr);
 
                 imageHeader = (GameSceneAssetHeader *)g_AssetLoadCursor;
                 assetOffset = imageHeader->offsets[2];
