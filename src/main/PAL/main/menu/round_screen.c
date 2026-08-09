@@ -205,8 +205,12 @@ void DrawBgmSelector(void) {
 
 /* Scene 10: draws the ROUND screen, takes the BGM choice and starts the race at frame 121. */
 void UpdateRoundScreen(void) {
-    if ((u32)g_SceneTimer < 10000) {
-        g_SceneTimer = g_SceneTimer + 1;
+    {
+        u32 sceneTime = g_SceneTimer;
+
+        if (sceneTime < 10000) {
+            g_SceneTimer = g_SceneTimer + 1;
+        }
     }
     if (g_SceneTimer == 0xf) {
         SetDispMask(1);

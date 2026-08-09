@@ -242,6 +242,7 @@ void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
     s32 *base;
     SoundModeEntry *entry;
     SoundModeEntryAddress entryAddress;
+    u32 cueIndex;
 
     if (cue >= 0) {
         if (cue >= 4) {
@@ -276,7 +277,8 @@ void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
             }
         }
 
-        if ((u32)cue < 2) {
+        cueIndex = cue;
+        if (cueIndex < 2) {
             if (left == g_SoundModes[0].slots[0].left) {
                 currentB = g_MusicChannels[1].left.value;
                 if (currentB == g_SoundModes[0].slots[1].left) {

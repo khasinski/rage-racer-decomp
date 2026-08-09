@@ -77,6 +77,7 @@ void LoadAudioParameterTable(u16 *table) {
     s32 step;
     s32 *leftPtr;
     s32 tableValue;
+    u32 adjustedStep;
 
     bank = 0;
     do {
@@ -119,7 +120,8 @@ void LoadAudioParameterTable(u16 *table) {
     leftPtr = &g_EngineSoundMaxRpm;
     *leftPtr = step;
     step--;
-    if ((u32)step >= 0x27FF) {
+    adjustedStep = step;
+    if (adjustedStep >= 0x27FF) {
         *leftPtr = 0x2800;
     }
 }
@@ -149,6 +151,7 @@ void SetReverbDepth(s32 left, s32 right) {
 void SetReverbPreset(s32 type, s32 left, s32 right) {
     s32 tempLeft;
     s32 tempRight;
+    u32 presetIndex;
 
     if (left >= 0) {
         tempLeft = left;
@@ -171,7 +174,8 @@ void SetReverbPreset(s32 type, s32 left, s32 right) {
 
     SsUtReverbOff();
 
-    if ((u32)(type - 1) < 9) {
+    presetIndex = type - 1;
+    if (presetIndex < 9) {
         g_ReverbType = type;
         g_ReverbDepthL = left;
         g_ReverbDepthR = right;
