@@ -148,6 +148,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
 
     if (drive->launchEnergy > 0) {
         s32 s2;
+        u32 steerRange;
 
         drive->bodyLiftOffset += 10;
         if (drive->bodyLiftOffset >= 100) {
@@ -159,7 +160,8 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
         res = s2 / 2048;
         drive->spinRate += res * 16;
 
-        if ((u32)(drive->steerPos + 127) < 255) {
+        steerRange = drive->steerPos + 127;
+        if (steerRange < 255) {
             if (GetAngleDistance(car->bodyYaw, car->headingAngle) < 0x200) {
                 drive->spinRate = drive->spinRate * 31 / 32;
                 drive->spinRate =
