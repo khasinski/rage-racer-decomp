@@ -13,6 +13,7 @@ s32 LoadSaveStateBlock(u8 *block) {
     __asm__("" : "=r"(base) : "0"(base));
     {
         u32 sum;
+        u32 checksumIndex;
         u16 *p;
 
         i = 0;
@@ -22,7 +23,8 @@ s32 LoadSaveStateBlock(u8 *block) {
         do {
             sum += *p++;
             i++;
-        } while ((u32)i < 0x7FE);
+            checksumIndex = i;
+        } while (checksumIndex < 0x7FE);
         printf(g_MsgSaveChecksumOk);
         sum = ~sum;
         printf(g_FmtSaveChecksum, ((GameSaveBlock *)base)->checksum, sum);
