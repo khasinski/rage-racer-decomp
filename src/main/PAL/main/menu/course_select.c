@@ -150,6 +150,7 @@ s32 DrawCourseSelectScreen(s32 step)
     s32 gpFlags;
     s32 gpSlide;
     u32 gpFade;
+    u32 fadeValue;
     OrderingTableAddress otAddress;
 
     otBase = SCRATCH_OT_BASE_AS(u32);
@@ -180,7 +181,8 @@ s32 DrawCourseSelectScreen(s32 step)
     }
 
     slide -= 0x28;
-    fade = (u8)((u32)g_CourseSelectScrollValue / 4);
+    fadeValue = g_CourseSelectScrollValue;
+    fade = (u8)(fadeValue / 4);
 
     if (g_GrandPrixMode != 0) {
         if (g_SeriesSelection == 0) {

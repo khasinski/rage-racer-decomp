@@ -16,6 +16,7 @@ void DrawCarShopPricePanel(s32 step, s32 money, s32 price) {
     s16 moneyY;
     s16 priceY;
     u32 rise;
+    u32 risePhase;
 
     ot = SCRATCH_OT_BASE;
 
@@ -36,7 +37,8 @@ void DrawCarShopPricePanel(s32 step, s32 money, s32 price) {
         if (risenFrames >= SHOP_PANEL_RISE_FRAMES) {
             risenFrames = SHOP_PANEL_RISE_FRAMES - 1;
         }
-        rise = ((u32)(risenFrames * -SHOP_PANEL_RISE_PER_FRAME)) >> SHOP_PANEL_RISE_SHIFT;
+        risePhase = risenFrames;
+        rise = (risePhase * -SHOP_PANEL_RISE_PER_FRAME) >> SHOP_PANEL_RISE_SHIFT;
         moneyY = rise + SHOP_PANEL_MONEY_TEXT_Y;
         priceY = rise + SHOP_PANEL_PRICE_TEXT_Y;
         GameDrawNumber(0x39, moneyY, 7, money, 0x7F, 0x7F, 0x7F, 0x259, 0x20);

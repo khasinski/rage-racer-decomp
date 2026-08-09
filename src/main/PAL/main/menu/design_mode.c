@@ -17,6 +17,7 @@ s32 DrawDesignModeScreen(s32 step) {
     s32 y;
     s32 row;
     s32 column;
+    u32 fadeValue;
 
     ot = (void *)(*(u32 *)&SCRATCH_OT_BASE + 4);
     mask = g_DesignModeCellMask;
@@ -48,7 +49,8 @@ s32 DrawDesignModeScreen(s32 step) {
     }
 
     y = 0xB0 - (s16)offset;
-    intensity = (u32)g_DesignModeScreenFade / MENU_FADE_INTENSITY_DIVISOR;
+    fadeValue = g_DesignModeScreenFade;
+    intensity = fadeValue / MENU_FADE_INTENSITY_DIVISOR;
 
     DrawSprite(ot, 0xB4, y, 0x18, 0xC, 0x94, 0xDC,
                   (u8)intensity, (u8)intensity, (u8)intensity,

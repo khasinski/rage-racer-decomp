@@ -70,6 +70,7 @@ typedef struct PadEdgeView {
 } PadEdgeView;
 
 void UpdateControllerConfigScreen(void) {
+    u32 flipPhase;
     PadEdgeView *pad = (PadEdgeView *)&g_PadPressed;
 
     g_AnimTimer++;
@@ -125,7 +126,8 @@ void UpdateControllerConfigScreen(void) {
     }
     if (g_PadConfigFlipTimer > 0) {
         g_PadConfigFlipTimer--;
-        g_PadConfigFlipPhase = ((u32)g_PadConfigFlipTimer / 4) & 1;
+        flipPhase = g_PadConfigFlipTimer;
+        g_PadConfigFlipPhase = (flipPhase / 4) & 1;
     }
     g_ControllerSceneAngleY = (g_ControllerSceneAngleY * 15) / 16;
     DrawControllerConfigScreen();

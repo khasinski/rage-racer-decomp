@@ -16,6 +16,7 @@ s32 DrawClassChangeCurtain(s32 step) {
     register s32 zero asm("$5");
     register void *callScratch asm("$4");
     s32 yArg;
+    u32 curtainPhase;
 
     scratch = SCRATCH_OT_BASE;
     delta = step;
@@ -41,7 +42,8 @@ s32 DrawClassChangeCurtain(s32 step) {
             callScratch = scratch;
             zero = 0;
             asm("" : "=r"(zero) : "0"(zero));
-            value = ((u32)(value << 9) / 32) + 0xFF10;
+            curtainPhase = value;
+            value = ((curtainPhase << 9) / 32) + 0xFF10;
             yArg = (s16)value;
             y1 = 0xF0;
             red = 0x95;
