@@ -163,28 +163,29 @@ void LoadRoundAssets(void) {
 }
 
 void RelocateCarModel(void) {
-    u32 temp;
+    AssetAddress address;
     u32 *dst;
     u32 *src;
     u32 count;
 
-    temp = (u32)g_CarModelAsset;
-    if (temp != 0) {
-        src = (u32 *)temp;
+    address.pointer = g_CarModelAsset;
+    if (address.offset != 0) {
+        src = address.pointer;
     } else {
-        src = (u32 *)temp;
+        src = address.pointer;
     }
     count = src[6];
-    temp = (u32)g_AssetBase;
+    address.pointer = g_AssetBase;
     if (count != 0) {
-        dst = (u32 *)temp;
+        dst = address.pointer;
     } else {
-        dst = (u32 *)temp;
+        dst = address.pointer;
     }
     count = count + 0x28;
-    temp = count + (u32)dst;
+    address.pointer = dst;
+    address.offset = count + address.offset;
     count >>= 2;
-    g_AssetLoadCursor = (u8 *)temp;
+    g_AssetLoadCursor = address.pointer;
 
     while (count != 0) {
         *dst = *src;
@@ -194,8 +195,8 @@ void RelocateCarModel(void) {
     }
 
     SetCarModelSlot((CarModelAsset *)g_AssetBase, 0);
-    temp = (s32)g_CarModelAsset->modelData.pointer;
-    UnrelocateModelBank((ModelBankHeader *)(g_AssetBase + 0x28), temp);
+    address.pointer = g_CarModelAsset->modelData.pointer;
+    UnrelocateModelBank((ModelBankHeader *)(g_AssetBase + 0x28), address.offset);
     SelectCarModelSlot(0);
     g_CarModelAsset->modelData.pointer = g_AssetBase + 0x28;
     RegisterModelBank((ModelBankHeader *)(g_AssetBase + 0x28), 0);
