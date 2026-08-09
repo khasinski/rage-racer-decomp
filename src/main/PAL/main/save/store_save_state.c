@@ -120,7 +120,7 @@ void StoreSaveStateBlock(u8 *block) {
             src = g_TeamLogoClut;
             dst = block;
             for (; count < 0x10; count++) {
-                *(u16 *)(dst + 0x1BC) = *src++;
+                ((GameSaveBlock *)dst)->teamLogoClut[0] = *src++;
                 dst += 2;
             }
         }
@@ -133,7 +133,7 @@ void StoreSaveStateBlock(u8 *block) {
             src = g_TeamLogoCanvas.halfwords;
             dst = block;
             for (; count < 0x400; count++) {
-                *(u16 *)(dst + 0x1DC) = *src++;
+                ((GameSaveBlock *)dst)->teamLogoCanvas[0] = *src++;
                 dst += 2;
             }
         }
