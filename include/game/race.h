@@ -63,7 +63,19 @@ typedef union RaceSeriesValue {
     u16 trackDirection;
 } RaceSeriesValue;
 
+typedef union RaceSeriesAddress {
+    volatile s32 *series;
+    RaceSeriesValue *value;
+} RaceSeriesAddress;
+
 extern volatile s32 g_RaceSeries;
+
+static inline u16 ReadRaceTrackDirection(void) {
+    RaceSeriesAddress address;
+
+    address.series = &g_RaceSeries;
+    return address.value->trackDirection;
+}
 
 static inline s32 ReadStableRaceSeries(void) {
     return *(const s32 *)&g_RaceSeries;

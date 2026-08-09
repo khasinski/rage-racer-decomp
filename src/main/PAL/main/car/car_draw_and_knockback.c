@@ -47,7 +47,7 @@ void BuildStartingGrid(void) {
         g_RaceSeries = g_GrandPrixSeries;
         cursor = table;
         do {
-            track = ((RaceSeriesValue *)&g_RaceSeries)->trackDirection;
+            track = ReadRaceTrackDirection();
             *flagPtr = 0;
             flagPtr[6] = track;
             if (cursor->value >= 0) {
@@ -71,7 +71,7 @@ void BuildStartingGrid(void) {
         g_RaceSeries = g_GrandPrixSeries;
         cursor = table;
         do {
-            track = ((RaceSeriesValue *)&g_RaceSeries)->trackDirection;
+            track = ReadRaceTrackDirection();
             *flagPtr = 0;
             flagPtr[6] = track;
             if (cursor->value >= 0) {
