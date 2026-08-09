@@ -14,7 +14,7 @@
 
 void InitPlayerCar(PlayerCarRuntime *car)
 {
-  s16 trackState[2];
+  CarTrackLimits trackState;
   int scaledGearRatio;
   Matrix rotationMatrix;
   Matrix axisMatrix;
@@ -85,9 +85,9 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->headingAngle = player->bodyYaw;
   player->drive.targetHeading = player->headingAngle;
   SeedCarLapProgress((GameCarRuntime *)car, 0);
-  trackState[0] = 0;
-  trackState[1] = 0;
-  UpdateCarTrackState(car, player->trackPointIndex, trackState);
+  trackState.rightInset = 0;
+  trackState.leftInset = 0;
+  UpdateCarTrackState(car, player->trackPointIndex, &trackState);
   player->previousTrackProgress = player->trackProgress;
   *(Vec4 *)(&player->modelPitch) = *(Vec4 *)(&player->bodyPitch);
   player->modelY = player->y;

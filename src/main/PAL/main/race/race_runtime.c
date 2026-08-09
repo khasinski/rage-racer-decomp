@@ -549,13 +549,12 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         if ((s16)model != -1) {
             struct {
                 s32 pad[4];
-                s16 a;
-                s16 b;
+                CarTrackLimits limits;
             } pair;
 
-            pair.a = 20;
-            pair.b = -20;
-            UpdateCarTrackState((u8 *)ent, ent->trackPointIndex, &pair.a);
+            pair.limits.rightInset = 20;
+            pair.limits.leftInset = -20;
+            UpdateCarTrackState(ent, ent->trackPointIndex, &pair.limits);
             ent->modelY = ent->y;
             ent->previousTrackProgress = ent->trackProgress;
         }

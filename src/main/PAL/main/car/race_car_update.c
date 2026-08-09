@@ -116,7 +116,7 @@ void UpdateRaceCars(void) {
      * frame even though their high-level scratch values are optimized away.
      */
     Matrix matrixScratch0;
-    s16 pair[4];
+    CarTrackLimits limits;
     Matrix m1;
     Matrix m2;
     SVec sv;
@@ -288,8 +288,8 @@ void UpdateRaceCars(void) {
         base++;
     } while ((s16)i < 11);
     }
-    pair[0] = 0x3C;
-    pair[1] = -0x3C;
+    limits.rightInset = 0x3C;
+    limits.leftInset = -0x3C;
     for (i = 0; i < 11; i++) {
         if (g_Cars[(s16)i].activeFlag != -1) {
             AccumulateLapProgress(&g_Cars[(s16)i]);
@@ -303,7 +303,7 @@ void UpdateRaceCars(void) {
             UpdateCarTrackState(
                 &g_Cars[(s16)i],
                 g_Cars[(s16)i].trackPointIndex,
-                pair);
+                &limits);
         }
     }
     {
@@ -387,7 +387,7 @@ void UpdateAttractCars(void) {
     Vec4 vTmp;
     /* See UpdateRaceCars: these two Matrix workspaces shape retail's frame. */
     Matrix matrixScratch0;
-    s16 svAng[4];
+    CarTrackLimits limits;
     Matrix m1;
     Matrix m2;
     SVec sv1;
@@ -528,8 +528,8 @@ void UpdateAttractCars(void) {
         } while (i < 11);
         }
     }
-    svAng[0] = 0x3C;
-    svAng[1] = -0x3C;
+    limits.rightInset = 0x3C;
+    limits.leftInset = -0x3C;
     for (i = 0; i < 11; i++) {
         if (((g_Cars[(s16)i]).activeFlag != -1)) {
             AccumulateLapProgress(&g_Cars[(s16)i]);
@@ -543,7 +543,7 @@ void UpdateAttractCars(void) {
             UpdateCarTrackState(
                 &g_Cars[(s16)i],
                 g_Cars[(s16)i].trackPointIndex,
-                svAng);
+                &limits);
         }
     }
     {

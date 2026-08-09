@@ -37,7 +37,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     Matrix mA;
     SVec sv2;
     Vec4 vout;
-    s16 arr[4];
+    CarTrackLimits limits;
     GameCarDrive *p = &car->drive;
     s32 mode23;
     s32 limit;
@@ -270,28 +270,28 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     sv2.vy = slip;
     RotMatrix(&sv2, &mA);
 
-    arr[0] = 0;
-    arr[1] = 0;
-    arr[0] = -1;
-    arr[1] = -1;
+    limits.rightInset = 0;
+    limits.leftInset = 0;
+    limits.rightInset = -1;
+    limits.leftInset = -1;
     for (i = 1, cornerIndex = 0; cornerIndex < 4; cornerIndex++, i++) {
         sv2.vx = g_CarCornerOffsets[cornerIndex].x * 4;
         sv2.vz = g_CarCornerOffsets[cornerIndex].z * 4;
         sv2.vy = 0;
         ApplyMatrix(&mA, &sv2, &vout);
-        if (arr[0] < vout.x) {
-            arr[2] = i;
-            arr[0] = vout.x;
-        } else if (vout.x < arr[1]) {
-            arr[3] = i;
-            arr[1] = vout.x;
+        if (limits.rightInset < vout.x) {
+            limits.rightKnockbackMode = i;
+            limits.rightInset = vout.x;
+        } else if (vout.x < limits.leftInset) {
+            limits.leftKnockbackMode = i;
+            limits.leftInset = vout.x;
         }
     }
 
     if ((s16)car->motionTimer > 0) {
         ApplyCarKnockback(car);
     }
-    skid = UpdateCarTrackState(car, car->trackPointIndex, arr);
+    skid = UpdateCarTrackState(car, car->trackPointIndex, &limits);
     skidRange = skid - 2;
     if (skidRange < 2U && car->speed < 64) {
         skid = 0;
