@@ -90,7 +90,8 @@ s32 GetCarCrestTrigger(GameCarRuntime *car) {
     s32 diff;
     s32 cmp;
     s32 threshold;
-    register s32 resultOffset asm("v0");
+    s32 resultOffset;
+    register u8 *resultCursor asm("v0");
 
     base = (u8 *)g_TrackEventData;
     if (car->speed < 0x320) {
@@ -158,8 +159,8 @@ crest_scan_done:
     if (crossed != 0) {
         resultOffset = i * 8;
         resultOffset += row * 64;
-        resultOffset = (s32)(base + resultOffset);
-        return ((TrackCrestEvent *)(resultOffset + 4))->motionValue;
+        resultCursor = base + resultOffset;
+        return ((TrackCrestEvent *)(resultCursor + 4))->motionValue;
     }
     return 0;
 }
