@@ -11,11 +11,6 @@
 #include "game/audio.h"
 #include "game/random.h"
 
-typedef struct GearRange {
-    s16 up;
-    s16 down;
-} GearRange;
-
 /*
  * Per-car physics / gear-shift driver (matched sibling of the ASM
  * UpdateAttractCars). Samples input, builds the car's orientation matrices, runs
