@@ -96,8 +96,6 @@ void RotateTeamLogoCcw(void) {
     u32 value2;
     u32 saved[512];
 
-    asm(".globl func_8004BDEC\nfunc_8004BDEC = RotateTeamLogoCcw + 0x38");
-
     PlaySoundCue(8);
 
     base = g_TeamLogoCanvas.words[0];

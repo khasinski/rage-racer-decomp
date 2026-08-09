@@ -309,7 +309,7 @@ void FlipTeamLogoVertical(void);
 /* Mirror about the vertical axis: nibbles reversed inside each word and word
  * w swapped with word 7 - w. */
 void FlipTeamLogoHorizontal(void);
-/* dst(y, x) = src(x, 63 - y). func_8004BDEC is its silent second entry point. */
+/* dst(y, x) = src(x, 63 - y). */
 void RotateTeamLogoCcw(void);
 /* dst(y, x) = src(63 - x, y). */
 void RotateTeamLogoCw(void);

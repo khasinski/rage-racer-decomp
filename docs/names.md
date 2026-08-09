@@ -1585,7 +1585,7 @@ receives word `i + 1`'s nibble 0.
 | `ScrollTeamLogoRight` | 0x8004BBA8 | `word <<= 4` with the previous word's high nibble |
 | `FlipTeamLogoVertical` | 0x8004BC68 | swaps row `i` with row `63 - i` for `i` in 0..31 |
 | `FlipTeamLogoHorizontal` | 0x8004BCE4 | reverses the nibble order inside each word and swaps word `w` with word `7 - w` |
-| `RotateTeamLogoCcw` | 0x8004BDB4 | works out to `dst(y, x) = src(x, 63 - y)`; `func_8004BDEC` is its second entry point, past the sound cue |
+| `RotateTeamLogoCcw` | 0x8004BDB4 | works out to `dst(y, x) = src(x, 63 - y)` |
 | `RotateTeamLogoCw` | 0x8004BF48 | works out to `dst(y, x) = src(63 - x, y)` |
 
 The four scrolls play sound cue 1, the four flips/rotations cue 8 — a second,

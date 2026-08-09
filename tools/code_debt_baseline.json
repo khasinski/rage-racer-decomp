@@ -1,5 +1,5 @@
 {
-  "asm_aliases": 1,
+  "asm_aliases": 0,
   "byte_pointer_arithmetic": 122,
   "empty_barriers": 144,
   "externs_in_c": 0,
