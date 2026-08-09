@@ -569,7 +569,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->avoidanceTargetOffset = height;
         ent->aiLateralOffset = height;
     }
-    *(Vec4 *)&ent->modelPitch = *(Vec4 *)&ent->bodyPitch;
+    CopyCarBodyRotationToModel(ent);
     {
         s32 lateral;
 

@@ -540,6 +540,14 @@ static inline PlayerRaceCueState *GetPlayerRaceCueState(PlayerCarRuntime *car) {
     return (PlayerRaceCueState *)&car->trackSection;
 }
 
+static inline void CopyPlayerBodyRotationToModel(PlayerCarRuntime *car) {
+    *(Vec4 *)&car->modelPitch = *(Vec4 *)&car->bodyPitch;
+}
+
+static inline void CopyCarBodyRotationToModel(GameCarRuntime *car) {
+    *(Vec4 *)&car->modelPitch = *(Vec4 *)&car->bodyPitch;
+}
+
 
 typedef union CarWorldCoordinate {
     s32 value;

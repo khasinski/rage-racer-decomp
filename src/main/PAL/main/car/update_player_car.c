@@ -312,7 +312,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     {
         s32 fuel = car->y;
 
-        *(Vec4 *)&car->modelPitch = *(Vec4 *)&car->bodyPitch;
+        CopyPlayerBodyRotationToModel(car);
         car->bodyRoll = car->bodyRoll + car->bodyRollVelocity;
         car->modelY = car->y;
         limit = fuel - 8;
