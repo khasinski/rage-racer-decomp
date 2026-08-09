@@ -173,9 +173,9 @@ void StoreSaveStateBlock(u8 *block) {
                     *totalOut++ = *totalIn++;
                     lapOut++;
                 }
-                lapDst += 8;
+                lapDst += sizeof(g_BestLapTimes[0][0]);
             }
-                outerDst += 0x20;
+                outerDst += sizeof(g_BestLapTimes[0]);
             }
         }
 
@@ -215,11 +215,11 @@ void StoreSaveStateBlock(u8 *block) {
                     rankingOut += 4;
                     rankingIn += 4;
                 }
-                rankingDst += 0x50;
-                middleOffset += 0x50;
+                rankingDst += sizeof(g_RankingRecords[0][0]);
+                middleOffset += sizeof(g_RankingRecords[0][0]);
             }
-            outerDst += 0x140;
-            outerOffset += 0x140;
+            outerDst += sizeof(g_RankingRecords[0]);
+            outerOffset += sizeof(g_RankingRecords[0]);
         }
         }
 
@@ -245,11 +245,11 @@ void StoreSaveStateBlock(u8 *block) {
                     *sectorOut = *sectorIn++;
                     sectorOut++;
                 }
-                sectorDst += 0xC;
-                middleOffset += 0xC;
+                sectorDst += sizeof(g_BestSectorTimes[0][0]);
+                middleOffset += sizeof(g_BestSectorTimes[0][0]);
             }
-            outerDst += 0x30;
-            outerOffset += 0x30;
+            outerDst += sizeof(g_BestSectorTimes[0]);
+            outerOffset += sizeof(g_BestSectorTimes[0]);
         }
         }
     }
