@@ -536,9 +536,12 @@ void UpdateRecordEntry(void) {
     case 6:
         g_SceneTimer += 2;
         DrawFullscreenFadeTile(g_SceneTimer, 0x49);
-        if ((u32)g_SceneTimer >= 0x100) {
-            RequestSelectBgmAssets();
-            g_SceneId = 6;
+        {
+            u32 sceneFrame = g_SceneTimer;
+            if (sceneFrame >= 0x100) {
+                RequestSelectBgmAssets();
+                g_SceneId = 6;
+            }
         }
         DrawTimeRecordPanel(0);
         break;
