@@ -53,7 +53,7 @@ void LoadCarSelectAssets(void) {
         return;
     case 3:
             if (LoadAsset(8, g_AssetLoadCursor) != 0) {
-                RegisterModelBank((s32 *)(g_AssetLoadCursor + 0xC), 0xE);
+                RegisterModelBank((ModelBankHeader *)(g_AssetLoadCursor + 0xC), 0xE);
 
                 header = (GameSceneAssetHeader *)g_AssetLoadCursor;
                 blockOffset = header->offsets[1];
@@ -87,7 +87,7 @@ void LoadCarSelectAssets(void) {
                 relOffset = model->modelDataOffset;
                 modelPtr = (s32)(carModelBase + relOffset);
                 model->modelDataOffset = modelPtr;
-                RegisterModelBank((s32 *)modelPtr, 0);
+                RegisterModelBank((ModelBankHeader *)modelPtr, 0);
 
                 model = (CarModelAsset *)g_CarModelAsset;
                 relOffset = model->imageDataOffset;
@@ -145,7 +145,8 @@ void LoadCarModel(s32 carIndex) {
             SetCarModelSlot(ptr, g_CarModelSlot < 1);
 
             asset->modelDataOffset = (s32)ptr + asset->modelDataOffset;
-            RegisterModelBank((s32 *)asset->modelDataOffset, g_CarModelSlot < 1);
+            RegisterModelBank((ModelBankHeader *)asset->modelDataOffset,
+                              g_CarModelSlot < 1);
 
             asset->imageDataOffset = (s32)ptr + asset->imageDataOffset;
             SetCarImageSlot((void *)asset->imageDataOffset, g_CarModelSlot < 1);

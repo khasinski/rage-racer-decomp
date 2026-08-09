@@ -41,16 +41,16 @@ void InitRenderState(s32 otShift) {
     SCRATCH_MIRROR = g_MirrorMode;
 }
 
-void RegisterModelBank(s32 *base, s32 index) {
-    s32 *ptr;
+void RegisterModelBank(ModelBankHeader *base, s32 index) {
+    AssetAddress *ptr;
     s32 i;
 
-    ptr = base + 3;
+    ptr = base->models;
     g_ModelBanks[index] = base;
-    base[1] = (s32)((u8 *)base + base[1]);
-    base[2] = (s32)((u8 *)base + base[2]);
-    for (i = 0; (u32)i < (u32)base[0]; i++) {
-        *ptr = (s32)((u8 *)base + *ptr);
+    base->table.pointer = (u8 *)base + base->table.offset;
+    base->normals.pointer = (u8 *)base + base->normals.offset;
+    for (i = 0; (u32)i < (u32)base->modelCount; i++) {
+        ptr->pointer = (u8 *)base + ptr->offset;
         ptr++;
     }
 }
@@ -85,9 +85,9 @@ void SelectModelBank(s32 index) {
     count = *entry;
     count = *(s32 *)count;
     bank = *entry;
-    SCRATCH_MODEL_TABLE1 = ((ModelBankHeader *)bank)->table;
+    SCRATCH_MODEL_TABLE1 = (s32)((ModelBankHeader *)bank)->table.pointer;
     bank = *entry;
-    SCRATCH_MODEL_NORMALS = ((ModelBankHeader *)bank)->normals;
+    SCRATCH_MODEL_NORMALS = (s32)((ModelBankHeader *)bank)->normals.pointer;
     bank = *entry;
     g_ModelBankCount = count;
     SCRATCH_MODEL_MODELS = (s32)((ModelBankHeader *)bank)->models;

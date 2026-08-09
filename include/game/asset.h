@@ -212,6 +212,18 @@ void InstallCourseAssets(void);
 /* Copy the live car model into g_AssetBase and re-register its bank there. */
 void RelocateCarModel(void);
 
+typedef union AssetAddress {
+    s32 offset;
+    void *pointer;
+} AssetAddress;
+
+typedef struct ModelBankHeader {
+    s32 modelCount;
+    AssetAddress table;
+    AssetAddress normals;
+    AssetAddress models[1];
+} ModelBankHeader;
+
 /* Asset-installation helpers. RegisterModelBank/RegisterCourseModels
  * rebase a pack's internal offsets to absolute addresses; UnrelocateModelBank
  * is the exact inverse (used before a bank is copied elsewhere). The Set*Slot
@@ -231,7 +243,7 @@ void InstallTrackPoints(void* trackData);
 void LoadCourseAssets(void);
 void LoadGrandPrixScreen(void);
 s32 PollAudioSlotLoad(void);
-void RegisterModelBank(s32 *base, s32 index);
+void RegisterModelBank(ModelBankHeader *base, s32 index);
 void RegisterCourseModels(s32 *base);
 s32 RequestRaceStart(void);
 void ResetTrackTextureSwap(void);

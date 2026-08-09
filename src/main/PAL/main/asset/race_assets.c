@@ -157,7 +157,7 @@ void LoadRaceAssets(void) {
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[3];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
-            RegisterModelBank((s32 *)g_AssetBlockPtr, 1);
+            RegisterModelBank((ModelBankHeader *)g_AssetBlockPtr, 1);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[4];
@@ -172,7 +172,7 @@ void LoadRaceAssets(void) {
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[6];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
-            RegisterModelBank((s32 *)g_AssetBlockPtr, 2);
+            RegisterModelBank((ModelBankHeader *)g_AssetBlockPtr, 2);
 
             header = (GameSceneAssetHeader *)g_AssetLoadCursor;
             offset = header->offsets[7];

@@ -35,7 +35,8 @@ void LoadUpgradedCarModel(s32 carIndex) {
             SetCarModelSlot(ptr, g_CarModelSlot < 1);
 
             asset->modelDataOffset = (s32)ptr + asset->modelDataOffset;
-            RegisterModelBank((s32 *)asset->modelDataOffset, g_CarModelSlot < 1);
+            RegisterModelBank((ModelBankHeader *)asset->modelDataOffset,
+                              g_CarModelSlot < 1);
 
             asset->imageDataOffset = (s32)ptr + asset->imageDataOffset;
             SetCarImageSlot((void *)asset->imageDataOffset, g_CarModelSlot < 1);
@@ -75,7 +76,7 @@ void LoadOptionScreenAssets(void) {
 
     if (g_AssetLoadState == 1) {
         if (LoadAsset(9, g_AssetBase) != 0) {
-            RegisterModelBank((s32 *)(g_AssetBase + 4), 0);
+            RegisterModelBank((ModelBankHeader *)(g_AssetBase + 4), 0);
             SelectModelBank(0);
 
             ptr = (s32)g_AssetBase;
@@ -194,5 +195,5 @@ void RelocateCarModel(void) {
     UnrelocateModelBank((s32 *)(g_AssetBase + 0x28), temp);
     SelectCarModelSlot(0);
     ((CarModelAsset *)g_CarModelAsset)->modelDataOffset = (u32)(g_AssetBase + 0x28);
-    RegisterModelBank((s32 *)(g_AssetBase + 0x28), 0);
+    RegisterModelBank((ModelBankHeader *)(g_AssetBase + 0x28), 0);
 }
