@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
@@ -40,11 +41,14 @@ void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
                 s32 index;
                 u8 *fontUCell;
                 u8 *fontV;
+                AssetAddress fontAddress;
                 s32 u;
                 s32 v;
 
                 index = cell * 2;
-                fontUCell = (u8 *)(index + (s32)font);
+                fontAddress.pointer = font;
+                fontAddress.offset = index + fontAddress.offset;
+                fontUCell = fontAddress.pointer;
                 fontV = &g_Font8x8Cells[1];
                 u = *fontUCell * 8;
                 v = *(index + fontV) * 8;
@@ -97,9 +101,12 @@ void GameDrawText8x8Shaded(
                     s32 index;
                     u8 *fontUCell;
                     u8 *fontV;
+                    AssetAddress fontAddress;
 
                     index = cell * 2;
-                    fontUCell = (u8 *)(index + (s32)font);
+                    fontAddress.pointer = font;
+                    fontAddress.offset = index + fontAddress.offset;
+                    fontUCell = fontAddress.pointer;
                     fontV = &g_Font8x8Cells[1];
                     u = *fontUCell * 8;
                     v = *(index + fontV) * 8;
@@ -148,11 +155,14 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
                 s32 index;
                 u8 *fontUCell;
                 u8 *fontV;
+                AssetAddress fontAddress;
                 s32 u;
                 s32 v;
 
                 index = cell * 2;
-                fontUCell = (u8 *)(index + (s32)font);
+                fontAddress.pointer = font;
+                fontAddress.offset = index + fontAddress.offset;
+                fontUCell = fontAddress.pointer;
                 fontV = &g_Font8x8Cells[1];
                 u = *fontUCell * 8;
                 v = *(index + fontV) * 8;
