@@ -548,16 +548,13 @@ void DrawRaceOptionMenu(s32 cursorRow) {
             {
                 register POLY_FT4 *drawPrim;
                 s32 rightTrig;
+                register s32 sample;
                 s16 right;
 
                 g_RaceOptionPulseAngle &= 0xFFF;
-                rightTrig = ({
-                    register s32 sample;
-
-                    sample = rcos(g_RaceOptionPulseAngle);
-                    asm volatile("" ::);
-                    sample * 0x2C;
-                });
+                sample = rcos(g_RaceOptionPulseAngle);
+                asm volatile("" ::);
+                rightTrig = sample * 0x2C;
                 quad = quadBase + 1;
                 if (rightTrig < 0) {
                     rightTrig += 0xFFF;

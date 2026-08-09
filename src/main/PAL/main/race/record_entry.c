@@ -53,15 +53,11 @@ void DrawRankingPanel(s32 slideX) {
             value = iter - doubledRow;
             value <<= 3;
             xOrField = value + 0x58;
-            FormatLapTime(
-                &text[2],
-                ({
-                    (void)(*(volatile char *)&text[0] = iter + 0x31);
-                    doubledRow = (doubledRow + row) << 5;
-                    scoreValue = *(s32 *)scoreOrX;
-                    value = (destination = panel + 0x14);
-                    scoreValue;
-                }));
+            *(volatile char *)&text[0] = iter + 0x31;
+            doubledRow = (doubledRow + row) << 5;
+            scoreValue = *(s32 *)scoreOrX;
+            value = (destination = panel + 0x14);
+            FormatLapTime(&text[2], scoreValue);
             destination = doubledRow;
             destination = destination + value;
             color = 0x78CC;
