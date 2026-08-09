@@ -316,15 +316,15 @@ void ResetCarTrackState(GameCarRuntime *car) {
         (s16)(((nextCamber * alongSegment) +
                (secondResult * (segLenE - alongSegment))) /
               segLenE);
-    spad->field_38 = rcos(spad->field_8C);
+    spad->headingCos = rcos(spad->field_8C);
     {
         s32 firstProduct;
         s32 sinValue;
         s32 secondProduct;
 
         sinValue = rsin(spad->field_8C);
-        spad->field_34 = sinValue;
-        firstProduct = spad->field_92 * spad->field_38;
+        spad->headingSin = sinValue;
+        firstProduct = spad->field_92 * spad->headingCos;
         if (firstProduct < 0) {
             firstProduct += 0xFFF;
         }
@@ -342,11 +342,11 @@ void ResetCarTrackState(GameCarRuntime *car) {
             s32 firstProduct;
 
             firstProduct =
-                (0 - spad->field_38) * spad->field_94;
+                (0 - spad->headingCos) * spad->field_94;
             if (firstProduct < 0) {
                 firstProduct += 0xFFF;
             }
-            lateralProduct = spad->field_92 * spad->field_34;
+            lateralProduct = spad->field_92 * spad->headingSin;
             firstComponent = firstProduct >> 0xC;
         }
         if (lateralProduct < 0) {

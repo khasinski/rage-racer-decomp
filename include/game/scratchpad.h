@@ -35,6 +35,15 @@ typedef struct GameScratchpadRenderState {
     s16 y1;
 } GameScratchpadRenderState;
 
+typedef struct ScratchViewState {
+    s32 x;
+    s32 y;
+    s32 z;
+    s32 reserved14;
+    s32 angleX;
+    s32 angleY;
+} ScratchViewState;
+
 typedef union CarTrackRadius {
     s32 value;
     struct {
@@ -56,17 +65,17 @@ typedef struct CarTrackScratch {
     s32 nextPointToCenterX;
     s32 pointToCenterZ;
     s32 nextPointToCenterZ;
-    s32 field_34;
-    s32 field_38;
+    s32 headingSin;
+    s32 headingCos;
     s32 field_3C;
     u8 pad40[0x20];
     u16 offsetX;
     s16 field_62;
     s16 offsetZ;
     s16 field_66;
-    s32 field_68;
-    s32 field_6C;
-    s32 field_70;
+    s32 correctionX;
+    s32 correctionY;
+    s32 correctionZ;
     s32 field_74;
     s16 curveMode;
     s16 arcIndex;
@@ -119,6 +128,7 @@ typedef struct CarTrackScratch {
 #define SCRATCH_VIEW_ANGLE_X (*(s32 *)0x1F800018)
 #define SCRATCH_VIEW_ANGLE_Y (*(s32 *)0x1F80001C)
 #define SCRATCH_VIEW_ANGLE_Z (*(s32 *)0x1F800020)
+#define SCRATCH_VIEW_STATE   ((ScratchViewState *)0x1F800008)
 #define SCRATCH_VIEW_MATRIX_GTE ((Matrix *)0x1F800028)
 
 extern s32 g_ScratchViewX asm("0x1F800008");

@@ -232,13 +232,13 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         spad->field_62 = 0;
         spad->offsetZ = lateralOffset;
         BuildRotMatrixY(clampSource, spad->heading);
-        ApplyMatrix(clampSource, &spad->offsetX, &spad->field_68);
+        ApplyMatrix(clampSource, &spad->offsetX, &spad->correctionX);
         if (obj == (GameCarRuntime *)&g_PlayerCar)
         {
-            SetCarKnockback(obj, spad->field_68, spad->field_70, limits->leftKnockbackMode);
+            SetCarKnockback(obj, spad->correctionX, spad->correctionZ, limits->leftKnockbackMode);
         }
-        obj->x = obj->x - spad->field_68;
-        obj->z = obj->z - spad->field_70;
+        obj->x = obj->x - spad->correctionX;
+        obj->z = obj->z - spad->correctionZ;
         lateralOffset = -spad->field_8A - limits->leftInset;
         spad->field_3C = limits->leftKnockbackMode;
     }
@@ -252,13 +252,13 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         spad->field_62 = 0;
         spad->offsetZ = lateralOffset;
         BuildRotMatrixY(clampSource, spad->heading);
-        ApplyMatrix(clampSource, &spad->offsetX, &spad->field_68);
+        ApplyMatrix(clampSource, &spad->offsetX, &spad->correctionX);
         if (obj == (GameCarRuntime *)&g_PlayerCar)
         {
-            SetCarKnockback(obj, spad->field_68, spad->field_70, limits->rightKnockbackMode);
+            SetCarKnockback(obj, spad->correctionX, spad->correctionZ, limits->rightKnockbackMode);
         }
-        obj->x = obj->x - spad->field_68;
-        obj->z = obj->z - spad->field_70;
+        obj->x = obj->x - spad->correctionX;
+        obj->z = obj->z - spad->correctionZ;
         lateralOffset = spad->field_88 - limits->rightInset;
         spad->field_3C = limits->rightKnockbackMode;
     }
@@ -324,15 +324,15 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     segLenF = (s16)spad->segmentLength;
     spad->field_94 =
         (s16)((nextCamber * alongSegment + secondResult * (segLenF - alongSegment)) / segLenF);
-    spad->field_38 = rcos(spad->field_8C);
+    spad->headingCos = rcos(spad->field_8C);
     {
         s32 firstProduct;
         s32 sinValue;
         s32 secondProduct;
 
         sinValue = rsin(spad->field_8C);
-        spad->field_34 = sinValue;
-        firstProduct = spad->field_92 * spad->field_38;
+        spad->headingSin = sinValue;
+        firstProduct = spad->field_92 * spad->headingCos;
         if (firstProduct < 0)
         {
             firstProduct += 0xFFF;
@@ -345,12 +345,12 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
         }
         obj->bodyPitch = firstProduct + (secondProduct >> 0xC);
     }
-    forwardProduct = (0 - spad->field_38) * spad->field_94;
+    forwardProduct = (0 - spad->headingCos) * spad->field_94;
     if (forwardProduct < 0)
     {
         forwardProduct += 0xFFF;
     }
-    lateralProduct = spad->field_92 * spad->field_34;
+    lateralProduct = spad->field_92 * spad->headingSin;
     forwardComponent = forwardProduct >> 0xC;
     if (lateralProduct < 0)
     {

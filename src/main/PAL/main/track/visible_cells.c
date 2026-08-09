@@ -116,18 +116,8 @@ u32 IsCellVisibleFromRegion(s32 cellX, s32 cellZ, s32 region) {
     return (mask << region) & *(u32 *)x;
 }
 
-typedef struct Scr {
-    s32 f0;
-    s32 f4;
-    s32 f8;
-    s32 fC;
-    s32 f10;
-    s32 f14;
-} Scr;
-
-
 void BuildVisibleCells(s32 near, s32 far) {
-    Scr *s = (Scr *)&SCRATCH_VIEW_X;
+    ScratchViewState *view = SCRATCH_VIEW_STATE;
     s32 i;
     s32 j;
     s32 oct;
@@ -144,9 +134,9 @@ void BuildVisibleCells(s32 near, s32 far) {
         g_VisibleCellMask[i] = 0;
     }
 
-    oct = (s->f14 / 128) & 0x1F;
-    cx = s->f0 / 2048;
-    cy = s->f8 / 2048;
+    oct = (view->angleY / 128) & 0x1F;
+    cx = view->x / 2048;
+    cy = view->z / 2048;
     ret0 = GetCellRegion(cx, cy);
 
     i = 0;
@@ -198,9 +188,9 @@ void BuildVisibleCells(s32 near, s32 far) {
             g_VisibleCellMask[sy] |= 1 << sx;
             center = 1024;
             if (clut != 0x3FF) {
-                vec[0] = ((sx << 11) - (s->f0 - center)) << 2;
-                vec[1] = (-s->f4) << 2;
-                vec[2] = ((sy << 11) - (s->f8 - center)) << 2;
+                vec[0] = ((sx << 11) - (view->x - center)) << 2;
+                vec[1] = (-view->y) << 2;
+                vec[2] = ((sy << 11) - (view->z - center)) << 2;
                 ApplyMatrixLV(SCRATCH_VIEW_MATRIX_GTE, vec, proj);
                 if (proj[2] >= near && far >= proj[2]) {
                     out->x = proj[0];
