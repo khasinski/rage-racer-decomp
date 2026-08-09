@@ -141,6 +141,8 @@ void ForceIndexedEffectVoiceEnabled(s32 enabled) {
 }
 
 void ForcePitchEffectVoicesEnabled(s32 enabled) {
+    EffectVoiceAddress cursorAddress;
+    EffectVoiceAddress endAddress;
     s32 voicePacked;
     s32 voice;
     s32 *pitchCursor;
@@ -213,7 +215,9 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
         pitchCursor += sizeof(EffectVoice) / sizeof(*pitchCursor);
         noteCursor += sizeof(EffectVoice) / sizeof(*noteCursor);
         offset += 0x14;
-    } while ((s32)pitchCursor < (s32)&g_ReverbFadeStep);
+        cursorAddress.wordPointer = pitchCursor;
+        endAddress.wordPointer = &g_ReverbFadeStep;
+    } while (cursorAddress.byteOffset < endAddress.byteOffset);
 }
 
 void ForceSoundSlotVoicePlayback(s32 enabled) {

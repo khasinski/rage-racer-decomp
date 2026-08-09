@@ -15,12 +15,6 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 *entry;
     s32 *scan;
     s32 *lower_position;
-    s32 lower_value_base;
-    s32 lower_value_indexed;
-    s32 lower_value_address;
-    s32 upper_value_base;
-    s32 upper_value_banked;
-    s32 upper_value_address;
     s32 lower_position_value;
     s32 lower_value_value;
     s32 upper_value_value;
@@ -30,8 +24,9 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 result;
     EngineSoundCurveAddress curveAddress;
     EngineSoundCurveAddress entryAddress;
-    EngineSoundCurveAddress valueBaseAddress;
     EngineSoundCurveAddress denominatorAddress;
+    EngineSoundCurveAddress lowerValueAddress;
+    EngineSoundCurveAddress upperValueAddress;
 
     index = 1;
     row_offset = (parameter * 9) << 3;
@@ -56,16 +51,14 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     curveAddress.byteOffset = index_offset + curveAddress.byteOffset;
     curveAddress.byteOffset += bank;
     lower_position = curveAddress.pointer;
-    valueBaseAddress.pointer = base + 8;
-    lower_value_base = valueBaseAddress.byteOffset;
-    lower_value_indexed = index_offset + lower_value_base;
-    lower_value_address = lower_value_indexed + bank;
-    valueBaseAddress.pointer = base + 9;
-    upper_value_base = valueBaseAddress.byteOffset;
-    upper_value_banked = bank + upper_value_base;
-    upper_value_address = index_offset + upper_value_banked;
-    lower_value_value = *(s32 *)lower_value_address;
-    upper_value_value = *(s32 *)upper_value_address;
+    lowerValueAddress.pointer = base + 8;
+    lowerValueAddress.byteOffset = index_offset + lowerValueAddress.byteOffset;
+    lowerValueAddress.byteOffset += bank;
+    upperValueAddress.pointer = base + 9;
+    upperValueAddress.byteOffset = bank + upperValueAddress.byteOffset;
+    upperValueAddress.byteOffset = index_offset + upperValueAddress.byteOffset;
+    lower_value_value = *lowerValueAddress.pointer;
+    upper_value_value = *upperValueAddress.pointer;
     lower_position_value = *lower_position;
     numerator =
         (upper_value_value - lower_value_value) *

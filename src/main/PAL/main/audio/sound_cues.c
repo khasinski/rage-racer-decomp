@@ -214,6 +214,8 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     *statePtr = neg
 
 void UpdateEffectVoiceStates(void) {
+    EffectVoiceAddress cursorAddress;
+    EffectVoiceAddress endAddress;
     s32 *statePtr;
     s32 *pitchPtr;
     s16 *f0Ptr;
@@ -257,7 +259,9 @@ void UpdateEffectVoiceStates(void) {
         pitchPtr += sizeof(EffectVoice) / sizeof(*pitchPtr);
         f0Ptr += sizeof(EffectVoice) / sizeof(*f0Ptr);
         offset += sizeof(EffectVoice);
-    } while ((s32)statePtr < (s32)&g_EffectVoices[4].state);
+        cursorAddress.wordPointer = statePtr;
+        endAddress.wordPointer = &g_EffectVoices[4].state;
+    } while (cursorAddress.byteOffset < endAddress.byteOffset);
 }
 
 

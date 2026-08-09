@@ -59,6 +59,7 @@ typedef struct EffectVoice {
 
 typedef union EffectVoiceAddress {
     s32 byteOffset;
+    s32 *wordPointer;
     EffectVoice *pointer;
 } EffectVoiceAddress;
 
