@@ -244,11 +244,11 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
     offset = 0;
     do {
         stride = 0x20000;
-        g_FrameContexts[offset + 0x16] = one;
-        g_FrameContexts[offset + 0x18] = one;
-        g_FrameContexts[offset + 0x19] = r;
-        g_FrameContexts[offset + 0x1A] = g;
-        g_FrameContexts[offset + 0x1B] = b;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->draw.dtd = one;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->draw.isbg = one;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->draw.r0 = r;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->draw.g0 = g;
+        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->draw.b0 = b;
         value = *src0;
         stride |= 0x37E8;
         ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts + offset))->display.screen.x = value;
