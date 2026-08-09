@@ -1,5 +1,6 @@
 {
   "asm_aliases": 0,
+  "address_reinterpret_casts": 78,
   "byte_pointer_arithmetic": 28,
   "declaration_overrides": 0,
   "empty_barriers": 142,

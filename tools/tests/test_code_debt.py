@@ -33,6 +33,7 @@ void f(u8 *base, void *ptr) {
         self.assertEqual(counts["byte_pointer_arithmetic"], 1)
         self.assertEqual(counts["raw_offset_dereferences"], 2)
         self.assertEqual(counts["pointer_integer_casts"], 1)
+        self.assertEqual(counts["address_reinterpret_casts"], 1)
         self.assertEqual(counts["field_macros"], 1)
         self.assertEqual(counts["register_pins"], 2)
         self.assertEqual(counts["empty_barriers"], 1)

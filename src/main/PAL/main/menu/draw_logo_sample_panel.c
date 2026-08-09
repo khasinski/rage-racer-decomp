@@ -35,7 +35,7 @@ void DrawLogoSamplePanel(s32 step, s32 sample) {
 
         for (i = 0, xoff = -23; i < 15; i++) {
             DrawSolidRect(ot, (s16)(xc + xoff), (s16)(t + 528), 8, (u16)0x10,
-                          (u8)(*(u8 *)&g_TeamLogoSwatches[i] << 3),
+                          (u8)((g_TeamLogoSwatches[i] & 0xFF) << 3),
                           (u8)((g_TeamLogoSwatches[i] >> 2) & 0xf8),
                           (u8)((g_TeamLogoSwatches[i] >> 7) & 0xf8), (u8)0xFF);
             xoff += 8;
