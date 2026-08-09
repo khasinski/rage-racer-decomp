@@ -182,10 +182,10 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   frontLoadScaled = frontLoad >> 8;
   if (frontLoad < 0)
   {
-    frontLoadScaled = ((s32) (frontLoad + 0xFF)) >> 8;
+    frontLoadScaled = (frontLoad + 0xFF) >> 8;
   }
   gripBudget = 0x17C - frontLoadScaled;
-  gripBudget += ((s32) (drive->brakeBtn * 0x64)) / 256;
+  gripBudget += (drive->brakeBtn * 0x64) / 256;
   if (drive->state98 == 1)
   {
     driveCurveMode = drive->unk40;
@@ -342,7 +342,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
         }
         frontLoadScaled = (engineSpeed - bandTorque) * curveValues[1];
         frontLoadScaled += (((s32) gearCurve) - engineSpeed) * curveValues[0];
-        netTorque = frontLoadScaled / ((s32) (bandCurve * 0xA));
+        netTorque = frontLoadScaled / (bandCurve * 0xA);
       }
       else
       {
@@ -612,11 +612,11 @@ shift_interpolation_done:
     assistArmed = shiftRemaining >= 0;
     if (assistArmed)
     {
-      steerLoad += ((s32) ((shiftRemaining * 5) / 6)) / assistStep;
+      steerLoad += ((shiftRemaining * 5) / 6) / assistStep;
     }
     else
     {
-      steerLoad -= ((s32) ((shiftRemaining * 5) / 6)) / assistStep;
+      steerLoad -= ((shiftRemaining * 5) / 6) / assistStep;
     }
   }
   trackHeadingError = GetAngleDistance(car->headingAngle,
@@ -638,7 +638,7 @@ shift_interpolation_done:
   slipAngle = dragProduct >> 0xC;
   if (dragProduct < 0)
   {
-    slipAngle = ((s32) (dragProduct + 0xFFF)) >> 0xC;
+    slipAngle = (dragProduct + 0xFFF) >> 0xC;
   }
   if (slipAngle < (-0xEE))
   {
@@ -679,13 +679,13 @@ shift_interpolation_done:
     throttleAccel = (throttleAccel * 4) / 5;
   }
   shiftTargetSpeed = (roadSpeed = car->speed * 0xA0 / 1168);
-  dragBase = (s32) ((g_CarSpec->unk110) * 0x3E8);
+  dragBase = g_CarSpec->unk110 * 0x3E8;
   dragTerm = dragBase / ((s16) g_DragScale);
   if (dragTerm <= 0)
   {
     dragTerm = 1;
   }
-  steerLoad += ((s32) (roadSpeed * roadSpeed)) / dragTerm;
+  steerLoad += (roadSpeed * roadSpeed) / dragTerm;
   g_DragScale = 0x3E8;
   if (car->shiftState == 0)
   {
@@ -728,7 +728,7 @@ shift_interpolation_done:
       frontLoadScaled = radialDistance >> 0xC;
       if (radialDistance < 0)
       {
-        frontLoadScaled = ((s32) (radialDistance + 0xFFF)) >> 0xC;
+        frontLoadScaled = (radialDistance + 0xFFF) >> 0xC;
       }
     }
     else
@@ -739,7 +739,7 @@ shift_interpolation_done:
     {
       downforceScale = (g_CarSpec->unk10C) * 0x64;
     }
-    downforce = ((s32) ((g_CarSpec->unk10C) * 0x64)) / downforceScale;
+    downforce = (g_CarSpec->unk10C * 0x64) / downforceScale;
     if (downforce <= 0)
     {
       downforce = 1;
