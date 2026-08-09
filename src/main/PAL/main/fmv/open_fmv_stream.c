@@ -3,9 +3,7 @@
 #include "game/asset.h"
 #include "psyq/gpu.h"
 #include "game/render.h"
-#define GAME_FMV_STRIP_INDEX_QUALIFIER volatile
 #include "game/fmv_decode_internal.h"
-#define GAME_FMV_STATE_QUALIFIER volatile
 #include "game/fmv_internal.h"
 #include "psyq/press_internal.h"
 
