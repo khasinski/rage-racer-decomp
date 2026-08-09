@@ -679,7 +679,7 @@ shift_interpolation_done:
     throttleAccel = (throttleAccel * 4) / 5;
   }
   shiftTargetSpeed = (roadSpeed = car->speed * 0xA0 / 1168);
-  dragBase = g_CarSpec->unk110 * 0x3E8;
+  dragBase = g_CarSpec->speedDragDivisor * 0x3E8;
   dragTerm = dragBase / ((s16) g_DragScale);
   if (dragTerm <= 0)
   {
@@ -733,13 +733,13 @@ shift_interpolation_done:
     }
     else
     {
-      frontLoadScaled = (g_CarSpec->unk10C) * 0x64;
+      frontLoadScaled = (g_CarSpec->referenceTurnRadius) * 0x64;
     }
-    if ((frontLoadScaled <= 0) || ((downforceScale = (g_CarSpec->unk10C) * 0x64, downforceScale <= 0)))
+    if ((frontLoadScaled <= 0) || ((downforceScale = (g_CarSpec->referenceTurnRadius) * 0x64, downforceScale <= 0)))
     {
-      downforceScale = (g_CarSpec->unk10C) * 0x64;
+      downforceScale = (g_CarSpec->referenceTurnRadius) * 0x64;
     }
-    downforce = (g_CarSpec->unk10C * 0x64) / downforceScale;
+    downforce = (g_CarSpec->referenceTurnRadius * 0x64) / downforceScale;
     if (downforce <= 0)
     {
       downforce = 1;
@@ -791,7 +791,7 @@ shift_interpolation_done:
           car->acceleration = torqueShifted;
           if (drive->manual == 0)
           {
-            car->acceleration = g_CarSpec->unk102 * torqueShifted / 1000;
+            car->acceleration = g_CarSpec->automaticAccelerationScale * torqueShifted / 1000;
           }
         }
       }

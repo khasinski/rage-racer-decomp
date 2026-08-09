@@ -289,14 +289,14 @@ typedef struct GameCarSpec {
     s32 gearLoad[6];      /* +0xCC engine-load divisor per gear */
     s32 gearRatio[7];     /* +0xE4 final-drive ratio per gear (rpm divisor) */
     s16 revLimit;         /* +0x100 rev ceiling; the tacho and cut-out use it */
-    s16 unk102;           /* +0x102 scale applied to car->acceleration */
+    s16 automaticAccelerationScale; /* +0x102, per-thousand automatic gearbox scale */
     s16 topGear;          /* +0x104 highest selectable gear */
     s16 redline;          /* +0x106 redline warning rpm */
     s16 steeringGripResponse;
     u16 steerResponse;    /* +0x10A divisor of the AI heading correction */
-    s16 unk10C;           /* +0x10C */
+    s16 referenceTurnRadius; /* +0x10C, baseline for curved-track grip scaling */
     s16 negconSteeringAssistScale; /* +0x10E */
-    s16 unk110;           /* +0x110 */
+    s16 speedDragDivisor; /* +0x110, denominator of the speed-squared drag term */
     s16 baseSteeringGrip; /* +0x112 */
     s16 torqueScale[6];
     GameCarSpecShiftPoint shiftPoints[6]; /* +0x120, index = gear - 1 */
