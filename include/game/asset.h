@@ -107,7 +107,7 @@ extern CarModelAsset *g_CarModelAsset;
 /* One VRAM upload record inside an image asset; UploadImageAsset walks a chain of
  * them and UploadImageBlock uploads each. */
 typedef struct GameImageBlock {
-    s32 size;   /* +0x00 block size in bytes, rounded down to a word */
+    u32 size;   /* +0x00 block size in bytes, rounded down to a word */
     u16 x;      /* +0x04 VRAM destination */
     u16 y;      /* +0x06 */
     u16 w;      /* +0x08 in 16-bit words */

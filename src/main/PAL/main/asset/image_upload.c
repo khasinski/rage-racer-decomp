@@ -22,7 +22,7 @@ void UploadImageBlock(GameImageAssetHeaderWord *asset) {
         rect.h = block->h;
         LoadImage(&rect, block->pixels);
         DrawSync(0);
-        asset = (GameImageAssetHeaderWord *)block + ((u32)block->size >> 2);
+        asset = (GameImageAssetHeaderWord *)block + (block->size >> 2);
     }
 
     block = (GameImageBlock *)asset;
@@ -54,7 +54,8 @@ void UploadImageAsset(void *asset) {
     goto test;
 
     do {
-        GameImageAssetHeaderWord *next = ptr + ((u32)size >> 2);
+        u32 blockSize = size;
+        GameImageAssetHeaderWord *next = ptr + (blockSize >> 2);
         UploadImageBlock(ptr);
         ptr = next;
     test:

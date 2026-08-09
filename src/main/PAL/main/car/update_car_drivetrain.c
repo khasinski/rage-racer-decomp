@@ -492,21 +492,21 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
           if (targetGearCheck == 4)
           {
             gradePenalty = (-g_RoadGrade) / 120;
-            wheelSpeedScaled = (s32) ((u32) wheelSpeedScaled << 16);
+      wheelSpeedScaled = (u32)wheelSpeedScaled << 16;
             wheelSpeedScaled >>= 16;
           }
           else
             if (targetGearCheck == 5)
           {
             gradePenalty = (-g_RoadGrade) / 48;
-            wheelSpeedScaled = (s32) ((u32) wheelSpeedScaled << 16);
+      wheelSpeedScaled = (u32)wheelSpeedScaled << 16;
             wheelSpeedScaled >>= 16;
           }
           else
             if (targetGearCheck >= 6)
           {
             gradePenalty = (g_RoadGrade * (-7)) / 240;
-            wheelSpeedScaled = (s32) ((u32) wheelSpeedScaled << 16);
+        wheelSpeedScaled = (u32)wheelSpeedScaled << 16;
             wheelSpeedScaled >>= 16;
           }
           else

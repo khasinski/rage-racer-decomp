@@ -145,10 +145,10 @@ void DrawSkyBackground(void)
     leftViewAngle /= 2;
     coordinateAccumulator = (coordinateAccumulator / 2) + 0x50;
     textureColumn = angleWork >> 7;
-    horizontalFixed = (s32) (((u32) ((-0x100) - ((angleWork >> 1) & 0x3F))) << 8);
-    nearVerticalFixed = (s32) (((u32) ((-0x80) - leftViewAngle)) << 8);
+    horizontalFixed = ((u32)((-0x100) - ((angleWork >> 1) & 0x3F))) << 8;
+    nearVerticalFixed = ((u32)((-0x80) - leftViewAngle)) << 8;
     rollAngle = scratch->roll;
-    farVerticalFixed = (s32) (((u32) ((-0x80) - coordinateAccumulator)) << 8);
+    farVerticalFixed = ((u32)((-0x80) - coordinateAccumulator)) << 8;
     if (g_MirrorMode == 0)
     {
       rollAngle = -rollAngle;
