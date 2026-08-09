@@ -198,8 +198,10 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
     } else {
         drive->spinRate = drive->spinRate * 15 / 16;
         if (s4val < 0x1000) {
+            GameCarSpec *spec;
+            GameCarSpecAddress specAddress;
             s32 lo;
-            u8 *specBase;
+            s32 offset;
 
             {
                 s32 gain = (100 - (drive->gear - 1) * 4) * 10000;
@@ -229,13 +231,12 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
 
             drive->spinRate = 0;
 
-            specBase = (u8 *)g_CarSpec;
-            lo = car->speed * 0xA0 / 1168 * 10000 /
-                 *(s32 *)((u8 *)specBase +
-                          (drive->gear << 2) + 0xE4);
+            spec = g_CarSpec;
+            lo = car->speed * 0xA0 / 1168 * 10000;
+            specAddress.pointer = spec;
+            specAddress.byteOffset += drive->gear << 2;
+            lo /= specAddress.pointer->gearRatio[0];
             {
-                s32 offset;
-
                 asm volatile("" : : : "memory");
                 offset = drive->gear;
                 firstHeading = (u16)drive->engineRpm;
@@ -245,11 +246,12 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                 RAW(drive->motionState) = CAR_MOTION_AIRBORNE;
                 g_ShiftTargetRpm = lo;
                 RAW(drive->shiftRpmDelta) = *(u16 *)&g_ShiftTargetRpm - firstHeading;
-                specBase += offset;
+                specAddress.pointer = spec;
+                specAddress.byteOffset += offset;
             }
             {
                 drive->engineLoad =
-                    lo * ((GameCarSpec *)specBase)->gearLoad[0] / 0x20000;
+                    lo * specAddress.pointer->gearLoad[0] / 0x20000;
                 if (drive->manual == 0) {
                     drive->engineLoad =
                         drive->engineLoad * 985 / 1000;

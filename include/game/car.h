@@ -311,6 +311,11 @@ typedef struct GameCarSpec {
     CarTachometerSpec tachometer; /* +0x138 */
 } GameCarSpec;
 
+typedef union GameCarSpecAddress {
+    s32 byteOffset;
+    GameCarSpec *pointer;
+} GameCarSpecAddress;
+
 extern GameCarSpec *g_CarSpec;
 
 /* Per-gear torque curve, one 16-entry row per gear: row 0 is the engine's own
