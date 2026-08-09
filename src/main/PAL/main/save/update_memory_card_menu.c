@@ -597,11 +597,14 @@ slot_prompt_done:
     g_McMenuPhase = MC_PROMPT_ACCESSING;
     switch (g_McActionState) {
     case 0:
-        if ((u32)g_SceneTimer < 0x1F) break;
-        wtmp = 1;
-        g_McCardOkFrames = 0;
-        g_McActionElapsed = 0;
-        g_McActionState = wtmp;
+        {
+            u32 sceneFrame = g_SceneTimer;
+            if (sceneFrame < 0x1F) break;
+            wtmp = 1;
+            g_McCardOkFrames = 0;
+            g_McActionElapsed = 0;
+            g_McActionState = wtmp;
+        }
         break;
     case 1:
         g_McActionBusy = 0;
