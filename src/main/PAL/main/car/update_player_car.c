@@ -515,17 +515,17 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
 s32 DrawPlayerTachometer(void) {
     s32 value;
     s32 type;
-    s32 amount;
+    u32 amount;
 
     if (g_TrackZoneDark != 3) {
         value = g_EnvScriptClock;
         amount = value - 0x1154;
-        if ((u32)amount < 0x434C) {
-            if ((u32)amount < 0x80) {
+        if (amount < 0x434C) {
+            if (amount < 0x80) {
                 type = 3;
             } else {
                 amount = value - 0x5420;
-                if ((u32)amount < 0x80) {
+                if (amount < 0x80) {
                     type = 1;
                 } else {
                     type = 0;
