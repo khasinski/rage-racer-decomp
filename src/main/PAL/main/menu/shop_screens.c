@@ -4,7 +4,6 @@
 #include "game/car.h"
 #include "game/asset_internal.h"
 #include "game/menu.h"
-#define GAME_MENU_SCRIPT_TYPE u8
 #include "game/menu_scripts_internal.h"
 #include "game/render.h"
 #include "game/scratchpad.h"

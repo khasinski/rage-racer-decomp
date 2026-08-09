@@ -4,7 +4,6 @@
 #include "game/car.h"
 #include "game/course_select_internal.h"
 #include "game/menu.h"
-#define GAME_MENU_SCRIPT_TYPE u8
 #include "game/menu_scripts_internal.h"
 #include "game/player_car_internal.h"
 #include "game/save_internal.h"
