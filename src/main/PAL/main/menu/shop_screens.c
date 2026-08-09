@@ -18,6 +18,7 @@ void UpdateCarShopScreen(void) {
     s32 sel;
     s32 t;
     s32 u;
+    u32 modalState;
 
     ot = SCRATCH_OT_BASE_AS(void);
     g_MenuAltLayout = g_MenuAltLayoutSetting;
@@ -191,7 +192,8 @@ void UpdateCarShopScreen(void) {
         }
     } else {
         if (GameMenuBusy < 0) {
-            if ((u32) (GameMenuBusy + 2) < 2U) {
+            modalState = GameMenuBusy + 2;
+            if (modalState < 2U) {
                 u16 *pad;
 
                 RunTimedDrawScript(g_CarShopModalScript, &g_UiScriptProgress2, 0);
