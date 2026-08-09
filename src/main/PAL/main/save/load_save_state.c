@@ -205,7 +205,8 @@ s32 LoadSaveStateBlock(u8 *block) {
                 d1 = d1base;
                 joff = 0;
                 for (; j < 4; j++) {
-                    register s32 dc asm("$2");
+                    register RaceRecordAddress timeAddress asm("$2");
+                    RaceRecordAddress destinationAddress;
                     register s32 *dst2 asm("$11");
                     register s32 sb asm("$3");
                     s32 s2;
@@ -214,8 +215,10 @@ s32 LoadSaveStateBlock(u8 *block) {
                     register s32 *src1 asm("$6");
                     s32 s1;
                     k = 0;
-                    dc = iofc + (s32)cb78;
-                    dst2 = (s32 *)(joff + dc);
+                    timeAddress.wordPointer = cb78;
+                    timeAddress.byteOffset = iofc + timeAddress.byteOffset;
+                    destinationAddress.byteOffset = joff + timeAddress.byteOffset;
+                    dst2 = destinationAddress.wordPointer;
                     sb = iofc + (s32)base;
                     s2 = sb + 0xCDC;
                     src2 = (s32 *)(joff + s2);
