@@ -49,13 +49,9 @@ extern SceneryMotionData *GAME_SCENERY_DATA_QUALIFIER g_FlybySceneryData;
 extern PathSceneryPositionData *GAME_SCENERY_DATA_QUALIFIER g_PathSceneryPosData;
 #undef GAME_SCENERY_DATA_QUALIFIER
 
-#ifndef GAME_ROUTE_SCENERY_QUALIFIER
-#define GAME_ROUTE_SCENERY_QUALIFIER
-#endif
-extern GAME_ROUTE_SCENERY_QUALIFIER s32 g_RouteSceneryClock;
-extern GAME_ROUTE_SCENERY_QUALIFIER s16 g_RouteSceneryKeyIndex;
-extern GAME_ROUTE_SCENERY_QUALIFIER s32 g_RouteSceneryRotY;
-#undef GAME_ROUTE_SCENERY_QUALIFIER
+extern s32 g_RouteSceneryClock;
+extern s16 g_RouteSceneryKeyIndex;
+extern s32 g_RouteSceneryRotY;
 extern SceneryMotionKeyframe *g_RouteSceneryKeyframe;
 
 extern s32 g_EnvScriptLength;
