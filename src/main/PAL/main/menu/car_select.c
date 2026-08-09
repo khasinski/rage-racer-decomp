@@ -139,13 +139,17 @@ pos:
 
 s32 DrawCarSelectScreen(s32 step) {
     u32 *ot = SCRATCH_OT_BASE_AS(u32);
-    s32 p = (s32)ot;
+    OrderingTableAddress otAddress;
+    s32 p;
     u32 *buf = ot + 1;
     s32 v;
     s32 col;
     s32 xpos;
     s32 mode;
     u8 tex;
+
+    otAddress.pointer = ot;
+    p = otAddress.byteOffset;
 
     if (step == 0) {
         g_CarSelectFadeAccum = 0;

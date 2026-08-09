@@ -150,12 +150,14 @@ s32 DrawCourseSelectScreen(s32 step)
     s32 gpFlags;
     s32 gpSlide;
     s32 gpFade;
+    OrderingTableAddress otAddress;
 
     otBase = SCRATCH_OT_BASE_AS(u32);
     ot = otBase + 1;
     if (step == 0) {
         g_CourseSelectScrollValue = 0;
-        return (s32)otBase;
+        otAddress.pointer = otBase;
+        return otAddress.byteOffset;
     }
 
     if (step > 0) {

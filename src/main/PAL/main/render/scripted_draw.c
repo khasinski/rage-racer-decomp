@@ -116,6 +116,7 @@ void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion 
     s32 temp;
     s32 interp;
     s32 alpha;
+    OrderingTableAddress otAddress;
 
     /* Match note: materialize motionReg in $t0 before the first load. */
     limit = motionReg->limit;
@@ -200,7 +201,8 @@ void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion 
     x0 <<= 0x10;
     y1 = y0Call << 0x10;
     x1 <<= 0x10;
-    otPtr = (s32)otBase + elapsed;
+    otAddress.pointer = otBase;
+    otPtr = otAddress.byteOffset + elapsed;
     asm("" : "=r"(otPtr), "=r"(x0) : "0"(otPtr), "1"(x0));
     DrawLine(
         (void *)otPtr,
