@@ -123,7 +123,7 @@ void DrawLapTimes(void) {
             base = g_DrawBuffer;
             ot = base + 0xCC;
             prim = (void *)(baseOffset + (s32)base);
-            *(s16 *)(primOffset + (s32)base + 0x23706) = tile;
+            ((SPRT *)(primOffset + (s32)base + 0x236F8))->clut = tile;
             AddPrim(ot, prim);
             i++;
             baseOffset += 0x14;
