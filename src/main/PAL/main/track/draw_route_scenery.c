@@ -1,4 +1,5 @@
 #include "common.h"
+#include "game/asset.h"
 #include "game/race.h"
 #include "game/render.h"
 #include "game/scratchpad.h"
@@ -32,13 +33,12 @@ void DrawRouteScenery(void) {
     SubmitModel((void *)SCRATCHPAD_ADDR, drawId);
 }
 
-#define ANGLES(byteOffset) (*(SVec *)((u8 *)g_ShuttlePathAngles + (byteOffset)))
-
 void InitShuttleScenery(void) {
     GameShuttleScenery *state;
     s32 index;
     s32 value;
     s32 v1;
+    AssetAddress angleAddress;
 
     state = &g_ShuttleScenery[0];
     if ((g_CourseIndex & 3) == 2) {
@@ -62,16 +62,22 @@ void InitShuttleScenery(void) {
     state->position = g_ShuttlePathPoints[state->pathIndex].endpoint[0];
     value = state->pathIndex;
     value <<= 3;
-    v1 = RAW(ANGLES(value).vx);
+    angleAddress.pointer = g_ShuttlePathAngles;
+    angleAddress.offset += value;
+    v1 = RAW(((SVec *)angleAddress.pointer)->vx);
     asm("" ::: "memory");
     value = state->pathIndex;
     value <<= 3;
     state->angleX = v1;
-    v1 = RAW(ANGLES(value).vy);
+    angleAddress.pointer = g_ShuttlePathAngles;
+    angleAddress.offset += value;
+    v1 = RAW(((SVec *)angleAddress.pointer)->vy);
     value = state->pathIndex;
     value <<= 3;
     state->angleY = v1;
-    v1 = RAW(ANGLES(value).vz);
+    angleAddress.pointer = g_ShuttlePathAngles;
+    angleAddress.offset += value;
+    v1 = RAW(((SVec *)angleAddress.pointer)->vz);
     value = state->pathIndex;
     state->startEndpoint = 0;
     state->travelStep = 0;
