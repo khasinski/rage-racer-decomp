@@ -24,7 +24,7 @@ void InitRecordTables(void) {
     s32 r15;
     s32 r16;
     register s32 r17 asm("$17");
-    register s32 r18 asm("$18");
+    register RaceRecordAddress r18 asm("$18");
     s32 r19;
     s32 r20;
     register s32 r21 asm("$21");
@@ -35,7 +35,7 @@ void InitRecordTables(void) {
     s32 r30;
 
     r14 = 0;
-    r18 = (s32)&g_DefaultLapTimes;
+    r18.wordPointer = &g_DefaultLapTimes;
     r17 = (s32)&g_BestTotalTimes;
     r16 = (s32)&g_BestLapTimes;
     do {
@@ -50,7 +50,7 @@ void InitRecordTables(void) {
             do {
                 r4 = 0;
                 r10 = r8;
-                r2 = r12 + r18;
+                r2 = r12 + r18.byteOffset;
                 r6 = r7 * 4;
                 r9 = r6 + r2;
                 r3 = r5 * 4;
@@ -88,8 +88,8 @@ void InitRecordTables(void) {
         do {
             r6 = 0;
             r19 = r15;
-            r18 = (s32)&g_TimeRecords;
-            r21 = r18 + 4;
+            r18.pointer = &g_TimeRecords[0][0][0];
+            r21 = r18.byteOffset + 4;
             r25 = r7 * 4;
             __asm__("" : "=r"(r25) : "0"(r25));
             r2 = (s32)&g_DefaultLapTimes;
@@ -117,7 +117,7 @@ void InitRecordTables(void) {
                 *(s32 *)r2 = r3;
                 r3 = *(s32 *)r8;
                 r8 += 0xC;
-                r2 = r4 + r18;
+                r2 = r4 + r18.byteOffset;
                 *(s32 *)r2 = r3;
                 r2 = *(s32 *)r9;
                 r4 = r4 + r21;
