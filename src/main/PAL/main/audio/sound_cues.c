@@ -187,7 +187,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
 #define VOLPITCH()                                                    \
     svArg = voiceCopy;                                                \
                                \
-    prod = ((EffectVoice *)((u8 *)g_EffectVoices + offset))->volume * g_SoundScale.scale; \
+    prod = GetEffectVoiceAtByteOffset(offset)->volume * g_SoundScale.scale; \
     left = prod;                                                      \
     if (prod < 0) {                                                   \
         left = prod + 0x7F;                                           \

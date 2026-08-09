@@ -57,7 +57,20 @@ typedef struct EffectVoice {
     s32 volume;    /* +0x10 volume */
 } EffectVoice; /* sizeof 0x14 */
 
+typedef union EffectVoiceAddress {
+    s32 byteOffset;
+    EffectVoice *pointer;
+} EffectVoiceAddress;
+
 extern EffectVoice g_EffectVoices[];
+
+static __inline__ EffectVoice *GetEffectVoiceAtByteOffset(s32 byteOffset) {
+    EffectVoiceAddress address;
+
+    address.pointer = g_EffectVoices;
+    address.byteOffset += byteOffset;
+    return address.pointer;
+}
 
 /* Scalar control block at 0x6D80. Retail addresses these individually by
  * symbol, never base+index, so they stay independent externs. */

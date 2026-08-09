@@ -165,12 +165,11 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
             voiceArg = voicePacked >> 16;
             left = g_VabIds[0];
             right = *(s16 *)noteCursor;
-            keyTone =
-                (s16)((EffectVoice *)((u8 *)g_EffectVoices + offset))->tone;
+            keyTone = (s16)GetEffectVoiceAtByteOffset(offset)->tone;
             raw = 0x3C;
             SsUtKeyOnV(voiceArg, left, right, keyTone, raw, 0, 0, 0);
 
-            scale = ((EffectVoice *)((u8 *)g_EffectVoices + offset))->volume;
+            scale = GetEffectVoiceAtByteOffset(offset)->volume;
             asm volatile("" : : "r"(scale));
             raw = g_SoundScale.scale;
             raw = scale * raw;
