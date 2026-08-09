@@ -93,10 +93,11 @@ void TriggerRaceCues(void) {
     s32 mask;
     PlayerRaceCueState *state;
     register s32 temp asm("v0");
-    register s32 entry asm("v1");
+    register TrackRaceCueAddress entry asm("v1");
     register s32 loopFlags asm("t0");
     register s32 current asm("a0");
     s32 product;
+    TrackRaceCueAddress baseAddress;
 
     current = g_RaceCueFlags;
     base = (u8 *)&g_TrackEventData->raceCues;
@@ -105,10 +106,10 @@ void TriggerRaceCues(void) {
         if (g_PlayerCar.trackSection ==
             ((TrackFinishCue *)((g_RaceSeries * sizeof(TrackFinishCue)) +
                                 (s32)base))->trackSection) {
-            entry = g_PlayerCar.lap;
-            if (entry == g_LapCount) {
-                entry = current | 8;
-                g_RaceCueFlags = entry;
+            entry.byteOffset = g_PlayerCar.lap;
+            if (entry.byteOffset == g_LapCount) {
+                entry.byteOffset = current | 8;
+                g_RaceCueFlags = entry.byteOffset;
                 if (g_WrongWayTimer < 10) {
                     PlaySoundCue(0x2A);
                 }
@@ -129,9 +130,10 @@ void TriggerRaceCues(void) {
         temp = mask & loopFlags;
         if (temp == 0) {
             temp = g_RaceSeries;
-            entry = ((temp * 3) + i) << 2;
-            entry += (s32)base;
-            current = ((TrackRaceCueData *)entry)->speed[0][0].trackSection;
+            entry.byteOffset = ((temp * 3) + i) << 2;
+            baseAddress.bytePointer = base;
+            entry.byteOffset += baseAddress.byteOffset;
+            current = entry.pointer->speed[0][0].trackSection;
             temp = -1;
             if (current == temp) {
                 return;
@@ -139,12 +141,12 @@ void TriggerRaceCues(void) {
 
             temp = state->trackSection;
             if (temp == current) {
-                entry = ((TrackRaceCueData *)entry)->speed[0][0].speedPercent;
+                entry.byteOffset = entry.pointer->speed[0][0].speedPercent;
                 temp = state->speedScale;
-                product = entry * temp;
+                product = entry.byteOffset * temp;
                 temp = product / 100;
-                entry = state->speed;
-                if (temp < entry) {
+                entry.byteOffset = state->speed;
+                if (temp < entry.byteOffset) {
                     temp = state->motionMode;
                     if (temp <= 0) {
                         temp = mask | loopFlags;

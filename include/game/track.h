@@ -141,6 +141,13 @@ typedef struct TrackRaceCueData {
     TrackSpeedCue speed[2][3];
 } TrackRaceCueData;
 
+typedef union TrackRaceCueAddress {
+    s32 byteOffset;
+    u8 *bytePointer;
+    TrackFinishCue *finishPointer;
+    TrackRaceCueData *pointer;
+} TrackRaceCueAddress;
+
 typedef struct TrackEventData {
     s32 trackWalkStart;
     TrackCrestEvent crestEvents[2][8];
