@@ -196,7 +196,7 @@ void ApplyCarKnockback(GameCarRuntime *car) {
     if (car->motionActive != 0) {
         timer = car->motionTimer - 1;
         car->motionTimer = timer;
-        if ((s32)(timer << 16) <= 0) {
+        if ((s16)timer <= 0) {
             car->motionActive = 0;
             car->motionTimer = 0;
         }

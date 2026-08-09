@@ -331,7 +331,7 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
         ctx->bodyRollVelocity = (ctx->bodyRollVelocity * 7) / 8;
     }
     } else if (g_PadType == 0x23) {
-    a1 = ((s32)(g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconMaxTwist];
+    a1 = ((g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconMaxTwist];
     if (g_MirrorMode != 0) a1 = -a1;
     if (!(a1 >= 0)) {
 
