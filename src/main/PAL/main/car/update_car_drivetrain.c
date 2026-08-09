@@ -127,9 +127,9 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   base = (u8 *)g_GearTorqueCurve;
   config = (u8 *)g_CarSpec;
   gear = car->drive.gear;
-  gearRatioSlot = ((u8 *)(config + (gear * 4))) + 0xCC;
+  gearRatioSlot = config + (gear * 4);
   gearCurve = (gear * 64) + ((u8 *)base);
-  gearRatio = *(s32 *)gearRatioSlot;
+  gearRatio = ((GameCarSpec *)gearRatioSlot)->gearLoad[0];
   drive = &car->drive;
   if (g_RacePhase < 2)
   {
@@ -330,9 +330,9 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       curveSlot = (void *)((bandSlot * 4) + ((s32) gearCurve));
       specSlot = (void *)((bandSlot * 4) + ((s32) config));
       loop_68:
-      bandTorque = *(s32 *)(((u8 *)specSlot) + 0x40);
+      bandTorque = ((GameCarSpec *)specSlot)->torqueBand.values[0];
 
-      if ((engineSpeed >= bandTorque) && ((gearCurve = *(u8 **)(((u8 *)specSlot) + 0x44), (((s32) gearCurve) < engineSpeed) == 0)))
+      if ((engineSpeed >= bandTorque) && ((gearCurve = (u8 *)((GameCarSpec *)specSlot)->torqueBand.values[1], (((s32) gearCurve) < engineSpeed) == 0)))
       {
         bandCurve = ((s32) gearCurve) - bandTorque;
         if (bandCurve <= 0)
@@ -379,11 +379,11 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       engineSpeedLoss = drive->unk78;
       gearCurve = (u8 *)((assistStep * 4) + ((s32) config));
       loop_83:
-      lossTorque = *(s32 *)(((u8 *)gearCurve) + 0xA8);
+      lossTorque = ((GameCarSpec *)gearCurve)->torqueLossRpm[0];
 
       if (engineSpeedLoss >= lossTorque)
       {
-        curveSlot = *(void **)(((u8 *)gearCurve) + 0xAC);
+        curveSlot = (void *)((GameCarSpec *)gearCurve)->torqueLossRpm[1];
         assistStep += 1;
         if (((s32) curveSlot) >= engineSpeedLoss)
         {
@@ -392,7 +392,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
           {
             lossCurve = 1;
           }
-          bandScale = ((s32) (((engineSpeedLoss - lossTorque) * (*(s32 *)(((u8 *)gearCurve) + 0x84))) + ((((s32) curveSlot) - engineSpeedLoss) * (*(s32 *)(((u8 *)gearCurve) + 0x80))))) / lossCurve;
+          bandScale = ((s32) (((engineSpeedLoss - lossTorque) * ((GameCarSpec *)gearCurve)->torqueLossValue[1]) + ((((s32) curveSlot) - engineSpeedLoss) * ((GameCarSpec *)gearCurve)->torqueLossValue[0]))) / lossCurve;
           lossBelowLimit = bandScale < 0x64;
         }
         else
@@ -458,7 +458,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
         if (drive->gearDisp != targetGear)
         {
           shiftTargetRpm = ((s32)(((car->speed * 0xA0) / 1168) * 0x2710)) /
-                           *(s32 *)((u8 *)((u8 *)g_CarSpec - (-(targetGear * 4))) + 0xE4);
+                           ((GameCarSpec *)((u8 *)g_CarSpec - (-(targetGear * 4))))->gearRatio[0];
           currentSpeed = (u16)drive->unk78;
           g_ShiftTargetRpm = shiftTargetRpm;
           drive->unk3C = (s16)((u16)g_ShiftTargetRpm - currentSpeed);
@@ -473,7 +473,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     if (drive->gearDisp != targetGearAgain)
     {
       gearCurve = (u8 *)((car->speed * 0x2710) /
-                         (*(s32 *)((u8 *)(config - (-(targetGearAgain * 4))) + 0xE4) * 0x490 / 160));
+                         (((GameCarSpec *)(config - (-(targetGearAgain * 4))))->gearRatio[0] * 0x490 / 160));
       wheelSpeed = (u16)car->field_A8;
       wheelSpeedScaled = wheelSpeed;
       assistEnabled = drive->manual;
