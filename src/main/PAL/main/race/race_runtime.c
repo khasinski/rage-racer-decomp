@@ -492,9 +492,9 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     scene = g_RaceSeries;
     ent->field_122 = val122;
     {
-        RivalStartEntry *p1;
+        TrackRivalStart *p1;
 
-        p1 = (RivalStartEntry *)(base + (sub + scene * 144) + 0x354);
+        p1 = (TrackRivalStart *)(base + (sub + scene * 144) + 0x354);
         ent->trackPointIndex = p1->trackPointIndex;
         ent->x = p1->x;
         ent->z = p1->z;
@@ -547,7 +547,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->field_104 = 0;
         ent->field_C4 = 0;
         ent->routeMarkerIndex = 0;
-        SeedCarLapProgress(ent, ((RivalStartEntry *)(p + 0x354))->modelId);
+        SeedCarLapProgress(ent, ((TrackRivalStart *)(p + 0x354))->modelId);
     }
 
     sub += g_RaceSeries * 144;
@@ -555,7 +555,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     {
         u16 model;
 
-        model = ((RivalStartEntry *)(base + 0x354))->modelId;
+        model = ((TrackRivalStart *)(base + 0x354))->modelId;
         ent->activeFlag = model;
         if ((s16)model != -1) {
             struct {
@@ -612,11 +612,11 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
   {
     s32 lev1_R3;
     unsigned int idxoff1_R4;
-    register RivalAiConfig *p1_R4;
+    register TrackRivalAiConfig *p1_R4;
     lev1_R3 = g_RaceSeries;
     idxoff1_R4 = idx_R8;
     idxoff1_R4 = idxoff1_R4 * 16;
-    p1_R4 = (RivalAiConfig *)(base_R9 + (idxoff1_R4 + (lev1_R3 * 192)) + 0x8F4);
+    p1_R4 = (TrackRivalAiConfig *)(base_R9 + (idxoff1_R4 + (lev1_R3 * 192)) + 0x8F4);
     ent2_R7->field_124 = (p1_R4->speed * 1168) / 160;
     ent2_R7->field_126 = p1_R4->field_126;
     ent2_R7->field_128 = p1_R4->field_128;
@@ -657,7 +657,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     lev2_R2 = g_RaceSeries;
     idxoff2_R4 = idx_R8 * 16;
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
-    w = ((RivalAiConfig *)(p2_R3 + 0x8F4))->field_132;
+    w = ((TrackRivalAiConfig *)(p2_R3 + 0x8F4))->field_132;
     sub_R6->field_132 = w;
     if (((s16) w) < 0x3D)
     {
@@ -666,7 +666,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     lev2_R2 = g_RaceSeries;
     __asm__("" : "=r"(idxoff2_R4) : "0"(idxoff2_R4));
     p2_R3 = base_R9 + (idxoff2_R4 + (lev2_R2 * 192));
-    w = ((RivalAiConfig *)(p2_R3 + 0x8F4))->field_134;
+    w = ((TrackRivalAiConfig *)(p2_R3 + 0x8F4))->field_134;
     sub_R6->field_134 = w;
     if (((s16) w) <= 0)
     {

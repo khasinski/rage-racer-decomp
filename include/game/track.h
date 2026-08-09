@@ -48,10 +48,48 @@ typedef struct TrackAiSpeedKey {
     s16 targetSpeeds[4];
 } TrackAiSpeedKey;
 
+typedef struct TrackRivalStart {
+    s32 x;
+    s32 z;
+    s16 trackPointIndex;
+    s16 modelId;
+} TrackRivalStart;
+
+typedef struct TrackRivalAiConfig {
+    s16 speed;
+    u16 field_126;
+    u16 field_128;
+    u16 field_12A;
+    u16 field_12C;
+    u16 field_132;
+    u16 field_134;
+    u16 reserved;
+} TrackRivalAiConfig;
+
+typedef struct TrackZone {
+    s32 start;
+    s32 end;
+    s16 code;
+    s16 value;
+} TrackZone;
+
+typedef struct TrackEventOffsets {
+    s32 routeScenery;
+    s32 raceIntroCamera;
+    s32 pathSceneryPosition;
+    s32 pathSceneryRotation;
+    s32 reserved;
+    s32 flybyScenery;
+} TrackEventOffsets;
+
 typedef struct TrackEventData {
     s32 trackWalkStart;
-    u8 reserved004[0x470];
+    u8 reserved004[0x350];
+    TrackRivalStart rivalStarts[2][12];
     TrackAiSpeedKey aiSpeedKeys[2][48];
+    TrackRivalAiConfig rivalAiConfigs[2][12];
+    TrackZone zones[20];
+    TrackEventOffsets offsets;
 } TrackEventData;
 
 /*

@@ -14,15 +14,6 @@
 
 
 
-typedef struct TrackZone {
-    s32 start;
-    s32 end;
-    s16 code;
-    s16 value;
-} TrackZone;
-
-
-
 void SeedReplayCars(void) {
     void *primary;
     void *secondary;
@@ -76,7 +67,7 @@ s32 GetTrackZoneBlend(s32 position) {
 
     base = g_TrackEventData;
     scene = g_RaceSeries;
-    first = (TrackZone *)(base + 0xA74);
+    first = ((TrackEventData *)base)->zones;
     if (scene != 0) {
         position = g_TrackLength - position;
     }
