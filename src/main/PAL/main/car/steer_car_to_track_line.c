@@ -6,6 +6,11 @@
 #include "game/audio.h"
 #include "game/random.h"
 
+typedef union EngineRpmAddress {
+    s32 *value;
+    u16 *rpm;
+} EngineRpmAddress;
+
 
 
 /*
@@ -240,6 +245,8 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
             specAddress.byteOffset += drive->gear << 2;
             lo /= specAddress.pointer->gearRatio[0];
             {
+                EngineRpmAddress shiftTarget;
+
                 asm volatile("" : : : "memory");
                 offset = drive->gear;
                 firstHeading = (u16)drive->engineRpm;
@@ -248,7 +255,8 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                 RAW(drive->jumpTimer) = 0x14;
                 RAW(drive->motionState) = CAR_MOTION_AIRBORNE;
                 g_ShiftTargetRpm = lo;
-                RAW(drive->shiftRpmDelta) = *(u16 *)&g_ShiftTargetRpm - firstHeading;
+                shiftTarget.value = &g_ShiftTargetRpm;
+                RAW(drive->shiftRpmDelta) = *shiftTarget.rpm - firstHeading;
                 specAddress.pointer = spec;
                 specAddress.byteOffset += offset;
             }
