@@ -475,7 +475,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     {
       gearCurve = (u8 *)((car->speed * 0x2710) /
                          (((GameCarSpec *)(config - (-(targetGearAgain * 4))))->gearRatio[0] * 0x490 / 160));
-      wheelSpeed = (u16)car->field_A8;
+      wheelSpeed = (u16)car->acceleration;
       wheelSpeedScaled = wheelSpeed;
       assistEnabled = drive->manual;
       drive->unk2C = wheelSpeedScaled;
@@ -758,28 +758,28 @@ shift_interpolation_done:
       arcPointIndex += 0x1FFFFF;
     }
     dragBase = arcPointIndex >> 0x15;
-    car->field_A8 = dragBase;
+    car->acceleration = dragBase;
   }
   else
   {
     if (car->shiftState != 0)
     {
       speedA = car->speed;
-      car->field_A8 = 0;
+      car->acceleration = 0;
       speedScaled = (speedA * 0x3E7) / 1000;
     }
     else
     {
       if (drive->clutch > 0)
       {
-        car->field_A8 = drive->unk2C;
+        car->acceleration = drive->unk2C;
       }
       else
       {
         torqueLate = gearTorqueLate;
         if (drive->unk38 > 0)
         {
-          car->field_A8 = drive->unk2C;
+          car->acceleration = drive->unk2C;
         }
         else
         {
@@ -788,16 +788,16 @@ shift_interpolation_done:
             torqueLate += 0x1FFFF;
           }
           torqueShifted = torqueLate >> 0x11;
-          car->field_A8 = torqueShifted;
+          car->acceleration = torqueShifted;
           if (drive->manual == 0)
           {
-            car->field_A8 = g_CarSpec->unk102 * torqueShifted / 1000;
+            car->acceleration = g_CarSpec->unk102 * torqueShifted / 1000;
           }
         }
       }
       if (g_GripLossTimer > 0)
       {
-        car->field_A8 /= 2;
+        car->acceleration /= 2;
       }
       speedB = car->speed;
       speedScaled = (speedB * 0x5E) / 100;

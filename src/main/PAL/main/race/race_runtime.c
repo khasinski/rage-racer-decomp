@@ -513,7 +513,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->field_68 = 0;
         ent->trackProgress = 0;
         ent->speed = 0;
-        ent->field_A8 = 0;
+        ent->acceleration = 0;
         ent->field_D0 = 0;
         ent->field_CC = 0;
         ent->field_C8 = 0;

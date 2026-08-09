@@ -66,7 +66,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->field_44 = 0;
   player->field_40 = 0;
   player->speed = 0;
-  player->field_A8 = 0;
+  player->acceleration = 0;
   player->lap = 0;
   player->drive.unk3E = 0;
   player->progressA = 0;
@@ -706,11 +706,11 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
     if (car->facingBackwards != g_RaceSeries)
     {
       car->drive.unk94 = 0;
-      car->field_A8 = 0;
+      car->acceleration = 0;
     }
     else
     {
-      car->field_A8 = car->field_A8 / 2;
+      car->acceleration = car->acceleration / 2;
       car->drive.unk94 = car->drive.unk94 * 0x50 / 100;
     }
     if ((car->speed - opponent->speed) >= 0x191)
@@ -752,7 +752,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
     s32 vx;
     s32 vz;
     opponent->speed = opponent->speed / 2;
-    opponent->field_A8 = opponent->field_A8 / 2;
+    opponent->acceleration = opponent->acceleration / 2;
     opponent->field_12E = opponent->field_12A;
     vx = (s16)((u16)opponent->field_C8 - (u16)car->drive.accelPos);
     velocityDelta.x = vx / 0x20;

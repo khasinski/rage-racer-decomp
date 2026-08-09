@@ -184,20 +184,20 @@ void UpdateRaceCars(void) {
             drive = (GameCarAiBlock *)&base->field_BC;
             if (walk->field_12E > 0) {
                 if (walk->field_128 < walk->field_12E && walk->speed >= 0x321) {
-                    walk->field_A8 = 0;
-                } else if (drive->field_130 >= walk->field_A8) {
-                    walk->field_A8 = drive->field_12C + walk->field_A8;
+                    walk->acceleration = 0;
+                } else if (drive->field_130 >= walk->acceleration) {
+                    walk->acceleration = drive->field_12C + walk->acceleration;
                 } else {
-                    walk->field_A8 = drive->field_130;
+                    walk->acceleration = drive->field_130;
                 }
                 drive->field_12E = drive->field_12E - 1;
-            } else if (walk->field_130 >= walk->field_A8) {
-                walk->field_A8 = walk->field_126 + walk->field_A8;
+            } else if (walk->field_130 >= walk->acceleration) {
+                walk->acceleration = walk->field_126 + walk->acceleration;
             } else {
-                walk->field_A8 = walk->field_130;
+                walk->acceleration = walk->field_130;
             }
             walk->speed = walk->speed * 0x5E / 100;
-            walk->speed = walk->speed + walk->field_A8;
+            walk->speed = walk->speed + walk->acceleration;
             walk->bodyYaw =
                 GetAngleDelta(walk->bodyYaw, drive->field_EC) / 5 + walk->bodyYaw;
         }
@@ -435,13 +435,13 @@ void UpdateAttractCars(void) {
         if (sub->activeFlag != -1) {
             drive = (GameCarAiBlock *)&car->field_BC;
 
-            if (sub->field_A8 < sub->field_130) {
-                sub->field_A8 = sub->field_126 + sub->field_A8;
+            if (sub->acceleration < sub->field_130) {
+                sub->acceleration = sub->field_126 + sub->acceleration;
             } else {
-                sub->field_A8 = sub->field_130;
+                sub->acceleration = sub->field_130;
             }
             sub->speed = sub->speed * 94 / 100;
-            sub->speed = sub->speed + sub->field_A8;
+            sub->speed = sub->speed + sub->acceleration;
             sub->bodyYaw =
                 GetAngleDelta(sub->bodyYaw, drive->field_EC) / 5 + sub->bodyYaw;
         }

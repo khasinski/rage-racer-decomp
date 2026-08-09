@@ -94,8 +94,8 @@ typedef struct GameCarRuntime {
     s16 field_9C;
     s16 field_9E;
     s32 headingAngle;
-    s32 speed;       /* +0xA4 longitudinal speed; km/h readout is speed * 160 / 1168 */
-    s32 field_A8;
+    s32 speed;        /* +0xA4 longitudinal speed; km/h readout is speed * 160 / 1168 */
+    s32 acceleration; /* +0xA8 per-frame acceleration ramp / drivetrain force */
     s16 activeFlag;
     s16 field_AE;
     s32 field_B0;
@@ -281,7 +281,7 @@ typedef struct GameCarSpec {
     s32 gearLoad[6];      /* +0xCC engine-load divisor per gear */
     s32 gearRatio[7];     /* +0xE4 final-drive ratio per gear (rpm divisor) */
     s16 revLimit;         /* +0x100 rev ceiling; the tacho and cut-out use it */
-    s16 unk102;           /* +0x102 scale applied to car->field_A8 */
+    s16 unk102;           /* +0x102 scale applied to car->acceleration */
     s16 topGear;          /* +0x104 highest selectable gear */
     s16 redline;          /* +0x106 redline warning rpm */
     s16 unk108;
@@ -451,7 +451,7 @@ typedef struct PlayerCarRuntime {
     s16 shiftBase;
     s32 headingAngle;
     s32 speed;
-    s32 field_A8;
+    s32 acceleration;
     s16 activeFlag;
     s16 field_AE;
     s32 field_B0;
@@ -491,9 +491,9 @@ typedef struct GameCarAiBlock {
     s16 field_124;  /* grid-seeded speed, clamped >= 0 */
     u8 pad6A[4];
     s16 field_12A;
-    s16 field_12C;  /* clamped to 0..15; the boost-branch step of field_A8 */
+    s16 field_12C;  /* clamped to 0..15; the boost-branch step of acceleration */
     s16 field_12E;  /* +0x72 slipstream-boost countdown, decremented while > 0 */
-    s16 field_130;  /* speed scale, damped to 98% when boxed in; caps field_A8 */
+    s16 field_130;  /* speed scale, damped to 98% when boxed in; caps acceleration */
     s16 field_132;  /* clamped to >= 0x3C */
     s16 field_134;  /* clamped to >= 0 */
     u8 pad7A[2];

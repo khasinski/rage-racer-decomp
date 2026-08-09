@@ -273,14 +273,14 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
         s32 a8;
 
         factor = (0x3600 - s4val) * 4;
-        a8 = car->field_A8;
+        a8 = car->acceleration;
         factor = factor * a8;
         factor = factor * (res - 0x400);
-        car->field_A8 = a8 / 2 + factor / 14155776;
+        car->acceleration = a8 / 2 + factor / 14155776;
     } else {
-        s32 a8 = car->field_A8;
+        s32 a8 = car->acceleration;
 
-        car->field_A8 = (0x200 - res) * a8 / 512;
+        car->acceleration = (0x200 - res) * a8 / 512;
     }
 
     {
