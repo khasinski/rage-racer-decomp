@@ -24,13 +24,13 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
     s32 t;
     s32 idx;
 
-    r = GetAngleDelta(car->field_24, route->unk90);
-    base = car->field_24;
-    car->field_24 = r / 5 + base;
+    r = GetAngleDelta(car->bodyYaw, route->unk90);
+    base = car->bodyYaw;
+    car->bodyYaw = r / 5 + base;
     AdvanceCarPosition(car, base);
 
-    sinA = rsin(car->field_24);
-    cosA = rcos(car->field_24);
+    sinA = rsin(car->bodyYaw);
+    cosA = rcos(car->bodyYaw);
 
     route->accelPos = rsin(car->headingAngle) * car->speed / 256;
     route->brakePos = rcos(car->headingAngle) * car->speed / 256;

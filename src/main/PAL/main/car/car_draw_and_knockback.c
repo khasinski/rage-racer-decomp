@@ -262,14 +262,14 @@ void SetCarKnockback(GameCarRuntime *car, s32 x, s32 z, s32 mode) {
         } else {
             speed = *(u16 *)&carReg->speed;
         }
-        trig = rsin(GetAngleDistance((s16)rawArg, carReg->field_24));
+        trig = rsin(GetAngleDistance((s16)rawArg, carReg->bodyYaw));
         product = (s16)speed * trig;
         if (product < 0) {
             product += 0xFFFF;
         }
         tmp = product >> 16;
     } else {
-        trig = rsin(GetAngleDistance((s16)rawArg, carReg->field_24));
+        trig = rsin(GetAngleDistance((s16)rawArg, carReg->bodyYaw));
         product = trig * 2;
         product += trig;
         product <<= 3;
@@ -370,7 +370,7 @@ void StartCarBodyKick(s32 strength, GameCarRuntime *car) {
 
 angled_body_kick:
     value = InterpolateTrackAngle(obj->trackPointIndex);
-    temp = GetAngleDistance(value, obj->field_24);
+    temp = GetAngleDistance(value, obj->bodyYaw);
     if (temp >= 0x401) {
         temp = 0x800 - temp;
     }

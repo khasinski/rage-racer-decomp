@@ -594,7 +594,7 @@ shift_interpolation_done:
   {
     accel -= netTorque / 2;
   }
-  headingError = GetAngleDistance(car->field_24, car->headingAngle, (s32) gearCurve, curveSlot);
+  headingError = GetAngleDistance(car->bodyYaw, car->headingAngle, (s32) gearCurve, curveSlot);
   drive->unk4C = headingError;
   if (headingError >= 0x401)
   {
@@ -806,7 +806,7 @@ shift_interpolation_done:
   }
   if (car->speed < 8)
   {
-    car->headingAngle = car->field_24;
+    car->headingAngle = car->bodyYaw;
   }
   if (g_RacePhase >= 2)
   {
@@ -838,6 +838,6 @@ shift_interpolation_done:
   }
   if (car->speed < 8)
   {
-    car->headingAngle = car->field_24;
+    car->headingAngle = car->bodyYaw;
   }
 }

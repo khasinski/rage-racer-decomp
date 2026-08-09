@@ -297,7 +297,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
     {
         s16 angle;
 
-        angle = (u16)car->field_24;
+        angle = (u16)car->bodyYaw;
         angle -= 0xC00;
         spad->field_8C = angle + (u16)spad->heading;
     }
@@ -362,7 +362,7 @@ void ResetCarTrackState(GameCarRuntime *car) {
                 (car->field_68 + car->field_6C) % trackLength;
             combinedComponent = firstComponent + (lateralProduct >> 0xC);
             car->field_58 = combinedComponent;
-            car->field_54 = car->field_24;
+            car->field_54 = car->bodyYaw;
             car->field_B4 = spad->heading;
             car->previousTrackProgress = car->trackProgress;
             car->trackProgress = progress;

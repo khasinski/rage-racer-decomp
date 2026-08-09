@@ -308,7 +308,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     {
         s16 angle;
 
-        angle = (u16)obj->field_24;
+        angle = (u16)obj->bodyYaw;
         angle -= 0xC00;
         spad->field_8C = angle + (u16)spad->heading;
     }

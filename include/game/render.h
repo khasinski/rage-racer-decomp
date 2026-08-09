@@ -258,7 +258,7 @@ typedef struct GameRenderSourcePoint {
     u8 padA[0x16];
     u16 field_20;
     u8 pad22[2];
-    u16 field_24;
+    u16 bodyYaw;
     u8 pad26[2];
     u16 field_28;
     u8 pad2A[6];

@@ -219,7 +219,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
 
     car->x -= car->motionX;
     car->z -= car->motionZ;
-    BuildRotMatrixY(&m1, car->field_24);
+    BuildRotMatrixY(&m1, car->bodyYaw);
     BuildRotMatrixX(&m2, car->field_20);
     MulMatrix2(&m2, &m1);
     BuildRotMatrixZ(&m2, car->field_28);
@@ -245,7 +245,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     AccumulateLapProgress((GameCarRuntime *)car);
 
     {
-        s32 base = car->field_24 - 0xC00;
+        s32 base = car->bodyYaw - 0xC00;
 
         slip = (base + g_TrackPoints[car->trackPointIndex].angle) & 0xFFF;
     }

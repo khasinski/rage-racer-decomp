@@ -51,7 +51,7 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
     dst->z0 = src1->field_8;
     dst->z20 = src1->field_60;
     dst->rotX0 = src1->field_20;
-    dst->rotY0 = src1->field_24;
+    dst->rotY0 = src1->bodyYaw;
     dst->rotZ0 = src1->field_28;
     dst->flags0 = src1->field_48;
     dst->field44_0 = src1->field_44;
@@ -60,7 +60,7 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
     dst->z1 = src2->field_8;
     dst->z21 = src2->field_60;
     dst->rotX1 = src2->field_20;
-    dst->rotY1 = src2->field_24;
+    dst->rotY1 = src2->bodyYaw;
     dst->rotZ1 = src2->field_28;
     dst->flags1 = src2->field_48;
     dst->field44_1 = src2->field_44;
@@ -88,7 +88,7 @@ void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
     dst->z = src->field_8;
     dst->z2 = src->field_60;
     dst->rotX = src->field_20;
-    dst->rotY = src->field_24;
+    dst->rotY = src->bodyYaw;
     dst->rotZ = src->field_28;
     dst->flags = src->field_48;
     dst->field44 = src->field_44;

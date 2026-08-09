@@ -100,7 +100,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
         value += car->headingAngle;
         car->headingAngle = value;
         ai->field_EC = value;
-        car->field_24 = value;
+        car->bodyYaw = value;
     }
 }
 
@@ -132,7 +132,7 @@ void UpdateRaceCars(void) {
     q = g_Cars;
     do {
         q->field_F8 = 0;
-        q->field_24 = q->field_108;
+        q->bodyYaw = q->field_108;
         q->field_8A = (u16)q->field_8A & 1;
         i++;
         q++;
@@ -198,8 +198,8 @@ void UpdateRaceCars(void) {
             }
             walk->speed = walk->speed * 0x5E / 100;
             walk->speed = walk->speed + walk->field_A8;
-            walk->field_24 =
-                GetAngleDelta(walk->field_24, drive->field_EC) / 5 + walk->field_24;
+            walk->bodyYaw =
+                GetAngleDelta(walk->bodyYaw, drive->field_EC) / 5 + walk->bodyYaw;
         }
         i++;
         walk++;
@@ -216,7 +216,7 @@ void UpdateRaceCars(void) {
     do {
         drive = (GameCarAiBlock *)&base->field_BC;
         if (walk->activeFlag != -1) {
-            walk->field_108 = walk->field_24;
+            walk->field_108 = walk->bodyYaw;
             t = rsin(walk->headingAngle) * walk->speed;
             if (t < 0) {
                 t += 0xFF;
@@ -238,7 +238,7 @@ void UpdateRaceCars(void) {
                 } else {
                     sixth = f4 / 6;
                 }
-                BuildRotMatrixY(pm1, walk->field_24);
+                BuildRotMatrixY(pm1, walk->bodyYaw);
                 BuildRotMatrixX(pm2, walk->field_20);
                 MulMatrix2(pm2, pm1);
                 BuildRotMatrixZ(pm2, walk->field_28);
@@ -280,7 +280,7 @@ void UpdateRaceCars(void) {
             } else if (walk->field_44 < -0x12B) {
                 walk->field_44 = -0x12C;
             }
-            walk->field_24 = walk->field_24 + drive->field_F4;
+            walk->bodyYaw = walk->bodyYaw + drive->field_F4;
         }
         i++;
         walk++;
@@ -400,7 +400,7 @@ void UpdateAttractCars(void) {
     for (i = 0; i < 11; i++) {
         c0->field_F8 = 0;
         c0->field_8A = 0;
-        c0->field_24 = c0->field_108;
+        c0->bodyYaw = c0->field_108;
         c0->field_68 = ((c0->field_68) % (g_TrackLength));
         c0++;
     }
@@ -442,8 +442,8 @@ void UpdateAttractCars(void) {
             }
             sub->speed = sub->speed * 94 / 100;
             sub->speed = sub->speed + sub->field_A8;
-            sub->field_24 =
-                GetAngleDelta(sub->field_24, drive->field_EC) / 5 + sub->field_24;
+            sub->bodyYaw =
+                GetAngleDelta(sub->bodyYaw, drive->field_EC) / 5 + sub->bodyYaw;
         }
         i++;
         sub++;
@@ -459,7 +459,7 @@ void UpdateAttractCars(void) {
 
         if (base->activeFlag != -1) {
             s32 t;
-            base->field_108 = base->field_24;
+            base->field_108 = base->bodyYaw;
             t = rsin(base->headingAngle) * base->speed;
             if (t < 0) {
                 t += 0xFF;
@@ -477,7 +477,7 @@ void UpdateAttractCars(void) {
                 } else {
                     sixth = f4 / 6;
                 }
-                BuildRotMatrixY(&m1, base->field_24);
+                BuildRotMatrixY(&m1, base->bodyYaw);
                 BuildRotMatrixX(&m2, base->field_20);
                 MulMatrix2(&m2, &m1);
                 BuildRotMatrixZ(&m2, base->field_28);
@@ -519,7 +519,7 @@ void UpdateAttractCars(void) {
             } else if (base->field_44 < -0x12B) {
                 base->field_44 = -0x12C;
             }
-            base->field_24 = base->field_24 + drive->field_F4;
+            base->bodyYaw = base->bodyYaw + drive->field_F4;
         }
         i++;
         base++;

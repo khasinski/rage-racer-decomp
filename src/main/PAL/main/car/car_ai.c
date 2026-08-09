@@ -585,7 +585,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
 
                 rotation[0] = (u16)car->field_20;
                 rotation[2] = (u16)car->field_28;
-                rotation[1] = (u16)car->field_24;
+                rotation[1] = (u16)car->bodyYaw;
                 RotMatrix(rotation, &matrix);
                 SetRotMatrix(&matrix);
 
@@ -658,7 +658,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
 
                 rotation[0] = (u16)other->field_20;
                 rotation[2] = (u16)other->field_28;
-                rotation[1] = (u16)other->field_24;
+                rotation[1] = (u16)other->bodyYaw;
                 RotMatrix(rotation, &matrix);
                 SetRotMatrix(&matrix);
 

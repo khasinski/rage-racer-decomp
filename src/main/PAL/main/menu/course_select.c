@@ -56,7 +56,7 @@ void EnterCourseSelectScreen(void) {
     g_PlayerCar.y = 0;
     g_PlayerCar.z = 0;
     g_PlayerCar.field_20 = 0;
-    g_PlayerCar.field_24 = 0;
+    g_PlayerCar.bodyYaw = 0;
     g_PlayerCar.field_28 = 0;
     g_PlayerCar.trackProgress = 0;
     g_PlayerSteerAngle = 0;
