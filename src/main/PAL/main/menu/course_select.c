@@ -129,8 +129,8 @@ static __inline__ s32 GameDrawSlidingSprite(
 
 s32 DrawCourseSelectScreen(s32 step)
 {
-    void *otBase;
-    void *ot;
+    u32 *otBase;
+    u32 *ot;
     u8 fade;
     u16 slide;
     s16 headerWidth;
@@ -151,8 +151,8 @@ s32 DrawCourseSelectScreen(s32 step)
     s32 gpSlide;
     s32 gpFade;
 
-    otBase = SCRATCH_OT_BASE_AS(void);
-    ot = (u8 *)otBase + 4;
+    otBase = SCRATCH_OT_BASE_AS(u32);
+    ot = otBase + 1;
     if (step == 0) {
         g_CourseSelectScrollValue = 0;
         return (s32)otBase;

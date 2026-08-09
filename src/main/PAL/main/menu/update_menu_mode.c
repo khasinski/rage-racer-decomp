@@ -6,13 +6,13 @@
 #include "psyq/gpu.h"
 
 void UpdateMenuMode(void) {
-    void *scratch;
+    u32 *scratch;
     s32 c0;
     s32 c1;
 
     c0 = g_AnimTimer;
     c1 = g_SceneTimer;
-    scratch = SCRATCH_OT_BASE;
+    scratch = SCRATCH_OT_BASE_AS(u32);
     c0 += 1;
     c1 += 1;
     g_AnimTimer = c0;
@@ -51,11 +51,11 @@ void UpdateMenuMode(void) {
 
     if (g_MenuHintButtonsVisible != 0) {
         if (g_PadType == 0x23) {
-            scratch = (void *)((u8 *)scratch + 4);
+            scratch++;
             DrawSprite(scratch, 0xC0, 0x1A1, 0x20, 0xC, 0x94, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);
             DrawSprite(scratch, 0xF0, 0x1A1, 0x2C, 0xC, 0xB4, 0xF4, 0, 0, 0, 0x244, 1, 1, 0x3B);
         } else {
-            scratch = (void *)((u8 *)scratch + 4);
+            scratch++;
             DrawSprite(scratch, 0xC0, 0x1A1, 0x20, 0xC, 0x94, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3B);
             DrawSprite(scratch, 0xF0, 0x1A1, 0x2C, 0xC, 0xB4, 0xE8, 0, 0, 0, 0x244, 1, 1, 0x3B);
         }

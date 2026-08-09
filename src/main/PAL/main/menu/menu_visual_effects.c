@@ -830,7 +830,7 @@ asm(".globl func_8004E07C\nfunc_8004E07C = DrawRankingTable + 0xCF8");
 
 s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
     u8 text[16];
-    void *ot;
+    u32 *ot;
     s32 phase;
     u32 slide;
     s32 headerTextureU;
@@ -848,7 +848,7 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
     s32 badgeXWord;
     s16 rectLeft;
 
-    ot = SCRATCH_OT_BASE_AS(void);
+    ot = SCRATCH_OT_BASE_AS(u32);
     if (step == 0) {
         *progress = 0;
         /* Initialization-only call; its caller ignores the return value. */
@@ -1170,14 +1170,14 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
         }
 
         {
-            void *rectOt;
-            void *rectCallOt;
+            u32 *rectOt;
+            u32 *rectCallOt;
             s32 rectX;
             s16 rectY;
             s32 rectHeight;
             s32 rectAlpha;
 
-            rectOt = (u8 *)ot + 4;
+            rectOt = ot + 1;
             rectCallOt = rectOt;
             rectX = rectLeft;
             rectY = panelY + 0x7A;

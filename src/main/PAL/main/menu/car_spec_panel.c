@@ -9,8 +9,8 @@
 
 /* The five-position tire-compound slider of the CUSTOMIZE screen. */
 void DrawTireCompoundSlider(u8 x, s32 useFlag) {
-    void *ot;
-    void *scratch;
+    u32 *ot;
+    u32 *scratch;
     s32 gray;
     s32 alpha;
     s32 angle;
@@ -20,7 +20,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     s32 yLarge;
     s32 ySmall;
 
-    scratch = SCRATCH_OT_BASE_AS(void);
+    scratch = SCRATCH_OT_BASE_AS(u32);
 
     switch ((u8)x) {
     case 4:
@@ -56,7 +56,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
     }
 
     gray = 0xB4;
-    ot = (void *)((u8 *)scratch + 8);
+    ot = scratch + 2;
 
     DrawSprite(ot, 0xBC, 0x50, 0x14, 0x10, 0, 0xB4, 0, 0, 0, 0x244, 1, 1, 0x3A);
     DrawSprite(ot, 0xE0, 0x72, 0x14, 0x10, 0x14, 0xB4, 0, 0, 0, 0x244, 1, 1, 0x3A);
@@ -100,7 +100,7 @@ void DrawTireCompoundSlider(u8 x, s32 useFlag) {
 
 /* The two side browse arrows, each lit only when that direction has somewhere to go. */
 void DrawBrowseArrows(s32 step, s32 wide, s32 drawLeft, s32 drawRight) {
-    void *ot;
+    u32 *ot;
     s32 halfWidth;
     s32 y;
     s32 phase;
@@ -242,7 +242,7 @@ void DrawCarSpecGraph(s32 step, u32 tireGrade) {
     s32 shadowX;
     s32 shadowY;
 
-    ot = (u8 *)SCRATCH_OT_BASE_AS(void) + 0xC;
+    ot = SCRATCH_OT_BASE_AS(u32) + 3;
     sourceColors = &g_CarSpecGraphColors;
     colors = *sourceColors;
     markerClut = 0x26C;
