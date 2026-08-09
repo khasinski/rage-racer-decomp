@@ -745,7 +745,9 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
         dst++;
     } while (src != end);
 
-    *(LVec *)dst = *(LVec *)src;
+    sourceAddress.blocks = src;
+    destinationAddress.blocks = dst;
+    *destinationAddress.vector = *sourceAddress.vector;
 
     index = car->trackPointIndex;
     track = g_TrackPoints;

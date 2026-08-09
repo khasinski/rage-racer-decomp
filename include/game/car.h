@@ -184,6 +184,7 @@ typedef union GameCarRuntimeAddress {
     GameCarRuntime *runtime;
     u32 *words;
     Block16 *blocks;
+    LVec *vector;
 } GameCarRuntimeAddress;
 
 typedef union CarBodyRotationAddress {
