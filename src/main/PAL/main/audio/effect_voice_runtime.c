@@ -330,8 +330,8 @@ after_match:
                 CHANNEL(offset).left.value = inactiveValue;
                 CHANNEL(offset).right.value = inactiveValue;
                 CHANNEL(offset).mode = activeValue;
-                runtime = (AudioRuntimeState *)((u8 *)&g_AudioLoadedSlotMask + offset);
-                runtime->musicChannels[0].volRight = 0;
+                runtime = (AudioRuntimeState *)&g_AudioLoadedSlotMask;
+                runtime->musicChannels[i].volRight = 0;
                 CHANNEL(offset).volLeft = 0;
                 i++;
             } while (i < resetCount);
