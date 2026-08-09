@@ -30,6 +30,7 @@
 void UpdateWaypointRaceScene(void) {
     s32 value;
     s32 option;
+    u32 pausePhase;
 
     option = 0;
     g_SceneTimer++;
@@ -43,7 +44,8 @@ void UpdateWaypointRaceScene(void) {
         g_PauseDebounce--;
     }
 
-    if ((u32)((u16)g_RacePhase - 1) < 2 && (g_PadPressed & PAD_START) && g_PauseDebounce <= 0) {
+    pausePhase = (u16)g_RacePhase - 1;
+    if (pausePhase < 2 && (g_PadPressed & PAD_START) && g_PauseDebounce <= 0) {
         g_PauseDebounce = 0;
         g_RacePaused = (u32)g_RacePaused < 1;
 
