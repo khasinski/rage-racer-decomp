@@ -313,6 +313,7 @@ void DrawRaceTimePanel(s32 slideY) {
     s32 columnBase;
     s32 drawColor;
     s32 quotient;
+    PlayerLapTimeAddress highlightAddress;
     char text[24];
     s32 color;
 
@@ -354,7 +355,9 @@ void DrawRaceTimePanel(s32 slideY) {
             textPos = column * 0xC + (base + columnBase);
             FormatLapTime(&text[2], *times);
             color = 0x7812;
-            if (*(s16 *)((char *)selectedPtr - 0x22) == i) {
+            highlightAddress.timePointer = selectedPtr;
+            highlightAddress.byteOffset -= PLAYER_LAP_HIGHLIGHT_TO_MILLISECONDS;
+            if (*highlightAddress.halfwordPointer == i) {
                 color = 0x784C;
             }
             DrawProportionalText(x, textPos, text, color);

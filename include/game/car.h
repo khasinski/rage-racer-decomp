@@ -402,6 +402,16 @@ typedef union PlayerLapTimes {
     s32 words[12];
 } PlayerLapTimes;
 
+enum {
+    PLAYER_LAP_HIGHLIGHT_TO_MILLISECONDS = 0x22
+};
+
+typedef union PlayerLapTimeAddress {
+    s32 byteOffset;
+    s16 *halfwordPointer;
+    s32 *timePointer;
+} PlayerLapTimeAddress;
+
 typedef union PlayerRaceTiming {
     struct {
         s32 field_A8;
