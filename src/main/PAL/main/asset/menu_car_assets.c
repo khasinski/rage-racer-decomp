@@ -34,16 +34,16 @@ void LoadUpgradedCarModel(s32 carIndex) {
             asset = (CarModelAsset *)ptr;
             SetCarModelSlot(ptr, g_CarModelSlot < 1);
 
-            asset->modelDataOffset = (s32)ptr + asset->modelDataOffset;
-            RegisterModelBank((ModelBankHeader *)asset->modelDataOffset,
+            asset->modelData.pointer = ptr + asset->modelData.offset;
+            RegisterModelBank((ModelBankHeader *)asset->modelData.pointer,
                               g_CarModelSlot < 1);
 
-            asset->imageDataOffset = (s32)ptr + asset->imageDataOffset;
-            SetCarImageSlot((void *)asset->imageDataOffset, g_CarModelSlot < 1);
+            asset->imageData.pointer = ptr + asset->imageData.offset;
+            SetCarImageSlot(asset->imageData.pointer, g_CarModelSlot < 1);
 
             if (g_PlayerCarIndex < 10) {
-                ApplyBodyColor1(g_CarTable[carIndex].paintColor1, asset->imageDataOffset);
-                ApplyBodyColor2(g_CarTable[carIndex].paintColor2, asset->imageDataOffset);
+                ApplyBodyColor1(g_CarTable[carIndex].paintColor1, asset->imageData.pointer);
+                ApplyBodyColor2(g_CarTable[carIndex].paintColor2, asset->imageData.pointer);
             }
 
             g_AssetLoadState = 0;
@@ -191,9 +191,9 @@ void RelocateCarModel(void) {
     }
 
     SetCarModelSlot(g_AssetBase, 0);
-    temp = ((CarModelAsset *)g_CarModelAsset)->modelDataOffset;
+    temp = (s32)((CarModelAsset *)g_CarModelAsset)->modelData.pointer;
     UnrelocateModelBank((ModelBankHeader *)(g_AssetBase + 0x28), temp);
     SelectCarModelSlot(0);
-    ((CarModelAsset *)g_CarModelAsset)->modelDataOffset = (u32)(g_AssetBase + 0x28);
+    ((CarModelAsset *)g_CarModelAsset)->modelData.pointer = g_AssetBase + 0x28;
     RegisterModelBank((ModelBankHeader *)(g_AssetBase + 0x28), 0);
 }

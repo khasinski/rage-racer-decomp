@@ -73,6 +73,11 @@ extern GameCdLoadEntry *g_StreamLoc;
 /* Boot CD scratch buffer: the RAGE.BIN index first, then asset 0. */
 extern s32 g_LoadBuffer[];
 
+typedef union AssetAddress {
+    s32 offset;
+    void *pointer;
+} AssetAddress;
+
 typedef struct CarModelAsset {
     s16 modelOffsetX;
     s16 modelOffsetY;
@@ -89,8 +94,8 @@ typedef struct CarModelAsset {
     u8 maxTorqueWhole;
     s16 maxTorqueRpm;
     u8 reserved1A[6];
-    s32 modelDataOffset;
-    s32 imageDataOffset;
+    AssetAddress modelData;
+    AssetAddress imageData;
 } CarModelAsset;
 
 /* One VRAM upload record inside an image asset; UploadImageAsset walks a chain of
@@ -211,11 +216,6 @@ void LoadTrackDataAssets(void);
 void InstallCourseAssets(void);
 /* Copy the live car model into g_AssetBase and re-register its bank there. */
 void RelocateCarModel(void);
-
-typedef union AssetAddress {
-    s32 offset;
-    void *pointer;
-} AssetAddress;
 
 typedef struct ModelBankHeader {
     s32 modelCount;

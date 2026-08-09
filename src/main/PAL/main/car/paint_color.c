@@ -104,7 +104,7 @@ void BlendPaintColorQuarters(u32 color0, u32 color1) {
  * compiler into the jal delay slot; no hand-written asm is needed.
  */
 
-void ApplyBodyColor1(u32 colour, u32 imageData) {
+void ApplyBodyColor1(u32 colour, void *imageData) {
     u32 raw;
     u16 *base;
     u16 s1;
@@ -116,7 +116,7 @@ void ApplyBodyColor1(u32 colour, u32 imageData) {
     u16 c;
     s32 i;
 
-    raw = imageData;
+    raw = (u32)imageData;
     primary = &g_BodyColorPrimary[colour];
     secondary = &g_BodyColorSecondary[colour];
     base = ((CarImageData *)raw)->paintPalette.entries;
@@ -162,11 +162,11 @@ void ApplyBodyColor1(u32 colour, u32 imageData) {
 
 
 void SetBodyColor1(u32 colour) {
-    ApplyBodyColor1(colour, ((CarModelAsset *)g_CarModelAsset)->imageDataOffset);
+    ApplyBodyColor1(colour, ((CarModelAsset *)g_CarModelAsset)->imageData.pointer);
     UploadCarImage(g_CarModelSlot);
 }
 
-void ApplyBodyColor2(u32 colour, u32 imageData) {
+void ApplyBodyColor2(u32 colour, void *imageData) {
     u16 *base;
     u16 s1;
     u16 s2;
@@ -217,6 +217,6 @@ void ApplyBodyColor2(u32 colour, u32 imageData) {
 
 
 void SetBodyColor2(u32 colour) {
-    ApplyBodyColor2(colour, ((CarModelAsset *)g_CarModelAsset)->imageDataOffset);
+    ApplyBodyColor2(colour, ((CarModelAsset *)g_CarModelAsset)->imageData.pointer);
     UploadCarImage(g_CarModelSlot);
 }

@@ -84,21 +84,21 @@ void LoadCarSelectAssets(void) {
                 SelectCarModelSlot(0);
 
                 model = (CarModelAsset *)g_CarModelAsset;
-                relOffset = model->modelDataOffset;
+                relOffset = model->modelData.offset;
                 modelPtr = (s32)(carModelBase + relOffset);
-                model->modelDataOffset = modelPtr;
+                model->modelData.pointer = (void *)modelPtr;
                 RegisterModelBank((ModelBankHeader *)modelPtr, 0);
 
                 model = (CarModelAsset *)g_CarModelAsset;
-                relOffset = model->imageDataOffset;
+                relOffset = model->imageData.offset;
                 modelPtr = (s32)(carModelBase + relOffset);
-                model->imageDataOffset = modelPtr;
+                model->imageData.pointer = (void *)modelPtr;
                 SetCarImageSlot((void *)modelPtr, 0);
 
                 carIndex = g_PlayerCarIndex;
                 if (carIndex < 10) {
-                    ApplyBodyColor1(g_CarTable[carIndex].paintColor1, ((CarModelAsset *)g_CarModelAsset)->imageDataOffset);
-                    ApplyBodyColor2(g_CarTable[g_PlayerCarIndex].paintColor2, ((CarModelAsset *)g_CarModelAsset)->imageDataOffset);
+                    ApplyBodyColor1(g_CarTable[carIndex].paintColor1, ((CarModelAsset *)g_CarModelAsset)->imageData.pointer);
+                    ApplyBodyColor2(g_CarTable[g_PlayerCarIndex].paintColor2, ((CarModelAsset *)g_CarModelAsset)->imageData.pointer);
                 }
 
                 g_CarModelSlot = 0;
@@ -144,16 +144,16 @@ void LoadCarModel(s32 carIndex) {
             asset = (CarModelAsset *)ptr;
             SetCarModelSlot(ptr, g_CarModelSlot < 1);
 
-            asset->modelDataOffset = (s32)ptr + asset->modelDataOffset;
-            RegisterModelBank((ModelBankHeader *)asset->modelDataOffset,
+            asset->modelData.pointer = ptr + asset->modelData.offset;
+            RegisterModelBank((ModelBankHeader *)asset->modelData.pointer,
                               g_CarModelSlot < 1);
 
-            asset->imageDataOffset = (s32)ptr + asset->imageDataOffset;
-            SetCarImageSlot((void *)asset->imageDataOffset, g_CarModelSlot < 1);
+            asset->imageData.pointer = ptr + asset->imageData.offset;
+            SetCarImageSlot(asset->imageData.pointer, g_CarModelSlot < 1);
 
             if (carIndex < 10) {
-                ApplyBodyColor1(g_CarTable[carIndex].paintColor1, asset->imageDataOffset);
-                ApplyBodyColor2(g_CarTable[carIndex].paintColor2, asset->imageDataOffset);
+                ApplyBodyColor1(g_CarTable[carIndex].paintColor1, asset->imageData.pointer);
+                ApplyBodyColor2(g_CarTable[carIndex].paintColor2, asset->imageData.pointer);
             }
 
             g_AssetLoadState = 0;

@@ -594,8 +594,8 @@ extern u32 g_CarModelSlot;
 /* Point g_CarModelAsset at g_CarModelSlots[index]. */
 void SelectCarModelSlot(s32 index);
 /* Repaint the loaded car's texture block in the two body colours. */
-void ApplyBodyColor1(u32 colour, u32 imageData);
-void ApplyBodyColor2(u32 colour, u32 imageData);
+void ApplyBodyColor1(u32 colour, void *imageData);
+void ApplyBodyColor2(u32 colour, void *imageData);
 s32 SmoothTrackAngle(s32 pointIndex, s32 weight);
 void UpdateRivalRubberBand(void);
 
