@@ -285,7 +285,7 @@ extern s32 g_TerrainCellCount;
 extern u32 g_CarImageRect;
 extern void *g_CarImageSlots[];
 extern void *g_CarModelSlots[];
-extern void *g_ModelBanks[];
+extern ModelBankHeader *g_ModelBanks[];
 extern char g_MsgFileNotFound[];
 extern char g_MsgFileReadError[];
 extern char g_MsgNowLoading[];

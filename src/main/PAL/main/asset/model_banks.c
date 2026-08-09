@@ -76,21 +76,22 @@ void UnrelocateModelBank(ModelBankHeader *base, s32 offset) {
  * retail's base-first addu; `&g_ModelBanks[index]` loses it.
  */
 void SelectModelBank(s32 index) {
-    s32 *entry;
-    s32 bank;
+    s32 banks;
+    ModelBankHeader **entry;
+    ModelBankHeader *bank;
     s32 count;
 
-    bank = (s32)g_ModelBanks;
-    entry = (s32 *)((index * 4) + bank);
-    count = *entry;
+    banks = (s32)g_ModelBanks;
+    entry = (ModelBankHeader **)((index * sizeof(*entry)) + banks);
+    count = (s32)*entry;
     count = *(s32 *)count;
     bank = *entry;
-    SCRATCH_MODEL_TABLE1 = ((ModelBankHeader *)bank)->table.pointer;
+    SCRATCH_MODEL_TABLE1 = bank->table.pointer;
     bank = *entry;
-    SCRATCH_MODEL_NORMALS = ((ModelBankHeader *)bank)->normals.pointer;
+    SCRATCH_MODEL_NORMALS = bank->normals.pointer;
     bank = *entry;
     g_ModelBankCount = count;
-    SCRATCH_MODEL_MODELS = ((ModelBankHeader *)bank)->models;
+    SCRATCH_MODEL_MODELS = bank->models;
 }
 
 void RegisterCourseModels(CourseModelAssetHeader *base) {
