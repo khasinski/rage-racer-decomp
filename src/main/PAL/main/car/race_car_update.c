@@ -647,8 +647,12 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
             RaceIntroCameraScript *script = g_RaceIntroCameraScript;
             s16 n = script->firstKeyIndex[ReadStableRaceSeries()];
             s32 off = n * sizeof(RaceIntroCameraKey) + sizeof(script->firstKeyIndex);
-            RaceIntroCameraKey *p = (RaceIntroCameraKey *)(off + (s32)script);
+            RaceIntroCameraScriptAddress keyAddress;
+            RaceIntroCameraKey *p;
             RaceIntroCameraKey *q;
+            keyAddress.scriptPointer = script;
+            keyAddress.byteOffset = off + keyAddress.byteOffset;
+            p = keyAddress.keyPointer;
             g_RaceIntroCameraCursor = p;
             *(Vec4 *)&SCRATCH_VIEW_X = *(Vec4 *)p;
             q = g_RaceIntroCameraCursor;

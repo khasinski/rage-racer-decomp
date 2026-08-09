@@ -25,6 +25,12 @@ struct RaceIntroCameraScript {
     RaceIntroCameraKey keys[1];
 };
 
+typedef union RaceIntroCameraScriptAddress {
+    s32 byteOffset;
+    struct RaceIntroCameraScript *scriptPointer;
+    RaceIntroCameraKey *keyPointer;
+} RaceIntroCameraScriptAddress;
+
 typedef struct LaunchSpeedThreshold {
     s16 initial;
     s16 sustain;
