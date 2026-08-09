@@ -85,12 +85,12 @@ void SelectModelBank(s32 index) {
     count = *entry;
     count = *(s32 *)count;
     bank = *entry;
-    SCRATCH_MODEL_TABLE1 = *(s32 *)(bank + 4);
+    SCRATCH_MODEL_TABLE1 = ((ModelBankHeader *)bank)->table;
     bank = *entry;
-    SCRATCH_MODEL_NORMALS = *(s32 *)(bank + 8);
+    SCRATCH_MODEL_NORMALS = ((ModelBankHeader *)bank)->normals;
     bank = *entry;
     g_ModelBankCount = count;
-    SCRATCH_MODEL_MODELS = bank + 0xC;
+    SCRATCH_MODEL_MODELS = (s32)((ModelBankHeader *)bank)->models;
 }
 
 void RegisterCourseModels(s32 *base) {
