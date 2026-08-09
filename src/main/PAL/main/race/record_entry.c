@@ -164,7 +164,7 @@ void InsertRaceRecords(void) {
     s32 best;
     register s32 j asm("$7");
     s32 *score_ptr;
-    register s32 entry_addr asm("$5");
+    register RaceRecordAddress entryAddress asm("$5");
     s32 fill_offset;
     s32 copy0;
     s32 copy1;
@@ -174,7 +174,7 @@ void InsertRaceRecords(void) {
     s32 score_value;
     s32 *entry;
     s32 mode;
-    register s32 base_addr asm("$2");
+    register RaceRecordAddress baseAddress asm("$2");
     RaceRecordAddress rankingBaseAddress;
     RaceRecordAddress timeBaseAddress;
     s32 letter;
@@ -216,14 +216,14 @@ void InsertRaceRecords(void) {
             if (i < 4) {
                 j = 4;
                 do {
-                    entry_addr = j * 0x10;
+                    entryAddress.byteOffset = j * 0x10;
                     j--;
                     mode = g_CourseIndex;
                     score_offset =
                         (g_GrandPrixSeries * 0x140) + rankingBaseAddress.byteOffset;
-                    base_addr = (mode * 0x50) + score_offset;
-                    entry_addr += base_addr;
-                    entry = (s32 *)entry_addr;
+                    baseAddress.byteOffset = (mode * 0x50) + score_offset;
+                    entryAddress.byteOffset += baseAddress.byteOffset;
+                    entry = entryAddress.wordPointer;
                     asm volatile("" : : "r"(j));
                     copy0 = entry[-4];
                     copy1 = entry[-3];
@@ -294,14 +294,14 @@ void InsertRaceRecords(void) {
             if (i < 4) {
                 j = 4;
                 do {
-                    entry_addr = j * 0x10;
+                    entryAddress.byteOffset = j * 0x10;
                     j--;
                     mode = g_CourseIndex;
                     score_offset =
                         (g_GrandPrixSeries * 0x140) + timeBaseAddress.byteOffset;
-                    base_addr = (mode * 0x50) + score_offset;
-                    entry_addr += base_addr;
-                    entry = (s32 *)entry_addr;
+                    baseAddress.byteOffset = (mode * 0x50) + score_offset;
+                    entryAddress.byteOffset += baseAddress.byteOffset;
+                    entry = entryAddress.wordPointer;
                     asm volatile("" : : "r"(j));
                     copy0 = entry[-4];
                     copy1 = entry[-3];
