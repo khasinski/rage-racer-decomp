@@ -640,7 +640,7 @@ s32 DrawCustomizeScreen(s32 step) {
             g_CustomizeFadeAccum = 0;
         }
         limit = limit - g_CustomizeFadeAccum;
-        product = (u32)(limit * limit);
+        product = limit * limit;
         value = product / 2048;
     }
 

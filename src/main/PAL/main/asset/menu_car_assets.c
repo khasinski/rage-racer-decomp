@@ -136,7 +136,7 @@ void LoadRoundAssets(void) {
             kind = scaled + index;
         }
 
-        result = LoadAsset((s32)kind, g_ImageBlockBuffer);
+        result = LoadAsset(kind, g_ImageBlockBuffer);
         if (result != 0) {
             g_AssetLoadState = 2;
             g_AssetBlockPtr2 = g_ImageBlockBuffer + result;

@@ -441,6 +441,8 @@ s32 DrawCarShopScreen(s32 step) {
         }
         value = 0;
     } else {
+        u32 product;
+
         value = g_CarShopScreenProgress + step;
         g_CarShopScreenProgress = value;
         if (value < 0) {
@@ -450,7 +452,8 @@ s32 DrawCarShopScreen(s32 step) {
         value = g_CarShopScreenProgress;
         limit = 0x1FC;
         limit -= value;
-        value = (u32)(limit * limit) >> 0xB;
+        product = limit * limit;
+        value = product >> 0xB;
     }
 
     amount = value << 16;

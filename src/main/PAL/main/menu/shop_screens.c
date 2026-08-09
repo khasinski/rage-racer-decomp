@@ -58,7 +58,7 @@ void UpdateCarShopScreen(void) {
                         s32 lprev;
 
                         PlaySoundCue(8);
-                        g_CarListCursor = (s32) g_PrevOwnedCarIndex;
+                        g_CarListCursor = g_PrevOwnedCarIndex;
                         RequestCarModel(g_PrevOwnedCarIndex);
                         lprev = g_MenuViewAngleTarget;
                         g_CarSwapFromIndex = sel;
@@ -78,7 +78,7 @@ void UpdateCarShopScreen(void) {
                         s32 lprev;
 
                         PlaySoundCue(8);
-                        g_CarListCursor = (s32) g_NextOwnedCarIndex;
+                        g_CarListCursor = g_NextOwnedCarIndex;
                         RequestCarModel(g_NextOwnedCarIndex);
                         base = 0x927C0;
                         lprev = g_MenuViewAngleTarget;
@@ -311,7 +311,7 @@ u32 DrawEngineerShopScreen(s32 step) {
         amount = 0;
     } else {
         s32 diff = 0x1FC;
-        s32 product;
+        u32 product;
 
         value = step + g_EngineSpecStep;
         g_EngineSpecStep = value;
@@ -320,7 +320,7 @@ u32 DrawEngineerShopScreen(s32 step) {
         }
         diff -= g_EngineSpecStep;
         product = diff * diff;
-        amount = (u32)product / 2048;
+        amount = product / 2048;
     }
 
     DrawCarEngineSpec((s16)amount, (u8)(g_EngineSpecStep >> 2), g_PlayerCarIndex);
