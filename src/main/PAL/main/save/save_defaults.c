@@ -28,13 +28,13 @@ void ResetProgressSlot(CarEntry *slot, GameRaceProgress *progress) {
 }
 
 void ResetCourseProgress(s32 mode) {
-    u8 *ptr = g_CourseProgress->bestPlace;
+    CourseProgressState *progress = g_CourseProgress;
 
-    g_CourseProgress->retriesRemaining = 5;
-    ptr[3] = 0;
-    ptr[2] = 0;
-    ptr[1] = 0;
-    ptr[0] = 0;
+    progress->retriesRemaining = 5;
+    progress->bestPlace[3] = 0;
+    progress->bestPlace[2] = 0;
+    progress->bestPlace[1] = 0;
+    progress->bestPlace[0] = 0;
 
     if (mode < 2) {
         g_CourseProgress->bestPlace[3] = 0xFF;
