@@ -126,6 +126,13 @@ typedef struct GameSceneAssetHeader {
     s32 offsets[11];
 } GameSceneAssetHeader;
 
+typedef union GameSceneAssetAddress {
+    s32 byteOffset;
+    u8 *bytes;
+    void *pointer;
+    GameSceneAssetHeader *header;
+} GameSceneAssetAddress;
+
 static __inline__ void *GetSceneAssetAddress(GameSceneAssetHeader *header, s32 offset) {
     return (u8 *)header + offset;
 }

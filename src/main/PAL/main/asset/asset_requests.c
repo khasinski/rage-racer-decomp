@@ -141,6 +141,7 @@ void LoadSelectBgmAssets(void) {
     u8 *secondBlock;
     s32 thirdOffset;
     s32 relOffset;
+    GameSceneAssetAddress firstBlockAddress;
 
     switch (g_AssetLoadState) {
     case 1:
@@ -154,7 +155,9 @@ void LoadSelectBgmAssets(void) {
              * addressing pattern and the block costs 19 instructions more. */
             firstOffset = *(volatile s32 *)&header->offsets[0];
             thirdOffset = *(volatile s32 *)&header->offsets[2];
-            g_AssetBlockPtr = (void *)((u8 *)header + firstOffset);
+            firstBlockAddress.header = header;
+            firstBlockAddress.byteOffset += firstOffset;
+            g_AssetBlockPtr = firstBlockAddress.pointer;
             relOffset = *(volatile s32 *)&header->offsets[1];
             g_AssetLoadState = 0;
             secondBlock = GetSceneAssetAddress(header, relOffset);
