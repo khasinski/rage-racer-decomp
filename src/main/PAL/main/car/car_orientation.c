@@ -5,7 +5,6 @@
 #include "game/track.h"
 #include "game/car.h"
 #include "game/car_internal.h"
-#define GAME_INPUT_BUTTON_TYPE s16
 #include "game/input_internal.h"
 #include "game/race.h"
 #include "game/menu.h"
@@ -292,11 +291,11 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     if (g_PadType == 0x41) {
 
     if (g_MirrorMode != 0) {
-        a1 = g_PadHeld & g_PadButtonMapping[0];
-        v1 = g_PadHeld & g_PadButtonMapping[1];
+        a1 = g_PadHeld & (s16)g_PadButtonMapping[0];
+        v1 = g_PadHeld & (s16)g_PadButtonMapping[1];
     } else {
-        v1 = g_PadHeld & g_PadButtonMapping[0];
-        a1 = g_PadHeld & g_PadButtonMapping[1];
+        v1 = g_PadHeld & (s16)g_PadButtonMapping[0];
+        a1 = g_PadHeld & (s16)g_PadButtonMapping[1];
     }
 
     if (v1 != 0) {

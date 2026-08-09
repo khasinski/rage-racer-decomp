@@ -3,11 +3,7 @@
 
 #include "common.h"
 
-#ifndef GAME_INPUT_BUTTON_TYPE
-#define GAME_INPUT_BUTTON_TYPE u16
-#endif
-
-extern GAME_INPUT_BUTTON_TYPE g_PadButtonMapping[];
+extern u16 g_PadButtonMapping[];
 typedef s16 ControllerMappingIndex;
 extern ControllerMappingIndex g_PadMappingIndex;
 extern ControllerMappingIndex g_NegconMappingIndex;
