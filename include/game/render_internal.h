@@ -64,11 +64,7 @@ extern GAME_FRAME_CONTEXT_QUALIFIER u8 g_FrameContexts[];
 extern GAME_SCREEN_OFFSET_TYPE g_ScreenOffsetX;
 extern GAME_SCREEN_OFFSET_TYPE g_ScreenOffsetY;
 #undef GAME_SCREEN_OFFSET_TYPE
-#ifndef GAME_FRAME_PARITY_TYPE
-#define GAME_FRAME_PARITY_TYPE u32
-#endif
-extern GAME_FRAME_PARITY_TYPE g_FrameParity;
-#undef GAME_FRAME_PARITY_TYPE
+extern s32 g_FrameParity;
 extern u8 g_Font8x8Cells[];
 extern u8 g_DrawModeEnv[];
 extern u8 g_PropFontU[];

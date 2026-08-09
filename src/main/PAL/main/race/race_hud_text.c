@@ -2,7 +2,6 @@
 #include "game/prim.h"
 #include "game/race.h"
 #include "game/save_internal.h"
-#define GAME_FRAME_PARITY_TYPE s32
 #include "game/fmv_internal.h"
 #include "game/render.h"
 #include "game/scratchpad.h"

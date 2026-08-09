@@ -6,7 +6,6 @@
 #include "game/memcard.h"
 #include "game/race.h"
 #include "game/render.h"
-#define GAME_FRAME_PARITY_TYPE s32
 #include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/state.h"
