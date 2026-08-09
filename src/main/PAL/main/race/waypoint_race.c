@@ -31,6 +31,7 @@ void UpdateWaypointRaceScene(void) {
     s32 value;
     s32 option;
     u32 pausePhase;
+    u32 paused;
 
     option = 0;
     g_SceneTimer++;
@@ -47,7 +48,8 @@ void UpdateWaypointRaceScene(void) {
     pausePhase = (u16)g_RacePhase - 1;
     if (pausePhase < 2 && (g_PadPressed & PAD_START) && g_PauseDebounce <= 0) {
         g_PauseDebounce = 0;
-        g_RacePaused = (u32)g_RacePaused < 1;
+        paused = g_RacePaused;
+        g_RacePaused = paused < 1;
 
         if (g_RacePaused != 0) {
             PauseCdAudio();
