@@ -292,6 +292,7 @@ void EnterRaceScene(void) {
     s32 *second;
     SectorTimeTableAddress sectorAddress;
     SectorTimeTableAddress lastSectorAddress;
+    LapTimeTableAddress lapAddress;
 
     SetupDisplay240(0, 0, 0);
     InitRenderState(5);
@@ -334,7 +335,9 @@ void EnterRaceScene(void) {
          * which is how the same table is spelled four times elsewhere in
          * this file. Written indexed here, or with the three offsets folded
          * together, the schedule around these barriers changes. */
-        lapTableRow = (u8 *)g_BestLapTimes + scene;
+        lapAddress.pointer = (s32 *)g_BestLapTimes;
+        lapAddress.byteOffset += scene;
+        lapTableRow = lapAddress.bytes;
         count = mode + (s32)lapTableRow;
         scratch = g_GrandPrixMode * 4;
         scratch += count;

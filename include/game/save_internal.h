@@ -29,4 +29,10 @@ typedef union SectorTimeTableAddress {
     s32 *pointer;
 } SectorTimeTableAddress;
 
+typedef union LapTimeTableAddress {
+    s32 byteOffset;
+    s32 *pointer;
+    u8 *bytes;
+} LapTimeTableAddress;
+
 #endif
