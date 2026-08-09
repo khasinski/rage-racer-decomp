@@ -202,7 +202,7 @@ s32 LoadSaveStateBlock(u8 *block) {
             d1base = (s32 *)g_RankingRecords;
             ioff = 0;
             for (; i < 2; i++) {
-                register s32 iofc asm("$15");
+                s32 iofc;
                 s32 *d1;
                 s32 joff;
                 j = 0;

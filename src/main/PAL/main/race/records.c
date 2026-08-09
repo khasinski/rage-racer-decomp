@@ -8,9 +8,9 @@
 
 void InitRecordTables(void) {
     RaceRecordAddress recordAddress;
-    register RaceRecordAddress r2 asm("$2");
+    RaceRecordAddress r2;
     RaceRecordAddress r3;
-    register RaceRecordAddress r4 asm("$4");
+    RaceRecordAddress r4;
     register RaceRecordAddress r5 asm("$5");
     s32 r6;
     register s32 r7 asm("$7");
@@ -19,11 +19,11 @@ void InitRecordTables(void) {
     RaceRecordAddress r10;
     s32 r11;
     s32 r12;
-    register s32 r13 asm("$13");
+    s32 r13;
     register s32 r14 asm("$14");
     s32 r15;
     RaceRecordAddress r16;
-    register RaceRecordAddress r17 asm("$17");
+    RaceRecordAddress r17;
     register RaceRecordAddress r18 asm("$18");
     s32 r19;
     s32 r20;

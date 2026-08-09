@@ -75,7 +75,7 @@ void ForceIndexedEffectVoiceEnabled(s32 enabled) {
     s32 base;
     register s32 center;
     s32 fine;
-    register s32 index asm("$3");
+    s32 index;
     register s32 raw asm("$2");
     s32 product;
     s32 scale;
