@@ -857,6 +857,12 @@ typedef struct EnvironmentPalette {
     Rgb colors[16];
 } EnvironmentPalette;
 
+typedef union EnvironmentPaletteAddress {
+    s32 byteOffset;
+    EnvironmentPalette *palettePointer;
+    Rgb *colorPointer;
+} EnvironmentPaletteAddress;
+
 extern EnvironmentPalette *g_EnvPaletteTable;
 /* The 16 interpolated BGR555 entries uploaded to VRAM at (0xE0, 0x1E6). */
 extern u16 g_EnvironmentClut[16];

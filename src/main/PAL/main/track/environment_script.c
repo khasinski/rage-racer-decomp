@@ -116,8 +116,10 @@ void UpdateEnvironment(void) {
     s32 i;
     s32 diff;
     s32 frac;
-    u8 *p1;
-    u8 *p2;
+    Rgb *p1;
+    Rgb *p2;
+    EnvironmentPaletteAddress paletteAddress;
+    EnvironmentPaletteAddress colorAddress;
     GameEnvironmentCue *cur;
 
     if (g_EnvScriptEnabled == 0) {
@@ -151,12 +153,18 @@ void UpdateEnvironment(void) {
 
     for (i = 0; i < 0x10; i++) {
         s16 *dst;
-        p1 = (u8 *)(i * 3) + (g_EnvironmentModePrev * 48 + (s32)g_EnvPaletteTable);
-        local[0] = p1[0] << 4;
-        local[1] = p1[1] << 4;
-        local[2] = p1[2] << 4;
-        p2 = (u8 *)(i * 3) + (g_EnvironmentMode * 48 + (s32)g_EnvPaletteTable);
-        SetFarColor(p2[0], p2[1], p2[2]);
+        paletteAddress.palettePointer = &g_EnvPaletteTable[g_EnvironmentModePrev];
+        colorAddress.byteOffset = i * sizeof(Rgb);
+        colorAddress.byteOffset += paletteAddress.byteOffset;
+        p1 = colorAddress.colorPointer;
+        local[0] = p1->r << 4;
+        local[1] = p1->g << 4;
+        local[2] = p1->b << 4;
+        paletteAddress.palettePointer = &g_EnvPaletteTable[g_EnvironmentMode];
+        colorAddress.byteOffset = i * sizeof(Rgb);
+        colorAddress.byteOffset += paletteAddress.byteOffset;
+        p2 = colorAddress.colorPointer;
+        SetFarColor(p2->r, p2->g, p2->b);
         Intpl(local, frac, out);
         {
             u8 *idx = (u8 *)(i * 2);
