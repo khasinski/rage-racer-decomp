@@ -168,8 +168,8 @@ typedef struct GameCarRuntime {
     s32 field_150;
     s32 field_154;
     u8 pad158[4];
-    s16 field_15C;
-    s16 field_15E;
+    s16 acceleratorInput;
+    s16 brakeInput;
     s16 field_160;
     s16 field_162;
     s32 field_164;
@@ -360,7 +360,7 @@ typedef struct GameCarDrive {
     s16 unk72;
     s16 manual;      /* +0x74 */
     s16 gear;        /* +0x76 */
-    s32 unk78;       /* +0x78 engine rpm */
+    s32 engineRpm;   /* +0x78 */
     s32 unk7C;
     s32 unk80;
     s32 unk84;       /* +0x84 launch-energy threshold */
@@ -371,8 +371,8 @@ typedef struct GameCarDrive {
     s32 state98;     /* +0x98 0 driving, 1 launching, 2 airborne */
     s16 unk9C;
     s16 unk9E;
-    s16 accelBtn;    /* +0xA0 */
-    s16 brakeBtn;    /* +0xA2 */
+    s16 acceleratorInput; /* +0xA0 */
+    s16 brakeInput;       /* +0xA2 */
     s16 unkA4;
     s16 unkA6;
 } GameCarDrive;
@@ -509,7 +509,7 @@ typedef struct GameCarAiBlock {
     u16 markerCounter; /* +0x7C */
     s16 markerDirection; /* +0x7E */
     u8 pad80[0x22];
-    s16 field_15E;  /* +0xA2 */
+    s16 brakeInput;  /* +0xA2 */
     u8 padA4[0x3C];
 } GameCarAiBlock;
 

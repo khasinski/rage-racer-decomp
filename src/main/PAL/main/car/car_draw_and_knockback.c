@@ -150,7 +150,7 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
     } else {
     if (obj->verticalMotionState == 0) {
         if (obj->engineRpm >= g_CarSpec->redline &&
-            obj->field_15C >= 0x81 &&
+            obj->acceleratorInput >= 0x81 &&
             obj->slideInput.halves.low == 0) {
             ptr = (u8 *)(s32)(u16)obj->tiltCounter;
             value = obj->currentGear;
@@ -166,7 +166,7 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
             return;
         }
 
-        if (((GameCarAiBlock *)ptr)->field_15E >= 0x81 ||
+        if (((GameCarAiBlock *)ptr)->brakeInput >= 0x81 ||
             ((GameCarAiBlock *)ptr)->slideInput.halves.low > 0) {
             if (obj->speed >= 0x51) {
                 value = (u16)obj->tiltCounter + 2;

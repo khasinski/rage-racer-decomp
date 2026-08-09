@@ -138,14 +138,14 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     gearCurve = base;
   }
   else
-    if ((car->drive.state98 == 3) && ((car->drive.accelBtn < 0x40) || (car->drive.brakeBtn >= 0x80)))
+    if ((car->drive.state98 == 3) && ((car->drive.acceleratorInput < 0x40) || (car->drive.brakeInput >= 0x80)))
   {
     gearCurve = base;
   }
   leftWheelState = drive->unk9C;
   if (leftWheelState == 0)
   {
-    if (drive->accelBtn >= 0x85)
+    if (drive->acceleratorInput >= 0x85)
     {
       drive->unk9C = 1;
     }
@@ -156,14 +156,14 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     drive->unk9C = 2;
   }
   else
-    if (drive->accelBtn < 0x7C)
+    if (drive->acceleratorInput < 0x7C)
   {
     drive->unk9C = 0;
   }
   rightWheelState = drive->unk9E;
   if (rightWheelState == 0)
   {
-    if (drive->brakeBtn >= 0x85)
+    if (drive->brakeInput >= 0x85)
     {
       drive->unk9E = 1;
     }
@@ -174,18 +174,18 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     drive->unk9E = 2;
   }
   else
-    if (drive->brakeBtn < 0x7C)
+    if (drive->brakeInput < 0x7C)
   {
     drive->unk9E = 0;
   }
-  frontLoad = drive->accelBtn * 0x64;
+  frontLoad = drive->acceleratorInput * 0x64;
   frontLoadScaled = frontLoad >> 8;
   if (frontLoad < 0)
   {
     frontLoadScaled = (frontLoad + 0xFF) >> 8;
   }
   gripBudget = 0x17C - frontLoadScaled;
-  gripBudget += (drive->brakeBtn * 0x64) / 256;
+  gripBudget += (drive->brakeInput * 0x64) / 256;
   if (drive->state98 == 1)
   {
     driveCurveMode = drive->unk40;
@@ -254,7 +254,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     }
     drive->unk32 = (s16)((drive->unk32 + (gripBudget * drive->unk88) / 1000) / 2);
   }
-  gearTorque = gearRatio * drive->unk78;
+  gearTorque = gearRatio * drive->engineRpm;
   steerLoad = 0;
   loadTorque = drive->unk94;
   netTorque = gearTorque - loadTorque;
@@ -298,14 +298,14 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     accel = netTorqueRoundedC >> 0xB;
   }
   revLimit = ((GameCarSpec *)config)->revLimit;
-  if (drive->unk78 >= revLimit)
+  if (drive->engineRpm >= revLimit)
   {
     bandScale = 0;
-    netTorque = ((revLimit - drive->unk78) * 4) / 5;
+    netTorque = ((revLimit - drive->engineRpm) * 4) / 5;
   }
   else
   {
-    bandIndex = drive->unk78 / 1000;
+    bandIndex = drive->engineRpm / 1000;
     if (bandIndex == 0)
     {
       bandBase = 0;
@@ -326,7 +326,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     bandSlot = bandBase;
     if (bandSlot < bandEnd)
     {
-      engineSpeed = drive->unk78;
+      engineSpeed = drive->engineRpm;
       curveSlot = (void *)((bandSlot * 4) + ((s32) gearCurve));
       specSlot = (void *)((bandSlot * 4) + ((s32) config));
       loop_68:
@@ -377,7 +377,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     bandScale = 0;
     if (assistStep < bandEnd)
     {
-      engineSpeedLoss = drive->unk78;
+      engineSpeedLoss = drive->engineRpm;
       gearCurve = (u8 *)((assistStep * 4) + ((s32) config));
       loop_83:
       lossTorque = ((GameCarSpec *)gearCurve)->torqueLossRpm[0];
@@ -429,7 +429,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     {
       bandScale = 0;
     }
-    if ((drive->gear == 1) && (drive->unk78 < g_CarSpec->redline))
+    if ((drive->gear == 1) && (drive->engineRpm < g_CarSpec->redline))
     {
       bandScale *= 2;
     }
@@ -460,7 +460,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
         {
           shiftTargetRpm = ((s32)(((car->speed * 0xA0) / 1168) * 0x2710)) /
                            ((GameCarSpec *)((u8 *)g_CarSpec - (-(targetGear * 4))))->gearRatio[0];
-          currentSpeed = (u16)drive->unk78;
+          currentSpeed = (u16)drive->engineRpm;
           g_ShiftTargetRpm = shiftTargetRpm;
           drive->unk3C = (s16)((u16)g_ShiftTargetRpm - currentSpeed);
         }
@@ -529,7 +529,7 @@ grade_adjust_done:
       g_ShiftTargetSpeed = shiftTargetSpeed;
       {
         u16 targetSpeed = (u16) g_ShiftTargetSpeed;
-        u16 currentSpeed = (u16)drive->unk78;
+        u16 currentSpeed = (u16)drive->engineRpm;
         drive->clutch = 0xA;
         drive->unk2E = 0;
         drive->unk36 = (s16)(targetSpeed - currentSpeed);
@@ -548,23 +548,23 @@ grade_adjust_done:
       else
         if (drive->manual != 0)
       {
-        drive->unk78 = g_ShiftTargetSpeed - drive->unk36 * (s16)countdown / 15;
+        drive->engineRpm = g_ShiftTargetSpeed - drive->unk36 * (s16)countdown / 15;
       }
       else
       {
         shiftRemaining = drive->unk36 * (s16)countdown;
         lossBase = shiftRemaining / 10;
-        drive->unk78 = g_ShiftTargetSpeed - lossBase;
+        drive->engineRpm = g_ShiftTargetSpeed - lossBase;
         goto shift_interpolation_done;
         block_129:
-        drive->unk78 = shiftedSpeed;
+        drive->engineRpm = shiftedSpeed;
 shift_interpolation_done:
 
       }
       }
     }
   }
-  throttleTorque = netTorque * drive->accelBtn * drive->unk2E;
+  throttleTorque = netTorque * drive->acceleratorInput * drive->unk2E;
   if (throttleTorque < 0)
   {
     throttleTorque += 0xFF;
@@ -580,12 +580,12 @@ shift_interpolation_done:
   }
   if (car->shiftState == 0)
   {
-    steerLoad += drive->unk78 / 256;
+    steerLoad += drive->engineRpm / 256;
   }
-  accel += drive->brakeBtn * drive->unk78 / 8192;
+  accel += drive->brakeInput * drive->engineRpm / 8192;
   if (netTorque > 0)
   {
-    if (drive->accelBtn < 0x7F)
+    if (drive->acceleratorInput < 0x7F)
     {
       accel += netTorque / 2;
     }
@@ -698,19 +698,19 @@ shift_interpolation_done:
   }
   if ((drive->unk38 <= 0) && (drive->clutch <= 0))
   {
-    drive->unk78 = throttleAccel - accel - steerLoad + drive->unk78;
+    drive->engineRpm = throttleAccel - accel - steerLoad + drive->engineRpm;
   }
-  speedForPath = drive->unk78;
+  speedForPath = drive->engineRpm;
   if (speedForPath < 0)
   {
-    drive->unk78 = 0;
+    drive->engineRpm = 0;
   }
   else
     if (speedForPath >= 0x3A99)
   {
-    drive->unk78 = 0x3A98;
+    drive->engineRpm = 0x3A98;
   }
-  gearTorqueLate = gearRatio * drive->unk78;
+  gearTorqueLate = gearRatio * drive->engineRpm;
   drive->unk94 = gearTorqueLate;
   if (drive->state98 == 1)
   {
@@ -744,7 +744,7 @@ shift_interpolation_done:
     {
       downforce = 1;
     }
-    dragTerm = drive->brakeBtn * 0x14;
+    dragTerm = drive->brakeInput * 0x14;
     coefficientBase = 0x26FC - downforce;
     coefficient = coefficientBase - (steerLoad * 2);
     if (dragTerm < 0)

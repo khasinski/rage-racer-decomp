@@ -191,10 +191,10 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
             }
         }
 
-        drive->unk48 -= drive->brakeBtn * 4;
-        drive->unk48 -= (0x100 - drive->accelBtn) * 4;
-        car->speed -= drive->brakeBtn * 10 / 256;
-        car->speed -= (0x100 - drive->accelBtn) * 10 / 256;
+        drive->unk48 -= drive->brakeInput * 4;
+        drive->unk48 -= (0x100 - drive->acceleratorInput) * 4;
+        car->speed -= drive->brakeInput * 10 / 256;
+        car->speed -= (0x100 - drive->acceleratorInput) * 10 / 256;
     } else {
         drive->unk50 = drive->unk50 * 15 / 16;
         if (s4val < 0x1000) {
@@ -238,7 +238,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
 
                 asm volatile("" : : : "memory");
                 offset = drive->gear;
-                firstHeading = (u16)drive->unk78;
+                firstHeading = (u16)drive->engineRpm;
                 offset <<= 2;
                 asm volatile("" : :);
                 RAW(drive->unk38) = 0x14;
@@ -341,7 +341,7 @@ void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
     r->brakePos =
         rcos(r->unk58) * r->unk5C / 256 + cosF24 * coords[2] / 4096;
 
-    if (r->unk9C != 1 && r->unk9E != 1 && r->accelBtn < 128) {
+    if (r->unk9C != 1 && r->unk9E != 1 && r->acceleratorInput < 128) {
         r->unk44 += 1;
     } else {
         r->unk44 = 0;
@@ -368,12 +368,6 @@ void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
     }
 }
 
-/*
- * Car motion handler for state98 == 3 (crash / tumble): applies a random shake
- * (Random15) scaled by the remaining shake budget g_StandingStartSpin, advances the
- * car (AdvanceCarPosition), and resets the car once the budget expires. field_15C /
- * field_15E hold the shake magnitude.
- */
 void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused) {
     GameCarDrive *route = &car->drive;
     s32 sinA;
@@ -400,16 +394,16 @@ void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused) {
 
     SetIndexedEffectVoice(0, 0x1A80,
                           (0x60 - (g_StandingStartSpin & 0x1F) * 2) *
-                              route->accelBtn / 256);
+                              route->acceleratorInput / 256);
 
     car->speed = car->speed / 10;
 
     if (g_StandingStartSpin >= 11) {
-        s32 f15c = route->accelBtn;
-        s32 f134 = route->unk78;
+        s32 f15c = route->acceleratorInput;
+        s32 f134 = route->engineRpm;
 
         sinA = f15c + 32;
-        g_StandingStartSpin -= route->brakeBtn * 2;
+        g_StandingStartSpin -= route->brakeInput * 2;
         if (f134 < 2000) {
             sinA = f15c + 1032;
         }

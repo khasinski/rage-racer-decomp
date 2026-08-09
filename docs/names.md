@@ -2888,7 +2888,7 @@ consumers assigns every slot a job:
 | slot | name | evidence |
 |---|---|---|
 | 0, 1 | `g_PadButtonMapping[0]` / `[1]` (this pass named them `g_PadSteerLeftMask` / `g_PadSteerRightMask`; section 22 folded both into the aggregate and neither spelling is in the tree) | `g_MirrorMode` swaps exactly these two |
-| 2, 3 | `g_PadAccelMask` / `g_PadBrakeMask` (`g_Negcon…` for row 1) | drive `accelBtn` / `brakeBtn` |
+| 2, 3 | `g_PadAccelMask` / `g_PadBrakeMask` (`g_Negcon…` for row 1) | drive `acceleratorInput` / `brakeInput` |
 | 4, 5 | `g_PadShiftMasks[type][0/1]` | gear up / gear down, hence the 8-halfword row stride |
 | 6 | `g_PadMirrorMasks[type * 8]` | held + D-pad up/down toggles `g_MirrorViewEnabled` while paused |
 

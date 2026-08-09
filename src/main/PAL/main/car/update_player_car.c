@@ -110,7 +110,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
             }
         }
         if (g_AutoShiftCooldown > 0) {
-            if (p->brakeBtn >= 129) {
+            if (p->brakeInput >= 129) {
                 g_AutoShiftCooldown = g_AutoShiftCooldown - 2;
             } else {
                 g_AutoShiftCooldown = g_AutoShiftCooldown - 1;
@@ -139,40 +139,40 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
 
     if (g_RacePhase < 4) {
         if (g_PadType == 0x41) {
-            *(volatile s16 *)&p->accelBtn = ((g_PadHeld & g_PadAccelMask) != 0) << 8;
-            p->brakeBtn = ((g_PadHeld & g_PadBrakeMask) != 0) << 8;
+            *(volatile s16 *)&p->acceleratorInput = ((g_PadHeld & g_PadAccelMask) != 0) << 8;
+            p->brakeInput = ((g_PadHeld & g_PadBrakeMask) != 0) << 8;
         } else if (g_PadType == 0x23) {
-            *(volatile s16 *)&p->accelBtn = ((g_PadHeld & g_NegconAccelMask) != 0) << 8;
-            p->brakeBtn = ((g_PadHeld & g_NegconBrakeMask) != 0) << 8;
+            *(volatile s16 *)&p->acceleratorInput = ((g_PadHeld & g_NegconAccelMask) != 0) << 8;
+            p->brakeInput = ((g_PadHeld & g_NegconBrakeMask) != 0) << 8;
             switch (g_NegconMappingIndex) {
             case 0:
             case 5:
-                *(volatile s16 *)&p->accelBtn = (g_NegconAnalogI << 8) / 106;
-                p->brakeBtn = (g_NegconAnalogII << 8) / 106;
+                *(volatile s16 *)&p->acceleratorInput = (g_NegconAnalogI << 8) / 106;
+                p->brakeInput = (g_NegconAnalogII << 8) / 106;
                 break;
             case 1:
             case 6:
-                *(volatile s16 *)&p->accelBtn = (g_NegconAnalogII << 8) / 106;
-                p->brakeBtn = (g_NegconAnalogI << 8) / 106;
+                *(volatile s16 *)&p->acceleratorInput = (g_NegconAnalogII << 8) / 106;
+                p->brakeInput = (g_NegconAnalogI << 8) / 106;
                 break;
             case 2:
-                p->brakeBtn = (g_NegconAnalogL << 8) / 106;
+                p->brakeInput = (g_NegconAnalogL << 8) / 106;
                 break;
             case 3:
-                *(volatile s16 *)&p->accelBtn = (g_NegconAnalogII << 8) / 106;
-                p->brakeBtn = (g_NegconAnalogL << 8) / 106;
+                *(volatile s16 *)&p->acceleratorInput = (g_NegconAnalogII << 8) / 106;
+                p->brakeInput = (g_NegconAnalogL << 8) / 106;
                 break;
             case 4:
             case 7:
                 break;
             }
         } else {
-            p->brakeBtn = 0;
-            p->accelBtn = 0;
+            p->brakeInput = 0;
+            p->acceleratorInput = 0;
         }
     } else {
-        p->accelBtn = 0;
-        p->brakeBtn = 0;
+        p->acceleratorInput = 0;
+        p->brakeInput = 0;
     }
 
     UpdateCarDrivetrain(car);
@@ -361,7 +361,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                 p->unk38 = 0x14;
                 p->state98 = 2;
                 g_ShiftTargetRpm = rpm;
-                p->unk3C = (u16)g_ShiftTargetRpm - (u16)p->unk78;
+                p->unk3C = (u16)g_ShiftTargetRpm - (u16)p->engineRpm;
                 {
                     s32 *loadRow = props->gearLoad;
 
@@ -462,7 +462,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         g_EngineRpmJitter = r % 150 / 2;
     } else {
         revFlag = 0;
-        if (p->unk78 == 0 && (g_AnimTimer & 8)) {
+        if (p->engineRpm == 0 && (g_AnimTimer & 8)) {
             g_TachoNeedleFlash = 0;
             g_EngineRpmJitter = rsin(Random15() & 0xFFF) * 150 / 4096;
             if (g_EngineRpmJitter <= 0) {
@@ -476,7 +476,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     }
 
     g_EngineRpmSnapshot = g_EngineRpm;
-    if (p->unk78 != 0) {
+    if (p->engineRpm != 0) {
         if (p->gear != 1) {
             revFlag = 0;
             if (g_EngineRpm >= g_CarSpec->redline - 2000) {

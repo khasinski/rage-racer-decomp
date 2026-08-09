@@ -126,7 +126,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->drive.unk68 = 0;
   player->drive.unk6C = 0;
   player->drive.gear = 1;
-  player->drive.unk78 = 0;
+  player->drive.engineRpm = 0;
   player->drive.unk80 = 0;
   player->drive.unk94 = 0;
   player->drive.unk7C = 0;
