@@ -60,7 +60,7 @@ typedef struct TrackRivalAiConfig {
     u16 field_126;
     u16 field_128;
     u16 field_12A;
-    u16 field_12C;
+    u16 boostAcceleration;
     u16 field_132;
     u16 field_134;
     u16 reserved;

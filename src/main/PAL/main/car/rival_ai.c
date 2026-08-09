@@ -15,23 +15,23 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     s32 k11 = 0xB;
     u8 *base = (u8 *)&g_PlayerCar.trackProgress;
     s32 carProgress;
-    s32 carField34;
+    s32 carLateralOffset;
     s32 carA4low;
     register u8 *block asm("$11");
     register s32 track asm("$12");
     s32 t6;
-    s32 field34minus;
-    s32 field34plus;
+    s32 lateralMin;
+    s32 lateralMax;
     s32 trackMinus;
     s32 total;
     s32 sums[4];
 
     carProgress = car->trackProgress;
-    carField34 = car->trackLateralOffset;
+    carLateralOffset = car->trackLateralOffset;
     carA4low = (u16)car->speed;
     block = (u8 *)&g_Cars[0].speed;
-    car->field_120 = 0;
-    car->field_10C = 0;
+    car->avoidanceStep = 0;
+    car->nearbyCarCount = 0;
     sums[3] = 0;
     sums[2] = 0;
     sums[1] = 0;
@@ -41,12 +41,12 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
         s32 tmp = car->speed * 2;
         t6 = tmp + 0xC00;
     }
-    field34minus = (s16)(carField34 - 0x30);
-    field34plus = (s16)(carField34 + 0x30);
+    lateralMin = (s16)(carLateralOffset - 0x30);
+    lateralMax = (s16)(carLateralOffset + 0x30);
     trackMinus = track - 0x400;
 
     for (; i < 12; i++, block += sizeof(GameCarRuntime)) {
-        s32 otherField34;
+        s32 otherLateralOffset;
         s32 otherA4;
         s32 a2;
         register s32 t1 asm("$9");
@@ -69,7 +69,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
         if (i == k11) {
             s32 op = *(s32 *)(base + 0);
             a2 = op + track;
-            otherField34 = *(s32 *)(base - 0x3C);
+            otherLateralOffset = *(s32 *)(base - 0x3C);
             if (carIndex < 4) {
                 otherA4 = 0;
             } else {
@@ -79,24 +79,24 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
             t6 = 0x1800 - (g_PlayerCar.speed * 2);
         } else {
             s32 op;
-            otherField34 = *(s32 *)(block - 0x70); /* g_Cars[i].trackLateralOffset */
+            otherLateralOffset = *(s32 *)(block - 0x70); /* g_Cars[i].trackLateralOffset */
             otherA4 = *(u16 *)block; /* g_Cars[i].speed, low half */
             op = *(s32 *)(block - 0x34); /* g_Cars[i].trackProgress */
             a2 = op + track;
-            t1 = (u16)state->field_104;
+            t1 = (u16)state->avoidanceActive;
         }
 
-        angleDiff = otherField34 - carField34;
+        angleDiff = otherLateralOffset - carLateralOffset;
         diff = (a2 - carProgress) % track;
         angleSaved = angleDiff;
         __asm__("" : "=r"(angleSaved) : "0"(angleSaved));
         otherA4 -= carA4low;
 
         if (diff > 0 && diff < t6) {
-            state->field_10C++;
-            if (field34minus < otherField34 && otherField34 < field34plus) {
+            state->nearbyCarCount++;
+            if (lateralMin < otherLateralOffset && otherLateralOffset < lateralMax) {
                 if (!((s16)otherA4 > 0 && t1 == 0)) {
-                    state->field_104 = 1;
+                    state->avoidanceActive = 1;
                     val = angleDiff + 0x30;
                     if (val < 0) {
                         val = angleDiff + 0x4F;
@@ -126,7 +126,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
             }
         } else {
             if (trackMinus < diff) {
-                state->field_10C++;
+                state->nearbyCarCount++;
             }
         }
     }
@@ -134,35 +134,35 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     total = sums[0] + sums[1] + sums[2];
     sums[3] = total;
     if (total > 0) {
-        if (acc8 == 0 && carField34 >= 0x51) {
-            s32 f104 = state->field_104;
-            state->field_11E = -0x50;
-            state->field_120 = -8 - (f104 * 2);
-        } else if (acc9 == 0 && carField34 < -0x50) {
-            s32 f104 = state->field_104;
-            state->field_11E = 0x50;
-            state->field_120 = (f104 * 2) + 8;
+        if (acc8 == 0 && carLateralOffset >= 0x51) {
+            s32 avoidanceStrength = state->avoidanceActive;
+            state->avoidanceTargetOffset = -0x50;
+            state->avoidanceStep = -8 - (avoidanceStrength * 2);
+        } else if (acc9 == 0 && carLateralOffset < -0x50) {
+            s32 avoidanceStrength = state->avoidanceActive;
+            state->avoidanceTargetOffset = 0x50;
+            state->avoidanceStep = (avoidanceStrength * 2) + 8;
         } else if (sums[0] <= sums[1] && sums[0] <= sums[2] && acc8 == 0) {
-            s32 f104 = state->field_104;
-            state->field_11E = -0x50;
-            state->field_120 = -6 - (f104 * 2);
+            s32 avoidanceStrength = state->avoidanceActive;
+            state->avoidanceTargetOffset = -0x50;
+            state->avoidanceStep = -6 - (avoidanceStrength * 2);
         } else if (sums[2] <= sums[1] && sums[2] <= sums[0] && acc9 == 0) {
-            s32 f104 = state->field_104;
-            state->field_11E = 0x50;
-            state->field_120 = (f104 * 2) + 6;
+            s32 avoidanceStrength = state->avoidanceActive;
+            state->avoidanceTargetOffset = 0x50;
+            state->avoidanceStep = (avoidanceStrength * 2) + 6;
         }
         if (sums[3] >= 0x3E9) {
-            s32 fv = state->field_130;
+            s32 fv = state->accelerationLimit;
             s32 d = (fv * 15) << 1;
-            state->field_130 = d / 100;
+            state->accelerationLimit = d / 100;
         }
     } else {
-        state->field_120 = 0;
-        state->field_104 = 0;
-        state->field_11E = state->field_11C;
+        state->avoidanceStep = 0;
+        state->avoidanceActive = 0;
+        state->avoidanceTargetOffset = state->aiLateralOffset;
     }
 
-    state->field_11C = state->field_11C + state->field_120;
+    state->aiLateralOffset = state->aiLateralOffset + state->avoidanceStep;
 }
 
 void SlowRivalAhead(GameCarRuntime *car, s32 carIndex) {
@@ -184,9 +184,9 @@ void SlowRivalAhead(GameCarRuntime *car, s32 carIndex) {
     }
 
     if (entry->speed >= 0x385) {
-        value = entry->field_130;
+        value = entry->accelerationLimit;
         value = ((value * 5) + ((value * 5) << 4)) / 100;
-        entry->field_130 = value;
+        entry->accelerationLimit = value;
     }
 }
 
@@ -296,7 +296,7 @@ void UpdateRivalRubberBand(void) {
             if (s4 < a0) {
                 g_RivalCueFlags &= ~(0x200 >> s0);
                 if (g_RankedCars[s1]->speed >= 0x321) {
-                    g_RankedCars[s1]->field_130 = g_RankedCars[s1]->field_130 * 90 / 100;
+                    g_RankedCars[s1]->accelerationLimit = g_RankedCars[s1]->accelerationLimit * 90 / 100;
                 }
                 return;
             }
@@ -304,7 +304,7 @@ void UpdateRivalRubberBand(void) {
                 s32 counter;
 
                 if (g_RankedCars[s1]->speed >= 0x3E9) {
-                    g_RankedCars[s1]->field_130 = g_RankedCars[s1]->field_130 * 98 / 100;
+                    g_RankedCars[s1]->accelerationLimit = g_RankedCars[s1]->accelerationLimit * 98 / 100;
                 }
                 counter = *s2;
                 g_RivalCueFlags |= (s3 >> s0);

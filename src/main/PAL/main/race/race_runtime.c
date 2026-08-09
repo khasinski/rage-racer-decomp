@@ -514,9 +514,9 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->trackProgress = 0;
         ent->speed = 0;
         ent->acceleration = 0;
-        ent->field_D0 = 0;
+        ent->worldVelocityZ = 0;
         ent->field_CC = 0;
-        ent->field_C8 = 0;
+        ent->worldVelocityX = 0;
         ent->field_E0 = 0;
         ent->field_DC = 0;
         ent->field_D8 = 0;
@@ -526,15 +526,15 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->routeIndex = 0;
         ent->field_116 = 0;
         ent->field_110 = 0;
-        ent->field_F4 = 0;
+        ent->yawRate = 0;
         ent->routeMarkerActive = 0;
         ent->slideInput.value = 0;
         ent->field_108 = ent->bodyYaw;
         p = base + (sub + lev * 144);
-        ent->field_EC = ent->bodyYaw;
+        ent->targetYaw = ent->bodyYaw;
         ent->headingAngle = ent->bodyYaw;
         ent->field_F8 = 0;
-        ent->field_104 = 0;
+        ent->avoidanceActive = 0;
         ent->field_C4 = 0;
         ent->routeMarkerIndex = 0;
         SeedCarLapProgress(ent, ((TrackEventData *)p)->rivalStarts[0][0].modelId);
@@ -566,10 +566,10 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         s32 height;
 
         height = ent->trackLateralOffset;
-        ent->field_120 = 0;
+        ent->avoidanceStep = 0;
         ent->field_FC = height;
-        ent->field_11E = height;
-        ent->field_11C = height;
+        ent->avoidanceTargetOffset = height;
+        ent->aiLateralOffset = height;
     }
     *(Vec4 *)&ent->modelPitch = *(Vec4 *)&ent->bodyPitch;
     {
@@ -607,16 +607,16 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     idxoff1_R4 = idx_R8;
     idxoff1_R4 = idxoff1_R4 * 16;
     p1_R4 = (TrackRivalAiConfig *)(base_R9 + (idxoff1_R4 + (lev1_R3 * 192)) + 0x8F4);
-    ent2_R7->field_124 = (p1_R4->speed * 1168) / 160;
+    ent2_R7->targetSpeed = (p1_R4->speed * 1168) / 160;
     ent2_R7->field_126 = p1_R4->field_126;
     ent2_R7->field_128 = p1_R4->field_128;
     ent2_R7->field_12A = p1_R4->field_12A;
-    ent2_R7->field_12C = p1_R4->field_12C;
+    ent2_R7->boostAcceleration = p1_R4->boostAcceleration;
   }
   __asm__ volatile("");
   c = ent2_R7->field_128;
   sub_R6 = (GameCarAiBlock *)&ent2_R7->field_BC;
-  ent2_R7->field_12E = 0;
+  ent2_R7->boostTimer = 0;
   if (c < 0)
   {
     ent2_R7->field_128 = 0;
@@ -630,15 +630,15 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
   {
     sub_R6->field_12A = 0;
   }
-  c = sub_R6->field_12C;
+  c = sub_R6->boostAcceleration;
   if (c <= 0)
   {
-    sub_R6->field_12C = 0;
+    sub_R6->boostAcceleration = 0;
   }
   else
     if (!(c < 16))
   {
-    sub_R6->field_12C = 15;
+    sub_R6->boostAcceleration = 15;
   }
   {
     s32 lev2_R2;
@@ -665,17 +665,17 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
   }
   {
     s32 v_R3;
-    v_R3 = sub_R6->field_124;
-    sub_R6->field_130 = (v_R3 * 6) / 100;
+    v_R3 = sub_R6->targetSpeed;
+    sub_R6->accelerationLimit = (v_R3 * 6) / 100;
   }
   if (pos2_R10 >= 4)
   {
     s32 d_R5;
     d_R5 = g_TrackLength;
-    sub_R6->field_118 = (d_R5 / 12) + ((d_R5 / 40) * (pos2_R10 - 4));
+    sub_R6->gridTargetProgress = (d_R5 / 12) + ((d_R5 / 40) * (pos2_R10 - 4));
   }
   else
   {
-    sub_R6->field_118 = g_TrackLength / 12;
+    sub_R6->gridTargetProgress = g_TrackLength / 12;
   }
 }

@@ -36,7 +36,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
     s32 lowerLimit;
     register s32 callArg asm("$4");
 
-    lateral = car->field_11C;
+    lateral = car->aiLateralOffset;
     offset = car->trackPointIndex;
     ai = (GameCarAiBlock *)&car->field_BC;
     car->field_DC = 0;
@@ -99,7 +99,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
         value = GetAngleDelta(car->headingAngle, angle);
         value += car->headingAngle;
         car->headingAngle = value;
-        ai->field_EC = value;
+        ai->targetYaw = value;
         car->bodyYaw = value;
     }
 }
@@ -182,24 +182,24 @@ void UpdateRaceCars(void) {
     do {
         if (walk->activeFlag != -1) {
             drive = (GameCarAiBlock *)&base->field_BC;
-            if (walk->field_12E > 0) {
-                if (walk->field_128 < walk->field_12E && walk->speed >= 0x321) {
+            if (walk->boostTimer > 0) {
+                if (walk->field_128 < walk->boostTimer && walk->speed >= 0x321) {
                     walk->acceleration = 0;
-                } else if (drive->field_130 >= walk->acceleration) {
-                    walk->acceleration = drive->field_12C + walk->acceleration;
+                } else if (drive->accelerationLimit >= walk->acceleration) {
+                    walk->acceleration = drive->boostAcceleration + walk->acceleration;
                 } else {
-                    walk->acceleration = drive->field_130;
+                    walk->acceleration = drive->accelerationLimit;
                 }
-                drive->field_12E = drive->field_12E - 1;
-            } else if (walk->field_130 >= walk->acceleration) {
+                drive->boostTimer = drive->boostTimer - 1;
+            } else if (walk->accelerationLimit >= walk->acceleration) {
                 walk->acceleration = walk->field_126 + walk->acceleration;
             } else {
-                walk->acceleration = walk->field_130;
+                walk->acceleration = walk->accelerationLimit;
             }
             walk->speed = walk->speed * 0x5E / 100;
             walk->speed = walk->speed + walk->acceleration;
             walk->bodyYaw =
-                GetAngleDelta(walk->bodyYaw, drive->field_EC) / 5 + walk->bodyYaw;
+                GetAngleDelta(walk->bodyYaw, drive->targetYaw) / 5 + walk->bodyYaw;
         }
         i++;
         walk++;
@@ -221,22 +221,22 @@ void UpdateRaceCars(void) {
             if (t < 0) {
                 t += 0xFF;
             }
-            walk->field_C8 = t >> 8;
+            walk->worldVelocityX = t >> 8;
             t = rcos(walk->headingAngle) * walk->speed;
             if (t < 0) {
                 t += 0xFF;
             }
-            walk->field_D0 = t >> 8;
+            walk->worldVelocityZ = t >> 8;
             if ((s16)i < 4) {
                 s32 sixth;
-                s32 f4;
+                s32 yawStep;
                 base->x = base->x - walk->motionX;
-                f4 = walk->field_F4;
+                yawStep = walk->yawRate;
                 walk->z = walk->z - walk->motionZ;
-                if (f4 < 0) {
-                    sixth = -f4 / 6;
+                if (yawStep < 0) {
+                    sixth = -yawStep / 6;
                 } else {
-                    sixth = f4 / 6;
+                    sixth = yawStep / 6;
                 }
                 BuildRotMatrixY(pm1, walk->bodyYaw);
                 BuildRotMatrixX(pm2, walk->bodyPitch);
@@ -259,8 +259,8 @@ void UpdateRaceCars(void) {
                 base->x = base->x + walk->motionX;
                 walk->z = walk->z + walk->motionZ;
             }
-            vpos.x = drive->field_C8 * 6 / 1280 + base->x;
-            vpos.z = drive->field_D0 * 6 / 1280 + walk->z;
+            vpos.x = drive->worldVelocityX * 6 / 1280 + base->x;
+            vpos.z = drive->worldVelocityZ * 6 / 1280 + walk->z;
             /*
              * Retail only initializes x and z before copying all four words.
              * Its uninitialized y and w stores are intentionally preserved.
@@ -274,13 +274,13 @@ void UpdateRaceCars(void) {
             if (walk->bodyRollVelocity != 0) {
                 walk->bodyRollVelocity = walk->bodyRollVelocity * 7 / 8;
             }
-            walk->steeringAngle = walk->steeringAngle + drive->field_F4;
+            walk->steeringAngle = walk->steeringAngle + drive->yawRate;
             if (walk->steeringAngle >= 0x12C) {
                 walk->steeringAngle = 0x12C;
             } else if (walk->steeringAngle < -0x12B) {
                 walk->steeringAngle = -0x12C;
             }
-            walk->bodyYaw = walk->bodyYaw + drive->field_F4;
+            walk->bodyYaw = walk->bodyYaw + drive->yawRate;
         }
         i++;
         walk++;
@@ -435,15 +435,15 @@ void UpdateAttractCars(void) {
         if (sub->activeFlag != -1) {
             drive = (GameCarAiBlock *)&car->field_BC;
 
-            if (sub->acceleration < sub->field_130) {
+            if (sub->acceleration < sub->accelerationLimit) {
                 sub->acceleration = sub->field_126 + sub->acceleration;
             } else {
-                sub->acceleration = sub->field_130;
+                sub->acceleration = sub->accelerationLimit;
             }
             sub->speed = sub->speed * 94 / 100;
             sub->speed = sub->speed + sub->acceleration;
             sub->bodyYaw =
-                GetAngleDelta(sub->bodyYaw, drive->field_EC) / 5 + sub->bodyYaw;
+                GetAngleDelta(sub->bodyYaw, drive->targetYaw) / 5 + sub->bodyYaw;
         }
         i++;
         sub++;
@@ -464,18 +464,18 @@ void UpdateAttractCars(void) {
             if (t < 0) {
                 t += 0xFF;
             }
-            base->field_C8 = t >> 8;
-            base->field_D0 = rcos(base->headingAngle) * base->speed / 256;
+            base->worldVelocityX = t >> 8;
+            base->worldVelocityZ = rcos(base->headingAngle) * base->speed / 256;
             if ((s16)i < 4) {
                 s32 sixth;
-                s32 f4;
+                s32 yawStep;
                 car->x = car->x - base->motionX;
-                f4 = base->field_F4;
+                yawStep = base->yawRate;
                 base->z = base->z - base->motionZ;
-                if (f4 < 0) {
-                    sixth = -f4 / 6;
+                if (yawStep < 0) {
+                    sixth = -yawStep / 6;
                 } else {
-                    sixth = f4 / 6;
+                    sixth = yawStep / 6;
                 }
                 BuildRotMatrixY(&m1, base->bodyYaw);
                 BuildRotMatrixX(&m2, base->bodyPitch);
@@ -498,8 +498,8 @@ void UpdateAttractCars(void) {
                 car->x = car->x + base->motionX;
                 base->z = base->z + base->motionZ;
             }
-            vTmp.x = drive->field_C8 * 6 / 1280 + car->x;
-            vTmp.z = drive->field_D0 * 6 / 1280 + base->z;
+            vTmp.x = drive->worldVelocityX * 6 / 1280 + car->x;
+            vTmp.z = drive->worldVelocityZ * 6 / 1280 + base->z;
             /*
              * Retail only initializes x and z before copying all four words.
              * Its uninitialized y and w stores are intentionally preserved.
@@ -513,13 +513,13 @@ void UpdateAttractCars(void) {
             if (base->bodyRollVelocity != 0) {
                 base->bodyRollVelocity = base->bodyRollVelocity * 7 / 8;
             }
-            base->steeringAngle = base->steeringAngle + drive->field_F4;
+            base->steeringAngle = base->steeringAngle + drive->yawRate;
             if (base->steeringAngle >= 0x12C) {
                 base->steeringAngle = 0x12C;
             } else if (base->steeringAngle < -0x12B) {
                 base->steeringAngle = -0x12C;
             }
-            base->bodyYaw = base->bodyYaw + drive->field_F4;
+            base->bodyYaw = base->bodyYaw + drive->yawRate;
         }
         i++;
         base++;

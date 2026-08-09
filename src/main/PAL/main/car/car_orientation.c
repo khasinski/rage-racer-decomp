@@ -724,9 +724,9 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
     {
       s32 vx;
       s32 vz;
-      vx = (s16)((u16)opponent->field_C8 - (u16)car->drive.accelPos);
+      vx = (s16)((u16)opponent->worldVelocityX - (u16)car->drive.accelPos);
       velocityDelta.x = vx / 0x20;
-      vz = (s16)((u16)opponent->field_D0 - (u16)car->drive.brakePos);
+      vz = (s16)((u16)opponent->worldVelocityZ - (u16)car->drive.brakePos);
       velocityDelta.z = vz / 0x20;
     }
     if (((car->facingBackwards != g_RaceSeries) && (car->speed >= 0x51)) && (g_WrongWayTimer >= 0xA))
@@ -753,10 +753,10 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
     s32 vz;
     opponent->speed = opponent->speed / 2;
     opponent->acceleration = opponent->acceleration / 2;
-    opponent->field_12E = opponent->field_12A;
-    vx = (s16)((u16)opponent->field_C8 - (u16)car->drive.accelPos);
+    opponent->boostTimer = opponent->field_12A;
+    vx = (s16)((u16)opponent->worldVelocityX - (u16)car->drive.accelPos);
     velocityDelta.x = vx / 0x20;
-    vz = (s16)((u16)opponent->field_D0 - (u16)car->drive.brakePos);
+    vz = (s16)((u16)opponent->worldVelocityZ - (u16)car->drive.brakePos);
     velocityDelta.z = vz / 0x20;
     velocityDelta.x = velocityDelta.x - (u16)opponent->velocityX;
     velocityDelta.z = velocityDelta.z - (u16)opponent->velocityZ;

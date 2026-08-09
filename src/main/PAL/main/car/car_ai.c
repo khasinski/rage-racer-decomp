@@ -247,7 +247,7 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
 
     ai = (GameCarAiBlock *)&obj->field_BC;
     if (obj->slideInput.value == 0) {
-        if (!(obj->field_F4 != 0)) {
+        if (!(obj->yawRate != 0)) {
         if (carIndex != 0) {
             value = obj->speed;
             if (value < 0x3C1) {
@@ -262,7 +262,7 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
                 temp = -temp;
                 obj->slideInput.value = temp;
             }
-            obj->field_F4 = 0;
+            obj->yawRate = 0;
             return;
         }
         }
@@ -281,24 +281,24 @@ void UpdateCarSlideAngle(GameCarRuntime *car, s32 carIndex) {
     value = (u32)value >> 31;
     ai->slideInput.value = temp;
     temp += value;
-    value = ai->field_F4;
+    value = ai->yawRate;
     temp >>= 1;
     value -= temp;
-    ai->field_F4 = value;
+    ai->yawRate = value;
     if (value >= 0x2BC) {
-        ai->field_F4 = 0x2BC;
+        ai->yawRate = 0x2BC;
         return;
     }
     temp = value < -0x2BB;
     if (temp != 0) {
         temp = -0x2BC;
-        ai->field_F4 = temp;
+        ai->yawRate = temp;
         return;
     }
     return;
 
 slide_input_done:
-    value = ai->field_F4;
+    value = ai->yawRate;
     if (value != 0) {
         temp = value * 15;
         temp <<= 1;
@@ -306,7 +306,7 @@ slide_input_done:
             temp += 0x1F;
         }
         temp >>= 5;
-        ai->field_F4 = temp;
+        ai->yawRate = temp;
         if (temp == 0) {
             ai->markerDirection = 0;
         }
@@ -345,8 +345,8 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
     if (entry->end < target) {
         goto advance;
     }
-    if (carIndex < 4 && objReg->field_10C == 0) {
-        valueRaw = objReg->field_11C;
+    if (carIndex < 4 && objReg->nearbyCarCount == 0) {
+        valueRaw = objReg->aiLateralOffset;
         if (entry->minHeight < valueRaw) {
             value = valueRaw;
             asm volatile("" : "=r"(valueRaw) : "0"(valueRaw));
@@ -354,7 +354,7 @@ void ApplyCarRacingLineHint(GameCarRuntime *obj, s32 carIndex) {
             raw = valueRaw < raw;
             if (raw != 0) {
                 raw = value + entry->heightAdjustment;
-                objReg->field_11C = raw;
+                objReg->aiLateralOffset = raw;
             }
         }
     }
@@ -500,7 +500,7 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
   d_R3 = rpm - lo_R7;
   v20_R4 = (lowValue = val[0]);
   q = ((val[1] - lowValue) * d_R3) / range;
-  sub_R9->field_130 = ((((lowValue + q) * 1168) / 160) * 6) / 100;
+  sub_R9->accelerationLimit = ((((lowValue + q) * 1168) / 160) * 6) / 100;
   goto target_speed_done;
   }
   if (lim[1] < rpm)
@@ -754,13 +754,13 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
             s32 deltaZ;
 
             deltaX =
-                (s16)((u16)other->field_C8 - (u16)car->field_C8);
+                (s16)((u16)other->worldVelocityX - (u16)car->worldVelocityX);
             if (deltaX < 0) {
                 deltaX += 31;
             }
             velocityDelta[0] = deltaX >> 5;
             deltaZ =
-                (s16)((u16)other->field_D0 - (u16)car->field_D0);
+                (s16)((u16)other->worldVelocityZ - (u16)car->worldVelocityZ);
             if (deltaZ < 0) {
                 deltaZ += 31;
             }
@@ -776,13 +776,13 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
             s32 deltaZ;
 
             deltaX =
-                (s16)((u16)other->field_C8 - (u16)car->field_C8);
+                (s16)((u16)other->worldVelocityX - (u16)car->worldVelocityX);
             if (deltaX < 0) {
                 deltaX += 31;
             }
             velocityDelta[0] = deltaX >> 5;
             deltaZ =
-                (s16)((u16)other->field_D0 - (u16)car->field_D0);
+                (s16)((u16)other->worldVelocityZ - (u16)car->worldVelocityZ);
             if (deltaZ < 0) {
                 deltaZ += 31;
             }

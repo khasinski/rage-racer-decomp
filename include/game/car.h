@@ -109,9 +109,9 @@ typedef struct GameCarRuntime {
     s32 field_BC;
     s32 field_C0;
     s32 field_C4;
-    s32 field_C8;
+    s32 worldVelocityX;
     s32 field_CC;
-    s32 field_D0;
+    s32 worldVelocityZ;
     s32 field_D4;
     s32 field_D8;
     s32 field_DC;
@@ -119,34 +119,34 @@ typedef struct GameCarRuntime {
     s32 field_E4;
     s16 field_E8;
     s16 field_EA;
-    s32 field_EC;
+    s32 targetYaw;
     CarSlideInput slideInput;
-    s32 field_F4;
+    s32 yawRate;
     s32 field_F8;
     s32 field_FC;
     s32 routeIndex;
-    s16 field_104;
+    s16 avoidanceActive;
     u8 pad106[2];
     s32 field_108;
-    s16 field_10C;
+    s16 nearbyCarCount;
     s16 field_10E;
     s16 field_110;
     s16 field_112;
     s16 field_114;
     s16 field_116;
-    s16 field_118;
+    s16 gridTargetProgress;
     s16 field_11A;
-    s16 field_11C;
-    s16 field_11E;
-    s16 field_120;
+    s16 aiLateralOffset;
+    s16 avoidanceTargetOffset;
+    s16 avoidanceStep;
     s16 field_122;
-    s16 field_124;
+    s16 targetSpeed;
     s16 field_126;
     s16 field_128;
     s16 field_12A;
-    s16 field_12C;
-    s16 field_12E;
-    s16 field_130;
+    s16 boostAcceleration;
+    s16 boostTimer;
+    s16 accelerationLimit;
     s16 currentGear;
     s32 engineRpm;
     s16 routeMarkerIndex;
@@ -469,31 +469,31 @@ typedef struct PlayerCarRuntime {
  * 0x104..0x134 as s16 where GameCarDrive declares s32. See names.md 3b. */
 typedef struct GameCarAiBlock {
     u8 pad0[0xC];
-    s32 field_C8;   /* +0x0C world velocity x, sin(headingAngle) * speed / 256 */
+    s32 worldVelocityX;   /* +0x0C world velocity x, sin(headingAngle) * speed / 256 */
     u8 pad10[4];
-    s32 field_D0;   /* +0x14 world velocity z, cos(headingAngle) * speed / 256 */
+    s32 worldVelocityZ;   /* +0x14 world velocity z, cos(headingAngle) * speed / 256 */
     u8 pad18[0x18];
-    s32 field_EC;   /* +0x30 target angle: bodyYaw += GetAngleDelta(bodyYaw, this) / 5 */
+    s32 targetYaw;   /* +0x30 target angle: bodyYaw += GetAngleDelta(bodyYaw, this) / 5 */
     CarSlideInput slideInput; /* +0x34 */
-    s32 field_F4;   /* +0x38 yaw rate, added to both steeringAngle and bodyYaw */
+    s32 yawRate;   /* +0x38 yaw rate, added to both steeringAngle and bodyYaw */
     u8 pad3C[8];
     s32 routeIndex; /* +0x44 */
-    s16 field_104;  /* set to 1 while another car blocks this one */
+    s16 avoidanceActive;  /* set to 1 while another car blocks this one */
     u8 pad4A[6];
-    u16 field_10C;  /* count of cars close enough to matter this frame */
+    u16 nearbyCarCount;  /* count of cars close enough to matter this frame */
     s16 field_10E;
     u8 pad54[8];
-    s32 field_118;  /* grid-seeded target progress (g_TrackLength / 12 steps) */
-    u16 field_11C;  /* accumulated steering bias */
-    s16 field_11E;  /* steering bias target, +-0x50 */
-    u16 field_120;  /* per-frame step towards the target */
+    s32 gridTargetProgress;  /* grid-seeded target progress (g_TrackLength / 12 steps) */
+    u16 aiLateralOffset;  /* current lateral racing-line offset */
+    s16 avoidanceTargetOffset;  /* traffic-avoidance target, +-0x50 */
+    u16 avoidanceStep;  /* per-frame step towards the avoidance target */
     u8 pad66[2];
-    s16 field_124;  /* grid-seeded speed, clamped >= 0 */
+    s16 targetSpeed;  /* grid-seeded speed, clamped >= 0 */
     u8 pad6A[4];
     s16 field_12A;
-    s16 field_12C;  /* clamped to 0..15; the boost-branch step of acceleration */
-    s16 field_12E;  /* +0x72 slipstream-boost countdown, decremented while > 0 */
-    s16 field_130;  /* speed scale, damped to 98% when boxed in; caps acceleration */
+    s16 boostAcceleration;  /* clamped to 0..15; the boost-branch step of acceleration */
+    s16 boostTimer;  /* +0x72 slipstream-boost countdown, decremented while > 0 */
+    s16 accelerationLimit;  /* damped while boxed in; caps acceleration */
     s16 field_132;  /* clamped to >= 0x3C */
     s16 field_134;  /* clamped to >= 0 */
     u8 pad7A[2];

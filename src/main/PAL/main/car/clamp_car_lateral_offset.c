@@ -4,7 +4,7 @@
 
 
 /*
- * Clamps the car's lateral offset (field_11C) to a fraction of the track
+ * Clamps the car's lateral offset (aiLateralOffset) to a fraction of the track
  * half-width at its current point: `leftHalfWidth` when offset is negative,
  * `rightHalfWidth` otherwise. `carIndex` selects the
  * scaling: <4 uses 5/8 of the half-width, else 4/7. Writes the clamped value
@@ -19,7 +19,7 @@ void ClampCarLateralOffset(GameCarRuntime *car, s32 carIndex) {
     s32 limit;
     s32 trackIndex;
 
-    current = carReg->field_11C;
+    current = carReg->aiLateralOffset;
     state = (GameCarAiBlock *)&carReg->field_BC;
     magnitude = current;
     if (current < 0) {
@@ -61,9 +61,9 @@ void ClampCarLateralOffset(GameCarRuntime *car, s32 carIndex) {
 
     if (limit < magnitude) {
         if (current > 0) {
-            state->field_11C = limit;
+            state->aiLateralOffset = limit;
         } else {
-            state->field_11C = -limit;
+            state->aiLateralOffset = -limit;
         }
     }
 }
