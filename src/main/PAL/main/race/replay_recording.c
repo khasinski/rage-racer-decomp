@@ -2,7 +2,6 @@
 #include "game/race.h"
 #include "game/player_car_internal.h"
 #include "game/render.h"
-#define GAME_REPLAY_COUNTER_TYPE u32
 #include "game/replay_internal.h"
 
 void ResetReplayFrameCounts(void) {
