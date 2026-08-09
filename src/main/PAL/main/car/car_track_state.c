@@ -304,7 +304,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     surfaceHeight =
         (nextPoint->y * alongSegment + point->y * (segLenD - alongSegment)) / segLenD;
     obj->y = surfaceHeight;
-    obj->y = (s32)(((s32)(spad->field_8E * lateralOffset) >> 7) + surfaceHeight);
+    obj->y = ((spad->field_8E * lateralOffset) >> 7) + surfaceHeight;
     {
         s16 angle;
 
@@ -318,9 +318,9 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
                           segLenE);
     trackWidth = (u16) spad->field_88 + (u16) spad->field_8A;
     spad->field_86 = trackWidth;
-    nextCamber = Atan2((s32) trackWidth, (s32) (nextPoint->field_E * trackWidth) >> 7);
+    nextCamber = Atan2(trackWidth, (nextPoint->field_E * trackWidth) >> 7);
     trackWidthCopy = spad->field_86;
-    secondResult = Atan2((s32) trackWidthCopy, (s32) (point->field_E * trackWidthCopy) >> 7);
+    secondResult = Atan2(trackWidthCopy, (point->field_E * trackWidthCopy) >> 7);
     segLenF = (s16)spad->segmentLength;
     spad->field_94 =
         (s16)((nextCamber * alongSegment + secondResult * (segLenF - alongSegment)) / segLenF);
