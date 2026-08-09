@@ -341,13 +341,13 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     {
       DrawRectOutline((void *)ot, (s16)x1, (s16)y1, (s16)0xD, 0x1A, (u8)0xB4, (u8)0xB4, (u8)0xB4, (u8)0xFF);
     }
-    DrawSolidRect((void *)ot, (s16)(x1 + 1), (s16)(y1 + 2), (s16)0xB, (s16)0x16, (u8)(*(u8 *)(&g_TeamLogoClut[g_TeamLogoPenColor]) * 8), (u8)((g_TeamLogoClut[g_TeamLogoPenColor] >> 2) & 0xF8), (u8)((g_TeamLogoClut[g_TeamLogoPenColor] >> 7) & 0xF8), (u8)0xFF);
+    DrawSolidRect((void *)ot, (s16)(x1 + 1), (s16)(y1 + 2), (s16)0xB, (s16)0x16, (u8)((g_TeamLogoClut[g_TeamLogoPenColor] & 0xFF) * 8), (u8)((g_TeamLogoClut[g_TeamLogoPenColor] >> 2) & 0xF8), (u8)((g_TeamLogoClut[g_TeamLogoPenColor] >> 7) & 0xF8), (u8)0xFF);
     {
       s32 fy2 = (kreg + 2) << 16;
       i = 0;
       j = 1;
       loop15:
-      DrawSolidRect((void *)ot, (s16)(x0 + j), (s16)(fy2 >> 16), (s16)8, (s16)0x10, (u8)(*(u8 *)(&g_TeamLogoSwatches[i]) * 8), (u8)((g_TeamLogoSwatches[i] >> 2) & 0xF8), (u8)((g_TeamLogoSwatches[i] >> 7) & 0xF8), (u8)0xFF);
+      DrawSolidRect((void *)ot, (s16)(x0 + j), (s16)(fy2 >> 16), (s16)8, (s16)0x10, (u8)((g_TeamLogoSwatches[i] & 0xFF) * 8), (u8)((g_TeamLogoSwatches[i] >> 2) & 0xF8), (u8)((g_TeamLogoSwatches[i] >> 7) & 0xF8), (u8)0xFF);
 
       i++;
       j += 8;
