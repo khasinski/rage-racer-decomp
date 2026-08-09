@@ -19,7 +19,7 @@ s32 DrawDesignModeScreen(s32 step) {
     s32 column;
     u32 fadeValue;
 
-    ot = (void *)(*(u32 *)&SCRATCH_OT_BASE + 4);
+    ot = (void *)(SCRATCH_OT_BASE_WORD + 4);
     mask = g_DesignModeCellMask;
 
     if (step == 0) {
