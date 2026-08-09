@@ -95,7 +95,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     BuildRotMatrixX(&m_F0, obj->wheelRotation);
     MulMatrix2(&m_30, &m_F0);
 
-    BuildRotMatrixY(&m_10, obj->angle_44 / 12);
+    BuildRotMatrixY(&m_10, obj->steeringAngle / 12);
     BuildRotMatrixX(&m_B0[0], obj->wheelRotation);
     MulMatrix2(&m_10, &m_B0[0]);
     MulMatrix2(&m_30, &m_B0[0]);
@@ -231,7 +231,7 @@ void DrawCar(GameRenderObject *obj) {
             BuildRotMatrixX(&m_F0, obj->wheelRotation);
             MulMatrix2(&m_30, &m_F0);
 
-            BuildRotMatrixY(&m_10, obj->angle_44 * 2);
+            BuildRotMatrixY(&m_10, obj->steeringAngle * 2);
             BuildRotMatrixX(&m_B0[0], obj->wheelRotation);
             MulMatrix2(&m_10, &m_B0[0]);
             MulMatrix2(&m_30, &m_B0[0]);

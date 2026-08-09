@@ -577,7 +577,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
 
         lateral = ent->y;
         ent->field_40 = 0;
-        ent->field_44 = 0;
+        ent->steeringAngle = 0;
         ent->wheelRotation = 0;
         ent->modelY = lateral;
     }

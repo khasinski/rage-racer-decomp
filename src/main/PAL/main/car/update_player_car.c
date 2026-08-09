@@ -192,13 +192,13 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     }
 
     if (g_PadType == 0x23) {
-        if (car->field_44 >= 4096) {
-            car->field_44 = 4096;
+        if (car->steeringAngle >= 4096) {
+            car->steeringAngle = 4096;
             if (p->steerPos < -4096) {
                 g_SteerHoldFrames++;
             }
-        } else if (car->field_44 < -4095) {
-            car->field_44 = -4096;
+        } else if (car->steeringAngle < -4095) {
+            car->steeringAngle = -4096;
             if (p->steerPos > 4096) {
                 g_SteerHoldFrames++;
             }
@@ -206,11 +206,11 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
             g_SteerHoldFrames = -10;
         }
     } else {
-        if (car->field_44 >= 4096) {
-            car->field_44 = 4096;
+        if (car->steeringAngle >= 4096) {
+            car->steeringAngle = 4096;
             g_SteerHoldFrames++;
-        } else if (car->field_44 < -4095) {
-            car->field_44 = -4096;
+        } else if (car->steeringAngle < -4095) {
+            car->steeringAngle = -4096;
             g_SteerHoldFrames++;
         } else {
             g_SteerHoldFrames = 0;

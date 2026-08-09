@@ -60,7 +60,7 @@ typedef struct GameCarRuntime {
     s32 field_38;
     s32 field_3C;
     s32 field_40;
-    s32 field_44;
+    s32 steeringAngle;
     s32 wheelRotation;
     s32 field_4C;
     s32 field_50;
@@ -416,7 +416,7 @@ typedef struct PlayerCarRuntime {
     s32 field_38;
     s32 field_3C;
     s32 field_40;
-    s32 field_44;
+    s32 steeringAngle;
     s32 wheelRotation;
     s32 field_4C;
     s32 field_50;
@@ -475,7 +475,7 @@ typedef struct GameCarAiBlock {
     u8 pad18[0x18];
     s32 field_EC;   /* +0x30 target angle: bodyYaw += GetAngleDelta(bodyYaw, this) / 5 */
     CarSlideInput slideInput; /* +0x34 */
-    s32 field_F4;   /* +0x38 yaw rate, added to both field_44 and bodyYaw */
+    s32 field_F4;   /* +0x38 yaw rate, added to both steeringAngle and bodyYaw */
     u8 pad3C[8];
     s32 routeIndex; /* +0x44 */
     s16 field_104;  /* set to 1 while another car blocks this one */

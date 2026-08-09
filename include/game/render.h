@@ -195,7 +195,7 @@ typedef struct GameRenderObject {
     s32 field_38;
     s32 field_3C;
     s32 field_40;
-    s32 angle_44;   /* 0x44 */
+    s32 steeringAngle; /* 0x44 */
     s32 wheelRotation; /* 0x48, 12-bit phase plus high-speed bit 0x1000 */
     s32 field_4C;
     s32 angle_50;   /* 0x50 */
@@ -267,7 +267,7 @@ typedef struct GameRenderSourcePoint {
     u8 pad2A[6];
     u32 field_30;
     u8 pad34[0x10];
-    u16 field_44;
+    u16 steeringAngle;
     u8 pad46[2];
     u16 wheelRotation;
     u8 pad4A[0x16];

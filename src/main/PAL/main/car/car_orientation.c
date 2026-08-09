@@ -63,7 +63,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->motionY = 0;
   player->motionX = 0;
   player->wheelRotation = 0;
-  player->field_44 = 0;
+  player->steeringAngle = 0;
   player->field_40 = 0;
   player->speed = 0;
   player->acceleration = 0;
@@ -288,7 +288,7 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
 
     if (mode < 2) {
         p->steerPos = 0;
-        ctx->field_44 = 0;
+        ctx->steeringAngle = 0;
     } else if ((mode < 4) && (g_PlayerAutoSteer == 0)) {
     if (g_PadType == 0x41) {
 
@@ -326,7 +326,7 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     p->unk40 = 0;
     p->steerPos = p->steerPos / 3;
     }
-    ctx->field_44 = -p->steerPos;
+    ctx->steeringAngle = -p->steerPos;
     if (ctx->bodyRollVelocity != 0) {
         ctx->bodyRollVelocity = (ctx->bodyRollVelocity * 7) / 8;
     }
@@ -341,13 +341,13 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     p->unk40 = a0v;
     if (v1 > 0) {
         p->steerPos = 0;
-        ctx->field_44 = 0;
+        ctx->steeringAngle = 0;
     } else if ((a1 - 256) < v1) {
         s32 t;
         if (v1 >= 4097) v1 = 4096;
         t = rcos(v1 / 8);
         p->steerPos = p->steerPos - (t / 4);
-        ctx->field_44 = ctx->field_44 + 1536;
+        ctx->steeringAngle = ctx->steeringAngle + 1536;
     } else {
         p->steerPos = v1 / 3;
     }
@@ -359,21 +359,21 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     p->unk40 = a0v;
     if (v1 < 0) {
         p->steerPos = 0;
-        ctx->field_44 = 0;
+        ctx->steeringAngle = 0;
     } else if (v1 < (a1 + 256)) {
         s32 t;
         s32 c = v1;
         if (v1 < -4096) { v1 = -4096; c = v1; }
         t = rcos(c / 8);
         p->steerPos = p->steerPos + (t / 4);
-        ctx->field_44 = ctx->field_44 - 1536;
+        ctx->steeringAngle = ctx->steeringAngle - 1536;
     } else {
         p->steerPos = v1 / 3;
     }
     ctx->bodyRollVelocity = ctx->bodyRollVelocity + 6;
     } else {
     p->unk40 = 0;
-    ctx->field_44 = ctx->field_44 / 2;
+    ctx->steeringAngle = ctx->steeringAngle / 2;
     p->steerPos = p->steerPos / 6;
     }
     if (ctx->bodyRollVelocity != 0) {
@@ -410,7 +410,7 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     if (a0v < -4096) a0v = -4096;
     if (a0v > 4096) a0v = 4096;
     p->steerPos = a0v;
-    ctx->field_44 = a0v;
+    ctx->steeringAngle = a0v;
     ctx->bodyRollVelocity = a0v / 128;
 
     }

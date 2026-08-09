@@ -19,7 +19,7 @@
  * offset to the track half-width (field_10/field_12), projects the target point
  * off the centre-line along the inward normal (0x1000 - smoothed track angle),
  * then nudges the car's headingAngle toward that target (GetAngleDelta). Writes
- * the steer value into field_44 and the route sub-block (field_BC).
+ * the steer value into steeringAngle and the route sub-block (field_BC).
  * Register-pinned locals are match-load-bearing.
  */
 void SteerCarAlongRoute(GameCarRuntime *car) {
@@ -93,7 +93,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
     value = car->field_B4;
     callArg = (callArg << 11) + 0xC00;
     value = -GetAngleDelta(callArg - value, angle);
-    car->field_44 = value * 3;
+    car->steeringAngle = value * 3;
 
     if (car->field_98 == 0) {
         value = GetAngleDelta(car->headingAngle, angle);
@@ -266,19 +266,19 @@ void UpdateRaceCars(void) {
              * Its uninitialized y and w stores are intentionally preserved.
              */
             *(Vec4 *)base = vpos;
-            if (walk->field_44 >= 0x41) {
+            if (walk->steeringAngle >= 0x41) {
                 walk->bodyRollVelocity = walk->bodyRollVelocity - 6;
-            } else if (walk->field_44 < -0x40) {
+            } else if (walk->steeringAngle < -0x40) {
                 walk->bodyRollVelocity = walk->bodyRollVelocity + 6;
             }
             if (walk->bodyRollVelocity != 0) {
                 walk->bodyRollVelocity = walk->bodyRollVelocity * 7 / 8;
             }
-            walk->field_44 = walk->field_44 + drive->field_F4;
-            if (walk->field_44 >= 0x12C) {
-                walk->field_44 = 0x12C;
-            } else if (walk->field_44 < -0x12B) {
-                walk->field_44 = -0x12C;
+            walk->steeringAngle = walk->steeringAngle + drive->field_F4;
+            if (walk->steeringAngle >= 0x12C) {
+                walk->steeringAngle = 0x12C;
+            } else if (walk->steeringAngle < -0x12B) {
+                walk->steeringAngle = -0x12C;
             }
             walk->bodyYaw = walk->bodyYaw + drive->field_F4;
         }
@@ -505,19 +505,19 @@ void UpdateAttractCars(void) {
              * Its uninitialized y and w stores are intentionally preserved.
              */
             *(Vec4 *)car = vTmp;
-            if (base->field_44 >= 0x41) {
+            if (base->steeringAngle >= 0x41) {
                 base->bodyRollVelocity = base->bodyRollVelocity - 6;
-            } else if (base->field_44 < -0x40) {
+            } else if (base->steeringAngle < -0x40) {
                 base->bodyRollVelocity = base->bodyRollVelocity + 6;
             }
             if (base->bodyRollVelocity != 0) {
                 base->bodyRollVelocity = base->bodyRollVelocity * 7 / 8;
             }
-            base->field_44 = base->field_44 + drive->field_F4;
-            if (base->field_44 >= 0x12C) {
-                base->field_44 = 0x12C;
-            } else if (base->field_44 < -0x12B) {
-                base->field_44 = -0x12C;
+            base->steeringAngle = base->steeringAngle + drive->field_F4;
+            if (base->steeringAngle >= 0x12C) {
+                base->steeringAngle = 0x12C;
+            } else if (base->steeringAngle < -0x12B) {
+                base->steeringAngle = -0x12C;
             }
             base->bodyYaw = base->bodyYaw + drive->field_F4;
         }
