@@ -124,6 +124,11 @@ typedef struct TimedDrawCommand {
     TimedDrawArgument motion;
 } TimedDrawCommand;
 
+typedef union TimedDrawCommandAddress {
+    s32 byteOffset;
+    TimedDrawCommand *pointer;
+} TimedDrawCommandAddress;
+
 /* A ready-made SPRT description; BuildSpriteFromDesc expands it into a scratchpad
  * SPRT. g_TachoNeedleSprite is the one instance. */
 typedef struct GameSpriteDesc {

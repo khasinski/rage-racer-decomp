@@ -435,7 +435,7 @@ s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     register s32 *progressPtr asm("$18") = progress;
     register s32 stepReg asm("$19") = step;
     TimedDrawCommand *cmd;
-    TimedDrawCommand *cmdTmp;
+    TimedDrawCommandAddress commandAddress;
     s32 index = 0;
     s32 remaining;
     s32 type;
@@ -454,11 +454,11 @@ s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
     }
 
     nextProgress = (index * 3) << 2;
-    cmdTmp = (TimedDrawCommand *)(nextProgress + (s32)base);
-    if (cmdTmp->time < 0) {
+    commandAddress.byteOffset = nextProgress + (s32)base;
+    if (commandAddress.pointer->time < 0) {
         goto timed_commands_done;
     }
-    cmd = cmdTmp;
+    cmd = commandAddress.pointer;
 loop_body:
     remaining = *progressPtr - cmd->time;
     if (remaining >= 0) {
@@ -523,8 +523,8 @@ loop_body:
 
 timed_commands_done:
     if (stepReg >= 0) {
-        cmdTmp = (TimedDrawCommand *)*progressPtr;
-        updatedProgress = stepReg + (s32)cmdTmp;
+        commandAddress.byteOffset = *progressPtr;
+        updatedProgress = stepReg + commandAddress.byteOffset;
         limit = base[index].motion.value;
         if (updatedProgress < limit) {
             *progressPtr = updatedProgress;
