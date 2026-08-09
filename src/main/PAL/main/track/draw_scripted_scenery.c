@@ -79,27 +79,27 @@ void InitPathScenery(void) {
     g_PathSceneryX = *(Block16 *)g_PathSceneryPosKeys;
 
     {
-        u8 *copySrc;
-        u8 *entryA;
-        u8 *entryB;
+        PathSceneryRotationKey *copySrc;
+        PathSceneryPositionKey *entryA;
+        PathSceneryRotationKey *entryB;
         s16 sv;
 
-        copySrc = (u8 *)g_PathSceneryRotKeys;
-        entryA = (u8 *)g_PathSceneryPosKeys;
+        copySrc = g_PathSceneryRotKeys;
+        entryA = g_PathSceneryPosKeys;
         g_PathSceneryRot = *(SVec *)copySrc;
         g_PathSceneryPosPhase = 0;
         g_PathSceneryRotPhase = 0;
         g_PathSceneryPosSpan =
-            RAW(((PathSceneryPositionKey *)entryA)->span);
-        entryB = (u8 *)g_PathSceneryRotKeys;
+            RAW(entryA->span);
+        entryB = g_PathSceneryRotKeys;
         g_PathSceneryRotSpan =
-            RAW(((PathSceneryRotationKey *)entryB)->span);
+            RAW(entryB->span);
         g_PathSceneryPosRate =
-            RAW(((PathSceneryPositionKey *)entryA)->rate);
+            RAW(entryA->rate);
         g_PathSceneryRotRate =
-            RAW(((PathSceneryRotationKey *)entryB)->rate);
+            RAW(entryB->rate);
 
-        sv = RAW(((PathSceneryPositionKey *)entryA)->rate);
+        sv = RAW(entryA->rate);
         if (sv < 0) {
             sv = -sv;
             g_PathSceneryPosRate = sv;
@@ -114,11 +114,11 @@ void InitPathScenery(void) {
     }
 
     {
-        u8 *entryB;
+        PathSceneryRotationKey *entryB;
         s16 sv;
 
-        entryB = (u8 *)g_PathSceneryRotKeys;
-        sv = RAW(((PathSceneryRotationKey *)entryB)->rate);
+        entryB = g_PathSceneryRotKeys;
+        sv = RAW(entryB->rate);
         if (sv < 0) {
             sv = -sv;
             g_PathSceneryRotRate = sv;
@@ -133,31 +133,26 @@ void InitPathScenery(void) {
     }
 
     {
-        u8 *entry;
+        PathSceneryPositionKey *positionKeys;
+        PathSceneryRotationKey *rotationKeys;
 
-        entry = (u8 *)g_PathSceneryPosKeys;
+        positionKeys = g_PathSceneryPosKeys;
         g_PathSceneryVolume = 0;
         g_PathSceneryPosIndex = 0;
         g_PathSceneryRotIndex = 0;
         g_PathSceneryHalfDelta[0] =
-            (RAW(((PathSceneryPositionKey *)entry)[1].x) -
-             RAW(((PathSceneryPositionKey *)entry)[0].x)) / 2;
+            (RAW(positionKeys[1].x) - RAW(positionKeys[0].x)) / 2;
         g_PathSceneryHalfDelta[1] =
-            (RAW(((PathSceneryPositionKey *)entry)[1].y) -
-             RAW(((PathSceneryPositionKey *)entry)[0].y)) / 2;
+            (RAW(positionKeys[1].y) - RAW(positionKeys[0].y)) / 2;
         g_PathSceneryHalfDelta[2] =
-            (RAW(((PathSceneryPositionKey *)entry)[1].z) -
-             RAW(((PathSceneryPositionKey *)entry)[0].z)) / 2;
-        entry = (u8 *)g_PathSceneryRotKeys;
+            (RAW(positionKeys[1].z) - RAW(positionKeys[0].z)) / 2;
+        rotationKeys = g_PathSceneryRotKeys;
         g_PathSceneryRotHalfDelta[0] =
-            (RAW(((PathSceneryRotationKey *)entry)[1].x) -
-             RAW(((PathSceneryRotationKey *)entry)[0].x)) / 2;
+            (RAW(rotationKeys[1].x) - RAW(rotationKeys[0].x)) / 2;
         g_PathSceneryRotHalfDelta[1] =
-            (RAW(((PathSceneryRotationKey *)entry)[1].y) -
-             RAW(((PathSceneryRotationKey *)entry)[0].y)) / 2;
+            (RAW(rotationKeys[1].y) - RAW(rotationKeys[0].y)) / 2;
         g_PathSceneryRotHalfDelta[2] =
-            (RAW(((PathSceneryRotationKey *)entry)[1].z) -
-             RAW(((PathSceneryRotationKey *)entry)[0].z)) / 2;
+            (RAW(rotationKeys[1].z) - RAW(rotationKeys[0].z)) / 2;
     }
 }
 
@@ -169,7 +164,8 @@ void InitPathScenery(void) {
  */
 void UpdatePathScenerySound(void) {
     s32 delta[3];
-    u8 *keys;
+    PathSceneryPositionKey *positionKeys;
+    PathSceneryRotationKey *rotationKeys;
     register PathSceneryKey *rec asm("$4");
     s16 rate;
     register s16 idx asm("$2");
@@ -189,19 +185,19 @@ void UpdatePathScenerySound(void) {
 
     if (g_PathSceneryClock.posFrame == g_PathSceneryPosSpan) {
         idx = (u16)g_PathSceneryPosIndex;
-        keys = (u8 *)g_PathSceneryPosKeys;
+        positionKeys = g_PathSceneryPosKeys;
         g_PathSceneryPosPhase = 0;
         idx = idx + 1;
         g_PathSceneryPosIndex = idx;
         __asm__ volatile("" : "=r"(idx) : "0"(idx));
-        stepRec = (PathSceneryKey *)(idx * 20 + (s32)keys);
+        stepRec = (PathSceneryKey *)(idx * 20 + (s32)positionKeys);
         if (stepRec->position.span == -1) {
             idx = stepRec->position.loopIndex;
             g_PathSceneryClock.posFrame = 0;
             g_PathSceneryPosIndex = idx;
             if (idx > 0) {
                 g_PathSceneryClock.posFrame =
-                    RAW(((PathSceneryPositionKey *)keys)[idx - 1].span);
+                    RAW(positionKeys[idx - 1].span);
             }
         }
         rate = RAW(g_PathSceneryPosKeys[g_PathSceneryPosIndex].rate);
@@ -296,19 +292,19 @@ void UpdatePathScenerySound(void) {
 
     if (g_PathSceneryClock.rotFrame == g_PathSceneryRotSpan) {
         idx = (u16)g_PathSceneryRotIndex;
-        keys = (u8 *)g_PathSceneryRotKeys;
+        rotationKeys = g_PathSceneryRotKeys;
         g_PathSceneryRotPhase = 0;
         idx = idx + 1;
         g_PathSceneryRotIndex = idx;
         __asm__ volatile("" : "=r"(idx) : "0"(idx));
-        stepRec = (PathSceneryKey *)(idx * 12 + (s32)keys);
+        stepRec = (PathSceneryKey *)(idx * 12 + (s32)rotationKeys);
         if (stepRec->rotation.span == -1) {
             idx = stepRec->rotation.loopIndex;
             g_PathSceneryClock.rotFrame = 0;
             g_PathSceneryRotIndex = idx;
             if (idx > 0) {
                 g_PathSceneryClock.rotFrame =
-                    RAW(((PathSceneryRotationKey *)keys)[idx - 1].span);
+                    RAW(rotationKeys[idx - 1].span);
             }
         }
         rate = RAW(g_PathSceneryRotKeys[g_PathSceneryRotIndex].rate);
