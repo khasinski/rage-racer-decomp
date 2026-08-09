@@ -201,6 +201,7 @@ void DrawAnimatedScenery(s32 timer, s32 instance) {
     s32 value;
     u32 *visibility;
     u32 *wordPtr;
+    VisibilityMaskAddress visibilityAddress;
     s32 bit;
     s32 visible;
     s32 num;
@@ -226,7 +227,9 @@ void DrawAnimatedScenery(s32 timer, s32 instance) {
     value = state.x;
     visibility = g_VisibleCellMask;
     bit = value + 0x400;
-    wordPtr = (u32 *)((wordIndex << 2) + (s32)visibility);
+    visibilityAddress.pointer = visibility;
+    visibilityAddress.byteOffset = (wordIndex << 2) + visibilityAddress.byteOffset;
+    wordPtr = visibilityAddress.pointer;
     if (bit < 0) {
         bit = value + 0xBFF;
     }
@@ -308,6 +311,7 @@ void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate) {
     s32 value;
     u32 *visibility;
     u32 *wordPtr;
+    VisibilityMaskAddress visibilityAddress;
     s32 bit;
     s32 visible;
     s32 num;
@@ -336,7 +340,9 @@ void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate) {
     value = state.x;
     visibility = g_VisibleCellMask;
     bit = value + 0x400;
-    wordPtr = (u32 *)((wordIndex << 2) + (s32)visibility);
+    visibilityAddress.pointer = visibility;
+    visibilityAddress.byteOffset = (wordIndex << 2) + visibilityAddress.byteOffset;
+    wordPtr = visibilityAddress.pointer;
     if (bit < 0) {
         bit = value + 0xBFF;
     }

@@ -27,6 +27,7 @@ void DrawStaticScenery(s32 shifted) {
     s32 value;
     u32 *visibility;
     u32 *wordPtr;
+    VisibilityMaskAddress visibilityAddress;
     s32 bit;
     s32 visible;
     s16 drawArg;
@@ -48,7 +49,9 @@ void DrawStaticScenery(s32 shifted) {
     value = state.x;
     visibility = g_VisibleCellMask;
     bit = value + 0x400;
-    wordPtr = (u32 *)((wordIndex << 2) + (s32)visibility);
+    visibilityAddress.pointer = visibility;
+    visibilityAddress.byteOffset = (wordIndex << 2) + visibilityAddress.byteOffset;
+    wordPtr = visibilityAddress.pointer;
     if (bit < 0) {
         bit = value + 0xBFF;
     }
