@@ -85,7 +85,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->bodyRollVelocity = 0;
   player->field_164 = player->trackPointIndex;
   player->headingAngle = player->bodyYaw;
-  player->drive.unk90 = player->headingAngle;
+  player->drive.targetHeading = player->headingAngle;
   SeedCarLapProgress((GameCarRuntime *)car, 0);
   trackState[0] = 0;
   trackState[1] = 0;
@@ -113,15 +113,15 @@ void InitPlayerCar(PlayerCarRuntime *car)
   ApplyMatrix(&axisMatrix, &rotationOffset, &player->motionX);
   player->drive.unkA6 = -1;
   player->drive.state98 = 3;
-  player->drive.unk2C = 0;
+  player->drive.engineLoad = 0;
   player->drive.unk2E = 1;
   player->drive.unk36 = 0;
   player->drive.unk32 = 0;
   player->drive.unk42 = 0;
   player->drive.unk40 = 0;
-  player->drive.unk38 = 0;
+  player->drive.jumpTimer = 0;
   player->drive.clutch = 0;
-  player->drive.unk44 = 0;
+  player->drive.groundedFrames = 0;
   player->drive.unk48 = 0;
   player->drive.unk68 = 0;
   player->drive.unk6C = 0;
@@ -135,7 +135,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->x = player->x + player->motionX;
   player->z = player->z + player->motionZ;
   player->facingBackwards = IsCarFacingBackwards((GameCarTrackAngleWindow *)car);
-  player->drive.unk38 = 0;
+  player->drive.jumpTimer = 0;
   player->drive.clutch = 0;
   player->drive.gearDisp = 1;
   player->drive.unk3C = 0;
@@ -154,7 +154,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   {
     carSpec->topGear = 6;
   }
-  drive->unk8C = (g_CarSpec->tachometer.speedScale * 0x490) / 160;
+  drive->speedScale = (g_CarSpec->tachometer.speedScale * 0x490) / 160;
   printf(g_MsgInit1);
   j = 0;
   for (i = 0; i < 16; i++)
@@ -230,7 +230,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   }
   while (speedBandOffset < 20);
   printf(g_MsgInit4);
-  drive->unk84 = g_LaunchEnergyThresholds[drive->unk28 % 5] * 0xE;
+  drive->launchEnergyThreshold = g_LaunchEnergyThresholds[drive->launchThresholdIndex % 5] * 0xE;
   drive->unk88 = g_CarSpec->unk108;
   printf(g_MsgInit5);
   player->shiftState = 0;

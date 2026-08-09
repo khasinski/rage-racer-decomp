@@ -24,7 +24,7 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
     s32 t;
     s32 idx;
 
-    r = GetAngleDelta(car->bodyYaw, route->unk90);
+    r = GetAngleDelta(car->bodyYaw, route->targetHeading);
     base = car->bodyYaw;
     car->bodyYaw = r / 5 + base;
     AdvanceCarPosition(car, base);
@@ -66,10 +66,10 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
     }
 
     if (route->unk9C == 1) {
-        route->unk48 = car->speed * route->unk44;
-        route->unk44 = 0;
-        if (g_LaunchSpeedThresholds[route->unk28].initial < car->speed &&
-            route->unk48 > route->unk84) {
+        route->unk48 = car->speed * route->groundedFrames;
+        route->groundedFrames = 0;
+        if (g_LaunchSpeedThresholds[route->launchThresholdIndex].initial < car->speed &&
+            route->unk48 > route->launchEnergyThreshold) {
             route->state98 = 1;
             route->unk3E = 0;
             SetIndexedEffectVoice(0, 0, 0);
@@ -77,8 +77,8 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
             if (t < 1000) {
                 t = 1000;
             }
-            route->unk50 = -coords[0] * t / 1000 * 2;
-            route->unk54 = car->facingBackwards;
+            route->spinRate = -coords[0] * t / 1000 * 2;
+            route->launchDirection = car->facingBackwards;
         }
     } else {
         if (route->acceleratorInput < 128) {
@@ -87,20 +87,20 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
                 s32 av = coords[0] < 0 ? -coords[0] : coords[0];
                 s32 aval = av * car->speed / 64;
                 route->unk48 = aval;
-                if (g_LaunchSpeedThresholds[route->unk28].sustain < car->speed &&
-                    route->unk84 < aval) {
+                if (g_LaunchSpeedThresholds[route->launchThresholdIndex].sustain < car->speed &&
+                    route->launchEnergyThreshold < aval) {
                     route->state98 = m9e;
                     route->unk3E = 0;
                     SetIndexedEffectVoice(0, 0, 0);
-                    route->unk50 = -coords[0];
-                    route->unk54 = car->facingBackwards;
+                    route->spinRate = -coords[0];
+                    route->launchDirection = car->facingBackwards;
                 }
             } else {
-                route->unk44 = route->unk44 + 1;
+                route->groundedFrames = route->groundedFrames + 1;
                 route->unk48 = 0;
             }
         } else {
-            route->unk44 = 0;
+            route->groundedFrames = 0;
             route->unk48 = 0;
         }
     }

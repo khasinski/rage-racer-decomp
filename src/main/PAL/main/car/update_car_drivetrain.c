@@ -437,23 +437,23 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   shiftMode = drive->state98;
   if ((shiftMode == 1) || (shiftMode == 3))
   {
-    drive->unk38 = 0;
+    drive->jumpTimer = 0;
     drive->clutch = 0;
   }
   else
   {
     if (shiftMode == 2)
     {
-      shiftTimer = drive->unk38;
+      shiftTimer = drive->jumpTimer;
       shiftTimerActive = shiftTimer >= 0;
       if (shiftTimerActive)
       {
         shiftTimerNext = shiftTimer - 1;
-        drive->unk38 = shiftTimerNext;
+        drive->jumpTimer = shiftTimerNext;
         accel = 0;
         if (shiftTimerNext < 0)
         {
-          drive->unk38 = 0;
+          drive->jumpTimer = 0;
         }
         targetGear = drive->gear;
         if (drive->gearDisp != targetGear)
@@ -464,7 +464,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
           g_ShiftTargetRpm = shiftTargetRpm;
           drive->unk3C = (s16)((u16)g_ShiftTargetRpm - currentSpeed);
         }
-        bandEnd = drive->unk3C * drive->unk38 / 20;
+        bandEnd = drive->unk3C * drive->jumpTimer / 20;
         shiftedSpeed = bandEnd;
         shiftedSpeed = shiftedSpeed + g_ShiftTargetRpm;
         goto block_129;
@@ -478,7 +478,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       wheelSpeed = (u16)car->acceleration;
       wheelSpeedScaled = wheelSpeed;
       assistEnabled = drive->manual;
-      drive->unk2C = wheelSpeedScaled;
+      drive->engineLoad = wheelSpeedScaled;
       g_ShiftTargetSpeed = (s32) gearCurve;
       if (assistEnabled != 0)
       {
@@ -514,7 +514,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
             goto grade_adjust_done;
           }
           gradeScale = 0x64 - gradePenalty;
-          drive->unk2C = (u16)((wheelSpeedScaled * gradeScale) / 100);
+          drive->engineLoad = (u16)((wheelSpeedScaled * gradeScale) / 100);
           g_ShiftTargetSpeed = (gradeScale * ((s32) gearCurve)) / 100;
         }
       }
@@ -542,7 +542,7 @@ grade_adjust_done:
       if (((s16) countdown) <= 0)
       {
         drive->unk2E = 1;
-        drive->unk2C = 0;
+        drive->engineLoad = 0;
         drive->clutch = 0;
       }
       else
@@ -696,7 +696,7 @@ shift_interpolation_done:
     throttleAccel *= 2;
     steerLoad = 0;
   }
-  if ((drive->unk38 <= 0) && (drive->clutch <= 0))
+  if ((drive->jumpTimer <= 0) && (drive->clutch <= 0))
   {
     drive->engineRpm = throttleAccel - accel - steerLoad + drive->engineRpm;
   }
@@ -772,14 +772,14 @@ shift_interpolation_done:
     {
       if (drive->clutch > 0)
       {
-        car->acceleration = drive->unk2C;
+        car->acceleration = drive->engineLoad;
       }
       else
       {
         torqueLate = gearTorqueLate;
-        if (drive->unk38 > 0)
+        if (drive->jumpTimer > 0)
         {
-          car->acceleration = drive->unk2C;
+          car->acceleration = drive->engineLoad;
         }
         else
         {

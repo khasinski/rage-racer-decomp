@@ -318,7 +318,7 @@ extern GearCurveRow g_GearTorqueCurve[];
  *
  * Calibrated on g_PlayerCar (D_8009E6D4), which is a different 0x19C object from
  * g_Cars: it shares the stride but not the meaning of every byte.
- * +0x30, +0x38, +0x74 and +0x76 are 16-bit gearDisp/unk38/manual/gear on the
+ * +0x30, +0x38, +0x74 and +0x76 are 16-bit gearDisp/jumpTimer/manual/gear on the
  * player object and 32-bit / AI-speed fields on the rival cars, so use
  * GameCarAiBlock for a g_Cars[] element. Evidence in names.md 30f. */
 typedef struct GameCarDrive {
@@ -332,27 +332,27 @@ typedef struct GameCarDrive {
     s32 steerPos;    /* +0x1C */
     s32 unk20;
     s32 unk24;
-    s32 unk28;       /* +0x28 index into the g_LaunchSpeedThresholds launch table */
-    s16 unk2C;       /* engine load */
+    s32 launchThresholdIndex;
+    s16 engineLoad;
     s16 unk2E;
     s16 gearDisp;    /* +0x30 */
     s16 unk32;
     s16 clutch;      /* +0x34 */
     s16 unk36;
-    s16 unk38;       /* +0x38 airborne height */
+    s16 jumpTimer;
     s16 unk3A;
     s16 unk3C;
     s16 unk3E;
     s16 unk40;
     s16 unk42;
-    s32 unk44;       /* +0x44 frames on the ground */
+    s32 groundedFrames;
     s32 unk48;
     s32 unk4C;
-    s32 unk50;       /* +0x50 spin rate, damped 31/32 per frame */
-    s32 unk54;
-    s32 unk58;       /* +0x58 launch heading */
-    s32 unk5C;       /* +0x5C launch speed */
-    s32 unk60;       /* +0x60 yaw offset */
+    s32 spinRate;
+    s32 launchDirection;
+    s32 launchHeading;
+    s32 launchSpeed;
+    s32 yawOffset;
     s32 unk64;
     s32 unk68;
     s32 unk6C;
@@ -363,10 +363,10 @@ typedef struct GameCarDrive {
     s32 engineRpm;   /* +0x78 */
     s32 unk7C;
     s32 unk80;
-    s32 unk84;       /* +0x84 launch-energy threshold */
+    s32 launchEnergyThreshold;
     s32 unk88;       /* +0x88 */
-    s32 unk8C;       /* +0x8C player-car speed scale seeded from the loaded spec */
-    s32 unk90;       /* +0x90 */
+    s32 speedScale;
+    s32 targetHeading;
     s32 unk94;       /* +0x94 */
     s32 state98;     /* +0x98 0 driving, 1 launching, 2 airborne */
     s16 unk9C;

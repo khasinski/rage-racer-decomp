@@ -129,11 +129,11 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         s32 spd = car->speed;
 
         if (spd < 256 && p->state98 == 0) {
-            p->unk90 += ((p->steerPos * 6) / 5 * p->unk32 / 256) * spd / 0x10000;
+            p->targetHeading += ((p->steerPos * 6) / 5 * p->unk32 / 256) * spd / 0x10000;
         } else if (spd < 512 && p->state98 == 3) {
-            p->unk90 += ((p->steerPos * 6) / 5 * p->unk32 / 256) * spd / 0x20000;
+            p->targetHeading += ((p->steerPos * 6) / 5 * p->unk32 / 256) * spd / 0x20000;
         } else {
-            p->unk90 += (p->steerPos * 6) / 5 * p->unk32 / 0x10000;
+            p->targetHeading += (p->steerPos * 6) / 5 * p->unk32 / 0x10000;
         }
     }
 
@@ -348,26 +348,26 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
 
                 p->unk94 = v * car->speed / 100;
                 g_ShiftSoundLevel = car->shiftTick & 0x3F;
-                p->unk60 = 0;
-                p->unk58 = car->headingAngle;
-                p->unk5C = car->speed / 0x100000;
-                p->unk50 = 0;
+                p->yawOffset = 0;
+                p->launchHeading = car->headingAngle;
+                p->launchSpeed = car->speed / 0x100000;
+                p->spinRate = 0;
                 props = g_CarSpec;
                 {
                     s32 *ratios = props->gearRatio;
 
                     rpm = car->speed * 160 / 1168 * 10000 / ratios[p->gear];
                 }
-                p->unk38 = 0x14;
+                p->jumpTimer = 0x14;
                 p->state98 = 2;
                 g_ShiftTargetRpm = rpm;
                 p->unk3C = (u16)g_ShiftTargetRpm - (u16)p->engineRpm;
                 {
                     s32 *loadRow = props->gearLoad;
 
-                    p->unk2C = rpm * loadRow[p->gear] / 0x20000;
+                    p->engineLoad = rpm * loadRow[p->gear] / 0x20000;
                     if (p->manual == 0) {
-                        p->unk2C = p->unk2C * 985 / 1000;
+                        p->engineLoad = p->engineLoad * 985 / 1000;
                     }
                 }
             }
@@ -388,14 +388,14 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
             if (car->speed >= 81) {
                 p->unk94 = p->unk94 * 98 / 100;
                 car->speed = car->speed * 97 / 100;
-                p->unk2C = p->unk2C * 95 / 100;
+                p->engineLoad = p->engineLoad * 95 / 100;
                 g_ShiftTargetRpm = g_ShiftTargetRpm * 95 / 100;
             }
         } else {
             p->unk48 -= 5000;
             p->unk94 = (85 - rsin(slip) * 20 / 4096) * p->unk94 / 100;
             car->speed = (87 - rsin(slip) * 40 / 4096) * car->speed / 100;
-            p->unk2C = p->unk2C * (85 - rsin(slip) * 20 / 4096) / 100;
+            p->engineLoad = p->engineLoad * (85 - rsin(slip) * 20 / 4096) / 100;
             g_ShiftTargetRpm = (85 - rsin(slip) * 20 / 4096) * g_ShiftTargetRpm / 100;
             if (g_RacePhase < 3) {
                 switch (skid) {

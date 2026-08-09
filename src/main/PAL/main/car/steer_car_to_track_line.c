@@ -35,7 +35,7 @@ void SteerCarToTrackLine(PlayerCarRuntime *car) {
     spec = g_CarSpec;
     lateral = car->trackLateralOffset;
     timer = spec->steerResponse;
-    directionFlag = car->drive.unk54;
+    directionFlag = car->drive.launchDirection;
 
     asm volatile("" : "=r"(timer) : "0"(timer));
     baseIndex = car->trackPointIndex;
@@ -103,7 +103,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
     s32 coords[3];
 
     first24 = car->bodyYaw;
-    v0 = car->drive.unk50;
+    v0 = car->drive.spinRate;
     firstHeading = car->headingAngle;
     s4val = v0;
     if (v0 < 0) {
@@ -154,29 +154,29 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
             drive->unk3E = 100;
         }
 
-        res = GetAngleDelta(car->bodyYaw, drive->unk90) * 98 / 100;
+        res = GetAngleDelta(car->bodyYaw, drive->targetHeading) * 98 / 100;
         s2 = res * (drive->unk4C + 0x800);
         res = s2 / 2048;
-        drive->unk50 += res * 16;
+        drive->spinRate += res * 16;
 
         if ((u32)(drive->steerPos + 127) < 255) {
             if (GetAngleDistance(car->bodyYaw, car->headingAngle) < 0x200) {
-                drive->unk50 = drive->unk50 * 31 / 32;
-                drive->unk50 =
-                    GetAngleDelta(car->bodyYaw, car->headingAngle) + drive->unk50;
+                drive->spinRate = drive->spinRate * 31 / 32;
+                drive->spinRate =
+                    GetAngleDelta(car->bodyYaw, car->headingAngle) + drive->spinRate;
             } else if (s4val < 0x800) {
-                drive->unk50 = res / 2 + drive->unk50;
+                drive->spinRate = res / 2 + drive->spinRate;
             }
         }
 
-        if (drive->unk50 > 0x3600) {
-            drive->unk50 = 0x3600;
+        if (drive->spinRate > 0x3600) {
+            drive->spinRate = 0x3600;
         }
-        if (drive->unk50 < -0x3600) {
-            drive->unk50 = -0x3600;
+        if (drive->spinRate < -0x3600) {
+            drive->spinRate = -0x3600;
         }
 
-        car->bodyYaw = drive->unk50 / 256 + car->bodyYaw;
+        car->bodyYaw = drive->spinRate / 256 + car->bodyYaw;
         drive->unk48 -= 64;
 
         res = GetAngleDistance(car->bodyYaw, car->headingAngle);
@@ -185,7 +185,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
 
         {
             s32 a4 = car->speed;
-            s32 half = drive->unk8C / 2;
+            s32 half = drive->speedScale / 2;
             if (a4 < half) {
                 drive->unk48 -= (half - a4) / 8;
             }
@@ -196,7 +196,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
         car->speed -= drive->brakeInput * 10 / 256;
         car->speed -= (0x100 - drive->acceleratorInput) * 10 / 256;
     } else {
-        drive->unk50 = drive->unk50 * 15 / 16;
+        drive->spinRate = drive->spinRate * 15 / 16;
         if (s4val < 0x1000) {
             s32 lo;
             u8 *specBase;
@@ -205,15 +205,15 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                 s32 gain = (100 - (drive->gear - 1) * 4) * 10000;
                 drive->unk94 = gain * car->speed / 100;
             }
-            drive->unk60 = GetAngleDelta(car->headingAngle, car->bodyYaw);
-            drive->unk58 = car->headingAngle;
+            drive->yawOffset = GetAngleDelta(car->headingAngle, car->bodyYaw);
+            drive->launchHeading = car->headingAngle;
             car->headingAngle = car->bodyYaw;
 
             {
                 register s32 t;
                 register s32 sq asm("$3");
 
-                t = drive->unk60;
+                t = drive->yawOffset;
                 sq = t;
                 if (t < 0) {
                     sq = -sq;
@@ -224,10 +224,10 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                     sq = 0x800 - sq;
                     sq = sq * sq;
                 }
-                drive->unk5C = sq * car->speed / 0x100000;
+                drive->launchSpeed = sq * car->speed / 0x100000;
             }
 
-            drive->unk50 = 0;
+            drive->spinRate = 0;
 
             specBase = (u8 *)g_CarSpec;
             lo = car->speed * 0xA0 / 1168 * 10000 /
@@ -241,18 +241,18 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                 firstHeading = (u16)drive->engineRpm;
                 offset <<= 2;
                 asm volatile("" : :);
-                RAW(drive->unk38) = 0x14;
+                RAW(drive->jumpTimer) = 0x14;
                 RAW(drive->state98) = 2;
                 g_ShiftTargetRpm = lo;
                 RAW(drive->unk3C) = *(u16 *)&g_ShiftTargetRpm - firstHeading;
                 specBase += offset;
             }
             {
-                drive->unk2C =
+                drive->engineLoad =
                     lo * ((GameCarSpec *)specBase)->gearLoad[0] / 0x20000;
                 if (drive->manual == 0) {
-                    drive->unk2C =
-                        drive->unk2C * 985 / 1000;
+                    drive->engineLoad =
+                        drive->engineLoad * 985 / 1000;
                 }
             }
 
@@ -264,7 +264,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
         }
     }
 
-    drive->unk90 = car->bodyYaw;
+    drive->targetHeading = car->bodyYaw;
     SteerCarToTrackLine(car);
 
     res = GetAngleDistance(car->bodyYaw, car->headingAngle);
@@ -309,19 +309,19 @@ void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
 
     if (flag == 0) {
         s32 phase;
-        s32 f11c = car->drive.unk60;
+        s32 f11c = car->drive.yawOffset;
         if (f11c < 513) {
             phase = f11c * 3 + 6144;
         } else {
             phase = 0x1e00;
         }
-        SetIndexedEffectVoice(0, phase, r->unk38 * 2 + 80);
+        SetIndexedEffectVoice(0, phase, r->jumpTimer * 2 + 80);
     } else {
         SetIndexedEffectVoice(0, 0x1800, flag + 25);
     }
 
     {
-        s32 rr = GetAngleDelta(car->bodyYaw, r->unk90);
+        s32 rr = GetAngleDelta(car->bodyYaw, r->targetHeading);
         s32 base = car->bodyYaw;
         car->bodyYaw = rr / 5 + base;
         AdvanceCarPosition(car, base);
@@ -330,39 +330,39 @@ void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
     sinF24 = rsin(car->bodyYaw);
     cosF24 = rcos(car->bodyYaw);
 
-    r->accelPos = rsin(car->headingAngle + r->unk60) * car->speed / 256;
-    r->brakePos = rcos(car->headingAngle + r->unk60) * car->speed / 256;
+    r->accelPos = rsin(car->headingAngle + r->yawOffset) * car->speed / 256;
+    r->brakePos = rcos(car->headingAngle + r->yawOffset) * car->speed / 256;
 
     coords[0] = (cosF24 * r->accelPos - sinF24 * r->brakePos) / 4096;
     coords[2] = (sinF24 * r->accelPos + cosF24 * r->brakePos) / 4096;
 
     r->accelPos =
-        rsin(r->unk58) * r->unk5C / 256 + sinF24 * coords[2] / 4096;
+        rsin(r->launchHeading) * r->launchSpeed / 256 + sinF24 * coords[2] / 4096;
     r->brakePos =
-        rcos(r->unk58) * r->unk5C / 256 + cosF24 * coords[2] / 4096;
+        rcos(r->launchHeading) * r->launchSpeed / 256 + cosF24 * coords[2] / 4096;
 
     if (r->unk9C != 1 && r->unk9E != 1 && r->acceleratorInput < 128) {
-        r->unk44 += 1;
+        r->groundedFrames += 1;
     } else {
-        r->unk44 = 0;
+        r->groundedFrames = 0;
     }
 
-    r->unk50 = r->unk50 * 31 / 32;
-    r->unk5C = r->unk5C * 31 / 32;
-    r->unk60 = r->unk60 * 31 / 32;
+    r->spinRate = r->spinRate * 31 / 32;
+    r->launchSpeed = r->launchSpeed * 31 / 32;
+    r->yawOffset = r->yawOffset * 31 / 32;
 
     r->unk3E = r->unk3E * 2 / 3;
-    if (r->unk60 >= 1537) {
+    if (r->yawOffset >= 1537) {
         car->speed = car->speed * 4 / 5;
     }
 
-    if (r->unk38 <= 0) {
+    if (r->jumpTimer <= 0) {
         SetIndexedEffectVoice(-1, 0, 0);
-        car->bodyYaw -= r->unk50;
+        car->bodyYaw -= r->spinRate;
         g_ShiftSoundLevel = 0;
         r->unk3C = 0;
-        r->unk60 = 0;
-        r->unk5C = 0;
+        r->yawOffset = 0;
+        r->launchSpeed = 0;
         r->state98 = 0;
         r->unk3E = 0;
     }
@@ -376,7 +376,7 @@ void UpdateCarStandingStart(PlayerCarRuntime *car, s32 unused) {
     s32 r;
     s32 coords[3];
 
-    r = GetAngleDelta(car->bodyYaw, route->unk90);
+    r = GetAngleDelta(car->bodyYaw, route->targetHeading);
     base = car->bodyYaw;
     car->bodyYaw = r / 5 + base;
     AdvanceCarPosition(car, base);
