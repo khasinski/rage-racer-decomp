@@ -250,17 +250,17 @@ typedef struct GameRenderObject {
 } GameRenderObject;
 
 typedef struct GameRenderSourcePoint {
-    u16 field_0;
+    u16 x;
     u8 pad2[2];
-    u16 field_4;
+    u16 y;
     u8 pad6[2];
-    u16 field_8;
+    u16 z;
     u8 padA[0x16];
-    u16 field_20;
+    u16 bodyPitch;
     u8 pad22[2];
     u16 bodyYaw;
     u8 pad26[2];
-    u16 field_28;
+    u16 bodyRoll;
     u8 pad2A[6];
     u32 field_30;
     u8 pad34[0x10];

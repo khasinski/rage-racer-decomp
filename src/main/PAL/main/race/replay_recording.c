@@ -23,17 +23,18 @@ void ResetReplayWriteCursor(void) {
     g_ReplayBufferWrapped = 0;
 }
 
-void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
+void StoreReplayCarFrame(s32 pairIndex, const GameRenderSourcePoint *srcA,
+                         const GameRenderSourcePoint *srcB) {
     ReplayGrandPrixFrame *dst;
-    GameRenderSourcePoint *src1;
-    GameRenderSourcePoint *src2;
+    const GameRenderSourcePoint *src1;
+    const GameRenderSourcePoint *src2;
     s32 sourceField_AE;
     s32 current;
     s32 odd;
     u32 first;
 
     current = g_PlayerCar.field_AE;
-    src2 = (GameRenderSourcePoint *)srcB;
+    src2 = srcB;
     sourceField_AE = src2->field_AE;
     g_ReplayPlayerModel.word = current;
     odd = pairIndex & 1;
@@ -44,24 +45,24 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
 
     pairIndex >>= 1;
     dst = &g_ReplayFramesGp[pairIndex];
-    src1 = (GameRenderSourcePoint *)srcA;
-    first = src1->field_0;
+    src1 = srcA;
+    first = src1->x;
     dst->x0 = first;
-    dst->y0 = src1->field_4;
-    dst->z0 = src1->field_8;
+    dst->y0 = src1->y;
+    dst->z0 = src1->z;
     dst->z20 = src1->field_60;
-    dst->rotX0 = src1->field_20;
+    dst->rotX0 = src1->bodyPitch;
     dst->rotY0 = src1->bodyYaw;
-    dst->rotZ0 = src1->field_28;
+    dst->rotZ0 = src1->bodyRoll;
     dst->flags0 = src1->field_48;
     dst->field44_0 = src1->field_44;
-    dst->x1 = src2->field_0;
-    dst->y1 = src2->field_4;
-    dst->z1 = src2->field_8;
+    dst->x1 = src2->x;
+    dst->y1 = src2->y;
+    dst->z1 = src2->z;
     dst->z21 = src2->field_60;
-    dst->rotX1 = src2->field_20;
+    dst->rotX1 = src2->bodyPitch;
     dst->rotY1 = src2->bodyYaw;
-    dst->rotZ1 = src2->field_28;
+    dst->rotZ1 = src2->bodyRoll;
     dst->flags1 = src2->field_48;
     dst->field44_1 = src2->field_44;
     dst->field30_0 = src1->field_30;
@@ -69,9 +70,9 @@ void StoreReplayCarFrame(s32 pairIndex, u8 *srcA, u8 *srcB) {
     dst->field20 = src1->field_8C;
 }
 
-void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
+void StoreReplayTimeAttackFrame(s32 pointIndex, const GameRenderSourcePoint *srcPtr) {
     ReplayTimeAttackFrame *dst;
-    GameRenderSourcePoint *src;
+    const GameRenderSourcePoint *src;
     u32 first;
 
     g_ReplayPlayerModel.word = g_PlayerCar.field_AE;
@@ -81,15 +82,15 @@ void StoreReplayTimeAttackFrame(s32 pointIndex, u8 *srcPtr) {
 
     pointIndex >>= 1;
     dst = &g_ReplayFramesTimeAttack[pointIndex];
-    src = (GameRenderSourcePoint *)srcPtr;
-    first = src->field_0;
+    src = srcPtr;
+    first = src->x;
     dst->x = first;
-    dst->y = src->field_4;
-    dst->z = src->field_8;
+    dst->y = src->y;
+    dst->z = src->z;
     dst->z2 = src->field_60;
-    dst->rotX = src->field_20;
+    dst->rotX = src->bodyPitch;
     dst->rotY = src->bodyYaw;
-    dst->rotZ = src->field_28;
+    dst->rotZ = src->bodyRoll;
     dst->flags = src->field_48;
     dst->field44 = src->field_44;
     dst->field30 = src->field_30;

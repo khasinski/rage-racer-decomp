@@ -153,9 +153,10 @@ void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj) {
 
 void RecordReplayFrame(void) {
     if (g_GrandPrixMode != 0) {
-        StoreReplayCarFrame(g_ReplayWriteCursor, (u8 *)&g_PlayerCar, (u8 *)g_Cars);
+        StoreReplayCarFrame(g_ReplayWriteCursor, (GameRenderSourcePoint *)&g_PlayerCar,
+                            (GameRenderSourcePoint *)g_Cars);
     } else {
-        StoreReplayTimeAttackFrame(g_ReplayWriteCursor, (u8 *)&g_PlayerCar);
+        StoreReplayTimeAttackFrame(g_ReplayWriteCursor, (GameRenderSourcePoint *)&g_PlayerCar);
     }
 
     g_ReplayWriteCursor++;

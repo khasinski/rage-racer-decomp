@@ -402,8 +402,6 @@ void SeedFlybyScenery(void);
 void SeedReplayCars(void);
 void SeedRouteScenery(void);
 void SeedWaypoints(void);
-void StoreReplayCarFrame(s32 pairIndex, u8* srcA, u8* srcB);
-void StoreReplayTimeAttackFrame(s32 pointIndex, u8* srcPtr);
 void TriggerRaceCues(void);
 void UpdateFinishCamera(void* obj);
 s32 UpdateLapAndFinish(struct PlayerCarRuntime *car, s32 grandPrixMode);
