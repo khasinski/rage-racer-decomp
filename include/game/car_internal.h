@@ -20,6 +20,11 @@ typedef struct RaceIntroCameraKey {
     s16 duration;
 } RaceIntroCameraKey;
 
+struct RaceIntroCameraScript {
+    s16 firstKeyIndex[2];
+    RaceIntroCameraKey keys[1];
+};
+
 typedef struct LaunchSpeedThreshold {
     s16 initial;
     s16 sustain;

@@ -643,10 +643,10 @@ void RunRaceIntroCamera(Obj *obj, s32 mode) {
     __asm__("" : "=r"(s0v) : "0"(28), "r"(spad));
     if (mode < 90) {
         if (mode < 2) {
-            u8 *base = g_RaceIntroCameraScript;
-            s16 n = *(s16 *)(base + 2 * g_RaceSeries);
-            s32 off = n * 20 + 4;
-            RaceIntroCameraKey *p = (RaceIntroCameraKey *)(off + (s32) base);
+            RaceIntroCameraScript *script = g_RaceIntroCameraScript;
+            s16 n = script->firstKeyIndex[g_RaceSeries];
+            s32 off = n * sizeof(RaceIntroCameraKey) + sizeof(script->firstKeyIndex);
+            RaceIntroCameraKey *p = (RaceIntroCameraKey *)(off + (s32)script);
             RaceIntroCameraKey *q;
             g_RaceIntroCameraCursor = p;
             *(Vec4 *)&SCRATCH_VIEW_X = *(Vec4 *)p;

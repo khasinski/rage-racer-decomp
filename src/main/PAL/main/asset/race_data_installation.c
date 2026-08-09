@@ -32,7 +32,7 @@ void InstallTrackEventData(void *resourceData) {
     g_TrackEventData = eventData;
     g_FlybySceneryData = (SceneryMotionData *)(base + offset0);
     offset0 = offsets->routeScenery;
-    g_RaceIntroCameraScript = base + offset1;
+    g_RaceIntroCameraScript = (RaceIntroCameraScript *)(base + offset1);
     offset1 = offsets->pathSceneryRotation;
     g_RouteSceneryData = (SceneryMotionData *)(base + offset0);
     offset0 = offsets->pathSceneryPosition;
