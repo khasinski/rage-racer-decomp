@@ -138,7 +138,7 @@ s32 RequestSelectBgmAssets(void) {
 void LoadSelectBgmAssets(void) {
     GameSceneAssetHeader *header;
     s32 firstOffset;
-    s32 secondOffset;
+    u8 *secondBlock;
     s32 thirdOffset;
     s32 relOffset;
 
@@ -157,9 +157,9 @@ void LoadSelectBgmAssets(void) {
             g_AssetBlockPtr = (void *)((u8 *)header + firstOffset);
             relOffset = *(volatile s32 *)&header->offsets[1];
             g_AssetLoadState = 0;
-            secondOffset = (s32)header + relOffset;
+            secondBlock = (u8 *)header + relOffset;
             header = (GameSceneAssetHeader *)((u8 *)header + thirdOffset);
-            g_AssetBlockPtr2 = (u8 *)secondOffset;
+            g_AssetBlockPtr2 = secondBlock;
             g_AssetSubBlockPtr = (u8 *)header;
         }
         break;
