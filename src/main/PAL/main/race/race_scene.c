@@ -313,7 +313,7 @@ void EnterRaceScene(void) {
     tableOffset = (mode * 12) + (scene * 48);
     g_RefSectorTimes.fields.first = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset);
     scene *= 32;
-    g_RefSectorTime1 = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset + 4);
+    g_RefSectorTime1 = ((s32 *)((u8 *)g_BestSectorTimes + tableOffset))[1];
     mode *= 8;
     do {
         do {
@@ -328,7 +328,7 @@ void EnterRaceScene(void) {
         scratch = g_GrandPrixMode * 4;
         scratch += count;
         entry = (s32 *)scratch;
-        g_RefSectorTime2 = *(s32 *)((u8 *)g_BestSectorTimes + tableOffset + 8);
+        g_RefSectorTime2 = ((s32 *)((u8 *)g_BestSectorTimes + tableOffset))[2];
     } while (0);
     g_RefLapTime = *entry;
     count = (scratch = g_LapCount);
