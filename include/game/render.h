@@ -265,7 +265,7 @@ typedef struct GameRenderSourcePoint {
     u8 pad26[2];
     u16 bodyRoll;
     u8 pad2A[6];
-    u32 field_30;
+    u32 trackPointIndex;
     u8 pad34[0x10];
     u16 steeringAngle;
     u8 pad46[2];

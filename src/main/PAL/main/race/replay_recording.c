@@ -65,8 +65,8 @@ void StoreReplayCarFrame(s32 pairIndex, const GameRenderSourcePoint *srcA,
     dst->bodyRoll1 = src2->bodyRoll;
     dst->wheelRotation1 = src2->wheelRotation;
     dst->steeringAngle1 = src2->steeringAngle;
-    dst->field30_0 = src1->field_30;
-    dst->field30_1 = src2->field_30;
+    dst->trackPointIndex0 = src1->trackPointIndex;
+    dst->trackPointIndex1 = src2->trackPointIndex;
     dst->field20 = src1->field_8C;
 }
 
@@ -93,6 +93,6 @@ void StoreReplayTimeAttackFrame(s32 pointIndex, const GameRenderSourcePoint *src
     dst->bodyRoll = src->bodyRoll;
     dst->wheelRotation = src->wheelRotation;
     dst->steeringAngle = src->steeringAngle;
-    dst->field30 = src->field_30;
+    dst->trackPointIndex = src->trackPointIndex;
     dst->field10 = src->field_8C;
 }

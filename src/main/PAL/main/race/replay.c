@@ -105,10 +105,11 @@ void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *r
     }
 }
 
-void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj) {
+void ApplyReplayFrameAndTilt(s32 subframe, ReplayCarState *playerObj,
+                             ReplayCarState *rivalObj) {
     register s32 index asm("s0");
-    u8 *primary;
-    u8 *secondary;
+    ReplayCarState *primary;
+    ReplayCarState *secondary;
     register s32 next asm("a0");
     register s32 offset asm("v0");
     register u8 *base asm("v1");
@@ -117,7 +118,7 @@ void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj) {
     primary = playerObj;
     secondary = rivalObj;
 
-    ApplyReplayFrame(index, (ReplayCarState *)primary, (ReplayCarState *)secondary);
+    ApplyReplayFrame(index, primary, secondary);
 
     if (g_GrandPrixMode != 0) {
         if ((index & 1) == 0) {
@@ -132,8 +133,8 @@ void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj) {
             offset = next * 3;
         }
         base = (u8 *)((offset * 16) + (s32)g_ReplayFramesGp);
-        ((ReplayCarState *)primary)->field30 = ((ReplayGrandPrixFrame *)base)->field30_0;
-        ((ReplayCarState *)secondary)->field30 = ((ReplayGrandPrixFrame *)base)->field30_1;
+        primary->trackPointIndex = ((ReplayGrandPrixFrame *)base)->trackPointIndex0;
+        secondary->trackPointIndex = ((ReplayGrandPrixFrame *)base)->trackPointIndex1;
     } else {
         if ((index & 1) == 0) {
             index >>= 1;
@@ -147,7 +148,7 @@ void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj) {
             offset = next * 7;
         }
         offset = (offset * 4) + (s32)g_ReplayFramesTimeAttack;
-        ((ReplayCarState *)primary)->field30 = ((ReplayTimeAttackFrame *)offset)->field30;
+        primary->trackPointIndex = ((ReplayTimeAttackFrame *)offset)->trackPointIndex;
     }
 }
 

@@ -22,7 +22,8 @@ void SeedReplayCars(void) {
 
     primary = &g_PlayerCar;
     secondary = g_Cars;
-    ApplyReplayFrameAndTilt(g_ReplayReadCursor, primary, secondary);
+    ApplyReplayFrameAndTilt(g_ReplayReadCursor, (ReplayCarState *)primary,
+                            (ReplayCarState *)secondary);
 
     g_PlayerCar.trackPointIndex = FindTrackSegment(primary, g_PlayerCar.trackPointIndex);
     SeedCarLapProgress(primary, 1);

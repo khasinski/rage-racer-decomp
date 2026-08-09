@@ -12,7 +12,7 @@ typedef struct ReplayCarState {
     s32 bodyYaw;
     s32 bodyRoll;
     u8 pad2C[4];
-    s32 field30;
+    s32 trackPointIndex;
     u8 pad34[0x10];
     s32 steeringAngle;
     s32 wheelRotation;
@@ -42,8 +42,8 @@ typedef struct ReplayGrandPrixFrame {
     s16 bodyRoll1;
     s16 wheelRotation1;
     s32 field20;
-    s32 field30_0;
-    s32 field30_1;
+    s32 trackPointIndex0;
+    s32 trackPointIndex1;
     s16 steeringAngle0;
     s16 steeringAngle1;
 } ReplayGrandPrixFrame;
@@ -58,7 +58,7 @@ typedef struct ReplayTimeAttackFrame {
     s16 bodyRoll;
     s16 wheelRotation;
     s32 field10;
-    s32 field30;
+    s32 trackPointIndex;
     s16 steeringAngle;
 } ReplayTimeAttackFrame;
 

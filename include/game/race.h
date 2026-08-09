@@ -416,7 +416,8 @@ s32 GetTrackZoneBlend(s32 position);
 void PlayCountdownCues(s32 timer);
 void AdvanceBgmShuffleBag(u32 track);
 void ApplyReplayFrame(s32 subframe, ReplayCarState *playerObj, ReplayCarState *rivalObj);
-void ApplyReplayFrameAndTilt(s32 subframe, u8 *playerObj, u8 *rivalObj);
+void ApplyReplayFrameAndTilt(s32 subframe, ReplayCarState *playerObj,
+                             ReplayCarState *rivalObj);
 extern void (*g_AttractDemoSteps[])(void);
 extern void (*g_BgmSelectSteps[])(void);
 
