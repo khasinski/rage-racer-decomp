@@ -125,8 +125,8 @@ s32 SetLookAtMatrix(GameRenderObject *obj) {
     m.t[0] <<= 1;
     m.t[1] <<= 1;
     m.t[2] <<= 1;
-    SetRotMatrix((s32 *)&m);
-    SetTransMatrix((s32 *)&m);
+    SetRotMatrix(&m);
+    SetTransMatrix(&m);
     return 0;
 }
 
