@@ -13,7 +13,8 @@ BASELINE = ROOT / "tools/code_debt_baseline.json"
 
 PATTERNS = {
     "byte_pointer_arithmetic": re.compile(
-        r"\(\s*(?:const\s+|volatile\s+)?(?:u8|s8|char)\s*\*\s*\)[^;\n]*\+"
+        r"\(\s*(?:const\s+|volatile\s+)?(?:u8|s8|char)\s*\*\s*\)"
+        r"(?!\s*\()[^;=\n]*\+"
     ),
     "raw_offset_dereferences": re.compile(
         r"\*\s*\([^)]*\*\s*\)\s*\("

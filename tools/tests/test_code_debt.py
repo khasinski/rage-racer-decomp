@@ -51,6 +51,20 @@ void f(u8 *base, void *ptr) {
 
         self.assertTrue(all(count == 0 for count in counts.values()))
 
+    def test_byte_pointer_arithmetic_ignores_casts_of_completed_expressions(self):
+        source = r'''
+void f(u8 *bytes, Packet *packet, u8 value) {
+    bytes = (u8 *)bytes + 4;
+    bytes = (u8 *)(packet + 1);
+    *(volatile u8 *)&packet->tag = value + 1;
+}
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            Path(directory, "sample.c").write_text(source)
+            counts = count_debt(Path(directory))
+
+        self.assertEqual(counts["byte_pointer_arithmetic"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()
