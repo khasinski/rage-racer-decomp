@@ -647,7 +647,11 @@ void ScrollTeamLogoLeft(void) {
         col = 0;
         base2 = base;
         do {
-            addr = (u32 *)(offset + (s32)base2);
+            TeamLogoCanvasAddress address;
+
+            address.wordPointer = base2;
+            address.byteOffset = offset + address.byteOffset;
+            addr = address.wordPointer;
             base2++;
             value = addr[0];
             next = addr[1];
@@ -705,9 +709,14 @@ void ScrollTeamLogoRight(void) {
         col = 7;
         base2 = base + 7;
         do {
-            u32 *word = (u32 *)(offset + (s32)base2);
+            TeamLogoCanvasAddress address;
+            u32 *word;
             u32 hi;
             u32 lo;
+
+            address.wordPointer = base2;
+            address.byteOffset = offset + address.byteOffset;
+            word = address.wordPointer;
             base2--;
             col--;
             hi = word[0];
@@ -756,9 +765,15 @@ void FlipTeamLogoVertical(void) {
             u32 temp;
             u32 *left;
             u32 *right;
+            TeamLogoCanvasAddress leftAddress;
+            TeamLogoCanvasAddress rightAddress;
 
-            left = (u32 *)(leftOffset + (s32)cursor);
-            right = (u32 *)(rightOffset + (s32)cursor);
+            leftAddress.bytePointer = cursor;
+            leftAddress.byteOffset = leftOffset + leftAddress.byteOffset;
+            left = leftAddress.wordPointer;
+            rightAddress.bytePointer = cursor;
+            rightAddress.byteOffset = rightOffset + rightAddress.byteOffset;
+            right = rightAddress.wordPointer;
             cursor += 4;
             temp = *left;
             *left = *right;

@@ -40,6 +40,7 @@ typedef union TeamLogoCanvas {
 
 typedef union TeamLogoCanvasAddress {
     s32 byteOffset;
+    u8 *bytePointer;
     u32 *wordPointer;
 } TeamLogoCanvasAddress;
 
