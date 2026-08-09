@@ -16,7 +16,8 @@ void SeedFinishCameraAlt(void *car) {
     Block16 *end;
     u32 *base;
     GameTrackPoint *track;
-    AssetAddress pointAddress;
+    TrackPointTableAddress pointAddress;
+    TrackPointTableAddress trackAddress;
     GameTrackPoint *point;
     register s32 index asm("$3");
     s32 lastIndex;
@@ -46,21 +47,24 @@ void SeedFinishCameraAlt(void *car) {
 
     index = ((GameCarRuntime *)base)->trackPointIndex;
     track = g_TrackPoints;
-    pointAddress.offset = (index * 3) << 3;
-    pointAddress.offset += (s32)track;
-    point = pointAddress.pointer;
+    pointAddress.byteOffset = (index * 3) << 3;
+    trackAddress.pointPointer = track;
+    pointAddress.byteOffset += trackAddress.byteOffset;
+    point = pointAddress.pointPointer;
     g_CameraCar.x = point->x;
 
     index = ((GameCarRuntime *)base)->trackPointIndex;
-    pointAddress.offset = (index * 3) << 3;
-    pointAddress.offset += (s32)track;
-    point = pointAddress.pointer;
+    pointAddress.byteOffset = (index * 3) << 3;
+    trackAddress.pointPointer = track;
+    pointAddress.byteOffset += trackAddress.byteOffset;
+    point = pointAddress.pointPointer;
     g_CameraCar.z = point->z;
 
     index = ((GameCarRuntime *)base)->trackPointIndex;
-    pointAddress.offset = (index * 3) << 3;
-    pointAddress.offset += (s32)track;
-    point = pointAddress.pointer;
+    pointAddress.byteOffset = (index * 3) << 3;
+    trackAddress.pointPointer = track;
+    pointAddress.byteOffset += trackAddress.byteOffset;
+    point = pointAddress.pointPointer;
     word0 = point->y;
     index = g_GrandPrixSeries;
     g_CameraCar.speed = 0;
@@ -68,9 +72,10 @@ void SeedFinishCameraAlt(void *car) {
 
     lastIndex = ((GameCarRuntime *)base)->trackPointIndex;
     index <<= 11;
-    pointAddress.offset = (lastIndex * 3) << 3;
-    pointAddress.offset += (s32)track;
-    point = pointAddress.pointer;
+    pointAddress.byteOffset = (lastIndex * 3) << 3;
+    trackAddress.pointPointer = track;
+    pointAddress.byteOffset += trackAddress.byteOffset;
+    point = pointAddress.pointPointer;
     index += 0xC00;
     index -= point->angle;
     g_CameraCar.headingAngle = index;
