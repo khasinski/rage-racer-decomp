@@ -34,24 +34,12 @@ extern GAME_SAVE_BGM_TYPE g_BgmSelection;
 extern TeamLogoCanvas g_TeamLogoCanvas;
 GAME_TEAM_LOGO_RECT_DECL;
 GAME_TEAM_LOGO_CLUT_RECT_DECL;
-#ifndef GAME_BEST_LAP_DECL
-#define GAME_BEST_LAP_DECL extern s32 g_BestLapTimes[2][4][2]
-#endif
-GAME_BEST_LAP_DECL;
-#ifndef GAME_BEST_TOTAL_DECL
-#define GAME_BEST_TOTAL_DECL extern s32 g_BestTotalTimes[2][4][2]
-#endif
-GAME_BEST_TOTAL_DECL;
-#ifndef GAME_BEST_SECTOR_DECL
-#define GAME_BEST_SECTOR_DECL extern s32 g_BestSectorTimes[2][4][3]
-#endif
-GAME_BEST_SECTOR_DECL;
+extern s32 g_BestLapTimes[2][4][2];
+extern s32 g_BestTotalTimes[2][4][2];
+extern s32 g_BestSectorTimes[2][4][3];
 
 #undef GAME_SAVE_BGM_TYPE
 #undef GAME_CLASS_WIN_COUNT_QUALIFIER
-#undef GAME_BEST_TOTAL_DECL
-#undef GAME_BEST_LAP_DECL
-#undef GAME_BEST_SECTOR_DECL
 #undef GAME_TEAM_LOGO_RECT_DECL
 #undef GAME_TEAM_LOGO_CLUT_RECT_DECL
 

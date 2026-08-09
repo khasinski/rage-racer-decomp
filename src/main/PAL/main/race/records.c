@@ -3,9 +3,6 @@
 #include "game/screens.h"
 #include "game/race.h"
 #include "game/render.h"
-#define GAME_BEST_LAP_DECL extern s32 g_BestLapTimes
-#define GAME_BEST_TOTAL_DECL extern s32 g_BestTotalTimes
-#define GAME_BEST_SECTOR_DECL extern s32 g_BestSectorTimes
 #include "game/save_internal.h"
 #include "game/records_internal.h"
 

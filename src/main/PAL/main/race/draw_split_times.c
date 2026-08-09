@@ -1,5 +1,4 @@
 #include "common.h"
-#define GAME_BEST_TOTAL_DECL extern u8 g_BestTotalTimes[]
 #include "game/save_internal.h"
 #include "game/race.h"
 #include "game/player_car_internal.h"
@@ -52,7 +51,7 @@ split_current_done:
         s32 finalA1 = 0x7C;
         s32 finalA3 = 0x78CC;
 
-        finalValue = *(s32 *)&g_BestTotalTimes[(g_CourseIndex << 3) + (g_RaceSeries << 5)];
+        finalValue = g_BestTotalTimes[g_RaceSeries][g_CourseIndex][0];
         DrawTimeValue(finalA0, finalA1, finalValue, finalA3, timeout);
     }
 }
