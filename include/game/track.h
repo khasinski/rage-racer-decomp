@@ -159,17 +159,20 @@ typedef struct TrackEventData {
  * three independent `* 0xC` sites (UpdateCarDrivetrain, and 8003237C /
  * UpdateCarTrackState); the third word is never read anywhere in the image.
  *
- * g_TrackArcCenters is declared per-file, and the two existing declarations disagree:
- * `u8 *` in car/UpdateCarDrivetrain.c (which does its own `* 0xC`) and
- * `GameTrackPoint *` in track/InstallTrackPoints.c, where the element type
- * is wrong but harmless because that unit only computes the base address. No
- * extern is declared here on purpose: adding one would collide with those two.
+ * The canonical global declaration lives in track_internal.h because the
+ * table is installed and consumed only by track/car internals.
  */
 typedef struct GameTrackArcCenter {
     s32 x;      /* +0x00 */
     s32 z;      /* +0x04 */
     s32 reserved08;  /* +0x08 never read */
 } GameTrackArcCenter;
+
+typedef union TrackPointTableAddress {
+    s32 byteOffset;
+    GameTrackPoint *pointPointer;
+    GameTrackArcCenter *arcCenterPointer;
+} TrackPointTableAddress;
 
 /* Track centreline points of the loaded course, g_TrackPointCount of them;
  * walked cyclically. */
