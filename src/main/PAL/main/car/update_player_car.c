@@ -90,7 +90,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                 }
             } else {
                 GameCarSpec *config;
-                u8 *entry;
+                GameCarSpecShiftPoint *entry;
                 s32 nextGear;
                 s32 speed;
 
@@ -98,10 +98,9 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
                 config = g_CarSpec;
                 speed = car->speed;
                 idx = nextGear - 1;
-                entry = (u8 *)config;
-                entry += idx * 4;
-                /* config->shiftPoints[idx].upshiftSpeed */
-                if (*(s16 *)(entry + 0x122) < speed &&
+                entry = config->shiftPoints;
+                entry += idx;
+                if (entry->upshiftSpeed < speed &&
                     g_AutoShiftCooldown <= 0 && p->clutch == 0 &&
                     nextGear < config->topGear) {
                     p->gear = p->gear + 1;
