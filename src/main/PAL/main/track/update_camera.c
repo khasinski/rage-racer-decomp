@@ -320,7 +320,7 @@ block_52:
         sp38[3] = chaseDistance;
         scratch[6] = 0x400 - (Atan2(sp38[1] + 0x28, chaseDistance) & 0xFFF);
         scratch[7] = 0x400 - (Atan2(sp38[0], sp38[2]) & 0xFFF);
-        scratch[8] = car->bodyRoll - car->field_64;
+        scratch[8] = car->bodyRoll - car->bodyRollVelocity;
         if (g_ChaseCameraPreset == 0) {
             negatedAccel = scratch[6] - 0x90;
         } else {

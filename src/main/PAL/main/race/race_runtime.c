@@ -508,7 +508,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->bodyYaw = (acc - angle) & 0xFFF;
 
         ent->bodyRoll = 0;
-        ent->field_64 = 0;
+        ent->bodyRollVelocity = 0;
         ent->field_6C = 0;
         ent->field_68 = 0;
         ent->trackProgress = 0;

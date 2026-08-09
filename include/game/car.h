@@ -68,7 +68,7 @@ typedef struct GameCarRuntime {
     s32 field_58;
     s32 field_5C;
     s32 modelY;
-    s32 field_64;
+    s32 bodyRollVelocity;
     s32 field_68;
     s32 field_6C;
     s32 trackProgress;
@@ -424,7 +424,7 @@ typedef struct PlayerCarRuntime {
     s32 field_58;
     s32 field_5C;
     s32 modelY;
-    s32 field_64;
+    s32 bodyRollVelocity;
     s32 progressA;
     s32 progressB;
     s32 trackProgress;

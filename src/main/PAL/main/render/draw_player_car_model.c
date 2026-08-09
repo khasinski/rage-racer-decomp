@@ -89,7 +89,7 @@ void DrawPlayerCarModel(GameRenderObject *obj) {
     if (obj->flags_48 & 0x1000) {
         otDepth += 10;
     }
-    BuildRotMatrixZ(&m_10, obj->bodyRoll - obj->field_64);
+    BuildRotMatrixZ(&m_10, obj->bodyRoll - obj->bodyRollVelocity);
     MulMatrix(&m_50, &m_10);
     MulMatrix(&m_30, &m_10);
     BuildRotMatrixX(&m_F0, obj->flags_48);
@@ -225,7 +225,7 @@ void DrawCar(GameRenderObject *obj) {
             SubmitModel((void *)SCRATCHPAD_ADDR,
                             (lod[0] < g_ModelBankCount) ? lod[0] : 1);
 
-            BuildRotMatrixZ(&m_10, obj->bodyRoll - obj->field_64);
+            BuildRotMatrixZ(&m_10, obj->bodyRoll - obj->bodyRollVelocity);
             MulMatrix(&m_50, &m_10);
             MulMatrix(&m_30, &m_10);
             BuildRotMatrixX(&m_F0, obj->flags_48);

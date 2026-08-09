@@ -267,12 +267,12 @@ void UpdateRaceCars(void) {
              */
             *(Vec4 *)base = vpos;
             if (walk->field_44 >= 0x41) {
-                walk->field_64 = walk->field_64 - 6;
+                walk->bodyRollVelocity = walk->bodyRollVelocity - 6;
             } else if (walk->field_44 < -0x40) {
-                walk->field_64 = walk->field_64 + 6;
+                walk->bodyRollVelocity = walk->bodyRollVelocity + 6;
             }
-            if (walk->field_64 != 0) {
-                walk->field_64 = walk->field_64 * 7 / 8;
+            if (walk->bodyRollVelocity != 0) {
+                walk->bodyRollVelocity = walk->bodyRollVelocity * 7 / 8;
             }
             walk->field_44 = walk->field_44 + drive->field_F4;
             if (walk->field_44 >= 0x12C) {
@@ -328,7 +328,7 @@ void UpdateRaceCars(void) {
             }
             limit = lastBase->y - 8;
             *(Vec4 *)&lastBase->field_50 = *(Vec4 *)&lastBase->bodyPitch;
-            lastBase->bodyRoll = lastBase->bodyRoll + lastBase->field_64;
+            lastBase->bodyRoll = lastBase->bodyRoll + lastBase->bodyRollVelocity;
             lastBase->modelY = lastBase->y;
             if (lastBase->field_98 != 0) {
                 s32 tick;
@@ -506,12 +506,12 @@ void UpdateAttractCars(void) {
              */
             *(Vec4 *)car = vTmp;
             if (base->field_44 >= 0x41) {
-                base->field_64 = base->field_64 - 6;
+                base->bodyRollVelocity = base->bodyRollVelocity - 6;
             } else if (base->field_44 < -0x40) {
-                base->field_64 = base->field_64 + 6;
+                base->bodyRollVelocity = base->bodyRollVelocity + 6;
             }
-            if (base->field_64 != 0) {
-                base->field_64 = base->field_64 * 7 / 8;
+            if (base->bodyRollVelocity != 0) {
+                base->bodyRollVelocity = base->bodyRollVelocity * 7 / 8;
             }
             base->field_44 = base->field_44 + drive->field_F4;
             if (base->field_44 >= 0x12C) {
@@ -568,7 +568,7 @@ void UpdateAttractCars(void) {
             }
             limit = base->y - 8;
             *(Vec4 *)&base->field_50 = *(Vec4 *)&base->bodyPitch;
-            base->bodyRoll = base->bodyRoll + base->field_64;
+            base->bodyRoll = base->bodyRoll + base->bodyRollVelocity;
             base->modelY = base->y;
             if (base->field_98 != 0) {
                 s32 tick;

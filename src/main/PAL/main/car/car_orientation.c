@@ -82,7 +82,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   headingBase = 0xC00 - (g_RaceSeries << 11);
   player->bodyYaw = (headingBase - g_TrackPoints[player->trackPointIndex].angle) & 0xFFF;
   player->bodyRoll = 0;
-  player->field_64 = 0;
+  player->bodyRollVelocity = 0;
   player->field_164 = player->trackPointIndex;
   player->headingAngle = player->bodyYaw;
   player->drive.unk90 = player->headingAngle;
@@ -310,7 +310,7 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     } else if (v1 >= -4095) {
         p->steerPos = v1 - 1536;
     }
-    ctx->field_64 = ctx->field_64 - 6;
+    ctx->bodyRollVelocity = ctx->bodyRollVelocity - 6;
     } else if (a1 != 0) {
     a0v = 1;
     if (ctx->facingBackwards != 0) a0v = 2;
@@ -321,14 +321,14 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     } else if (v1 < 4096) {
         p->steerPos = v1 + 1536;
     }
-    ctx->field_64 = ctx->field_64 + 6;
+    ctx->bodyRollVelocity = ctx->bodyRollVelocity + 6;
     } else {
     p->unk40 = 0;
     p->steerPos = p->steerPos / 3;
     }
     ctx->field_44 = -p->steerPos;
-    if (ctx->field_64 != 0) {
-        ctx->field_64 = (ctx->field_64 * 7) / 8;
+    if (ctx->bodyRollVelocity != 0) {
+        ctx->bodyRollVelocity = (ctx->bodyRollVelocity * 7) / 8;
     }
     } else if (g_PadType == 0x23) {
     a1 = ((s32)(g_NegconSteer * 13) << 9) / g_NegconSteerRange[g_NegconMaxTwist];
@@ -351,7 +351,7 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     } else {
         p->steerPos = v1 / 3;
     }
-    ctx->field_64 = ctx->field_64 - 6;
+    ctx->bodyRollVelocity = ctx->bodyRollVelocity - 6;
     } else if (!(a1 <= 0)) {
     a0v = 1;
     if (ctx->facingBackwards != 0) a0v = 2;
@@ -370,17 +370,17 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     } else {
         p->steerPos = v1 / 3;
     }
-    ctx->field_64 = ctx->field_64 + 6;
+    ctx->bodyRollVelocity = ctx->bodyRollVelocity + 6;
     } else {
     p->unk40 = 0;
     ctx->field_44 = ctx->field_44 / 2;
     p->steerPos = p->steerPos / 6;
     }
-    if (ctx->field_64 != 0) {
-        ctx->field_64 = (ctx->field_64 * 7) / 8;
+    if (ctx->bodyRollVelocity != 0) {
+        ctx->bodyRollVelocity = (ctx->bodyRollVelocity * 7) / 8;
     }
     } else {
-    ctx->field_64 = 0;
+    ctx->bodyRollVelocity = 0;
     p->steerPos = 0;
     }
     } else {
@@ -411,13 +411,13 @@ void UpdateCarBodyRoll(PlayerCarRuntime *ctx) {
     if (a0v > 4096) a0v = 4096;
     p->steerPos = a0v;
     ctx->field_44 = a0v;
-    ctx->field_64 = a0v / 128;
+    ctx->bodyRollVelocity = a0v / 128;
 
     }
     v1 = ctx->speed;
     if (v1 < 800) {
-        s32 f = ctx->field_64;
-        ctx->field_64 = (f * v1) / 800;
+        s32 f = ctx->bodyRollVelocity;
+        ctx->bodyRollVelocity = (f * v1) / 800;
     }
 }
 

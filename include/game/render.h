@@ -203,7 +203,7 @@ typedef struct GameRenderObject {
     s32 angle_58;   /* 0x58 */
     s32 field_5C;
     s32 modelY;     /* 0x60 secondary model origin, normally copied from y */
-    s32 field_64;   /* 0x64 */
+    s32 bodyRollVelocity; /* 0x64, damped and accumulated into bodyRoll */
     s32 progressA;
     s32 progressB;
     s32 trackProgress;   /* 0x70 */
