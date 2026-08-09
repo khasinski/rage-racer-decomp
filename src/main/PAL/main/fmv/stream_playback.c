@@ -27,7 +27,6 @@ void *GetFmvFrame(FmvDecodeContext *ctx) {
     StRingEventRecord *slot[2];
     u16 rect[4];
     s32 count;
-    u16 *dst;
     StRingEventRecord *entry;
     s32 w;
     s32 h;
@@ -69,28 +68,27 @@ void *GetFmvFrame(FmvDecodeContext *ctx) {
         ClearImage(rect, 0, 0, 0);
     }
 
-    dst = (u16 *)ctx;
     ret = slot[0];
     h32 = g_FmvFrameHeight;
     w32 = g_FmvFrameWidth;
     half = (0xF0 - h32) / 2;
-    dst[0xD] = g_DispEnv0Y + half;
+    ctx->displayRects[0].y = g_DispEnv0Y + half;
     __asm__ __volatile__("" ::);
     {
         u32 wm = (u32)w32 * 3;
         hgt16 = wm >> 31;
         wdraw = (u16)((wm + hgt16) >> 1);
     }
-    dst[0x12] = wdraw;
-    dst[0xE] = wdraw;
+    ctx->displayRects[1].w = wdraw;
+    ctx->displayRects[0].w = wdraw;
     wid16 = g_FmvFrameWidth;
     c067e = g_DispEnv1Y;
     hgt16 = g_FmvFrameHeight;
-    dst[0x13] = hgt16;
-    dst[0xF] = hgt16;
-    dst[0x19] = hgt16;
+    ctx->displayRects[1].h = hgt16;
+    ctx->displayRects[0].h = hgt16;
+    ctx->decodedHeight = hgt16;
     c067e += half;
-    dst[0x11] = c067e;
+    ctx->displayRects[1].y = c067e;
     g_DispEnv1W = wid16;
     g_DispEnv0W = wid16;
     g_DispEnv1H = hgt16;
