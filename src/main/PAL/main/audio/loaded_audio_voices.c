@@ -28,12 +28,18 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 denominator;
     s32 raw_result;
     s32 result;
+    EngineSoundCurveAddress curveAddress;
+    EngineSoundCurveAddress entryAddress;
+    EngineSoundCurveAddress valueBaseAddress;
+    EngineSoundCurveAddress denominatorAddress;
 
     index = 1;
     row_offset = (parameter * 9) << 3;
     bank_offset = (((bank * 7) * 4) - bank) << 5;
     bank = row_offset + bank_offset;
-    entry = (s32 *)((s32)base + bank);
+    entryAddress.pointer = base;
+    entryAddress.byteOffset += bank;
+    entry = entryAddress.pointer;
     scan = entry + 1;
     while (index < 9) {
         raw_result = *scan;
@@ -46,12 +52,16 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
 
     base_minus = base - 1;
     index_offset = index * 4;
-    lower_position = (s32 *)(index_offset + (s32)base_minus);
-    lower_position = (s32 *)((u8 *)lower_position + bank);
-    lower_value_base = (s32)(base + 8);
+    curveAddress.pointer = base_minus;
+    curveAddress.byteOffset = index_offset + curveAddress.byteOffset;
+    curveAddress.byteOffset += bank;
+    lower_position = curveAddress.pointer;
+    valueBaseAddress.pointer = base + 8;
+    lower_value_base = valueBaseAddress.byteOffset;
     lower_value_indexed = index_offset + lower_value_base;
     lower_value_address = lower_value_indexed + bank;
-    upper_value_base = (s32)(base + 9);
+    valueBaseAddress.pointer = base + 9;
+    upper_value_base = valueBaseAddress.byteOffset;
     upper_value_banked = bank + upper_value_base;
     upper_value_address = index_offset + upper_value_banked;
     lower_value_value = *(s32 *)lower_value_address;
@@ -60,8 +70,9 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     numerator =
         (upper_value_value - lower_value_value) *
         (value - lower_position_value);
-    denominator =
-        *(s32 *)(index_offset + (s32)entry) - lower_position_value;
+    denominatorAddress.pointer = entry;
+    denominatorAddress.byteOffset = index_offset + denominatorAddress.byteOffset;
+    denominator = *denominatorAddress.pointer - lower_position_value;
     raw_result = numerator / denominator + lower_value_value;
 
     if (raw_result >= 0) {

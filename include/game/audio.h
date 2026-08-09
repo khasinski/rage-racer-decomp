@@ -128,6 +128,11 @@ typedef struct EngineSoundCurveRow {
     s32 right[9];
 } EngineSoundCurveRow;
 
+typedef union EngineSoundCurveAddress {
+    s32 byteOffset;
+    s32 *pointer;
+} EngineSoundCurveAddress;
+
 extern EngineSoundCurveRow g_EngineSoundCurves[2][12];
 extern s32 g_EngineSoundMaxRpm;
 extern s32 g_SoundSlotActive[];
