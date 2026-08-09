@@ -7,7 +7,6 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
     s32 count;
     s32 loopCount;
     s32 i;
-    s32 off;
     /* Load-bearing GCC 2.6.3 register roles for the table loops. */
     register s32 tblOff asm("$3");
     register s32 loopTblOff asm("$8");
@@ -54,14 +53,12 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     inactive = -1;
                     defaultPitch = 0x1E00;
                     volume = count;
-                    off = 0;
                     do {
-                        ((EffectVoice *)((u8 *)g_EffectVoices + off))->state = active;
-                        ((EffectVoice *)((u8 *)g_EffectVoices + off))->note = inactive;
-                        ((EffectVoice *)((u8 *)g_EffectVoices + off))->tone = inactive;
-                        ((EffectVoice *)((u8 *)g_EffectVoices + off))->pitch = defaultPitch;
-                        ((EffectVoice *)((u8 *)g_EffectVoices + off))->volume = 0;
-                        off += 0x14;
+                        g_EffectVoices[resetIndex].state = active;
+                        g_EffectVoices[resetIndex].note = inactive;
+                        g_EffectVoices[resetIndex].tone = inactive;
+                        g_EffectVoices[resetIndex].pitch = defaultPitch;
+                        g_EffectVoices[resetIndex].volume = 0;
                         resetIndex++;
                     } while (resetIndex < volume);
                 }
@@ -83,25 +80,23 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                 tableBase = g_EffectCueTable;
                 loopTblOff = tblOff;
                 p = (const EffectCueRow *)((u8 *)tableBase + loopTblOff);
-                off = 0;
                 do {
                     if (i != 0) {
-                        ((EffectVoice *)((u8 *)g_EffectVoices + off))->state = *stateBase;
+                        g_EffectVoices[i].state = *stateBase;
                     }
                     scaleValue = *(s32 *)((u8 *)&g_EffectCueTable[0].volumeScale + loopTblOff);
                     scaled = volume * scaleValue;
                     cueValue = p->cue;
-                    ((EffectVoice *)((u8 *)g_EffectVoices + off))->note = cueValue;
+                    g_EffectVoices[i].note = cueValue;
                     toneValue = p->tone;
-                    ((EffectVoice *)((u8 *)g_EffectVoices + off))->pitch = pitch;
-                    ((EffectVoice *)((u8 *)g_EffectVoices + off))->tone = toneValue;
+                    g_EffectVoices[i].pitch = pitch;
+                    g_EffectVoices[i].tone = toneValue;
                     p = (const EffectCueRow *)((u8 *)p + 8);
                     if (scaled < 0) {
                         scaled += 0x7F;
                     }
-                    ((EffectVoice *)((u8 *)g_EffectVoices + off))->volume = scaled >> 7;
+                    g_EffectVoices[i].volume = scaled >> 7;
                     i++;
-                    off += 0x14;
                 } while (i < loopCount);
             }
         }
@@ -130,14 +125,12 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                         inactive = -1;
                         defaultPitch = 0x1E00;
                         volume = count;
-                        off = 0x28;
                         do {
-                            ((EffectVoice *)((u8 *)g_EffectVoices + off))->state = active;
-                            ((EffectVoice *)((u8 *)g_EffectVoices + off))->note = inactive;
-                            ((EffectVoice *)((u8 *)g_EffectVoices + off))->tone = inactive;
-                            ((EffectVoice *)((u8 *)g_EffectVoices + off))->pitch = defaultPitch;
-                            ((EffectVoice *)((u8 *)g_EffectVoices + off))->volume = 0;
-                            off += 0x14;
+                            g_EffectVoices[i + 2].state = active;
+                            g_EffectVoices[i + 2].note = inactive;
+                            g_EffectVoices[i + 2].tone = inactive;
+                            g_EffectVoices[i + 2].pitch = defaultPitch;
+                            g_EffectVoices[i + 2].volume = 0;
                             i++;
                         } while (i < volume);
                     }
@@ -166,25 +159,23 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                 tableBase = g_EffectCueTable;
                 loopTblOff = tblOff;
                 p = (const EffectCueRow *)((u8 *)tableBase + loopTblOff);
-                off = 0x28;
                 do {
                     if (i != 0) {
-                        ((EffectVoice *)((u8 *)g_EffectVoices + off))->state = *stateBase;
+                        g_EffectVoices[i + 2].state = *stateBase;
                     }
                     scaleValue = *(s32 *)((u8 *)&g_EffectCueTable[0].volumeScale + loopTblOff);
                     scaled = volume * scaleValue;
                     cueValue = p->cue;
-                    ((EffectVoice *)((u8 *)g_EffectVoices + off))->note = cueValue;
+                    g_EffectVoices[i + 2].note = cueValue;
                     toneValue = p->tone;
-                    ((EffectVoice *)((u8 *)g_EffectVoices + off))->pitch = pitch;
-                    ((EffectVoice *)((u8 *)g_EffectVoices + off))->tone = toneValue;
+                    g_EffectVoices[i + 2].pitch = pitch;
+                    g_EffectVoices[i + 2].tone = toneValue;
                     p = (const EffectCueRow *)((u8 *)p + 8);
                     if (scaled < 0) {
                         scaled += 0x7F;
                     }
-                    ((EffectVoice *)((u8 *)g_EffectVoices + off))->volume = scaled >> 7;
+                    g_EffectVoices[i + 2].volume = scaled >> 7;
                     i++;
-                    off += 0x14;
                 } while (i < loopCount);
             }
         }
