@@ -114,6 +114,7 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     GameTrackCameraNode *prevNode;
     GameTrackCameraNodeAddress introNode;
     CameraCarAddress playerAddress;
+    ScratchBlockAddress scratchAddress;
 
     cameraNodeIndex = FindNearestTrackCamera(car);
     scratch = &SCRATCH_PRIM_CURSOR_WORD;
@@ -128,8 +129,10 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
     switch (cameraMode) {
     case 0:
         playerAddress.renderObject = car;
-        *(Block16 *)&scratch[2] = playerAddress.blocks[0];
-        *(Block16 *)&scratch[6] = playerAddress.blocks[2];
+        scratchAddress.words = &scratch[2];
+        scratchAddress.blocks[0] = playerAddress.blocks[0];
+        scratchAddress.words = &scratch[6];
+        scratchAddress.blocks[0] = playerAddress.blocks[2];
         BuildRotMatrixY(objectRotation.halfwords, scratch[7]);
         BuildRotMatrixX(matrixWork.halfwords, scratch[6]);
         MulMatrix2(matrixWork.halfwords, objectRotation.halfwords);
@@ -156,7 +159,8 @@ void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
         break;
     case 1:
         playerAddress.renderObject = car;
-        *(Block16 *)&scratch[2] = playerAddress.blocks[0];
+        scratchAddress.words = &scratch[2];
+        scratchAddress.blocks[0] = playerAddress.blocks[0];
         chaseYawDamping = car->angleY;
         chaseTargetYaw = chaseYawDamping & 0xFFF;
         chaseCarSpeed = car->speed;
@@ -348,7 +352,8 @@ block_52:
     case 2:
         chaseNodeOffset = cameraNodeIndex * 0x24;
         chaseNode = &g_TrackCameras[cameraNodeIndex];
-        *(Block16 *)&scratch[2] = *(Block16 *)chaseNode;
+        scratchAddress.words = &scratch[2];
+        scratchAddress.blocks[0] = *(Block16 *)chaseNode;
         BuildRotMatrixY(objectRotation.halfwords, car->angleY);
         BuildRotMatrixX(matrixWork.halfwords, car->bodyPitch);
         MulMatrix2(matrixWork.halfwords, objectRotation.halfwords);
@@ -384,7 +389,8 @@ block_52:
         break;
     case 3:
         playerAddress.renderObject = car;
-        *(Block16 *)&scratch[2] = playerAddress.blocks[0];
+        scratchAddress.words = &scratch[2];
+        scratchAddress.blocks[0] = playerAddress.blocks[0];
         if (((u8)nodeChanged) || (g_CameraModePrev != 3)) {
             g_CamPathNode = cameraNodeIndex;
             g_CamPathFrame = 0;
@@ -538,7 +544,8 @@ block_52:
         case4Base.pointer = g_TrackCameras;
         introNodeOffset = cameraNodeIndex * sizeof(GameTrackCameraNode);
         introNode.value = introNodeOffset + case4Base.value;
-        *(Block16 *)&scratch[2] = *(Block16 *)introNode.pointer;
+        scratchAddress.words = &scratch[2];
+        scratchAddress.blocks[0] = *(Block16 *)introNode.pointer;
         if (((u8)nodeChanged) || (g_CameraModePrev != 4)) {
             g_CamPathFrame = 0;
         } else if (g_CamPathFrame < g_TrackCameras[cameraNodeIndex].duration) {
@@ -581,7 +588,8 @@ block_52:
         break;
     case 5:
         playerAddress.renderObject = car;
-        *(Block16 *)&scratch[2] = playerAddress.blocks[0];
+        scratchAddress.words = &scratch[2];
+        scratchAddress.blocks[0] = playerAddress.blocks[0];
         BuildRotMatrixY(cameraRotation.halfwords, 0 - g_OrbitCameraYaw);
         BuildRotMatrixY(objectRotation.halfwords, car->angleY);
         BuildRotMatrixX(matrixWork.halfwords, car->bodyPitch);
