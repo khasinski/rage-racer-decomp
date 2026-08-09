@@ -476,8 +476,6 @@ extern s16 g_PathSceneryRotSpan;
 extern s16 g_PathSceneryRotY;
 extern s16 g_PathSceneryRotZ;
 extern s32 g_PathSceneryVolume;
-extern s32 g_PathSceneryY;
-extern s32 g_PathSceneryZ;
 extern s32 g_PlayerField3C;
 extern s32 g_PlayerSegmentWeight;
 extern s32 g_RouteSceneryY;

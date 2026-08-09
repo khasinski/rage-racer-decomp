@@ -48,9 +48,8 @@ void DrawScriptedScenery(s32 flags) {
  * posRateNeg / rotRateNeg record that the keyframe's rate field was negative
  * (the rate itself is stored as a magnitude).
  */
-/* The three words are the scenery position: g_PathSceneryY and
- * g_PathSceneryZ alias +4 and +8. It stays a Block16 because respelling
- * w[0] as a named member of a Vec4 does not match. */
+/* The position stays a Block16 because respelling w[0] as a named member of a
+ * Vec4 does not match. */
 
 /*
  * The position and rotation cursors are the same interleaved eight-halfword
@@ -76,7 +75,7 @@ void InitPathScenery(void) {
     g_PathSceneryRotKeys = (PathSceneryRotationKey *)tblB;
     g_PathSceneryRotKeys =
         &((PathSceneryRotationData *)g_PathSceneryRotKeys)->keys[ib];
-    g_PathSceneryX = *(Block16 *)g_PathSceneryPosKeys;
+    g_PathSceneryTransform.position = *(Block16 *)g_PathSceneryPosKeys;
 
     {
         PathSceneryRotationKey *copySrc;
@@ -86,7 +85,7 @@ void InitPathScenery(void) {
 
         copySrc = g_PathSceneryRotKeys;
         entryA = g_PathSceneryPosKeys;
-        g_PathSceneryRot = *(SVec *)copySrc;
+        g_PathSceneryTransform.rotation = *(SVec *)copySrc;
         g_PathSceneryPosPhase = 0;
         g_PathSceneryRotPhase = 0;
         g_PathSceneryPosSpan =
@@ -233,21 +232,21 @@ void UpdatePathScenerySound(void) {
     if (g_PathSceneryPosCursor.phase <= (s16)g_PathSceneryPosCursor.rate) {
         if (g_PathSceneryPosCursor.phase <=
             (s16)g_PathSceneryPosCursor.rate / 2) {
-            g_PathSceneryX.w[0] =
+            g_PathSceneryTransform.position.w[0] =
                 RAW(g_PathSceneryPosKeys[g_PathSceneryPosCursor.index + 1].x) -
                 g_PathSceneryHalfDelta[0] *
                     rcos((g_PathSceneryPosCursor.phase << 11) /
                          (s16)g_PathSceneryPosCursor.rate) /
                     4096 -
                 g_PathSceneryHalfDelta[0];
-            g_PathSceneryY =
+            g_PathSceneryTransform.position.w[1] =
                 RAW(g_PathSceneryPosKeys[g_PathSceneryPosCursor.index + 1].y) -
                 g_PathSceneryHalfDelta[1] *
                     rcos((g_PathSceneryPosCursor.phase << 11) /
                          (s16)g_PathSceneryPosCursor.rate) /
                     4096 -
                 g_PathSceneryHalfDelta[1];
-            g_PathSceneryZ =
+            g_PathSceneryTransform.position.w[2] =
                 RAW(g_PathSceneryPosKeys[g_PathSceneryPosCursor.index + 1].z) -
                 g_PathSceneryHalfDelta[2] *
                     rcos((g_PathSceneryPosCursor.phase << 11) /
@@ -264,7 +263,7 @@ void UpdatePathScenerySound(void) {
             if (product < 0) {
                 product += 0xFFF;
             }
-            g_PathSceneryX.w[0] =
+            g_PathSceneryTransform.position.w[0] =
                 (product >> 12) + sinRec->x +
                 g_PathSceneryHalfDelta[0];
 
@@ -277,11 +276,11 @@ void UpdatePathScenerySound(void) {
             if (product < 0) {
                 product += 0xFFF;
             }
-            g_PathSceneryY =
+            g_PathSceneryTransform.position.w[1] =
                 (product >> 12) + sinRec->y +
                 g_PathSceneryHalfDelta[1];
 
-            g_PathSceneryZ =
+            g_PathSceneryTransform.position.w[2] =
                 RAW(g_PathSceneryPosKeys[g_PathSceneryPosCursor.index].z) +
                 g_PathSceneryHalfDelta[2] *
                     rsin((g_PathSceneryPosCursor.phase << 11) /
@@ -291,7 +290,7 @@ void UpdatePathScenerySound(void) {
                 g_PathSceneryHalfDelta[2];
         }
     } else {
-        g_PathSceneryX =
+        g_PathSceneryTransform.position =
             *(Block16 *)&g_PathSceneryPosKeys[g_PathSceneryPosCursor.index + 1];
     }
 
@@ -348,7 +347,7 @@ void UpdatePathScenerySound(void) {
     if (g_PathSceneryRotCursor.phase <= (s16)g_PathSceneryRotCursor.rate) {
         if (g_PathSceneryRotCursor.phase <=
             (s16)g_PathSceneryRotCursor.rate / 2) {
-            g_PathSceneryRot.vx =
+            g_PathSceneryTransform.rotation.vx =
                 RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index + 1].x) -
                 g_PathSceneryRotHalfDelta[0] *
                     rcos((g_PathSceneryRotCursor.phase << 11) /
@@ -370,7 +369,7 @@ void UpdatePathScenerySound(void) {
                     4096 -
                 g_PathSceneryRotHalfDelta[2];
         } else {
-            g_PathSceneryRot.vx =
+            g_PathSceneryTransform.rotation.vx =
                 RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index].x) +
                 g_PathSceneryRotHalfDelta[0] *
                     rsin((g_PathSceneryRotCursor.phase << 11) /
@@ -396,7 +395,7 @@ void UpdatePathScenerySound(void) {
                 g_PathSceneryRotHalfDelta[2];
         }
     } else {
-        g_PathSceneryRot =
+        g_PathSceneryTransform.rotation =
             *(SVec *)&g_PathSceneryRotKeys[g_PathSceneryRotCursor.index + 1];
     }
 
@@ -408,13 +407,13 @@ void UpdatePathScenerySound(void) {
     posFrame = frames[0];
     rotFrame = frames[1];
     __asm__ volatile("" : "=r"(rotFrame) : "0"(rotFrame));
-    dx = g_PlayerCar.x - g_PathSceneryX.w[0];
+    dx = g_PlayerCar.x - g_PathSceneryTransform.position.w[0];
     posFrame = posFrame + 1;
     frames[0] = posFrame;
     frames[1] = rotFrame + 1;
     delta[0] = dx;
-    delta[1] = dy = g_PlayerCar.y - g_PathSceneryY;
-    delta[2] = dz = g_PlayerCar.z - g_PathSceneryZ;
+    delta[1] = dy = g_PlayerCar.y - g_PathSceneryTransform.position.w[1];
+    delta[2] = dz = g_PlayerCar.z - g_PathSceneryTransform.position.w[2];
 
     if (dx < 0x1000 && dz < 0x1000 && dx >= -0xFFF && dz >= -0xFFF) {
         slew =

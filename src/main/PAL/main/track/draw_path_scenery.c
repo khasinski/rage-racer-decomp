@@ -26,20 +26,20 @@ void DrawPathScenery(void) {
 
     mtx0Ptr = &mtx0;
     __asm__("" : "=r"(mtx0Ptr) : "0"(mtx0Ptr));
-    anglePtr = &g_PathSceneryRot.vy;
+    anglePtr = &g_PathSceneryTransform.rotation.vy;
     mtx1Ptr = &mtx1;
 
     BuildRotMatrixY(mtx0Ptr, 0x800 - anglePtr[0]);
-    BuildRotMatrixX(mtx1Ptr, g_PathSceneryRot.vx);
+    BuildRotMatrixX(mtx1Ptr, g_PathSceneryTransform.rotation.vx);
     MulMatrix2(&mtx0, mtx1Ptr);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, mtx1Ptr);
-    BuildRotMatrixZ(&mtx0, g_PathSceneryRot.vz);
+    BuildRotMatrixZ(&mtx0, g_PathSceneryTransform.rotation.vz);
     MulMatrix2(mtx1Ptr, &mtx0);
 
     SelectModelBank(1);
     scratchVec = (void *)0x1F80011C;
     __asm__("" : "=r"(scratchVec) : "0"(scratchVec));
-    anglePtr = (s16 *)((u8 *)anglePtr - 0x12);
+    anglePtr = (s16 *)&g_PathSceneryTransform.position;
     SetGteObjectMatrix(scratchVec, anglePtr, &mtx0);
     frameValue = g_ModelBankCount;
     SCRATCH_ENV_MODE4 = 0;

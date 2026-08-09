@@ -26,14 +26,18 @@ typedef struct PathSceneryClock {
     s16 rotRateNeg;
 } PathSceneryClock;
 
+typedef struct PathSceneryTransform {
+    Block16 position;
+    SVec rotation;
+} PathSceneryTransform;
+
 extern GameTrackArcCenter *g_TrackArcCenters;
 extern s32 g_EnvScriptClock;
 extern CourseObject *g_CourseObjects;
 extern s32 g_CourseObjectCount;
 extern StartGridSceneryStep g_StartGridSceneryStep[];
 extern PathSceneryClock g_PathSceneryClock;
-extern Block16 g_PathSceneryX;
-extern SVec g_PathSceneryRot;
+extern PathSceneryTransform g_PathSceneryTransform asm("g_PathSceneryX");
 extern PathSceneryCursor g_PathSceneryPosCursor asm("g_PathSceneryPosPhase");
 extern PathSceneryCursor g_PathSceneryRotCursor asm("g_PathSceneryRotPhase");
 
