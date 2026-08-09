@@ -2,6 +2,7 @@
 #define GAME_SCRATCHPAD_H
 
 #include "common.h"
+#include "game/vector.h"
 #include "psyq/gte.h"
 
 /*
@@ -43,10 +44,19 @@ typedef union ScratchViewCoordinate {
     } half;
 } ScratchViewCoordinate;
 
-typedef struct ScratchViewState {
+typedef struct ScratchViewCoordinates {
     ScratchViewCoordinate x;
     ScratchViewCoordinate y;
     ScratchViewCoordinate z;
+} ScratchViewCoordinates;
+
+typedef union ScratchViewPosition {
+    ScratchViewCoordinates components;
+    LVec vector;
+} ScratchViewPosition;
+
+typedef struct ScratchViewState {
+    ScratchViewPosition position;
     s32 reserved14;
     s32 angleX;
     s32 angleY;

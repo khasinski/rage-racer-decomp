@@ -49,15 +49,15 @@ void DrawCourseObjects(void) {
             s32 camera;
 
             transformed = (u16)obj->x;
-            camera = SCRATCH_VIEW_STATE->x.half.low;
+            camera = SCRATCH_VIEW_STATE->position.components.x.half.low;
             transformed -= camera;
             *(s16 *)0x1F80011C = transformed;
             transformed = (u16)obj->y;
-            camera = SCRATCH_VIEW_STATE->y.half.low;
+            camera = SCRATCH_VIEW_STATE->position.components.y.half.low;
             transformed -= camera;
             *(s16 *)0x1F80011E = transformed;
             transformed = (u16)obj->z;
-            camera = SCRATCH_VIEW_STATE->z.half.low;
+            camera = SCRATCH_VIEW_STATE->position.components.z.half.low;
             transformed -= camera;
             *(s16 *)0x1F800120 = transformed;
 
@@ -136,8 +136,8 @@ void BuildVisibleCells(s32 near, s32 far) {
     }
 
     oct = (view->angleY / 128) & 0x1F;
-    cx = view->x.value / 2048;
-    cy = view->z.value / 2048;
+    cx = view->position.components.x.value / 2048;
+    cy = view->position.components.z.value / 2048;
     ret0 = GetCellRegion(cx, cy);
 
     i = 0;
@@ -189,9 +189,9 @@ void BuildVisibleCells(s32 near, s32 far) {
             g_VisibleCellMask[sy] |= 1 << sx;
             center = 1024;
             if (clut != 0x3FF) {
-                vec[0] = ((sx << 11) - (view->x.value - center)) << 2;
-                vec[1] = (-view->y.value) << 2;
-                vec[2] = ((sy << 11) - (view->z.value - center)) << 2;
+                vec[0] = ((sx << 11) - (view->position.components.x.value - center)) << 2;
+                vec[1] = (-view->position.components.y.value) << 2;
+                vec[2] = ((sy << 11) - (view->position.components.z.value - center)) << 2;
                 ApplyMatrixLV(SCRATCH_VIEW_MATRIX_GTE, vec, proj);
                 if (proj[2] >= near && far >= proj[2]) {
                     out->x = proj[0];

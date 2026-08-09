@@ -151,7 +151,7 @@ typedef struct ObjectMatrixWork {
 } ObjectMatrixWork;
 
 /* The per-frame scratchpad block: camera position at +8, view matrix at +0x28. */
-#define SCRATCH_CAMERA_POS ((LVec *)&SCRATCH_VIEW_X)
+#define SCRATCH_CAMERA_POS (&SCRATCH_VIEW_STATE->position.vector)
 #define SCRATCH_VIEW_MATRIX (SCRATCH_VIEW_MATRIX_GTE)
 
 /*
