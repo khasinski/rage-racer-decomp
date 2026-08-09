@@ -47,6 +47,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     s32 revFlag;
     s32 i;
     s32 cornerIndex;
+    u32 skidRange;
 
     mode23 = g_PadType == 0x23;
     car->facingBackwards = IsCarFacingBackwards(car);
@@ -274,7 +275,8 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         ApplyCarKnockback(car);
     }
     skid = UpdateCarTrackState(car, car->trackPointIndex, arr);
-    if ((u32)(skid - 2) < 2U && car->speed < 64) {
+    skidRange = skid - 2;
+    if (skidRange < 2U && car->speed < 64) {
         skid = 0;
     }
 
