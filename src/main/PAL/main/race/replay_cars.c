@@ -15,27 +15,26 @@
 
 
 void SeedReplayCars(void) {
-    void *primary;
-    void *secondary;
+    ReplayCarAddress primary;
+    ReplayCarAddress secondary;
 
     InitShuttleScenery();
 
-    primary = &g_PlayerCar;
-    secondary = g_Cars;
-    ApplyReplayFrameAndTilt(g_ReplayReadCursor, (ReplayCarState *)primary,
-                            (ReplayCarState *)secondary);
+    primary.player = &g_PlayerCar;
+    secondary.rivals = g_Cars;
+    ApplyReplayFrameAndTilt(g_ReplayReadCursor, primary.state, secondary.state);
 
-    g_PlayerCar.trackPointIndex = FindTrackSegment(primary, g_PlayerCar.trackPointIndex);
-    SeedCarLapProgress(primary, 1);
-    AccumulateLapProgress(primary);
-    ResetCarTrackState(primary);
+    g_PlayerCar.trackPointIndex = FindTrackSegment(primary.runtime, g_PlayerCar.trackPointIndex);
+    SeedCarLapProgress(primary.runtime, 1);
+    AccumulateLapProgress(primary.runtime);
+    ResetCarTrackState(primary.runtime);
 
     if (g_GrandPrixMode == 1) {
         g_Cars[0].trackPointIndex =
-            FindTrackSegment(secondary, g_Cars[0].trackPointIndex);
-        SeedCarLapProgress(secondary, 1);
-        AccumulateLapProgress(secondary);
-        ResetCarTrackState(secondary);
+            FindTrackSegment(secondary.runtime, g_Cars[0].trackPointIndex);
+        SeedCarLapProgress(secondary.runtime, 1);
+        AccumulateLapProgress(secondary.runtime);
+        ResetCarTrackState(secondary.runtime);
     }
 }
 

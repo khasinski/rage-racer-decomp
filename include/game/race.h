@@ -7,7 +7,17 @@
 #include "game/replay.h"
 
 struct PlayerCarRuntime;
+struct GameCarRuntime;
+struct GameRenderSourcePoint;
 struct CarEntry;
+
+typedef union ReplayCarAddress {
+    struct PlayerCarRuntime *player;
+    struct GameCarRuntime *rivals;
+    ReplayCarState *state;
+    struct GameRenderSourcePoint *source;
+    void *runtime;
+} ReplayCarAddress;
 
 /* Grand Prix class index, 0-based; displayed as CLASS(n+1). Also the track
  * tier: course asset index = 0x57 + (course << 1) + (class << 3). OVAL is
