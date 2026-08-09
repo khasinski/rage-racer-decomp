@@ -198,8 +198,8 @@ void ResetCarTrackState(GameCarRuntime *car) {
         arcAngle = spad->arcSpan;
         spad->sweptAngle = sweptAngle;
         spad->pointRadius.value =
-            (s32)(((s16)sweptAngle * spad->pointRadius.value) +
-                  ((arcAngle - (s16)sweptAngle) * spad->nextPointRadius.value)) /
+            (((s16)sweptAngle * spad->pointRadius.value) +
+             ((arcAngle - (s16)sweptAngle) * spad->nextPointRadius.value)) /
             arcAngle;
         arcLateral = (s16)(spad->carRadius.half.low - spad->pointRadius.half.low);
         if (spad->curveMode == 2) {

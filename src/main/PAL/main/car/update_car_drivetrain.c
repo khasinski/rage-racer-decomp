@@ -458,7 +458,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
         targetGear = drive->gear;
         if (drive->gearDisp != targetGear)
         {
-          shiftTargetRpm = ((s32)(((car->speed * 0xA0) / 1168) * 0x2710)) /
+          shiftTargetRpm = (((car->speed * 0xA0) / 1168) * 0x2710) /
                            ((GameCarSpec *)((u8 *)g_CarSpec - (-(targetGear * 4))))->gearRatio[0];
           currentSpeed = (u16)drive->engineRpm;
           g_ShiftTargetRpm = shiftTargetRpm;

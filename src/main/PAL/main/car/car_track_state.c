@@ -271,7 +271,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
     {
         alongSegment = 0;
     }
-    obj->segmentFraction = (s32)((s32)(alongSegment << 0xA) / (s16)spad->segmentLength);
+    obj->segmentFraction = (alongSegment << 0xA) / (s16)spad->segmentLength;
     if (lateralOffset < 0)
     {
         obj->normalizedLateralOffset = (lateralOffset * 0x400) / spad->leftHalfWidth;
