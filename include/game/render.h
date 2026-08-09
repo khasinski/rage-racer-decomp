@@ -177,6 +177,19 @@ typedef struct CamRow {
  * two declarations because the tails disagree - car.h reads 0x7C, 0x80, 0x84,
  * 0x88, 0xAC and 0xBC as halfwords, which shifts every later offset by four.
  */
+typedef union CameraLookAt {
+    struct {
+        s32 eyeX;
+        s32 eyeY;
+        s32 eyeZ;
+        s32 targetX;
+        s32 targetY;
+        s32 targetZ;
+        s32 reserved[2];
+    } fields;
+    s32 words[8];
+} CameraLookAt;
+
 typedef struct GameRenderObject {
     s32 x;          /* 0x00 */
     s32 y;          /* 0x04 */
@@ -895,7 +908,7 @@ s32 rcos(s32 angle);
 void *ApplyMatrixLV();
 s32 SquareRoot0(s32 square);
 void SubmitTerrainCells(void *ctx, void *cells, s32 count);
-s32 SetLookAtMatrix(GameRenderObject *obj);
+s32 SetLookAtMatrix(const CameraLookAt *camera);
 void SetTrackTexturePageNow(s32 trackSection);
 
 /* Declared identically by 95 translation units before this

@@ -22,7 +22,7 @@ void UpdateScriptedCamera(void) {
     s32 scale;
     s32 blend;
     s32 scaledTick;
-    s32 values[8];
+    CameraLookAt camera;
 
     tick = g_CameraPathTick;
     current = g_CameraPathKey;
@@ -38,23 +38,23 @@ void UpdateScriptedCamera(void) {
 
     tick = KEY(nextOffset).eyeX;
     currentValue = KEY(currentOffset).eyeX;
-    values[0] = (((tick - currentValue) * blend) / 10000) + currentValue;
+    camera.words[0] = (((tick - currentValue) * blend) / 10000) + currentValue;
     tick = KEY(nextOffset).eyeY;
     currentValue = KEY(currentOffset).eyeY;
-    values[1] = (((tick - currentValue) * blend) / 10000) + currentValue;
+    camera.words[1] = (((tick - currentValue) * blend) / 10000) + currentValue;
     tick = KEY(nextOffset).eyeZ;
     currentValue = KEY(currentOffset).eyeZ;
-    values[2] = (((tick - currentValue) * blend) / 10000) + currentValue;
+    camera.words[2] = (((tick - currentValue) * blend) / 10000) + currentValue;
     tick = KEY(nextOffset).atX;
     currentValue = KEY(currentOffset).atX;
-    values[3] = (((tick - currentValue) * blend) / 10000) + currentValue;
+    camera.words[3] = (((tick - currentValue) * blend) / 10000) + currentValue;
     tick = KEY(nextOffset).atY;
     currentValue = KEY(currentOffset).atY;
-    values[4] = (((tick - currentValue) * blend) / 10000) + currentValue;
+    camera.words[4] = (((tick - currentValue) * blend) / 10000) + currentValue;
     tick = KEY(nextOffset).atZ;
     nextOffset = KEY(currentOffset).atZ;
-    values[5] = (((tick - nextOffset) * blend) / 10000) + nextOffset;
-    SetLookAtMatrix((GameRenderObject *)values);
+    camera.words[5] = (((tick - nextOffset) * blend) / 10000) + nextOffset;
+    SetLookAtMatrix(&camera);
 
     {
         s32 duration = KEY(g_CameraPathKey << 5).duration;

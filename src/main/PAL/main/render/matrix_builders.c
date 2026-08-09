@@ -53,13 +53,12 @@ void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32
 
 
 /*
- * Builds a billboard / look-at view Matrix for a GameRenderObject: the eye is
- * obj->{x,y,z} and the look-at target is obj->{field_0C,field_10,field_14}.
+ * Builds a billboard / look-at view Matrix from an eye and target point.
  * `len` is the distance (SquareRoot0 sqrt); computes a pitch and a yaw axis
  * rotation (BuildAxisRotMatrix), the translation (MatrixApplyVectorComponents), then per-row
  * fixed-point projection scaling (<<1 / <<2). Returns 1 if eye==target, else 0.
  */
-s32 SetLookAtMatrix(GameRenderObject *obj) {
+s32 SetLookAtMatrix(const CameraLookAt *camera) {
     Matrix m;
     GameRenderAxisMatrix am;
     volatile s32 pad[18];
@@ -81,18 +80,23 @@ s32 SetLookAtMatrix(GameRenderObject *obj) {
     m.m[2][2] = 0x1000;
     MatrixApplyZRotation(&m, 0);
 
-    len = SquareRoot0((obj->field_0C - obj->x) * (obj->field_0C - obj->x) +
-                        (obj->motionX - obj->y) * (obj->motionX - obj->y) +
-                        (obj->motionY - obj->z) * (obj->motionY - obj->z));
+    len = SquareRoot0((camera->fields.targetX - camera->fields.eyeX) *
+                          (camera->fields.targetX - camera->fields.eyeX) +
+                      (camera->fields.targetY - camera->fields.eyeY) *
+                          (camera->fields.targetY - camera->fields.eyeY) +
+                      (camera->fields.targetZ - camera->fields.eyeZ) *
+                          (camera->fields.targetZ - camera->fields.eyeZ));
     if (len == 0) {
         return 1;
     }
 
-    horiz = obj->y - obj->motionX;
+    horiz = camera->fields.eyeY - camera->fields.targetY;
     pitch = (horiz << 12) / len;
     pitch = -pitch;
-    horiz = SquareRoot0((obj->field_0C - obj->x) * (obj->field_0C - obj->x) +
-                          (obj->motionY - obj->z) * (obj->motionY - obj->z));
+    horiz = SquareRoot0((camera->fields.targetX - camera->fields.eyeX) *
+                            (camera->fields.targetX - camera->fields.eyeX) +
+                        (camera->fields.targetZ - camera->fields.eyeZ) *
+                            (camera->fields.targetZ - camera->fields.eyeZ));
     BuildAxisRotMatrix(&am, (s16)pitch, (s16)((horiz << 12) / len), 0x78);
     MulMatrix(&m, &am);
 
@@ -101,15 +105,16 @@ s32 SetLookAtMatrix(GameRenderObject *obj) {
         s32 t2;
 
         len = horiz;
-        horiz = obj->field_0C - obj->x;
+        horiz = camera->fields.targetX - camera->fields.eyeX;
         t1 = (horiz << 12) / len;
-        horiz = obj->motionY - obj->z;
+        horiz = camera->fields.targetZ - camera->fields.eyeZ;
         t2 = (horiz << 12) / len;
         BuildAxisRotMatrix(&am, (s16)(-t1), (s16)t2, 0x79);
         MulMatrix(&m, &am);
     }
 
-    MatrixApplyVectorComponents((s16 *)&m, -obj->x, -obj->y, -obj->z, &outX, &outY, &outZ);
+    MatrixApplyVectorComponents((s16 *)&m, -camera->fields.eyeX, -camera->fields.eyeY,
+                                -camera->fields.eyeZ, &outX, &outY, &outZ);
     m.t[0] = outX;
     m.t[1] = outY;
     m.t[2] = outZ;
