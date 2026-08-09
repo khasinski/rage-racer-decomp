@@ -19,6 +19,7 @@ typedef union RenderBufferAddress {
     s32 byteOffset;
     u8 *bytes;
     void *pointer;
+    SPRT *sprite;
 } RenderBufferAddress;
 
 typedef union VisibilityMaskAddress {

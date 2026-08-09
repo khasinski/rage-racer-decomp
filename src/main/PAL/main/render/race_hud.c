@@ -22,10 +22,13 @@ void DrawRaceHudLabels(s32 mode) {
     if (i < count) {
         offset = 0x23770;
         do {
-            u8 *base = g_DrawBuffer;
+            RenderBufferAddress base;
+            RenderBufferAddress prim;
 
+            base.bytes = g_DrawBuffer;
             i++;
-            AddPrim(base + 0xCC, (void *)(offset + (s32)base));
+            prim.byteOffset = offset + base.byteOffset;
+            AddPrim(base.bytes + 0xCC, prim.pointer);
             offset += 0x14;
         } while (i < count);
     }
@@ -82,9 +85,10 @@ void DrawLapTimes(void) {
     s32 baseOffset;
     s32 *valuePtr;
     GameRaceRanking *list;
-    u8 *base;
+    RenderBufferAddress base;
     void *ot;
-    void *prim;
+    RenderBufferAddress prim;
+    RenderBufferAddress sprite;
     s32 framePad[2];
     s32 value;
 
@@ -120,11 +124,12 @@ void DrawLapTimes(void) {
             DrawTimeValue(0xFA, y, value, tile, 0x3E8);
             y += 0xA;
             valuePtr++;
-            base = g_DrawBuffer;
-            ot = base + 0xCC;
-            prim = (void *)(baseOffset + (s32)base);
-            ((SPRT *)(primOffset + (s32)base + 0x236F8))->clut = tile;
-            AddPrim(ot, prim);
+            base.bytes = g_DrawBuffer;
+            ot = base.bytes + 0xCC;
+            prim.byteOffset = baseOffset + base.byteOffset;
+            sprite.byteOffset = primOffset + base.byteOffset + 0x236F8;
+            sprite.sprite->clut = tile;
+            AddPrim(ot, prim.pointer);
             i++;
             baseOffset += 0x14;
             primOffset += 0x14;
