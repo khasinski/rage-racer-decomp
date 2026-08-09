@@ -23,10 +23,9 @@ void UploadFmvSlice(void) {
     s32 oldBuffer;
     s32 state;
     s32 bufferIndex;
-s32 bufferAddr;
+    s32 bufferAddr;
     s32 pixelCount;
     s32 next;
-    s32 oldOffset;
     s32 index;
     register u16 x asm("$2");
     register u16 step asm("$7");
@@ -74,6 +73,5 @@ s32 bufferAddr;
         }
     }
 
-    oldOffset = oldBuffer * 4;
-    LoadImage(&rect, (void *)*(volatile u32 **)((s32)g_FmvStripBuffers + oldOffset));
+    LoadImage(&rect, (void *)g_FmvStripBuffers[oldBuffer]);
 }
