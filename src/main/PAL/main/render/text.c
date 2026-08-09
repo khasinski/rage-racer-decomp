@@ -4,16 +4,6 @@
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
-typedef struct TextSprt8 {
-    P_TAG tag;
-    s16 x0;
-    s16 y0;
-    u8 u0;
-    u8 v0;
-    u16 clut;
-} TextSprt8;
-
-
 /*
  * Keep the first font base opaque after materialising it. This empty constraint
  * makes gcc emit that base before the sprite cursor while still rematerialising
@@ -28,11 +18,11 @@ void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
 
     packet = *scratch;
     if (*str != 0) {
-        volatile TextSprt8 *sprt;
+        volatile SPRT_8 *sprt;
         u8 *font;
 
         INIT_TEXT_FONT(font);
-        sprt = (TextSprt8 *)packet;
+        sprt = (SPRT_8 *)packet;
         do {
             s32 cell = *str - 0x20;
 
@@ -62,7 +52,7 @@ void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
                 sprt->clut = clutIndex;
                 AddPrim(g_DrawBuffer + 0xCC, (void *)sprt);
                 sprt++;
-                packet += sizeof(TextSprt8);
+                packet += sizeof(SPRT_8);
             }
             x += 8;
         } while (*str != 0);
@@ -84,11 +74,11 @@ void GameDrawText8x8Shaded(
 
     packet = *scratch;
     if (*str != 0) {
-        volatile TextSprt8 *sprt;
+        volatile SPRT_8 *sprt;
         u8 *font;
 
         INIT_TEXT_FONT(font);
-        sprt = (TextSprt8 *)packet;
+        sprt = (SPRT_8 *)packet;
         do {
             s32 cell = *str - 0x20;
 
@@ -118,15 +108,15 @@ void GameDrawText8x8Shaded(
                 sprt->y0 = y;
                 sprt->u0 = u;
                 sprt->v0 = v;
-                sprt->tag.r0 = intensity;
-                sprt->tag.g0 = intensity;
-                sprt->tag.b0 = intensity;
+                sprt->t.r0 = intensity;
+                sprt->t.g0 = intensity;
+                sprt->t.b0 = intensity;
                 asm("");
                 prim = (u8 *)sprt;
                 sprt->clut = clutIndex;
                 AddPrim(g_DrawBuffer + 0xCC, prim);
                 sprt++;
-                packet += sizeof(TextSprt8);
+                packet += sizeof(SPRT_8);
             }
             x += 8;
         } while (*str != 0);
@@ -142,11 +132,11 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
 
     packet = *scratch;
     if (*str != 0) {
-        volatile TextSprt8 *sprt;
+        volatile SPRT_8 *sprt;
         u8 *font;
 
         INIT_TEXT_FONT(font);
-        sprt = (TextSprt8 *)packet;
+        sprt = (SPRT_8 *)packet;
         do {
             s32 cell = *str - 0x20;
 
@@ -177,7 +167,7 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
                 sprt->clut = clutIndex;
                 AddPrim(g_DrawBuffer + 0xCC, (void *)sprt);
                 sprt++;
-                packet += sizeof(TextSprt8);
+                packet += sizeof(SPRT_8);
             }
             x += 8;
         } while (*str != 0);
