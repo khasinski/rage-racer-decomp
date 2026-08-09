@@ -21,7 +21,8 @@ PATTERNS = {
         r"(?:[^();\n]|\([^();\n]*\))*?[+-]\s*(?:0x[0-9A-Fa-f]+|[1-9][0-9]*)"
     ),
     "pointer_integer_casts": re.compile(
-        r"\(\s*(?:s32|u32|long|unsigned\s+long)\s*\)\s*(?:[A-Za-z_&]|\()"
+        r"\(\s*(?:s32|u32|long|unsigned\s+long)\s*\)\s*"
+        r"(?:[A-Za-z_&]|\(\s*[A-Za-z_&])"
     ),
     "address_reinterpret_casts": re.compile(
         r"\*\s*\(\s*(?:u8|s8|u16|s16|u32|s32)\s*\*\s*\)\s*\(?\s*&"

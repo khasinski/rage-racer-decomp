@@ -66,6 +66,20 @@ void f(u8 *bytes, Packet *packet, u8 value) {
 
         self.assertEqual(counts["byte_pointer_arithmetic"], 1)
 
+    def test_pointer_integer_casts_ignore_integer_expressions(self):
+        source = r'''
+void f(void *pointer, s32 value) {
+    value = (s32)pointer;
+    value += (s32)(pointer + 3);
+    value += (u32)((-0x100) - value) << 8;
+}
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            Path(directory, "sample.c").write_text(source)
+            counts = count_debt(Path(directory))
+
+        self.assertEqual(counts["pointer_integer_casts"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()
