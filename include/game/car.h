@@ -114,7 +114,7 @@ typedef struct GameCarRuntime {
      * is the wrong-way test. */
     s16 facingBackwards;
     u8 padBA[2];
-    s32 field_BC;
+    s32 aiEnabled;
     s32 field_C0;
     s32 field_C4;
     s32 worldVelocityX;
@@ -135,7 +135,7 @@ typedef struct GameCarRuntime {
     s32 routeIndex;
     s16 avoidanceActive;
     u8 pad106[2];
-    s32 field_108;
+    s32 baseBodyYaw;
     s16 nearbyCarCount;
     s16 field_10E;
     s16 field_110;
@@ -313,8 +313,8 @@ typedef struct GearCurveRow {
 
 extern GearCurveRow g_GearTorqueCurve[];
 
-/* Drivetrain / input block at `car->field_BC`; the physics code addresses the
- * car's second half through this rather than through GameCarRuntime.
+/* Drivetrain / input block beginning at +0xBC; the player physics code addresses
+ * the car's second half through this rather than through GameCarRuntime.
  *
  * Calibrated on g_PlayerCar (D_8009E6D4), which is a different 0x19C object from
  * g_Cars: it shares the stride but not the meaning of every byte.
@@ -476,7 +476,8 @@ typedef struct PlayerCarRuntime {
 /* A second, halfword-wide view of that same block, for the code that loads
  * 0x104..0x134 as s16 where GameCarDrive declares s32. See names.md 3b. */
 typedef struct GameCarAiBlock {
-    u8 pad0[0xC];
+    s32 enabled;
+    u8 pad4[8];
     s32 worldVelocityX;   /* +0x0C world velocity x, sin(headingAngle) * speed / 256 */
     u8 pad10[4];
     s32 worldVelocityZ;   /* +0x14 world velocity z, cos(headingAngle) * speed / 256 */
@@ -554,7 +555,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index);
 /* Draws one car, from the DrawCars loop; two LOD tiers plus the mirrored
  * wheel pass, submitted through SubmitModel. */
 /* Selects model bank 1 and calls DrawCar for each of the 11 runtime cars
- * whose activeFlag != -1 and field_BC == 1. */
+ * whose activeFlag != -1 and aiEnabled == 1. */
 void DrawCars(void);
 /* Car motion-state handler for state98 == 1: the one-frame jump takeoff, which
  * hands over to the airborne handler UpdateCarAirborne.  Declared K&R because

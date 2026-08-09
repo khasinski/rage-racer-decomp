@@ -10,7 +10,7 @@
  * world velocity, triggers over-rev / redline engine-audio cues (comparing
  * against the spec block's redline at +0x100 / +0x106), advances the car
  * (AdvanceCarPosition), and detects the jump/launch trigger. The drive sub-block is
- * the GameCarDrive view of car->field_BC.
+ * the GameCarDrive view beginning at offset +0xBC.
  */
 void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
     GameCarDrive *route = &car->drive;

@@ -19,7 +19,7 @@
  * offset to the track half-width (`leftHalfWidth`/`rightHalfWidth`), projects the target point
  * off the centre-line along the inward normal (0x1000 - smoothed track angle),
  * then nudges the car's headingAngle toward that target (GetAngleDelta). Writes
- * the steer value into steeringAngle and the route sub-block (field_BC).
+ * the steer value into steeringAngle and the rival AI block at `aiEnabled`.
  * Register-pinned locals are match-load-bearing.
  */
 void SteerCarAlongRoute(GameCarRuntime *car) {
@@ -38,7 +38,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
 
     lateral = car->aiLateralOffset;
     offset = car->trackPointIndex;
-    ai = (GameCarAiBlock *)&car->field_BC;
+    ai = (GameCarAiBlock *)&car->aiEnabled;
     car->field_DC = 0;
 
     if (g_RaceSeries != 0) {
@@ -132,7 +132,7 @@ void UpdateRaceCars(void) {
     q = g_Cars;
     do {
         q->field_F8 = 0;
-        q->bodyYaw = q->field_108;
+        q->bodyYaw = q->baseBodyYaw;
         q->collisionFlag = (u16)q->collisionFlag & 1;
         i++;
         q++;
@@ -181,7 +181,7 @@ void UpdateRaceCars(void) {
     walk = g_Cars;
     do {
         if (walk->activeFlag != -1) {
-            drive = (GameCarAiBlock *)&base->field_BC;
+            drive = (GameCarAiBlock *)&base->aiEnabled;
             if (walk->boostTimer > 0) {
                 if (walk->boostAccelerationThreshold < walk->boostTimer && walk->speed >= 0x321) {
                     walk->acceleration = 0;
@@ -214,9 +214,9 @@ void UpdateRaceCars(void) {
     pm2 = &m2;
     walk = g_Cars;
     do {
-        drive = (GameCarAiBlock *)&base->field_BC;
+        drive = (GameCarAiBlock *)&base->aiEnabled;
         if (walk->activeFlag != -1) {
-            walk->field_108 = walk->bodyYaw;
+            walk->baseBodyYaw = walk->bodyYaw;
             t = rsin(walk->headingAngle) * walk->speed;
             if (t < 0) {
                 t += 0xFF;
@@ -400,7 +400,7 @@ void UpdateAttractCars(void) {
     for (i = 0; i < 11; i++) {
         c0->field_F8 = 0;
         c0->collisionFlag = 0;
-        c0->bodyYaw = c0->field_108;
+        c0->bodyYaw = c0->baseBodyYaw;
         c0->progressA = ((c0->progressA) % (g_TrackLength));
         c0++;
     }
@@ -433,7 +433,7 @@ void UpdateAttractCars(void) {
         sub = g_Cars;
         do {
         if (sub->activeFlag != -1) {
-            drive = (GameCarAiBlock *)&car->field_BC;
+            drive = (GameCarAiBlock *)&car->aiEnabled;
 
             if (sub->acceleration < sub->accelerationLimit) {
                 sub->acceleration = sub->accelerationStep + sub->acceleration;
@@ -455,11 +455,11 @@ void UpdateAttractCars(void) {
         car = g_Cars;
         base = g_Cars;
         do {
-        drive = (GameCarAiBlock *)&car->field_BC;
+        drive = (GameCarAiBlock *)&car->aiEnabled;
 
         if (base->activeFlag != -1) {
             s32 t;
-            base->field_108 = base->bodyYaw;
+            base->baseBodyYaw = base->bodyYaw;
             t = rsin(base->headingAngle) * base->speed;
             if (t < 0) {
                 t += 0xFF;

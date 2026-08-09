@@ -298,7 +298,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
 /*
  * Car motion handler for state98 == 2 (airborne / jump): decays velocity and
  * spin, advances the car (AdvanceCarPosition), and lands it when it returns to the
- * ground. The drive sub-block is the GameCarDrive view of car->field_BC.
+ * ground. The drive sub-block is the GameCarDrive view beginning at +0xBC.
  */
 void UpdateCarAirborne(PlayerCarRuntime *car, s32 unused) {
     GameCarDrive *r = &car->drive;

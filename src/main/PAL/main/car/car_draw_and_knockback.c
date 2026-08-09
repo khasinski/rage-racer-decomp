@@ -102,7 +102,7 @@ void DrawCars(void) {
     one = 1;
     do {
         if (base->activeFlag != (i++, minus_one)) {
-            if (base->field_BC == one) {
+            if (base->aiEnabled == one) {
                 DrawCar((GameRenderObject *)base);
             }
         }
@@ -144,7 +144,7 @@ void UpdateCarTiltCounter(GameCarRuntime *car) {
 
     obj = car;
 
-    ptr = (u8 *)&obj->field_BC;
+    ptr = (u8 *)&obj->aiEnabled;
     if (g_RacePhase < 2) {
         value = 8;
     } else {

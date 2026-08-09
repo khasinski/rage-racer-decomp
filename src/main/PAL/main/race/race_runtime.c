@@ -476,7 +476,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         base = baseValue;
     }
     ent->collisionFlag = 0;
-    ent->field_BC = 1;
+    ent->aiEnabled = 1;
     ent->modelIndex = av;
     val122 = slots[pos].halves.modelId;
     scene = g_RaceSeries;
@@ -529,7 +529,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->yawRate = 0;
         ent->routeMarkerActive = 0;
         ent->slideInput.value = 0;
-        ent->field_108 = ent->bodyYaw;
+        ent->baseBodyYaw = ent->bodyYaw;
         p = base + (sub + lev * 144);
         ent->targetYaw = ent->bodyYaw;
         ent->headingAngle = ent->bodyYaw;
@@ -615,7 +615,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
   }
   __asm__ volatile("");
   c = ent2_R7->boostAccelerationThreshold;
-  sub_R6 = (GameCarAiBlock *)&ent2_R7->field_BC;
+  sub_R6 = (GameCarAiBlock *)&ent2_R7->aiEnabled;
   ent2_R7->boostTimer = 0;
   if (c < 0)
   {

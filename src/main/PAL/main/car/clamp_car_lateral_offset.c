@@ -8,7 +8,7 @@
  * half-width at its current point: `leftHalfWidth` when offset is negative,
  * `rightHalfWidth` otherwise. `carIndex` selects the
  * scaling: <4 uses 5/8 of the half-width, else 4/7. Writes the clamped value
- * back into the route sub-block (field_BC + 0x60) only if it would exceed the
+ * back into `aiLateralOffset` only if it would exceed the
  * limit.
  */
 void ClampCarLateralOffset(GameCarRuntime *car, s32 carIndex) {
@@ -20,7 +20,7 @@ void ClampCarLateralOffset(GameCarRuntime *car, s32 carIndex) {
     s32 trackIndex;
 
     current = carReg->aiLateralOffset;
-    state = (GameCarAiBlock *)&carReg->field_BC;
+    state = (GameCarAiBlock *)&carReg->aiEnabled;
     magnitude = current;
     if (current < 0) {
         magnitude = -current;
