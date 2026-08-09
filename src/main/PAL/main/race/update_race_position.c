@@ -12,7 +12,7 @@ void UpdateRacePosition(void) {
     CarProgressWindow *cars;
 
     active = 1;
-    if (g_LapCount >= ((GameRaceRanking *)&g_PlayerCar.lap)->count) {
+    if (g_LapCount >= g_PlayerCar.lap) {
         total = g_PlayerCar.progressA + g_PlayerCar.progressB;
         cars = (CarProgressWindow *)&g_Cars[0].progressB;
 

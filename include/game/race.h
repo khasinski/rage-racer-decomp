@@ -109,12 +109,6 @@ extern GameRaceProgress g_TimeAttackSave;
 
 void ResetProgressSlot(struct CarEntry *cars, GameRaceProgress *progress);
 
-typedef struct GameRaceRanking {
-    s16 count;
-    u8 pad2[0x1A];
-    s32 values[1];
-} GameRaceRanking;
-
 extern s32 g_ClosestRivalRank;
 
 /* Course-select gate: `g_CourseIndex < (class < 2 ? 2 : 3)`, or 6 : 7 for the

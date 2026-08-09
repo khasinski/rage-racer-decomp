@@ -84,7 +84,6 @@ void DrawLapTimes(void) {
     s32 primOffset;
     s32 baseOffset;
     s32 *valuePtr;
-    GameRaceRanking *list;
     RenderBufferAddress base;
     void *ot;
     RenderBufferAddress prim;
@@ -92,8 +91,7 @@ void DrawLapTimes(void) {
     s32 framePad[2];
     s32 value;
 
-    list = (GameRaceRanking *)&g_PlayerCar.lap;
-    visibleCount = list->count;
+    visibleCount = g_PlayerCar.lap;
     if (visibleCount > g_LapCount) {
         visibleCount = g_LapCount;
     }
@@ -104,7 +102,7 @@ void DrawLapTimes(void) {
         baseOffset = 0x236F8;
         primOffset = 0;
         y = 0x2E;
-        valuePtr = list->values;
+        valuePtr = g_PlayerCar.lapTimes.table.milliseconds;
 
         do {
             if (i == activeIndex) {
