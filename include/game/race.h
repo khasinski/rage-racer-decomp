@@ -319,7 +319,7 @@ extern s32 g_NameEntryCursor;
 extern s16 g_PadMirrorMasks[];
 extern u8 *g_PlaceSuffixNames[];
 extern s16 g_PlayerGear;
-extern s32 g_PlayerVelocity[];
+extern Vec4 g_PlayerVelocity[2];
 extern s32 g_PrizeMoney3rd[][6][3];
 extern s32 g_PrologueCutIndex;
 typedef struct PrologueLine {

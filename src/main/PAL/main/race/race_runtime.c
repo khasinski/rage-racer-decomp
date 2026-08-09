@@ -112,19 +112,19 @@ void UpdateWaypoints(void) {
                 PlaySoundCue(0xA);
 
                 waypoint->active = activeState;
-                *(Block16 *)&CURRENT_WAYPOINT->velocityX = *(Block16 *)g_PlayerVelocity;
+                CURRENT_WAYPOINT->velocity.vector = g_PlayerVelocity[0];
 
-                CURRENT_WAYPOINT->velocityX *= 2;
-                CURRENT_WAYPOINT->velocityY *= 2;
+                CURRENT_WAYPOINT->velocity.fields.x *= 2;
+                CURRENT_WAYPOINT->velocity.fields.y *= 2;
                 CURRENT_WAYPOINT->velocityMagnitude =
-                    ((CURRENT_WAYPOINT->velocityX * CURRENT_WAYPOINT->velocityX) + (CURRENT_WAYPOINT->velocityY * CURRENT_WAYPOINT->velocityY)) /
+                    ((CURRENT_WAYPOINT->velocity.fields.x * CURRENT_WAYPOINT->velocity.fields.x) + (CURRENT_WAYPOINT->velocity.fields.y * CURRENT_WAYPOINT->velocity.fields.y)) /
                     0x2000;
             }
         } else if (waypoint->active == activeState) {
-            CURRENT_WAYPOINT->x += CURRENT_WAYPOINT->velocityX / 0x100;
-            CURRENT_WAYPOINT->y += CURRENT_WAYPOINT->velocityY / 0x100;
-            CURRENT_WAYPOINT->velocityX = (CURRENT_WAYPOINT->velocityX * 15) / 16;
-            CURRENT_WAYPOINT->velocityY = (CURRENT_WAYPOINT->velocityY * 15) / 16;
+            CURRENT_WAYPOINT->x += CURRENT_WAYPOINT->velocity.fields.x / 0x100;
+            CURRENT_WAYPOINT->y += CURRENT_WAYPOINT->velocity.fields.y / 0x100;
+            CURRENT_WAYPOINT->velocity.fields.x = (CURRENT_WAYPOINT->velocity.fields.x * 15) / 16;
+            CURRENT_WAYPOINT->velocity.fields.y = (CURRENT_WAYPOINT->velocity.fields.y * 15) / 16;
             CURRENT_WAYPOINT->rotationY += CURRENT_WAYPOINT->velocityMagnitude / 0x100;
             CURRENT_WAYPOINT->velocityMagnitude = (CURRENT_WAYPOINT->velocityMagnitude * 15) / 16;
 
@@ -134,7 +134,7 @@ void UpdateWaypoints(void) {
                 CURRENT_WAYPOINT->rotationZ = 0x400;
             }
 
-            if ((CURRENT_WAYPOINT->velocityX == 0) && (CURRENT_WAYPOINT->velocityY == 0) && (CURRENT_WAYPOINT->velocityMagnitude == 0)) {
+            if ((CURRENT_WAYPOINT->velocity.fields.x == 0) && (CURRENT_WAYPOINT->velocity.fields.y == 0) && (CURRENT_WAYPOINT->velocityMagnitude == 0)) {
                 waypoint->active = 2;
             }
         }
@@ -154,9 +154,7 @@ static inline void ClearScratchRenderMode37AAC(void) {
  * Renders the 6 waypoints. For each active-shaped slot it builds a rotation
  * matrix from the waypoint's Y and Z rotations and emits
  * two GTE draw primitives (SubmitModel) into the scratchpad OT: the second is
- * the same billboard rotated by 0x800 (180 degrees). `point` walks the
- * TrackWaypointRuntime array g_Waypoints. The point cursor starts at each
- * slot's motion subrecord. Its register pin is match-load-bearing.
+ * the same billboard rotated by 0x800 (180 degrees).
  */
 void DrawWaypoints(void) {
     Matrix mtx0;
@@ -164,7 +162,7 @@ void DrawWaypoints(void) {
     s32 drawId;
     s32 i;
     Matrix *mtx1Ptr;
-    register TrackWaypointMotionCursor *point asm("$16");
+    TrackWaypointRuntime *waypoint;
     s32 frameValue;
     s32 drawArg;
 
@@ -172,14 +170,14 @@ void DrawWaypoints(void) {
     SelectModelBank(0);
     i = 0;
     mtx1Ptr = &mtx1;
-    point = (TrackWaypointMotionCursor *)&g_Waypoints[0].motion;
+    waypoint = g_Waypoints;
 
     do {
-        BuildRotMatrixY(&mtx0, point->motion.rotationY);
+        BuildRotMatrixY(&mtx0, waypoint->motion.rotationY);
         MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx0);
-        BuildRotMatrixZ(mtx1Ptr, point->motion.rotationZ);
+        BuildRotMatrixZ(mtx1Ptr, waypoint->motion.rotationZ);
         MulMatrix(&mtx0, mtx1Ptr);
-        SetGteObjectMatrix((void *)0x1F80011C, &point->motion, &mtx0);
+        SetGteObjectMatrix((void *)0x1F80011C, &waypoint->motion, &mtx0);
         frameValue = g_ModelBankCount;
         ClearScratchRenderMode37AAC();
         drawArg = 1;
@@ -190,7 +188,7 @@ void DrawWaypoints(void) {
 
         BuildRotMatrixY(mtx1Ptr, 0x800);
         MulMatrix2(&mtx0, mtx1Ptr);
-        SetGteObjectMatrix((void *)0x1F80011C, &point->motion, mtx1Ptr);
+        SetGteObjectMatrix((void *)0x1F80011C, &waypoint->motion, mtx1Ptr);
         frameValue = g_ModelBankCount;
         ClearScratchRenderMode37AAC();
         drawArg = 1;
@@ -200,7 +198,7 @@ void DrawWaypoints(void) {
         SubmitModel((void *)SCRATCHPAD_ADDR, drawArg);
 
         i++;
-        point++;
+        waypoint++;
     } while (i < 6);
 }
 
