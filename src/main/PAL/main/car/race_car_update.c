@@ -23,7 +23,7 @@
  * Register-pinned locals are match-load-bearing.
  */
 void SteerCarAlongRoute(GameCarRuntime *car) {
-    GameCarRuntime *route;
+    GameCarAiBlock *ai;
     GameTrackPoint *point;
     s32 index;
     s32 offset;
@@ -38,7 +38,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
 
     lateral = car->field_11C;
     offset = car->trackPointIndex;
-    route = (GameCarRuntime *)&car->field_BC;
+    ai = (GameCarAiBlock *)&car->field_BC;
     car->field_DC = 0;
 
     if (g_RaceSeries != 0) {
@@ -99,7 +99,7 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
         value = GetAngleDelta(car->headingAngle, angle);
         value += car->headingAngle;
         car->headingAngle = value;
-        route->trackPointIndex = value;
+        ai->field_EC = value;
         car->field_24 = value;
     }
 }

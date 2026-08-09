@@ -111,14 +111,17 @@ void ApplyBodyColor1(u32 colour, u32 imageData) {
     u16 s2;
     volatile u16 *idx;
     volatile u16 *color;
+    const u16 *primary;
+    const u16 *secondary;
     u16 c;
     s32 i;
 
     raw = imageData;
-    colour <<= 1;
+    primary = &g_BodyColorPrimary[colour];
+    secondary = &g_BodyColorSecondary[colour];
     base = (u16 *)(raw + 0x7060);
-    s1 = *(u16 *)((u8 *)g_BodyColorPrimary + colour);
-    s2 = *(u16 *)((u8 *)g_BodyColorSecondary + colour);
+    s1 = *primary;
+    s2 = *secondary;
 
     *(u16 *)(raw + 0x7162) = s1;
     BlendPaintColor(s1, s2);
