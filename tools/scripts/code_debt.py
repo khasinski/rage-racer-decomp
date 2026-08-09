@@ -42,7 +42,9 @@ PATTERNS = {
     ),
     "statement_expressions": re.compile(r"\(\s*\{"),
     "asm_aliases": re.compile(r"\.globl\s+func_[0-9A-Fa-f]+"),
-    "header_asm_aliases": re.compile(r"^\s*extern\b[^;\n]*\basm\s*\(", re.MULTILINE),
+    "header_asm_aliases": re.compile(
+        r'^\s*extern\b[^;\n]*\basm\s*\(\s*"(?!0x)', re.MULTILINE
+    ),
     "unknown_fields": re.compile(r"\b(?:field_[0-9A-Fa-f]+|unk[0-9A-Fa-f]+)\b"),
     "externs_in_c": re.compile(r"^\s*extern\b", re.MULTILINE),
     "declaration_overrides": re.compile(

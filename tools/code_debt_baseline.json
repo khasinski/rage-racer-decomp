@@ -7,7 +7,7 @@
   "empty_barriers": 142,
   "externs_in_c": 0,
   "field_macros": 0,
-  "header_asm_aliases": 15,
+  "header_asm_aliases": 6,
   "pointer_integer_casts": 244,
   "raw_offset_dereferences": 19,
   "register_pins": 228,

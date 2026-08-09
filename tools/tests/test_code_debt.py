@@ -87,7 +87,9 @@ void f(void *pointer, s32 value) {
         with tempfile.TemporaryDirectory() as source_directory, tempfile.TemporaryDirectory() as header_directory:
             Path(source_directory, "sample.c").write_text("void f(void) {}\n")
             Path(header_directory, "sample.h").write_text(
-                'extern s32 alias asm("canonical");\nextern s32 ordinary;\n'
+                'extern s32 alias asm("canonical");\n'
+                'extern s32 hardware asm("0x1F800000");\n'
+                'extern s32 ordinary;\n'
             )
             counts = count_debt(Path(source_directory), Path(header_directory))
 
