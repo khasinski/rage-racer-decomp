@@ -742,7 +742,7 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
     base = (u32 *)car;
     dst = (Block16 *)&g_CameraCar;
     src = (Block16 *)base;
-    end = (Block16 *)((u8 *)base + 0x190);
+    end = src + sizeof(GameCarRuntime) / sizeof(*src);
     do {
         *dst = *src;
         src++;
