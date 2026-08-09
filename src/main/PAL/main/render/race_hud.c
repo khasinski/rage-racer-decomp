@@ -218,6 +218,6 @@ void DrawSplitDelta(s32 delta, s32 y) {
         return;
     }
 
-    *(u16 *)(base + 0x237CE) = temp;
+    ((SPRT *)(base + 0x23770))[4].clut = temp;
     AddPrim(ot + 0xCC, (void *)firstOffset);
 }
