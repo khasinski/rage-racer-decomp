@@ -221,7 +221,7 @@ void RotateTeamLogoCw(void) {
             src = srcStart;
             do {
                 dst = (u32 *)((i * 8 + k) * 8);
-                                indexAddress.wordPointer = dst;
+                indexAddress.wordPointer = dst;
                 indexAddress.byteOffset += 7;
                 dst = indexAddress.wordPointer;
                 indexAddress.wordPointer = dst;
