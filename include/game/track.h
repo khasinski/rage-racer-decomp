@@ -42,6 +42,18 @@ typedef struct GameTrackPoint {
     u16 segmentLength;
 } GameTrackPoint;
 
+typedef struct TrackAiSpeedKey {
+    s16 progress;
+    u16 pitch;
+    s16 targetSpeeds[4];
+} TrackAiSpeedKey;
+
+typedef struct TrackEventData {
+    s32 trackWalkStart;
+    u8 reserved004[0x470];
+    TrackAiSpeedKey aiSpeedKeys[2][48];
+} TrackEventData;
+
 /*
  * One corner's centre of curvature. `GameTrackPoint.arcRef >> 4` indexes this
  * array, which InstallTrackPoints publishes at `g_TrackArcCenters`

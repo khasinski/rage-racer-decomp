@@ -482,12 +482,6 @@ typedef struct GameCarAiBlock {
     u8 pad80[0x60];
 } GameCarAiBlock;
 
-typedef struct CarAiSpeedKey {
-    s16 progress;
-    u16 pitch;
-    s16 targetSpeeds[4];
-} CarAiSpeedKey;
-
 typedef struct RivalStartEntry {
     s32 x;
     s32 z;

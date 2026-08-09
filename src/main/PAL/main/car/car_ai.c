@@ -451,14 +451,14 @@ inner:
 }
 
 void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
-  CarAiSpeedKey *p[2];
+    TrackAiSpeedKey *p[2];
   s16 lim[4];
   s16 val[2];
   register GameCarAiBlock *sub_R9 asm("$9");
   s32 rpm;
   s32 g0;
   s32 raw;
-  CarAiSpeedKey *tbl;
+  TrackAiSpeedKey *tbl;
   s32 f;
   s32 lo_R7;
   s32 hi;
@@ -482,7 +482,7 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
   {
     car->routeMarkerIndex = 0;
   }
-  tbl = (CarAiSpeedKey *)(g_TrackEventData + ((g_RaceSeries * 576) + 0x474));
+  tbl = ((TrackEventData *)g_TrackEventData)->aiSpeedKeys[g_RaceSeries];
   p[0] = &tbl[g0];
   p[1] = &tbl[g0 + 1];
   lim[0] = p[0]->progress;

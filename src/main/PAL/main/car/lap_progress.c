@@ -43,7 +43,7 @@ void SeedCarLapProgress(GameCarRuntime *car, s32 mode) {
 
     obj->field_68 = 0;
     if (state != 0) {
-        index = *(s32 *)g_TrackEventData;
+        index = ((TrackEventData *)g_TrackEventData)->trackWalkStart;
         if (mode == 1) {
             s32 count;
             u8 *table;
@@ -82,7 +82,7 @@ while (1) {
             }
         }
     } else {
-        index = *(s32 *)g_TrackEventData;
+        index = ((TrackEventData *)g_TrackEventData)->trackWalkStart;
         if (mode == 0) {
             s32 count;
             u8 *table;

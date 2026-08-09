@@ -295,7 +295,7 @@ void EnterRaceScene(void) {
     ResetReplayWriteCursor();
     LoadTrackTexturePageRange();
     InitTrackLighting();
-    g_TrackWalkStart = *(s32 *)g_TrackEventData;
+    g_TrackWalkStart = ((TrackEventData *)g_TrackEventData)->trackWalkStart;
     if (g_CourseIndex == 3) {
         g_LapCount = 6;
     } else {
