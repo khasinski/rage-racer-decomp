@@ -46,27 +46,27 @@ void SeedCarLapProgress(GameCarRuntime *car, s32 mode) {
         index = g_TrackEventData->trackWalkStart;
         if (mode == 1) {
             s32 count;
-            u8 *table;
+            GameTrackPoint *table;
             s32 wrapped;
 
             count = g_TrackPointCount;
-            table = (u8 *)g_TrackPoints;
+            table = g_TrackPoints;
 while (1) {
             index++;
             wrapped = index % count;
             if (cur == wrapped) {
                 break;
             }
-            total += (s16)((GameTrackPoint *)table)[wrapped].segmentLength;
+            total += (s16)table[wrapped].segmentLength;
             }
         } else {
             s32 count;
-            u8 *table;
+            GameTrackPoint *table;
             s32 wrapped;
             s32 mod;
 
             count = g_TrackPointCount;
-            table = (u8 *)g_TrackPoints;
+            table = g_TrackPoints;
 while (1) {
             if (index < 0) {
                 wrapped = index + count;
@@ -74,7 +74,7 @@ while (1) {
                 wrapped = index;
             }
             mod = wrapped % count;
-            total -= (s16)((GameTrackPoint *)table)[mod].segmentLength;
+            total -= (s16)table[mod].segmentLength;
             if (cur == wrapped) {
                 break;
             }
@@ -85,24 +85,24 @@ while (1) {
         index = g_TrackEventData->trackWalkStart;
         if (mode == 0) {
             s32 count;
-            u8 *table;
+            GameTrackPoint *table;
             s32 wrapped;
 
             count = g_TrackPointCount;
-            table = (u8 *)g_TrackPoints;
+            table = g_TrackPoints;
             do {
                 index++;
                 wrapped = index % count;
-                total -= (s16)((GameTrackPoint *)table)[wrapped].segmentLength;
+                total -= (s16)table[wrapped].segmentLength;
             } while (cur != wrapped);
 
         } else {
             s32 count;
-            u8 *table;
+            GameTrackPoint *table;
             s32 mod;
 
             count = g_TrackPointCount;
-            table = (u8 *)g_TrackPoints;
+            table = g_TrackPoints;
             do {
                 if (index < 0) {
                     mode = index + count;
@@ -113,7 +113,7 @@ while (1) {
                     break;
                 }
                 mod = mode % count;
-                total += (s16)((GameTrackPoint *)table)[mod].segmentLength;
+                total += (s16)table[mod].segmentLength;
                 index--;
             } while (1);
         }
