@@ -195,10 +195,10 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     }
 
     BuildRotMatrixY(&mtx, n);
-    ApplyMatrixSV((s32 *)&mtx, &verts[0], (s16 *)&out[0]);
-    ApplyMatrixSV((s32 *)&mtx, &verts[1], (s16 *)&out[1]);
-    ApplyMatrixSV((s32 *)&mtx, &verts[2], (s16 *)&out[2]);
-    ApplyMatrixSV((s32 *)&mtx, &verts[3], (s16 *)&out[3]);
+    ApplyMatrixSV(&mtx, &verts[0], (s16 *)&out[0]);
+    ApplyMatrixSV(&mtx, &verts[1], (s16 *)&out[1]);
+    ApplyMatrixSV(&mtx, &verts[2], (s16 *)&out[2]);
+    ApplyMatrixSV(&mtx, &verts[3], (s16 *)&out[3]);
 
     {
         s16 x0;
