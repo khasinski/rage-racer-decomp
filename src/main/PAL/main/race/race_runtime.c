@@ -608,27 +608,27 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     idxoff1_R4 = idxoff1_R4 * 16;
     p1_R4 = (TrackRivalAiConfig *)(base_R9 + (idxoff1_R4 + (lev1_R3 * 192)) + 0x8F4);
     ent2_R7->targetSpeed = (p1_R4->speed * 1168) / 160;
-    ent2_R7->field_126 = p1_R4->field_126;
-    ent2_R7->field_128 = p1_R4->field_128;
-    ent2_R7->field_12A = p1_R4->field_12A;
+    ent2_R7->accelerationStep = p1_R4->accelerationStep;
+    ent2_R7->boostAccelerationThreshold = p1_R4->boostAccelerationThreshold;
+    ent2_R7->collisionBoostDuration = p1_R4->collisionBoostDuration;
     ent2_R7->boostAcceleration = p1_R4->boostAcceleration;
   }
   __asm__ volatile("");
-  c = ent2_R7->field_128;
+  c = ent2_R7->boostAccelerationThreshold;
   sub_R6 = (GameCarAiBlock *)&ent2_R7->field_BC;
   ent2_R7->boostTimer = 0;
   if (c < 0)
   {
-    ent2_R7->field_128 = 0;
+    ent2_R7->boostAccelerationThreshold = 0;
   }
   else
     if (!(c < 11))
   {
-    ent2_R7->field_128 = 10;
+    ent2_R7->boostAccelerationThreshold = 10;
   }
-  if ((sub_R6->field_12A) < 0)
+  if ((sub_R6->collisionBoostDuration) < 0)
   {
-    sub_R6->field_12A = 0;
+    sub_R6->collisionBoostDuration = 0;
   }
   c = sub_R6->boostAcceleration;
   if (c <= 0)

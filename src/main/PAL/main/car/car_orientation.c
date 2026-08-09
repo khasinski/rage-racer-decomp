@@ -753,7 +753,7 @@ s32 CollidePlayerWithCars(PlayerCarRuntime *car)
     s32 vz;
     opponent->speed = opponent->speed / 2;
     opponent->acceleration = opponent->acceleration / 2;
-    opponent->boostTimer = opponent->field_12A;
+    opponent->boostTimer = opponent->collisionBoostDuration;
     vx = (s16)((u16)opponent->worldVelocityX - (u16)car->drive.accelPos);
     velocityDelta.x = vx / 0x20;
     vz = (s16)((u16)opponent->worldVelocityZ - (u16)car->drive.brakePos);

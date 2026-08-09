@@ -183,7 +183,7 @@ void UpdateRaceCars(void) {
         if (walk->activeFlag != -1) {
             drive = (GameCarAiBlock *)&base->field_BC;
             if (walk->boostTimer > 0) {
-                if (walk->field_128 < walk->boostTimer && walk->speed >= 0x321) {
+                if (walk->boostAccelerationThreshold < walk->boostTimer && walk->speed >= 0x321) {
                     walk->acceleration = 0;
                 } else if (drive->accelerationLimit >= walk->acceleration) {
                     walk->acceleration = drive->boostAcceleration + walk->acceleration;
@@ -192,7 +192,7 @@ void UpdateRaceCars(void) {
                 }
                 drive->boostTimer = drive->boostTimer - 1;
             } else if (walk->accelerationLimit >= walk->acceleration) {
-                walk->acceleration = walk->field_126 + walk->acceleration;
+                walk->acceleration = walk->accelerationStep + walk->acceleration;
             } else {
                 walk->acceleration = walk->accelerationLimit;
             }
@@ -436,7 +436,7 @@ void UpdateAttractCars(void) {
             drive = (GameCarAiBlock *)&car->field_BC;
 
             if (sub->acceleration < sub->accelerationLimit) {
-                sub->acceleration = sub->field_126 + sub->acceleration;
+                sub->acceleration = sub->accelerationStep + sub->acceleration;
             } else {
                 sub->acceleration = sub->accelerationLimit;
             }

@@ -57,9 +57,9 @@ typedef struct TrackRivalStart {
 
 typedef struct TrackRivalAiConfig {
     s16 speed;
-    u16 field_126;
-    u16 field_128;
-    u16 field_12A;
+    u16 accelerationStep;
+    u16 boostAccelerationThreshold;
+    u16 collisionBoostDuration;
     u16 boostAcceleration;
     u16 field_132;
     u16 field_134;

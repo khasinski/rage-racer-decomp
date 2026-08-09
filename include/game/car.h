@@ -141,9 +141,9 @@ typedef struct GameCarRuntime {
     s16 avoidanceStep;
     s16 field_122;
     s16 targetSpeed;
-    s16 field_126;
-    s16 field_128;
-    s16 field_12A;
+    s16 accelerationStep;
+    s16 boostAccelerationThreshold;
+    s16 collisionBoostDuration;
     s16 boostAcceleration;
     s16 boostTimer;
     s16 accelerationLimit;
@@ -490,7 +490,7 @@ typedef struct GameCarAiBlock {
     u8 pad66[2];
     s16 targetSpeed;  /* grid-seeded speed, clamped >= 0 */
     u8 pad6A[4];
-    s16 field_12A;
+    s16 collisionBoostDuration;
     s16 boostAcceleration;  /* clamped to 0..15; the boost-branch step of acceleration */
     s16 boostTimer;  /* +0x72 slipstream-boost countdown, decremented while > 0 */
     s16 accelerationLimit;  /* damped while boxed in; caps acceleration */
