@@ -72,7 +72,7 @@ void *GetFmvFrame(FmvDecodeContext *ctx) {
     h32 = g_FmvFrameHeight;
     w32 = g_FmvFrameWidth;
     half = (0xF0 - h32) / 2;
-    ctx->displayRects[0].y = g_DispEnv0Y + half;
+    ctx->displayRects[0].y = ReadStableFmvDisplayCoordinate(&g_DispEnv0Y) + half;
     __asm__ __volatile__("" ::);
     {
         u32 wm = w32 * 3;
@@ -82,7 +82,7 @@ void *GetFmvFrame(FmvDecodeContext *ctx) {
     ctx->displayRects[1].w = wdraw;
     ctx->displayRects[0].w = wdraw;
     wid16 = g_FmvFrameWidth;
-    c067e = g_DispEnv1Y;
+    c067e = ReadStableFmvDisplayCoordinate(&g_DispEnv1Y);
     hgt16 = g_FmvFrameHeight;
     ctx->displayRects[1].h = hgt16;
     ctx->displayRects[0].h = hgt16;

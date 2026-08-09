@@ -7,7 +7,6 @@
 #include "game/cd.h"
 #include "game/render.h"
 #include "game/fmv_decode_internal.h"
-#define GAME_FMV_STATE_QUALIFIER volatile
 #include "game/fmv_internal.h"
 
 void DecodeFmvFrame(void) {
