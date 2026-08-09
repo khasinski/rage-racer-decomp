@@ -41,7 +41,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   s16 *accelBandOut;
   s32 bandSpeed;
   player = car;
-  startData = g_TrackEventData;
+  startData = (u8 *)g_TrackEventData;
   printf(g_MsgInitCar);
   value = g_GrandPrixSeries;
   g_RacePhase = 2;

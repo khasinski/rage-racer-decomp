@@ -108,7 +108,7 @@ void TriggerRaceCues(void) {
     register s32 current asm("a0");
     s32 product;
 
-    rawBase = g_TrackEventData;
+    rawBase = (u8 *)g_TrackEventData;
     current = g_RaceCueFlags;
     base = rawBase + 0x1CCC;
 

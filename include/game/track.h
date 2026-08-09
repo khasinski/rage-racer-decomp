@@ -191,7 +191,7 @@ extern s32 g_TrackLength;
 /* Base of the course's event/marker block (InstallTrackEventData installs it). Starts
  * with the s32 track-walk start index; sub-table offsets are at +0xB64..+0xB78
  * and the per-series marker rows at + g_RaceSeries * 576 + 0x474. */
-extern u8 *g_TrackEventData;
+extern TrackEventData *g_TrackEventData;
 
 /* Declared identically by 73 translation units before this
  * header carried them. */

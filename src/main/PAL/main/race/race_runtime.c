@@ -482,7 +482,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     av = slots[pos].halves.modelId;
     sub = (pos + 1) * 12;
     {
-        u8 *baseValue = g_TrackEventData;
+        u8 *baseValue = (u8 *)g_TrackEventData;
         base = baseValue;
     }
     ent->field_8A = 0;
@@ -603,7 +603,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
   u16 w;
   pos2_R10 = pos;
   idx_R8 = slots[pos2_R10].value;
-  base_R9 = g_TrackEventData;
+  base_R9 = (u8 *)g_TrackEventData;
   ent2_R7 = ent;
   if (!(idx_R8 < 12))
   {

@@ -65,7 +65,7 @@ s32 GetTrackZoneBlend(s32 position) {
     s32 code;
     u16 rawCode;
 
-    base = g_TrackEventData;
+    base = (u8 *)g_TrackEventData;
     scene = g_RaceSeries;
     first = ((TrackEventData *)base)->zones;
     if (scene != 0) {

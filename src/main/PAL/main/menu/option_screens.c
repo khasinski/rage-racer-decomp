@@ -250,7 +250,7 @@ void InitTrackScene(void) {
     InitRenderState(5);
     LoadTrackTexturePageRange();
     InitTrackLighting();
-    g_TrackWalkStart = ((TrackEventData *)g_TrackEventData)->trackWalkStart;
+    g_TrackWalkStart = g_TrackEventData->trackWalkStart;
     BuildStartingGrid();
     SetTrackTexturePageNow(g_Cars[g_CameraCarIndex].trackSection);
     SeekEnvironmentScript(g_CamRow[2]);

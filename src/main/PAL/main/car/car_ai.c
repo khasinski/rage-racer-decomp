@@ -92,7 +92,7 @@ s32 GetCarCrestTrigger(GameCarRuntime *car) {
     s32 threshold;
     register s32 resultOffset asm("v0");
 
-    base = g_TrackEventData;
+    base = (u8 *)g_TrackEventData;
     if (car->field_A4 < 0x320) {
         return 0;
     }
@@ -413,7 +413,7 @@ void SeedCarRouteMarkers(void) {
     s32 value;
 
     scene = g_RaceSeries;
-    base = g_TrackEventData;
+    base = (u8 *)g_TrackEventData;
     product = scene * 9;
     baseOffset = product * 64;
 
@@ -482,7 +482,7 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
   {
     car->routeMarkerIndex = 0;
   }
-  tbl = ((TrackEventData *)g_TrackEventData)->aiSpeedKeys[g_RaceSeries];
+  tbl = g_TrackEventData->aiSpeedKeys[g_RaceSeries];
   p[0] = &tbl[g0];
   p[1] = &tbl[g0 + 1];
   lim[0] = p[0]->progress;
