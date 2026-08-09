@@ -338,7 +338,7 @@ s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR) {
         i = 0;
         do {
             if (busy[i] == 0) {
-                result = (s16)SsUtKeyOnV((s16)(i + 0x12), g_SoundScale.values[vab],
+                result = (s16)SsUtKeyOnV((s16)(i + 0x12), g_SoundScale.vabIds[vab],
                                          (s16)prog, (s16)tone, 0x3C, 0,
                                          (s16)volL, (s16)volR);
                 g_SpecialCueVoiceA = result;
@@ -350,7 +350,7 @@ s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR) {
         i = 0;
         do {
             if (busy[i] == 0) {
-                result = (s16)SsUtKeyOnV((s16)(i + 0x12), g_SoundScale.values[vab],
+                result = (s16)SsUtKeyOnV((s16)(i + 0x12), g_SoundScale.vabIds[vab],
                                          (s16)prog, (s16)tone2, 0x3C, 0,
                                          (s16)volL, (s16)volR);
                 g_SpecialCueVoiceB = result;
@@ -360,9 +360,9 @@ s32 StartSoundCueVoice(s32 cue, s32 note, s32 volL, s32 volR) {
             i++;
         } while (i < 6);
     } else {
-        result = (s16)SsUtKeyOn(g_SoundScale.values[vab], prog, tone, 0x3C, 0,
+        result = (s16)SsUtKeyOn(g_SoundScale.vabIds[vab], prog, tone, 0x3C, 0,
                                 volL, volR);
-        result = (s16)SsUtKeyOn(g_SoundScale.values[(g_SpecialCueVoiceA = result, vab)],
+        result = (s16)SsUtKeyOn(g_SoundScale.vabIds[(g_SpecialCueVoiceA = result, vab)],
                                 prog, tone2, 0x3C, 0, volL, volR);
         g_SpecialCueVoiceB = result;
     }
@@ -408,7 +408,7 @@ s32 StartSingleSpecialCue(s32 cue, s32 volume) {
             result += 0x7F;
         }
 
-        scaleValue = g_SoundScale.values[vab];
+        scaleValue = g_SoundScale.vabIds[vab];
         program = (s16)program;
         tone = (s16)tone;
         result = (s16)SsUtKeyOnV(

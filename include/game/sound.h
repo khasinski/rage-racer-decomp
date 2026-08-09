@@ -6,14 +6,14 @@
 /* Volume-scale table at g_SoundScale. */
 typedef struct SoundScale {
     s32 scale;
-    s16 values[3];
+    s16 vabIds[8];
 } SoundScale;
 
 /*
  * Volume-scale record at 0x801E6CA4. Its `.scale` word is the master scale
  * applied to every sound-effect voice volume, 0..0x80: SetEffectVolumeScale
  * clamps into that range and the voice code multiplies a cue's nominal volume
- * by it before writing the SPU. `.values` is the VAB id table at 0x801E6CA8.
+ * by it before writing the SPU. `.vabIds` is the VAB id table at 0x801E6CA8.
  */
 extern SoundScale g_SoundScale;
 
