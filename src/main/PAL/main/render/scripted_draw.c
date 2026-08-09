@@ -664,7 +664,7 @@ loop:
 
 void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
                    u8 r, u8 g, u8 b,
-                   s32 flags, s32 textX, s32 textY, s32 caption) {
+                   s32 flags, s32 textX, s32 textY, u8 *caption) {
     register s32 f asm("$16") = flags;
     register s32 p0 asm("$18") = x0;
     register void *ot = SCRATCH_OT_BASE_AS(void);
@@ -674,10 +674,10 @@ void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
 
     if (flags & 0x10) {
         if (flags % 2) {
-            DrawLargeText((s16)(x0 + textX), (s16)(y0 + textY), (u8 *)caption,
+            DrawLargeText((s16)(x0 + textX), (s16)(y0 + textY), caption,
                           0x7f, 0x7f, 0x7f, 0x244, (flags & 8) ? 0x20 : 0x40);
         } else {
-            DrawSmallText((s16)(x0 + textX), (s16)(y0 + textY), (u8 *)caption,
+            DrawSmallText((s16)(x0 + textX), (s16)(y0 + textY), caption,
                           0x7f, 0x7f, 0x7f, 0x244, (flags & 8) ? 0x20 : 0x40);
         }
     }

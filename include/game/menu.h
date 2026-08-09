@@ -185,7 +185,7 @@ void GameDrawMenuButton(
     s32 flags,
     s32 textX,
     s32 textY,
-    s32 caption);
+    u8 *caption);
 void DrawMenuCursorBox(
     s32 x0,
     s32 y0,
