@@ -361,8 +361,8 @@ void UpdateRaceCars(void) {
                 }
                 if (lastBase->verticalMotionState == 0) {
                     lastBase->y = limit + 8;
-                    lastBase->field_90 = 0;
-                    lastBase->field_94 = 0;
+                    lastBase->verticalPitch = 0;
+                    lastBase->verticalRoll = 0;
                     lastBase->verticalMotionState = 0;
                     StartCarBodyKick(1, base);
                 }
@@ -600,8 +600,8 @@ void UpdateAttractCars(void) {
                 }
                 if (base->verticalMotionState == 0) {
                     base->y = limit + 8;
-                    base->field_90 = 0;
-                    base->field_94 = 0;
+                    base->verticalPitch = 0;
+                    base->verticalRoll = 0;
                     base->verticalMotionState = 0;
                     StartCarBodyKick(1, car);
                 }

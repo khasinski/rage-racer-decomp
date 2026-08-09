@@ -179,7 +179,7 @@ void UpdateCarCrestHop(GameCarRuntime *car) {
     if (obj->verticalMotionState != 0) {
         result = obj->verticalMotionTimer;
         value = result * result;
-        temp = obj->field_90;
+        temp = obj->verticalPitch;
         /* /6 is the retail `mult` by 0x2AAAAAAB + `mfhi` - (x >> 31); gcc
          * generates that magic-number sequence for a signed divide by 6. */
         value = value / 6;
@@ -192,19 +192,19 @@ void UpdateCarCrestHop(GameCarRuntime *car) {
             value >>= 8;
         }
         result += value;
-        obj->field_90 = result;
+        obj->verticalPitch = result;
 
         temp = value;
         if (value < 0) {
             temp = value + 3;
         }
-        result = (u16)obj->field_94;
+        result = (u16)obj->verticalRoll;
         temp >>= 2;
         result += temp;
-        obj->field_94 = result;
+        obj->verticalRoll = result;
 
-        result = obj->field_90;
-        temp = obj->field_94;
+        result = obj->verticalPitch;
+        temp = obj->verticalRoll;
         obj->bodyPitch = result;
         obj->bodyRoll = temp;
         return;
@@ -233,8 +233,8 @@ void UpdateCarCrestHop(GameCarRuntime *car) {
     temp = (u16)obj->bodyRoll;
     value = (u16)obj->y;
     obj->verticalMotionTimer = 0;
-    obj->field_90 = result;
-    obj->field_94 = temp;
+    obj->verticalPitch = result;
+    obj->verticalRoll = temp;
     obj->verticalTargetY = value;
 }
 

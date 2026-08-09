@@ -126,9 +126,9 @@ void ClearCarMotionState(GameCarRuntime *car) {
     car->velocityZ = 0;
     car->tiltCounter = 0;
     car->field_8E = 0;
-    car->field_90 = 0;
+    car->verticalPitch = 0;
     car->field_92 = 0;
-    car->field_94 = 0;
+    car->verticalRoll = 0;
     car->field_96 = 0;
     car->verticalMotionState = 0;
     car->verticalMotionTimer = 0;

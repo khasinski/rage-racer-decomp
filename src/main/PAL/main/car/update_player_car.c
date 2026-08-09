@@ -331,8 +331,8 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
 
         if (car->shiftState == 0) {
             car->y = limit + 8;
-            car->field_90 = 0;
-            car->field_94 = 0;
+            car->verticalPitch = 0;
+            car->verticalRoll = 0;
             StartCarBodyKick(1, car);
             g_ShiftSoundLevel = 0;
             if ((s16)car->shiftTick >= 19) {
