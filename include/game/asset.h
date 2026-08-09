@@ -102,6 +102,11 @@ typedef struct GameImageBlock {
     u8 pixels[4]; /* +0x0C */
 } GameImageBlock;
 
+typedef union GameImageAssetHeaderWord {
+    s32 size;
+    s32 flags;
+} GameImageAssetHeaderWord;
+
 /* The offset table every asset pack starts with; sub-blocks live at
  * base + offsets[n]. Some packs only ever use the first three. */
 typedef struct GameSceneAssetHeader {
@@ -236,7 +241,7 @@ void SetEnvPaletteTable(void* table);
 void SetEnvironmentScript(void* script);
 void StoreTeamLogoImage(void* dst);
 void UploadImageAsset(void *asset);
-void UploadImageBlock(void* asset);
+void UploadImageBlock(GameImageAssetHeaderWord *asset);
 void UploadLoadBufferImage(void);
 s32 RequestTrackDataAssets(void);
 s32 GetCarAssetIndex(s32 model, s32 grade);

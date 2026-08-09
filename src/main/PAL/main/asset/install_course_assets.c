@@ -15,7 +15,7 @@ void InstallCourseAssets(void) {
     UploadImageAsset(g_AssetBlockPtr);
 
     g_AssetBlockPtr = g_AssetBase + ((GameSceneAssetHeader *)g_AssetBase)->offsets[2];
-    UploadImageBlock(g_AssetBlockPtr);
+    UploadImageBlock((GameImageAssetHeaderWord *)g_AssetBlockPtr);
 
     base = g_AssetBase;
     offset0 = ((GameSceneAssetHeader *)base)->offsets[3];

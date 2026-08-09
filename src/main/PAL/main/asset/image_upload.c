@@ -5,29 +5,29 @@
 #include "game/asset.h"
 
 
-void UploadImageBlock(void *asset) {
+void UploadImageBlock(GameImageAssetHeaderWord *asset) {
     GameImageBlock *block;
     Rect rect;
     u32 width;
     u32 height;
     s32 flags;
 
-    asset = (u8 *)asset + 4;
-    flags = *(s32 *)asset;
-    asset = (u8 *)asset + 4;
+    asset++;
+    flags = asset->flags;
+    asset++;
 
     if (flags & 8) {
-        block = asset;
+        block = (GameImageBlock *)asset;
         rect.x = block->x;
         rect.y = block->y;
         rect.w = block->w;
         rect.h = block->h;
         LoadImage(&rect, block->pixels);
         DrawSync(0);
-        asset = (u8 *)block + (((u32)block->size >> 2) << 2);
+        asset = (GameImageAssetHeaderWord *)((u8 *)block + (((u32)block->size >> 2) << 2));
     }
 
-    block = asset;
+    block = (GameImageBlock *)asset;
     rect.x = block->x;
     rect.y = block->y;
     width = rect.w = block->w;
@@ -56,7 +56,7 @@ void UploadImageAsset(void *asset) {
 
     do {
         u8 *next = ptr + (((u32)size >> 2) << 2);
-        UploadImageBlock(ptr);
+        UploadImageBlock((GameImageAssetHeaderWord *)ptr);
         ptr = next;
     test:
         size = *(s32 *)ptr;
