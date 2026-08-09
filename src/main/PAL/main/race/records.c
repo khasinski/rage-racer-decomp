@@ -16,7 +16,7 @@ void InitRecordTables(void) {
     register s32 r7 asm("$7");
     RaceRecordAddress r8;
     RaceRecordAddress r9;
-    s32 r10;
+    RaceRecordAddress r10;
     s32 r11;
     s32 r12;
     register s32 r13 asm("$13");
@@ -49,7 +49,7 @@ void InitRecordTables(void) {
             r8.byteOffset = r11;
             do {
                 r4 = 0;
-                r10 = r8.byteOffset;
+                r10.byteOffset = r8.byteOffset;
                 r2 = r12 + r18.byteOffset;
                 r6 = r7 * 4;
                 r9.byteOffset = r6 + r2;
@@ -59,7 +59,7 @@ void InitRecordTables(void) {
                 r3 = r3 + r2;
                 do {
                     r2 = *r9.wordPointer;
-                    *(s32 *)r10 = r2;
+                    *r10.wordPointer = r2;
                     r2 = (s32)&g_DefaultTotalTimes;
                     r2 = r12 + r2;
                     r2 = r6 + r2;
@@ -96,7 +96,7 @@ void InitRecordTables(void) {
             r24 = r14 << 4;
             r2 = r24 + r2;
             r17.byteOffset = r25 + r2;
-            r10 = (s32)&g_DefaultRecordCars;
+            r10.halfwordPointer = &g_DefaultRecordCars;
             r13 = 0;
             r12 = 0;
             r11 = r15;
@@ -136,16 +136,16 @@ void InitRecordTables(void) {
                 recordAddress.pointer = (RaceRecord *)g_TimeRecords;
                 recordAddress.byteOffset += r5;
                 recordAddress.pointer->raceTime = r2;
-                r2 = *(u16 *)r10;
+                r2 = *r10.halfwordPointer;
                 r13 += 0x2710;
                 recordAddress.pointer = (RaceRecord *)g_RankingRecords;
                 recordAddress.byteOffset += r5;
                 recordAddress.pointer->carIndex = r2;
-                r2 = *(u16 *)r10;
+                r2 = *r10.halfwordPointer;
                 recordAddress.pointer = (RaceRecord *)g_TimeRecords;
                 recordAddress.byteOffset += r5;
                 recordAddress.pointer->carIndex = r2;
-                r10 += 0xC;
+                r10.byteOffset += 0xC;
             } while (r6 < 5);
             r7++;
             r15 += 0x50;
