@@ -35,9 +35,20 @@ typedef char GameFrameEnvironmentHeaderSizeCheck[
     sizeof(GameFrameEnvironmentHeader) == 0xCC ? 1 : -1];
 
 #define GAME_FRAME_CONTEXT_SIZE 0x237E8
+#define GAME_FRAME_OT_LENGTH 0x2C0
+
+typedef struct GameFrameLayout {
+    GameFrameEnvironmentHeader environment;
+    u_long orderingTables[2][GAME_FRAME_OT_LENGTH];
+    u8 primitiveBuffer[GAME_FRAME_CONTEXT_SIZE - 0x16CC];
+} GameFrameLayout;
+
+typedef char GameFrameLayoutSizeCheck[
+    sizeof(GameFrameLayout) == GAME_FRAME_CONTEXT_SIZE ? 1 : -1];
 
 typedef union GameFrameContext {
     GameFrameEnvironmentHeader environment;
+    GameFrameLayout layout;
     u8 bytes[GAME_FRAME_CONTEXT_SIZE];
     volatile u8 volatileBytes[GAME_FRAME_CONTEXT_SIZE];
 } GameFrameContext;
