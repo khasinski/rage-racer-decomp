@@ -76,6 +76,7 @@ typedef char DispEnvSizeCheck[sizeof(DispEnv) == 0x14 ? 1 : -1];
 s32 SetGraphDebug(u8 level);
 DrawEnv *PutDrawEnv(DrawEnv *env);
 DispEnv *PutDispEnv(DispEnv *env);
+void DrawOTagEnv(void *ot, DrawEnv *env);
 void DrawOTag(void *ot);
 u_char *MemCopy(u_char *dst, u_char *src, long count);
 
@@ -372,8 +373,8 @@ void DumpDrawEnv(DrawEnv *env);
 void DumpDispEnv(DispEnv *env);
 long GetClut(long x, long y);
 long GetTPage(long tp, long abr, long x, long y);
-long GetDispEnv(long env);
-long GetDrawEnv(long env);
+DispEnv *GetDispEnv(DispEnv *env);
+DrawEnv *GetDrawEnv(DrawEnv *env);
 /* Draws one primitive immediately (DrawSync + push prim[4..] for prim[3]
  * words). */
 void DrawPrim(u_char *prim);

@@ -40,25 +40,25 @@ DrawEnv *PutDrawEnv(DrawEnv *env) {
     return prim;
 }
 
-void *DrawOTagEnv(void *ot, void *env) {
+void DrawOTagEnv(void *ot, DrawEnv *env) {
     void *src = ot;
     u8 *debug = &g_GraphDebug;
-    void *prim = env;
-    void *tag;
+    DrawEnv *prim = env;
+    DrawEnvPacket *tag;
 
     if (*debug >= 2) {
         GPU_printf(g_GpuTraceDrawOTagEnv, src, prim);
     }
 
-    tag = (u8 *)prim + 0x1C;
+    tag = &prim->packet;
     Gpu_BuildDrawEnvCmds(tag, prim);
     {
-        u32 word = (*(u32 *)tag & 0xFF000000) |
+        u32 word = (tag->tag & 0xFF000000) |
                    ((u32)src & 0xFFFFFF);
         GpuCallbacks *gpu = g_GpuFuncs;
 
-        *(u32 *)tag = word;
+        tag->tag = word;
         gpu->send(gpu->sendList, tag, 0x40, 0);
     }
-    return MemCopy(debug + 0xE, prim, 0x5C);
+    MemCopy(debug + 0xE, (u_char *)prim, 0x5C);
 }

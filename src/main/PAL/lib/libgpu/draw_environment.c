@@ -2,7 +2,7 @@
 #include "psyq/gpu.h"
 #include "psyq/gpu_internal.h"
 
-long GetDispEnv(long env) { MemCopy((u_char *)env, (u_char *)&g_DispEnvCache, 0x14); return env; }
+DispEnv *GetDispEnv(DispEnv *env) { MemCopy((u_char *)env, (u_char *)&g_DispEnvCache, 0x14); return env; }
 
 
 u_long GetODE(void) {
