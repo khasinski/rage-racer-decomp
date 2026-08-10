@@ -138,6 +138,7 @@ typedef struct TrackEventSoundZone {
 
 typedef union TrackEventSoundZoneAddress {
     s32 byteOffset;
+    s32 value;
     TrackEventSoundZone *pointer;
 } TrackEventSoundZoneAddress;
 
@@ -486,6 +487,7 @@ typedef union PathSceneryRotationKey {
 
 typedef union PathSceneryKeyAddress {
     s32 byteOffset;
+    s32 value;
     PathSceneryPositionKey *positionPointer;
     PathSceneryRotationKey *rotationPointer;
 } PathSceneryKeyAddress;

@@ -98,7 +98,7 @@ void UpdateTrackEventSound(s16 arg) {
         cur = p;
         cursorAddress.pointer = p;
         endAddress.pointer = end;
-    } while (cursorAddress.byteOffset < endAddress.byteOffset);
+    } while (cursorAddress.value < endAddress.value);
 
     if (!(data == 0)) {
     s0 = g_PlayerField3C;

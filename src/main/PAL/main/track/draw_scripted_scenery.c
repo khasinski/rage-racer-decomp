@@ -191,8 +191,8 @@ void UpdatePathScenerySound(void) {
         idx = idx + 1;
         g_PathSceneryCursors.posIndex = idx;
         positionStepAddress.positionPointer = positionKeys;
-        positionStepAddress.byteOffset =
-            idx * sizeof(PathSceneryPositionKey) + positionStepAddress.byteOffset;
+        positionStepAddress.value =
+            idx * sizeof(PathSceneryPositionKey) + positionStepAddress.value;
         stepRec = positionStepAddress.positionPointer;
         if (stepRec->fields.span == -1) {
             idx = stepRec->fields.loopIndex;
@@ -302,8 +302,8 @@ void UpdatePathScenerySound(void) {
         idx = idx + 1;
         g_PathSceneryCursors.rotIndex = idx;
         rotationStepAddress.rotationPointer = rotationKeys;
-        rotationStepAddress.byteOffset =
-            idx * sizeof(PathSceneryRotationKey) + rotationStepAddress.byteOffset;
+        rotationStepAddress.value =
+            idx * sizeof(PathSceneryRotationKey) + rotationStepAddress.value;
         stepRec = rotationStepAddress.rotationPointer;
         if (stepRec->fields.span == -1) {
             idx = stepRec->fields.loopIndex;
