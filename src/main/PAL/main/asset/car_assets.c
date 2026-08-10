@@ -55,7 +55,7 @@ void LoadCarSelectAssets(void) {
             if (LoadAsset(8, g_AssetLoadCursor) != 0) {
                 RegisterModelBank((ModelBankHeader *)(g_AssetLoadCursor + 0xC), 0xE);
 
-                header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+                header = GetSceneAssetHeader(g_AssetLoadCursor);
                 blockOffset = header->offsets[1];
                 firstOffset = header->offsets[0];
                 secondBlock = GetSceneAssetAddress(header, blockOffset);
@@ -64,7 +64,7 @@ void LoadCarSelectAssets(void) {
                 g_AssetBlockPtr = secondBlock;
                 RegisterCourseModels((CourseModelAssetHeader *)g_AssetBlockPtr);
 
-                imageHeader = (GameSceneAssetHeader *)g_AssetLoadCursor;
+                imageHeader = GetSceneAssetHeader(g_AssetLoadCursor);
                 assetOffset = imageHeader->offsets[2];
                 g_AssetBlockPtr = GetSceneAssetAddress(imageHeader, assetOffset);
                 UploadImageAsset(g_AssetBlockPtr);
