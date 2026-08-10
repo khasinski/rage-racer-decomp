@@ -17,92 +17,92 @@ void ClearMemoryCardSwEvents(void) {
     TestEvent(g_McSwEventNew);
 }
 
-s32 PollMemoryCardHwEvent(void) {
-    s32 result;
+MemoryCardEvent PollMemoryCardHwEvent(void) {
+    MemoryCardEvent result;
     s32 ready;
     s32 count;
 
     ready = 1;
     if (TestEvent(g_McHwEventIoe) == 1) {
-        result = 1;
+        result = MC_EVENT_IO_COMPLETE;
     }
     if (TestEvent(g_McHwEventError) == 1) {
-        result = 2;
+        result = MC_EVENT_ERROR;
     }
     if (TestEvent(g_McHwEventTimeout) == 1) {
-        result = 3;
+        result = MC_EVENT_TIMEOUT;
     }
     if (TestEvent(g_McHwEventNew) == 1) {
-        result = 4;
+        result = MC_EVENT_NEW_CARD;
     }
 
     count = g_McPollTicks;
     g_McPollTicks = count + 1;
     if (count >= 90) {
-        result = 2;
+        result = MC_EVENT_ERROR;
     }
 
     return result;
 }
 
-s32 PollMemoryCardHwEventLimit(s32 limit) {
+MemoryCardEvent PollMemoryCardHwEventLimit(s32 limit) {
     s32 i;
     i = 0;
     while (i < limit) {
         if (TestEvent(g_McHwEventIoe) == 1) {
-            return 1;
+            return MC_EVENT_IO_COMPLETE;
         }
         if (TestEvent(g_McHwEventError) == 1) {
-            return 2;
+            return MC_EVENT_ERROR;
         }
         if (TestEvent(g_McHwEventTimeout) == 1) {
-            return 3;
+            return MC_EVENT_TIMEOUT;
         }
         if (TestEvent(g_McHwEventNew) == 1) {
-            return 4;
+            return MC_EVENT_NEW_CARD;
         }
         i++;
     }
 
-    return 0;
+    return MC_EVENT_NONE;
 }
 
-s32 WaitMemoryCardHwEvent(void) {
+MemoryCardEvent WaitMemoryCardHwEvent(void) {
     s32 ready;
 
     ready = 1;
     while (1) {
         if (TestEvent(g_McHwEventIoe) == 1) {
-            return 1;
+            return MC_EVENT_IO_COMPLETE;
         }
         if (TestEvent(g_McHwEventError) == 1) {
-            return 2;
+            return MC_EVENT_ERROR;
         }
         if (TestEvent(g_McHwEventTimeout) == 1) {
-            return 3;
+            return MC_EVENT_TIMEOUT;
         }
         if (TestEvent(g_McHwEventNew) == 1) {
-            return 4;
+            return MC_EVENT_NEW_CARD;
         }
     }
 }
 
-s32 WaitMemoryCardSwEvent(void) {
+MemoryCardEvent WaitMemoryCardSwEvent(void) {
     s32 ready;
 
     ready = 1;
     while (1) {
         if (TestEvent(g_McSwEventIoe) == 1) {
-            return 1;
+            return MC_EVENT_IO_COMPLETE;
         }
         if (TestEvent(g_McSwEventError) == 1) {
-            return 2;
+            return MC_EVENT_ERROR;
         }
         if (TestEvent(g_McSwEventTimeout) == 1) {
-            return 3;
+            return MC_EVENT_TIMEOUT;
         }
         if (TestEvent(g_McSwEventNew) == 1) {
-            return 4;
+            return MC_EVENT_NEW_CARD;
         }
     }
 }

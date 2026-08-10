@@ -209,10 +209,18 @@ void DrawMemoryCardSaveRows(
  * an empty parameter list lets that stand. */
 void ClearMemoryCardHwEvents();
 void ClearMemoryCardSwEvents();
-s32 WaitMemoryCardHwEvent(void);
-s32 WaitMemoryCardSwEvent(void);
-s32 PollMemoryCardHwEvent(void);
-s32 PollMemoryCardHwEventLimit(s32 attempts);
+typedef enum MemoryCardEvent {
+    MC_EVENT_INVALID = -1,
+    MC_EVENT_NONE,
+    MC_EVENT_IO_COMPLETE,
+    MC_EVENT_ERROR,
+    MC_EVENT_TIMEOUT,
+    MC_EVENT_NEW_CARD
+} MemoryCardEvent;
+MemoryCardEvent WaitMemoryCardHwEvent(void);
+MemoryCardEvent WaitMemoryCardSwEvent(void);
+MemoryCardEvent PollMemoryCardHwEvent(void);
+MemoryCardEvent PollMemoryCardHwEventLimit(s32 attempts);
 void OpenMemoryCardEvents(void);
 void EnableMemoryCardEvents(void);
 void DisableMemoryCardEvents(void);
