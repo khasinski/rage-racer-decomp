@@ -268,6 +268,11 @@ typedef struct ShuttlePath {
     Vec4 endpoint[2];
 } ShuttlePath;
 
+typedef union ShuttlePathPointAddress {
+    s32 byteOffset;
+    Vec4 *pointer;
+} ShuttlePathPointAddress;
+
 extern ShuttlePath g_ShuttlePathPoints[];
 
 /* State of a shuttling prop: it runs between the two endpoints of its path in

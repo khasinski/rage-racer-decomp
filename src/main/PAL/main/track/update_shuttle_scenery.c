@@ -18,8 +18,8 @@ void UpdateShuttleScenery(s32 instance) {
     s16 *limitPtr;
     s16 *tailLimitPtr;
     s16 denom;
-    AssetAddress basePointAddress;
-    AssetAddress altPointAddress;
+    ShuttlePathPointAddress basePointAddress;
+    ShuttlePathPointAddress altPointAddress;
 
     entry = &g_ShuttleScenery[instance];
     asm("" : "=r"(entry) : "0"(entry));
@@ -34,28 +34,28 @@ void UpdateShuttleScenery(s32 instance) {
     denom = *limitPtr;
     altIndex = (1 - side) << 4;
     altIndex += phaseShift;
-    basePointAddress.pointer = g_ShuttlePathPoints;
-    basePointAddress.offset += baseIndex;
-    altPointAddress.pointer = g_ShuttlePathPoints;
-    altPointAddress.offset += altIndex;
-    entry->position.x = ((denom - step) * ((Vec4 *)basePointAddress.pointer)->x +
-                         step * ((Vec4 *)altPointAddress.pointer)->x) / denom;
+    basePointAddress.pointer = g_ShuttlePathPoints->endpoint;
+    basePointAddress.byteOffset += baseIndex;
+    altPointAddress.pointer = g_ShuttlePathPoints->endpoint;
+    altPointAddress.byteOffset += altIndex;
+    entry->position.x = ((denom - step) * basePointAddress.pointer->x +
+                         step * altPointAddress.pointer->x) / denom;
 
     denom = *limitPtr;
-    basePointAddress.pointer = g_ShuttlePathPoints;
-    basePointAddress.offset += baseIndex;
-    altPointAddress.pointer = g_ShuttlePathPoints;
-    altPointAddress.offset += altIndex;
-    entry->position.y = ((denom - step) * ((Vec4 *)basePointAddress.pointer)->y +
-                         step * ((Vec4 *)altPointAddress.pointer)->y) / denom;
+    basePointAddress.pointer = g_ShuttlePathPoints->endpoint;
+    basePointAddress.byteOffset += baseIndex;
+    altPointAddress.pointer = g_ShuttlePathPoints->endpoint;
+    altPointAddress.byteOffset += altIndex;
+    entry->position.y = ((denom - step) * basePointAddress.pointer->y +
+                         step * altPointAddress.pointer->y) / denom;
 
     denom = *limitPtr;
-    basePointAddress.pointer = g_ShuttlePathPoints;
-    basePointAddress.offset += baseIndex;
-    altPointAddress.pointer = g_ShuttlePathPoints;
-    altPointAddress.offset += altIndex;
-    entry->position.z = ((denom - step) * ((Vec4 *)basePointAddress.pointer)->z +
-                         step * ((Vec4 *)altPointAddress.pointer)->z) / denom;
+    basePointAddress.pointer = g_ShuttlePathPoints->endpoint;
+    basePointAddress.byteOffset += baseIndex;
+    altPointAddress.pointer = g_ShuttlePathPoints->endpoint;
+    altPointAddress.byteOffset += altIndex;
+    entry->position.z = ((denom - step) * basePointAddress.pointer->z +
+                         step * altPointAddress.pointer->z) / denom;
 
     if (entry->travelStep >= *limitPtr) {
         entry->travelStep = 0;
