@@ -28,7 +28,7 @@ void DrawRaceHudLabels(s32 mode) {
 
             base.bytes = g_DrawBuffer;
             i++;
-            prim.byteOffset = offset + base.byteOffset;
+            prim.value = offset + base.value;
             AddPrim(base.bytes + 0xCC, prim.pointer);
             offset += 0x14;
         } while (i < count);
@@ -128,8 +128,8 @@ void DrawLapTimes(void) {
             valuePtr++;
             base.bytes = g_DrawBuffer;
             ot = base.bytes + 0xCC;
-            prim.byteOffset = baseOffset + base.byteOffset;
-            sprite.byteOffset = primOffset + base.byteOffset + 0x236F8;
+            prim.value = baseOffset + base.value;
+            sprite.value = primOffset + base.value + 0x236F8;
             sprite.sprite->clut = tile;
             AddPrim(ot, prim.pointer);
             i++;
