@@ -374,7 +374,18 @@ extern s16 g_RaceOptionScroll0;
 extern s16 g_RaceOptionScroll1;
 extern s32 g_RankingInsertRow;
 extern u8 g_RankingNameCodes[];
-extern s32 g_RecordEntryState;
+typedef enum RecordEntryState {
+    RECORD_ENTRY_STATE_INVALID = -1,
+    RECORD_ENTRY_STATE_FADE_IN,
+    RECORD_ENTRY_STATE_EDIT_LAP_NAME,
+    RECORD_ENTRY_STATE_WAIT_AFTER_LAP_NAME,
+    RECORD_ENTRY_STATE_SWITCH_TO_RACE_RECORD,
+    RECORD_ENTRY_STATE_EDIT_RACE_NAME,
+    RECORD_ENTRY_STATE_WAIT_TO_FINISH,
+    RECORD_ENTRY_STATE_FADE_OUT
+} RecordEntryState;
+
+extern RecordEntryState g_RecordEntryState;
 extern s32 g_RecordPanelSlide;
 extern s32 g_RefSectorTime1;
 extern s32 g_RefSectorTime2;

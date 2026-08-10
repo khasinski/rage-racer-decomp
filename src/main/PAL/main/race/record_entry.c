@@ -343,7 +343,7 @@ void InsertRaceRecords(void) {
 void EnterRecordEntry(void) {
     g_SceneTimer = 0x100;
     g_FrameSyncThreshold = 0x80;
-    g_RecordEntryState = 0;
+    g_RecordEntryState = RECORD_ENTRY_STATE_FADE_IN;
     g_SceneId = 0x15;
     InsertRaceRecords();
 }
@@ -355,7 +355,7 @@ void UpdateRecordEntry(void) {
     g_AnimTimer++;
 
     switch (g_RecordEntryState) {
-    case 0:
+    case RECORD_ENTRY_STATE_FADE_IN:
         g_SceneTimer -= 8;
         DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if (g_SceneTimer == 0) {
@@ -366,15 +366,15 @@ void UpdateRecordEntry(void) {
             if (g_RankingInsertRow < 5) {
                 g_NameEntryChar = 0xB;
                 g_NameEntryCursor = 0;
-                g_RecordEntryState = 1;
+                g_RecordEntryState = RECORD_ENTRY_STATE_EDIT_LAP_NAME;
             } else {
-                g_RecordEntryState = 2;
+                g_RecordEntryState = RECORD_ENTRY_STATE_WAIT_AFTER_LAP_NAME;
             }
         }
         DrawRankingPanel(0);
         break;
 
-    case 1: {
+    case RECORD_ENTRY_STATE_EDIT_LAP_NAME: {
         u8 *timeName;
         RaceRecordAddress timeRecordBase;
         RaceRecordAddress recordAddress;
@@ -399,7 +399,7 @@ void UpdateRecordEntry(void) {
             PlaySoundCue(2);
             g_NameEntryCursor++;
             if (g_NameEntryCursor == 6) {
-                g_RecordEntryState = 2;
+                g_RecordEntryState = RECORD_ENTRY_STATE_WAIT_AFTER_LAP_NAME;
                 i = 0;
                 if (g_TimeRecordInsertRow < 5) {
                     timeRecordBase.pointer = &g_TimeRecords[0][0][0];
@@ -425,7 +425,7 @@ void UpdateRecordEntry(void) {
             g_NameEntryChar = name[g_NameEntryCursor];
         }
 
-        if (g_RecordEntryState == 1) {
+        if (g_RecordEntryState == RECORD_ENTRY_STATE_EDIT_LAP_NAME) {
             DrawNameEntryCursor(g_NameEntryCursor, g_RankingInsertRow);
         }
         i = 0;
@@ -439,30 +439,30 @@ void UpdateRecordEntry(void) {
         break;
     }
 
-    case 2:
+    case RECORD_ENTRY_STATE_WAIT_AFTER_LAP_NAME:
         if (g_PadPressed & PAD_CONFIRM) {
-            g_RecordEntryState = 3;
+            g_RecordEntryState = RECORD_ENTRY_STATE_SWITCH_TO_RACE_RECORD;
             g_RecordPanelSlide = 0;
         }
         DrawRankingPanel(0);
         break;
 
-    case 3:
+    case RECORD_ENTRY_STATE_SWITCH_TO_RACE_RECORD:
         g_RecordPanelSlide -= 8;
         DrawRankingPanel(g_RecordPanelSlide);
         DrawTimeRecordPanel(g_RecordPanelSlide + 0x140);
         if (g_RecordPanelSlide < -0x13F) {
             if (g_TimeRecordInsertRow < 5) {
                 g_NameEntryCursor = 0;
-                g_RecordEntryState = 4;
+                g_RecordEntryState = RECORD_ENTRY_STATE_EDIT_RACE_NAME;
                 g_NameEntryChar = g_TimeRecordNameCodes[0];
             } else {
-                g_RecordEntryState = 5;
+                g_RecordEntryState = RECORD_ENTRY_STATE_WAIT_TO_FINISH;
             }
         }
         break;
 
-    case 4: {
+    case RECORD_ENTRY_STATE_EDIT_RACE_NAME: {
         s32 previous;
         u16 buttons;
 
@@ -484,7 +484,7 @@ void UpdateRecordEntry(void) {
             PlaySoundCue(2);
             g_NameEntryCursor++;
             if (g_NameEntryCursor == 6) {
-                g_RecordEntryState = 5;
+                g_RecordEntryState = RECORD_ENTRY_STATE_WAIT_TO_FINISH;
             }
             g_NameEntryChar = name[g_NameEntryCursor];
         } else if ((buttons & 0x90) && g_NameEntryCursor > 0) {
@@ -493,7 +493,7 @@ void UpdateRecordEntry(void) {
             g_NameEntryChar = name[g_NameEntryCursor];
         }
 
-        if (g_RecordEntryState == 4) {
+        if (g_RecordEntryState == RECORD_ENTRY_STATE_EDIT_RACE_NAME) {
             DrawNameEntryCursor(g_NameEntryCursor, g_TimeRecordInsertRow);
         }
         i = 0;
@@ -507,19 +507,19 @@ void UpdateRecordEntry(void) {
         break;
     }
 
-    case 5:
+    case RECORD_ENTRY_STATE_WAIT_TO_FINISH:
         if (g_PadPressed & PAD_CONFIRM) {
             if (g_RankingInsertRow < 5 || g_TimeRecordInsertRow < 5) {
                 StartCdVolumeFade(0x78);
                 StartCdAudio();
             }
-            g_RecordEntryState = 6;
+            g_RecordEntryState = RECORD_ENTRY_STATE_FADE_OUT;
             g_RecordPanelSlide = 0;
         }
         DrawTimeRecordPanel(0);
         break;
 
-    case 6:
+    case RECORD_ENTRY_STATE_FADE_OUT:
         g_SceneTimer += 2;
         DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         {
