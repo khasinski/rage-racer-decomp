@@ -112,7 +112,7 @@ void ApplyReplayFrameAndTilt(s32 subframe, ReplayCarState *playerObj,
     ReplayCarState *secondary;
     register s32 next asm("a0");
     register s32 offset asm("v0");
-    register ReplayGrandPrixFrame *base asm("v1");
+    register ReplayFrameAddress base asm("v1");
 
     index = subframe;
     primary = playerObj;
@@ -132,9 +132,10 @@ void ApplyReplayFrameAndTilt(s32 subframe, ReplayCarState *playerObj,
             }
             offset = next * 3;
         }
-        base = (ReplayGrandPrixFrame *)((u32 *)g_ReplayFramesGp + offset * 4);
-        primary->trackPointIndex = base->trackPointIndex0;
-        secondary->trackPointIndex = base->trackPointIndex1;
+        base.grandPrixPointer = g_ReplayFramesGp;
+        base.value = (offset << 4) + base.value;
+        primary->trackPointIndex = base.grandPrixPointer->trackPointIndex0;
+        secondary->trackPointIndex = base.grandPrixPointer->trackPointIndex1;
     } else {
         if ((index & 1) == 0) {
             index >>= 1;

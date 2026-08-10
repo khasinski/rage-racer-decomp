@@ -62,4 +62,11 @@ typedef struct ReplayTimeAttackFrame {
     s16 steeringAngle;
 } ReplayTimeAttackFrame;
 
+typedef union ReplayFrameAddress {
+    s32 value;
+    u32 *wordPointer;
+    ReplayGrandPrixFrame *grandPrixPointer;
+    ReplayTimeAttackFrame *timeAttackPointer;
+} ReplayFrameAddress;
+
 #endif
