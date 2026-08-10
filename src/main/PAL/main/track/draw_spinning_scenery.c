@@ -56,13 +56,13 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
             *dst &= 0xFFF;
 
             dataAddress.orientationPointer = g_SpinningSceneryYaw;
-            dataAddress.byteOffset += offset;
+            dataAddress.value += offset;
             BuildRotMatrixY(yawMatrix, dataAddress.orientationPointer->yaw);
             MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, yawMatrix);
             BuildRotMatrixZ(work, *dst);
             MulMatrix2(yawMatrix, work);
             dataAddress.positionPointer = g_SpinningSceneryPos;
-            dataAddress.byteOffset += offset;
+            dataAddress.value += offset;
             SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, dataAddress.positionPointer, work);
 
             SCRATCH_ENV_MODE4 = 0;
@@ -76,8 +76,8 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
             offset += 0x10;
             cursorAddress.pointer = dst;
             endAddress.pointer = base;
-            endAddress.byteOffset = (end * 2) + endAddress.byteOffset;
-        } while (cursorAddress.byteOffset < endAddress.byteOffset);
+            endAddress.value = (end * 2) + endAddress.value;
+        } while (cursorAddress.value < endAddress.value);
     }
 
     frameMask = frame & 0x1FF;

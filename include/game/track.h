@@ -497,6 +497,7 @@ typedef struct PathSceneryPositionData {
 
 typedef union SpinningSceneryAngleAddress {
     s32 byteOffset;
+    s32 value;
     s16 *pointer;
 } SpinningSceneryAngleAddress;
 
@@ -547,6 +548,7 @@ typedef struct SpinningSceneryOrientation {
 } SpinningSceneryOrientation;
 typedef union SpinningSceneryDataAddress {
     s32 byteOffset;
+    s32 value;
     SpinningSceneryOrientation *orientationPointer;
     Vec4 *positionPointer;
     void *pointer;
