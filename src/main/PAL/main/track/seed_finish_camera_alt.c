@@ -51,21 +51,21 @@ void SeedFinishCameraAlt(void *car) {
     track = g_TrackPoints;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
-    pointAddress.byteOffset += trackAddress.byteOffset;
+    pointAddress.value = pointAddress.byteOffset + trackAddress.value;
     point = pointAddress.pointPointer;
     g_CameraCar.x = point->x;
 
     index = source.runtime->trackPointIndex;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
-    pointAddress.byteOffset += trackAddress.byteOffset;
+    pointAddress.value = pointAddress.byteOffset + trackAddress.value;
     point = pointAddress.pointPointer;
     g_CameraCar.z = point->z;
 
     index = source.runtime->trackPointIndex;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
-    pointAddress.byteOffset += trackAddress.byteOffset;
+    pointAddress.value = pointAddress.byteOffset + trackAddress.value;
     point = pointAddress.pointPointer;
     word0 = point->y;
     index = g_GrandPrixSeries;
@@ -76,7 +76,7 @@ void SeedFinishCameraAlt(void *car) {
     index <<= 11;
     pointAddress.byteOffset = (lastIndex * 3) << 3;
     trackAddress.pointPointer = track;
-    pointAddress.byteOffset += trackAddress.byteOffset;
+    pointAddress.value = pointAddress.byteOffset + trackAddress.value;
     point = pointAddress.pointPointer;
     index += 0xC00;
     index -= point->angle;

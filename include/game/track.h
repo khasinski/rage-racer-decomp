@@ -216,6 +216,7 @@ typedef struct GameTrackArcCenter {
 
 typedef union TrackPointTableAddress {
     s32 byteOffset;
+    s32 value;
     GameTrackPoint *pointPointer;
     GameTrackPointHalfwordView *halfwordPointer;
     GameTrackArcCenter *arcCenterPointer;

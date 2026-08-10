@@ -753,21 +753,21 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
     track = g_TrackPoints;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
-    pointAddress.byteOffset += trackAddress.byteOffset;
+    pointAddress.value = pointAddress.byteOffset + trackAddress.value;
     point = pointAddress.pointPointer;
     g_CameraCar.x = point->x;
 
     index = car->trackPointIndex;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
-    pointAddress.byteOffset += trackAddress.byteOffset;
+    pointAddress.value = pointAddress.byteOffset + trackAddress.value;
     point = pointAddress.pointPointer;
     g_CameraCar.z = point->z;
 
     index = car->trackPointIndex;
     pointAddress.byteOffset = (index * 3) << 3;
     trackAddress.pointPointer = track;
-    pointAddress.byteOffset += trackAddress.byteOffset;
+    pointAddress.value = pointAddress.byteOffset + trackAddress.value;
     point = pointAddress.pointPointer;
     index = g_CameraCar.speed;
     word0 = point->y;
@@ -781,7 +781,7 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
     index <<= 11;
     pointAddress.byteOffset = (lastIndex * 3) << 3;
     trackAddress.pointPointer = track;
-    pointAddress.byteOffset += trackAddress.byteOffset;
+    pointAddress.value = pointAddress.byteOffset + trackAddress.value;
     point = pointAddress.pointPointer;
     index += 0xC00;
     index -= point->angle;
