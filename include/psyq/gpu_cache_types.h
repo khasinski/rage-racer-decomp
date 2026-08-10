@@ -4,15 +4,15 @@
 #include "common.h"
 
 typedef struct GpuDisplayEnvironmentCache {
-    volatile u_short x0;
-    volatile u_short x2;
-    volatile u_short x4;
-    volatile u_short x6;
-    volatile u_short x8;
-    volatile u_short xA;
-    volatile u_short xC;
-    volatile u_short xE;
-    u_long x10;
+    volatile u_short displayX;
+    volatile u_short displayY;
+    volatile u_short displayWidth;
+    volatile u_short displayHeight;
+    volatile u_short screenX;
+    volatile u_short screenY;
+    volatile u_short screenWidth;
+    volatile u_short screenHeight;
+    u_long flags;
 } GpuDisplayEnvironmentCache;
 
 #endif

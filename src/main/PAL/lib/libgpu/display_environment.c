@@ -25,8 +25,8 @@ DispEnv *PutDispEnv(DispEnv *env) {
     }
     g_GpuFuncs.funcs->submit(cmd);
 
-    if ((short)g_DispEnvCache.x8 != s0->screen.x || (short)g_DispEnvCache.xA != s0->screen.y ||
-        (short)g_DispEnvCache.xC != s0->screen.w || (short)g_DispEnvCache.xE != s0->screen.h) {
+    if ((short)g_DispEnvCache.screenX != s0->screen.x || (short)g_DispEnvCache.screenY != s0->screen.y ||
+        (short)g_DispEnvCache.screenWidth != s0->screen.w || (short)g_DispEnvCache.screenHeight != s0->screen.h) {
         long left;
         long right;
         long top;
@@ -83,9 +83,9 @@ DispEnv *PutDispEnv(DispEnv *env) {
         }
     }
 
-    if (g_DispEnvCache.x10 != *(u_long *)&s0->isinter || (short)g_DispEnvCache.x0 != s0->disp.x ||
-        (short)g_DispEnvCache.x2 != s0->disp.y || (short)g_DispEnvCache.x4 != s0->disp.w ||
-        (short)g_DispEnvCache.x6 != s0->disp.h) {
+    if (g_DispEnvCache.flags != *(u_long *)&s0->isinter || (short)g_DispEnvCache.displayX != s0->disp.x ||
+        (short)g_DispEnvCache.displayY != s0->disp.y || (short)g_DispEnvCache.displayWidth != s0->disp.w ||
+        (short)g_DispEnvCache.displayHeight != s0->disp.h) {
         s0->pad0 = GetDMAInterruptState();
         if (s0->pad0 == 1) {
             flags |= 8;

@@ -36,21 +36,6 @@ typedef struct DispEnv {
     u_char pad1;
 } DispEnv;
 
-typedef struct Env {
-    short x0;
-    short x2;
-    short x4;
-    short x6;
-    short x8;
-    short xA;
-    short xC;
-    short xE;
-    u_char x10;
-    u_char x11;
-    u_char x12;
-    u_char x13;
-} Env;
-
 typedef struct DrawEnvPacket {
     u_long tag;
     u_long code[15];
