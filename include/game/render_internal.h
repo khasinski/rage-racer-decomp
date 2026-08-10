@@ -37,10 +37,21 @@ typedef char GameFrameEnvironmentHeaderSizeCheck[
 #define GAME_FRAME_CONTEXT_SIZE 0x237E8
 #define GAME_FRAME_OT_LENGTH 0x2C0
 
+typedef struct RaceHudPackets {
+    DrawPacket tachometerDrawModes[2];
+    SPRT tachometerFace;
+    SPRT lapTimes[6];
+    SPRT labels[6];
+} RaceHudPackets;
+
+typedef char RaceHudPacketsSizeCheck[
+    sizeof(RaceHudPackets) == 0x11C ? 1 : -1];
+
 typedef struct GameFrameLayout {
     GameFrameEnvironmentHeader environment;
     u_long orderingTables[2][GAME_FRAME_OT_LENGTH];
-    u8 primitiveBuffer[GAME_FRAME_CONTEXT_SIZE - 0x16CC];
+    u8 primitiveBuffer[0x22000];
+    RaceHudPackets raceHud;
 } GameFrameLayout;
 
 typedef char GameFrameLayoutSizeCheck[
