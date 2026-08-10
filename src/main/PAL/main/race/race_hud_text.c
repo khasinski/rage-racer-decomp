@@ -572,6 +572,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 s32 rightTrig;
                 register s32 sample;
                 s16 right;
+                RenderBufferAddress cursor;
 
                 g_RaceOptionPulseAngle &= 0xFFF;
                 sample = rcos(g_RaceOptionPulseAngle);
@@ -599,8 +600,9 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 drawPrim->tpage = 9;
                 AddPrim(g_DrawBuffer + 0xCC, drawPrim);
 
+                cursor.polyFT4 = quad;
                 SCRATCH_PRIM_CURSOR_AS(u8) = QueueDrawModePrim(
-                    g_DrawBuffer + 0xCC, (u8 *)quad, 9);
+                    g_DrawBuffer + 0xCC, cursor.bytes, 9);
             }
         }
     }

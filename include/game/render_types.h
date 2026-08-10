@@ -14,6 +14,7 @@ typedef union RenderBufferAddress {
     volatile SPRT_8 *volatileSprite8;
     TILE *tile;
     POLY_F4 *polyF4;
+    POLY_FT4 *polyFT4;
     POLY_G4 *polyG4;
     CVec *color;
 } RenderBufferAddress;
