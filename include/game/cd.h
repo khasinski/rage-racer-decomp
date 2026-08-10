@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+struct CdlLOC;
+
 extern u8 g_CdVolume;
 /*
  * CD-DA (music) front end. Nothing here talks to the drive directly: each call
@@ -79,7 +81,7 @@ extern u8 g_CdMixPresets[];
 extern u8 g_CdModeParam;
 extern u8 g_CdSearchFile[];
 extern s32 g_CdTocEntryCount;
-extern u8 g_CdTrackElapsedLoc[];
+extern struct CdlLOC g_CdTrackElapsedLoc;
 
 void CdMix(u8* vol);
 

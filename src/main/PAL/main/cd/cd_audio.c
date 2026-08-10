@@ -42,14 +42,14 @@ void StepCdPauseRequest(void) {
         break;
 
     case 3:
-        g_CdTrackElapsedLoc[0] = g_CdLocMinute;
-        g_CdTrackElapsedLoc[2] = 0;
-        g_CdTrackElapsedLoc[1] = g_CdLocSecond;
+        g_CdTrackElapsedLoc.minute = g_CdLocMinute;
+        g_CdTrackElapsedLoc.sector = 0;
+        g_CdTrackElapsedLoc.second = g_CdLocSecond;
 
         currentTime = CdPosToInt_Local(&g_CdTrackLoopPoint[g_CdCurrentTrack]);
         bestTime = CdPosToInt_Local(&g_CdTrackLoopPoint[0]);
         if (bestTime < currentTime) {
-            enteredTime = CdPosToInt_Local((CdlLOC *)g_CdTrackElapsedLoc);
+            enteredTime = CdPosToInt_Local(&g_CdTrackElapsedLoc);
             currentTime = CdPosToInt_Local(&g_CdTrackLoopPoint[g_CdCurrentTrack]);
             if (enteredTime >= currentTime) {
                 g_CdRestartOnResume = 1;
