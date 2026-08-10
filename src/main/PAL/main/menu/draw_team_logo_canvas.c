@@ -397,8 +397,8 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       asm("" : : "r"(swatchWidth));
       shade = (u8) (i * 0x24);
       asm("" : : "r"(shade));
-      drawValue.byteOffset = ot.byteOffset;
-      asm("" : : "r"(drawValue.byteOffset));
+      drawValue.pointer = ot.pointer;
+      asm("" : : "r"(drawValue.pointer));
       asm("" : : "r"(x1));
       asm("" : "=r"(clutArg) : "0"(clut));
       DrawSprite(drawValue.pointer, (s16)(x1 + 0x13), (s16)(yA0 >> 16), (s16)swatchWidth, (s16)0x18,

@@ -49,7 +49,7 @@ void InitRecordTables(void) {
             r8.byteOffset = r11;
             do {
                 r4.value = 0;
-                r10.byteOffset = r8.byteOffset;
+                r10.wordPointer = r8.wordPointer;
                 r2.byteOffset = r12 + r18.byteOffset;
                 r6 = r7 * 4;
                 r9.byteOffset = r6 + r2.byteOffset;
@@ -160,12 +160,12 @@ void InitRecordTables(void) {
     r9.wordPointer = &g_BestSectorTimes[0][0][0];
     do {
         r7 = 0;
-        r4.byteOffset = r9.byteOffset;
+        r4.wordPointer = r9.wordPointer;
         do {
             r6 = 0;
             r2.value = r7 * 4;
             r5.byteOffset = r2.value + r8.byteOffset;
-            r3.byteOffset = r4.byteOffset;
+            r3.wordPointer = r4.wordPointer;
             do {
                 r2.value = *r5.wordPointer;
                 r6++;
