@@ -32,6 +32,14 @@ typedef struct GameFrameEnvironmentHeader {
     DrawEnv mirrorDraw;
 } GameFrameEnvironmentHeader;
 
+#define GAME_FRAME_CONTEXT_SIZE 0x237E8
+
+typedef union GameFrameContext {
+    GameFrameEnvironmentHeader environment;
+    u8 bytes[GAME_FRAME_CONTEXT_SIZE];
+    volatile u8 volatileBytes[GAME_FRAME_CONTEXT_SIZE];
+} GameFrameContext;
+
 typedef union ScreenOffset {
     s32 value;
     u16 displayValue;
@@ -51,7 +59,7 @@ extern Vec4 *g_VisibleCellList;
 extern s32 g_CameraViewMode;
 extern s16 g_AtanTable[];
 extern u8 *g_DrawBuffer;
-extern u8 g_FrameContexts[];
+extern GameFrameContext g_FrameContexts[2];
 extern ScreenOffset g_ScreenOffsetX;
 extern ScreenOffset g_ScreenOffsetY;
 extern s32 g_FrameParity;

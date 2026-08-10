@@ -92,7 +92,7 @@ void MainLoop(void) {
     g_FrameCounter = 0;
     for (;;) {
         s32 parity = g_FrameCounter & 1;
-        u8 *frame = g_FrameContexts + parity * 0x237E8;
+        u8 *frame = g_FrameContexts[0].bytes + parity * GAME_FRAME_CONTEXT_SIZE;
 
         g_DrawBuffer = frame;
         g_FrameParity = parity;
