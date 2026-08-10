@@ -293,7 +293,15 @@ extern char g_McSlotLabels[];
 extern s32 g_McSlotUsedMask;
 extern s32 g_McStateChangeCount;
 extern s32 g_McStatusResult;
-extern s32 g_McStatusState;
+typedef enum MemoryCardStatusState {
+    MC_STATUS_INVALID = -1,
+    MC_STATUS_REQUEST_INFO,
+    MC_STATUS_WAIT_INFO,
+    MC_STATUS_REQUEST_LOAD,
+    MC_STATUS_WAIT_LOAD,
+    MC_STATUS_PUBLISH_RESULT
+} MemoryCardStatusState;
+extern MemoryCardStatusState g_McStatusState;
 extern s32 g_McSwEventError;
 extern s32 g_McSwEventIoe;
 extern s32 g_McSwEventNew;

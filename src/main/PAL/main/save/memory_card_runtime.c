@@ -17,14 +17,14 @@ s32 PollMemoryCardStatus(s32 port, s32 slot) {
     handle = (port * 16) + slot;
 
     switch (g_McStatusState) {
-    case 0:
+    case MC_STATUS_REQUEST_INFO:
         _card_info(handle);
-        g_McStatusState = 1;
+        g_McStatusState = MC_STATUS_WAIT_INFO;
         g_McPollTicks = 0;
         g_McStatusResult = 0;
         break;
 
-    case 1:
+    case MC_STATUS_WAIT_INFO:
         status = PollMemoryCardHwEvent();
         if (status == 0) {
             break;
@@ -38,7 +38,7 @@ s32 PollMemoryCardStatus(s32 port, s32 slot) {
             }
             state = -3;
         g_McPollStatus = state;
-        g_McStatusState = 4;
+        g_McStatusState = MC_STATUS_PUBLISH_RESULT;
         g_McLastCardStatus = 0;
         break;
         }
@@ -51,9 +51,9 @@ s32 PollMemoryCardStatus(s32 port, s32 slot) {
 case1_ready:
         g_McPollStatus = status;
         if (g_McLastCardStatus == status) {
-            g_McStatusState = 4;
+            g_McStatusState = MC_STATUS_PUBLISH_RESULT;
         } else {
-            g_McStatusState = two;
+            g_McStatusState = MC_STATUS_REQUEST_LOAD;
         }
         break;
 
@@ -61,7 +61,7 @@ case1_ready:
         } else {
         state = -1;
         g_McPollStatus = state;
-        g_McStatusState = 4;
+        g_McStatusState = MC_STATUS_PUBLISH_RESULT;
         g_McLastCardStatus = 0;
         break;
 
@@ -70,7 +70,7 @@ case1_ready:
         ClearMemoryCardSwEvents();
         _card_clear(handle);
         WaitMemoryCardSwEvent();
-        g_McStatusState = two;
+        g_McStatusState = MC_STATUS_REQUEST_LOAD;
         g_McLastCardStatus = 0;
         break;
 
@@ -79,24 +79,24 @@ case1_ready:
 
 fail_case1:
         g_McPollStatus = state;
-        g_McStatusState = 4;
+        g_McStatusState = MC_STATUS_PUBLISH_RESULT;
         g_McLastCardStatus = 0;
         break;
 
-    case 2:
+    case MC_STATUS_REQUEST_LOAD:
         ClearMemoryCardHwEvents();
         _card_load(handle);
-        g_McStatusState = 3;
+        g_McStatusState = MC_STATUS_WAIT_LOAD;
         g_McPollTicks = 0;
         break;
 
-    case 3:
+    case MC_STATUS_WAIT_LOAD:
         status = PollMemoryCardHwEvent();
         if (status == 0) {
             break;
         }
 
-        g_McStatusState = 4;
+        g_McStatusState = MC_STATUS_PUBLISH_RESULT;
         if (!(status == 2)) {
         if (status < 3) {
             if (status == 1) {
@@ -137,13 +137,13 @@ case3_ready:
         g_McLastCardStatus = 0;
         break;
 
-    case 4:
-        g_McStatusState = 0;
+    case MC_STATUS_PUBLISH_RESULT:
+        g_McStatusState = MC_STATUS_REQUEST_INFO;
         g_McStatusResult = g_McPollStatus;
         break;
 
     default:
-        g_McStatusState = 0;
+        g_McStatusState = MC_STATUS_REQUEST_INFO;
         g_McStatusResult = 0;
     }
 
