@@ -254,6 +254,9 @@ typedef union CarCollisionPointValue {
     s32 packed;
 } CarCollisionPointValue;
 
+#define GetCarCollisionPointPacked(point) \
+    (((CarCollisionPointValue *)(point))->packed)
+
 typedef struct CarHullPoint {
     u16 x;
     u16 z;

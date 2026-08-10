@@ -681,11 +681,11 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                     quadIndex = 0;
                     do {
                         hit = IsPointInQuad(
-                            ((CarCollisionPointValue *)&quads[quadIndex][2])->packed,
-                            ((CarCollisionPointValue *)&quads[quadIndex][3])->packed,
-                            ((CarCollisionPointValue *)&quads[quadIndex][0])->packed,
-                            ((CarCollisionPointValue *)&quads[quadIndex][1])->packed,
-                            ((CarCollisionPointValue *)&otherCorners[corner])->packed);
+                            GetCarCollisionPointPacked(&quads[quadIndex][2]),
+                            GetCarCollisionPointPacked(&quads[quadIndex][3]),
+                            GetCarCollisionPointPacked(&quads[quadIndex][0]),
+                            GetCarCollisionPointPacked(&quads[quadIndex][1]),
+                            GetCarCollisionPointPacked(&otherCorners[corner]));
                         if (hit > 0) {
                             hit = quadIndex + 1;
                             break;
@@ -704,11 +704,11 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                         quadIndex = 0;
                         do {
                             hit = IsPointInQuad(
-                                ((CarCollisionPointValue *)&quads[quadIndex][2])->packed,
-                                ((CarCollisionPointValue *)&quads[quadIndex][3])->packed,
-                                ((CarCollisionPointValue *)&quads[quadIndex][0])->packed,
-                                ((CarCollisionPointValue *)&quads[quadIndex][1])->packed,
-                                ((CarCollisionPointValue *)&samples[corner])->packed);
+                                GetCarCollisionPointPacked(&quads[quadIndex][2]),
+                                GetCarCollisionPointPacked(&quads[quadIndex][3]),
+                                GetCarCollisionPointPacked(&quads[quadIndex][0]),
+                                GetCarCollisionPointPacked(&quads[quadIndex][1]),
+                                GetCarCollisionPointPacked(&samples[corner]));
                             if (hit > 0) {
                                 hit = quadIndex + 1;
                                 break;
