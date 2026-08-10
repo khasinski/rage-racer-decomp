@@ -330,16 +330,16 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       loop_68:
       bandTorque = specSlot.pointer->torqueBand.values[0];
 
-      if ((engineSpeed >= bandTorque) && ((gearCurve.byteOffset = specSlot.pointer->torqueBand.values[1], (gearCurve.byteOffset < engineSpeed) == 0)))
+      if ((engineSpeed >= bandTorque) && ((gearCurve.value = specSlot.pointer->torqueBand.values[1], (gearCurve.value < engineSpeed) == 0)))
       {
         s32 *curveValues = curveSlot.valuePointer;
-        bandCurve = gearCurve.byteOffset - bandTorque;
+        bandCurve = gearCurve.value - bandTorque;
         if (bandCurve <= 0)
         {
           bandCurve = 1;
         }
         frontLoadScaled = (engineSpeed - bandTorque) * curveValues[1];
-        frontLoadScaled += (gearCurve.byteOffset - engineSpeed) * curveValues[0];
+        frontLoadScaled += (gearCurve.value - engineSpeed) * curveValues[0];
         netTorque = frontLoadScaled / (bandCurve * 0xA);
       }
       else
@@ -382,16 +382,16 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
 
       if (engineSpeedLoss >= lossTorque)
       {
-        curveSlot.byteOffset = gearCurve.specPointer->torqueLossRpm[1];
+        curveSlot.value = gearCurve.specPointer->torqueLossRpm[1];
         assistStep += 1;
-        if (curveSlot.byteOffset >= engineSpeedLoss)
+        if (curveSlot.value >= engineSpeedLoss)
         {
-          lossCurve = curveSlot.byteOffset - lossTorque;
+          lossCurve = curveSlot.value - lossTorque;
           if (lossCurve <= 0)
           {
             lossCurve = 1;
           }
-          bandScale = (((engineSpeedLoss - lossTorque) * gearCurve.specPointer->torqueLossValue[1]) + ((curveSlot.byteOffset - engineSpeedLoss) * gearCurve.specPointer->torqueLossValue[0])) / lossCurve;
+          bandScale = (((engineSpeedLoss - lossTorque) * gearCurve.specPointer->torqueLossValue[1]) + ((curveSlot.value - engineSpeedLoss) * gearCurve.specPointer->torqueLossValue[0])) / lossCurve;
           lossBelowLimit = bandScale < 0x64;
         }
         else
@@ -473,13 +473,13 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     if (drive->gearDisp != targetGearAgain)
     {
       gearRatios = config.pointer->gearRatio;
-      gearCurve.byteOffset = (car->speed * 0x2710) /
+      gearCurve.value = (car->speed * 0x2710) /
                             (gearRatios[targetGearAgain] * 0x490 / 160);
       wheelSpeed = (u16)car->acceleration;
       wheelSpeedScaled.value = wheelSpeed;
       assistEnabled = drive->manual;
       drive->engineLoad = wheelSpeedScaled.value;
-      g_ShiftTargetSpeed = gearCurve.byteOffset;
+      g_ShiftTargetSpeed = gearCurve.value;
       if (assistEnabled != 0)
       {
         targetGearCheck = drive->gear;
@@ -515,7 +515,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
           }
           gradeScale = 0x64 - gradePenalty;
           drive->engineLoad = (u16)((wheelSpeedScaled.value * gradeScale) / 100);
-          g_ShiftTargetSpeed = (gradeScale * gearCurve.byteOffset) / 100;
+          g_ShiftTargetSpeed = (gradeScale * gearCurve.value) / 100;
         }
       }
 grade_adjust_done:
@@ -594,7 +594,7 @@ shift_interpolation_done:
   {
     accel -= netTorque / 2;
   }
-  headingError = GetAngleDistance(car->bodyYaw, car->headingAngle, gearCurve.byteOffset, curveSlot.byteOffset);
+  headingError = GetAngleDistance(car->bodyYaw, car->headingAngle, gearCurve.value, curveSlot.value);
   drive->steeringLoadAngle = headingError;
   if (headingError >= 0x401)
   {

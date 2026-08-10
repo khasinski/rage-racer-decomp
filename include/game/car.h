@@ -413,6 +413,7 @@ typedef struct GameCarSpec {
 
 typedef union GameCarSpecAddress {
     s32 byteOffset;
+    s32 value;
     void *data;
     u8 *bytes;
     GameCarSpec *pointer;
@@ -435,6 +436,7 @@ typedef struct GearCurveRow {
 
 typedef union GearCurveAddress {
     s32 byteOffset;
+    s32 value;
     u8 *bytes;
     s32 *valuePointer;
     GearCurveRow *rowPointer;
