@@ -43,7 +43,7 @@ void DrawEndingStill(void) {
     base = g_DrawBuffer + 0xCC;
     height = 0xF0;
     clut = 0x3FDB;
-    scratch = (u8 *volatile *)SCRATCHPAD_ADDR;
+    scratch = SCRATCH_PRIM_CURSOR_SLOT;
 
     next = *scratch;
     next = GameQueueSprite(base, next, 0, 0, 0x100, height, 0, 0, clut);

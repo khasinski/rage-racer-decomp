@@ -29,7 +29,7 @@ void DrawControllerSetupScene(s32 variant) {
     s32 steer;
     s32 model;
     u32 setupMode;
-    u8 *scratchBase = (u8 *)SCRATCHPAD_ADDR;
+    u8 *scratchBase = SCRATCHPAD_BYTES;
 
     g_ScratchViewZVolatile = 0;
     g_ScratchViewZPointer = (void *)-0x1080;

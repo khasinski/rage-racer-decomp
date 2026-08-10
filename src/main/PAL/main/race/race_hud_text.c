@@ -466,7 +466,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
             asm(
                 "" : "=r"(textY), "=r"(textColor) :
                 "0"(textY), "1"(textColor));
-            scratchPacket = (u8 *)SCRATCHPAD_ADDR;
+            scratchPacket = SCRATCHPAD_BYTES;
             scroll0 = g_RaceOptionScroll0;
             marqueeBase = &g_RaceOptionMarquee[0][0];
             *(u8 **)scratchPacket = firstNext;

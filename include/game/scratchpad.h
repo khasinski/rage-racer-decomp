@@ -133,6 +133,7 @@ typedef struct CarTrackScratch {
 
 #define SCRATCHPAD_ADDR 0x1F800000
 #define SCRATCHPAD ((GameScratchpadRenderState *)SCRATCHPAD_ADDR)
+#define SCRATCHPAD_BYTES ((u8 *)SCRATCHPAD_ADDR)
 
 /*
  * The primitive-packing cursor. Every emitter packs a GPU packet at it, bumps
@@ -144,6 +145,8 @@ typedef struct CarTrackScratch {
 #define SCRATCH_PRIM_CURSOR_AS(type) (*(type **)0x1F800000)
 #define SCRATCH_PRIM_CURSOR          SCRATCH_PRIM_CURSOR_AS(void)
 #define SCRATCH_PRIM_CURSOR_WORD     (*(s32 *)0x1F800000)
+#define SCRATCH_PRIM_CURSOR_VOLATILE (*(u8 *volatile *)SCRATCHPAD_ADDR)
+#define SCRATCH_PRIM_CURSOR_SLOT     (&SCRATCH_PRIM_CURSOR_VOLATILE)
 
 /* Ordering table the emitters link finished packets into. */
 #define SCRATCH_OT_BASE_AS(type)     (*(type **)0x1F800004)

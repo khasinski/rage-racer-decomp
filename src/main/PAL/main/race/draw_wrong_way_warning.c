@@ -165,7 +165,7 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         /* Not SCRATCH: this read has to stay volatile. Spelling it as the
          * plain macro lets the cursor written above be reused instead of
          * reloaded, which changes the output. */
-        u8 *q = DrawHudDigit(*(u8 *volatile *)SCRATCHPAD_ADDR, x, y, g_PlayerGear, g_HudGlyphClut);
+        u8 *q = DrawHudDigit(SCRATCH_PRIM_CURSOR_VOLATILE, x, y, g_PlayerGear, g_HudGlyphClut);
         SCRATCH = q;
         DrawSpeedDigits(cx, cy, g_PlayerSpeed * 160 / 1168);
     }
