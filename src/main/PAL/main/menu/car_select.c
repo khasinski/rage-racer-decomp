@@ -149,7 +149,7 @@ s32 DrawCarSelectScreen(s32 step) {
     u8 tex;
 
     otAddress.pointer = ot;
-    p = otAddress.byteOffset;
+    p = otAddress.value;
 
     if (step == 0) {
         g_CarSelectFadeAccum = 0;

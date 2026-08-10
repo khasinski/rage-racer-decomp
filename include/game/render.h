@@ -13,6 +13,7 @@
 
 typedef union OrderingTableAddress {
     s32 byteOffset;
+    s32 value;
     void *pointer;
 } OrderingTableAddress;
 

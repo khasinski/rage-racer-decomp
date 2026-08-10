@@ -158,7 +158,7 @@ s32 DrawCourseSelectScreen(s32 step)
     if (step == 0) {
         g_CourseSelectScrollValue = 0;
         otAddress.pointer = otBase;
-        return otAddress.byteOffset;
+        return otAddress.value;
     }
 
     if (step > 0) {
