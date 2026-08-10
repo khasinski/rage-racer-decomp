@@ -114,7 +114,11 @@ void MainLoop(void) {
         ticks = g_GameClock + 1;
         g_GameClock = ticks + elapsed / 256;
         VSync(0);
-        PutDrawEnv(g_DrawBuffer);
+        {
+            GameFrameContextAddress drawBuffer;
+            drawBuffer.bytes = g_DrawBuffer;
+            PutDrawEnv(&drawBuffer.context->environment.draw);
+        }
         {
             GameFrameContextAddress drawBuffer;
             drawBuffer.bytes = g_DrawBuffer;

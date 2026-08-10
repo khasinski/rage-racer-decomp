@@ -14,29 +14,29 @@ void DrawOTag(void *ot) {
 }
 
 /* Named from its own trace string g_GpuTracePutDrawEnv, "PutDrawEnv(%08x)...". */
-void *PutDrawEnv(void *env) {
+DrawEnv *PutDrawEnv(DrawEnv *env) {
     u8 *debug = &g_GraphDebug;
-    void *prim = env;
-    void *tag;
+    DrawEnv *prim = env;
+    DrawEnvPacket *tag;
 
     if (*debug >= 2) {
         GPU_printf(g_GpuTracePutDrawEnv, prim);
     }
 
-    tag = (u8 *)prim + 0x1C;
+    tag = &prim->packet;
     Gpu_BuildDrawEnvCmds(tag, prim);
     {
         u32 mask = 0xFFFFFF;
-        void *sendTag = tag;
+        DrawEnvPacket *sendTag = tag;
         s32 size = 0x40;
-        u32 word = *(u32 *)tag;
+        u32 word = tag->tag;
         GpuCallbacks *gpu = g_GpuFuncs;
 
         word |= mask;
-        *(u32 *)tag = word;
+        tag->tag = word;
         gpu->send(gpu->sendList, sendTag, size, 0);
     }
-    MemCopy(debug + 0xE, prim, 0x5C);
+    MemCopy(debug + 0xE, (u_char *)prim, 0x5C);
     return prim;
 }
 
