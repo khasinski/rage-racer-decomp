@@ -20,17 +20,24 @@ typedef union RivalCueCooldownAddress {
     u16 *unsignedCounter;
 } RivalCueCooldownAddress;
 
+typedef union TrafficAvoidanceAnchorAddress {
+    u8 *bytes;
+    s16 *signedHalfwords;
+    u16 *halfwords;
+    s32 *words;
+} TrafficAvoidanceAnchorAddress;
+
 void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     GameCarAiBlock *state = GetCarAiBlock(car);
     s32 acc8 = 0;
     s32 acc9 = 0;
     register s32 i asm("$10") = 0;
     s32 k11 = 0xB;
-    u8 *base = (u8 *)&g_PlayerCar.trackProgress;
+    TrafficAvoidanceAnchorAddress playerAnchor;
     s32 carProgress;
     s32 carLateralOffset;
     s32 carA4low;
-    register u8 *block asm("$11");
+    register TrafficAvoidanceAnchorAddress carAnchor asm("$11");
     register s32 track asm("$12");
     s32 t6;
     s32 lateralMin;
@@ -42,7 +49,8 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     carProgress = car->trackProgress;
     carLateralOffset = car->trackLateralOffset;
     carA4low = (u16)car->speed;
-    block = (u8 *)&g_Cars[0].speed;
+    playerAnchor.words = &g_PlayerCar.trackProgress;
+    carAnchor.words = &g_Cars[0].speed;
     car->avoidanceStep = 0;
     car->nearbyCarCount = 0;
     sums[3] = 0;
@@ -58,7 +66,7 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     lateralMax = (s16)(carLateralOffset + 0x30);
     trackMinus = track - 0x400;
 
-    for (; i < 12; i++, block += sizeof(GameCarRuntime)) {
+    for (; i < 12; i++, carAnchor.bytes += sizeof(GameCarRuntime)) {
         s32 otherLateralOffset;
         s32 otherA4;
         s32 a2;
@@ -75,26 +83,29 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
         if (i == carIndex) {
             continue;
         }
-        if (((s16 *)block)[CAR_SPEED_ACTIVE_FLAG_HALFWORD] == -1) {
+        if (carAnchor.signedHalfwords[CAR_SPEED_ACTIVE_FLAG_HALFWORD] == -1) {
             continue;
         }
 
         if (i == k11) {
-            s32 op = *(s32 *)(base + 0);
+            s32 op = playerAnchor.words[0];
             a2 = op + track;
-            otherLateralOffset = ((s32 *)base)[PLAYER_PROGRESS_TRACK_LATERAL_WORD];
+            otherLateralOffset =
+                playerAnchor.words[PLAYER_PROGRESS_TRACK_LATERAL_WORD];
             if (carIndex < 4) {
                 otherA4 = 0;
             } else {
-                otherA4 = ((u16 *)base)[PLAYER_PROGRESS_SPEED_HALFWORD];
+                otherA4 =
+                    playerAnchor.halfwords[PLAYER_PROGRESS_SPEED_HALFWORD];
             }
             t1 = 0;
             t6 = 0x1800 - (g_PlayerCar.speed * 2);
         } else {
             s32 op;
-            otherLateralOffset = ((s32 *)block)[CAR_SPEED_TRACK_LATERAL_WORD];
-            otherA4 = *(u16 *)block; /* g_Cars[i].speed, low half */
-            op = ((s32 *)block)[CAR_SPEED_TRACK_PROGRESS_WORD];
+            otherLateralOffset =
+                carAnchor.words[CAR_SPEED_TRACK_LATERAL_WORD];
+            otherA4 = carAnchor.halfwords[0];
+            op = carAnchor.words[CAR_SPEED_TRACK_PROGRESS_WORD];
             a2 = op + track;
             t1 = (u16)state->avoidanceActive;
         }
