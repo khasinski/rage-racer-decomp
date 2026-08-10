@@ -4,6 +4,7 @@
 #include "common.h"
 
 struct CdlLOC;
+struct CdlFILE;
 
 extern u8 g_CdVolume;
 /*
@@ -73,13 +74,13 @@ extern s32 g_CdTrackStep;
 /* Declared identically by 10 translation units before this
  * header carried them. */
 
-extern void *g_CdAudioFileNames[];
+extern char *g_CdAudioFileNames[];
 extern u8 g_CdLocMinute;
 extern u8 g_CdLocResult;
 extern u8 g_CdLocSecond;
 extern u8 g_CdMixPresets[];
 extern u8 g_CdModeParam;
-extern u8 g_CdSearchFile[];
+extern struct CdlFILE g_CdSearchFile;
 extern s32 g_CdTocEntryCount;
 extern struct CdlLOC g_CdTrackElapsedLoc;
 
