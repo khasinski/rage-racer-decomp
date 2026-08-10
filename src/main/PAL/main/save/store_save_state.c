@@ -168,12 +168,23 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
             s32 outer = 0;
             s32 *lapBase = &g_BestLapTimes[0][0][0];
             s32 *totalBase = &g_BestTotalTimes[0][0][0];
-            u8 *outerDst = (u8 *)block;
+            GameSaveBlockAddress outerDestinationAddress;
+            u8 *outerDst;
+
+            outerDestinationAddress.pointer = block;
+            outerDst = outerDestinationAddress.bytePointer;
 
             for (; outer < 2; outer++) {
                 register s32 outerOffset asm("$9") = (middle = 0, outer * 32);
                 register u8 *middleDst asm("$11") = outerDst;
-                u8 *lapDst = (u8 *)((GameSaveBlock *)outerDst)->bestLapTimes;
+                GameSaveBlockAddress lapBlockAddress;
+                LapTimeTableAddress lapDestinationAddress;
+                u8 *lapDst;
+
+                lapBlockAddress.bytePointer = outerDst;
+                lapDestinationAddress.pointer =
+                    &lapBlockAddress.pointer->bestLapTimes[0][0][0];
+                lapDst = lapDestinationAddress.bytes;
 
             for (; middle < 4; middle++) {
                 LapTimeTableAddress totalOutputBaseAddress;
@@ -185,14 +196,16 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
                 LapTimeTableAddress lapInputBaseAddress;
                 LapTimeTableAddress lapInputOuterAddress;
                 LapTimeTableAddress lapInputAddress;
+                GameSaveBlockAddress middleDestinationAddress;
                 s32 middleOffset = (inner = 0, middle * 8);
                 s32 *totalOut;
                 s32 *totalIn;
                 s32 *lapOut;
                 s32 *lapIn;
 
+                middleDestinationAddress.bytePointer = middleDst;
                 totalOutputBaseAddress.pointer =
-                    &((GameSaveBlock *)middleDst)->bestTotalTimes[0][0][0];
+                    &middleDestinationAddress.pointer->bestTotalTimes[0][0][0];
                 totalOutputAddress.byteOffset =
                     middleOffset + totalOutputBaseAddress.byteOffset;
                 totalOut = totalOutputAddress.pointer;
