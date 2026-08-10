@@ -167,7 +167,7 @@ void LoadRaceAssets(void) {
             header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[5];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
-            RegisterCourseModels((CourseModelAssetHeader *)g_AssetBlockPtr);
+            RegisterCourseModels(GetCourseModelAssetHeader(g_AssetBlockPtr));
 
             header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[6];
