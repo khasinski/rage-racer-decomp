@@ -13,7 +13,7 @@ static __inline__ CameraKey *GetCameraKey(s32 byteOffset) {
     AssetAddress address;
 
     address.pointer = g_CameraPath;
-    address.offset += byteOffset;
+    address.bytes += byteOffset;
     return address.pointer;
 }
 
