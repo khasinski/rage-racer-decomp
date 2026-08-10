@@ -166,7 +166,7 @@ void UpdatePathScenerySound(void) {
     PathSceneryPositionKey *positionKeys;
     PathSceneryRotationKey *rotationKeys;
     s16 rate;
-    register s16 idx asm("$2");
+    s16 idx;
     s32 dx;
     s32 dy;
     s32 dz;

@@ -172,13 +172,13 @@ void InsertRaceRecords(void) {
     s32 i;
     s32 row_offset;
     s32 best;
-    register s32 j asm("$7");
+    s32 j;
     s32 *score_ptr;
     register RaceRecordAddress entryAddress asm("$5");
     register s32 score_offset asm("$3");
     s32 score_value;
     s32 mode;
-    register RaceRecordAddress baseAddress asm("$2");
+    RaceRecordAddress baseAddress;
     s32 letter;
     s32 code;
     s32 letter2;
