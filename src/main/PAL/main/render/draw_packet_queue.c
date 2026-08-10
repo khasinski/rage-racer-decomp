@@ -52,28 +52,28 @@ u8 *GameQueueShadedTexturedRect(ot, prim, x, y, w, h, u, v, clutIndex, tpage, in
         v0 -= height;
     }
 
-    (((POLY_FT4 *)prim)->x0 = x,
-     ((POLY_FT4 *)prim)->y0 = y,
-     ((POLY_FT4 *)prim)->x1 = x + (width < 0 ? -width : width),
-     ((POLY_FT4 *)prim)->y1 = y,
-     ((POLY_FT4 *)prim)->x2 = x,
-     ((POLY_FT4 *)prim)->y2 = y + (height < 0 ? -height : height),
-     ((POLY_FT4 *)prim)->x3 = x + (width < 0 ? -width : width),
-     ((POLY_FT4 *)prim)->y3 = y + (height < 0 ? -height : height));
-    ((POLY_FT4 *)prim)->u0 = u0;
-    ((POLY_FT4 *)prim)->v0 = v0;
-    ((POLY_FT4 *)prim)->u1 = u0 + width;
-    ((POLY_FT4 *)prim)->v1 = v0;
-    ((POLY_FT4 *)prim)->u2 = u0;
-    ((POLY_FT4 *)prim)->v2 = v0 + height;
-    ((POLY_FT4 *)prim)->u3 = u0 + width;
-    ((POLY_FT4 *)prim)->v3 = v0 + height;
-    ((POLY_FT4 *)prim)->t.r0 = intensity;
-    ((POLY_FT4 *)prim)->t.g0 = intensity;
-    ((POLY_FT4 *)prim)->t.b0 = intensity;
-    ((POLY_FT4 *)prim)->clut = clutIndex;
-    ((POLY_FT4 *)prim)->tpage = tpage;
     packet = (POLY_FT4 *)prim;
+    (packet->x0 = x,
+     packet->y0 = y,
+     packet->x1 = x + (width < 0 ? -width : width),
+     packet->y1 = y,
+     packet->x2 = x,
+     packet->y2 = y + (height < 0 ? -height : height),
+     packet->x3 = x + (width < 0 ? -width : width),
+     packet->y3 = y + (height < 0 ? -height : height));
+    packet->u0 = u0;
+    packet->v0 = v0;
+    packet->u1 = u0 + width;
+    packet->v1 = v0;
+    packet->u2 = u0;
+    packet->v2 = v0 + height;
+    packet->u3 = u0 + width;
+    packet->v3 = v0 + height;
+    packet->t.r0 = intensity;
+    packet->t.g0 = intensity;
+    packet->t.b0 = intensity;
+    packet->clut = clutIndex;
+    packet->tpage = tpage;
     prim += sizeof(POLY_FT4);
     AddPrim(ot, packet);
     return prim;
@@ -109,25 +109,25 @@ u8 *GameQueueTexturedRect(ot, prim, x, y, w, h, u, v, uSpan, vSpan, clutIndex, t
         v0 -= height + 1;
     }
 
-    (((POLY_FT4 *)prim)->x0 = x,
-     ((POLY_FT4 *)prim)->y0 = y,
-     ((POLY_FT4 *)prim)->x1 = x + (width < 0 ? -width : width),
-     ((POLY_FT4 *)prim)->y1 = y,
-     ((POLY_FT4 *)prim)->x2 = x,
-     ((POLY_FT4 *)prim)->y2 = y + (height < 0 ? -height : height),
-     ((POLY_FT4 *)prim)->x3 = x + (width < 0 ? -width : width),
-     ((POLY_FT4 *)prim)->y3 = y + (height < 0 ? -height : height));
-    ((POLY_FT4 *)prim)->u0 = u0;
-    ((POLY_FT4 *)prim)->v0 = v0;
-    ((POLY_FT4 *)prim)->u1 = u0 + uSpan;
-    ((POLY_FT4 *)prim)->v1 = v0;
-    ((POLY_FT4 *)prim)->u2 = u0;
-    ((POLY_FT4 *)prim)->v2 = v0 + vSpan;
-    ((POLY_FT4 *)prim)->u3 = u0 + uSpan;
-    ((POLY_FT4 *)prim)->v3 = v0 + vSpan;
-    ((POLY_FT4 *)prim)->clut = clutIndex;
-    ((POLY_FT4 *)prim)->tpage = tpage;
     packet = (POLY_FT4 *)prim;
+    (packet->x0 = x,
+     packet->y0 = y,
+     packet->x1 = x + (width < 0 ? -width : width),
+     packet->y1 = y,
+     packet->x2 = x,
+     packet->y2 = y + (height < 0 ? -height : height),
+     packet->x3 = x + (width < 0 ? -width : width),
+     packet->y3 = y + (height < 0 ? -height : height));
+    packet->u0 = u0;
+    packet->v0 = v0;
+    packet->u1 = u0 + uSpan;
+    packet->v1 = v0;
+    packet->u2 = u0;
+    packet->v2 = v0 + vSpan;
+    packet->u3 = u0 + uSpan;
+    packet->v3 = v0 + vSpan;
+    packet->clut = clutIndex;
+    packet->tpage = tpage;
     prim += sizeof(POLY_FT4);
     AddPrim(ot, packet);
     return prim;
