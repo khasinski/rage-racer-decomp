@@ -119,6 +119,19 @@ void f(void *pointer, s32 value) {
 
         self.assertEqual(counts["header_asm_aliases"], 1)
 
+    def test_counts_address_integer_arithmetic_in_game_headers(self):
+        with tempfile.TemporaryDirectory() as source_directory, tempfile.TemporaryDirectory() as header_directory:
+            Path(source_directory, "sample.c").write_text("void f(void) {}\n")
+            Path(header_directory, "sample.h").write_text(
+                "static void *resolve(Address value, int offset) {\n"
+                "    value.offset += offset;\n"
+                "    return value.pointer;\n"
+                "}\n"
+            )
+            counts = count_debt(Path(source_directory), Path(header_directory))
+
+        self.assertEqual(counts["header_address_integer_arithmetic"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

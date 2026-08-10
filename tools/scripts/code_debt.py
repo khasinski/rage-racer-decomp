@@ -66,6 +66,12 @@ PATTERNS = {
     ),
 }
 
+HEADER_PATTERNS = {
+    "header_address_integer_arithmetic": re.compile(
+        r"\.(?:value|offset)\s*(?:\+=|-=|=[^;\n]*(?:\+|<<))"
+    ),
+}
+
 
 def strip_comments(text: str) -> str:
     text = re.sub(r"/\*.*?\*/", "", text, flags=re.DOTALL)
@@ -74,6 +80,7 @@ def strip_comments(text: str) -> str:
 
 def count_debt(source_root: Path = SOURCE_ROOT, header_root: Path | None = None) -> dict[str, int]:
     totals = {name: 0 for name in PATTERNS}
+    totals.update({name: 0 for name in HEADER_PATTERNS})
     for path in sorted(source_root.rglob("*.c")):
         source = path.read_text(errors="ignore")
         text = strip_comments(source)
@@ -84,9 +91,13 @@ def count_debt(source_root: Path = SOURCE_ROOT, header_root: Path | None = None)
     if header_root is None and source_root == SOURCE_ROOT:
         header_root = HEADER_ROOT
     if header_root is not None:
-        pattern = PATTERNS["header_asm_aliases"]
         for path in sorted(header_root.rglob("*.h")):
-            totals["header_asm_aliases"] += len(pattern.findall(strip_comments(path.read_text(errors="ignore"))))
+            text = strip_comments(path.read_text(errors="ignore"))
+            totals["header_asm_aliases"] += len(
+                PATTERNS["header_asm_aliases"].findall(text)
+            )
+            for name, pattern in HEADER_PATTERNS.items():
+                totals[name] += len(pattern.findall(text))
     return totals
 
 
