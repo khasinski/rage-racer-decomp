@@ -13,8 +13,8 @@ typedef union MatrixElementAddress {
  * fast-path: if the row is (1.0, 0, 0) etc. the matching input component is
  * copied straight through without the multiply-accumulate.
  */
-void MatrixApplyVectorComponents(s16 *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) {
-    s16 *m = mtx;
+void MatrixApplyVectorComponents(Matrix *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ) {
+    s16 *m = mtx->m[0];
     MatrixElementAddress elementAddress;
 
     elementAddress.elements = &m[0];

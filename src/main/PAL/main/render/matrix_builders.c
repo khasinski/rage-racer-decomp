@@ -113,7 +113,7 @@ s32 SetLookAtMatrix(const CameraLookAt *camera) {
         MulMatrix(&m, &am);
     }
 
-    MatrixApplyVectorComponents((s16 *)&m, -camera->fields.eyeX, -camera->fields.eyeY,
+    MatrixApplyVectorComponents(&m, -camera->fields.eyeX, -camera->fields.eyeY,
                                 -camera->fields.eyeZ, &outX, &outY, &outZ);
     m.t[0] = outX;
     m.t[1] = outY;
