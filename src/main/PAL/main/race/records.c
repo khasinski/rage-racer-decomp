@@ -9,7 +9,7 @@
 void InitRecordTables(void) {
     RaceRecordAddress recordAddress;
     RaceRecordAddress r2;
-    RaceRecordAddress r3;
+    LapTimeTableAddress r3;
     RaceRecordAddress r4;
     register RaceRecordAddress r5 asm("$5");
     s32 r6;
@@ -53,10 +53,10 @@ void InitRecordTables(void) {
                 r2.value = r12 + r18.value;
                 r6 = r7 * 4;
                 r9.value = r6 + r2.value;
-                r3.byteOffset = r5.value * 4;
+                r3.timeOffset = r5.value * sizeof(s32);
                 r2.value = r15 + r17.value;
                 r2.value = r13 + r2.value;
-                r3.value = r3.byteOffset + r2.value;
+                r3.value = r3.timeOffset + r2.value;
                 do {
                     r2.value = *r9.wordPointer;
                     *r10.wordPointer = r2.value;

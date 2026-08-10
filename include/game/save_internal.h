@@ -39,10 +39,14 @@ typedef union SectorTimeTableAddress {
     GameSaveBlock *saveBlock;
 } SectorTimeTableAddress;
 
+typedef s32 LapTimeOffset;
+
 typedef union LapTimeTableAddress {
     s32 byteOffset;
+    LapTimeOffset timeOffset;
     s32 value;
     s32 *pointer;
+    s32 *wordPointer;
     s32 (*table)[4][2];
     u8 *bytes;
 } LapTimeTableAddress;
