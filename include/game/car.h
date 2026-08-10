@@ -542,6 +542,7 @@ enum {
 typedef union PlayerLapTimeAddress {
     s32 byteOffset;
     s32 value;
+    u8 *bytes;
     s16 *halfwordPointer;
     s32 *timePointer;
 } PlayerLapTimeAddress;
