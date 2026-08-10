@@ -216,7 +216,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
     base = g_FrameContexts[0].bytes;
     height = 0xF0;
     SetDefDrawEnv((DrawEnv *)base, 0, 0, 0x140, height);
-    SetDefDrawEnv((DrawEnv *)g_DrawEnv1, 0, 0xF0, 0x140, height);
+    SetDefDrawEnv(&g_DrawEnv1, 0, 0xF0, 0x140, height);
     SetDefDispEnv(base + 0x5C, 0, 0xF0, 0x140, height);
     SetDefDispEnv((u8 *)&g_DispEnv1X, 0, 0, 0x140, height);
 
@@ -233,7 +233,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
         smallWidth = 0x94;
         small_height = 0x24;
         SetDefDrawEnv((DrawEnv *)ptr, g, b, smallWidth, small_height);
-        SetDefDrawEnv((DrawEnv *)g_MirrorDrawEnv1, 0x56, 0x102, 0x94, small_height);
+        SetDefDrawEnv(&g_MirrorDrawEnv1, 0x56, 0x102, 0x94, small_height);
     }
 
     i = 0;
@@ -284,7 +284,7 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
 
     height = 0x1E0;
     SetDefDrawEnv((DrawEnv *)base, 0, 0, 0x140, height);
-    SetDefDrawEnv((DrawEnv *)g_DrawEnv1, 0, 0, 0x140, height);
+    SetDefDrawEnv(&g_DrawEnv1, 0, 0, 0x140, height);
     SetDefDispEnv(base + 0x5C, 0, 0, 0x140, height);
     SetDefDispEnv((u8 *)&g_DispEnv1X, 0, 0, 0x140, height);
 
