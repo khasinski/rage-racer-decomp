@@ -237,7 +237,7 @@ void SetStereoSoundCue(s32 cue, s32 left, s32 right) {
     s32 currentB;
     s32 matchValue;
     s32 flag;
-    s32 *base;
+    SoundModeEntry *base;
     SoundModeEntry *entry;
     SoundModeEntryAddress entryAddress;
     u32 cueIndex;
@@ -360,9 +360,9 @@ after_match:
     count = cue;
     /* Load-bearing: removal changes five linked preheader words. */
     asm("" : "=r"(count) : "0"(count));
-    base = (s32 *)g_SoundModes;
+    base = g_SoundModes;
     entryOffset = loopTableOffset;
-    entryAddress.wordPointer = base;
+    entryAddress.pointer = base;
     entryAddress.byteOffset += entryOffset;
     entry = entryAddress.pointer;
     cue = 0;
