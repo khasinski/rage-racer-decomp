@@ -589,6 +589,7 @@ void DrawSkyBackground(void)
         u16 geomValueX2;
         s32 x3Raw;
         s32 doubleStepX;
+        RenderBufferAddress cursor;
         asm volatile("" : : "r"(xWork));
         asm volatile("" : "=r"(screenX0) : "0"(screenX2));
         doubleStepX = rowStepX * 2;
@@ -613,7 +614,8 @@ void DrawSkyBackground(void)
         screenY1 = screenY3;
         screenY2 = GameRoundTerrainCoordinate(panelYFixed - rotatedBandY);
         screenY3 = GameRoundTerrainCoordinate(heldBandY - rotatedBandY);
-        nextPacket = (u8 *)(g4Cursor + 1);
+        cursor.polyG4 = g4Cursor + 1;
+        nextPacket = cursor.bytes;
         SetPolyG4(g4Cursor);
         g4Cursor->x0 = screenX0;
         g4Cursor->x1 = screenX1;
