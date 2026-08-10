@@ -214,8 +214,9 @@ void DrawSkyBackground(void)
     s32 gridRow;
     s32 leftXWorkFixed;
     s32 rightXWorkFixed;
-    SkyTileUV *tileUv;
-    u8 *nextPacket;
+  SkyTileUV *tileUv;
+  u8 *nextPacket;
+  RenderBufferAddress packetAddress;
     if (g_SkyRowBase != 0)
     {
       {
@@ -236,7 +237,8 @@ void DrawSkyBackground(void)
         do
         {
           column = 0;
-          quadRow = (POLY_FT4 *)packetCursor;
+          packetAddress.bytes = packetCursor;
+          quadRow = packetAddress.polyFT4;
           doubleRowStepY = rowShearX;
           rowOffsetYFixed = rowShearY;
           bandRowY = panelYFixed;
@@ -329,7 +331,8 @@ void DrawSkyBackground(void)
         clip.yEdge2 = (columnStepY > 0) ? (0xF0) : (-0xF0);
         clip.yEdge3 = (columnStepY > 0) ? (-0xF0) : (0xF0);
         gridRow = 0;
-        quad = (POLY_FT4 *)packetCursor;
+        packetAddress.bytes = packetCursor;
+        quad = packetAddress.polyFT4;
         do
         {
           screenX0 = GameRoundTerrainCoordinate(panelXFixed);
@@ -484,7 +487,8 @@ void DrawSkyBackground(void)
         screenY3 = bandFarY / 256;
         nextPacket = packetCursor + 0x24;
         SetPolyG4(packetCursor);
-        firstG4 = (POLY_G4 *)packetCursor;
+        packetAddress.bytes = packetCursor;
+        firstG4 = packetAddress.polyG4;
         firstG4->x0 = screenX0;
         firstG4->x1 = screenX1;
         firstG4->x2 = screenX2;
@@ -519,9 +523,11 @@ void DrawSkyBackground(void)
       }
       {
         u8 color;
-        POLY_G4 *g4Cursor = (POLY_G4 *)packetCursor;
+        POLY_G4 *g4Cursor;
         u32 *orderingTableBase;
         RenderBufferAddress cursor;
+        cursor.bytes = packetCursor;
+        g4Cursor = cursor.polyG4;
         xWork = panelXFixed - rowStepX;
         adjW = xWork;
         if (xWork < 0)
@@ -600,7 +606,8 @@ void DrawSkyBackground(void)
         screenX2 = GameRoundTerrainCoordinate(panelXFixed - rightXWorkFixed);
 
         packetCursor = nextPacket;
-        g4Cursor = (POLY_G4 *)packetCursor;
+        cursor.bytes = packetCursor;
+        g4Cursor = cursor.polyG4;
         x3Raw = bandRightX - leftXWorkFixed;
         if (x3Raw < 0)
         {
@@ -655,8 +662,10 @@ void DrawSkyBackground(void)
       if (g_CourseIndex != 2)
       {
         u8 color;
-        POLY_G4 *courseG4 = (POLY_G4 *)packetCursor;
+        POLY_G4 *courseG4;
         RenderBufferAddress cursor;
+        cursor.bytes = packetCursor;
+        courseG4 = cursor.polyG4;
         leftXWorkFixed = (panelXFixed + rowStepX) * 8;
         courseLeftX = leftXWorkFixed - savedSinRoll;
         screenX0 = courseLeftX / 2048;
@@ -717,8 +726,10 @@ void DrawSkyBackground(void)
       if (g_CourseIndex == 2)
       {
         u8 color;
-        POLY_G4 *courseG4 = (POLY_G4 *)packetCursor;
+        POLY_G4 *courseG4;
         RenderBufferAddress cursor;
+        cursor.bytes = packetCursor;
+        courseG4 = cursor.polyG4;
         rightXWorkFixed = panelXFixed;
         screenX0 = GameRoundTerrainCoordinate(rightXWorkFixed + rowStepX);
         screenX1 = GameRoundTerrainCoordinate(skirtRightX + (rowStepX + (rowStepX - rowStepX)));
@@ -758,7 +769,9 @@ void DrawSkyBackground(void)
       }
       else
       {
-        POLY_F4 *courseF4 = (POLY_F4 *)packetCursor;
+        POLY_F4 *courseF4;
+        packetAddress.bytes = packetCursor;
+        courseF4 = packetAddress.polyF4;
         screenX0 = savedCourseX0;
         screenX1 = savedCourseX1;
         screenY0 = xWork_late;
