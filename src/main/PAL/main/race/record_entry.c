@@ -175,23 +175,18 @@ void InsertRaceRecords(void) {
     register s32 j asm("$7");
     s32 *score_ptr;
     register RaceRecordAddress entryAddress asm("$5");
-    s32 fill_offset;
-    s32 copy0;
-    s32 copy1;
-    s32 copy2;
-    s32 copy3;
     register s32 score_offset asm("$3");
     s32 score_value;
-    s32 *entry;
     s32 mode;
     register RaceRecordAddress baseAddress asm("$2");
-    RaceRecordAddress rankingBaseAddress;
-    RaceRecordAddress timeBaseAddress;
     s32 letter;
     s32 code;
     s32 letter2;
     s32 code2;
     RaceRecordAddress recordAddress;
+    RaceRecordAddress rankingBaseAddress;
+    RaceRecordAddress timeBaseAddress;
+    s32 fill_offset;
 
     count = 3;
     if (g_CourseIndex == 3) {
@@ -226,24 +221,15 @@ void InsertRaceRecords(void) {
             if (i < 4) {
                 j = 4;
                 do {
-                    entryAddress.byteOffset = j * 0x10;
+                    entryAddress.byteOffset = j * sizeof(RaceRecord);
                     j--;
                     mode = g_CourseIndex;
                     score_offset =
                         (g_GrandPrixSeries * 0x140) + rankingBaseAddress.byteOffset;
                     baseAddress.byteOffset = (mode * 0x50) + score_offset;
                     entryAddress.byteOffset += baseAddress.byteOffset;
-                    entry = entryAddress.wordPointer;
                     asm volatile("" : : "r"(j));
-                    copy0 = entry[-4];
-                    copy1 = entry[-3];
-                    copy2 = entry[-2];
-                    copy3 = entry[-1];
-                    entry[0] = copy0;
-                    entry[1] = copy1;
-                    entry[2] = copy2;
-                    entry[3] = copy3;
-                    asm volatile("" : :);
+                    entryAddress.pointer[0] = entryAddress.pointer[-1];
                 } while (i < j);
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);
@@ -304,24 +290,15 @@ void InsertRaceRecords(void) {
             if (i < 4) {
                 j = 4;
                 do {
-                    entryAddress.byteOffset = j * 0x10;
+                    entryAddress.byteOffset = j * sizeof(RaceRecord);
                     j--;
                     mode = g_CourseIndex;
                     score_offset =
                         (g_GrandPrixSeries * 0x140) + timeBaseAddress.byteOffset;
                     baseAddress.byteOffset = (mode * 0x50) + score_offset;
                     entryAddress.byteOffset += baseAddress.byteOffset;
-                    entry = entryAddress.wordPointer;
                     asm volatile("" : : "r"(j));
-                    copy0 = entry[-4];
-                    copy1 = entry[-3];
-                    copy2 = entry[-2];
-                    copy3 = entry[-1];
-                    entry[0] = copy0;
-                    entry[1] = copy1;
-                    entry[2] = copy2;
-                    entry[3] = copy3;
-                    asm volatile("" : :);
+                    entryAddress.pointer[0] = entryAddress.pointer[-1];
                 } while (i < j);
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);
