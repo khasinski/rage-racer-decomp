@@ -177,7 +177,7 @@ static __inline__ void *ResolveAssetAddress(void *base, s32 offset) {
     AssetAddress address;
 
     address.pointer = base;
-    address.offset += offset;
+    address.bytes += offset;
     return address.pointer;
 }
 
