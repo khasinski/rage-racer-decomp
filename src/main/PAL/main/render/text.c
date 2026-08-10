@@ -406,7 +406,11 @@ u8 *GameQueueSprite(
     s32 u,
     s32 v,
     s32 clutIndex) {
-    SPRT *sprt = (SPRT *)prim;
+    RenderBufferAddress address;
+    SPRT *sprt;
+
+    address.bytes = prim;
+    sprt = address.sprite;
 
     SetSprt(sprt);
     SetShadeTex(sprt, 1);
@@ -438,7 +442,11 @@ u8 *GameQueueShadedSprite(
     s32 v,
     s32 clutIndex,
     s32 intensity) {
-    SPRT *sprt = (SPRT *)prim;
+    RenderBufferAddress address;
+    SPRT *sprt;
+
+    address.bytes = prim;
+    sprt = address.sprite;
 
     SetSprt(sprt);
     sprt->x0 = x;
@@ -468,7 +476,11 @@ u8 *GameQueueShadedSpriteTrans(
     s32 v,
     s32 clutIndex,
     s32 intensity) {
-    SPRT *sprt = (SPRT *)prim;
+    RenderBufferAddress address;
+    SPRT *sprt;
+
+    address.bytes = prim;
+    sprt = address.sprite;
 
     SetSprt(sprt);
     SetSemiTrans(sprt, 1);
@@ -498,7 +510,11 @@ u8 *GameQueueSpriteTrans(
     s32 u,
     s32 v,
     s32 clutIndex) {
-    SPRT *sprt = (SPRT *)prim;
+    RenderBufferAddress address;
+    SPRT *sprt;
+
+    address.bytes = prim;
+    sprt = address.sprite;
 
     SetSprt(sprt);
     SetSemiTrans(sprt, 1);
@@ -527,7 +543,11 @@ u8 *GameQueueTileTrans(
     s32 r,
     s32 g,
     s32 b) {
-    TILE *tile = (TILE *)prim;
+    RenderBufferAddress address;
+    TILE *tile;
+
+    address.bytes = prim;
+    tile = address.tile;
 
     SetTile(tile);
     SetSemiTrans(tile, 1);
@@ -562,7 +582,11 @@ u8 *GameQueueLine(
     s32 r,
     s32 g,
     s32 b) {
-    LINE_F2 *line = (LINE_F2 *)prim;
+    RenderBufferAddress address;
+    LINE_F2 *line;
+
+    address.bytes = prim;
+    line = address.lineF2;
 
     SetLineF2(line);
     line->x0 = x0;
