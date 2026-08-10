@@ -13,7 +13,7 @@ void BuildRaceHudPrims(s32 mode) {
         s32 bufferOffset;
 
         row = 0;
-        rowOffset.byteOffset = 0;
+        rowOffset.value = 0;
 
 nonzero_outer:
         col = 0;
@@ -30,11 +30,11 @@ nonzero_inner:
             baseAddress.drawPacket = g_TachoNeedlePrim0PageA;
             dst = baseAddress.bytes;
             dst = bufferOffset + dst;
-            offset = rowOffset.byteOffset + 0x2C;
+            offset = rowOffset.value + 0x2C;
             dst += offset;
             spriteAddress.bytes = dst;
             descAddress.descriptors = g_RaceHudSpriteDescsGp;
-            descAddress.bytes += rowOffset.byteOffset;
+            descAddress.bytes += rowOffset.value;
             BuildSpriteFromDesc(spriteAddress.sprite, descAddress.descriptors);
         }
         if (g_GrandPrixClass == 5 && row == 0xB) {
@@ -47,7 +47,7 @@ nonzero_inner:
             goto nonzero_inner;
         }
         row++;
-        rowOffset.byteOffset += 0x14;
+        rowOffset.value += 0x14;
         if (row < 0xC) {
             goto nonzero_outer;
         }

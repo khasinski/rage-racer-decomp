@@ -135,6 +135,7 @@ typedef struct TimedDrawCommand {
 
 typedef union TimedDrawCommandAddress {
     s32 byteOffset;
+    s32 value;
     TimedDrawCommand *pointer;
 } TimedDrawCommandAddress;
 

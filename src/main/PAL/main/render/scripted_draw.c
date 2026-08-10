@@ -541,8 +541,8 @@ loop_body:
 
 timed_commands_done:
     if (stepReg >= 0) {
-        commandAddress.byteOffset = *progressPtr;
-        updatedProgress = stepReg + commandAddress.byteOffset;
+        commandAddress.value = *progressPtr;
+        updatedProgress = stepReg + commandAddress.value;
         limit = base[index].motion.value;
         if (updatedProgress < limit) {
             *progressPtr = updatedProgress;
