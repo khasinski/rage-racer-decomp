@@ -546,6 +546,7 @@ typedef struct PlayerCarRaceState {
 
 typedef union PlayerCarRaceStateAddress {
     PlayerCarRaceState *state;
+    GameCarDrive *drive;
     s32 *words;
 } PlayerCarRaceStateAddress;
 
@@ -619,24 +620,48 @@ typedef struct PlayerCarRuntime {
     PlayerLapTimes lapTimes;
 } PlayerCarRuntime;
 
+typedef union PlayerRaceCueStateAddress {
+    s16 *trackSection;
+    PlayerRaceCueState *state;
+} PlayerRaceCueStateAddress;
+
 static inline PlayerCarRaceState *GetPlayerCarRaceState(PlayerCarRuntime *car) {
-    return (PlayerCarRaceState *)&car->drive;
+    PlayerCarRaceStateAddress address;
+
+    address.drive = &car->drive;
+    return address.state;
 }
 
 static inline PlayerRaceCueState *GetPlayerRaceCueState(PlayerCarRuntime *car) {
-    return (PlayerRaceCueState *)&car->trackSection;
+    PlayerRaceCueStateAddress address;
+
+    address.trackSection = &car->trackSection;
+    return address.state;
 }
 
 static inline void CopyPlayerBodyRotationToModel(PlayerCarRuntime *car) {
-    *(Vec4 *)&car->modelPitch = *(Vec4 *)&car->bodyPitch;
+    GameCarRuntimeAddress source;
+    GameCarRuntimeAddress destination;
+
+    source.words = &car->bodyPitch;
+    destination.words = &car->modelPitch;
+    *destination.vector4 = *source.vector4;
 }
 
 static inline void SetPlayerPosition(PlayerCarRuntime *car, const Vec4 *position) {
-    *(Vec4 *)&car->x = *position;
+    GameCarRuntimeAddress address;
+
+    address.player = car;
+    *address.vector4 = *position;
 }
 
 static inline void CopyCarBodyRotationToModel(GameCarRuntime *car) {
-    *(Vec4 *)&car->modelPitch = *(Vec4 *)&car->bodyPitch;
+    GameCarRuntimeAddress source;
+    GameCarRuntimeAddress destination;
+
+    source.words = &car->bodyPitch;
+    destination.words = &car->modelPitch;
+    *destination.vector4 = *source.vector4;
 }
 
 
