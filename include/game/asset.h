@@ -13,6 +13,7 @@ struct SceneryMotionData;
 struct RaceIntroCameraScript;
 struct PathSceneryPositionData;
 struct OptionScreenAsset;
+struct CarModelAsset;
 
 /* Asset-load state machine phase (0 idle; 1..6 drive LoadAsset loads). */
 extern s32 g_AssetLoadState;
@@ -96,6 +97,7 @@ typedef union AssetAddress {
     struct RaceIntroCameraScript *raceIntroCamera;
     struct PathSceneryPositionData *pathSceneryPosition;
     struct OptionScreenAsset *optionScreen;
+    struct CarModelAsset *carModel;
 } AssetAddress;
 
 static __inline__ struct CourseModelAssetHeader *GetCourseModelAssetHeader(
@@ -133,6 +135,13 @@ typedef struct CarModelAsset {
     AssetAddress modelData;
     AssetAddress imageData;
 } CarModelAsset;
+
+static __inline__ CarModelAsset *GetCarModelAsset(void *data) {
+    AssetAddress address;
+
+    address.pointer = data;
+    return address.carModel;
+}
 
 extern CarModelAsset *g_CarModelAsset;
 

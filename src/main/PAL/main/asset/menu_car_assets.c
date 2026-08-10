@@ -31,7 +31,7 @@ void LoadUpgradedCarModel(s32 carIndex) {
         }
 
         if (LoadAsset(assetId, ptr) != 0) {
-            asset = (CarModelAsset *)ptr;
+            asset = GetCarModelAsset(ptr);
             SetCarModelSlot(asset, g_CarModelSlot < 1);
 
             asset->modelData.pointer = ptr + asset->modelData.offset;
@@ -192,7 +192,7 @@ void RelocateCarModel(void) {
         dst++;
     }
 
-    SetCarModelSlot((CarModelAsset *)g_AssetBase, 0);
+    SetCarModelSlot(GetCarModelAsset(g_AssetBase), 0);
     address.pointer = g_CarModelAsset->modelData.pointer;
     UnrelocateModelBank((ModelBankHeader *)(g_AssetBase + 0x28), address.offset);
     SelectCarModelSlot(0);
