@@ -71,7 +71,7 @@ void DrawStaticScenery(s32 shifted) {
             if (frameValue >= 0x3B) {
                 drawArg = 0x3A;
             }
-            SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+            SubmitCourseModel(SCRATCHPAD, drawArg);
         } else {
             SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, statePtr, &mtx);
             frameValue = g_CourseModelCount;
@@ -80,7 +80,7 @@ void DrawStaticScenery(s32 shifted) {
             if (frameValue >= 0x3A) {
                 drawArg = 0x39;
             }
-            SubmitCourseModel2((void *)SCRATCHPAD_ADDR, drawArg);
+            SubmitCourseModel2(SCRATCHPAD, drawArg);
         }
     }
 }
@@ -103,7 +103,7 @@ void DrawHighClassScenery(void) {
         if (g_CourseModelCount >= 0x40) {
             drawArg = 0x3F;
         }
-        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+        SubmitCourseModel(SCRATCHPAD, drawArg);
     } else {
         SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, state - 3, &mtx);
         SCRATCH_ENV_MODE4 = 0;
@@ -111,7 +111,7 @@ void DrawHighClassScenery(void) {
         if (g_CourseModelCount >= 0x40) {
             drawArg = 0x3F;
         }
-        SubmitCourseModel2((void *)SCRATCHPAD_ADDR, drawArg);
+        SubmitCourseModel2(SCRATCHPAD, drawArg);
     }
 }
 

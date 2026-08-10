@@ -23,7 +23,7 @@ void DrawFlybyScenery(void) {
         SelectModelBank(2);
         SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state->position, &mtx0);
         SCRATCH_ENV_MODE4 = 0;
-        SubmitModel((void *)SCRATCHPAD_ADDR, g_ModelBankCount < 1);
+        SubmitModel(SCRATCHPAD, g_ModelBankCount < 1);
     }
 }
 

@@ -192,7 +192,7 @@ void DrawStartGridScenery(s32 flags) {
             SCRATCH_ENV_MODE4 = 0;
             drawArg = (value < lim) ? value : 1;
         }
-        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+        SubmitCourseModel(SCRATCHPAD, drawArg);
     }
 }
 
@@ -274,13 +274,13 @@ void DrawAnimatedScenery(s32 timer, s32 instance) {
             num = g_AnimSceneryFrame + 10;
             SCRATCH_ENV_MODE4 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
-            SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+            SubmitCourseModel(SCRATCHPAD, drawArg);
         } else {
             SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
             num = g_AnimSceneryRacePosition;
             SCRATCH_ENV_MODE4 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
-            SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+            SubmitCourseModel(SCRATCHPAD, drawArg);
         }
 
         SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
@@ -289,14 +289,14 @@ void DrawAnimatedScenery(s32 timer, s32 instance) {
         num = g_AnimSceneryVariant + 4;
         sv = g_CourseModelCount;
         drawArg = (num < sv) ? num : 1;
-        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+        SubmitCourseModel(SCRATCHPAD, drawArg);
     } else {
         SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         num = g_AnimSceneryFrame + 0x18;
         scr = &SCRATCH_ENV_MODE4;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+        SubmitCourseModel(SCRATCHPAD, drawArg);
 
         SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         sv = g_AnimSceneryTint;
@@ -305,7 +305,7 @@ void DrawAnimatedScenery(s32 timer, s32 instance) {
         num = g_AnimSceneryVariant + 7;
         sv = g_CourseModelCount;
         drawArg = (num < sv) ? num : 1;
-        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+        SubmitCourseModel(SCRATCHPAD, drawArg);
     }
 }
 
@@ -379,7 +379,7 @@ void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate) {
         scr = &SCRATCH_ENV_MODE4;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+        SubmitCourseModel(SCRATCHPAD, drawArg);
 
         SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         sv = g_AnimScenery2Tint;
@@ -396,7 +396,7 @@ void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate) {
         scr = &SCRATCH_ENV_MODE4;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
-        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+        SubmitCourseModel(SCRATCHPAD, drawArg);
 
         SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         sv = g_AnimScenery2Tint;
@@ -412,5 +412,5 @@ void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate) {
     if (num < sv) {
         drawArg = num;
     }
-    SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
+    SubmitCourseModel(SCRATCHPAD, drawArg);
 }

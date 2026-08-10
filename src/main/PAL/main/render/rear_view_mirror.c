@@ -221,7 +221,7 @@ void DrawRearViewMirror(s32 mode) {
             BuildVisibleCells(-0x3000, 0x6000);
             SetRotMatrix(SCRATCH_VIEW_MATRIX_GTE);
             SCRATCH_ENV_MODE4 = g_IsEnvironmentMode4;
-            SubmitTerrainCells((void *)SCRATCHPAD_ADDR, (void *)g_VisibleCellList, 0x40);
+            SubmitTerrainCells(SCRATCHPAD, (void *)g_VisibleCellList, 0x40);
 
             packet = *scratch;
             SetDrawArea((DrawPacket *)packet, (Rect *)g_DrawBuffer);

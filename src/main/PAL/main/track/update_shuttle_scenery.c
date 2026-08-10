@@ -130,6 +130,6 @@ void DrawShuttleScenery(s32 instance) {
         if (drawArg < frameValue) {
             drawValue = drawArg;
         }
-        SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawValue);
+        SubmitCourseModel(SCRATCHPAD, drawValue);
     }
 }

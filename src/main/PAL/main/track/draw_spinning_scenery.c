@@ -70,7 +70,7 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
             if (g_CourseModelCount >= 0x3F) {
                 limit = 0x3E;
             }
-            SubmitCourseModel2((void *)SCRATCHPAD_ADDR, limit);
+            SubmitCourseModel2(SCRATCHPAD, limit);
 
             dst++;
             offset += 0x10;

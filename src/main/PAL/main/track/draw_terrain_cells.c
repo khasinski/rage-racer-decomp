@@ -12,13 +12,13 @@
 void DrawTerrainCells(void) {
     BuildVisibleCells(-12288, 0x14000);
     SetRotMatrix(SCRATCH_VIEW_MATRIX_GTE);
-    SubmitTerrainCells((void *)SCRATCHPAD_ADDR, (void *)g_VisibleCellList, 0x40);
+    SubmitTerrainCells(SCRATCHPAD, (void *)g_VisibleCellList, 0x40);
 }
 
 void DrawTerrainCellsWide(void) {
     BuildVisibleCells(0xFFFF6000, 0x14000);
     SetRotMatrix(SCRATCH_VIEW_MATRIX_GTE);
-    SubmitTerrainCells((void *)SCRATCHPAD_ADDR, (void *)g_VisibleCellList, 0x40);
+    SubmitTerrainCells(SCRATCHPAD, (void *)g_VisibleCellList, 0x40);
 }
 
 inline static s32 DivideSigned32(s32 value)

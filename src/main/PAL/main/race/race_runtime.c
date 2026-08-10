@@ -183,7 +183,7 @@ void DrawWaypoints(void) {
         if (drawId < frameValue) {
             drawArg = drawId;
         }
-        SubmitModel((void *)SCRATCHPAD_ADDR, drawArg);
+        SubmitModel(SCRATCHPAD, drawArg);
 
         BuildRotMatrixY(mtx1Ptr, 0x800);
         MulMatrix2(&mtx0, mtx1Ptr);
@@ -194,7 +194,7 @@ void DrawWaypoints(void) {
         if (drawId < frameValue) {
             drawArg = drawId;
         }
-        SubmitModel((void *)SCRATCHPAD_ADDR, drawArg);
+        SubmitModel(SCRATCHPAD, drawArg);
 
         i++;
         waypoint++;

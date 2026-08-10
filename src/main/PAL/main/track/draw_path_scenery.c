@@ -37,7 +37,7 @@ void DrawPathScenery(void) {
     if (frameValue >= 0x24) {
         drawId = 0x23;
     }
-    SubmitModel((void *)SCRATCHPAD_ADDR, drawId);
+    SubmitModel(SCRATCHPAD, drawId);
 
     {
         s32 base;
@@ -61,7 +61,7 @@ void DrawPathScenery(void) {
     if (frameValue >= 0x25) {
         drawId = 0x24;
     }
-    SubmitModel((void *)SCRATCHPAD_ADDR, drawId);
+    SubmitModel(SCRATCHPAD, drawId);
 }
 
 

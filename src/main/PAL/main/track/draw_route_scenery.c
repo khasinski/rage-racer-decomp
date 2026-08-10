@@ -30,7 +30,7 @@ void DrawRouteScenery(void) {
     if (frameValue >= 0x26) {
         drawId = 0x25;
     }
-    SubmitModel((void *)SCRATCHPAD_ADDR, drawId);
+    SubmitModel(SCRATCHPAD, drawId);
 }
 
 void InitShuttleScenery(void) {

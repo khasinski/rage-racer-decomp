@@ -64,7 +64,7 @@ void DrawControllerSetupScene(s32 variant) {
         SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, position, &xRot);
         g_ScratchEnvMode4 = 0;
         model = g_ModelBankCount < 1;
-        SubmitModel((void *)SCRATCHPAD_ADDR, model);
+        SubmitModel(SCRATCHPAD, model);
         return;
     }
 
@@ -97,7 +97,7 @@ void DrawControllerSetupScene(s32 variant) {
     SetGteLightMatrix(&xRot);
     SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, position, &xRot);
     g_ScratchEnvMode4 = 0;
-    SubmitModel((void *)SCRATCHPAD_ADDR, 1);
+    SubmitModel(SCRATCHPAD, 1);
     if (variant != 0) {
         SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, position, &xRot);
         g_ScratchEnvMode4 = 0;
@@ -105,7 +105,7 @@ void DrawControllerSetupScene(s32 variant) {
         if (g_ModelBankCount >= 4) {
             model = 3;
         }
-        SubmitModel((void *)SCRATCHPAD_ADDR, model);
+        SubmitModel(SCRATCHPAD, model);
     }
 
     {
@@ -128,7 +128,7 @@ void DrawControllerSetupScene(s32 variant) {
     if (g_ModelBankCount >= 3) {
         model = 2;
     }
-    SubmitModel((void *)SCRATCHPAD_ADDR, model);
+    SubmitModel(SCRATCHPAD, model);
     if (variant != 0) {
         SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, position, &xRot);
         g_ScratchEnvMode4 = 0;
@@ -136,7 +136,7 @@ void DrawControllerSetupScene(s32 variant) {
         if (g_ModelBankCount >= 5) {
             model = 4;
         }
-        SubmitModel((void *)SCRATCHPAD_ADDR, model);
+        SubmitModel(SCRATCHPAD, model);
     }
 }
 

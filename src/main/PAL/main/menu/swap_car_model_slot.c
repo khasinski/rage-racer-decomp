@@ -185,7 +185,7 @@ void DrawMenuCarView(void) {
         if (g_ModelBankCount >= 6) {
             a1 = 5;
         }
-        SubmitModel((void *)SCRATCHPAD_ADDR, a1);
+        SubmitModel(SCRATCHPAD, a1);
     }
     D_1F800004 -= 120;
 }
@@ -288,7 +288,7 @@ void DrawMenuCourseView(void) {
         if ((s2 & 3) < g_ModelBankCount) {
             a1 = s2 & 3;
         }
-        SubmitModel((void *)SCRATCHPAD_ADDR, a1);
+        SubmitModel(SCRATCHPAD, a1);
     }
 }
 
@@ -395,7 +395,7 @@ void DrawTeamNameCharModel(void) {
         if (g_TeamNameCharModel < g_CourseModelCount) {
             a1 = g_TeamNameCharModel;
         }
-        SubmitCourseModel((void *)SCRATCHPAD_ADDR, a1);
+        SubmitCourseModel(SCRATCHPAD, a1);
     }
 }
 

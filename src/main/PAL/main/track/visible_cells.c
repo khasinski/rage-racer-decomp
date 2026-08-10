@@ -87,9 +87,9 @@ void DrawCourseObjects(void) {
         }
 
         if (g_IsEnvironmentMode4 ? (obj->flags & 2) : (obj->flags % 2)) {
-            SubmitCourseModel2((void *)SCRATCHPAD_ADDR, obj->modelId);
+            SubmitCourseModel2(SCRATCHPAD, obj->modelId);
         } else {
-            SubmitCourseModel((void *)SCRATCHPAD_ADDR, obj->modelId);
+            SubmitCourseModel(SCRATCHPAD, obj->modelId);
         }
 
         }
