@@ -23,6 +23,7 @@ void f(u8 *base, void *ptr) {
     ptr = (void *)((u8 *)ptr + 4);
     value += (s32)ptr;
     value += FIELD32(base, 4);
+    value += base[-2];
     address.byteOffset += 4;
     sampleAddress.value += 4;
     asm volatile("");
@@ -43,6 +44,7 @@ void f(u8 *base, void *ptr) {
         self.assertEqual(counts["explicit_pointer_casts"], 7)
         self.assertEqual(counts["manual_byte_offsets"], 1)
         self.assertEqual(counts["address_integer_arithmetic"], 1)
+        self.assertEqual(counts["negative_pointer_indexing"], 1)
         self.assertEqual(counts["field_macros"], 1)
         self.assertEqual(counts["register_pins"], 2)
         self.assertEqual(counts["empty_barriers"], 1)

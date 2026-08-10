@@ -43,6 +43,10 @@ PATTERNS = {
         r"\b[A-Za-z_][A-Za-z0-9_]*Address\.(?:value|offset)\s*"
         r"(?:\+=|-=|=[^;\n]*(?:\+|<<))"
     ),
+    "negative_pointer_indexing": re.compile(
+        r"\b[A-Za-z_][A-Za-z0-9_]*(?:\s*->\s*[A-Za-z_][A-Za-z0-9_]*)?"
+        r"\s*\[\s*-[1-9][0-9]*\s*\]"
+    ),
     "field_macros": re.compile(r"\b(?:FIELD|RAW_FIELD)\w*\s*\("),
     "register_pins": re.compile(
         r"\bregister\b[^;\n]*\basm\s*\(\s*\"(?:\$\d+|zero|at|v[01]|a[0-3]|t[0-9]|s[0-8]|k[01]|gp|sp|fp|ra)\""
