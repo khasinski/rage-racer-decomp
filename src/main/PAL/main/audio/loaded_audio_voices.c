@@ -8,7 +8,7 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     s32 value = position;
     s32 index;
     s32 index_offset;
-    s32 *base = (s32 *)g_EngineSoundCurves;
+    s32 *base = g_EngineSoundCurves[0][0].left;
     s32 row_offset;
     s32 bank_offset;
     s32 *base_minus;
