@@ -149,7 +149,7 @@ u8 *DrawLeftArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     if (pulse != 0) {
         u8 glow = rsin(g_SetupArrowPulse % 0x1000) / 64 - 65;
 
-        prim = (u8 *)AddTilePrim(
+        prim = AddTilePrim(
             ot, prim, x, y, 0x10, 0x20, 0, glow, 0);
     }
     return prim;
@@ -163,7 +163,7 @@ u8 *DrawRightArrow(void *ot, u8 *prim, s32 x, s32 y, s32 pulse) {
     if (pulse != 0) {
         u8 glow = rsin(g_SetupArrowPulse % 0x1000) / 64 - 65;
 
-        prim = (u8 *)AddTilePrim(
+        prim = AddTilePrim(
             ot, prim, x, y, 0x10, 0x20, 0, glow, 0);
     }
     return prim;
@@ -191,12 +191,12 @@ u8 *DrawPadConfigSelector(ot, prim, x, y, selection)
     prim = GameQueueSpriteTrans(
         ot, prim, x + 34, y + 32, 8, 0x10, 0x68, 0x28, 0x7F40);
     prim = QueueDrawModePrim(ot, prim, 0x5B);
-    prim = (u8 *)AddTilePrim(
+    prim = AddTilePrim(
         ot, prim, x + 1, y + 2, 0x3A, 0x14, 0, 0, 0);
-    prim = (u8 *)AddTilePrim(
+    prim = AddTilePrim(
         ot, prim, x + 2, y + 26, 0x38, 0x1A, 0xFF, 0xFF, 0xFF);
-    prim = (u8 *)AddTilePrim(
+    prim = AddTilePrim(
         ot, prim, x + 1, y + 24, 0x3A, 0x1E, 0, 0, 0);
-    return (u8 *)AddTilePrim(
+    return AddTilePrim(
         ot, prim, x, y, 0x3C, 0x38, 0xFF, 0xFF, 0xFF);
 }

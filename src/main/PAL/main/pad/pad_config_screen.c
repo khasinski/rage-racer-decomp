@@ -43,11 +43,11 @@ u8 *DrawPadConfigLabels(void *ot, u8 *prim, u8 *labelRow) {
     i = 0;
     do {
         k = labelRow[i];
-        prim = (u8 *)AddTilePrim(
+        prim = AddTilePrim(
             ot, prim, g_PadLabelSlots[k].vx + 1, g_PadLabelSlots[k].vy + 2, 0x46,
             0x1C, 0, 0, 0);
         k = labelRow[i];
-        prim = (u8 *)AddTilePrim(
+        prim = AddTilePrim(
             ot, prim, g_PadLabelSlots[k].vx, g_PadLabelSlots[k].vy, 0x48, 0x20,
             0xFF, 0xFF, 0xFF);
         i++;
