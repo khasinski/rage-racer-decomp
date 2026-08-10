@@ -215,7 +215,9 @@ void DrawRearViewMirror(s32 mode) {
 
             DrawSkyBackground();
             packet = DrawMirrorFrame(*scratch);
-            SetDrawArea((DrawPacket *)packet, (Rect *)(g_DrawBuffer + 0x70));
+            SetDrawArea((DrawPacket *)packet,
+                        &GetGameFrameContext(g_DrawBuffer)
+                             ->environment.mirrorDraw.clip);
             prim = packet;
             packet += sizeof(DrawPacket);
             AddPrim(g_DrawBuffer + 0x16C8, prim);
@@ -226,7 +228,8 @@ void DrawRearViewMirror(s32 mode) {
             SubmitTerrainCells(SCRATCHPAD, g_VisibleCellList, 0x40);
 
             packet = *scratch;
-            SetDrawArea((DrawPacket *)packet, (Rect *)g_DrawBuffer);
+            SetDrawArea((DrawPacket *)packet,
+                        &GetGameFrameContext(g_DrawBuffer)->environment.draw.clip);
             prim = packet;
             packet += sizeof(DrawPacket);
             AddPrim(g_DrawBuffer + 0xBD0, prim);

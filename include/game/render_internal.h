@@ -69,6 +69,13 @@ typedef union GameFrameContextAddress {
     GameFrameContext *context;
 } GameFrameContextAddress;
 
+static __inline__ GameFrameContext *GetGameFrameContext(u8 *bytes) {
+    GameFrameContextAddress address;
+
+    address.bytes = bytes;
+    return address.context;
+}
+
 typedef union ScreenOffset {
     s32 value;
     u16 displayValue;
