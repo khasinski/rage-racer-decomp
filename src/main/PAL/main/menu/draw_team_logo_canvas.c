@@ -64,7 +64,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
   s16 yC8;
   register s32 phaseValue asm("$2");
   register s32 secondaryValue asm("$3");
-  register s32 drawValue asm("$4");
+  register RenderBufferAddress drawValue asm("$4");
   a0v = panelStep;
   a1v = editorStep;
   ot.pointer = SCRATCH_OT_BASE_AS(void);
@@ -100,17 +100,17 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       u16 *src = &g_TeamLogoClut[i];
       *dst = k8;
       phaseValue = (((*src) & 0x1F) * mul) / 256;
-      drawValue = phaseValue | ((u16) 0x8000);
-      *dst = drawValue;
-      drawValue |= (((((*src) >> 5) & 0x1F) * mul) / 256) << 5;
-      *dst = drawValue;
+      drawValue.byteOffset = phaseValue | ((u16) 0x8000);
+      *dst = drawValue.byteOffset;
+      drawValue.byteOffset |= (((((*src) >> 5) & 0x1F) * mul) / 256) << 5;
+      *dst = drawValue.byteOffset;
       v = (((*src) >> 10) & 0x1F) * mul;
       if (v < 0)
       {
         v += 0xFF;
       }
       i++;
-      phaseValue = drawValue | ((v >> 8) << 10);
+      phaseValue = drawValue.byteOffset | ((v >> 8) << 10);
       *dst = phaseValue;
       dst++;
       if (i < 16)
@@ -177,7 +177,7 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
         angleSource = g_TeamLogoColorCycleAngle;
         secondaryValue = g_TeamLogoCursorX;
         angleValue = angleSource * 2;
-        drawValue = angleValue;
+        drawValue.byteOffset = angleValue;
         secondaryValue *= 4;
         sy2 = secondaryValue + 0x88;
         sy2Arg = sy2;
@@ -186,12 +186,12 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
         sy += syOffset;
         if (angleValue < 0)
         {
-          drawValue = angleValue + 0xFFF;
+          drawValue.byteOffset = angleValue + 0xFFF;
         }
-        drawValue >>= 12;
-        drawValue *= 0x1000;
-        drawValue = angleValue - drawValue;
-        clut = (rsin(drawValue) / 64) - 0x41;
+        drawValue.byteOffset >>= 12;
+        drawValue.byteOffset *= 0x1000;
+        drawValue.byteOffset = angleValue - drawValue.byteOffset;
+        clut = (rsin(drawValue.byteOffset) / 64) - 0x41;
         DrawRectOutline(ot.pointer, (s16)sy2Arg, (s16)sy, (s16)(g_TeamLogoBrushSize * 4), (s16)(g_TeamLogoBrushSize * 8), 0, (u8)clut, 0, (u8)ff);
       }
     }
@@ -206,14 +206,14 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
     delta = 0x220 - g_TeamLogoZoomSpan;
     scaleDelta = (delta * g_TeamLogoViewX) / 272;
     phaseValue = (g_TeamLogoRect.coordinate.x.value * 4) - 1;
-    drawValue = phaseValue + scaleDelta;
-    gx = drawValue;
+    drawValue.byteOffset = phaseValue + scaleDelta;
+    gx = drawValue.byteOffset;
     scaleDelta = (delta * g_TeamLogoViewY) / 272;
     texY = g_TeamLogoRect.coordinate.y.byte.low - 1;
     gyTemp = texY + scaleDelta;
     phaseValue = gyTemp;
     gy = phaseValue;
-    gx2 = drawValue + (g_TeamLogoZoomSpan / 8);
+    gx2 = drawValue.byteOffset + (g_TeamLogoZoomSpan / 8);
     asm("" : : "r"(scaleDelta));
     gy2 = phaseValue + (g_TeamLogoZoomSpan / 8);
     clut = (g_TeamLogoRect.coordinate.y.value >> 4) & 0x10;
@@ -397,11 +397,11 @@ void DrawTeamLogoCanvas(s32 panelStep, s32 editorStep)
       asm("" : : "r"(swatchWidth));
       shade = (u8) (i * 0x24);
       asm("" : : "r"(shade));
-      drawValue = ot.byteOffset;
-      asm("" : : "r"(drawValue));
+      drawValue.byteOffset = ot.byteOffset;
+      asm("" : : "r"(drawValue.byteOffset));
       asm("" : : "r"(x1));
       asm("" : "=r"(clutArg) : "0"(clut));
-      DrawSprite((void *)drawValue, (s16)(x1 + 0x13), (s16)(yA0 >> 16), (s16)swatchWidth, (s16)0x18,
+      DrawSprite(drawValue.pointer, (s16)(x1 + 0x13), (s16)(yA0 >> 16), (s16)swatchWidth, (s16)0x18,
                             gxArg, gyArg, 0, 0, 0, (u16) pal, 1, 0, clutArg);
       asm("" : "=r"(shade) : "0"(shade));
       secondaryValue = (u8) shade;
