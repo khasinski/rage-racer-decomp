@@ -67,8 +67,11 @@ def strip_comments(text: str) -> str:
 def count_debt(source_root: Path = SOURCE_ROOT, header_root: Path | None = None) -> dict[str, int]:
     totals = {name: 0 for name in PATTERNS}
     for path in sorted(source_root.rglob("*.c")):
-        text = strip_comments(path.read_text(errors="ignore"))
+        source = path.read_text(errors="ignore")
+        text = strip_comments(source)
         for name, pattern in PATTERNS.items():
+            if name == "register_pins" and "HANDWRITTEN_ASM" in source:
+                continue
             totals[name] += len(pattern.findall(text))
     if header_root is None and source_root == SOURCE_ROOT:
         header_root = HEADER_ROOT

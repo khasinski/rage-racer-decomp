@@ -12,7 +12,7 @@
   "manual_byte_offsets": 0,
   "pointer_integer_casts": 2,
   "raw_offset_dereferences": 0,
-  "register_pins": 211,
+  "register_pins": 210,
   "statement_expressions": 0,
   "unknown_fields": 0
 }

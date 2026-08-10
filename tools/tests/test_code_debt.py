@@ -59,6 +59,20 @@ void f(u8 *base, void *ptr) {
 
         self.assertTrue(all(count == 0 for count in counts.values()))
 
+    def test_excludes_pins_required_by_handwritten_asm(self):
+        source = r'''
+/* HANDWRITTEN_ASM */
+void f(void) {
+    register s32 value asm("$2");
+    asm volatile("move %0, $3" : "=r"(value));
+}
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            Path(directory, "sample.c").write_text(source)
+            counts = count_debt(Path(directory))
+
+        self.assertEqual(counts["register_pins"], 0)
+
     def test_byte_pointer_arithmetic_ignores_casts_of_completed_expressions(self):
         source = r'''
 void f(u8 *bytes, Packet *packet, u8 value) {
