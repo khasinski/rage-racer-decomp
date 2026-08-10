@@ -13,6 +13,7 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
     s16 wReg;
     s16 hReg;
     u8 *oldPacket;
+    RenderBufferAddress packetAddress;
     s32 tmp;
     Rect rect;
 
@@ -52,7 +53,8 @@ void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h) {
                     rect.y = yReg;
                     rect.w = wReg;
                     rect.h = hReg;
-                    SetDrawArea((DrawPacket *)packet, &rect);
+                    packetAddress.bytes = packet;
+                    SetDrawArea(packetAddress.drawPacket, &rect);
                     oldPacket = packet;
                     packet += sizeof(DrawPacket);
                     AddPrim(otReg, oldPacket);
