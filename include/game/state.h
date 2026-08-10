@@ -219,8 +219,16 @@ extern u8 g_PadConfigLabelRows[];
 extern u16 g_PadPrevHeld;
 extern volatile u16 g_PadHeld;
 
+typedef union PadHeldAddress {
+    volatile u16 *live;
+    const u16 *stable;
+} PadHeldAddress;
+
 static inline u16 ReadStablePadHeld(void) {
-    return *(const u16 *)&g_PadHeld;
+    PadHeldAddress address;
+
+    address.live = &g_PadHeld;
+    return *address.stable;
 }
 extern u16 g_PadPressedRepeat;
 extern u16 g_PadPressed;
@@ -229,7 +237,17 @@ typedef struct PadPressedView {
     u16 buttons;
 } PadPressedView;
 
-#define GetPadPressedView() ((PadPressedView *)&g_PadPressed)
+typedef union PadPressedAddress {
+    u16 *buttons;
+    PadPressedView *view;
+} PadPressedAddress;
+
+static inline PadPressedView *GetPadPressedView(void) {
+    PadPressedAddress address;
+
+    address.buttons = &g_PadPressed;
+    return address.view;
+}
 
 extern u8 g_PadRepeatTimer[];
 
