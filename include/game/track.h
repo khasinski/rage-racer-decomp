@@ -217,8 +217,10 @@ typedef struct GameTrackArcCenter {
     s32 reserved08;  /* +0x08 never read */
 } GameTrackArcCenter;
 
+typedef s32 TrackPointOffset;
+
 typedef union TrackPointTableAddress {
-    s32 byteOffset;
+    TrackPointOffset pointOffset;
     s32 value;
     GameTrackPoint *pointPointer;
     GameTrackPointHalfwordView *halfwordPointer;
