@@ -406,10 +406,11 @@ void UpdateRecordEntry(void) {
                     timeName = g_TimeRecordNameCodes;
                     do {
                         *timeName = g_RankingNameCodes[i];
-                        recordAddress.byteOffset =
-                            (((g_CourseIndex * 5) + g_TimeRecordInsertRow) * 0x10) +
-                            (g_GrandPrixSeries * 0x140);
-                        recordAddress.value = recordAddress.byteOffset + timeRecordBase.value;
+                        recordAddress.value =
+                            (((g_CourseIndex * 5) + g_TimeRecordInsertRow) *
+                             sizeof(RaceRecord)) +
+                            (g_GrandPrixSeries * sizeof(g_TimeRecords[0])) +
+                            timeRecordBase.value;
                         recordAddress.value += i;
                         i++;
                         *recordAddress.bytePointer = g_NameEntryCharset[*timeName];
