@@ -104,7 +104,7 @@ void TriggerRaceCues(void) {
 
     if (!(current & 8)) {
         finishAddress.byteOffset = g_RaceSeries * sizeof(TrackFinishCue);
-        finishAddress.byteOffset += base.byteOffset;
+        finishAddress.value = finishAddress.byteOffset + base.value;
         if (g_PlayerCar.trackSection == finishAddress.finishPointer->trackSection) {
             entry.value = g_PlayerCar.lap;
             if (entry.value == g_LapCount) {
@@ -131,7 +131,7 @@ void TriggerRaceCues(void) {
         if (temp == 0) {
             temp = g_RaceSeries;
             entry.byteOffset = ((temp * 3) + i) << 2;
-            entry.byteOffset += base.byteOffset;
+            entry.value = entry.byteOffset + base.value;
             current = entry.pointer->speed[0][0].trackSection;
             temp = -1;
             if (current == temp) {

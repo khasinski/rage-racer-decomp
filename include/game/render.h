@@ -868,12 +868,14 @@ typedef struct EnvironmentPalette {
 
 typedef union EnvironmentPaletteAddress {
     s32 byteOffset;
+    s32 value;
     EnvironmentPalette *palettePointer;
     Rgb *colorPointer;
 } EnvironmentPaletteAddress;
 
 typedef union EnvironmentClutAddress {
     s32 byteOffset;
+    s32 value;
     u8 *bytes;
     u16 *pointer;
     s16 *signedPointer;

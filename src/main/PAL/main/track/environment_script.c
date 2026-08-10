@@ -157,14 +157,14 @@ void UpdateEnvironment(void) {
         s16 *dst;
         paletteAddress.palettePointer = &g_EnvPaletteTable[g_EnvironmentModePrev];
         colorAddress.byteOffset = i * sizeof(Rgb);
-        colorAddress.byteOffset += paletteAddress.byteOffset;
+        colorAddress.value = colorAddress.byteOffset + paletteAddress.value;
         p1 = colorAddress.colorPointer;
         local[0] = p1->r << 4;
         local[1] = p1->g << 4;
         local[2] = p1->b << 4;
         paletteAddress.palettePointer = &g_EnvPaletteTable[g_EnvironmentMode];
         colorAddress.byteOffset = i * sizeof(Rgb);
-        colorAddress.byteOffset += paletteAddress.byteOffset;
+        colorAddress.value = colorAddress.byteOffset + paletteAddress.value;
         p2 = colorAddress.colorPointer;
         SetFarColor(p2->r, p2->g, p2->b);
         Intpl(local, frac, out);
@@ -174,7 +174,7 @@ void UpdateEnvironment(void) {
 
             idx.byteOffset = i * sizeof(g_EnvironmentClut[0]);
             LA_ORDERED(palo, g_EnvironmentClut, idx.byteOffset);
-            idx.byteOffset += palo;
+            idx.value = idx.byteOffset + palo;
             dst = idx.signedPointer;
         }
         *dst = 0;
