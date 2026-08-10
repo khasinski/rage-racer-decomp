@@ -42,6 +42,11 @@ typedef union GameFrameContext {
     volatile u8 volatileBytes[GAME_FRAME_CONTEXT_SIZE];
 } GameFrameContext;
 
+typedef union GameFrameContextAddress {
+    u8 *bytes;
+    GameFrameContext *context;
+} GameFrameContextAddress;
+
 typedef union ScreenOffset {
     s32 value;
     u16 displayValue;

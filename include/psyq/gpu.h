@@ -75,7 +75,7 @@ typedef char DispEnvSizeCheck[sizeof(DispEnv) == 0x14 ? 1 : -1];
 
 s32 SetGraphDebug(u8 level);
 void *PutDrawEnv(void *env);
-Env *PutDispEnv(Env *env);
+DispEnv *PutDispEnv(DispEnv *env);
 void DrawOTag(void *ot);
 u_char *MemCopy(u_char *dst, u_char *src, long count);
 

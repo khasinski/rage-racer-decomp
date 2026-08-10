@@ -115,7 +115,11 @@ void MainLoop(void) {
         g_GameClock = ticks + elapsed / 256;
         VSync(0);
         PutDrawEnv(g_DrawBuffer);
-        PutDispEnv((Env *)(g_DrawBuffer + 0x5C));
+        {
+            GameFrameContextAddress drawBuffer;
+            drawBuffer.bytes = g_DrawBuffer;
+            PutDispEnv(&drawBuffer.context->environment.display);
+        }
         DrawOTag(g_DrawBuffer + 0xBC8);
         DrawOTag(g_DrawBuffer + 0x16C8);
         UpdatePadState();
