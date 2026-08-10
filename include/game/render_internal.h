@@ -27,10 +27,12 @@ typedef struct CameraKey {
 /* The environment block at the head of each 0x237E8-byte frame context. */
 typedef struct GameFrameEnvironmentHeader {
     DrawEnv draw;
-    u8 reserved1C[0x40];
     DispEnv display;
     DrawEnv mirrorDraw;
 } GameFrameEnvironmentHeader;
+
+typedef char GameFrameEnvironmentHeaderSizeCheck[
+    sizeof(GameFrameEnvironmentHeader) == 0xCC ? 1 : -1];
 
 #define GAME_FRAME_CONTEXT_SIZE 0x237E8
 

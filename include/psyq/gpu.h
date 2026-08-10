@@ -51,6 +51,11 @@ typedef struct Env {
     u_char x13;
 } Env;
 
+typedef struct DrawEnvPacket {
+    u_long tag;
+    u_long code[15];
+} DrawEnvPacket;
+
 typedef struct DrawEnv {
     Rect clip;
     short ofs[2];
@@ -62,7 +67,11 @@ typedef struct DrawEnv {
     u_char r0;
     u_char g0;
     u_char b0;
+    DrawEnvPacket packet;
 } DrawEnv;
+
+typedef char DrawEnvSizeCheck[sizeof(DrawEnv) == 0x5C ? 1 : -1];
+typedef char DispEnvSizeCheck[sizeof(DispEnv) == 0x14 ? 1 : -1];
 
 s32 SetGraphDebug(u8 level);
 void *PutDrawEnv(void *env);
