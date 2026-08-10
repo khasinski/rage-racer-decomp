@@ -14,6 +14,11 @@ typedef struct CourseObject {
     s32 flags;
 } CourseObject;
 
+typedef struct CourseObjectTable {
+    u32 count;
+    CourseObject objects[1];
+} CourseObjectTable;
+
 typedef struct StartGridSceneryStep {
     s16 x;
     s16 y;

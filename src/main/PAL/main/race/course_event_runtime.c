@@ -38,10 +38,10 @@ void UpdateRivalCueGate(void) {
     }
 }
 
-void SetCourseObjects(u32 *table) {
+void SetCourseObjects(CourseObjectTable *table) {
     u32 value;
 
-    value = *table;
-    g_CourseObjects = (CourseObject *)(table + 1);
+    value = table->count;
+    g_CourseObjects = table->objects;
     g_CourseObjectCount = value;
 }
