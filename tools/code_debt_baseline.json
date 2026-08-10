@@ -8,7 +8,7 @@
   "empty_barriers": 133,
   "explicit_pointer_casts": 6,
   "externs_in_c": 0,
-  "field_macros": 21,
+  "field_macros": 17,
   "header_asm_aliases": 3,
   "header_address_integer_arithmetic": 4,
   "manual_byte_offsets": 0,
