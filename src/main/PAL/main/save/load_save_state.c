@@ -156,27 +156,27 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
 
         {
             u16 *dst;
-            u8 *src;
+            GameSaveBlockAddress srcAddress;
 
             i = 0;
             dst = g_TeamLogoClut;
-            src = (u8 *)base;
+            srcAddress.pointer = base;
             for (; i < 0x10; i++) {
-                *dst++ = ((GameSaveBlock *)src)->teamLogoClut[0];
-                src += 2;
+                *dst++ = srcAddress.pointer->teamLogoClut[0];
+                srcAddress.halfwordPointer++;
             }
         }
 
         {
             u16 *dst;
-            u8 *src;
+            GameSaveBlockAddress srcAddress;
 
             i = 0;
             dst = g_TeamLogoCanvas.halfwords;
-            src = (u8 *)base;
+            srcAddress.pointer = base;
             for (; i < 0x400; i++) {
-                *dst++ = ((GameSaveBlock *)src)->teamLogoCanvas[0];
-                src += 2;
+                *dst++ = srcAddress.pointer->teamLogoCanvas[0];
+                srcAddress.halfwordPointer++;
             }
         }
 

@@ -134,27 +134,27 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
 
         {
             u16 *src;
-            u8 *dst;
+            GameSaveBlockAddress dstAddress;
 
             count = 0;
             src = g_TeamLogoClut;
-            dst = (u8 *)block;
+            dstAddress.pointer = block;
             for (; count < 0x10; count++) {
-                ((GameSaveBlock *)dst)->teamLogoClut[0] = *src++;
-                dst += 2;
+                dstAddress.pointer->teamLogoClut[0] = *src++;
+                dstAddress.halfwordPointer++;
             }
         }
 
         {
             u16 *src;
-            u8 *dst;
+            GameSaveBlockAddress dstAddress;
 
             count = 0;
             src = g_TeamLogoCanvas.halfwords;
-            dst = (u8 *)block;
+            dstAddress.pointer = block;
             for (; count < 0x400; count++) {
-                ((GameSaveBlock *)dst)->teamLogoCanvas[0] = *src++;
-                dst += 2;
+                dstAddress.pointer->teamLogoCanvas[0] = *src++;
+                dstAddress.halfwordPointer++;
             }
         }
     }
