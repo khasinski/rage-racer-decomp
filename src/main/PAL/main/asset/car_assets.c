@@ -93,14 +93,14 @@ void LoadCarSelectAssets(void) {
                 relOffset = model->imageData.offset;
                 modelPtr = carModelBase + relOffset;
                 model->imageData.pointer = modelPtr;
-                SetCarImageSlot((CarImageData *)modelPtr, 0);
+                SetCarImageSlot(model->imageData.carImage, 0);
 
                 carIndex = g_PlayerCarIndex;
                 if (carIndex < 10) {
                     ApplyBodyColor1(g_CarTable[carIndex].paintColor1,
-                                    (CarImageData *)g_CarModelAsset->imageData.pointer);
+                                    g_CarModelAsset->imageData.carImage);
                     ApplyBodyColor2(g_CarTable[g_PlayerCarIndex].paintColor2,
-                                    (CarImageData *)g_CarModelAsset->imageData.pointer);
+                                    g_CarModelAsset->imageData.carImage);
                 }
 
                 g_CarModelSlot = 0;
@@ -151,14 +151,13 @@ void LoadCarModel(s32 carIndex) {
                               g_CarModelSlot < 1);
 
             asset->imageData.pointer = ptr + asset->imageData.offset;
-            SetCarImageSlot((CarImageData *)asset->imageData.pointer,
-                            g_CarModelSlot < 1);
+            SetCarImageSlot(asset->imageData.carImage, g_CarModelSlot < 1);
 
             if (carIndex < 10) {
                 ApplyBodyColor1(g_CarTable[carIndex].paintColor1,
-                                (CarImageData *)asset->imageData.pointer);
+                                asset->imageData.carImage);
                 ApplyBodyColor2(g_CarTable[carIndex].paintColor2,
-                                (CarImageData *)asset->imageData.pointer);
+                                asset->imageData.carImage);
             }
 
             g_AssetLoadState = 0;

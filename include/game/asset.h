@@ -5,6 +5,7 @@
 #include "psyq/gpu.h"
 
 struct GameCarSpec;
+struct CarImageData;
 
 /* Asset-load state machine phase (0 idle; 1..6 drive LoadAsset loads). */
 extern s32 g_AssetLoadState;
@@ -76,6 +77,7 @@ extern s32 g_LoadBuffer[];
 typedef union AssetAddress {
     s32 offset;
     void *pointer;
+    struct CarImageData *carImage;
 } AssetAddress;
 
 static __inline__ void *ResolveAssetAddress(void *base, s32 offset) {
