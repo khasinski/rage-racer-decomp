@@ -76,7 +76,7 @@ void DrawRankingPanel(s32 slideX) {
             }
             DrawText8x8(destination, xOrField, text.value, color);
             iter.value++;
-            scoreOrX.byteOffset += 4;
+            scoreOrX.timePointer++;
         } while (iter.value < limit);
     }
     DrawProportionalText(panel + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
