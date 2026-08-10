@@ -183,7 +183,7 @@ void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
     slot = g_SectorIndex;
     if (slot >= 0) {
         if ((car->lap - 1) * g_TrackLength + g_SectorEndDistance[slot] <=
-                (RAW(car->progressB) + RAW(car->progressA)) ||
+                (car->progressB + car->progressA) ||
             lapEvent != 0) {
             g_SectorTimes[slot] = g_LapTimeMs;
             if (g_LapTimeMs <= 0x927BE) {
