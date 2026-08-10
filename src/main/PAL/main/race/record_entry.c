@@ -228,7 +228,8 @@ void InsertRaceRecords(void) {
                         (g_GrandPrixSeries * 0x140) + rankingBaseAddress.value;
                     baseAddress.value = (mode * 0x50) + score_offset;
                     entryAddress.value = entryAddress.recordOffset + baseAddress.value;
-                    entryAddress.pointer[0] = entryAddress.pointer[-1];
+                    entryAddress.pointer--;
+                    entryAddress.pointer[1] = entryAddress.pointer[0];
                 } while (i < j);
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);
@@ -296,7 +297,8 @@ void InsertRaceRecords(void) {
                         (g_GrandPrixSeries * 0x140) + timeBaseAddress.value;
                     baseAddress.value = (mode * 0x50) + score_offset;
                     entryAddress.value = entryAddress.recordOffset + baseAddress.value;
-                    entryAddress.pointer[0] = entryAddress.pointer[-1];
+                    entryAddress.pointer--;
+                    entryAddress.pointer[1] = entryAddress.pointer[0];
                 } while (i < j);
             }
             score_offset = row_offset + (g_CourseIndex * 0x50);
