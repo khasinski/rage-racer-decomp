@@ -236,7 +236,7 @@ void DrawFullscreenFadeTile(s32 color, s32 tpage) {
 
     prim = packet;
     packet++;
-    AddPrim((u32 *)ot, (u32 *)prim);
+    AddPrim(ot, prim);
     {
         RenderBufferAddress cursor;
         cursor.tile = packet;

@@ -180,7 +180,7 @@ u8 *DrawMirrorFrame(u8 *packet) {
     tile->y0 = *panelPosition.screenY - 2;
     tile->h = 0x28;
     packet = (void *)(tile + 1);
-    AddPrim((u32 *)otArg, (u32 *)prim);
+    AddPrim(otArg, prim);
 
     colorIndex = g_CarMirrorBadgeStyles[g_PlayerCarIndex];
     paletteIndex = colorIndex * 3;
@@ -218,7 +218,7 @@ void DrawRearViewMirror(s32 mode) {
             SetDrawArea((DrawPacket *)packet, (Rect *)(g_DrawBuffer + 0x70));
             prim = packet;
             packet = (void *)((DrawPacket *)packet + 1);
-            AddPrim((u32 *)(g_DrawBuffer + 0x16C8), (u32 *)prim);
+            AddPrim(g_DrawBuffer + 0x16C8, prim);
             *scratch = packet;
             BuildVisibleCells(-0x3000, 0x6000);
             SetRotMatrix(SCRATCH_VIEW_MATRIX_GTE);
@@ -229,7 +229,7 @@ void DrawRearViewMirror(s32 mode) {
             SetDrawArea((DrawPacket *)packet, (Rect *)g_DrawBuffer);
             prim = packet;
             packet = (void *)((DrawPacket *)packet + 1);
-            AddPrim((u32 *)(g_DrawBuffer + 0xBD0), (u32 *)prim);
+            AddPrim(g_DrawBuffer + 0xBD0, prim);
             *scratch = packet;
             DrawCourseObjects();
             DrawCars();

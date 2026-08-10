@@ -197,7 +197,7 @@ void DrawFlatTriangle(ot, x0, y0, x1, y1, x2, y2, r, g, b, semiTrans, flags)
 
     oldPrim = (u8 *)prim;
     prim++;
-    AddPrim((u32 *)ot, (u32 *)oldPrim);
+    AddPrim(ot, oldPrim);
 
     semiReg = flagsReg;
     flagsReg &= 0x80;
@@ -401,7 +401,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b
 
     oldPrim = (u8 *)prim;
     prim++;
-    AddPrim((u32 *)ot, (u32 *)oldPrim);
+    AddPrim(ot, oldPrim);
 
     if (alphaValue != 0xFF) {
         prim = (TILE *)QueueDrawModePrim(ot, (u8 *)prim, alphaValue);
@@ -450,7 +450,7 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32
 
     oldPrim = (u8 *)prim;
     prim++;
-    AddPrim((u32 *)ot, (u32 *)oldPrim);
+    AddPrim(ot, oldPrim);
 
     if (alphaValue != 0xFF) {
         prim = (LINE_F2 *)QueueDrawModePrim(ot, (u8 *)prim, alphaValue);
@@ -549,7 +549,7 @@ void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8
 
     oldPrim = (u8 *)prim;
     prim++;
-    AddPrim((u32 *)ot, (u32 *)oldPrim);
+    AddPrim(ot, oldPrim);
 
     if (alphaReg != 0xFF) {
         prim = (LINE_G2 *)QueueDrawModePrim(ot, (u8 *)prim, alphaReg);
