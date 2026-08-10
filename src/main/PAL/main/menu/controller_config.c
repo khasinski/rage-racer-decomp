@@ -35,8 +35,8 @@ void DrawControllerConfigScreen(void) {
     leftLit = selection != 0;
     selection ^= 7;
     rightLit = selection != 0;
-    if (g_PadErrorState != 0) {
-        if (g_PadErrorState == 1) {
+    if (g_PadErrorState != PAD_ERROR_STATE_NONE) {
+        if (g_PadErrorState == PAD_ERROR_STATE_DISCONNECTED) {
             DrawProportionalText(0x3A, 0xEA, g_MsgInsertController, 0x7812);
         } else {
             DrawProportionalText(0x40, 0xEA, g_MsgControllerError, 0x7812);

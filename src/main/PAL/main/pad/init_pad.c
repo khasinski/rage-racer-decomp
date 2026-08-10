@@ -71,7 +71,7 @@ void UpdatePadState(void) {
     pad->status = raw[0];
     g_PadType = g_PadBufferType;
     if (raw[0] != 0) {
-        v = 1;
+        v = PAD_ERROR_STATE_DISCONNECTED;
         g_PadErrorState = v;
         g_PadValidateCountdown = 0x22;
         g_PadErrorHoldBits |= 0x10;
@@ -82,7 +82,7 @@ void UpdatePadState(void) {
                 mask = ~(g_PadBufferButtonsLow | (g_PadBufferButtonsHigh << 8));
                 if (!(((mask & 0x5000) != 0x5000) && ((mask & 0xA000) != 0xA000) &&
                     ((mask & 0x1C4) == 0))) {
-                    v = 2;
+                    v = PAD_ERROR_STATE_INVALID_INPUT;
         g_PadErrorState = v;
         g_PadValidateCountdown = 0x22;
         g_PadErrorHoldBits |= 0x10;
@@ -95,7 +95,7 @@ void UpdatePadState(void) {
         raw[1] = 0;
         pad->type = 0;
     } else {
-        g_PadErrorState = 0;
+        g_PadErrorState = PAD_ERROR_STATE_NONE;
     }
     if (raw[1] == 0x41) {
         pad->prevHeld = pad->held;
@@ -142,8 +142,8 @@ void UpdatePadState(void) {
         }
         pad->pressed = pad->held & ~pad->prevHeld;
     } else {
-        if (g_PadErrorState == 0) {
-            g_PadErrorState = 2;
+        if (g_PadErrorState == PAD_ERROR_STATE_NONE) {
+            g_PadErrorState = PAD_ERROR_STATE_INVALID_INPUT;
         }
         pad->status = 1;
         pad->held = 0;

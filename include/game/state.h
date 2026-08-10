@@ -189,7 +189,14 @@ extern u16 g_NegconMappingIndexSaved;
 extern s32 g_OptionLetterboxHeight;
 extern s32 g_PadConfigFlipPhase;
 extern s32 g_PadConfigFlipTimer;
-extern s32 g_PadErrorState;
+typedef enum PadErrorState {
+    PAD_ERROR_STATE_INVALID = -1,
+    PAD_ERROR_STATE_NONE,
+    PAD_ERROR_STATE_DISCONNECTED,
+    PAD_ERROR_STATE_INVALID_INPUT
+} PadErrorState;
+
+extern PadErrorState g_PadErrorState;
 extern u16 g_PadMappingIndexSaved;
 
 void RestartMemoryCard(void);

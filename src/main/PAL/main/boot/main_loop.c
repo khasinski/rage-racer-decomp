@@ -40,7 +40,7 @@ void InitSubsystems(void) {
     g_NegconNeutralII = 0;
     g_NegconNeutralL = 0;
     g_NegconMaxTwist = 0;
-    g_PadErrorState = 0;
+    g_PadErrorState = PAD_ERROR_STATE_NONE;
     g_PadValidateCountdown = 0x21;
     g_PadErrorHoldBits = 0;
     g_MirrorMode = 0;
