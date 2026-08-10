@@ -113,8 +113,9 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
  * it beside g_DrawBuffer. Here it turns into the 240-line y bias of the
  * drawing-area rect. */
 
-u8 *QueueDrawAreaPrim(void *ot, u8 *packet, s16 x, s16 y, s32 w, s32 h) {
-    u8 *oldPacket;
+u8 *QueueDrawAreaPrim(void *ot, DrawPacket *packet, s16 x, s16 y, s32 w, s32 h) {
+    DrawPacket *oldPacket;
+    RenderBufferAddress nextPacket;
     Rect rect;
     s32 offset;
 
@@ -123,11 +124,12 @@ u8 *QueueDrawAreaPrim(void *ot, u8 *packet, s16 x, s16 y, s32 w, s32 h) {
     rect.y = y + offset;
     rect.w = w;
     rect.h = h;
-    SetDrawArea((DrawPacket *)packet, &rect);
+    SetDrawArea(packet, &rect);
     oldPacket = packet;
-    packet += sizeof(DrawPacket);
+    packet++;
     AddPrim(ot, oldPacket);
-    return packet;
+    nextPacket.drawPacket = packet;
+    return nextPacket.bytes;
 }
 
 void BuildTileStrips(void) {
@@ -451,7 +453,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
         }
 
         firstNext =
-            QueueDrawAreaPrim(ot, prim.bytes, 0, 0, 0x140, 0xF0);
+            QueueDrawAreaPrim(ot, prim.drawPacket, 0, 0, 0x140, 0xF0);
     }
 
     {
@@ -495,7 +497,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
 
         scratchPacket.bytes = *scratchPacket.packetLink;
         drawPrim = QueueDrawAreaPrim(
-            ot, scratchPacket.bytes, 0x72, 0x8A, 0x5C, 0xC);
+            ot, scratchPacket.drawPacket, 0x72, 0x8A, 0x5C, 0xC);
         fontU = 0xD0;
         prim.bytes = GameQueueSprite(
             ot, drawPrim, 0x88, 0x6A, 0x30, 8, fontU, 0x10, 0x7893);
