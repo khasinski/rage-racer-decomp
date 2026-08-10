@@ -26,7 +26,7 @@ void InstallCourseAssets(void) {
 
     StoreTeamLogoImage(g_AssetBase);
 
-    g_TrackTextureShadow = g_AssetBase;
+    g_TrackTextureShadow = GetTrackTextureShadowRows(g_AssetBase);
     UploadImageAsset(g_AssetSubBlockPtr);
     ResetTrackTextureSwap();
     g_AssetLoadCursor = g_AssetBase + TRACK_TEXTURE_SHADOW_SIZE;

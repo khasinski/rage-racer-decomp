@@ -87,6 +87,8 @@ extern GameCdLoadEntry *g_StreamLoc;
 /* Boot CD scratch buffer: the RAGE.BIN index first, then asset 0. */
 extern s32 g_LoadBuffer[];
 
+typedef s32 TrackTextureShadowRow[0xE0];
+
 typedef union AssetAddress {
     s32 offset;
     void *pointer;
@@ -101,6 +103,7 @@ typedef union AssetAddress {
     struct PathSceneryPositionData *pathSceneryPosition;
     struct OptionScreenAsset *optionScreen;
     struct CarModelAsset *carModel;
+    TrackTextureShadowRow *trackTextureRows;
 } AssetAddress;
 
 static __inline__ s32 *GetAssetWords(void *data) {
@@ -115,6 +118,13 @@ static __inline__ u8 *GetAssetBytes(void *data) {
 
     address.pointer = data;
     return address.bytes;
+}
+
+static __inline__ TrackTextureShadowRow *GetTrackTextureShadowRows(void *data) {
+    AssetAddress address;
+
+    address.pointer = data;
+    return address.trackTextureRows;
 }
 
 static __inline__ u16 *GetAssetHalfwords(void *data) {
@@ -399,7 +409,7 @@ void UploadCarImage(s32 slot);
  * header carried them. */
 
 extern s32 g_PendingCarModelIndex;
-extern u8 *g_TrackTextureShadow;
+extern TrackTextureShadowRow *g_TrackTextureShadow;
 
 void InstallTerrainCellData(void *data);
 void InstallTrackEventData(void* eventData);

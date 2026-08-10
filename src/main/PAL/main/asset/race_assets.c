@@ -121,7 +121,7 @@ void LoadRaceAssets(void) {
             g_AssetSubBlockPtr = base + shadowOffset;
             UploadImageAsset(g_AssetBlockPtr);
             StoreTeamLogoImage(g_AssetLoadCursor);
-            g_TrackTextureShadow = g_AssetLoadCursor;
+            g_TrackTextureShadow = GetTrackTextureShadowRows(g_AssetLoadCursor);
             UploadImageAsset(g_AssetSubBlockPtr);
             ResetTrackTextureSwap();
             g_AssetLoadState = 6;

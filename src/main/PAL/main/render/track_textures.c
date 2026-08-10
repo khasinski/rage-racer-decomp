@@ -39,7 +39,7 @@ void SwapTrackTexturePageNow(void) {
     s32 page = 0;
     s16 *rectY = &g_TrackTextureRowRect.y;
     Rect *rect = &g_TrackTextureRowRect;
-    u8 **basePtr = &g_TrackTextureShadow;
+    TrackTextureShadowRow **basePtr = &g_TrackTextureShadow;
     s32 value;
     s32 *src;
     s32 *dst;
@@ -51,11 +51,11 @@ void SwapTrackTexturePageNow(void) {
         if (g_TrackTextureShadowPage[page] == g_TrackTexturePageWanted) {
             StoreImage(rect, buffer);
             DrawSync(0);
-            LoadImage(rect, *basePtr + (((page * 7) << 7)));
+            LoadImage(rect, (*basePtr)[page]);
             DrawSync(0);
 
             src = buffer;
-            dst = (s32 *)(*basePtr + (((page * 7) << 7)));
+            dst = (*basePtr)[page];
             count = 0;
             do {
                 *dst++ = *src++;
@@ -105,10 +105,9 @@ void SwapTrackTextureRow(void) {
     s32 *dst;
     s32 *src;
     s32 count;
-    u8 **basePtr;
+    TrackTextureShadowRow **basePtr;
     Rect *rect;
     s32 copyIndex;
-    s32 copyOffset;
     s32 index;
 
     rectY = &g_TrackTextureRowRect.y;
@@ -123,14 +122,13 @@ void SwapTrackTextureRow(void) {
         index = g_TrackTextureCursorRow;
         rect = &g_TrackTextureRowRect;
         basePtr = &g_TrackTextureShadow;
-        LoadImage(rect, *basePtr + (((index * 7) << 7)));
+        LoadImage(rect, (*basePtr)[index]);
         DrawSync(0);
 
         src = buffer;
         copyIndex = g_TrackTextureCursorRow;
         count = 0;
-        copyOffset = copyIndex * 7;
-        dst = (s32 *)(*basePtr + (copyOffset << 7));
+        dst = (*basePtr)[copyIndex];
         do {
             *dst++ = *src++;
             count++;
