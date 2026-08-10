@@ -655,6 +655,7 @@ void DrawSkyBackground(void)
       {
         u8 color;
         POLY_G4 *courseG4 = (POLY_G4 *)packetCursor;
+        RenderBufferAddress cursor;
         leftXWorkFixed = (panelXFixed + rowStepX) * 8;
         courseLeftX = leftXWorkFixed - savedSinRoll;
         screenX0 = courseLeftX / 2048;
@@ -696,7 +697,8 @@ void DrawSkyBackground(void)
         color = g_EnvironmentColors.fields.slots[7].cur.bytes.b;
         courseG4->b1 = color;
         courseG4->t.b0 = color;
-        nextPacket = (u8 *)(courseG4 + 1);
+        cursor.polyG4 = courseG4 + 1;
+        nextPacket = cursor.bytes;
         color = g_EnvironmentColors.fields.slots[8].cur.bytes.b;
         courseG4->b3 = color;
         courseG4->b2 = color;
@@ -715,12 +717,14 @@ void DrawSkyBackground(void)
       {
         u8 color;
         POLY_G4 *courseG4 = (POLY_G4 *)packetCursor;
+        RenderBufferAddress cursor;
         rightXWorkFixed = panelXFixed;
         screenX0 = GameRoundTerrainCoordinate(rightXWorkFixed + rowStepX);
         screenX1 = GameRoundTerrainCoordinate(skirtRightX + (rowStepX + (rowStepX - rowStepX)));
         screenY0 = GameRoundTerrainCoordinate(panelYFixed + rowStepY);
         screenY1 = GameRoundTerrainCoordinate(skirtBottomY + rowStepY);
-        nextPacket = (u8 *)(courseG4 + 1);
+        cursor.polyG4 = courseG4 + 1;
+        nextPacket = cursor.bytes;
         SetPolyG4(courseG4);
         courseG4->x0 = screenX0;
         courseG4->x1 = screenX1;
