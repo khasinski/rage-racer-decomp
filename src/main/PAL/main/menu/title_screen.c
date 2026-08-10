@@ -33,7 +33,7 @@ void EnterFrontend(void) {
     g_TitleFadeLevel = 0;
     g_MainMenuSlide = 0;
     g_TitlePulse = 0;
-    g_FrontendState = 0;
+    g_FrontendState = FRONTEND_STATE_TITLE;
     g_TitleExitTimer = 0;
     g_TitleAttractTimer = -1;
 
@@ -60,7 +60,7 @@ void EnterTitleScreen(void) {
     g_SceneId = 4;
     g_FrontendIdleTimer = 0;
     g_MainMenuSlide = 0;
-    g_FrontendState = 0;
+    g_FrontendState = FRONTEND_STATE_TITLE;
     UpdateBgmTrackCount();
     SetDefaultReverbDepth();
     DrawPressStartPrompt();
@@ -111,7 +111,7 @@ void DrawPressStartPrompt(void) {
 void UpdateTitleScreen(void) {
     if (g_PadPressed & PAD_START) {
         PlaySoundCue(2);
-        g_FrontendState = 1;
+        g_FrontendState = FRONTEND_STATE_MENU_OPENING;
         g_FrontendIdleTimer = 0;
         g_TitleMenuSelection = 0;
         if (g_TitleAttractTimer > 0) {
@@ -184,7 +184,7 @@ void DrawMainMenuRows(void) {
 
 void UpdateMainMenuOpen(void) {
     if (++g_MainMenuSlide == 0x30) {
-        g_FrontendState = 2;
+        g_FrontendState = FRONTEND_STATE_MENU_INPUT;
     }
 
     DrawMainMenuRows();
@@ -309,7 +309,7 @@ void UpdateMainMenuInput(void) {
             g_OptionMenuCursor = 0;
             break;
         }
-        g_FrontendState = 3;
+        g_FrontendState = FRONTEND_STATE_MENU_EXIT;
     }
     DrawMainMenuRows();
 }
