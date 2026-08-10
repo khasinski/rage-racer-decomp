@@ -85,6 +85,7 @@ typedef struct PaintColorTable {
 
 typedef union PaintColorAddress {
     s32 byteOffset;
+    s32 value;
     Rgb *pointer;
 } PaintColorAddress;
 
