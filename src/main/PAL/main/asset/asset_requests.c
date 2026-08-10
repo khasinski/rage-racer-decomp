@@ -166,9 +166,9 @@ void LoadSelectBgmAssets(void) {
             relOffset = *offsetAddress.volatilePointer;
             g_AssetLoadState = 0;
             secondBlock = GetSceneAssetAddress(header, relOffset);
-            header = (GameSceneAssetHeader *)((u8 *)header + thirdOffset);
+            header = (GameSceneAssetHeader *)(GetAssetBytes(header) + thirdOffset);
             g_AssetBlockPtr2 = secondBlock;
-            g_AssetSubBlockPtr = (u8 *)header;
+            g_AssetSubBlockPtr = GetAssetBytes(header);
         }
         break;
     }
