@@ -153,7 +153,7 @@ void DrawPrologueText(void) {
             GameDrawText8x8Shaded(
                 g_PrologueLines[i].x,
                 delta,
-                (u8 *)g_PrologueLines[i].text,
+                g_PrologueLines[i].text,
                 0x78CC,
                 value);
         }
