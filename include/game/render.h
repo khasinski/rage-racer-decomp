@@ -19,6 +19,7 @@ typedef union OrderingTableAddress {
 
 typedef union VisibilityMaskAddress {
     s32 byteOffset;
+    s32 value;
     u32 *pointer;
 } VisibilityMaskAddress;
 
