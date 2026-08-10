@@ -9,8 +9,10 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
+typedef s32 TeamLogoRotationOffset;
+
 typedef union TeamLogoRotationBufferAddress {
-    s32 byteOffset;
+    TeamLogoRotationOffset rotationOffset;
     s32 value;
     s32 wordIndex;
     u32 *wordPointer;
@@ -149,12 +151,13 @@ void RotateTeamLogoCcw(void) {
             k = 0;
             src = srcStart;
             do {
-                destinationIndex.byteOffset =
+                destinationIndex.rotationOffset =
                     ((i * 8 + k) * 8 + j) << 2;
                 dst = destinationIndex.wordPointer;
                 destinationIndex.wordPointer = dst;
                 destinationBase.wordPointer = (stackBase = saved);
-                destinationIndex.value = destinationIndex.byteOffset + destinationBase.value;
+                destinationIndex.value =
+                    destinationIndex.rotationOffset + destinationBase.value;
                 dst = destinationIndex.wordPointer;
                 shift = (limit - k) << 2;
                 *dst = 0;
