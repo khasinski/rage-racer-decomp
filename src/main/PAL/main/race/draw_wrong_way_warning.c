@@ -3,6 +3,7 @@
 #include "game/car.h"
 #include "game/race.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "game/track.h"
 #include "psyq/gpu.h"
@@ -10,11 +11,6 @@
 /* The GPU packet cursor: scratchpad word 0. Every emitter here packs its
  * primitive at this address and bumps it past what it wrote. */
 #define SCRATCH (SCRATCH_PRIM_CURSOR_AS(u8))
-
-typedef union TachometerSpriteClutAddress {
-    s16 *halfwordPointer;
-    SPRT *spritePointer;
-} TachometerSpriteClutAddress;
 
 typedef union TachometerColorAddress {
     u8 *components;
@@ -113,7 +109,7 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         prim->t.g0 = (amt * 32 + p->needleColor[1] * (96 - amt)) / 96;
         prim->t.b0 = (amt * 32 + p->needleColor[2] * (96 - amt)) / 96;
     } else if (type == 3) {
-        TachometerSpriteClutAddress clutAddress;
+        s16 *clutAddress;
 
         amt -= 32;
         if (amt < 0) amt = 0;
@@ -123,15 +119,15 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         prim->t.r0 = ((96 - amt) * 32 + p->needleColor[0] * amt) / 96;
         prim->t.g0 = ((96 - amt) * 32 + p->needleColor[1] * amt) / 96;
         prim->t.b0 = ((96 - amt) * 32 + p->needleColor[2] * amt) / 96;
-        clutAddress.halfwordPointer = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
-        *clutAddress.halfwordPointer = 0x33A8;
+        clutAddress = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
+        *clutAddress = 0x33A8;
     } else if (type == 2) {
         TachometerColorAddress packetColor;
         TachometerColorAddress needleColor;
-        TachometerSpriteClutAddress clutAddress;
+        s16 *clutAddress;
 
-        clutAddress.halfwordPointer = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
-        *clutAddress.halfwordPointer = 0x33E8;
+        clutAddress = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
+        *clutAddress = 0x33E8;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
         g_TachoFaceR = 0x80;
@@ -141,11 +137,11 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
     } else {
         TachometerColorAddress packetColor;
         TachometerColorAddress needleColor;
-        TachometerSpriteClutAddress clutAddress;
+        s16 *clutAddress;
         s16 rv = 0x33A8;
 
-        clutAddress.halfwordPointer = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
-        *clutAddress.halfwordPointer = rv;
+        clutAddress = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
+        *clutAddress = rv;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
         g_TachoFaceR = 0x80;
@@ -174,9 +170,21 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         DrawSpeedDigits(cx, cy, g_PlayerSpeed * 160 / 1168);
     }
 
-    ((SPRT *)(g_DrawBuffer + 0x236E4))->t.r0 = g_TachoFaceR;
-    ((SPRT *)(g_DrawBuffer + 0x236E4))->t.g0 = g_TachoFaceG;
-    ((SPRT *)(g_DrawBuffer + 0x236E4))->t.b0 = g_TachoFaceB;
+    {
+        GameFrameContextAddress frame;
+        frame.bytes = g_DrawBuffer;
+        frame.context->layout.raceHud.tachometerFace.t.r0 = g_TachoFaceR;
+    }
+    {
+        GameFrameContextAddress frame;
+        frame.bytes = g_DrawBuffer;
+        frame.context->layout.raceHud.tachometerFace.t.g0 = g_TachoFaceG;
+    }
+    {
+        GameFrameContextAddress frame;
+        frame.bytes = g_DrawBuffer;
+        frame.context->layout.raceHud.tachometerFace.t.b0 = g_TachoFaceB;
+    }
 
     { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236CC); }
     { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236E4); }
