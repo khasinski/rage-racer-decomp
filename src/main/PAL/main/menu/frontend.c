@@ -15,7 +15,8 @@
 #include "psyq/cd.h"
 #include "psyq/gpu.h"
 
-#define FRAME_CONTEXT_BYTE(offset) (g_FrameContexts[0].volatileBytes[offset])
+#define FRAME_CONTEXT_ENVIRONMENT(offset)                                      \
+    (*(volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + (offset)))
 
 
 void UpdateMainMenuExit(void) {
@@ -245,22 +246,22 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
     offset = 0;
     do {
         stride = 0x20000;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->draw.dtd = one;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->draw.isbg = one;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->draw.r0 = r;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->draw.g0 = g;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->draw.b0 = b;
+        FRAME_CONTEXT_ENVIRONMENT(offset).draw.dtd = one;
+        FRAME_CONTEXT_ENVIRONMENT(offset).draw.isbg = one;
+        FRAME_CONTEXT_ENVIRONMENT(offset).draw.r0 = r;
+        FRAME_CONTEXT_ENVIRONMENT(offset).draw.g0 = g;
+        FRAME_CONTEXT_ENVIRONMENT(offset).draw.b0 = b;
         value = *src0;
         stride |= 0x37E8;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->display.screen.x = value;
+        FRAME_CONTEXT_ENVIRONMENT(offset).display.screen.x = value;
         value2 = *src1;
         i++;
-        FRAME_CONTEXT_BYTE(offset + 0x86) = one;
-        FRAME_CONTEXT_BYTE(offset + 0x88) = 0;
-        FRAME_CONTEXT_BYTE(offset + 0x89) = r;
-        FRAME_CONTEXT_BYTE(offset + 0x8A) = g;
-        FRAME_CONTEXT_BYTE(offset + 0x8B) = b;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->display.screen.y = value2 + 0x1D;
+        FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.dtd = one;
+        FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.isbg = 0;
+        FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.r0 = r;
+        FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.g0 = g;
+        FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.b0 = b;
+        FRAME_CONTEXT_ENVIRONMENT(offset).display.screen.y = value2 + 0x1D;
         offset += stride;
     } while (i < 2);
 
@@ -298,22 +299,22 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
     offset = 0;
     do {
         stride = 0x20000;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->draw.dtd = one;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->draw.isbg = one;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->draw.r0 = mode;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->draw.g0 = x;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->draw.b0 = y;
+        FRAME_CONTEXT_ENVIRONMENT(offset).draw.dtd = one;
+        FRAME_CONTEXT_ENVIRONMENT(offset).draw.isbg = one;
+        FRAME_CONTEXT_ENVIRONMENT(offset).draw.r0 = mode;
+        FRAME_CONTEXT_ENVIRONMENT(offset).draw.g0 = x;
+        FRAME_CONTEXT_ENVIRONMENT(offset).draw.b0 = y;
         value = *src0;
         stride |= 0x37E8;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->display.screen.x = value;
+        FRAME_CONTEXT_ENVIRONMENT(offset).display.screen.x = value;
         value2 = *src1;
         i++;
-        FRAME_CONTEXT_BYTE(offset + 0x86) = one;
-        FRAME_CONTEXT_BYTE(offset + 0x88) = 0;
-        FRAME_CONTEXT_BYTE(offset + 0x89) = mode;
-        FRAME_CONTEXT_BYTE(offset + 0x8A) = x;
-        FRAME_CONTEXT_BYTE(offset + 0x8B) = y;
-        ((volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + offset))->display.screen.y = value2 + 0x1D;
+        FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.dtd = one;
+        FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.isbg = 0;
+        FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.r0 = mode;
+        FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.g0 = x;
+        FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.b0 = y;
+        FRAME_CONTEXT_ENVIRONMENT(offset).display.screen.y = value2 + 0x1D;
         offset += stride;
     } while (i < 2);
 
@@ -323,4 +324,4 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
     SCRATCH_CLIP_Y1 = 0x1E0;
 }
 
-#undef FRAME_CONTEXT_BYTE
+#undef FRAME_CONTEXT_ENVIRONMENT
