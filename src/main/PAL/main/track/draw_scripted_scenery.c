@@ -196,10 +196,10 @@ void UpdatePathScenerySound(void) {
             g_PathSceneryCursors.posIndex = idx;
             if (idx > 0) {
                 g_PathSceneryClock.posFrame =
-                    RAW(positionKeys[idx - 1].fields.span);
+                    positionKeys[idx - 1].fields.span;
             }
         }
-        rate = RAW(g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex].fields.rate);
+        rate = g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex].fields.rate;
         if (rate < 0) {
             rate = -rate;
             g_PathSceneryCursors.posRate.value = rate;
@@ -213,13 +213,13 @@ void UpdatePathScenerySound(void) {
         }
         rec = &g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex];
         g_PathSceneryCursors.posSpan =
-            RAW(rec->fields.span);
+            rec->fields.span;
         g_PathSceneryHalfDelta[0] =
-            (RAW(rec[1].fields.x) - RAW(rec[0].fields.x)) / 2;
+            (rec[1].fields.x - rec[0].fields.x) / 2;
         g_PathSceneryHalfDelta[1] =
-            (RAW(rec[1].fields.y) - RAW(rec[0].fields.y)) / 2;
+            (rec[1].fields.y - rec[0].fields.y) / 2;
         g_PathSceneryHalfDelta[2] =
-            (RAW(rec[1].fields.z) - RAW(rec[0].fields.z)) / 2;
+            (rec[1].fields.z - rec[0].fields.z) / 2;
     } else {
         g_PathSceneryCursors.posPhase.value = g_PathSceneryCursors.posPhase.value + 1;
     }
@@ -228,21 +228,21 @@ void UpdatePathScenerySound(void) {
         if (g_PathSceneryCursors.posPhase.signedValue <=
             g_PathSceneryCursors.posRate.signedValue / 2) {
             g_PathSceneryTransform.position.w[0] =
-                RAW(g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex + 1].fields.x) -
+                g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex + 1].fields.x -
                 g_PathSceneryHalfDelta[0] *
                     rcos((g_PathSceneryCursors.posPhase.signedValue << 11) /
                          g_PathSceneryCursors.posRate.signedValue) /
                     4096 -
                 g_PathSceneryHalfDelta[0];
             g_PathSceneryTransform.position.w[1] =
-                RAW(g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex + 1].fields.y) -
+                g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex + 1].fields.y -
                 g_PathSceneryHalfDelta[1] *
                     rcos((g_PathSceneryCursors.posPhase.signedValue << 11) /
                          g_PathSceneryCursors.posRate.signedValue) /
                     4096 -
                 g_PathSceneryHalfDelta[1];
             g_PathSceneryTransform.position.w[2] =
-                RAW(g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex + 1].fields.z) -
+                g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex + 1].fields.z -
                 g_PathSceneryHalfDelta[2] *
                     rcos((g_PathSceneryCursors.posPhase.signedValue << 11) /
                          g_PathSceneryCursors.posRate.signedValue) /
@@ -276,7 +276,7 @@ void UpdatePathScenerySound(void) {
                 g_PathSceneryHalfDelta[1];
 
             g_PathSceneryTransform.position.w[2] =
-                RAW(g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex].fields.z) +
+                g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex].fields.z +
                 g_PathSceneryHalfDelta[2] *
                     rsin((g_PathSceneryCursors.posPhase.signedValue << 11) /
                              g_PathSceneryCursors.posRate.signedValue -
@@ -307,10 +307,10 @@ void UpdatePathScenerySound(void) {
             g_PathSceneryCursors.rotIndex = idx;
             if (idx > 0) {
                 g_PathSceneryClock.rotFrame =
-                    RAW(rotationKeys[idx - 1].fields.span);
+                    rotationKeys[idx - 1].fields.span;
             }
         }
-        rate = RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.rate);
+        rate = g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.rate;
         if (rate < 0) {
             rate = -rate;
             g_PathSceneryCursors.rotRate.value = rate;
@@ -324,15 +324,15 @@ void UpdatePathScenerySound(void) {
         }
         rec = &g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex];
         g_PathSceneryCursors.rotRate.value =
-            RAW(rec->fields.rate);
+            rec->fields.rate;
         g_PathSceneryCursors.rotSpan =
-            RAW(rec->fields.span);
+            rec->fields.span;
         g_PathSceneryRotHalfDelta[0] =
-            (RAW(rec[1].fields.x) - RAW(rec[0].fields.x)) / 2;
+            (rec[1].fields.x - rec[0].fields.x) / 2;
         g_PathSceneryRotHalfDelta[1] =
-            (RAW(rec[1].fields.y) - RAW(rec[0].fields.y)) / 2;
+            (rec[1].fields.y - rec[0].fields.y) / 2;
         g_PathSceneryRotHalfDelta[2] =
-            (RAW(rec[1].fields.z) - RAW(rec[0].fields.z)) / 2;
+            (rec[1].fields.z - rec[0].fields.z) / 2;
     } else {
         g_PathSceneryCursors.rotPhase.value = g_PathSceneryCursors.rotPhase.value + 1;
     }
@@ -341,21 +341,21 @@ void UpdatePathScenerySound(void) {
         if (g_PathSceneryCursors.rotPhase.signedValue <=
             g_PathSceneryCursors.rotRate.signedValue / 2) {
             g_PathSceneryTransform.rotation.vx =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex + 1].fields.x) -
+                g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex + 1].fields.x -
                 g_PathSceneryRotHalfDelta[0] *
                     rcos((g_PathSceneryCursors.rotPhase.signedValue << 11) /
                          g_PathSceneryCursors.rotRate.signedValue) /
                     4096 -
                 g_PathSceneryRotHalfDelta[0];
             g_PathSceneryTransform.rotation.vy =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex + 1].fields.y) -
+                g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex + 1].fields.y -
                 g_PathSceneryRotHalfDelta[1] *
                     rcos((g_PathSceneryCursors.rotPhase.signedValue << 11) /
                          g_PathSceneryCursors.rotRate.signedValue) /
                     4096 -
                 g_PathSceneryRotHalfDelta[1];
             g_PathSceneryTransform.rotation.vz =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex + 1].fields.z) -
+                g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex + 1].fields.z -
                 g_PathSceneryRotHalfDelta[2] *
                     rcos((g_PathSceneryCursors.rotPhase.signedValue << 11) /
                          g_PathSceneryCursors.rotRate.signedValue) /
@@ -363,7 +363,7 @@ void UpdatePathScenerySound(void) {
                 g_PathSceneryRotHalfDelta[2];
         } else {
             g_PathSceneryTransform.rotation.vx =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.x) +
+                g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.x +
                 g_PathSceneryRotHalfDelta[0] *
                     rsin((g_PathSceneryCursors.rotPhase.signedValue << 11) /
                              g_PathSceneryCursors.rotRate.signedValue -
@@ -371,7 +371,7 @@ void UpdatePathScenerySound(void) {
                     4096 +
                 g_PathSceneryRotHalfDelta[0];
             g_PathSceneryTransform.rotation.vy =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.y) +
+                g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.y +
                 g_PathSceneryRotHalfDelta[1] *
                     rsin((g_PathSceneryCursors.rotPhase.signedValue << 11) /
                              g_PathSceneryCursors.rotRate.signedValue -
@@ -379,7 +379,7 @@ void UpdatePathScenerySound(void) {
                     4096 +
                 g_PathSceneryRotHalfDelta[1];
             g_PathSceneryTransform.rotation.vz =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.z) +
+                g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.z +
                 g_PathSceneryRotHalfDelta[2] *
                     rsin((g_PathSceneryCursors.rotPhase.signedValue << 11) /
                              g_PathSceneryCursors.rotRate.signedValue -
