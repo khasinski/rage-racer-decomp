@@ -113,7 +113,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   u16 currentSpeed;
   u16 steerBiasNext;
   GameCarDrive *drive;
-  void *arcCentre;
+  GameTrackArcCenter *arcCentre;
   GameTrackPoint *trackPoint;
   GearCurveAddress curveSlot;
   GameCarSpecAddress specSlot;
@@ -717,8 +717,8 @@ shift_interpolation_done:
     if (dragBase > 0)
     {
       arcCentre = &g_TrackArcCenters[(s16)arcFlags >> 4];
-      toCentreX = car->x - ((GameTrackArcCenter *)arcCentre)->x;
-      toCentreZ = car->z - ((GameTrackArcCenter *)arcCentre)->z;
+      toCentreX = car->x - arcCentre->x;
+      toCentreZ = car->z - arcCentre->z;
       centreAngle = Atan2(toCentreX, toCentreZ);
       cosCentreAngle = rcos(centreAngle);
       radialDistance = (cosCentreAngle * toCentreX) + (rsin(centreAngle) * toCentreZ);
