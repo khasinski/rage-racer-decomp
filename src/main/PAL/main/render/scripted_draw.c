@@ -212,8 +212,9 @@ void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion 
     otAddress.pointer = otBase;
     otPtr = otAddress.byteOffset + elapsed;
     asm("" : "=r"(otPtr), "=r"(x0) : "0"(otPtr), "1"(x0));
+    otAddress.byteOffset = otPtr;
     DrawLine(
-        (void *)otPtr,
+        otAddress.pointer,
         x0 >> 0x10,
         y1 >> 0x10,
         x1 >> 0x10,
