@@ -228,7 +228,6 @@ void InsertRaceRecords(void) {
                         (g_GrandPrixSeries * 0x140) + rankingBaseAddress.byteOffset;
                     baseAddress.byteOffset = (mode * 0x50) + score_offset;
                     entryAddress.byteOffset += baseAddress.byteOffset;
-                    asm volatile("" : : "r"(j));
                     entryAddress.pointer[0] = entryAddress.pointer[-1];
                 } while (i < j);
             }
@@ -297,7 +296,6 @@ void InsertRaceRecords(void) {
                         (g_GrandPrixSeries * 0x140) + timeBaseAddress.byteOffset;
                     baseAddress.byteOffset = (mode * 0x50) + score_offset;
                     entryAddress.byteOffset += baseAddress.byteOffset;
-                    asm volatile("" : : "r"(j));
                     entryAddress.pointer[0] = entryAddress.pointer[-1];
                 } while (i < j);
             }
