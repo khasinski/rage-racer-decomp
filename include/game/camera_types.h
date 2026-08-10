@@ -13,4 +13,18 @@ typedef struct CamRow {
     s16 horizon;
 } CamRow;
 
+typedef union CamRowAddress {
+    s32 byteOffset;
+    u8 *bytes;
+    CamRow *row;
+} CamRowAddress;
+
+static __inline__ CamRow *GetCamRow(u8 *table, s32 index) {
+    CamRowAddress address;
+
+    address.bytes = table;
+    address.byteOffset += index << 3;
+    return address.row;
+}
+
 #endif

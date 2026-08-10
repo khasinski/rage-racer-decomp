@@ -162,8 +162,8 @@ void DrawCar(GameRenderObject *obj) {
 
     model = g_CarModelByCourse[g_CourseIndex][obj->modelIndex];
     lod = g_CarModelBankTable[model];
-    obj->y -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;
-    obj->modelY -= ((CamRow *)(g_CamRow + (model << 3)))->horizon;
+    obj->y -= GetCamRow(g_CamRow, model)->horizon;
+    obj->modelY -= GetCamRow(g_CamRow, model)->horizon;
 
     v_128[0] = obj->x - cam[2];
     v_128[1] = 0;
@@ -251,13 +251,13 @@ void DrawCar(GameRenderObject *obj) {
                             (lod[0] + 3 < g_ModelBankCount) ? (lod[0] + 3) : 1);
 
             for (i = 0; i < 2; i++) {
-                s32 ax = ((CamRow *)(g_CamRow + (model << 3)))->axis0;
+                s32 ax = GetCamRow(g_CamRow, model)->axis0;
                 if (i % 2) {
                     ax = -ax;
                 }
                 v_110[0] = ax;
-                v_110[1] = ((CamRow *)(g_CamRow + (model << 3)))->axis1;
-                v_110[2] = ((CamRow *)(g_CamRow + (model << 3)))->axis2;
+                v_110[1] = GetCamRow(g_CamRow, model)->axis1;
+                v_110[2] = GetCamRow(g_CamRow, model)->axis2;
                 ApplyMatrix(&m_50, v_110, m_118);
                 m_118[0] += obj->x;
                 m_118[1] += obj->y;
@@ -289,8 +289,8 @@ void DrawCar(GameRenderObject *obj) {
         }
     }
 
-    obj->y += ((CamRow *)(g_CamRow + (model << 3)))->horizon;
-    obj->modelY += ((CamRow *)(g_CamRow + (model << 3)))->horizon;
+    obj->y += GetCamRow(g_CamRow, model)->horizon;
+    obj->modelY += GetCamRow(g_CamRow, model)->horizon;
     if (clipHandle != 0) {
         RestoreColorMatrix();
     }
