@@ -12,6 +12,7 @@ extern s32 misplaced;
 #define GAME_SAMPLE_TYPE s16
 #define GAME_SAMPLE_DECL extern s32 sample
 void f(u8 *base, void *ptr) {
+    Address address;
     register s32 value asm("$4");
     register s32 named asm("v0");
     value = *(s16 *)(base + 0x10);
@@ -22,6 +23,7 @@ void f(u8 *base, void *ptr) {
     ptr = (void *)((u8 *)ptr + 4);
     value += (s32)ptr;
     value += FIELD32(base, 4);
+    address.byteOffset += 4;
     asm volatile("");
     value += ({ s32 temporary = 2; temporary; });
     asm(".globl func_80001234\nfunc_80001234 = f + 4");
@@ -38,6 +40,7 @@ void f(u8 *base, void *ptr) {
         self.assertEqual(counts["address_reinterpret_casts"], 2)
         self.assertEqual(counts["aggregate_address_casts"], 1)
         self.assertEqual(counts["explicit_pointer_casts"], 7)
+        self.assertEqual(counts["manual_byte_offsets"], 1)
         self.assertEqual(counts["field_macros"], 1)
         self.assertEqual(counts["register_pins"], 2)
         self.assertEqual(counts["empty_barriers"], 1)
