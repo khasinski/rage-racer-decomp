@@ -240,14 +240,23 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
         s32 outer = 0;
         s32 *rankingBase = GetRaceRecordWords(&g_RankingRecords[0][0][0]);
         s32 *timeBase = GetRaceRecordWords(&g_TimeRecords[0][0][0]);
-        register u8 *outerDst asm("$25") = (u8 *)block;
+        GameSaveBlockAddress outerDestinationAddress;
+        register u8 *outerDst asm("$25") =
+            (outerDestinationAddress.pointer = block,
+             outerDestinationAddress.bytePointer);
         register s32 outerOffset asm("$16") = 0;
 
         for (; outer < 2; outer++) {
             s32 middle = 0;
             register s32 currentOuterOffset asm("$15") = outerOffset;
             register u8 *middleDst asm("$17") = outerDst;
-            register u8 *rankingDst asm("$14") = (u8 *)((GameSaveBlock *)outerDst)->rankingRecords;
+            GameSaveBlockAddress outerBlockAddress;
+            RaceRecordAddress rankingDestinationAddress;
+            register u8 *rankingDst asm("$14") =
+                (outerBlockAddress.bytePointer = outerDst,
+                 rankingDestinationAddress.pointer =
+                     &outerBlockAddress.pointer->rankingRecords[0][0][0],
+                 rankingDestinationAddress.bytePointer);
             s32 middleOffset = 0;
 
             for (; middle < 4; middle++) {
@@ -306,12 +315,21 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
         /* The remaining register hints in these loops are load-bearing. */
         s32 outer = 0;
         register s32 *sectorBase asm("$11") = &g_BestSectorTimes[0][0][0];
-        u8 *outerDst = (u8 *)block;
+        GameSaveBlockAddress outerDestinationAddress;
+        u8 *outerDst =
+            (outerDestinationAddress.pointer = block,
+             outerDestinationAddress.bytePointer);
         s32 outerOffset = 0;
 
         for (; outer < 2; outer++) {
             s32 currentOuterOffset = (middle = 0, outerOffset);
-            u8 *sectorDst = (u8 *)((GameSaveBlock *)outerDst)->bestSectorTimes;
+            GameSaveBlockAddress outerBlockAddress;
+            SectorTimeTableAddress sectorDestinationAddress;
+            u8 *sectorDst =
+                (outerBlockAddress.bytePointer = outerDst,
+                 sectorDestinationAddress.pointer =
+                     &outerBlockAddress.pointer->bestSectorTimes[0][0][0],
+                 sectorDestinationAddress.bytes);
             s32 middleOffset = 0;
 
             for (; middle < 4; middle++) {
