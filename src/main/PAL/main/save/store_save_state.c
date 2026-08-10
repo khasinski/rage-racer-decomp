@@ -260,12 +260,14 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
                 RaceRecordAddress rankingInputOuterAddress;
                 RaceRecordAddress rankingInputAddress;
                 RaceRecordAddress rankingOutputAddress;
+                GameSaveBlockAddress middleBlockAddress;
                 s32 *timeDst;
                 s32 *timeIn;
                 s32 *rankingOut;
                 s32 *rankingIn;
+                middleBlockAddress.bytePointer = middleDst;
                 timeDestinationBase.pointer =
-                    (inner = 0, &((GameSaveBlock *)middleDst)->timeRecords[0][0][0]);
+                    (inner = 0, &middleBlockAddress.pointer->timeRecords[0][0][0]);
                 timeDestinationAddress.byteOffset =
                     middleOffset + timeDestinationBase.byteOffset;
                 timeDst = timeDestinationAddress.wordPointer;
