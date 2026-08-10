@@ -28,10 +28,10 @@ static inline u16 *TeamLogoPaletteAddress(
 
     baseAddress.samplePointer = samples;
     address.byteOffset = TeamLogoRowByteOffset(row);
-    address.byteOffset += baseAddress.byteOffset;
+    address.value = address.byteOffset + baseAddress.value;
     parityOffset = TeamLogoParityByteOffset(parity);
     parityAddress.byteOffset = parityOffset;
-    parityAddress.byteOffset += address.byteOffset;
+    parityAddress.value = parityAddress.byteOffset + address.value;
     return parityAddress.halfwordPointer;
 }
 
@@ -48,12 +48,12 @@ static inline u16 *TeamLogoClutAddress(
     byteOffset = index * 2;
     baseAddress.samplePointer = samples;
     address.byteOffset = TeamLogoRowByteOffset(row);
-    address.byteOffset += baseAddress.byteOffset;
+    address.value = address.byteOffset + baseAddress.value;
     parityOffset = TeamLogoParityByteOffset(parity);
     parityAddress.byteOffset = parityOffset;
-    parityAddress.byteOffset += address.byteOffset;
+    parityAddress.value = parityAddress.byteOffset + address.value;
     elementAddress.byteOffset = byteOffset;
-    elementAddress.byteOffset += parityAddress.byteOffset;
+    elementAddress.value = elementAddress.byteOffset + parityAddress.value;
     return elementAddress.halfwordPointer;
 }
 

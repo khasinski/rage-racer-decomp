@@ -40,6 +40,7 @@ typedef struct TeamLogoSample {
 
 typedef union TeamLogoSampleAddress {
     s32 byteOffset;
+    s32 value;
     void *data;
     TeamLogoSample *samplePointer;
     u16 *halfwordPointer;
