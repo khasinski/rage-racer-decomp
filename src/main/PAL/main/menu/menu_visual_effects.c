@@ -21,6 +21,7 @@ typedef union TeamLogoRotationBufferAddress {
 typedef union MenuOrderingTableAddress {
     s32 byteOffset;
     s32 value;
+    u8 *bytes;
     void *pointer;
 } MenuOrderingTableAddress;
 
@@ -782,7 +783,8 @@ void DrawMenuLightBurst(s32 arg) {
     MenuLightBurstBand l2;
     MenuOrderingTableAddress orderingTableAddress;
 
-    orderingTableAddress.value = SCRATCH_OT_BASE_WORD + 0xAFC;
+    orderingTableAddress.pointer = SCRATCH_OT_BASE;
+    orderingTableAddress.bytes += 0xAFC;
     s3 = orderingTableAddress.pointer;
     l1 = g_MenuLightBurstBandX;
     l2 = g_MenuLightBurstBandY;

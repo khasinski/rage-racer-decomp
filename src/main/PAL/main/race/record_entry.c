@@ -250,7 +250,7 @@ void InsertRaceRecords(void) {
                 score_offset += g_GrandPrixSeries * 0x140;
                 nameAddress.bytePointer = rankingBaseAddress.bytePointer;
                 nameAddress.value = score_offset + nameAddress.value;
-                nameAddress.value = nameAddress.value + j;
+                nameAddress.bytePointer += j;
                 *nameAddress.volatileBytePointer = letter;
                 g_RankingNameCodes[j] = code;
             }
@@ -319,7 +319,7 @@ void InsertRaceRecords(void) {
                 score_offset += g_GrandPrixSeries * 0x140;
                 nameAddress.bytePointer = timeBaseAddress.bytePointer;
                 nameAddress.value = score_offset + nameAddress.value;
-                nameAddress.value = nameAddress.value + j;
+                nameAddress.bytePointer += j;
                 *nameAddress.volatileBytePointer = letter2;
                 g_TimeRecordNameCodes[j] = code2;
             }
