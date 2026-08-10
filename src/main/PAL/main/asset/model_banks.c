@@ -9,6 +9,12 @@
 #include "game/track.h"
 #include "psyq/gpu.h"
 
+typedef union ModelBankCountValue {
+    s32 value;
+    s32 *wordPointer;
+    ModelBankHeader *bank;
+} ModelBankCountValue;
+
 /* Kept local: this unit only stores an address into them, while track/ and
  * render/ read them as u32[] rows, Vec4[] entries and plain s32, four
  * incompatible element types across seven files. */
@@ -79,19 +85,19 @@ void SelectModelBank(s32 index) {
     ModelBankTableAddress banks;
     ModelBankHeader **entry;
     ModelBankHeader *bank;
-    s32 count;
+    ModelBankCountValue count;
 
     banks.pointer = g_ModelBanks;
     banks.byteAddress += index * sizeof(*entry);
     entry = banks.pointer;
-    count = (s32)*entry;
-    count = *(s32 *)count;
+    count.bank = *entry;
+    count.value = *count.wordPointer;
     bank = *entry;
     SCRATCH_MODEL_TABLE1 = bank->table.pointer;
     bank = *entry;
     SCRATCH_MODEL_NORMALS = bank->normals.pointer;
     bank = *entry;
-    g_ModelBankCount = count;
+    g_ModelBankCount = count.value;
     SCRATCH_MODEL_MODELS = bank->models;
 }
 
