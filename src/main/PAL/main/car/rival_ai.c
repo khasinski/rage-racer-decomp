@@ -15,6 +15,11 @@ enum TrafficAvoidanceAnchorIndex {
     PLAYER_PROGRESS_SPEED_HALFWORD = 26
 };
 
+typedef union RivalCueCooldownAddress {
+    s16 *signedCounter;
+    u16 *unsignedCounter;
+} RivalCueCooldownAddress;
+
 void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex) {
     GameCarAiBlock *state = GetCarAiBlock(car);
     s32 acc8 = 0;
@@ -350,7 +355,11 @@ void UpdateRivalRubberBand(void) {
                 g_RivalCueFlags = (bit >> s0) | flags;
                 return;
             }
-            (*(u16 *)s2)++;
+            {
+                RivalCueCooldownAddress counter;
+                counter.signedCounter = s2;
+                (*counter.unsignedCounter)++;
+            }
             return;
         } else {
             if (s1 == 0 && !(g_RivalCueFlags % 2) && a0 < -0x1C00) {
