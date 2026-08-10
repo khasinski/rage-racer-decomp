@@ -294,7 +294,7 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
                     s32 *src;
                     k = 0;
                     dst = dbase;
-                    sourceAddress.pointer = (s32 *)base;
+                    sourceAddress.saveBlock = base;
                     sourceAddress.byteOffset =
                         iofc + sourceAddress.byteOffset + 0xF5C;
                     sourceAddress.byteOffset = joff + sourceAddress.byteOffset;

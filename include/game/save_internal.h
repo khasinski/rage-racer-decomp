@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "game/car.h"
+#include "game/memcard.h"
 #include "game/menu_types.h"
 #include "game/team_logo.h"
 #include "psyq/gpu.h"
@@ -32,6 +33,7 @@ extern s32 g_BestSectorTimes[2][4][3];
 typedef union SectorTimeTableAddress {
     s32 byteOffset;
     s32 *pointer;
+    GameSaveBlock *saveBlock;
 } SectorTimeTableAddress;
 
 typedef union LapTimeTableAddress {
