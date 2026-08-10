@@ -12,9 +12,11 @@
  * for the primitives that follow, links it into the ordering table and returns
  * the advanced packet cursor. */
 u8 *QueueDrawModePrim(void *ot, u8 *prim, s32 tpage) {
+    RenderBufferAddress cursor;
     u8 *pkt;
 
-    SetDrawMode((DrawPacket *)prim, 0, 1, (u16)tpage, g_DrawModeEnv);
+    cursor.bytes = prim;
+    SetDrawMode(cursor.drawPacket, 0, 1, (u16)tpage, g_DrawModeEnv);
     pkt = prim;
     prim += sizeof(DrawPacket);
     AddPrim(ot, pkt);
@@ -134,7 +136,10 @@ u8 *GameQueueTexturedRect(ot, prim, x, y, w, h, u, v, uSpan, vSpan, clutIndex, t
 /* Fills a DR_MODE packet in place; unlike QueueDrawModePrim it neither
  * links the packet nor advances the scratchpad cursor. No callers in retail. */
 void SetDrawModePacket(u8 *prim, s32 tpage) {
-    SetDrawMode((DrawPacket *)prim, 0, 1, tpage, g_DrawModeEnv);
+    RenderBufferAddress cursor;
+
+    cursor.bytes = prim;
+    SetDrawMode(cursor.drawPacket, 0, 1, tpage, g_DrawModeEnv);
 }
 
 /* World position in full-precision components; the camera keeps one of these
