@@ -489,13 +489,6 @@ typedef union PathSceneryRotationKey {
     SVec rotation;
 } PathSceneryRotationKey;
 
-typedef union PathSceneryKeyAddress {
-    s32 byteOffset;
-    s32 value;
-    PathSceneryPositionKey *positionPointer;
-    PathSceneryRotationKey *rotationPointer;
-} PathSceneryKeyAddress;
-
 typedef struct PathSceneryPositionData {
     s16 firstKey[2];
     PathSceneryPositionKey keys[1];
@@ -511,6 +504,39 @@ typedef struct PathSceneryRotationData {
     s16 firstKey[2];
     PathSceneryRotationKey keys[1];
 } PathSceneryRotationData;
+
+typedef union PathSceneryKeyAddress {
+    s32 byteOffset;
+    s32 value;
+    PathSceneryPositionData *positionData;
+    PathSceneryRotationData *rotationData;
+    PathSceneryPositionKey *positionPointer;
+    PathSceneryRotationKey *rotationPointer;
+} PathSceneryKeyAddress;
+
+static __inline__ PathSceneryPositionKey *GetPathSceneryPositionKey(
+    PathSceneryPositionData *data, s32 index) {
+    PathSceneryKeyAddress address;
+    PathSceneryKeyAddress base;
+
+    address.value = index * sizeof(PathSceneryPositionKey);
+    address.value += sizeof(data->firstKey);
+    base.positionData = data;
+    address.value += base.value;
+    return address.positionPointer;
+}
+
+static __inline__ PathSceneryRotationKey *GetPathSceneryRotationKey(
+    PathSceneryRotationData *data, s32 index) {
+    PathSceneryKeyAddress address;
+    PathSceneryKeyAddress base;
+
+    address.value = index * sizeof(PathSceneryRotationKey);
+    address.value += sizeof(data->firstKey);
+    base.rotationData = data;
+    address.value += base.value;
+    return address.rotationPointer;
+}
 
 extern PathSceneryPositionKey *g_PathSceneryPosKeys;
 typedef union PathSceneryRate {

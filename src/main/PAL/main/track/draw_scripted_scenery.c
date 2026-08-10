@@ -69,12 +69,8 @@ void InitPathScenery(void) {
     ib = RAW(tblB->firstKey[lev]);
     g_PathSceneryClock.rotFrame = 0;
     g_PathSceneryClock.posFrame = 0;
-    g_PathSceneryPosKeys = (PathSceneryPositionKey *)tblA;
-    g_PathSceneryPosKeys =
-        &((PathSceneryPositionData *)g_PathSceneryPosKeys)->keys[ia];
-    g_PathSceneryRotKeys = (PathSceneryRotationKey *)tblB;
-    g_PathSceneryRotKeys =
-        &((PathSceneryRotationData *)g_PathSceneryRotKeys)->keys[ib];
+    g_PathSceneryPosKeys = GetPathSceneryPositionKey(tblA, ia);
+    g_PathSceneryRotKeys = GetPathSceneryRotationKey(tblB, ib);
     g_PathSceneryTransform.position = g_PathSceneryPosKeys->position;
 
     {
