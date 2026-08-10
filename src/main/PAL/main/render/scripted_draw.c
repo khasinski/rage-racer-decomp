@@ -339,10 +339,10 @@ void DrawScriptedTriangle(s32 time, ScriptedTriangleShape *styleArg, ScriptedTri
         flags);
 }
 
-void DrawScriptedQuad(s32 time, u8 *desc, ScriptedQuadMotion *ctx) {
+void DrawScriptedQuad(s32 time, ScriptedQuadShape *desc, ScriptedQuadMotion *ctx) {
     s32 duration;
     u8 *table;
-    u8 *entry;
+    ScriptedQuadShape *entry;
     s32 velocity0;
     s32 velocity1;
     s32 x;
@@ -414,7 +414,7 @@ void DrawScriptedQuad(s32 time, u8 *desc, ScriptedQuadMotion *ctx) {
     asm("" : "=r"(posY2) : "0"(posY2));
     dy = posY2;
 
-    switch (((ScriptedQuadShape *)entry)->flags & 3) {
+    switch (entry->flags & 3) {
     case 0:
         index = 0;
         break;
@@ -429,14 +429,13 @@ void DrawScriptedQuad(s32 time, u8 *desc, ScriptedQuadMotion *ctx) {
         break;
     }
 
-    flags = ((ScriptedQuadShape *)entry)->flags;
+    flags = entry->flags;
     GameDrawTexturedQuad(table + index * 4, (s16)x, (s16)y,
                   (s16)(x + dx), (s16)y, (s16)x, (s16)(y + dy),
-                  (s16)(x + dx), (s16)(y + dy), entry[0], entry[1], entry[2], entry[3],
-                  entry[4], entry[5], entry[6], entry[7], ((ScriptedQuadShape *)entry)->r,
-                  ((ScriptedQuadShape *)entry)->g, ((ScriptedQuadShape *)entry)->b,
-                  ((ScriptedQuadShape *)entry)->clut, flags & 8,
-                  flags & 4, ((ScriptedQuadShape *)entry)->alpha);
+                  (s16)(x + dx), (s16)(y + dy), entry->u0, entry->v0,
+                  entry->u1, entry->v1, entry->u2, entry->v2, entry->u3,
+                  entry->v3, entry->r, entry->g, entry->b, entry->clut,
+                  flags & 8, flags & 4, entry->alpha);
 }
 
 s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
@@ -480,45 +479,49 @@ loop_body:
                     break;
                 }
                 DrawScriptedSprite(
-                    remaining, cmd->shape.pointer, cmd->motion.pointer, type);
+                    remaining, cmd->shape.spriteShape,
+                    cmd->motion.spriteMotion, type);
                 break;
             case 0:
             case 1:
                 DrawScriptedSprite(
-                    remaining, cmd->shape.pointer, cmd->motion.pointer, type);
+                    remaining, cmd->shape.spriteShape,
+                    cmd->motion.spriteMotion, type);
                 break;
             case 19:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
                 DrawScriptedLine(
-                    remaining, cmd->shape.pointer, cmd->motion.pointer);
+                    remaining, cmd->shape.lineShape, cmd->motion.lineMotion);
                 break;
             case 10:
                 DrawScriptedLine(
-                    remaining, cmd->shape.pointer, cmd->motion.pointer);
+                    remaining, cmd->shape.lineShape, cmd->motion.lineMotion);
                 break;
             case 29:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
                 DrawScriptedTriangle(
-                    remaining, cmd->shape.pointer, cmd->motion.pointer);
+                    remaining, cmd->shape.triangleShape,
+                    cmd->motion.triangleMotion);
                 break;
             case 20:
                 DrawScriptedTriangle(
-                    remaining, cmd->shape.pointer, cmd->motion.pointer);
+                    remaining, cmd->shape.triangleShape,
+                    cmd->motion.triangleMotion);
                 break;
             case 39:
                 if (g_MenuAltLayout != 0) {
                     break;
                 }
                 DrawScriptedQuad(
-                    remaining, cmd->shape.bytes, cmd->motion.pointer);
+                    remaining, cmd->shape.quadShape, cmd->motion.quadMotion);
                 break;
             case 30:
                 DrawScriptedQuad(
-                    remaining, cmd->shape.bytes, cmd->motion.pointer);
+                    remaining, cmd->shape.quadShape, cmd->motion.quadMotion);
                 break;
             default:
                 break;
@@ -574,9 +577,9 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     u32 offsetProduct;
     u32 packedDrawY;
 
-    shapePtr = g_MenuRowScript[0].shape.pointer;
+    shapePtr = g_MenuRowScript[0].shape.spriteShape;
     elapsed = progress - g_MenuRowScript[0].time;
-    motionPtr = g_MenuRowScript[0].motion.pointer;
+    motionPtr = g_MenuRowScript[0].motion.spriteMotion;
     ot = SCRATCH_OT_BASE_AS(u32);
     countReg = count;
     packed = motionPtr->packedVelocity;
@@ -667,8 +670,8 @@ loop:
     i++;
     done = countReg < i;
     *timer = nextTimer;
-    shapePtr = cmd->shape.pointer;
-    motionPtr = cmd->motion.pointer;
+    shapePtr = cmd->shape.spriteShape;
+    motionPtr = cmd->motion.spriteMotion;
     if (!done) {
         goto loop;
     }

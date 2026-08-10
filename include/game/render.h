@@ -33,6 +33,14 @@ typedef union TimedDrawArgument {
     void *pointer;
     u8 *bytes;
     s32 *words;
+    struct ScriptedSpriteShape *spriteShape;
+    struct ScriptedSpriteMotion *spriteMotion;
+    struct ScriptedLineShape *lineShape;
+    struct ScriptedLineMotion *lineMotion;
+    struct ScriptedTriangleShape *triangleShape;
+    struct ScriptedTriangleMotion *triangleMotion;
+    struct ScriptedQuadShape *quadShape;
+    struct ScriptedQuadMotion *quadMotion;
 } TimedDrawArgument;
 
 typedef struct ScriptedSpriteShape {
@@ -623,7 +631,7 @@ void DrawScriptedSprite(
     s32 useAlpha);
 void DrawScriptedLine(s32 elapsed, ScriptedLineShape *style, ScriptedLineMotion *record);
 void DrawScriptedTriangle(s32 elapsed, ScriptedTriangleShape *shape, ScriptedTriangleMotion *motion);
-void DrawScriptedQuad(s32 elapsed, u8 *shape, ScriptedQuadMotion *motion);
+void DrawScriptedQuad(s32 elapsed, ScriptedQuadShape *shape, ScriptedQuadMotion *motion);
 
 /*
  * Low-level packet builders from the first 0x3900 bytes of .text (the boot /
