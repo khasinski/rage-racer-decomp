@@ -66,6 +66,7 @@ typedef union RaceSeriesValue {
 
 typedef union RaceSeriesAddress {
     volatile s32 *series;
+    const s32 *stableSeries;
     RaceSeriesValue *value;
 } RaceSeriesAddress;
 
@@ -79,7 +80,10 @@ static inline u16 ReadRaceTrackDirection(void) {
 }
 
 static inline s32 ReadStableRaceSeries(void) {
-    return *(const s32 *)&g_RaceSeries;
+    RaceSeriesAddress address;
+
+    address.series = &g_RaceSeries;
+    return *address.stableSeries;
 }
 
 /* Race phase: 0 pre-start (physics frozen), 1 countdown, 2 racing, 4/5
