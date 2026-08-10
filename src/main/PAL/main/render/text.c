@@ -15,15 +15,15 @@
 
 void DrawText8x8(s32 x, s32 y, const u8 *str, s32 clutIndex) {
     u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
-    u8 *packet;
+    RenderBufferAddress packet;
 
-    packet = *scratch;
+    packet.bytes = *scratch;
     if (*str != 0) {
         volatile SPRT_8 *sprt;
         u8 *font;
         RenderBufferAddress spriteAddress;
         INIT_TEXT_FONT(font);
-        spriteAddress.bytes = packet;
+        spriteAddress.bytes = packet.bytes;
         sprt = spriteAddress.volatileSprite8;
         do {
             s32 cell = *str - 0x20;
@@ -45,8 +45,8 @@ void DrawText8x8(s32 x, s32 y, const u8 *str, s32 clutIndex) {
                 u = *fontUCell * 8;
                 v = *(index + fontV) * 8;
 
-                SetSprt8(packet);
-                SetShadeTex(packet, 1);
+                SetSprt8(packet.bytes);
+                SetShadeTex(packet.bytes, 1);
                 sprt->x0 = x;
                 sprt->y0 = y;
                 sprt->u0 = u;
@@ -55,14 +55,14 @@ void DrawText8x8(s32 x, s32 y, const u8 *str, s32 clutIndex) {
                 spriteAddress.volatileSprite8 = sprt;
                 AddPrim(g_DrawBuffer + 0xCC, spriteAddress.pointer);
                 sprt++;
-                packet += sizeof(SPRT_8);
+                packet.bytes += sizeof(SPRT_8);
             }
             x += 8;
         } while (*str != 0);
     }
-    SetDrawMode((DrawPacket *)packet, 0, 1, 9, g_DrawModeEnv);
-    AddPrim(g_DrawBuffer + 0xCC, packet);
-    *scratch = packet + sizeof(DrawPacket);
+    SetDrawMode(packet.drawPacket, 0, 1, 9, g_DrawModeEnv);
+    AddPrim(g_DrawBuffer + 0xCC, packet.pointer);
+    *scratch = packet.bytes + sizeof(DrawPacket);
 }
 
 void GameDrawText8x8Shaded(
@@ -72,17 +72,17 @@ void GameDrawText8x8Shaded(
     s32 clutIndex,
     u8 intensity) {
     u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
-    u8 *packet;
+    RenderBufferAddress packet;
     u8 *prim;
     RenderBufferAddress primAddress;
 
-    packet = *scratch;
+    packet.bytes = *scratch;
     if (*str != 0) {
         volatile SPRT_8 *sprt;
         u8 *font;
 
         INIT_TEXT_FONT(font);
-        primAddress.bytes = packet;
+        primAddress.bytes = packet.bytes;
         sprt = primAddress.volatileSprite8;
         do {
             s32 cell = *str - 0x20;
@@ -107,8 +107,8 @@ void GameDrawText8x8Shaded(
                     v = *(index + fontV) * 8;
                 }
 
-                SetSprt8(packet);
-                SetSemiTrans(packet, 1);
+                SetSprt8(packet.bytes);
+                SetSemiTrans(packet.bytes, 1);
                 sprt->x0 = x;
                 sprt->y0 = y;
                 sprt->u0 = u;
@@ -122,27 +122,27 @@ void GameDrawText8x8Shaded(
                 sprt->clut = clutIndex;
                 AddPrim(g_DrawBuffer + 0xCC, prim);
                 sprt++;
-                packet += sizeof(SPRT_8);
+                packet.bytes += sizeof(SPRT_8);
             }
             x += 8;
         } while (*str != 0);
     }
-    SetDrawMode((DrawPacket *)packet, 0, 1, 0x29, g_DrawModeEnv);
-    AddPrim(g_DrawBuffer + 0xCC, packet);
-    *scratch = packet + sizeof(DrawPacket);
+    SetDrawMode(packet.drawPacket, 0, 1, 0x29, g_DrawModeEnv);
+    AddPrim(g_DrawBuffer + 0xCC, packet.pointer);
+    *scratch = packet.bytes + sizeof(DrawPacket);
 }
 
 void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
     u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
-    u8 *packet;
+    RenderBufferAddress packet;
 
-    packet = *scratch;
+    packet.bytes = *scratch;
     if (*str != 0) {
         volatile SPRT_8 *sprt;
         u8 *font;
         RenderBufferAddress spriteAddress;
         INIT_TEXT_FONT(font);
-        spriteAddress.bytes = packet;
+        spriteAddress.bytes = packet.bytes;
         sprt = spriteAddress.volatileSprite8;
         do {
             s32 cell = *str - 0x20;
@@ -164,9 +164,9 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
                 u = *fontUCell * 8;
                 v = *(index + fontV) * 8;
 
-                SetSprt8(packet);
-                SetShadeTex(packet, 1);
-                SetSemiTrans(packet, 1);
+                SetSprt8(packet.bytes);
+                SetShadeTex(packet.bytes, 1);
+                SetSemiTrans(packet.bytes, 1);
                 sprt->x0 = x;
                 sprt->y0 = y;
                 sprt->u0 = u;
@@ -175,14 +175,14 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
                 spriteAddress.volatileSprite8 = sprt;
                 AddPrim(g_DrawBuffer + 0xCC, spriteAddress.pointer);
                 sprt++;
-                packet += sizeof(SPRT_8);
+                packet.bytes += sizeof(SPRT_8);
             }
             x += 8;
         } while (*str != 0);
     }
-    SetDrawMode((DrawPacket *)packet, 0, 1, 0x49, g_DrawModeEnv);
-    AddPrim(g_DrawBuffer + 0xCC, packet);
-    *scratch = packet + sizeof(DrawPacket);
+    SetDrawMode(packet.drawPacket, 0, 1, 0x49, g_DrawModeEnv);
+    AddPrim(g_DrawBuffer + 0xCC, packet.pointer);
+    *scratch = packet.bytes + sizeof(DrawPacket);
 }
 
 #undef INIT_TEXT_FONT
@@ -206,7 +206,7 @@ typedef union TextRenderWork {
 
 #define OPAQUE_VALUE (t0.value = 0x100)
     s32 xPos = x;
-    u8 *packet = SCRATCH_PRIM_CURSOR_AS(u8);
+    RenderBufferAddress packet;
     u8 *text = str;
     register s32 shade asm("$23");
     register TextRenderWork t0 asm("$8");
@@ -220,6 +220,7 @@ typedef union TextRenderWork {
         s32 clut;
     } home;
 
+    packet.bytes = SCRATCH_PRIM_CURSOR_AS(u8);
     home.y = y;
     home.clut = clutIndex;
     first = *text;
@@ -227,7 +228,7 @@ typedef union TextRenderWork {
 
     if (first != 0) {
         s32 height = 12;
-        register SPRT *sprt asm("$16") = (SPRT *)packet;
+        register SPRT *sprt asm("$16") = packet.sprite;
 
         do {
             s32 advance;
@@ -247,12 +248,12 @@ typedef union TextRenderWork {
                 text++;
                 u = g_HighFontU[index];
                 v = g_HighFontV[index];
-                SetSprt(packet);
+                SetSprt(packet.bytes);
                 if (shade == OPAQUE_VALUE) {
-                    SetShadeTex(packet, 1);
+                    SetShadeTex(packet.bytes, 1);
                     RAW(sprt->x0) = xPos;
                 } else {
-                    SetSemiTrans(packet, 1);
+                    SetSemiTrans(packet.bytes, 1);
                     sprt->t.r0 = shade;
                     sprt->t.g0 = shade;
                     sprt->t.b0 = shade;
@@ -263,7 +264,7 @@ typedef union TextRenderWork {
                 asm(
                     "" : "=r"(yOffset), "=r"(t0.value) :
                     "0"(yOffset), "1"(t0.value));
-                packet += 20;
+                packet.bytes += 20;
                 sprt->y0 = yOffset + t0.value;
                 width = g_HighFontWidth[index];
                 prim = sprt;
@@ -293,19 +294,19 @@ typedef union TextRenderWork {
                 text++;
                 u = g_WordFontU[s1];
                 v = g_WordFontV[s1];
-                SetSprt(packet);
+                SetSprt(packet.bytes);
                 if (shade == OPAQUE_VALUE) {
-                    SetShadeTex(packet, 1);
+                    SetShadeTex(packet.bytes, 1);
                     RAW(sprt->x0) = xPos;
                 } else {
-                    SetSemiTrans(packet, 1);
+                    SetSemiTrans(packet.bytes, 1);
                     sprt->t.r0 = shade;
                     sprt->t.g0 = shade;
                     sprt->t.b0 = shade;
                     sprt->x0 = xPos;
                 }
                 t0.value = (u16)home.y;
-                packet += 20;
+                packet.bytes += 20;
                 sprt->y0 = t0.value;
                 width = g_WordFontWidth[s1];
                 prim = sprt;
@@ -345,12 +346,12 @@ typedef union TextRenderWork {
                     asm("" : "=r"(vCell) : "0"(vCell), "r"(uCell));
                     u = *uCell;
                     v = *vCell;
-                    SetSprt(packet);
+                    SetSprt(packet.bytes);
                     if (shade == OPAQUE_VALUE) {
-                        SetShadeTex(packet, 1);
+                        SetShadeTex(packet.bytes, 1);
                         RAW(sprt->x0) = xPos;
                     } else {
-                        SetSemiTrans(packet, 1);
+                        SetSemiTrans(packet.bytes, 1);
                         sprt->t.r0 = shade;
                         sprt->t.g0 = shade;
                         sprt->t.b0 = shade;
@@ -363,7 +364,7 @@ typedef union TextRenderWork {
                     sprt->u0 = u;
                     sprt->v0 = v;
                     ot = g_DrawBuffer;
-                    packet += 20;
+                    packet.bytes += 20;
                     sprt->w = height;
                     sprt->h = height;
                     sprt->y0 = t0.value;
@@ -379,9 +380,9 @@ typedef union TextRenderWork {
             ;
         } while (*text != 0);
     }
-    SetDrawMode((DrawPacket *)packet, 0, 1, 0x29, g_DrawModeEnv);
-    AddPrim(g_DrawBuffer + 0xCC, packet);
-    SCRATCH_PRIM_CURSOR_AS(u8) = packet + 12;
+    SetDrawMode(packet.drawPacket, 0, 1, 0x29, g_DrawModeEnv);
+    AddPrim(g_DrawBuffer + 0xCC, packet.pointer);
+    SCRATCH_PRIM_CURSOR_AS(u8) = packet.bytes + 12;
 #undef OPAQUE_VALUE
 }
 
