@@ -65,7 +65,14 @@ typedef union GameSaveHeaderWordAddress {
 typedef struct GameSaveHeaderClearCursor {
     u8 prefix[0xC];
     u16 reservedHalfword;
+    u8 suffix[0x74];
 } GameSaveHeaderClearCursor;
+
+typedef union GameSaveHeaderRowsAddress {
+    u8 *bytes;
+    GameSaveHeaderRow *rows;
+    GameSaveHeaderClearCursor *clearCursors;
+} GameSaveHeaderRowsAddress;
 
 typedef struct MemoryCardMessageRow {
     s32 text;
