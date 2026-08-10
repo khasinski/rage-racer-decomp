@@ -198,6 +198,7 @@ void SetHudBlinkColor(s32 phase) {
 }
 
 void DrawSplitDelta(s32 delta, s32 y) {
+    GameFrameContextAddress drawBuffer;
     u8 *base;
     u8 *prim;
     RenderBufferAddress firstPrim;
@@ -209,10 +210,11 @@ void DrawSplitDelta(s32 delta, s32 y) {
     temp = 0x237C0;
     value = delta * 8;
     base = g_DrawBuffer;
+    drawBuffer.bytes = base;
     value += 0x50;
     prim = base + temp;
 
-    ((SPRT *)(base + 0x237AC))->u0 = value;
+    drawBuffer.context->layout.raceHud.labels[3].u0 = value;
     AddPrim(g_DrawBuffer + 0xCC, base + firstPrim.byteOffset);
     firstPrim.bytes = prim;
 
@@ -230,6 +232,6 @@ void DrawSplitDelta(s32 delta, s32 y) {
         return;
     }
 
-    ((SPRT *)(base + 0x23770))[4].clut = temp;
+    drawBuffer.context->layout.raceHud.labels[4].clut = temp;
     AddPrim(ot + 0xCC, firstPrim.pointer);
 }
