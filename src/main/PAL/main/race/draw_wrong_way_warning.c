@@ -30,7 +30,7 @@ void DrawWrongWayWarning(void) {
     u8 *ret;
     RenderBufferAddress nextAddress;
 
-    next = (SPRT *)SCRATCH;
+    next = SCRATCH_PRIM_CURSOR_AS(SPRT);
     i = 0;
     u = 0x48;
     x = 0x6C;
@@ -80,7 +80,7 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
     s32 angle = b + rpm * (p->angleMax - b) / 10000;
     s32 cos = rsin(angle);
     s32 sin = rcos(angle);
-    POLY_F4 *prim = (POLY_F4 *)SCRATCH;
+    POLY_F4 *prim = SCRATCH_PRIM_CURSOR_AS(POLY_F4);
     s16 *vp;
     s16 *pa;
     s16 *pb;
@@ -205,7 +205,7 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
     { u8 *g = g_DrawBuffer; AddPrim(g + 0xCC, g + 0x236D8); }
 
     {
-        TILE *q = (TILE *)SCRATCH;
+        TILE *q = SCRATCH_PRIM_CURSOR_AS(TILE);
         u8 *g;
         TILE *tile;
         s32 v10;
@@ -243,7 +243,7 @@ void DrawFullscreenFadeTile(s32 color, s32 tpage) {
         color = 0xFF;
     }
 
-    packet = (TILE *)SCRATCH;
+    packet = SCRATCH_PRIM_CURSOR_AS(TILE);
     SetTile(packet);
     SetSemiTrans(packet, 1);
 
