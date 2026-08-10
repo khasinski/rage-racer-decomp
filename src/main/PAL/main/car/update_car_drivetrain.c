@@ -344,7 +344,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       }
       else
       {
-        curveSlot.byteOffset += 4;
+        curveSlot.valuePointer++;
         bandSlot += 1;
         specSlot.byteOffset += 4;
         if (bandSlot < bandEnd)
