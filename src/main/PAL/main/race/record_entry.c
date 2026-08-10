@@ -215,7 +215,7 @@ void InsertRaceRecords(void) {
     while (i < 5) {
         score_offset = row_offset + (g_CourseIndex * 0x50);
         score_offset += g_GrandPrixSeries * 0x140;
-        recordAddress.pointer = (RaceRecord *)g_RankingRecords;
+        recordAddress.pointer = &g_RankingRecords[0][0][0];
         recordAddress.byteOffset += score_offset;
         if (best < recordAddress.pointer->raceTime) {
             if (i < 4) {
