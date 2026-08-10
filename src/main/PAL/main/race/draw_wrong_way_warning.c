@@ -119,14 +119,22 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         prim->t.r0 = ((96 - amt) * 32 + p->needleColor[0] * amt) / 96;
         prim->t.g0 = ((96 - amt) * 32 + p->needleColor[1] * amt) / 96;
         prim->t.b0 = ((96 - amt) * 32 + p->needleColor[2] * amt) / 96;
-        clutAddress = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
+        {
+            GameFrameContextAddress frame;
+            frame.bytes = g_DrawBuffer;
+            clutAddress = &frame.context->layout.raceHud.tachometerFace.clut;
+        }
         *clutAddress = 0x33A8;
     } else if (type == 2) {
         TachometerColorAddress packetColor;
         TachometerColorAddress needleColor;
         s16 *clutAddress;
 
-        clutAddress = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
+        {
+            GameFrameContextAddress frame;
+            frame.bytes = g_DrawBuffer;
+            clutAddress = &frame.context->layout.raceHud.tachometerFace.clut;
+        }
         *clutAddress = 0x33E8;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
@@ -140,7 +148,11 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         s16 *clutAddress;
         s16 rv = 0x33A8;
 
-        clutAddress = &((SPRT *)(g_DrawBuffer + 0x236E4))->clut;
+        {
+            GameFrameContextAddress frame;
+            frame.bytes = g_DrawBuffer;
+            clutAddress = &frame.context->layout.raceHud.tachometerFace.clut;
+        }
         *clutAddress = rv;
         g_TachoFaceB = 0x80;
         g_TachoFaceG = 0x80;
