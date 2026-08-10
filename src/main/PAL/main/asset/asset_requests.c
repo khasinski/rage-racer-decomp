@@ -160,7 +160,7 @@ void LoadSelectBgmAssets(void) {
             offsetAddress.pointer = &header->offsets[2];
             thirdOffset = *offsetAddress.volatilePointer;
             firstBlockAddress.header = header;
-            firstBlockAddress.value += firstOffset;
+            firstBlockAddress.bytes = GetAssetBytes(header) + firstOffset;
             g_AssetBlockPtr = firstBlockAddress.pointer;
             offsetAddress.pointer = &header->offsets[1];
             relOffset = *offsetAddress.volatilePointer;

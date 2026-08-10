@@ -1,6 +1,6 @@
 {
   "asm_aliases": 0,
-  "address_integer_arithmetic": 102,
+  "address_integer_arithmetic": 101,
   "address_reinterpret_casts": 0,
   "aggregate_address_casts": 0,
   "byte_pointer_arithmetic": 1,
