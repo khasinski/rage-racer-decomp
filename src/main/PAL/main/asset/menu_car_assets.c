@@ -194,8 +194,8 @@ void RelocateCarModel(void) {
 
     SetCarModelSlot(GetCarModelAsset(g_AssetBase), 0);
     address.pointer = g_CarModelAsset->modelData.pointer;
-    UnrelocateModelBank((ModelBankHeader *)(g_AssetBase + 0x28), address.offset);
+    UnrelocateModelBank(GetModelBankHeader(g_AssetBase + 0x28), address.offset);
     SelectCarModelSlot(0);
     g_CarModelAsset->modelData.pointer = g_AssetBase + 0x28;
-    RegisterModelBank((ModelBankHeader *)(g_AssetBase + 0x28), 0);
+    RegisterModelBank(GetModelBankHeader(g_AssetBase + 0x28), 0);
 }

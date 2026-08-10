@@ -53,7 +53,7 @@ void LoadCarSelectAssets(void) {
         return;
     case 3:
             if (LoadAsset(8, g_AssetLoadCursor) != 0) {
-                RegisterModelBank((ModelBankHeader *)(g_AssetLoadCursor + 0xC), 0xE);
+                RegisterModelBank(GetModelBankHeader(g_AssetLoadCursor + 0xC), 0xE);
 
                 header = GetSceneAssetHeader(g_AssetLoadCursor);
                 blockOffset = header->offsets[1];

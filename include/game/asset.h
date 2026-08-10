@@ -108,6 +108,13 @@ static __inline__ struct CourseModelAssetHeader *GetCourseModelAssetHeader(
     return address.courseModels;
 }
 
+static __inline__ struct ModelBankHeader *GetModelBankHeader(void *data) {
+    AssetAddress address;
+
+    address.pointer = data;
+    return address.modelBank;
+}
+
 static __inline__ void *ResolveAssetAddress(void *base, s32 offset) {
     AssetAddress address;
 
