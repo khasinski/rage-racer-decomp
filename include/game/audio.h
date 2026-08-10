@@ -146,6 +146,7 @@ typedef struct EngineSoundCurveRow {
 
 typedef union EngineSoundCurveAddress {
     s32 byteOffset;
+    s32 value;
     s32 *pointer;
 } EngineSoundCurveAddress;
 

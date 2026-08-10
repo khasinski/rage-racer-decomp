@@ -33,7 +33,7 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     bank_offset = (((bank * 7) * 4) - bank) << 5;
     bank = row_offset + bank_offset;
     entryAddress.pointer = base;
-    entryAddress.byteOffset += bank;
+    entryAddress.value += bank;
     entry = entryAddress.pointer;
     scan = entry + 1;
     while (index < 9) {
@@ -48,15 +48,15 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     base_minus = base - 1;
     index_offset = index * 4;
     curveAddress.pointer = base_minus;
-    curveAddress.byteOffset = index_offset + curveAddress.byteOffset;
-    curveAddress.byteOffset += bank;
+    curveAddress.value = index_offset + curveAddress.value;
+    curveAddress.value += bank;
     lower_position = curveAddress.pointer;
     lowerValueAddress.pointer = base + 8;
-    lowerValueAddress.byteOffset = index_offset + lowerValueAddress.byteOffset;
-    lowerValueAddress.byteOffset += bank;
+    lowerValueAddress.value = index_offset + lowerValueAddress.value;
+    lowerValueAddress.value += bank;
     upperValueAddress.pointer = base + 9;
-    upperValueAddress.byteOffset = bank + upperValueAddress.byteOffset;
-    upperValueAddress.byteOffset = index_offset + upperValueAddress.byteOffset;
+    upperValueAddress.value = bank + upperValueAddress.value;
+    upperValueAddress.value = index_offset + upperValueAddress.value;
     lower_value_value = *lowerValueAddress.pointer;
     upper_value_value = *upperValueAddress.pointer;
     lower_position_value = *lower_position;
@@ -64,7 +64,7 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
         (upper_value_value - lower_value_value) *
         (value - lower_position_value);
     denominatorAddress.pointer = entry;
-    denominatorAddress.byteOffset = index_offset + denominatorAddress.byteOffset;
+    denominatorAddress.value = index_offset + denominatorAddress.value;
     denominator = *denominatorAddress.pointer - lower_position_value;
     raw_result = numerator / denominator + lower_value_value;
 
