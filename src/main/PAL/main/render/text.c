@@ -251,7 +251,7 @@ typedef union TextRenderWork {
                 SetSprt(packet.bytes);
                 if (shade == OPAQUE_VALUE) {
                     SetShadeTex(packet.bytes, 1);
-                    RAW(sprt->x0) = xPos;
+                    sprt->x0 = xPos;
                 } else {
                     SetSemiTrans(packet.bytes, 1);
                     sprt->t.r0 = shade;
@@ -297,7 +297,7 @@ typedef union TextRenderWork {
                 SetSprt(packet.bytes);
                 if (shade == OPAQUE_VALUE) {
                     SetShadeTex(packet.bytes, 1);
-                    RAW(sprt->x0) = xPos;
+                    sprt->x0 = xPos;
                 } else {
                     SetSemiTrans(packet.bytes, 1);
                     sprt->t.r0 = shade;
@@ -349,7 +349,7 @@ typedef union TextRenderWork {
                     SetSprt(packet.bytes);
                     if (shade == OPAQUE_VALUE) {
                         SetShadeTex(packet.bytes, 1);
-                        RAW(sprt->x0) = xPos;
+                        sprt->x0 = xPos;
                     } else {
                         SetSemiTrans(packet.bytes, 1);
                         sprt->t.r0 = shade;
