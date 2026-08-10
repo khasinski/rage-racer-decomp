@@ -4,6 +4,11 @@
 #include "game/scratchpad.h"
 #include "game/state.h"
 
+typedef union FadingMenuTableAddress {
+    TimedDrawCommand *commands;
+    s32 *timers;
+} FadingMenuTableAddress;
+
 
 void DrawScriptedSprite(s32 elapsed, ScriptedSpriteShape *shape, ScriptedSpriteMotion *motion, s32 type) {
     register ScriptedSpriteMotion *motionReg asm("$10") = motion;
@@ -564,7 +569,7 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
     s32 nextTimer;
     register s32 value asm("$2");
     s32 temporary;
-    void *basePtr;
+    FadingMenuTableAddress tableAddress;
     s32 done;
     s32 timerValue;
     u32 fade;
@@ -623,12 +628,12 @@ void DrawFadingMenuSprites(s32 progress, s32 count, s32 slot) {
         return;
     }
 
-    basePtr = g_MenuRowScript;
-    cmd = &((TimedDrawCommand *)basePtr)[i];
+    tableAddress.commands = g_MenuRowScript;
+    cmd = &tableAddress.commands[i];
 
 loop:
-    basePtr = g_MenuRowFlashLevels;
-    timer = &((s32 *)basePtr)[i];
+    tableAddress.timers = g_MenuRowFlashLevels;
+    timer = &tableAddress.timers[i];
 
     fade = *timer & 0x1FF;
     *timer = fade;
