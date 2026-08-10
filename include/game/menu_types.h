@@ -121,11 +121,14 @@ typedef struct DesignModeCellMask {
 } DesignModeCellMask;
 
 /* Screen-space output produced while flipping the course card. */
-typedef struct MenuProjectedVertex {
-    u16 x;
-    u16 y;
-    u16 z;
-    u16 pad;
+typedef union MenuProjectedVertex {
+    struct {
+        s16 x;
+        s16 y;
+        s16 z;
+        s16 pad;
+    } position;
+    s16 components[4];
 } MenuProjectedVertex;
 
 /* Texture coordinates for the four glyph cells of a NeGcon setup panel. */

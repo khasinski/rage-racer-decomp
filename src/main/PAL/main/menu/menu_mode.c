@@ -195,10 +195,10 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
     }
 
     BuildRotMatrixY(&mtx, n);
-    ApplyMatrixSV(&mtx, &verts[0], (s16 *)&out[0]);
-    ApplyMatrixSV(&mtx, &verts[1], (s16 *)&out[1]);
-    ApplyMatrixSV(&mtx, &verts[2], (s16 *)&out[2]);
-    ApplyMatrixSV(&mtx, &verts[3], (s16 *)&out[3]);
+    ApplyMatrixSV(&mtx, &verts[0], out[0].components);
+    ApplyMatrixSV(&mtx, &verts[1], out[1].components);
+    ApplyMatrixSV(&mtx, &verts[2], out[2].components);
+    ApplyMatrixSV(&mtx, &verts[3], out[3].components);
 
     {
         s16 x0;
@@ -210,14 +210,14 @@ void FlipCourseCard(s32 *p0, s32 *p1, s32 *p2) {
         s16 x3;
         s16 y3;
 
-        x0 = out[0].x;
-        x1 = out[1].x;
-        x2 = out[2].x;
-        x3 = out[3].x;
-        y0 = out[0].y;
-        y1 = out[1].y;
-        y2 = out[2].y;
-        y3 = out[3].y;
+        x0 = out[0].position.x;
+        x1 = out[1].position.x;
+        x2 = out[2].position.x;
+        x3 = out[3].position.x;
+        y0 = out[0].position.y;
+        y1 = out[1].position.y;
+        y2 = out[2].position.y;
+        y3 = out[3].position.y;
 
         x0 += 0xE4;
         y0 += 0x58;
