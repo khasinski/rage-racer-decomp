@@ -4,6 +4,8 @@
 #include "common.h"
 #include "game/vector.h"
 
+struct PlayerCarRuntime;
+
 /*
  * Per-car entry. The two setup bytes are what the CUSTOMIZE screen edits and
  * the save file keeps; whether the transmission row can be opened at all is a
@@ -182,6 +184,7 @@ typedef struct GameCarRuntime {
 
 typedef union GameCarRuntimeAddress {
     GameCarRuntime *runtime;
+    struct PlayerCarRuntime *player;
     u32 *words;
     Block16 *blocks;
     LVec *vector;

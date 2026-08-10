@@ -734,7 +734,7 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
     register s32 index asm("$3");
     s32 lastIndex;
 
-    sourceAddress.runtime = car;
+    sourceAddress.player = car;
     destinationAddress.runtime = &g_CameraCar;
     dst = destinationAddress.blocks;
     src = sourceAddress.blocks;
