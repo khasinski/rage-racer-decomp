@@ -215,9 +215,9 @@ void DrawScriptedLine(s32 elapsed, ScriptedLineShape *shape, ScriptedLineMotion 
     y1 = y0Call << 0x10;
     x1 <<= 0x10;
     otAddress.pointer = otBase;
-    otPtr = otAddress.byteOffset + elapsed;
+    otPtr = otAddress.value + elapsed;
     asm("" : "=r"(otPtr), "=r"(x0) : "0"(otPtr), "1"(x0));
-    otAddress.byteOffset = otPtr;
+    otAddress.value = otPtr;
     DrawLine(
         otAddress.pointer,
         x0 >> 0x10,
@@ -468,7 +468,7 @@ s32 RunTimedDrawScript(void *commands, s32 *progress, s32 step) {
 
     nextProgress = (index * 3) << 2;
     commandAddress.pointer = base;
-    commandAddress.byteOffset = nextProgress + commandAddress.byteOffset;
+    commandAddress.value = nextProgress + commandAddress.value;
     if (commandAddress.pointer->time < 0) {
         goto timed_commands_done;
     }
