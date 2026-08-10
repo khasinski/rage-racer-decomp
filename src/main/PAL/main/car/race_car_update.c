@@ -266,7 +266,7 @@ void UpdateRaceCars(void) {
              * Retail only initializes x and z before copying all four words.
              * Its uninitialized y and w stores are intentionally preserved.
              */
-            *(Vec4 *)base = vpos;
+            *GetCarVector4(base) = vpos;
             if (walk->steeringAngle >= 0x41) {
                 walk->bodyRollVelocity = walk->bodyRollVelocity - 6;
             } else if (walk->steeringAngle < -0x40) {
@@ -505,7 +505,7 @@ void UpdateAttractCars(void) {
              * Retail only initializes x and z before copying all four words.
              * Its uninitialized y and w stores are intentionally preserved.
              */
-            *(Vec4 *)car = vTmp;
+            *GetCarVector4(car) = vTmp;
             if (base->steeringAngle >= 0x41) {
                 base->bodyRollVelocity = base->bodyRollVelocity - 6;
             } else if (base->steeringAngle < -0x40) {

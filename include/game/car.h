@@ -190,6 +190,7 @@ typedef union GameCarRuntimeAddress {
     u32 *words;
     Block16 *blocks;
     LVec *vector;
+    Vec4 *vector4;
 } GameCarRuntimeAddress;
 
 static __inline__ struct GameRenderObject *GetCarRenderObject(
@@ -198,6 +199,13 @@ static __inline__ struct GameRenderObject *GetCarRenderObject(
 
     address.runtime = car;
     return address.renderObject;
+}
+
+static __inline__ Vec4 *GetCarVector4(GameCarRuntime *car) {
+    GameCarRuntimeAddress address;
+
+    address.runtime = car;
+    return address.vector4;
 }
 
 typedef union CarBodyRotationAddress {
