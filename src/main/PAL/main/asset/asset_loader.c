@@ -128,7 +128,7 @@ void LoadDiscArchiveIndex(void) {
     src = g_LoadBuffer;
     dst = g_AssetCdEntries;
     for (i = 0; i < 135; i++) {
-        CdIntToPos(base + *src, (CdlLOC *)dst);
+        CdIntToPos(base + *src, &dst->position.location);
         dst->size = src[1];
         src += 2;
         dst++;
@@ -144,7 +144,8 @@ void LoadDiscArchiveIndex(void) {
     base = CdPosToInt_Local(&file.pos);
     stream = g_StreamCdEntries;
     for (i = 0; i < 11; i++) {
-        CdIntToPos(base + stream->position, (CdlLOC *)stream);
+        CdIntToPos(base + stream->position.sectorOffset,
+                   &stream->position.location);
         stream++;
     }
 }

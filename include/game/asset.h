@@ -2,6 +2,7 @@
 #define GAME_ASSET_H
 
 #include "common.h"
+#include "psyq/cd_location.h"
 #include "psyq/gpu.h"
 
 struct GameCarSpec;
@@ -59,8 +60,13 @@ s32 LoadAsset(s32 assetIndex, void *dst);
  * wait, success, failure). Sequences one transfer, unlike g_AssetLoadState. */
 extern s16 g_CdLoadPhase;
 
+typedef union GameCdPosition {
+    u32 sectorOffset;
+    CdlLOC location;
+} GameCdPosition;
+
 typedef struct GameCdLoadEntry {
-    u32 position;
+    GameCdPosition position;
     u32 size;
 } GameCdLoadEntry;
 

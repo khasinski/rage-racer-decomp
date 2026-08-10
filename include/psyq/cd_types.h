@@ -2,13 +2,7 @@
 #define PSYQ_CD_TYPES_H
 
 #include "common.h"
-
-typedef struct CdlLOC {
-    u_char minute;
-    u_char second;
-    u_char sector;
-    u_char track;
-} CdlLOC;
+#include "psyq/cd_location.h"
 
 typedef struct CdlFILE {
     CdlLOC pos;
