@@ -194,7 +194,7 @@ s32 ScanMemoryCardSaveHeaders(GameSaveHeaderRow *headers) {
 }
 
 s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
-    u8 block[MC_BLOCK_SIZE];
+    GameSaveBlock block;
     GameSaveHeaderRow *header;
     s32 tries;
     s32 fd;
@@ -247,13 +247,13 @@ s32 LoadMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *outHeader) {
     }
 
     GameMenuLoadPhase = 0x3600;
-    if (BiosFileRead(fd, block, MC_BLOCK_SIZE) != MC_BLOCK_SIZE) {
+    if (BiosFileRead(fd, &block, MC_BLOCK_SIZE) != MC_BLOCK_SIZE) {
         return 0;
     }
 
     BiosFileClose(fd);
     GameMenuLoadPhase = 0x3700;
-    if (LoadSaveStateBlock((GameSaveBlock *)block) == 0) {
+    if (LoadSaveStateBlock(&block) == 0) {
         return 0;
     }
 
