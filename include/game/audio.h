@@ -26,6 +26,7 @@ typedef struct EffectCueBank {
 
 typedef union EffectCueBankAddress {
     s32 byteOffset;
+    s32 value;
     const EffectCueBank *pointer;
     const EffectCueBankEntry *entryPointer;
 } EffectCueBankAddress;

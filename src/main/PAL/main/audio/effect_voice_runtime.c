@@ -363,7 +363,7 @@ after_match:
     base = g_SoundModes;
     entryOffset = loopTableOffset;
     entryAddress.pointer = base;
-    entryAddress.byteOffset += entryOffset;
+    entryAddress.value += entryOffset;
     entry = entryAddress.pointer;
     cue = 0;
     do {
@@ -384,7 +384,7 @@ after_match:
             CHANNEL(cue).volLeft.updated = scaledLeft;
             scaledRight = right * currentB;
             entryAddress.pointer = entry;
-            entryAddress.byteOffset += sizeof(SoundModeSlot);
+            entryAddress.value += sizeof(SoundModeSlot);
             entry = entryAddress.pointer;
             if (scaledRight < 0) {
                 scaledRight += 0x7F;
@@ -404,7 +404,7 @@ after_match:
             /* Load-bearing: removal changes eight linked scheduler words. */
             asm volatile("");
             entryAddress.pointer = entry;
-            entryAddress.byteOffset += sizeof(SoundModeSlot);
+            entryAddress.value += sizeof(SoundModeSlot);
             entry = entryAddress.pointer;
             i++;
         }
@@ -414,12 +414,12 @@ after_match:
 
 #define UPDATE_BASIC_EFFECT_VOLUME()                                  \
     updateLeftAddress.wordPointer = &g_MusicChannels[0].volLeft.value; \
-    updateLeftAddress.byteOffset += offset;                           \
+    updateLeftAddress.value += offset;                                \
     raw = *updateLeftAddress.wordPointer;                             \
     scale = g_SoundScale.scale;                                                \
     left = raw * scale;                                                \
     updateRightAddress.wordPointer = &g_MusicChannels[0].volRight.value; \
-    updateRightAddress.byteOffset += offset;                          \
+    updateRightAddress.value += offset;                               \
     raw = *updateRightAddress.wordPointer;                            \
     voice = i + 8;                                                     \
     if (left < 0) {                                                    \
@@ -450,7 +450,7 @@ after_match:
 
 #define START_BASIC_EFFECT_VOLUME()                                   \
     startLeftAddress.wordPointer = &g_MusicChannels[0].volLeft.value; \
-    startLeftAddress.byteOffset += offset;                            \
+    startLeftAddress.value += offset;                                 \
     raw = *startLeftAddress.wordPointer;                              \
     scale = g_SoundScale.scale;                                                \
     left = raw * scale;                                                \
@@ -458,7 +458,7 @@ after_match:
     asm("" : "=r"(raw) : "0"(raw));                                    \
     voice = raw;                                                       \
     startRightAddress.wordPointer = &g_MusicChannels[0].volRight.value; \
-    startRightAddress.byteOffset += offset;                           \
+    startRightAddress.value += offset;                                \
     raw = *startRightAddress.wordPointer;                             \
     if (left < 0) {                                                    \
         left += 0x7F;                                                  \
@@ -513,9 +513,9 @@ void UpdateBasicEffectVoices(void) {
         switch (*state) {
         case 0:
             leftToneAddress.halfwordPointer = &g_MusicChannels[0].left.half[0];
-            leftToneAddress.byteOffset += offset;
+            leftToneAddress.value += offset;
             rightToneAddress.halfwordPointer = &g_MusicChannels[0].right.half[0];
-            rightToneAddress.byteOffset += offset;
+            rightToneAddress.value += offset;
             SsUtKeyOnV(voicePacked >> 16, g_VabIds[0],
                           *leftToneAddress.halfwordPointer,
                           *rightToneAddress.halfwordPointer, 0x3C, 0, 0, 0);

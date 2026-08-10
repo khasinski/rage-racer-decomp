@@ -50,6 +50,7 @@ typedef struct MusicChannel {
 
 typedef union MusicChannelAddress {
     s32 byteOffset;
+    s32 value;
     s16 *halfwordPointer;
     s32 *wordPointer;
     MusicChannel *pointer;
@@ -136,7 +137,7 @@ static __inline__ EffectVoice *GetEffectVoiceAtByteOffset(s32 byteOffset) {
     EffectVoiceAddress address;
 
     address.pointer = g_EffectVoices;
-    address.byteOffset += byteOffset;
+    address.value += byteOffset;
     return address.pointer;
 }
 
@@ -168,6 +169,7 @@ extern s16 g_SoundSlotTone[][2];
 
 typedef union SoundToneTableAddress {
     s32 byteOffset;
+    s32 value;
     s16 *pointer;
 } SoundToneTableAddress;
 
@@ -199,6 +201,7 @@ typedef struct SoundModeEntry {
 
 typedef union SoundModeEntryAddress {
     s32 byteOffset;
+    s32 value;
     s32 *wordPointer;
     SoundModeEntry *pointer;
 } SoundModeEntryAddress;
@@ -209,7 +212,7 @@ static __inline__ SoundModeEntry *GetSoundModeAtByteOffset(s32 byteOffset) {
     SoundModeEntryAddress address;
 
     address.pointer = g_SoundModes;
-    address.byteOffset += byteOffset;
+    address.value += byteOffset;
     return address.pointer;
 }
 

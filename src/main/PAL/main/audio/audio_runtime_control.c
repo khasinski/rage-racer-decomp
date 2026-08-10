@@ -51,10 +51,10 @@ s32 SetSoundToneTableEntry(s32 slot, s32 vabSlot, s32 tone) {
     SoundToneTableAddress entryAddress;
 
     rowAddress.pointer = base;
-    rowAddress.byteOffset += slot * 4;
+    rowAddress.value += slot * 4;
     row = rowAddress.pointer;
     entryAddress.pointer = row;
-    entryAddress.byteOffset = vabSlot * 2 + entryAddress.byteOffset;
+    entryAddress.value = vabSlot * 2 + entryAddress.value;
     entry = entryAddress.pointer;
     old = *entry;
 
@@ -192,10 +192,10 @@ void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
     SoundToneTableAddress entryAddress;
 
     rowAddress.pointer = base;
-    rowAddress.byteOffset += slot * 4;
+    rowAddress.value += slot * 4;
     row = rowAddress.pointer;
     entryAddress.pointer = row;
-    entryAddress.byteOffset = tone * 2 + entryAddress.byteOffset;
+    entryAddress.value = tone * 2 + entryAddress.value;
     entry = entryAddress.pointer;
     SsUtKeyOnV((s16)(slot + 0xE), g_SoundScale.vabIds[(s16)vabSlot], *entry, 0, 0x3C, 0, 0, 0);
 }
