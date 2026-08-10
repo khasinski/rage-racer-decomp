@@ -162,8 +162,12 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
             }
             CAR_TRACK_POINT_RADIUS = interpolated;
         }
-        arcLateral =
-            (s16)(RAW(spad->carRadius.half.low) - RAW(spad->pointRadius.half.low));
+        {
+            volatile u16 *carRadiusLow = &spad->carRadius.half.low;
+            volatile u16 *pointRadiusLow = &spad->pointRadius.half.low;
+
+            arcLateral = (s16)(*carRadiusLow - *pointRadiusLow);
+        }
         if (spad->curveMode == 2)
         {
             arcLateral = 0 - arcLateral;

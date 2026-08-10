@@ -299,8 +299,12 @@ block_36:
         BuildRotMatrixY(angleState, 0 - g_ChaseYawLag);
         BuildRotMatrixX(matrixWork.halfwords, -0x80);
         MulMatrix2(matrixWork.halfwords, cameraRotation.halfwords);
-        g_ChaseYawPrev = g_ChaseYaw;
-        BuildRotMatrixY(objectRotation.halfwords, RAW(car->angleY));
+        {
+            volatile s32 *angleY = &car->angleY;
+
+            g_ChaseYawPrev = g_ChaseYaw;
+            BuildRotMatrixY(objectRotation.halfwords, *angleY);
+        }
         BuildRotMatrixX(matrixWork.halfwords, car->bodyPitch);
         MulMatrix2(matrixWork.halfwords, objectRotation.halfwords);
         BuildRotMatrixZ(matrixWork.halfwords, car->bodyRoll);
