@@ -192,9 +192,9 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
                 j = 0;
                 for (; j < 4; j++) {
                     g_BestLapTimes[i][j][0] =
-                        ((GameSaveBlock *)base)->bestLapTimes[i][j][0];
+                        base->bestLapTimes[i][j][0];
                     g_BestTotalTimes[i][j][0] =
-                        ((GameSaveBlock *)base)->bestTotalTimes[i][j][0];
+                        base->bestTotalTimes[i][j][0];
                 }
             }
         }
@@ -232,7 +232,7 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
                     timeAddress.byteOffset = iofc + timeAddress.byteOffset;
                     destinationAddress.byteOffset = joff + timeAddress.byteOffset;
                     dst2 = destinationAddress.wordPointer;
-                    saveAddress.bytePointer = (u8 *)base;
+                    saveAddress.pointer = base;
                     saveAddress.offset = iofc + saveAddress.offset;
                     timeSourceAddress.pointer = &saveAddress.pointer->timeRecords[0][0][0];
                     sourceAddress.byteOffset = joff + timeSourceAddress.byteOffset;
