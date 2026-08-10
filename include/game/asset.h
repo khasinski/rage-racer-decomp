@@ -14,6 +14,7 @@ struct RaceIntroCameraScript;
 struct PathSceneryPositionData;
 struct OptionScreenAsset;
 struct CarModelAsset;
+struct SVec;
 
 /* Asset-load state machine phase (0 idle; 1..6 drive LoadAsset loads). */
 extern s32 g_AssetLoadState;
@@ -103,6 +104,7 @@ typedef union AssetAddress {
     struct PathSceneryPositionData *pathSceneryPosition;
     struct OptionScreenAsset *optionScreen;
     struct CarModelAsset *carModel;
+    struct SVec *shortVector;
     TrackTextureShadowRow *trackTextureRows;
 } AssetAddress;
 
