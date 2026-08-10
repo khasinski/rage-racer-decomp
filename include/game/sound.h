@@ -139,7 +139,7 @@ static __inline__ EffectVoice *GetEffectVoiceAtByteOffset(s32 byteOffset) {
     EffectVoiceAddress address;
 
     address.pointer = g_EffectVoices;
-    address.value += byteOffset;
+    address.bytes += byteOffset;
     return address.pointer;
 }
 

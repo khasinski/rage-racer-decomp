@@ -270,7 +270,7 @@ static __inline__ void *GetSceneAssetAddress(GameSceneAssetHeader *header, s32 o
     GameSceneAssetAddress address;
 
     address.header = header;
-    address.value += offset;
+    address.bytes += offset;
     return address.pointer;
 }
 
