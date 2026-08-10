@@ -5,7 +5,7 @@
   "byte_pointer_arithmetic": 1,
   "declaration_overrides": 0,
   "empty_barriers": 133,
-  "explicit_pointer_casts": 12,
+  "explicit_pointer_casts": 10,
   "externs_in_c": 0,
   "field_macros": 0,
   "header_asm_aliases": 3,

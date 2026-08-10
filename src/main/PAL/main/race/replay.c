@@ -149,9 +149,10 @@ void ApplyReplayFrameAndTilt(s32 subframe, ReplayCarState *playerObj,
             offset = next * (sizeof(ReplayTimeAttackFrame) / sizeof(u32));
         }
         {
-            ReplayTimeAttackFrame *frame;
-            frame = (ReplayTimeAttackFrame *)((u32 *)g_ReplayFramesTimeAttack + offset);
-            primary->trackPointIndex = frame->trackPointIndex;
+            ReplayFrameAddress frame;
+            frame.timeAttackPointer = g_ReplayFramesTimeAttack;
+            frame.value = (offset << 2) + frame.value;
+            primary->trackPointIndex = frame.timeAttackPointer->trackPointIndex;
         }
     }
 }
