@@ -220,6 +220,11 @@ typedef struct CarProgressWindow {
     u8 trailing[0x15A];
 } CarProgressWindow;
 
+#define GetCarProgressWindow(car) \
+    ((CarProgressWindow *)&(car)->progressB)
+#define GetCarProgressWindowProgressA(window) \
+    (((s32 *)(window))[-1])
+
 typedef struct CarSurfaceSampleView {
     u16 x;
     u16 reserved02;

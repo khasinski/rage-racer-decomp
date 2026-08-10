@@ -14,12 +14,12 @@ void UpdateRacePosition(void) {
     active = 1;
     if (g_LapCount >= g_PlayerCar.lap) {
         total = g_PlayerCar.progressA + g_PlayerCar.progressB;
-        cars = (CarProgressWindow *)&g_Cars[0].progressB;
+        cars = GetCarProgressWindow(&g_Cars[0]);
 
         for (i = 0; i < 0xB; i++) {
             CarProgressWindow *entry = &cars[i];
             if (entry->activeFlag != -1) {
-                if ((((s32 *)entry)[-1] + entry->progressB) - total > 0) {
+                if ((GetCarProgressWindowProgressA(entry) + entry->progressB) - total > 0) {
                     active++;
                 }
             }
