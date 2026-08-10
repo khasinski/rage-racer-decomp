@@ -43,8 +43,8 @@ void DrawScriptedScenery(s32 flags) {
 
 /*
  * Frame counters and rate signs of the two keyframe tracks. UpdatePathScenerySound
- * compares posFrame against g_PathSceneryPosSpan and rotFrame against
- * g_PathSceneryRotSpan to decide when to step to the next keyframe;
+ * compares posFrame against g_PathSceneryCursors.posSpan and rotFrame against
+ * g_PathSceneryCursors.rotSpan to decide when to step to the next keyframe;
  * posRateNeg / rotRateNeg record that the keyframe's rate field was negative
  * (the rate itself is stored as a magnitude).
  */
@@ -86,28 +86,28 @@ void InitPathScenery(void) {
         copySrc = g_PathSceneryRotKeys;
         entryA = g_PathSceneryPosKeys;
         g_PathSceneryTransform.rotation = copySrc->rotation;
-        g_PathSceneryPosPhase = 0;
-        g_PathSceneryRotPhase = 0;
-        g_PathSceneryPosSpan =
+        g_PathSceneryCursors.posPhase.value = 0;
+        g_PathSceneryCursors.rotPhase.value = 0;
+        g_PathSceneryCursors.posSpan =
             RAW(entryA->fields.span);
         entryB = g_PathSceneryRotKeys;
-        g_PathSceneryRotSpan =
+        g_PathSceneryCursors.rotSpan =
             RAW(entryB->fields.span);
-        g_PathSceneryPosRate =
+        g_PathSceneryCursors.posRate.value =
             RAW(entryA->fields.rate);
-        g_PathSceneryRotRate =
+        g_PathSceneryCursors.rotRate.value =
             RAW(entryB->fields.rate);
 
         sv = RAW(entryA->fields.rate);
         if (sv < 0) {
             sv = -sv;
-            g_PathSceneryPosRate = sv;
+            g_PathSceneryCursors.posRate.value = sv;
             g_PathSceneryClock.posRateNeg = 1;
         } else {
             if (sv == 0) {
                 sv = 1;
             }
-            g_PathSceneryPosRate = sv;
+            g_PathSceneryCursors.posRate.value = sv;
             g_PathSceneryClock.posRateNeg = 0;
         }
     }
@@ -120,13 +120,13 @@ void InitPathScenery(void) {
         sv = RAW(entryB->fields.rate);
         if (sv < 0) {
             sv = -sv;
-            g_PathSceneryRotRate = sv;
+            g_PathSceneryCursors.rotRate.value = sv;
             g_PathSceneryClock.rotRateNeg = 1;
         } else {
             if (sv == 0) {
                 sv = 1;
             }
-            g_PathSceneryRotRate = sv;
+            g_PathSceneryCursors.rotRate.value = sv;
             g_PathSceneryClock.rotRateNeg = 0;
         }
     }
@@ -137,8 +137,8 @@ void InitPathScenery(void) {
 
         positionKeys = g_PathSceneryPosKeys;
         g_PathSceneryVolume = 0;
-        g_PathSceneryPosIndex = 0;
-        g_PathSceneryRotIndex = 0;
+        g_PathSceneryCursors.posIndex = 0;
+        g_PathSceneryCursors.rotIndex = 0;
         g_PathSceneryHalfDelta[0] =
             (RAW(positionKeys[1].fields.x) - RAW(positionKeys[0].fields.x)) / 2;
         g_PathSceneryHalfDelta[1] =
@@ -182,14 +182,14 @@ void UpdatePathScenerySound(void) {
     PathSceneryKeyAddress positionStepAddress;
     PathSceneryKeyAddress rotationStepAddress;
 
-    if (g_PathSceneryClock.posFrame == g_PathSceneryPosSpan) {
+    if (g_PathSceneryClock.posFrame == g_PathSceneryCursors.posSpan) {
         PathSceneryPositionKey *rec;
         PathSceneryPositionKey *stepRec;
-        idx = (u16)g_PathSceneryPosIndex;
+        idx = (u16)g_PathSceneryCursors.posIndex;
         positionKeys = g_PathSceneryPosKeys;
-        g_PathSceneryPosPhase = 0;
+        g_PathSceneryCursors.posPhase.value = 0;
         idx = idx + 1;
-        g_PathSceneryPosIndex = idx;
+        g_PathSceneryCursors.posIndex = idx;
         positionStepAddress.positionPointer = positionKeys;
         positionStepAddress.byteOffset =
             idx * sizeof(PathSceneryPositionKey) + positionStepAddress.byteOffset;
@@ -197,26 +197,26 @@ void UpdatePathScenerySound(void) {
         if (stepRec->fields.span == -1) {
             idx = stepRec->fields.loopIndex;
             g_PathSceneryClock.posFrame = 0;
-            g_PathSceneryPosIndex = idx;
+            g_PathSceneryCursors.posIndex = idx;
             if (idx > 0) {
                 g_PathSceneryClock.posFrame =
                     RAW(positionKeys[idx - 1].fields.span);
             }
         }
-        rate = RAW(g_PathSceneryPosKeys[g_PathSceneryPosIndex].fields.rate);
+        rate = RAW(g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex].fields.rate);
         if (rate < 0) {
             rate = -rate;
-            g_PathSceneryPosRate = rate;
+            g_PathSceneryCursors.posRate.value = rate;
             g_PathSceneryClock.posRateNeg = 1;
         } else {
             if (rate == 0) {
                 rate = 1;
             }
-            g_PathSceneryPosRate = rate;
+            g_PathSceneryCursors.posRate.value = rate;
             g_PathSceneryClock.posRateNeg = 0;
         }
-        rec = &g_PathSceneryPosKeys[g_PathSceneryPosIndex];
-        g_PathSceneryPosSpan =
+        rec = &g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex];
+        g_PathSceneryCursors.posSpan =
             RAW(rec->fields.span);
         g_PathSceneryHalfDelta[0] =
             (RAW(rec[1].fields.x) - RAW(rec[0].fields.x)) / 2;
@@ -225,40 +225,40 @@ void UpdatePathScenerySound(void) {
         g_PathSceneryHalfDelta[2] =
             (RAW(rec[1].fields.z) - RAW(rec[0].fields.z)) / 2;
     } else {
-        g_PathSceneryPosPhase = g_PathSceneryPosPhase + 1;
+        g_PathSceneryCursors.posPhase.value = g_PathSceneryCursors.posPhase.value + 1;
     }
 
-    if (g_PathSceneryPosCursor.phase <= (s16)g_PathSceneryPosCursor.rate) {
-        if (g_PathSceneryPosCursor.phase <=
-            (s16)g_PathSceneryPosCursor.rate / 2) {
+    if (g_PathSceneryCursors.posPhase.signedValue <= g_PathSceneryCursors.posRate.signedValue) {
+        if (g_PathSceneryCursors.posPhase.signedValue <=
+            g_PathSceneryCursors.posRate.signedValue / 2) {
             g_PathSceneryTransform.position.w[0] =
-                RAW(g_PathSceneryPosKeys[g_PathSceneryPosCursor.index + 1].fields.x) -
+                RAW(g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex + 1].fields.x) -
                 g_PathSceneryHalfDelta[0] *
-                    rcos((g_PathSceneryPosCursor.phase << 11) /
-                         (s16)g_PathSceneryPosCursor.rate) /
+                    rcos((g_PathSceneryCursors.posPhase.signedValue << 11) /
+                         g_PathSceneryCursors.posRate.signedValue) /
                     4096 -
                 g_PathSceneryHalfDelta[0];
             g_PathSceneryTransform.position.w[1] =
-                RAW(g_PathSceneryPosKeys[g_PathSceneryPosCursor.index + 1].fields.y) -
+                RAW(g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex + 1].fields.y) -
                 g_PathSceneryHalfDelta[1] *
-                    rcos((g_PathSceneryPosCursor.phase << 11) /
-                         (s16)g_PathSceneryPosCursor.rate) /
+                    rcos((g_PathSceneryCursors.posPhase.signedValue << 11) /
+                         g_PathSceneryCursors.posRate.signedValue) /
                     4096 -
                 g_PathSceneryHalfDelta[1];
             g_PathSceneryTransform.position.w[2] =
-                RAW(g_PathSceneryPosKeys[g_PathSceneryPosCursor.index + 1].fields.z) -
+                RAW(g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex + 1].fields.z) -
                 g_PathSceneryHalfDelta[2] *
-                    rcos((g_PathSceneryPosCursor.phase << 11) /
-                         (s16)g_PathSceneryPosCursor.rate) /
+                    rcos((g_PathSceneryCursors.posPhase.signedValue << 11) /
+                         g_PathSceneryCursors.posRate.signedValue) /
                     4096 -
                 g_PathSceneryHalfDelta[2];
         } else {
             product =
                 g_PathSceneryHalfDelta[0] *
-                rsin((g_PathSceneryPosCursor.phase << 11) /
-                         (s16)g_PathSceneryPosCursor.rate -
+                rsin((g_PathSceneryCursors.posPhase.signedValue << 11) /
+                         g_PathSceneryCursors.posRate.signedValue -
                      0x400);
-            sinRec = &g_PathSceneryPosKeys[g_PathSceneryPosCursor.index];
+            sinRec = &g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex];
             if (product < 0) {
                 product += 0xFFF;
             }
@@ -268,10 +268,10 @@ void UpdatePathScenerySound(void) {
 
             product =
                 g_PathSceneryHalfDelta[1] *
-                rsin((g_PathSceneryPosCursor.phase << 11) /
-                         (s16)g_PathSceneryPosCursor.rate -
+                rsin((g_PathSceneryCursors.posPhase.signedValue << 11) /
+                         g_PathSceneryCursors.posRate.signedValue -
                      0x400);
-            sinRec = &g_PathSceneryPosKeys[g_PathSceneryPosCursor.index];
+            sinRec = &g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex];
             if (product < 0) {
                 product += 0xFFF;
             }
@@ -280,27 +280,27 @@ void UpdatePathScenerySound(void) {
                 g_PathSceneryHalfDelta[1];
 
             g_PathSceneryTransform.position.w[2] =
-                RAW(g_PathSceneryPosKeys[g_PathSceneryPosCursor.index].fields.z) +
+                RAW(g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex].fields.z) +
                 g_PathSceneryHalfDelta[2] *
-                    rsin((g_PathSceneryPosCursor.phase << 11) /
-                             (s16)g_PathSceneryPosCursor.rate -
+                    rsin((g_PathSceneryCursors.posPhase.signedValue << 11) /
+                             g_PathSceneryCursors.posRate.signedValue -
                          0x400) /
                     4096 +
                 g_PathSceneryHalfDelta[2];
         }
     } else {
         g_PathSceneryTransform.position =
-            g_PathSceneryPosKeys[g_PathSceneryPosCursor.index + 1].position;
+            g_PathSceneryPosKeys[g_PathSceneryCursors.posIndex + 1].position;
     }
 
-    if (g_PathSceneryClock.rotFrame == g_PathSceneryRotSpan) {
+    if (g_PathSceneryClock.rotFrame == g_PathSceneryCursors.rotSpan) {
         PathSceneryRotationKey *rec;
         PathSceneryRotationKey *stepRec;
-        idx = (u16)g_PathSceneryRotIndex;
+        idx = (u16)g_PathSceneryCursors.rotIndex;
         rotationKeys = g_PathSceneryRotKeys;
-        g_PathSceneryRotPhase = 0;
+        g_PathSceneryCursors.rotPhase.value = 0;
         idx = idx + 1;
-        g_PathSceneryRotIndex = idx;
+        g_PathSceneryCursors.rotIndex = idx;
         rotationStepAddress.rotationPointer = rotationKeys;
         rotationStepAddress.byteOffset =
             idx * sizeof(PathSceneryRotationKey) + rotationStepAddress.byteOffset;
@@ -308,28 +308,28 @@ void UpdatePathScenerySound(void) {
         if (stepRec->fields.span == -1) {
             idx = stepRec->fields.loopIndex;
             g_PathSceneryClock.rotFrame = 0;
-            g_PathSceneryRotIndex = idx;
+            g_PathSceneryCursors.rotIndex = idx;
             if (idx > 0) {
                 g_PathSceneryClock.rotFrame =
                     RAW(rotationKeys[idx - 1].fields.span);
             }
         }
-        rate = RAW(g_PathSceneryRotKeys[g_PathSceneryRotIndex].fields.rate);
+        rate = RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.rate);
         if (rate < 0) {
             rate = -rate;
-            g_PathSceneryRotRate = rate;
+            g_PathSceneryCursors.rotRate.value = rate;
             g_PathSceneryClock.rotRateNeg = 1;
         } else {
             if (rate == 0) {
                 rate = 1;
             }
-            g_PathSceneryRotRate = rate;
+            g_PathSceneryCursors.rotRate.value = rate;
             g_PathSceneryClock.rotRateNeg = 0;
         }
-        rec = &g_PathSceneryRotKeys[g_PathSceneryRotIndex];
-        g_PathSceneryRotRate =
+        rec = &g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex];
+        g_PathSceneryCursors.rotRate.value =
             RAW(rec->fields.rate);
-        g_PathSceneryRotSpan =
+        g_PathSceneryCursors.rotSpan =
             RAW(rec->fields.span);
         g_PathSceneryRotHalfDelta[0] =
             (RAW(rec[1].fields.x) - RAW(rec[0].fields.x)) / 2;
@@ -338,62 +338,62 @@ void UpdatePathScenerySound(void) {
         g_PathSceneryRotHalfDelta[2] =
             (RAW(rec[1].fields.z) - RAW(rec[0].fields.z)) / 2;
     } else {
-        g_PathSceneryRotPhase = g_PathSceneryRotPhase + 1;
+        g_PathSceneryCursors.rotPhase.value = g_PathSceneryCursors.rotPhase.value + 1;
     }
 
-    if (g_PathSceneryRotCursor.phase <= (s16)g_PathSceneryRotCursor.rate) {
-        if (g_PathSceneryRotCursor.phase <=
-            (s16)g_PathSceneryRotCursor.rate / 2) {
+    if (g_PathSceneryCursors.rotPhase.signedValue <= g_PathSceneryCursors.rotRate.signedValue) {
+        if (g_PathSceneryCursors.rotPhase.signedValue <=
+            g_PathSceneryCursors.rotRate.signedValue / 2) {
             g_PathSceneryTransform.rotation.vx =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index + 1].fields.x) -
+                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex + 1].fields.x) -
                 g_PathSceneryRotHalfDelta[0] *
-                    rcos((g_PathSceneryRotCursor.phase << 11) /
-                         (s16)g_PathSceneryRotCursor.rate) /
+                    rcos((g_PathSceneryCursors.rotPhase.signedValue << 11) /
+                         g_PathSceneryCursors.rotRate.signedValue) /
                     4096 -
                 g_PathSceneryRotHalfDelta[0];
             g_PathSceneryTransform.rotation.vy =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index + 1].fields.y) -
+                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex + 1].fields.y) -
                 g_PathSceneryRotHalfDelta[1] *
-                    rcos((g_PathSceneryRotCursor.phase << 11) /
-                         (s16)g_PathSceneryRotCursor.rate) /
+                    rcos((g_PathSceneryCursors.rotPhase.signedValue << 11) /
+                         g_PathSceneryCursors.rotRate.signedValue) /
                     4096 -
                 g_PathSceneryRotHalfDelta[1];
             g_PathSceneryTransform.rotation.vz =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index + 1].fields.z) -
+                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex + 1].fields.z) -
                 g_PathSceneryRotHalfDelta[2] *
-                    rcos((g_PathSceneryRotCursor.phase << 11) /
-                         (s16)g_PathSceneryRotCursor.rate) /
+                    rcos((g_PathSceneryCursors.rotPhase.signedValue << 11) /
+                         g_PathSceneryCursors.rotRate.signedValue) /
                     4096 -
                 g_PathSceneryRotHalfDelta[2];
         } else {
             g_PathSceneryTransform.rotation.vx =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index].fields.x) +
+                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.x) +
                 g_PathSceneryRotHalfDelta[0] *
-                    rsin((g_PathSceneryRotCursor.phase << 11) /
-                             (s16)g_PathSceneryRotCursor.rate -
+                    rsin((g_PathSceneryCursors.rotPhase.signedValue << 11) /
+                             g_PathSceneryCursors.rotRate.signedValue -
                          0x400) /
                     4096 +
                 g_PathSceneryRotHalfDelta[0];
             g_PathSceneryTransform.rotation.vy =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index].fields.y) +
+                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.y) +
                 g_PathSceneryRotHalfDelta[1] *
-                    rsin((g_PathSceneryRotCursor.phase << 11) /
-                             (s16)g_PathSceneryRotCursor.rate -
+                    rsin((g_PathSceneryCursors.rotPhase.signedValue << 11) /
+                             g_PathSceneryCursors.rotRate.signedValue -
                          0x400) /
                     4096 +
                 g_PathSceneryRotHalfDelta[1];
             g_PathSceneryTransform.rotation.vz =
-                RAW(g_PathSceneryRotKeys[g_PathSceneryRotCursor.index].fields.z) +
+                RAW(g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex].fields.z) +
                 g_PathSceneryRotHalfDelta[2] *
-                    rsin((g_PathSceneryRotCursor.phase << 11) /
-                             (s16)g_PathSceneryRotCursor.rate -
+                    rsin((g_PathSceneryCursors.rotPhase.signedValue << 11) /
+                             g_PathSceneryCursors.rotRate.signedValue -
                          0x400) /
                     4096 +
                 g_PathSceneryRotHalfDelta[2];
         }
     } else {
         g_PathSceneryTransform.rotation =
-            g_PathSceneryRotKeys[g_PathSceneryRotCursor.index + 1].rotation;
+            g_PathSceneryRotKeys[g_PathSceneryCursors.rotIndex + 1].rotation;
     }
 
     /*

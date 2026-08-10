@@ -3484,8 +3484,8 @@ that proves it:
   about half a turn.
 * **12.12 fixed point.** `g_CdMix*` / `g_CdMixFull*` are shifted right 12 to
   make the 0..0x7F bytes `CdMix` wants, so 0x7F000 is full scale.
-* **Cosine-ease phase, 0..0x1000.** `g_PathSceneryPosPhase` /
-  `g_PathSceneryRotPhase`.
+* **Cosine-ease phase, 0..0x1000.** `g_PathSceneryCursors.posPhase` /
+  `g_PathSceneryCursors.rotPhase`.
 * **Unsigned 0..255 with 0x80 the mechanical centre.** The four raw NeGcon axis
   bytes at `D_801E4040`; `UpdateNegconNeutralScreen` latches the steering
   one as `axis - 128` while the three analog buttons keep their raw range and

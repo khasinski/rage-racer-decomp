@@ -455,7 +455,6 @@ extern s32 g_HighClassSceneryYaw;
 extern s32 g_OrbitCameraDistance;
 extern s32 g_OrbitCameraYaw;
 extern s16 g_PathSceneryHalfDelta[3];
-extern s16 g_PathSceneryPosIndex;
 typedef union PathSceneryPositionKey {
     struct {
         s32 x;
@@ -503,25 +502,30 @@ typedef struct PathSceneryRotationData {
 } PathSceneryRotationData;
 
 extern PathSceneryPositionKey *g_PathSceneryPosKeys;
-typedef struct PathSceneryCursor {
-    s16 phase;
-    s16 otherPhase;
-    u16 span;
-    u16 otherSpan;
-    u16 rate;
-    u16 otherRate;
-    s16 index;
-    s16 otherIndex;
-} PathSceneryCursor;
-extern u16 g_PathSceneryPosPhase;
-extern u16 g_PathSceneryPosRate;
-extern s16 g_PathSceneryPosSpan;
+typedef union PathSceneryRate {
+    u16 value;
+    s16 signedValue;
+} PathSceneryRate;
+
+typedef union PathSceneryPhase {
+    u16 value;
+    s16 signedValue;
+} PathSceneryPhase;
+
+typedef struct PathSceneryCursors {
+    PathSceneryPhase posPhase;
+    PathSceneryPhase rotPhase;
+    s16 posSpan;
+    s16 rotSpan;
+    PathSceneryRate posRate;
+    PathSceneryRate rotRate;
+    s16 posIndex;
+    s16 rotIndex;
+} PathSceneryCursors;
+
+extern PathSceneryCursors g_PathSceneryCursors;
 extern s16 g_PathSceneryRotHalfDelta[3];
-extern s16 g_PathSceneryRotIndex;
 extern PathSceneryRotationKey *g_PathSceneryRotKeys;
-extern u16 g_PathSceneryRotPhase;
-extern u16 g_PathSceneryRotRate;
-extern s16 g_PathSceneryRotSpan;
 extern s32 g_PathSceneryVolume;
 extern s32 g_PlayerField3C;
 extern s32 g_PlayerSegmentWeight;

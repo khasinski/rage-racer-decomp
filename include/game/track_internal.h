@@ -48,9 +48,6 @@ extern s32 g_CourseObjectCount;
 extern StartGridSceneryStep g_StartGridSceneryStep[];
 extern PathSceneryClock g_PathSceneryClock;
 extern PathSceneryTransform g_PathSceneryTransform;
-extern PathSceneryCursor g_PathSceneryPosCursor asm("g_PathSceneryPosPhase");
-extern PathSceneryCursor g_PathSceneryRotCursor asm("g_PathSceneryRotPhase");
-
 extern s32 g_TrackLength;
 extern TrackEventData *g_TrackEventData;
 
