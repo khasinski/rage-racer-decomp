@@ -68,13 +68,13 @@ void InitRecordTables(void) {
                     *r3.wordPointer = r2.value;
                 } while (r4.value < 4);
                 r5.value++;
-                r8.byteOffset += 4;
+                r8.wordPointer++;
             } while (r5.value < 2);
             r7++;
             r11 += 8;
         } while (r7 < 4);
         r14++;
-        r16.byteOffset += 0x20;
+        r16.wordPointer += 8;
     } while (r14 < 2);
 
     r14 = 0;
@@ -116,14 +116,14 @@ void InitRecordTables(void) {
                 r2.byteOffset = r4.byteOffset + r30;
                 *r2.wordPointer = r3.value;
                 r3.value = *r8.wordPointer;
-                r8.byteOffset += 0xC;
+                r8.wordPointer += 3;
                 r2.byteOffset = r4.byteOffset + r18.byteOffset;
                 *r2.wordPointer = r3.value;
                 r2.value = *r9.wordPointer;
                 r4.byteOffset = r4.byteOffset + r21;
                 *r4.wordPointer = r2.value;
                 r2.value = *r17.wordPointer;
-                r9.byteOffset += 0xC;
+                r9.wordPointer += 3;
                 r2.value = r12 + r2.value;
                 recordAddress.pointer = &g_RankingRecords[0][0][0];
                 recordAddress.byteOffset += r5.byteOffset;
@@ -146,7 +146,7 @@ void InitRecordTables(void) {
                 recordAddress.pointer = &g_TimeRecords[0][0][0];
                 recordAddress.byteOffset += r5.byteOffset;
                 recordAddress.pointer->carIndex = r2.value;
-                r10.byteOffset += 0xC;
+                r10.halfwordPointer += 6;
             } while (r6 < 5);
             r7++;
             r15 += 0x50;
@@ -170,14 +170,14 @@ void InitRecordTables(void) {
                 r2.value = *r5.wordPointer;
                 r6++;
                 *r3.wordPointer = r2.value;
-                r3.byteOffset += 4;
+                r3.wordPointer++;
             } while (r6 < 3);
             r7++;
-            r4.byteOffset += 0xC;
+            r4.wordPointer += 3;
         } while (r7 < 4);
-        r8.byteOffset += 0x10;
+        r8.wordPointer += 4;
         r14++;
-        r9.byteOffset += 0x30;
+        r9.wordPointer += 12;
     } while (r14 < 2);
 
     __asm__("" : : "r"(r23));
