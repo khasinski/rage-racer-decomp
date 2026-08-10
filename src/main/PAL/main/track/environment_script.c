@@ -156,15 +156,13 @@ void UpdateEnvironment(void) {
     for (i = 0; i < 0x10; i++) {
         s16 *dst;
         paletteAddress.palettePointer = &g_EnvPaletteTable[g_EnvironmentModePrev];
-        colorAddress.byteOffset = i * sizeof(Rgb);
-        colorAddress.value = colorAddress.byteOffset + paletteAddress.value;
+        colorAddress.value = (i * sizeof(Rgb)) + paletteAddress.value;
         p1 = colorAddress.colorPointer;
         local[0] = p1->r << 4;
         local[1] = p1->g << 4;
         local[2] = p1->b << 4;
         paletteAddress.palettePointer = &g_EnvPaletteTable[g_EnvironmentMode];
-        colorAddress.byteOffset = i * sizeof(Rgb);
-        colorAddress.value = colorAddress.byteOffset + paletteAddress.value;
+        colorAddress.value = (i * sizeof(Rgb)) + paletteAddress.value;
         p2 = colorAddress.colorPointer;
         SetFarColor(p2->r, p2->g, p2->b);
         Intpl(local, frac, out);
