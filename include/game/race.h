@@ -247,7 +247,20 @@ extern s32 g_ClassResultPlace;
 extern s32 g_LapCount;
 extern s16 g_PauseDebounce;
 extern s32 g_PrizeAmount;
-extern s32 g_PrizeScreenState;
+typedef enum PrizeScreenState {
+    PRIZE_SCREEN_STATE_INVALID = -1,
+    PRIZE_SCREEN_STATE_INTRO_FADE_IN,
+    PRIZE_SCREEN_STATE_WAIT_FOR_INTRO_CONFIRM,
+    PRIZE_SCREEN_STATE_HIDE_RACE_TIME,
+    PRIZE_SCREEN_STATE_SHOW_PRIZE_PANEL,
+    PRIZE_SCREEN_STATE_COUNT_PRIZE,
+    PRIZE_SCREEN_STATE_WAIT_FOR_BONUS_CONFIRM,
+    PRIZE_SCREEN_STATE_COUNT_BONUS,
+    PRIZE_SCREEN_STATE_WAIT_TO_FINISH,
+    PRIZE_SCREEN_STATE_FADE_OUT
+} PrizeScreenState;
+
+extern PrizeScreenState g_PrizeScreenState;
 extern s32 g_PromotionBonus;
 extern s32 g_RacePaused;
 extern s32 g_ReplayReadCursor;

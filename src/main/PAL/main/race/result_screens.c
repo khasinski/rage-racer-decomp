@@ -213,7 +213,8 @@ void DrawResultScreen(void) {
 void DrawGrandprixIntro(void) {
     u8 *base;
     char text[0x30];
-    if ((g_ClassResultPlace != 0) && (g_PrizeScreenState >= 5)) {
+    if ((g_ClassResultPlace != 0) &&
+        (g_PrizeScreenState >= PRIZE_SCREEN_STATE_WAIT_FOR_BONUS_CONFIRM)) {
         u8 **scratch;
         u8 *next;
         s32 height;

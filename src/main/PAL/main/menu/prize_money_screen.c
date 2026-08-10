@@ -17,7 +17,7 @@ typedef union PrizeScreenWork {
 void UpdatePrizeMoneyScreen(void) {
     s32 lim1 = g_PrizeCountStep;
     s32 lim0 = g_BonusCountStep;
-    s32 st;
+    PrizeScreenState st;
     PrizeScreenWork t;
 
     if (g_PadHeld & PAD_CONFIRM) {
@@ -26,41 +26,41 @@ void UpdatePrizeMoneyScreen(void) {
     }
 
     switch (g_PrizeScreenState) {
-    case 0:
+    case PRIZE_SCREEN_STATE_INTRO_FADE_IN:
         g_SceneTimer -= 8;
         DrawFullscreenFadeTile(g_SceneTimer, 0x49);
-        if (g_SceneTimer == 0) g_PrizeScreenState = 1;
+        if (g_SceneTimer == 0) g_PrizeScreenState = PRIZE_SCREEN_STATE_WAIT_FOR_INTRO_CONFIRM;
         DrawRaceTimePanel(0);
         DrawGrandprixIntro();
         return;
-    case 1:
+    case PRIZE_SCREEN_STATE_WAIT_FOR_INTRO_CONFIRM:
         DrawRaceTimePanel(0);
         if (g_PadPressed & PAD_CONFIRM) {
-            g_PrizeScreenState = 2;
+            g_PrizeScreenState = PRIZE_SCREEN_STATE_HIDE_RACE_TIME;
             g_SceneTimer = 0;
         }
         DrawGrandprixIntro();
         return;
-    case 2:
+    case PRIZE_SCREEN_STATE_HIDE_RACE_TIME:
         g_SceneTimer += 8;
         DrawRaceTimePanel(g_SceneTimer);
-        if (g_SceneTimer >= 129U) g_PrizeScreenState = 3;
+        if (g_SceneTimer >= 129U) g_PrizeScreenState = PRIZE_SCREEN_STATE_SHOW_PRIZE_PANEL;
         DrawGrandprixIntro();
         return;
-    case 3:
+    case PRIZE_SCREEN_STATE_SHOW_PRIZE_PANEL:
         g_SceneTimer -= 8;
         DrawPrizeMoneyPanel(g_SceneTimer);
-        if (g_SceneTimer == 0) g_PrizeScreenState = 4;
+        if (g_SceneTimer == 0) g_PrizeScreenState = PRIZE_SCREEN_STATE_COUNT_PRIZE;
         DrawGrandprixIntro();
         return;
-    case 4:
+    case PRIZE_SCREEN_STATE_COUNT_PRIZE:
         g_SceneTimer += 1;
         t.value = g_SceneTimer;
         if (!(t.unsignedValue < 121)) {
         if (g_PrizeAmount == 0) {
         g_SceneTimer = 0;
         if (g_PromotionBonus == 0) goto Lstore7;
-        st = 5;
+        st = PRIZE_SCREEN_STATE_WAIT_FOR_BONUS_CONFIRM;
         goto Lstore;
         }
         PlaySoundCue((g_PadHeld & PAD_CONFIRM) ? 0x10 : 0xf);
@@ -77,18 +77,18 @@ void UpdatePrizeMoneyScreen(void) {
         if (g_PrizeAmount != 0) break;
         g_SceneTimer = 0;
         if (g_PromotionBonus == 0) goto Lstore7;
-        st = 5;
+        st = PRIZE_SCREEN_STATE_WAIT_FOR_BONUS_CONFIRM;
         goto Lstore;
-    case 5:
+    case PRIZE_SCREEN_STATE_WAIT_FOR_BONUS_CONFIRM:
         PlaySoundCue(0x11);
         if (!(g_PadPressed & PAD_CONFIRM)) break;
-        st = 6;
+        st = PRIZE_SCREEN_STATE_COUNT_BONUS;
     Lstore:
         g_PrizeScreenState = st;
         break;
-    case 6:
+    case PRIZE_SCREEN_STATE_COUNT_BONUS:
         TickClassClearFanfare();
-        if (g_PromotionBonus == 0) { st = 7; goto Lstore; }
+        if (g_PromotionBonus == 0) { st = PRIZE_SCREEN_STATE_WAIT_TO_FINISH; goto Lstore; }
         PlaySoundCue((g_PadHeld & PAD_CONFIRM) ? 0x10 : 0xf);
         t.value = g_PromotionBonus;
         if (t.value >= lim0) {
@@ -101,17 +101,17 @@ void UpdatePrizeMoneyScreen(void) {
         }
         if (g_PromotionBonus != 0) break;
     Lstore7:
-        st = 7;
+        st = PRIZE_SCREEN_STATE_WAIT_TO_FINISH;
         goto Lstore;
-    case 7:
+    case PRIZE_SCREEN_STATE_WAIT_TO_FINISH:
         TickClassClearFanfare();
         PlaySoundCue(0x11);
         if (!(g_PadPressed & PAD_CONFIRM)) break;
         if (g_ClassClearFanfareTimer != 0) break;
         if (g_ClassCompleted == 0) { RequestSelectBgmAssets(); }
-        st = 8;
+        st = PRIZE_SCREEN_STATE_FADE_OUT;
         goto Lstore;
-    case 8:
+    case PRIZE_SCREEN_STATE_FADE_OUT:
         if (g_SeriesCleared != 0)
             g_SceneTimer += 1;
         else
