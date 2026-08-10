@@ -91,6 +91,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   s32 steerLoad;
   s32 throttleAccel;
   s32 gearRatio;
+  s32 *gearRatios;
   s32 netTorque;
   s32 gradePenalty;
   s32 lateralSum;
@@ -455,8 +456,9 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
         targetGear = drive->gear;
         if (drive->gearDisp != targetGear)
         {
+          gearRatios = g_CarSpec->gearRatio;
           shiftTargetRpm = (((car->speed * 0xA0) / 1168) * 0x2710) /
-                           ((GameCarSpec *)((u8 *)g_CarSpec - (-(targetGear * 4))))->gearRatio[0];
+                           gearRatios[targetGear];
           currentSpeed = (u16)drive->engineRpm;
           g_ShiftTargetRpm = shiftTargetRpm;
           drive->shiftRpmDelta = (s16)((u16)g_ShiftTargetRpm - currentSpeed);
@@ -470,8 +472,9 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     targetGearAgain = drive->gear;
     if (drive->gearDisp != targetGearAgain)
     {
+      gearRatios = config.pointer->gearRatio;
       gearCurve.byteOffset = (car->speed * 0x2710) /
-                            (((GameCarSpec *)(config.bytes - (-(targetGearAgain * 4))))->gearRatio[0] * 0x490 / 160);
+                            (gearRatios[targetGearAgain] * 0x490 / 160);
       wheelSpeed = (u16)car->acceleration;
       wheelSpeedScaled.value = wheelSpeed;
       assistEnabled = drive->manual;
