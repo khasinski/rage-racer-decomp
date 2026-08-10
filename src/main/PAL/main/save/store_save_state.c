@@ -238,9 +238,8 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
         {
         /* The remaining register hints in these loops are load-bearing. */
         s32 outer = 0;
-        /* Serialised as a flat run of words, hence the cast. */
-        s32 *rankingBase = (s32 *)g_RankingRecords;
-        s32 *timeBase = (s32 *)g_TimeRecords;
+        s32 *rankingBase = GetRaceRecordWords(&g_RankingRecords[0][0][0]);
+        s32 *timeBase = GetRaceRecordWords(&g_TimeRecords[0][0][0]);
         register u8 *outerDst asm("$25") = (u8 *)block;
         register s32 outerOffset asm("$16") = 0;
 

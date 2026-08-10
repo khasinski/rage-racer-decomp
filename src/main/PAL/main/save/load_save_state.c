@@ -205,8 +205,8 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
             s32 *d1base;
             s32 ioff;
             i = 0;
-            cb78 = (s32 *)g_TimeRecords;
-            d1base = (s32 *)g_RankingRecords;
+            cb78 = GetRaceRecordWords(&g_TimeRecords[0][0][0]);
+            d1base = GetRaceRecordWords(&g_RankingRecords[0][0][0]);
             ioff = 0;
             for (; i < 2; i++) {
                 s32 iofc;
