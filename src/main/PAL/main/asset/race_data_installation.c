@@ -21,6 +21,7 @@ void InstallTrackEventData(void *resourceData) {
     s32 offset1;
     u8 *callArg;
     TrackEventOffsetBase base;
+    AssetAddress cameraAddress;
     TrackEventData *eventData;
     volatile TrackEventOffsets *offsets;
 
@@ -30,11 +31,14 @@ void InstallTrackEventData(void *resourceData) {
     offset1 = offsets->raceIntroCamera;
     base.offsets = offsets;
     g_TrackEventData = eventData;
-    g_FlybySceneryData = (SceneryMotionData *)(base.bytes + cursor.offset);
+    cursor.pointer = base.bytes + cursor.offset;
+    g_FlybySceneryData = cursor.sceneryMotion;
     cursor.offset = offsets->routeScenery;
-    g_RaceIntroCameraScript = (RaceIntroCameraScript *)(base.bytes + offset1);
+    cameraAddress.pointer = base.bytes + offset1;
+    g_RaceIntroCameraScript = cameraAddress.raceIntroCamera;
     offset1 = offsets->pathSceneryRotation;
-    g_RouteSceneryData = (SceneryMotionData *)(base.bytes + cursor.offset);
+    cursor.pointer = base.bytes + cursor.offset;
+    g_RouteSceneryData = cursor.sceneryMotion;
     cursor.offset = offsets->pathSceneryPosition;
     callArg = g_MsgEventOk;
     cursor.pointer = base.bytes + cursor.offset;
