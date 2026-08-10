@@ -116,7 +116,7 @@ void UpdateTeamLogoScreen(void)
             GameMenuBusy = 0;
           }
         }
-        pad = (u16 *)(&g_PadPressed);
+        pad = &g_PadPressed;
         if ((*pad) & PAD_CANCEL)
         {
           PlaySoundCue(3);

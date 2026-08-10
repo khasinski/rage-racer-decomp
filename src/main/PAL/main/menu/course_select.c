@@ -582,7 +582,7 @@ void UpdateCourseSelectScreen(void) {
                     GameMenuBusy = -3;
                     g_MenuConfirmTimer = 0x23;
                 }
-                pad = (u16 *)&g_PadPressed;
+                pad = &g_PadPressed;
                 if (*pad & 0x90) {
                     PlaySoundCue(3);
                     GameMenuBusy = -4;
@@ -615,7 +615,7 @@ void UpdateCourseSelectScreen(void) {
                         DrawClassChangeCurtain(0);
                     }
                 }
-                pad = (u16 *)&g_PadPressed;
+                pad = &g_PadPressed;
                 if (*pad & 0x90) {
                     PlaySoundCue(3);
                     GameMenuBusy = 0;
