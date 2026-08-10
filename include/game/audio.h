@@ -76,7 +76,7 @@ void SetSoundSlotVoiceEnabled(s32 slot, s32 enabled);
 void SetSoundSlotVoicesEnabled(s32 enabled);
 void SetEffectVoicesEnabled(s32 enabled);
 void ResetSoundState(void);
-int InitSoundWithVab(s32 header, s32 body);
+int InitSoundWithVab(u8 *header, u8 *body);
 int InitSoundRuntime(void);
 s32 CloseVabOnlyAudioSlot(s32 slot);
 s32 CloseLoadedAudioSlots(void);

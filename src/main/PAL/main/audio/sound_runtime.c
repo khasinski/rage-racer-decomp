@@ -113,7 +113,7 @@ void ResetSoundState(void) {
     }
 }
 
-s32 InitSoundWithVab(s32 header, s32 body) {
+s32 InitSoundWithVab(u8 *header, u8 *body) {
     s16 *vabIdPtr = g_SoundScale.vabIds;
     s16 vabId;
 
@@ -125,14 +125,14 @@ s32 InitSoundWithVab(s32 header, s32 body) {
     SetReverbPreset(2, 0, 0);
     ResetSoundState();
 
-    *vabIdPtr = SsVabOpenHeadSticky((u_char *)header, -1, 0x1000);
+    *vabIdPtr = SsVabOpenHeadSticky(header, -1, 0x1000);
     vabId = *vabIdPtr;
     if (vabId == -1) {
         printf(g_MsgVabOpenHeadError);
         BiosExit(1);
     }
 
-    *vabIdPtr = SsVabTransBody((u_char *)body, vabId);
+    *vabIdPtr = SsVabTransBody(body, vabId);
     if (*vabIdPtr == -1) {
         printf(g_MsgVabTransBodyError);
         BiosExit(1);
