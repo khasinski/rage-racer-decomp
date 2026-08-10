@@ -164,10 +164,10 @@ u8 *DrawMirrorFrame(u8 *packet) {
     base = g_DrawBuffer;
     ot = base + 0xD0;
 
-    tile = (TILE *)packet;
+    tileAddress.bytes = packet;
+    tile = tileAddress.tile;
     SetTile(tile);
     otArg = ot;
-    tileAddress.tile = tile;
     prim = tileAddress.bytes;
 
     tile->x0 = 0x54;
@@ -179,7 +179,7 @@ u8 *DrawMirrorFrame(u8 *packet) {
     panelPosition.position = &g_MirrorPanelY;
     tile->y0 = *panelPosition.screenY - 2;
     tile->h = 0x28;
-    packet = (void *)(tile + 1);
+    packet += sizeof(*tile);
     AddPrim(otArg, prim);
 
     colorIndex = g_CarMirrorBadgeStyles[g_PlayerCarIndex];
@@ -217,7 +217,7 @@ void DrawRearViewMirror(s32 mode) {
             packet = DrawMirrorFrame(*scratch);
             SetDrawArea((DrawPacket *)packet, (Rect *)(g_DrawBuffer + 0x70));
             prim = packet;
-            packet = (void *)((DrawPacket *)packet + 1);
+            packet += sizeof(DrawPacket);
             AddPrim(g_DrawBuffer + 0x16C8, prim);
             *scratch = packet;
             BuildVisibleCells(-0x3000, 0x6000);
@@ -228,7 +228,7 @@ void DrawRearViewMirror(s32 mode) {
             packet = *scratch;
             SetDrawArea((DrawPacket *)packet, (Rect *)g_DrawBuffer);
             prim = packet;
-            packet = (void *)((DrawPacket *)packet + 1);
+            packet += sizeof(DrawPacket);
             AddPrim(g_DrawBuffer + 0xBD0, prim);
             *scratch = packet;
             DrawCourseObjects();
