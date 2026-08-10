@@ -65,8 +65,8 @@ void InitPathScenery(void) {
     lev = g_RaceSeries;
     tblA = g_PathSceneryPosData;
     tblB = g_PathSceneryRotData;
-    ia = RAW(tblA->firstKey[lev]);
-    ib = RAW(tblB->firstKey[lev]);
+    ia = tblA->firstKey[lev];
+    ib = tblB->firstKey[lev];
     g_PathSceneryClock.rotFrame = 0;
     g_PathSceneryClock.posFrame = 0;
     g_PathSceneryPosKeys = GetPathSceneryPositionKey(tblA, ia);
@@ -85,16 +85,16 @@ void InitPathScenery(void) {
         g_PathSceneryCursors.posPhase.value = 0;
         g_PathSceneryCursors.rotPhase.value = 0;
         g_PathSceneryCursors.posSpan =
-            RAW(entryA->fields.span);
+            entryA->fields.span;
         entryB = g_PathSceneryRotKeys;
         g_PathSceneryCursors.rotSpan =
-            RAW(entryB->fields.span);
+            entryB->fields.span;
         g_PathSceneryCursors.posRate.value =
-            RAW(entryA->fields.rate);
+            entryA->fields.rate;
         g_PathSceneryCursors.rotRate.value =
-            RAW(entryB->fields.rate);
+            entryB->fields.rate;
 
-        sv = RAW(entryA->fields.rate);
+        sv = entryA->fields.rate;
         if (sv < 0) {
             sv = -sv;
             g_PathSceneryCursors.posRate.value = sv;
@@ -113,7 +113,7 @@ void InitPathScenery(void) {
         s16 sv;
 
         entryB = g_PathSceneryRotKeys;
-        sv = RAW(entryB->fields.rate);
+        sv = entryB->fields.rate;
         if (sv < 0) {
             sv = -sv;
             g_PathSceneryCursors.rotRate.value = sv;
@@ -138,16 +138,16 @@ void InitPathScenery(void) {
         g_PathSceneryHalfDelta[0] =
             (RAW(positionKeys[1].fields.x) - RAW(positionKeys[0].fields.x)) / 2;
         g_PathSceneryHalfDelta[1] =
-            (RAW(positionKeys[1].fields.y) - RAW(positionKeys[0].fields.y)) / 2;
+            (positionKeys[1].fields.y - positionKeys[0].fields.y) / 2;
         g_PathSceneryHalfDelta[2] =
-            (RAW(positionKeys[1].fields.z) - RAW(positionKeys[0].fields.z)) / 2;
+            (positionKeys[1].fields.z - positionKeys[0].fields.z) / 2;
         rotationKeys = g_PathSceneryRotKeys;
         g_PathSceneryRotHalfDelta[0] =
-            (RAW(rotationKeys[1].fields.x) - RAW(rotationKeys[0].fields.x)) / 2;
+            (rotationKeys[1].fields.x - rotationKeys[0].fields.x) / 2;
         g_PathSceneryRotHalfDelta[1] =
-            (RAW(rotationKeys[1].fields.y) - RAW(rotationKeys[0].fields.y)) / 2;
+            (rotationKeys[1].fields.y - rotationKeys[0].fields.y) / 2;
         g_PathSceneryRotHalfDelta[2] =
-            (RAW(rotationKeys[1].fields.z) - RAW(rotationKeys[0].fields.z)) / 2;
+            (rotationKeys[1].fields.z - rotationKeys[0].fields.z) / 2;
     }
 }
 
