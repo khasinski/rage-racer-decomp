@@ -147,7 +147,7 @@ void EndMirrorPass(void) {
     scratch->matrix = g_CameraMatrixSaved;
 }
 
-u8 *DrawMirrorFrame(u8 *packet) {
+DrawPacket *DrawMirrorFrame(u8 *packet) {
     MirrorPanelPositionAddress panelPosition;
     u8 *otArg;
     u8 *prim;
@@ -187,15 +187,16 @@ u8 *DrawMirrorFrame(u8 *packet) {
     base2 = g_DrawBuffer;
     ot = base2 + 0xBD0;
     next = GameQueueSprite(ot, packet, 0x56, g_MirrorPanelY, g_MirrorBadgeWidths[paletteIndex], 8, g_MirrorBadgeTexU[paletteIndex], g_MirrorBadgeTexV[paletteIndex], 0x7800);
-    return QueueDrawModePrim(ot, next, 9);
+    tileAddress.bytes = QueueDrawModePrim(ot, next, 9);
+    return tileAddress.drawPacket;
 }
 
 
 
 void DrawRearViewMirror(s32 mode) {
-    u8 **scratch;
-    u8 *packet;
-    u8 *prim;
+    void **scratch;
+    DrawPacket *packet;
+    DrawPacket *prim;
 
     if (mode >= 0x169) {
         g_MirrorUnlocked = 1;
@@ -211,15 +212,15 @@ void DrawRearViewMirror(s32 mode) {
         }
 
         if (BeginMirrorPass() != 0) {
-            scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
+            scratch = &SCRATCH_PRIM_CURSOR_AS(void);
 
             DrawSkyBackground();
             packet = DrawMirrorFrame(*scratch);
-            SetDrawArea((DrawPacket *)packet,
+            SetDrawArea(packet,
                         &GetGameFrameContext(g_DrawBuffer)
                              ->environment.mirrorDraw.clip);
             prim = packet;
-            packet += sizeof(DrawPacket);
+            packet++;
             AddPrim(g_DrawBuffer + 0x16C8, prim);
             *scratch = packet;
             BuildVisibleCells(-0x3000, 0x6000);
@@ -228,10 +229,10 @@ void DrawRearViewMirror(s32 mode) {
             SubmitTerrainCells(SCRATCHPAD, g_VisibleCellList, 0x40);
 
             packet = *scratch;
-            SetDrawArea((DrawPacket *)packet,
+            SetDrawArea(packet,
                         &GetGameFrameContext(g_DrawBuffer)->environment.draw.clip);
             prim = packet;
-            packet += sizeof(DrawPacket);
+            packet++;
             AddPrim(g_DrawBuffer + 0xBD0, prim);
             *scratch = packet;
             DrawCourseObjects();

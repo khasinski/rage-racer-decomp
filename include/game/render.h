@@ -1025,7 +1025,7 @@ s32 CdRead2(s32 mode);
 void DecDCTReset(s32 mode);
 void DecDCTin(volatile u32* bitstream, s32 mode);
 void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color);
-u8 *DrawMirrorFrame(u8 *packet);
+DrawPacket *DrawMirrorFrame(u8 *packet);
 void GPU_cw(void *packet);
 void Gpu_BuildDrawEnvCmds(void* packet, void* env);
 s32 Gpu_Reset(s32 mode);
