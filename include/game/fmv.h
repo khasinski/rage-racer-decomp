@@ -41,6 +41,8 @@ typedef struct FmvWorkBuffers {
 
 typedef union FmvWorkBufferAddress {
     u32 address;
+    void *data;
+    u8 *bytes;
     volatile u32 *words;
     FmvWorkBuffers *buffers;
 } FmvWorkBufferAddress;

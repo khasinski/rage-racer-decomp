@@ -20,6 +20,7 @@ void UploadFmvSlice(void) {
     FmvUploadRectAddress rectAddress;
     register FmvStripCursorAddress bufferCursor asm("$6");
     FmvStripCursorAddress bufferAddress;
+    FmvWorkBufferAddress uploadAddress;
     s32 oldBuffer;
     s32 state;
     s32 bufferIndex;
@@ -71,5 +72,6 @@ void UploadFmvSlice(void) {
         g_FmvUploadRectY = g_FmvStripRects.components[next][1];
     }
 
-    LoadImage(&rect, (void *)g_FmvStripBuffers[oldBuffer]);
+    uploadAddress.words = g_FmvStripBuffers[oldBuffer];
+    LoadImage(&rect, uploadAddress.data);
 }

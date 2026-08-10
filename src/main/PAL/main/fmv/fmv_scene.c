@@ -20,9 +20,12 @@ void BeginFmv(s32 returnScene) {
 
 
 void UpdateFmv(void) {
+    FmvWorkBufferAddress workAddress;
+
     switch (g_FmvState) {
     case 0:
-        StartFmvPlayback((FmvWorkBuffers *)g_AssetBase);
+        workAddress.bytes = g_AssetBase;
+        StartFmvPlayback(workAddress.buffers);
         /* fall through */
     case 1:
         DecodeFmvFrame();
