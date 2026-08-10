@@ -36,6 +36,16 @@ typedef struct GameScratchpadRenderState {
     s16 y1;
 } GameScratchpadRenderState;
 
+typedef struct ObjectMatrixWork {
+    s16 relative[3];
+    s16 pad06;
+    LVec view;
+    s32 pad14;
+    Matrix mtx;
+} ObjectMatrixWork;
+
+#define SCRATCH_OBJECT_MATRIX_WORK ((ObjectMatrixWork *)0x1F80011C)
+
 typedef union ScratchViewCoordinate {
     s32 value;
     struct {

@@ -61,7 +61,7 @@ void DrawControllerSetupScene(s32 variant) {
         ScaleMatrix(&yRot, scale);
         MulMatrix2(&yRot, &xRot);
         SetGteLightMatrix(&xRot);
-        SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, position, &xRot);
         g_ScratchEnvMode4 = 0;
         model = g_ModelBankCount < 1;
         SubmitModel((void *)SCRATCHPAD_ADDR, model);
@@ -95,11 +95,11 @@ void DrawControllerSetupScene(s32 variant) {
     ScaleMatrix(&yRot, scale);
     MulMatrix2(&yRot, &xRot);
     SetGteLightMatrix(&xRot);
-    SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+    SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, position, &xRot);
     g_ScratchEnvMode4 = 0;
     SubmitModel((void *)SCRATCHPAD_ADDR, 1);
     if (variant != 0) {
-        SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, position, &xRot);
         g_ScratchEnvMode4 = 0;
         model = 1;
         if (g_ModelBankCount >= 4) {
@@ -122,7 +122,7 @@ void DrawControllerSetupScene(s32 variant) {
     ScaleMatrix(&yRot, scale);
     MulMatrix2(&yRot, &xRot);
     SetGteLightMatrix(&xRot);
-    SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+    SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, position, &xRot);
     g_ScratchEnvMode4 = 0;
     model = 1;
     if (g_ModelBankCount >= 3) {
@@ -130,7 +130,7 @@ void DrawControllerSetupScene(s32 variant) {
     }
     SubmitModel((void *)SCRATCHPAD_ADDR, model);
     if (variant != 0) {
-        SetGteObjectMatrix((void *)0x1F80011C, position, &xRot);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, position, &xRot);
         g_ScratchEnvMode4 = 0;
         model = 1;
         if (g_ModelBankCount >= 5) {

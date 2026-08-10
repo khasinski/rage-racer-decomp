@@ -173,7 +173,7 @@ void DrawStartGridScenery(s32 flags) {
             if (g_CourseIndex % 4 == 3) {
                 state.z += 0x5000;
             }
-            SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+            SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
             rem = s1 - s0 * 15;
             lim = g_CourseModelCount;
             __asm__ __volatile__("");
@@ -185,7 +185,7 @@ void DrawStartGridScenery(s32 flags) {
             if (g_CourseIndex % 4 == 3) {
                 state.z += 0x5000;
             }
-            SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+            SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
             lim = g_CourseModelCount;
             __asm__ __volatile__("");
             value = 0x28;
@@ -270,20 +270,20 @@ void DrawAnimatedScenery(s32 timer, s32 instance) {
 
     if (g_AnimSceneryRacePosition != 0) {
         if (g_AnimSceneryFrame < 13) {
-            SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+            SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
             num = g_AnimSceneryFrame + 10;
             SCRATCH_ENV_MODE4 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
             SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
         } else {
-            SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+            SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
             num = g_AnimSceneryRacePosition;
             SCRATCH_ENV_MODE4 = 0;
             drawArg = (num < g_CourseModelCount) ? num : 1;
             SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
         }
 
-        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         sv = g_AnimSceneryTint;
         SCRATCH_ENV_MODE4 = sv;
         num = g_AnimSceneryVariant + 4;
@@ -291,14 +291,14 @@ void DrawAnimatedScenery(s32 timer, s32 instance) {
         drawArg = (num < sv) ? num : 1;
         SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
     } else {
-        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         num = g_AnimSceneryFrame + 0x18;
         scr = &SCRATCH_ENV_MODE4;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
         SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
 
-        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         sv = g_AnimSceneryTint;
         scr = &SCRATCH_ENV_MODE4;
         *scr = sv;
@@ -374,14 +374,14 @@ void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate) {
     g_AnimScenery2Tint = ((timer >> 3) & 3) << 16;
 
     if (isReplay != 0) {
-        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         num = g_AnimScenery2Frame + 0xA;
         scr = &SCRATCH_ENV_MODE4;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
         SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
 
-        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         sv = g_AnimScenery2Tint;
         drawArg = 1;
         scr = &SCRATCH_ENV_MODE4;
@@ -391,14 +391,14 @@ void DrawAnimatedScenery2(s32 timer, s32 instance, s32 isReplay, s32 animate) {
         __asm__("" : "=r"(num) : "0"(num), "r"(sv));
         num = num + 4;
     } else {
-        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         num = g_AnimScenery2Frame + 0x18;
         scr = &SCRATCH_ENV_MODE4;
         *scr = 0;
         drawArg = (num < g_CourseModelCount) ? num : 1;
         SubmitCourseModel((void *)SCRATCHPAD_ADDR, drawArg);
 
-        SetGteObjectMatrix((void *)0x1F80011C, &state, &mtx);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
         sv = g_AnimScenery2Tint;
         drawArg = 1;
         scr = &SCRATCH_ENV_MODE4;

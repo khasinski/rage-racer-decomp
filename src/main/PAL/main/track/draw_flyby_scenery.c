@@ -21,7 +21,7 @@ void DrawFlybyScenery(void) {
         BuildRotMatrixZ(&mtx0, state->rotationZ);
         MulMatrix2(&mtx1, &mtx0);
         SelectModelBank(2);
-        SetGteObjectMatrix((void *)0x1F80011C, &state->position, &mtx0);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state->position, &mtx0);
         SCRATCH_ENV_MODE4 = 0;
         SubmitModel((void *)SCRATCHPAD_ADDR, g_ModelBankCount < 1);
     }

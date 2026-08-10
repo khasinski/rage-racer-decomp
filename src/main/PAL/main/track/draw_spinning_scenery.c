@@ -63,7 +63,7 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
             MulMatrix2(yawMatrix, work);
             dataAddress.positionPointer = g_SpinningSceneryPos;
             dataAddress.byteOffset += offset;
-            SetGteObjectMatrix((void *)0x1F80011C, dataAddress.positionPointer, work);
+            SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, dataAddress.positionPointer, work);
 
             SCRATCH_ENV_MODE4 = 0;
             limit = 1;

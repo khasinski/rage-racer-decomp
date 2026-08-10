@@ -51,26 +51,28 @@ void DrawCourseObjects(void) {
             transformed = (u16)obj->x;
             camera = SCRATCH_VIEW_STATE->position.components.x.half.low;
             transformed -= camera;
-            *(s16 *)0x1F80011C = transformed;
+            SCRATCH_OBJECT_MATRIX_WORK->relative[0] = transformed;
             transformed = (u16)obj->y;
             camera = SCRATCH_VIEW_STATE->position.components.y.half.low;
             transformed -= camera;
-            *(s16 *)0x1F80011E = transformed;
+            SCRATCH_OBJECT_MATRIX_WORK->relative[1] = transformed;
             transformed = (u16)obj->z;
             camera = SCRATCH_VIEW_STATE->position.components.z.half.low;
             transformed -= camera;
-            *(s16 *)0x1F800120 = transformed;
+            SCRATCH_OBJECT_MATRIX_WORK->relative[2] = transformed;
 
-            ApplyMatrix(SCRATCH_VIEW_MATRIX_GTE, (void *)0x1F80011C, (void *)0x1F800124);
-            transformed = *(s32 *)0x1F800124;
-            camera = *(s32 *)0x1F80012C;
+            ApplyMatrix(SCRATCH_VIEW_MATRIX_GTE,
+                        SCRATCH_OBJECT_MATRIX_WORK->relative,
+                        &SCRATCH_OBJECT_MATRIX_WORK->view);
+            transformed = SCRATCH_OBJECT_MATRIX_WORK->view.x;
+            camera = SCRATCH_OBJECT_MATRIX_WORK->view.z;
             transformed <<= 2;
-            *(s32 *)0x1F800148 = transformed;
-            transformed = *(s32 *)0x1F800128;
+            SCRATCH_OBJECT_MATRIX_WORK->mtx.t[0] = transformed;
+            transformed = SCRATCH_OBJECT_MATRIX_WORK->view.y;
             camera <<= 2;
-            *(s32 *)0x1F800150 = camera;
+            SCRATCH_OBJECT_MATRIX_WORK->mtx.t[2] = camera;
             transformed <<= 2;
-            *(s32 *)0x1F80014C = transformed;
+            SCRATCH_OBJECT_MATRIX_WORK->mtx.t[1] = transformed;
         }
         SetRotMatrix(&mtx);
         SetTransMatrix((void *)0x1F800134);

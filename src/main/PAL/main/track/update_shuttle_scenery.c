@@ -123,7 +123,7 @@ void DrawShuttleScenery(s32 instance) {
         if ((g_CourseIndex & 3) >= 2) {
             drawArg = 0x3C;
         }
-        SetGteObjectMatrix((void *)0x1F80011C, &state->position, mtx1Ptr);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state->position, mtx1Ptr);
         frameValue = g_CourseModelCount;
         SCRATCH_ENV_MODE4 = 0;
         drawValue = 1;

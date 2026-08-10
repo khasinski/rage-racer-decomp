@@ -139,17 +139,6 @@ void SetDrawModePacket(u8 *prim, s32 tpage) {
 
 /* World position in full-precision components; the camera keeps one of these
  * in the scratchpad at 0x1F800008. */
-/* The 56-byte scratch block callers hand in: the object-relative offset as a
- * short vector, the rotated result, then the matrix that is handed to the
- * GTE. */
-typedef struct ObjectMatrixWork {
-    s16 relative[3];
-    s16 pad06;
-    LVec view;
-    s32 pad14;
-    Matrix mtx;
-} ObjectMatrixWork;
-
 /* The per-frame scratchpad block: camera position at +8, view matrix at +0x28. */
 #define SCRATCH_CAMERA_POS (&SCRATCH_VIEW_STATE->position.vector)
 #define SCRATCH_VIEW_MATRIX (SCRATCH_VIEW_MATRIX_GTE)
@@ -160,10 +149,7 @@ typedef struct ObjectMatrixWork {
  * matrix's translation, and programs the GTE with the caller's rotation and
  * that translation.
  */
-void SetGteObjectMatrix(void *work, void *objectPos, Matrix *rot) {
-    ObjectMatrixWork *w = (ObjectMatrixWork *)work;
-    LVec *pos = (LVec *)objectPos;
-
+void SetGteObjectMatrix(ObjectMatrixWork *w, LVec *pos, Matrix *rot) {
     w->relative[0] = pos->x - SCRATCH_CAMERA_POS->x;
     w->relative[1] = pos->y - SCRATCH_CAMERA_POS->y;
     w->relative[2] = pos->z - SCRATCH_CAMERA_POS->z;

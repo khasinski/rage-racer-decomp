@@ -178,7 +178,7 @@ void DrawMenuCarView(void) {
     g_PlayerCar.pose.position[2] = 0;
     SelectModelBank(14);
     D_1F800004 += 120;
-    SetGteObjectMatrix((void *)0x1F80011C, &g_PlayerCar.pose.position[0], &mtxA);
+    SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &g_PlayerCar.pose.position[0], &mtxA);
     SCRATCH_ENV_MODE4 = 0;
     {
         s32 a1 = 1;
@@ -281,7 +281,7 @@ void DrawMenuCourseView(void) {
     MulMatrix2(&mtxB, &mtxA);
     MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtxA);
     SelectModelBank(14);
-    SetGteObjectMatrix((void *)0x1F80011C, p - 9, &mtxA);
+    SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, p - 9, &mtxA);
     SCRATCH_ENV_MODE4 = 0;
     {
         s32 a1 = 1;
@@ -389,7 +389,7 @@ void DrawTeamNameCharModel(void) {
 
     if (g_TeamNameCharModel != 10 && g_TeamNameCharModel - 42 >= 2U) {
         s32 a1;
-        SetGteObjectMatrix((void *)0x1F80011C, &transform, &mtxA);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &transform, &mtxA);
         SCRATCH_ENV_MODE4 = 0;
         a1 = 1;
         if (g_TeamNameCharModel < g_CourseModelCount) {
