@@ -35,9 +35,9 @@ s32 RequestRaceAssets(void) {
 void LoadRaceAssets(void) {
     switch (g_AssetLoadState) {
     case 1: {
-        s32 *src = (s32 *)g_AssetBlockPtr;
+        s32 *src = GetAssetWords(g_AssetBlockPtr);
         s32 size = g_SharedAssetWord0;
-        s32 *dst = (s32 *)g_AssetLoadCursor;
+        s32 *dst = GetAssetWords(g_AssetLoadCursor);
         s32 n = size / 4;
         while (n != 0) {
             *dst = *src;
