@@ -220,7 +220,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
     SetDefDrawEnv(&context->environment.draw, 0, 0, 0x140, height);
     SetDefDrawEnv(&g_DrawEnv1, 0, 0xF0, 0x140, height);
     SetDefDispEnv(&context->environment.display, 0, 0xF0, 0x140, height);
-    SetDefDispEnv((DispEnv *)&g_DispEnv1X, 0, 0, 0x140, height);
+    SetDefDispEnv(&g_FrameContexts[1].environment.display, 0, 0, 0x140, height);
 
     {
         register DrawEnv *ptr;
@@ -289,7 +289,7 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
     SetDefDrawEnv(&context->environment.draw, 0, 0, 0x140, height);
     SetDefDrawEnv(&g_DrawEnv1, 0, 0, 0x140, height);
     SetDefDispEnv(&context->environment.display, 0, 0, 0x140, height);
-    SetDefDispEnv((DispEnv *)&g_DispEnv1X, 0, 0, 0x140, height);
+    SetDefDispEnv(&g_FrameContexts[1].environment.display, 0, 0, 0x140, height);
 
     i = 0;
     one = 1;
