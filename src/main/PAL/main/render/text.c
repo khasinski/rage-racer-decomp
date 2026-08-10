@@ -13,7 +13,7 @@
 #define INIT_TEXT_FONT(font) \
     asm("" : "=r"(font) : "0"(g_Font8x8Cells))
 
-void DrawText8x8(s32 x, s32 y, u8 *str, s32 clutIndex) {
+void DrawText8x8(s32 x, s32 y, const u8 *str, s32 clutIndex) {
     u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
     u8 *packet;
 
