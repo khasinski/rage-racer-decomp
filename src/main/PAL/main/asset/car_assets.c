@@ -14,12 +14,12 @@ s32 RequestCarSelectAssets(void) {
         return 1;
     }
 
-    if (g_MainState == 4) {
-        g_MainState = 0;
+    if (g_AssetRequestType == ASSET_REQUEST_CAR_SELECT) {
+        g_AssetRequestType = ASSET_REQUEST_IDLE;
         return 0;
     }
 
-    g_MainState = 4;
+    g_AssetRequestType = ASSET_REQUEST_CAR_SELECT;
     g_AssetLoadState = 1;
     return 1;
 }
@@ -115,7 +115,7 @@ s32 RequestCarModel(s32 carIndex) {
         return 1;
     }
 
-    g_MainState = 5;
+    g_AssetRequestType = ASSET_REQUEST_CAR_MODEL;
     g_PendingCarModelIndex = carIndex;
     g_AssetLoadState = 1;
     return 1;
@@ -169,7 +169,7 @@ s32 RequestUpgradedCarModel(s32 carIndex) {
         return 1;
     }
 
-    g_MainState = 6;
+    g_AssetRequestType = ASSET_REQUEST_UPGRADED_CAR_MODEL;
     g_PendingCarModelIndex = carIndex;
     g_AssetLoadState = 1;
     return 1;

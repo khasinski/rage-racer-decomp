@@ -37,12 +37,12 @@ s32 RequestTrackDataAssets(void) {
         return 1;
     }
 
-    if (g_MainState == 0xC) {
-        g_MainState = 0;
+    if (g_AssetRequestType == ASSET_REQUEST_TRACK_DATA) {
+        g_AssetRequestType = ASSET_REQUEST_IDLE;
         return 0;
     }
 
-    g_MainState = 0xC;
+    g_AssetRequestType = ASSET_REQUEST_TRACK_DATA;
     g_AssetLoadState = 1;
     return 1;
 }

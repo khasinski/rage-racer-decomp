@@ -25,7 +25,7 @@ void ResetAssetLoader(void) {
 
     g_CdLoadPhase = 0;
     g_AssetLoadState = 0;
-    g_MainState = 0;
+    g_AssetRequestType = ASSET_REQUEST_IDLE;
 }
 
 s32 EnableCdAudioMode(void) {
@@ -164,12 +164,12 @@ s32 RequestBootAssets(void) {
         return 1;
     }
 
-    if (g_MainState == 1) {
-        g_MainState = 0;
+    if (g_AssetRequestType == ASSET_REQUEST_BOOT) {
+        g_AssetRequestType = ASSET_REQUEST_IDLE;
         return 0;
     }
 
-    g_MainState = 1;
+    g_AssetRequestType = ASSET_REQUEST_BOOT;
     g_AssetLoadState = 1;
     return 1;
 }

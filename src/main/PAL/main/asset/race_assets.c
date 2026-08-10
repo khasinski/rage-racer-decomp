@@ -22,12 +22,12 @@ s32 RequestRaceAssets(void) {
         return 1;
     }
 
-    if (g_MainState == 9) {
-        g_MainState = 0;
+    if (g_AssetRequestType == ASSET_REQUEST_RACE) {
+        g_AssetRequestType = ASSET_REQUEST_IDLE;
         return 0;
     }
 
-    g_MainState = 9;
+    g_AssetRequestType = ASSET_REQUEST_RACE;
     g_AssetLoadState = 1;
     return 1;
 }
@@ -213,14 +213,14 @@ s32 RequestRaceStart(void) {
         return 1;
     }
 
-    state = 10;
-    if (g_MainState == state) {
-        g_MainState = 0;
+    state = ASSET_REQUEST_GRAND_PRIX_SCREEN;
+    if (g_AssetRequestType == state) {
+        g_AssetRequestType = ASSET_REQUEST_IDLE;
         return 0;
     }
 
     ResetCdAudioState();
-    g_MainState = state;
+    g_AssetRequestType = state;
     g_AssetLoadState = 1;
     return 1;
 }
@@ -245,12 +245,12 @@ s32 RequestTrackLoad(void) {
         return 1;
     }
 
-    if (g_MainState == 0xB) {
-        g_MainState = 0;
+    if (g_AssetRequestType == ASSET_REQUEST_COURSE) {
+        g_AssetRequestType = ASSET_REQUEST_IDLE;
         return 0;
     }
 
-    g_MainState = 0xB;
+    g_AssetRequestType = ASSET_REQUEST_COURSE;
     g_AssetLoadState = 1;
     return 1;
 }

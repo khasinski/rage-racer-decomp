@@ -408,7 +408,7 @@ Landing status into headers is recorded in the change note at the end of this fi
 | 0x8009DF20 | (block) | Sound voice work buffer: voice*0x10 block at base + voice*0x34 block at 0x8009E0B8; per-voice status bytes `g_SndVoiceFlags` @ 0x8009E0A0 (see audio.h). |
 | 0x8019C9A8 | `D_8019C9A8` | A **pointer** to the `CamRow` table, installed by `SetTrackCameraTable` from sub-block 0 of the track `.2ND` pack; indexed by the per-object model selector, not by a screen number. (Said "camera/horizon rows, indexed `+8*screen`" — see §2's `CamRow` entry for what was wrong.) |
 | 0x1F800000 | (scratchpad) | Render primitive scratch: `*(void**)0x1F800004` = OT/prim base; prims packed at 0x1F800000 (cursor `s2 += 0x28`). GTE engine state at 0x1F800068 / 0x1F80011C etc. |
-| 0x8007C704 | `g_MainState` (`D_8007C704`) | Top-level scene/state machine selector (state.h). |
+| 0x8007C704 | `g_AssetRequestType` (`D_8007C704`) | Active asset pipeline selector, `AssetRequestType` (asset.h). |
 | 0x8019CB14 | `g_GameMode` (`D_8019CB14`) | Current game mode; indexes `g_GameModeHandlers` (`D_8007D67C`). |
 | 0x8007BED8 | `g_AssetLoadState` (`D_8007BED8`) | Asset-load state-machine phase (asset.h). |
 
@@ -552,7 +552,7 @@ what was actually known — naming these would have been a guess:
 
 ## 3a. The menu-mode screen table (identified by emulation)
 
-Everything the front end draws while `g_MainState == 3` (i.e. after GRAND PRIX or
+Everything the front end draws while `g_GameMode == 3` (i.e. after GRAND PRIX or
 TIME ATTACK is chosen) is one of fourteen screens. `func_8005ACA0` dispatches
 them through **two parallel tables indexed by the same screen id in
 `g_MenuScreen`** (`func_8005ACA0` is `UpdateMenuMode`):
@@ -592,7 +592,7 @@ durable fact and the C spellings follow from them.
 
 Ids 6..12 are the GRAND PRIX-only design/shop subtree; TIME ATTACK only reaches
 0..5. **SAVE&LOAD and OPTION are not in this table** — they are separate
-`g_MainState` scenes (2 and 7, entered from func_800182D0 / func_80018B98).
+`g_GameMode` scenes (2 and 7, entered from func_800182D0 / func_80018B98).
 
 The game's internal pad bit layout (`g_PadHeld` = `D_801E436A`, `g_PadPressed` =
 `D_801E436E`) is *not* the SIO0 order; measured by holding
@@ -1430,13 +1430,13 @@ read together with the asset index each loader passes to `LoadAsset`:
 | 87..134 | `BIG/MID/HI/OVAL <1..6>.1ST` / `.2ND`, addressed as `0x57 + (course << 1) + (class << 3)` |
 
 `ServiceAssetLoad` (func_80019C04) runs once per frame and dispatches
-`g_MainState` 1..12; each phase has a `GameRequest*` that arms it and a
+`g_AssetRequestType` 1..12; each phase has a `GameRequest*` that arms it and a
 `GameLoad*Assets` step that runs it. Reading the index each step loads is what
 names the phase:
 
 | Name | Addr | Evidence |
 |---|---|---|
-| `ServiceAssetLoad` | 0x80019C04 | 12-way `switch (g_MainState)` over the loaders below, gated on `g_AssetLoadState != 0` |
+| `ServiceAssetLoad` | 0x80019C04 | 12-way `switch (g_AssetRequestType)` over the loaders below, gated on `g_AssetLoadState != 0` |
 | `SetTrackCameraTable` | 0x80017BD4 | stores its argument in D_8019C9A8, the camera/horizon row base documented in `game/render.h`; fed sub-block 0 of the `.2ND` track pack |
 | `ResetAssetLoader` | 0x80017BE4 | aborts a running CdRead (`g_CdLoadPhase == 4`) and clears all three state words |
 | `EnableCdAudioMode` | 0x80017C2C | `CdSync` then `CdControl(CdlSetmode, 0x07)` = report/autopause/CDDA; the last step of every track load |
@@ -1459,7 +1459,7 @@ names the phase:
 The `GameRequest*` twins (0x80018078, 0x800182D0, 0x8001839C, 0x80018410,
 0x80018530, 0x8001882C, 0x800189E4, 0x80018B98, 0x80018C88, 0x80018FC4,
 0x80019844) are all the same shape: return 1 while `g_AssetLoadState != 0`,
-otherwise latch `g_MainState` and return 0 once the phase has been consumed.
+otherwise latch `g_AssetRequestType` and return 0 once the phase has been consumed.
 `RequestSelectBgmAssetsNoReset` (0x8001839C) differs from
 `RequestSelectBgmAssets` (0x80018410) only in starting the phase at
 `g_AssetLoadState = 2`, which skips the `CloseLoadedAudioSlots` step.

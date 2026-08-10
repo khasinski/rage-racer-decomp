@@ -17,6 +17,25 @@ struct OptionScreenAsset;
 struct CarModelAsset;
 struct SVec;
 
+typedef enum AssetRequestType {
+    ASSET_REQUEST_INVALID = -1,
+    ASSET_REQUEST_IDLE = 0,
+    ASSET_REQUEST_BOOT,
+    ASSET_REQUEST_SAVE_SCREEN,
+    ASSET_REQUEST_SELECT_BGM,
+    ASSET_REQUEST_CAR_SELECT,
+    ASSET_REQUEST_CAR_MODEL,
+    ASSET_REQUEST_UPGRADED_CAR_MODEL,
+    ASSET_REQUEST_OPTION_SCREEN,
+    ASSET_REQUEST_ROUND_SCREEN,
+    ASSET_REQUEST_RACE,
+    ASSET_REQUEST_GRAND_PRIX_SCREEN,
+    ASSET_REQUEST_COURSE,
+    ASSET_REQUEST_TRACK_DATA
+} AssetRequestType;
+
+extern AssetRequestType g_AssetRequestType;
+
 /* Asset-load state machine phase (0 idle; 1..6 drive LoadAsset loads). */
 extern s32 g_AssetLoadState;
 
@@ -294,15 +313,15 @@ extern u8 *g_AssetSubBlockPtr;
 
 /*
  * Asset-load state machine. ServiceAssetLoad runs once per frame and
- * dispatches g_MainState 1..12 to the GameLoad*Assets step below; each step
+ * dispatches g_AssetRequestType 1..12 to the GameLoad*Assets step below; each step
  * advances g_AssetLoadState until it reaches 0. A screen starts a load with the
- * matching GameRequest* (which sets g_MainState and returns 1 while busy) and
+ * matching GameRequest* (which sets g_AssetRequestType and returns 1 while busy) and
  * polls the same GameRequest* until it returns 0. Asset indices are documented
  * on g_AssetPaths above; see docs/names.md 13.
  */
 void ServiceAssetLoad(void);
 /* Cancel an in-flight load: aborts a running CdRead and clears all three
- * state words (g_CdLoadPhase / g_AssetLoadState / g_MainState). */
+ * state words (g_CdLoadPhase / g_AssetLoadState / g_AssetRequestType). */
 void ResetAssetLoader(void);
 /* Spin on LoadAsset until the transfer completes. */
 void LoadAssetBlocking(s32 assetIndex, void *dst);

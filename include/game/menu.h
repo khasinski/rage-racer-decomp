@@ -203,7 +203,7 @@ void InitMenuMode(void);
 
 /*
  * The menu-mode screen table pair: everything the front end shows once
- * g_MainState == 3 is one of fourteen screens, dispatched from UpdateMenuMode
+ * g_GameMode == 3 is one of fourteen screens, dispatched from UpdateMenuMode
  * through g_MenuScreenUpdate[g_MenuScreen] (state machine) and
  * g_MenuScreenDraw[g_MenuHandlerIndex] (fade overlay). Each Draw entry owns a
  * private accumulator in 0x8009B2C4..0x8009B2EC, clamped to [0, 0x1FC]; a

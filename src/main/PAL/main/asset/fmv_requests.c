@@ -125,41 +125,41 @@ void BeginEndingFmv(s32 returnScene) {
 
 void ServiceAssetLoad(void) {
     if (g_AssetLoadState != 0) {
-        switch (g_MainState) {
-        case 1:
+        switch (g_AssetRequestType) {
+        case ASSET_REQUEST_BOOT:
             LoadBootAssets();
             break;
-        case 2:
+        case ASSET_REQUEST_SAVE_SCREEN:
             LoadSaveScreenAssets();
             break;
-        case 3:
+        case ASSET_REQUEST_SELECT_BGM:
             LoadSelectBgmAssets();
             break;
-        case 4:
+        case ASSET_REQUEST_CAR_SELECT:
             LoadCarSelectAssets();
             break;
-        case 5:
+        case ASSET_REQUEST_CAR_MODEL:
             LoadCarModel(g_PendingCarModelIndex);
             break;
-        case 6:
+        case ASSET_REQUEST_UPGRADED_CAR_MODEL:
             LoadUpgradedCarModel(g_PendingCarModelIndex);
             break;
-        case 7:
+        case ASSET_REQUEST_OPTION_SCREEN:
             LoadOptionScreenAssets();
             break;
-        case 8:
+        case ASSET_REQUEST_ROUND_SCREEN:
             LoadRoundAssets();
             break;
-        case 9:
+        case ASSET_REQUEST_RACE:
             LoadRaceAssets();
             break;
-        case 10:
+        case ASSET_REQUEST_GRAND_PRIX_SCREEN:
             LoadGrandPrixScreen();
             break;
-        case 11:
+        case ASSET_REQUEST_COURSE:
             LoadCourseAssets();
             break;
-        case 12:
+        case ASSET_REQUEST_TRACK_DATA:
             LoadTrackDataAssets();
             break;
         }

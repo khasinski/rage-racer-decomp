@@ -64,12 +64,8 @@ enum PadButton {
     PAD_DPAD = PAD_UP | PAD_DOWN | PAD_LEFT | PAD_RIGHT
 };
 
-/* Top-level scene/state machine, dispatched by ServiceAssetLoad; 1 = the
- * asset-load driver, other values are individual screens. */
-extern s32 g_MainState;
-
 /* Current top-level game mode; indexes g_GameModeHandlers, dispatched each
- * frame by UpdateOptionScene. Distinct from g_MainState (the scene dispatcher). */
+ * frame by UpdateOptionScene. */
 extern s32 g_GameMode;
 extern void (*g_GameModeHandlers[])(void);
 
