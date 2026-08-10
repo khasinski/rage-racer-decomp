@@ -223,6 +223,7 @@ void DrawStartCountdown(s32 sceneTimer) {
     u8 *orderingTable;
     SPRT *sprite;
     u8 *backdrop;
+    RenderBufferAddress packetAddress;
 
     timer = sceneTimer;
     orderingTable = g_DrawBuffer + 0xD0;
@@ -324,7 +325,8 @@ void DrawStartCountdown(s32 sceneTimer) {
         GAME_TEXTURE_PACKET_SPRT);
 
     packet = cursor;
-    sprite = (SPRT *)packet;
+    packetAddress.bytes = packet;
+    sprite = packetAddress.sprite;
     for (row = 0; row < 6; row++) {
         SetSprt(cursor);
         sprite->w = 0x20;
@@ -543,9 +545,11 @@ void DrawRaceOptionMenu(s32 cursorRow) {
         {
             POLY_FT4 *quadBase;
             register POLY_FT4 *quad asm("$17");
+            RenderBufferAddress quadAddress;
 
-            quadBase = (POLY_FT4 *)GameQueueTileTrans(
+            quadAddress.bytes = GameQueueTileTrans(
                 ot, prim.bytes, 0x70, 0x50, 0x60, 0x48, 8, 8, 8);
+            quadBase = quadAddress.polyFT4;
             {
                 register s32 leftTrig;
                 s16 left;
