@@ -217,7 +217,7 @@ void ForcePitchEffectVoicesEnabled(s32 enabled) {
         offset += 0x14;
         cursorAddress.pitchPointer = pitchCursor;
         endAddress.wordPointer = &g_ReverbFadeStep;
-    } while (cursorAddress.byteOffset < endAddress.byteOffset);
+    } while (cursorAddress.value < endAddress.value);
 }
 
 void ForceSoundSlotVoicePlayback(s32 enabled) {
