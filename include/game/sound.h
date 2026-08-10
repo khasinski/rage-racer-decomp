@@ -36,6 +36,9 @@ typedef union MusicChannelWordValue {
     volatile s32 updated;
 } MusicChannelWordValue;
 
+#define SetMusicChannelWordUpdated(word, newValue) \
+    (*(volatile s32 *)&(word) = (newValue))
+
 typedef struct MusicChannel {
     MusicChannelValue left; /* +0x00 current left/tone value */
     MusicChannelValue right; /* +0x04 current right value */

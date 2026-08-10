@@ -400,7 +400,7 @@ after_match:
             }
             currentB >>= 7;
             CHANNEL(cue).volLeft.updated = currentB;
-            *(volatile s32 *)&CHANNEL(cue).volRight = currentB;
+            SetMusicChannelWordUpdated(CHANNEL(cue).volRight, currentB);
             /* Load-bearing: removal changes eight linked scheduler words. */
             asm volatile("");
             entryAddress.pointer = entry;
