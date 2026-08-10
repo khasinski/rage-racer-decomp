@@ -162,7 +162,7 @@ void InitEffectVoiceRuntime(void) {
             g_MusicChannels[i].right.value = neg;
             ptr[0x78 / 4] = 0;
             ptr += sizeof(MusicChannel) / sizeof(*ptr);
-            g_MusicChannels[i].volLeft = 0;
+            g_MusicChannels[i].volLeft.value = 0;
         }
     }
 

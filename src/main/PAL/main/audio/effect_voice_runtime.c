@@ -330,7 +330,7 @@ after_match:
                 g_MusicChannels[i].mode = activeValue;
                 runtime = &g_AudioRuntimeState;
                 runtime->musicChannels[i].volRight = 0;
-                g_MusicChannels[i].volLeft = 0;
+                g_MusicChannels[i].volLeft.value = 0;
                 i++;
             } while (i < resetCount);
         }
@@ -381,7 +381,7 @@ after_match:
                 scaledLeft += 0x7F;
             }
             scaledLeft >>= 7;
-            ((MusicChannelWordValue *)&CHANNEL(cue).volLeft)->updated = scaledLeft;
+            CHANNEL(cue).volLeft.updated = scaledLeft;
             scaledRight = right * currentB;
             entryAddress.pointer = entry;
             entryAddress.byteOffset += sizeof(SoundModeSlot);
@@ -390,7 +390,7 @@ after_match:
                 scaledRight += 0x7F;
             }
             scaledRight >>= 7;
-            ((MusicChannelWordValue *)&CHANNEL(cue).volRight)->updated = scaledRight;
+            CHANNEL(cue).volRight.updated = scaledRight;
             i++;
         } else {
             if ((scaledLeft = average * GetSoundModeAtByteOffset(entryOffset)->factor) < 0) {
@@ -399,7 +399,7 @@ after_match:
                 currentB = scaledLeft;
             }
             currentB >>= 7;
-            ((MusicChannelWordValue *)&CHANNEL(cue).volLeft)->updated = currentB;
+            CHANNEL(cue).volLeft.updated = currentB;
             *(volatile s32 *)&CHANNEL(cue).volRight = currentB;
             /* Load-bearing: removal changes eight linked scheduler words. */
             asm volatile("");
@@ -413,12 +413,12 @@ after_match:
 }
 
 #define UPDATE_BASIC_EFFECT_VOLUME()                                  \
-    updateLeftAddress.wordPointer = &g_MusicChannels[0].volLeft;      \
+    updateLeftAddress.wordPointer = &g_MusicChannels[0].volLeft.value; \
     updateLeftAddress.byteOffset += offset;                           \
     raw = *updateLeftAddress.wordPointer;                             \
     scale = g_SoundScale.scale;                                                \
     left = raw * scale;                                                \
-    updateRightAddress.wordPointer = &g_MusicChannels[0].volRight;    \
+    updateRightAddress.wordPointer = &g_MusicChannels[0].volRight.value; \
     updateRightAddress.byteOffset += offset;                          \
     raw = *updateRightAddress.wordPointer;                            \
     voice = i + 8;                                                     \
@@ -449,7 +449,7 @@ after_match:
     *state = neg
 
 #define START_BASIC_EFFECT_VOLUME()                                   \
-    startLeftAddress.wordPointer = &g_MusicChannels[0].volLeft;       \
+    startLeftAddress.wordPointer = &g_MusicChannels[0].volLeft.value; \
     startLeftAddress.byteOffset += offset;                            \
     raw = *startLeftAddress.wordPointer;                              \
     scale = g_SoundScale.scale;                                                \
@@ -457,7 +457,7 @@ after_match:
     raw = i + 8;                                                       \
     asm("" : "=r"(raw) : "0"(raw));                                    \
     voice = raw;                                                       \
-    startRightAddress.wordPointer = &g_MusicChannels[0].volRight;     \
+    startRightAddress.wordPointer = &g_MusicChannels[0].volRight.value; \
     startRightAddress.byteOffset += offset;                           \
     raw = *startRightAddress.wordPointer;                             \
     if (left < 0) {                                                    \

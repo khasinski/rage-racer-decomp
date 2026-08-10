@@ -29,10 +29,10 @@ void ForceBasicEffectVoicesEnabled(s32 enabled) {
             SsUtKeyOnV(voiceArg, left, right, zeroArg, raw, 0, 0, 0);
             asm volatile("" : : "r"(unused));
 
-            raw = g_MusicChannels[i].volLeft;
+            raw = g_MusicChannels[i].volLeft.value;
             scale = g_SoundScale.scale;
             left = raw * scale;
-            raw = g_MusicChannels[i].volRight;
+            raw = g_MusicChannels[i].volRight.value;
             voiceArg = voice;
             if (left < 0) {
                 left += 0x7F;
