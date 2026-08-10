@@ -45,7 +45,7 @@ void DrawBootLogo(void) {
 }
 
 void UpdateBootLogoScene(void) {
-    s32 state;
+    BootLogoState state;
 
     if (g_BootLogoTimer < 110) {
         if (g_BootLogoTimer >= 10) {
@@ -70,30 +70,30 @@ void UpdateBootLogoScene(void) {
 
     state = g_BootLogoState;
     switch (state) {
-    case 0: {
+    case BOOT_LOGO_STATE_FADE_IN: {
         u32 sceneTime;
 
         sceneTime = g_SceneTimer;
         if (sceneTime < 0x100) {
             g_SceneTimer += 8;
         } else {
-            g_BootLogoState = 1;
+            g_BootLogoState = BOOT_LOGO_STATE_HOLD;
         }
         break;
     }
-    case 1:
+    case BOOT_LOGO_STATE_HOLD:
         if (g_BootLogoHoldTimer == 0) {
-            g_BootLogoState = 2;
+            g_BootLogoState = BOOT_LOGO_STATE_FADE_OUT;
         }
         break;
-    case 2:
+    case BOOT_LOGO_STATE_FADE_OUT:
         g_SceneTimer -= 8;
         if (g_SceneTimer == 0) {
-            g_BootLogoState = 3;
+            g_BootLogoState = BOOT_LOGO_STATE_START_FMV;
             SetupDisplay240(0, 0, 0);
         }
         break;
-    case 3: {
+    case BOOT_LOGO_STATE_START_FMV: {
         u32 sceneTime;
 
         g_SceneTimer++;
@@ -105,7 +105,7 @@ void UpdateBootLogoScene(void) {
     }
     }
 
-    if (g_BootLogoState != 3) {
+    if (g_BootLogoState != BOOT_LOGO_STATE_START_FMV) {
         u32 sceneTime;
 
         DrawBootLogo();

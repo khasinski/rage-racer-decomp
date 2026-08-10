@@ -199,7 +199,15 @@ void RestartMemoryCard(void);
 
 extern u16 g_NegconSteerDeadZone[][2];
 extern s32 g_BootLogoHoldTimer;
-extern s32 g_BootLogoState;
+typedef enum BootLogoState {
+    BOOT_LOGO_STATE_INVALID = -1,
+    BOOT_LOGO_STATE_FADE_IN,
+    BOOT_LOGO_STATE_HOLD,
+    BOOT_LOGO_STATE_FADE_OUT,
+    BOOT_LOGO_STATE_START_FMV
+} BootLogoState;
+
+extern BootLogoState g_BootLogoState;
 extern s32 g_BootLogoTimer;
 extern s32 g_FrameCounter;
 extern u8 g_LibcLowerDigits[];
