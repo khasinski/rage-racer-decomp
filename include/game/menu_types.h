@@ -18,6 +18,7 @@ typedef struct RaceRecord {
 
 typedef union RaceRecordAddress {
     s32 byteOffset;
+    s32 value;
     RaceRecord *pointer;
     s32 *wordPointer;
     u16 *halfwordPointer;

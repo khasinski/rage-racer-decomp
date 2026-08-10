@@ -81,7 +81,7 @@ void DrawRankingPanel(s32 slideX) {
     }
     DrawProportionalText(panel + 0x10, 0x6C, g_CaptionRanking2, 0x7812);
     countOrIndex = 0;
-    scoreOrX.byteOffset = 0x82;
+    scoreOrX.value = 0x82;
     destination = 0x78;
     do {
         text.value[0] = g_PlaceSuffixNames[countOrIndex][0];
@@ -99,9 +99,9 @@ void DrawRankingPanel(s32 slideX) {
         }
         DrawText8x8(panel + 0x14, destination, text.value, color);
         sprintf(text.value, g_FmtCarName, g_CarNames[xOrField]);
-        DrawText8x8(panel + 0x2C, scoreOrX.byteOffset, text.value, color);
+        DrawText8x8(panel + 0x2C, scoreOrX.value, text.value, color);
         destination += 0x14;
-        scoreOrX.byteOffset += 0x14;
+        scoreOrX.value += 0x14;
         countOrIndex++;
     } while (countOrIndex < 5);
 }
