@@ -873,8 +873,10 @@ typedef union EnvironmentPaletteAddress {
     Rgb *colorPointer;
 } EnvironmentPaletteAddress;
 
+typedef s32 EnvironmentClutOffset;
+
 typedef union EnvironmentClutAddress {
-    s32 byteOffset;
+    EnvironmentClutOffset clutOffset;
     s32 value;
     u8 *bytes;
     u16 *pointer;

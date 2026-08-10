@@ -170,9 +170,9 @@ void UpdateEnvironment(void) {
             EnvironmentClutAddress idx;
             register s32 palo asm("$5");
 
-            idx.byteOffset = i * sizeof(g_EnvironmentClut[0]);
-            LA_ORDERED(palo, g_EnvironmentClut, idx.byteOffset);
-            idx.value = idx.byteOffset + palo;
+            idx.clutOffset = i * sizeof(g_EnvironmentClut[0]);
+            LA_ORDERED(palo, g_EnvironmentClut, idx.clutOffset);
+            idx.value = idx.clutOffset + palo;
             dst = idx.signedPointer;
         }
         *dst = 0;
