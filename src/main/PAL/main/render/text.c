@@ -21,9 +21,10 @@ void DrawText8x8(s32 x, s32 y, const u8 *str, s32 clutIndex) {
     if (*str != 0) {
         volatile SPRT_8 *sprt;
         u8 *font;
-
+        RenderBufferAddress spriteAddress;
         INIT_TEXT_FONT(font);
-        sprt = (SPRT_8 *)packet;
+        spriteAddress.bytes = packet;
+        sprt = spriteAddress.volatileSprite8;
         do {
             s32 cell = *str - 0x20;
 
@@ -80,7 +81,8 @@ void GameDrawText8x8Shaded(
         u8 *font;
 
         INIT_TEXT_FONT(font);
-        sprt = (SPRT_8 *)packet;
+        primAddress.bytes = packet;
+        sprt = primAddress.volatileSprite8;
         do {
             s32 cell = *str - 0x20;
 
@@ -137,9 +139,10 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
     if (*str != 0) {
         volatile SPRT_8 *sprt;
         u8 *font;
-
+        RenderBufferAddress spriteAddress;
         INIT_TEXT_FONT(font);
-        sprt = (SPRT_8 *)packet;
+        spriteAddress.bytes = packet;
+        sprt = spriteAddress.volatileSprite8;
         do {
             s32 cell = *str - 0x20;
 
