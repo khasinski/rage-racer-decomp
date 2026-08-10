@@ -32,6 +32,8 @@ typedef struct DispEnv {
     Rect screen;
     u_char isinter;
     u_char isrgb24;
+    u_char pad0;
+    u_char pad1;
 } DispEnv;
 
 typedef struct Env {
@@ -371,7 +373,7 @@ void DrawPrim(u_char *prim);
 DrawEnv *SetDefDrawEnv(DrawEnv *env, long x, long y, long w, long h);
 /* Fills the 0x14-byte DISPENV: disp Rect, screen Rect, isinter, isrgb24.
  * Was bound to SetDefDrawEnv here; that was wrong (see docs/names.md 17). */
-u_char *SetDefDispEnv(u_char *env, long x, long y, long w, long h);
+DispEnv *SetDefDispEnv(DispEnv *env, long x, long y, long w, long h);
 void SetDrawTPage(u_char *prim, long dfe, long dtd, long tpage);
 void SetTexWindow(DrawPacket *prim, void *tw);
 void SetDrawArea(DrawPacket *prim, Rect *rect);

@@ -96,23 +96,20 @@ DrawEnv *SetDefDrawEnv(DrawEnv *env, long x, long y, long w, long h) {
     return env;
 }
 
-u_char *SetDefDispEnv(u_char *env, long x, long y, long w, long h) {
-    u_char *ret;
-
-    ret = env;
-    *(short *)&ret[0] = x;
-    *(short *)&ret[2] = y;
-    *(short *)&ret[4] = w;
-    *(short *)&ret[8] = 0;
-    *(short *)&ret[0xA] = 0;
-    *(short *)&ret[0xC] = 0;
-    *(short *)&ret[0xE] = 0;
-    ret[0x11] = 0;
-    ret[0x10] = 0;
-    ret[0x13] = 0;
-    ret[0x12] = 0;
-    *(short *)&ret[6] = h;
-    return ret;
+DispEnv *SetDefDispEnv(DispEnv *env, long x, long y, long w, long h) {
+    env->disp.x = x;
+    env->disp.y = y;
+    env->disp.w = w;
+    env->disp.h = h;
+    env->screen.x = 0;
+    env->screen.y = 0;
+    env->screen.w = 0;
+    env->screen.h = 0;
+    env->isrgb24 = 0;
+    env->isinter = 0;
+    env->pad1 = 0;
+    env->pad0 = 0;
+    return env;
 }
 
 long GetTPage(long tp, long abr, long x, long y) {

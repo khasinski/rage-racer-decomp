@@ -199,6 +199,7 @@ void ResetFrameContext(int buffer) {
 
 
 void SetupDisplay240(s32 r, s32 g, s32 b) {
+    GameFrameContext *context;
     u8 *base;
     s32 height;
     u16 *src0;
@@ -213,12 +214,13 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
     SetGeomOffset(0xA0, 0x78);
     SetGeomScreen(0x140);
 
-    base = g_FrameContexts[0].bytes;
+    context = g_FrameContexts;
+    base = context->bytes;
     height = 0xF0;
-    SetDefDrawEnv((DrawEnv *)base, 0, 0, 0x140, height);
+    SetDefDrawEnv(&context->environment.draw, 0, 0, 0x140, height);
     SetDefDrawEnv(&g_DrawEnv1, 0, 0xF0, 0x140, height);
-    SetDefDispEnv(base + 0x5C, 0, 0xF0, 0x140, height);
-    SetDefDispEnv((u8 *)&g_DispEnv1X, 0, 0, 0x140, height);
+    SetDefDispEnv(&context->environment.display, 0, 0xF0, 0x140, height);
+    SetDefDispEnv((DispEnv *)&g_DispEnv1X, 0, 0, 0x140, height);
 
     {
         register void *ptr;
@@ -268,7 +270,8 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
 }
 
 void SetupDisplay480(s32 mode, s32 x, s32 y) {
-    u8 *base = g_FrameContexts[0].bytes;
+    GameFrameContext *context = g_FrameContexts;
+    u8 *base = context->bytes;
     s32 height;
     u16 *src0;
     u16 *src1;
@@ -283,10 +286,10 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
     SetGeomScreen(0x140);
 
     height = 0x1E0;
-    SetDefDrawEnv((DrawEnv *)base, 0, 0, 0x140, height);
+    SetDefDrawEnv(&context->environment.draw, 0, 0, 0x140, height);
     SetDefDrawEnv(&g_DrawEnv1, 0, 0, 0x140, height);
-    SetDefDispEnv(base + 0x5C, 0, 0, 0x140, height);
-    SetDefDispEnv((u8 *)&g_DispEnv1X, 0, 0, 0x140, height);
+    SetDefDispEnv(&context->environment.display, 0, 0, 0x140, height);
+    SetDefDispEnv((DispEnv *)&g_DispEnv1X, 0, 0, 0x140, height);
 
     i = 0;
     one = 1;
