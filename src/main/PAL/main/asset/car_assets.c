@@ -144,7 +144,7 @@ void LoadCarModel(s32 carIndex) {
 
         if (LoadAsset(assetId, ptr) != 0) {
             asset = (CarModelAsset *)ptr;
-            SetCarModelSlot((CarModelAsset *)ptr, g_CarModelSlot < 1);
+            SetCarModelSlot(asset, g_CarModelSlot < 1);
 
             asset->modelData.pointer = ptr + asset->modelData.offset;
             RegisterModelBank(asset->modelData.modelBank, g_CarModelSlot < 1);
