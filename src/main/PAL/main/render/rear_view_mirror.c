@@ -159,6 +159,7 @@ u8 *DrawMirrorFrame(u8 *packet) {
     s32 color;
     u8 *next;
     TILE *tile;
+    RenderBufferAddress tileAddress;
 
     base = g_DrawBuffer;
     ot = base + 0xD0;
@@ -166,7 +167,8 @@ u8 *DrawMirrorFrame(u8 *packet) {
     tile = (TILE *)packet;
     SetTile(tile);
     otArg = ot;
-    prim = (u8 *)tile;
+    tileAddress.tile = tile;
+    prim = tileAddress.bytes;
 
     tile->x0 = 0x54;
     color = 0x98;
