@@ -256,7 +256,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                 RAW(drive->motionState) = CAR_MOTION_AIRBORNE;
                 g_ShiftTargetRpm = lo;
                 shiftTarget.value = &g_ShiftTargetRpm;
-                RAW(drive->shiftRpmDelta) = *shiftTarget.rpm - firstHeading;
+                drive->shiftRpmDelta = *shiftTarget.rpm - firstHeading;
                 specAddress.pointer = spec;
                 specAddress.value += offset;
             }
