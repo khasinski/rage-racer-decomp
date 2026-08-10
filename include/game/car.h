@@ -711,13 +711,6 @@ typedef union RaceGridSlot {
     } halves;
 } RaceGridSlot;
 
-typedef struct GameCarTrackAngleWindow {
-    u8 pad0[0x30];
-    s32 trackPointIndex;
-    u8 pad34[0x6C];
-    s32 headingAngle;
-} GameCarTrackAngleWindow;
-
 /*
  * The car pipeline. docs/names.md 1 has the evidence and the data layouts.
  */
@@ -879,7 +872,7 @@ void ApplyCarKnockback();
 void ClearCarMotionState();
 s32 FindTrackSegment();
 s32 InterpolateTrackAngle();
-s32 IsCarFacingBackwards();
+s32 IsCarFacingBackwards(PlayerCarRuntime *car);
 s32 IsPointInQuad();
 void SeedCarLapProgress(GameCarRuntime *car, s32 mode);
 void SetCarKnockback();

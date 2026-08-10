@@ -132,7 +132,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->drive.racePosition = 1;
   player->x = player->x + player->motionX;
   player->z = player->z + player->motionZ;
-  player->facingBackwards = IsCarFacingBackwards((GameCarTrackAngleWindow *)car);
+  player->facingBackwards = IsCarFacingBackwards(car);
   player->drive.jumpTimer = 0;
   player->drive.clutch = 0;
   player->drive.gearDisp = 1;
@@ -261,12 +261,11 @@ void InitPlayerCar(PlayerCarRuntime *car)
  * Wrong-way / spin check: compares the car's headingAngle against the current
  * track point's forward direction (0xC00 - track angle) and returns whether the
  * delta falls inside the 0x401..0x7FF window (i.e. facing roughly backwards).
- * Uses the 0x19C-stride GameCarTrackAngleWindow view onto the car array.
  */
-s32 IsCarFacingBackwards(GameCarTrackAngleWindow *window) {
-    s32 index = window->trackPointIndex;
+s32 IsCarFacingBackwards(PlayerCarRuntime *car) {
+    s32 index = car->trackPointIndex;
     s32 complement = 0xC00 - g_TrackPoints[index].angle;
-    s32 diff = (window->headingAngle - complement) & 0xFFF;
+    s32 diff = (car->headingAngle - complement) & 0xFFF;
     u32 backwardRange = diff - 0x401;
     return backwardRange < 0x7FFU;
 }
