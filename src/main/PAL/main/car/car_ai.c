@@ -5,10 +5,6 @@
 #include "game/race.h"
 #include "psyq/gte.h"
 
-typedef struct CarCollisionPointSlot {
-    CarCollisionPoint point;
-} CarCollisionPointSlot;
-
 /*
  * Jump / launch setup: when GetCarCrestTrigger reports a marker crossing, seeds the
  * launch trajectory and snapshots the car's render offsets (bodyPitch/bodyRoll
@@ -523,7 +519,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
     s32 transformed[3];
     Matrix matrix;
     s16 velocityDelta[2];
-    CarCollisionPointSlot quads[4][4];
+    CarCollisionPoint quads[4][4];
     CarCollisionPoint samples[5];
     CarCollisionPoint carCorners[4];
     CarCollisionPoint otherCorners[4];
@@ -581,8 +577,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                     TransformCollisionVector((s32 *)rotation, transformed);
                     carCorners[offset].x = transformed[0] >> 2;
                     carCorners[offset].z = transformed[2] >> 2;
-                    quads[corner][offset] =
-                        *(CarCollisionPointSlot *)&carCorners[offset];
+                    quads[corner][offset] = carCorners[offset];
                 }
 
                 average02X = carCorners[0].x + carCorners[2].x;
@@ -618,30 +613,30 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                 centerZ += centerZ >> 31;
                 centerZ >>= 1;
 
-                quads[1][0].point.x = average01X;
-                quads[0][1].point.x = average01X;
-                quads[1][0].point.z = average01Z;
-                quads[0][1].point.z = average01Z;
-                quads[2][0].point.x = average02X;
-                quads[0][2].point.x = average02X;
-                quads[2][0].point.z = average02Z;
-                quads[0][2].point.z = average02Z;
-                quads[3][1].point.x = average13X;
-                quads[1][3].point.x = average13X;
-                quads[3][1].point.z = average13Z;
-                quads[1][3].point.z = average13Z;
-                quads[3][2].point.x = average23X;
-                quads[2][3].point.x = average23X;
-                quads[3][2].point.z = average23Z;
-                quads[2][3].point.z = average23Z;
-                quads[3][0].point.x = centerX;
-                quads[2][1].point.x = centerX;
-                quads[1][2].point.x = centerX;
-                quads[0][3].point.x = centerX;
-                quads[3][0].point.z = centerZ;
-                quads[2][1].point.z = centerZ;
-                quads[1][2].point.z = centerZ;
-                quads[0][3].point.z = centerZ;
+                quads[1][0].x = average01X;
+                quads[0][1].x = average01X;
+                quads[1][0].z = average01Z;
+                quads[0][1].z = average01Z;
+                quads[2][0].x = average02X;
+                quads[0][2].x = average02X;
+                quads[2][0].z = average02Z;
+                quads[0][2].z = average02Z;
+                quads[3][1].x = average13X;
+                quads[1][3].x = average13X;
+                quads[3][1].z = average13Z;
+                quads[1][3].z = average13Z;
+                quads[3][2].x = average23X;
+                quads[2][3].x = average23X;
+                quads[3][2].z = average23Z;
+                quads[2][3].z = average23Z;
+                quads[3][0].x = centerX;
+                quads[2][1].x = centerX;
+                quads[1][2].x = centerX;
+                quads[0][3].x = centerX;
+                quads[3][0].z = centerZ;
+                quads[2][1].z = centerZ;
+                quads[1][2].z = centerZ;
+                quads[0][3].z = centerZ;
 
                 rotation[0] = (u16)other->bodyPitch;
                 rotation[2] = (u16)other->bodyRoll;
