@@ -150,7 +150,8 @@ void LoadSelectBgmAssets(void) {
         g_AssetLoadState = 2;
     case 2:
         if (LoadAsset(7, g_AssetBase) != 0) {
-            header = (GameSceneAssetHeader *)g_AssetBase;
+            firstBlockAddress.pointer = g_AssetBase;
+            header = firstBlockAddress.header;
             /* The three volatile reads are load-bearing: without them cse
              * folds the header pointer and the three offsets into one
              * addressing pattern and the block costs 19 instructions more. */
