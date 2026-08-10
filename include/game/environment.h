@@ -24,6 +24,11 @@ struct GameEnvironmentCue {
     u16 spareTarget;
 };
 
+typedef union GameEnvironmentScriptAddress {
+    u32 *words;
+    struct GameEnvironmentCue *cues;
+} GameEnvironmentScriptAddress;
+
 typedef struct GameEnvColorSlot {
     GameEnvColor cur;
     GameEnvColor from;

@@ -634,6 +634,7 @@ block_52:
  * never read anywhere in the image (docs/names.md 15g). */
 
 void SetEnvironmentScript(u32 *script) {
+    GameEnvironmentScriptAddress address;
     u32 value0;
     u32 value1;
 
@@ -642,6 +643,7 @@ void SetEnvironmentScript(u32 *script) {
     g_SkyRowBase = value0;
     value1 = *script;
     script++;
-    g_EnvScriptCues = (GameEnvironmentCue *)script;
+    address.words = script;
+    g_EnvScriptCues = address.cues;
     g_EnvScriptLength = value1;
 }
