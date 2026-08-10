@@ -224,6 +224,13 @@ static inline u16 ReadStablePadHeld(void) {
 }
 extern u16 g_PadPressedRepeat;
 extern u16 g_PadPressed;
+
+typedef struct PadPressedView {
+    u16 buttons;
+} PadPressedView;
+
+#define GetPadPressedView() ((PadPressedView *)&g_PadPressed)
+
 extern u8 g_PadRepeatTimer[];
 
 void BiosSetMemSize(s32 megabytes);

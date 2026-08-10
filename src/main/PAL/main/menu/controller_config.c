@@ -60,32 +60,23 @@ void DrawControllerConfigScreen(void) {
     }
 }
 
-/*
- * The pointer view is load-bearing: it keeps the first three pad-edge reads on
- * one address register, while the later left/right reads rematerialise the
- * global.  That is also the actual storage boundary being accessed here.
- */
-typedef struct PadEdgeView {
-    u16 edge;
-} PadEdgeView;
-
 void UpdateControllerConfigScreen(void) {
     u32 flipPhase;
-    PadEdgeView *pad = (PadEdgeView *)&g_PadPressed;
+    PadPressedView *pad = GetPadPressedView();
 
     g_AnimTimer++;
     g_SetupArrowPulse += 96;
-    if (pad->edge & 0x90) {
+    if (pad->buttons & 0x90) {
         PlaySoundCue(3);
         g_GameMode = 1;
         g_PadMappingIndex = g_PadMappingIndexSaved;
         g_NegconMappingIndex = g_NegconMappingIndexSaved;
     }
-    if (pad->edge & 0x860) {
+    if (pad->buttons & 0x860) {
         PlaySoundCue(2);
         LoadPadButtonMapping(g_PadMappingIndex, g_NegconMappingIndex);
         if (g_PadType == 0x23) {
-            g_GameMode = (pad->edge & 0x800) ? 8 : 1;
+            g_GameMode = (pad->buttons & 0x800) ? 8 : 1;
         } else {
             g_GameMode = 1;
         }
