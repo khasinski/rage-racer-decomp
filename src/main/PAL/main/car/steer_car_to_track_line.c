@@ -242,7 +242,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
             spec = g_CarSpec;
             lo = car->speed * 0xA0 / 1168 * 10000;
             specAddress.pointer = spec;
-            specAddress.byteOffset += drive->gear << 2;
+            specAddress.value += drive->gear << 2;
             lo /= specAddress.pointer->gearRatio[0];
             {
                 EngineRpmAddress shiftTarget;
@@ -258,7 +258,7 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
                 shiftTarget.value = &g_ShiftTargetRpm;
                 RAW(drive->shiftRpmDelta) = *shiftTarget.rpm - firstHeading;
                 specAddress.pointer = spec;
-                specAddress.byteOffset += offset;
+                specAddress.value += offset;
             }
             {
                 drive->engineLoad =

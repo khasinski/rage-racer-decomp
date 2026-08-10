@@ -125,7 +125,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   base.rowPointer = g_GearTorqueCurve;
   config.pointer = g_CarSpec;
   gear = car->drive.gear;
-  gearRatioSlot.byteOffset = config.byteOffset + (gear * 4);
+  gearRatioSlot.value = config.value + (gear * 4);
   gearCurve.valuePointer = base.rowPointer[gear].values;
   gearRatio = gearRatioSlot.pointer->gearLoad[0];
   drive = &car->drive;
@@ -325,8 +325,8 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     if (bandSlot < bandEnd)
     {
       engineSpeed = drive->engineRpm;
-      curveSlot.byteOffset = (bandSlot * 4) + gearCurve.byteOffset;
-      specSlot.byteOffset = (bandSlot * 4) + config.byteOffset;
+      curveSlot.value = (bandSlot * 4) + gearCurve.value;
+      specSlot.value = (bandSlot * 4) + config.value;
       loop_68:
       bandTorque = specSlot.pointer->torqueBand.values[0];
 
@@ -376,7 +376,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
     if (assistStep < bandEnd)
     {
       engineSpeedLoss = drive->engineRpm;
-      gearCurve.byteOffset = (assistStep * 4) + config.byteOffset;
+      gearCurve.value = (assistStep * 4) + config.value;
       loop_83:
       lossTorque = gearCurve.specPointer->torqueLossRpm[0];
 
