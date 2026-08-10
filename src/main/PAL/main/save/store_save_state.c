@@ -110,7 +110,7 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
                 timeAttackCar->paintColor2 = g_TimeAttackCars[i].paintColor2;
                 timeAttackCar->enabled = g_TimeAttackCars[i].enabled;
 
-                saveAddress.offset += sizeof(SavedCarSetup);
+                saveAddress.bytePointer += sizeof(SavedCarSetup);
             }
         }
 
@@ -124,7 +124,7 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
                     &saveAddress.pointer->classRecords[0];
                 dst->grade = g_ClassRecords[index].place;
                 dst->clears = g_ClassRecords[index].clears;
-                saveAddress.offset += sizeof(SavedClassRecord);
+                saveAddress.bytePointer += sizeof(SavedClassRecord);
             }
         }
     }
