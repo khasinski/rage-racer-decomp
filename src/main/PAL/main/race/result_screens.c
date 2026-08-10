@@ -370,7 +370,7 @@ void DrawRaceTimePanel(s32 slideY) {
             FormatLapTime(&text[2], *times);
             color = 0x7812;
             highlightAddress.timePointer = selectedPtr;
-            highlightAddress.byteOffset -= PLAYER_LAP_HIGHLIGHT_TO_MILLISECONDS;
+            highlightAddress.value -= PLAYER_LAP_HIGHLIGHT_TO_MILLISECONDS;
             if (*highlightAddress.halfwordPointer == i) {
                 color = 0x784C;
             }
