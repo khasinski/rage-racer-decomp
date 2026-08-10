@@ -14,7 +14,7 @@
  * instructions. Everywhere else the header/offset spelling is used directly,
  * which is what fmv_requests.c does for the same 11-entry track pack.
  */
-#define ASSET_SUB(base, k) ((base) + ((GameSceneAssetHeader *)(base))->offsets[k])
+#define ASSET_SUB(base, k) ((base) + GetSceneAssetHeader(base)->offsets[k])
 
 
 s32 RequestRaceAssets(void) {
@@ -64,7 +64,7 @@ void LoadRaceAssets(void) {
             u8 *table;
             u8 *header;
             u8 *body;
-            pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            pack = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = pack->offsets[0];
             g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
             SetCarSpec((GameCarSpec *)g_AssetBlockPtr);
@@ -76,7 +76,7 @@ void LoadRaceAssets(void) {
             g_AssetBlockPtr2 = table;
             g_AssetSubBlockPtr = body;
             StartAudioSlotLoad(3, header, body, (u16 *)table);
-            pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            pack = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = pack->offsets[4];
             g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
             UploadImageAsset(g_AssetBlockPtr);
@@ -102,21 +102,21 @@ void LoadRaceAssets(void) {
             s32 offset;
             u8 *base;
             s32 logoOffset, shadowOffset;
-            pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            pack = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = pack->offsets[0];
             g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
             UploadImageAsset(g_AssetBlockPtr);
-            pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            pack = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = pack->offsets[1];
             g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
             UploadImageAsset(g_AssetBlockPtr);
-            pack = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            pack = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = pack->offsets[2];
             g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
             UploadImageBlock((GameImageAssetHeaderWord *)g_AssetBlockPtr);
             base = g_AssetLoadCursor;
-            logoOffset = ((GameSceneAssetHeader *)base)->offsets[3];
-            shadowOffset = ((GameSceneAssetHeader *)base)->offsets[4];
+            logoOffset = GetSceneAssetHeader(base)->offsets[3];
+            shadowOffset = GetSceneAssetHeader(base)->offsets[4];
             g_AssetBlockPtr = base + logoOffset;
             g_AssetSubBlockPtr = base + shadowOffset;
             UploadImageAsset(g_AssetBlockPtr);
@@ -139,57 +139,57 @@ void LoadRaceAssets(void) {
         if (LoadAsset(offset + ASSET_TRACK_2ND_BASE, dst) != 0) {
             GameSceneAssetHeader *header;
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[0];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             SetTrackCameraTable(g_AssetBlockPtr);
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[1];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             SetEnvPaletteTable(g_AssetBlockPtr);
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[2];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             SetEnvironmentScript(g_AssetBlockPtr);
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[3];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             RegisterModelBank((ModelBankHeader *)g_AssetBlockPtr, 1);
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[4];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             InstallTrackPoints(g_AssetBlockPtr);
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[5];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             RegisterCourseModels((CourseModelAssetHeader *)g_AssetBlockPtr);
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[6];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             RegisterModelBank((ModelBankHeader *)g_AssetBlockPtr, 2);
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[7];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             InstallTerrainCellData(g_AssetBlockPtr);
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[8];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             SetCourseObjects(g_AssetBlockPtr);
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[9];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             InstallTrackEventData(g_AssetBlockPtr);
 
-            header = (GameSceneAssetHeader *)g_AssetLoadCursor;
+            header = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = header->offsets[10];
             g_AssetBlockPtr = GetSceneAssetAddress(header, offset);
             SelectTrackCameraTable(g_AssetBlockPtr, 1);
