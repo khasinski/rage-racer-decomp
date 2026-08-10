@@ -21,7 +21,6 @@ static inline void ClearScratchRenderMode3DF68(void) {
 void DrawStaticScenery(s32 shifted) {
     Matrix mtx;
     Vec4 state;
-    s32 *statePtr;
     s32 wordIndex;
     s32 bitIndex;
     s32 value;
@@ -34,7 +33,6 @@ void DrawStaticScenery(s32 shifted) {
     s32 frameValue;
 
     state = g_StaticSceneryPos;
-    statePtr = (s32 *)&state;
 
     if (shifted != 0) {
         state.z += 0x5000;
@@ -64,7 +62,7 @@ void DrawStaticScenery(s32 shifted) {
         MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
 
         if (g_IsEnvironmentMode4 != 0) {
-            SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, statePtr, &mtx);
+            SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
             frameValue = g_CourseModelCount;
             ClearScratchRenderMode3DF68();
             drawArg = 1;
@@ -73,7 +71,7 @@ void DrawStaticScenery(s32 shifted) {
             }
             SubmitCourseModel(SCRATCHPAD, drawArg);
         } else {
-            SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, statePtr, &mtx);
+            SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &state, &mtx);
             frameValue = g_CourseModelCount;
             ClearScratchRenderMode3DF68();
             drawArg = 1;
