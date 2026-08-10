@@ -273,7 +273,17 @@ typedef union CarPaintPalette {
         u16 reserved[0x81];
         u16 bodyColor1;
     } fixed;
+    struct {
+        u16 reserved[0x2C1];
+        volatile u16 bodyColor1Gradient[5];
+        volatile u16 bodyColor2Gradient[5];
+    } gradients;
 } CarPaintPalette;
+
+typedef union CarPaintPaletteAddress {
+    u16 *entries;
+    CarPaintPalette *palette;
+} CarPaintPaletteAddress;
 
 typedef struct CarImageData {
     u8 reserved[0x7060];

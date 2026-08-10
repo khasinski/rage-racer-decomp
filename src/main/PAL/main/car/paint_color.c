@@ -112,6 +112,7 @@ void ApplyBodyColor1(u32 colour, CarImageData *imageData) {
     volatile u16 *color;
     const u16 *primary;
     const u16 *secondary;
+    CarPaintPaletteAddress paletteAddress;
     u16 c;
     s32 i;
 
@@ -149,12 +150,13 @@ void ApplyBodyColor1(u32 colour, CarImageData *imageData) {
 
     BlendPaintColorQuarters(s1, s2);
 
-    ((volatile u16 *)base)[0x2C1] = s1;
-    ((volatile u16 *)base)[0x2C2] = g_PaintBlendShade0;
-    ((volatile u16 *)base)[0x2C3] = g_PaintBlendShade1;
+    paletteAddress.entries = base;
+    paletteAddress.palette->gradients.bodyColor1Gradient[0] = s1;
+    paletteAddress.palette->gradients.bodyColor1Gradient[1] = g_PaintBlendShade0;
+    paletteAddress.palette->gradients.bodyColor1Gradient[2] = g_PaintBlendShade1;
     c = g_PaintBlendShade2;
-    ((volatile u16 *)base)[0x2C5] = s2;
-    ((volatile u16 *)base)[0x2C4] = c;
+    paletteAddress.palette->gradients.bodyColor1Gradient[4] = s2;
+    paletteAddress.palette->gradients.bodyColor1Gradient[3] = c;
 }
 
 
@@ -172,6 +174,7 @@ void ApplyBodyColor2(u32 colour, CarImageData *imageData) {
     volatile u16 *color;
     u16 c;
     s32 i;
+    CarPaintPaletteAddress paletteAddress;
 
     base = imageData->paintPalette.entries;
     s1 = g_BodyColorPrimary[colour];
@@ -204,12 +207,13 @@ void ApplyBodyColor2(u32 colour, CarImageData *imageData) {
 
     BlendPaintColorQuarters(s1, s2);
 
-    ((volatile u16 *)base)[0x2C6] = s1;
-    ((volatile u16 *)base)[0x2C7] = g_PaintBlendShade0;
-    ((volatile u16 *)base)[0x2C8] = g_PaintBlendShade1;
+    paletteAddress.entries = base;
+    paletteAddress.palette->gradients.bodyColor2Gradient[0] = s1;
+    paletteAddress.palette->gradients.bodyColor2Gradient[1] = g_PaintBlendShade0;
+    paletteAddress.palette->gradients.bodyColor2Gradient[2] = g_PaintBlendShade1;
     c = g_PaintBlendShade2;
-    ((volatile u16 *)base)[0x2CA] = s2;
-    ((volatile u16 *)base)[0x2C9] = c;
+    paletteAddress.palette->gradients.bodyColor2Gradient[4] = s2;
+    paletteAddress.palette->gradients.bodyColor2Gradient[3] = c;
 }
 
 
