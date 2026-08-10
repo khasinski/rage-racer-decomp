@@ -35,7 +35,7 @@ void EnterAttractDemo(void) {
     InstallCourseAssets();
     RequestTrackDataAssets();
 
-    g_AttractDemoStep = 0;
+    g_AttractDemoStep = ATTRACT_DEMO_STEP_LOAD;
     g_FadeLevel = initialValue;
     g_SceneTimer = 0;
     g_SceneId = 0x1E;
@@ -45,7 +45,7 @@ void EnterAttractDemo(void) {
 s32 GetAttractTitleFade(s32 element) {
     s32 value;
 
-    if (g_AttractDemoStep == 0) {
+    if (g_AttractDemoStep == ATTRACT_DEMO_STEP_LOAD) {
         value = (g_SceneTimer * 4) - g_AttractTitleDelays[element];
     } else {
         if (g_FadeLevel > 0) {
@@ -89,7 +89,7 @@ void UpdateAttractDemoStart(void) {
     if (g_AssetLoadState == 0) {
         InitTrackScene();
 
-        g_AttractDemoStep = 1;
+        g_AttractDemoStep = ATTRACT_DEMO_STEP_RACE;
         mode = g_BgmShuffleOrder[g_BgmShuffleIndex];
         AdvanceBgmShuffleBag(mode);
 

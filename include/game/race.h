@@ -237,7 +237,13 @@ void DrawWrongWayWarning(void);
  * header carried them. */
 
 extern s16 g_PlayerAutoSteer;
-extern s32 g_AttractDemoStep;
+typedef enum AttractDemoStep {
+    ATTRACT_DEMO_STEP_INVALID = -1,
+    ATTRACT_DEMO_STEP_LOAD,
+    ATTRACT_DEMO_STEP_RACE
+} AttractDemoStep;
+
+extern AttractDemoStep g_AttractDemoStep;
 extern s32 g_BestLapThisRace;
 extern s32 g_BgmTrack;
 extern s32 g_BonusCountStep;
