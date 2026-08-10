@@ -129,7 +129,7 @@ not_crossed:
     sentinel = -1;
     offset = row * sizeof(TrackCrestEvent[8]);
     cursor.pointer = base;
-    cursor.value += offset;
+    cursor.bytePointer += offset;
 
 for (;;) {
     if (!(cursor.pointer->crestEvents[0][0].motionValue == sentinel)) {
@@ -146,7 +146,7 @@ for (;;) {
     i++;
     if (i < 8) {
         cursor.pointer = base;
-        cursor.value += offset;
+        cursor.bytePointer += offset;
         continue;
     }
 
@@ -158,7 +158,7 @@ crest_scan_done:
         resultOffset = i * sizeof(TrackCrestEvent);
         resultOffset += row * sizeof(TrackCrestEvent[8]);
         resultCursor.pointer = base;
-        resultCursor.value += resultOffset;
+        resultCursor.bytePointer += resultOffset;
         return resultCursor.pointer->crestEvents[0][0].motionValue;
     }
     return 0;
