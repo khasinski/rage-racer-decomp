@@ -10,14 +10,14 @@ void SetSoundSlotVoiceEnabled(s32 slot, s32 enabled) {
     s32 *entry;
 
     if (enabled != 0) {
-        s32 *base = g_SoundSlotActive;
+        s32 *base = g_EngineSoundState.slotActive;
         entry = base + slot;
         if (*entry == 0) {
             PlaySoundSlotVoice(slot, 0, 3);
             *entry = 1;
         }
     } else {
-        s32 *base = g_SoundSlotActive;
+        s32 *base = g_EngineSoundState.slotActive;
         entry = base + slot;
         if (*entry != 0) {
             StopSoundSlotVoice(slot);
@@ -47,7 +47,7 @@ void ResetSoundState(void) {
         s32 *ptr;
 
         i = 5;
-        ptr = &g_SoundSlotActive5;
+        ptr = &g_EngineSoundState.slotActive[5];
         for (; i >= 0; i--) {
             *ptr-- = 0;
         }
@@ -97,7 +97,7 @@ void ResetSoundState(void) {
 
             offset = 0x80;
             value = -1;
-            g_EngineSoundBank = value;
+            g_EngineSoundState.bank = value;
             g_PanVoiceVolumeR = value;
             g_PanVoiceVolumeL = value;
             g_IndexedEffectIndexPrev = value;
@@ -107,7 +107,7 @@ void ResetSoundState(void) {
             value = 1;
             g_SoundScale.scale = offset;
             g_PanVoiceActive = 0;
-            g_SoundSlotVolumeScale = offset;
+            g_EngineSoundState.volumeScale = offset;
             g_AudioLoadedSlotMask = value;
         }
     }

@@ -137,7 +137,7 @@ s32 StartVabTransferWithTable(u8 *header, u8 *body, u16 *table) {
         LoadAudioParameterTable(table);
     }
 
-    g_ExtraVabLoaded = 1;
+    g_EngineSoundState.extraVabLoaded = 1;
     g_VabTransferDone = SsVabTransCompleted(0);
     return g_VabTransferDone;
 }
@@ -167,7 +167,7 @@ s32 LoadExtraVabSlotWithTable(u8 *header, u8 *body, u16 *table) {
     }
 
     flags = g_AudioLoadedSlotMask;
-    g_ExtraVabLoaded = 1;
+    g_EngineSoundState.extraVabLoaded = 1;
     g_AudioLoadedSlotMask = flags | 0x20;
     return 0;
 }

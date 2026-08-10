@@ -7,7 +7,7 @@ void SetVabSlotVoiceEnabled(s32 voice, s32 enabled, s32 vabSlot) {
     s32 *state;
 
     if (enabled != 0) {
-        s32 *base = g_SoundSlotActive;
+        s32 *base = g_EngineSoundState.slotActive;
 
         state = base + voice;
         if (*state == 0) {
@@ -15,7 +15,7 @@ void SetVabSlotVoiceEnabled(s32 voice, s32 enabled, s32 vabSlot) {
             *state = 1;
         }
     } else {
-        s32 *base = g_SoundSlotActive;
+        s32 *base = g_EngineSoundState.slotActive;
 
         state = base + voice;
         if (*state != 0) {

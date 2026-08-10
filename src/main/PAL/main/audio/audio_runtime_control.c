@@ -110,7 +110,7 @@ void LoadAudioParameterTable(u16 *table) {
     } while (bank < 2);
 
     step = *tableReg;
-    leftPtr = &g_EngineSoundMaxRpm;
+    leftPtr = &g_EngineSoundState.maxRpm;
     *leftPtr = step;
     step--;
     adjustedStep = step;

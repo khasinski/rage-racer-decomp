@@ -23,7 +23,7 @@ void SetLoadedTableVolumeScale(s32 scale) {
     } else {
         scale = 0;
     }
-    g_SoundSlotVolumeScale = scale;
+    g_EngineSoundState.volumeScale = scale;
 }
 
 void SetSequenceVolumeSetting(s32 setting) {
@@ -67,7 +67,7 @@ void SetStereoOutput(void) { g_StereoOutput = 1; SetCdMixPreset(0); SsSetStereo(
 void SetMonoOutput(void) { g_StereoOutput = 0; SetCdMixPreset(1); SsSetMono(); }
 
 u32 GetLoadedAudioStep(void) {
-    return g_EngineSoundMaxRpm;
+    return g_EngineSoundState.maxRpm;
 }
 
 s32 GetActiveAudioSlots(void) {

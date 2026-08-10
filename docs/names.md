@@ -3070,23 +3070,25 @@ CdlModeRept`, which is why `TickCdAudio` can detect end-of-track as status 4.
 `LoadAudioParameterTable` (in `menu/update_menu_mode.c`) writes the shape
 out longhand: **`g_EngineSoundCurves` (`D_801E446C`) is `[2 banks][12][9][2]`** —
 bank stride `0x360`, row stride `0x48`, nine `{position, value}` breakpoints per
-row — and its last word becomes **`g_EngineSoundMaxRpm`** (`D_801E6CC4`, clamped
+row — and its last word becomes **`g_EngineSoundState.maxRpm`** (`D_801E6CC4`, clamped
 to `1..0x2800`). `UpdateLoadedAudioVoices` is called from
 `UpdatePlayerCar` as `(g_EngineRpm + g_EngineRpmJitter, bank)` and normalises
-that onto `0..10240` with `((rpm * 5) << 11) / g_EngineSoundMaxRpm`, so the twelve
+that onto `0..10240` with `((rpm * 5) << 11) / g_EngineSoundState.maxRpm`, so the twelve
 rows are six sound slots × {pitch curve, volume curve} and the domain is engine
-revs. Hence `g_EngineSoundPosition` (`D_801E6CB8`) and `g_EngineSoundBank`
-(`D_801E6CBC`, latched so a bank change re-keys the six voices).
+revs. The contiguous state at `D_801E6CB8..D_801E6CE3` is therefore one
+**`g_EngineSoundState`** record; its `position` and `bank` fields latch the
+current curve position and bank so a bank change re-keys the six voices.
 
-Also named here: `g_SoundSlotActive[6]` (`D_801E6CC8`), `g_SoundSlotVolumeScale`
-(`D_801E6CE0`, which is `g_SoundSlotActive[6]` read as `base[6]` in two files and
-is the per-car engine loudness from **`g_CarSoundVolumeScales`**, `D_800125FC`,
+Also named here: `g_EngineSoundState.slotActive[6]` (`D_801E6CC8`) and
+`g_EngineSoundState.volumeScale` (`D_801E6CE0`, whose old `base[6]` view remains
+load-bearing in one function and which stores the per-car engine loudness from
+**`g_CarSoundVolumeScales`**, `D_800125FC`,
 indexed the same way `g_CarPriceTable` is), the pan voice (`g_PanVoiceVolumeR`,
 `g_PanVoiceActive`), the indexed effect voice (`g_IndexedEffectIndex` / `…Prev` /
 `…Pitch` / `…Volume` over the 3×3-word table `g_IndexedEffectTones` /
 `g_IndexedEffectVolumes`), the VAB loader (`g_VabSpuAddress` =
 `{0x1000, 0x20000, 0x20000}` + `g_VabSpuAddressExtra` = `0x6A000`,
-`g_AudioLoadSlot`, `g_VabTransferDone`, `g_ExtraVabLoaded`), and the sequence
+`g_AudioLoadSlot`, `g_VabTransferDone`, `g_EngineSoundState.extraVabLoaded`), and the sequence
 side in `game/sound.h`: `g_MusicChannels`, `g_EffectVoices`, `g_ReverbDepthL/R`,
 `g_SeqVolume`, `g_SeqVolumeSetting`, `g_SeqVolumeFadeStep`.
 

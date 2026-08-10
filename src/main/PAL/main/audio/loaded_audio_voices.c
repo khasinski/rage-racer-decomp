@@ -90,9 +90,9 @@ void UpdateLoadedAudioVoices(s32 value, s32 bank) {
     s32 *slot_base;
     s32 first;
 
-    value = ((value * 5) << 11) / *(scale_base = &g_EngineSoundMaxRpm);
+    value = ((value * 5) << 11) / *(scale_base = &g_EngineSoundState.maxRpm);
 
-    if (bank != g_EngineSoundBank) {
+    if (bank != g_EngineSoundState.bank) {
         index = 0;
         slot = scale_base + 1;
         do {
@@ -102,12 +102,12 @@ void UpdateLoadedAudioVoices(s32 value, s32 bank) {
             }
             index++;
         } while (index < 6);
-        g_EngineSoundBank = bank;
+        g_EngineSoundState.bank = bank;
     }
 
     index = 0;
     odd_parameter = 1;
-    scale_base = (slot_base = g_SoundSlotActive);
+    scale_base = (slot_base = g_EngineSoundState.slotActive);
     slot = scale_base;
     do {
         if (*slot != 0) {
@@ -124,7 +124,7 @@ void UpdateLoadedAudioVoices(s32 value, s32 bank) {
         slot++;
     } while (index < 6);
 
-    g_EngineSoundPosition = value;
+    g_EngineSoundState.position = value;
     ApplyPanVoiceVolume();
     UpdateBasicEffectVoices();
     UpdateIndexedEffectVoice();

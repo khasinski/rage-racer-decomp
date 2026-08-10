@@ -153,9 +153,17 @@ typedef union EngineSoundCurveAddress {
     s32 *pointer;
 } EngineSoundCurveAddress;
 
+typedef struct EngineSoundState {
+    s32 position;
+    s32 bank;
+    s32 extraVabLoaded;
+    s32 maxRpm;
+    s32 slotActive[6];
+    s32 volumeScale;
+} EngineSoundState;
+
 extern EngineSoundCurveRow g_EngineSoundCurves[2][12];
-extern s32 g_EngineSoundMaxRpm;
-extern s32 g_SoundSlotActive[];
+extern EngineSoundState g_EngineSoundState;
 
 s32 GetOwnedCarAssetIndex(s32 model);
 
@@ -169,9 +177,6 @@ extern s32 g_AudioLoadSlot;
 extern s32 g_AudioLoadedSlotMask;
 extern s32 g_CarSoundVolumeScales[];
 extern const EffectCueBank g_EffectCueTable[3];
-extern s32 g_EngineSoundBank;
-extern s32 g_EngineSoundPosition;
-extern s32 g_ExtraVabLoaded;
 extern s32 g_IndexedEffectIndex;
 extern s32 g_IndexedEffectIndexPrev;
 extern s32 g_IndexedEffectPitch;
@@ -197,8 +202,6 @@ typedef struct SoundCueParams {
 
 extern const SoundCueParams g_SoundCueParams[];
 extern const SoundCueParams g_SoundCueParams2[];
-extern s32 g_SoundSlotActive5;
-extern s32 g_SoundSlotVolumeScale;
 extern s32 g_SpecialCueVoiceA;
 extern s32 g_SpecialCueVoiceB;
 extern const s32 g_SpecialVoiceBits[];

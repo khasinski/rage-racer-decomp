@@ -238,7 +238,7 @@ void ForceSoundSlotVoicePlayback(s32 enabled) {
 
     i = 0;
     if (saved != 0) {
-        base = g_SoundSlotActive;
+        base = g_EngineSoundState.slotActive;
         active = base;
         saved = 0;
         do {
@@ -251,7 +251,7 @@ void ForceSoundSlotVoicePlayback(s32 enabled) {
 
         i = 0;
         odd = 1;
-        base = g_SoundSlotActive;
+        base = g_EngineSoundState.slotActive;
         active = base;
         do {
             if (*active != 0) {
