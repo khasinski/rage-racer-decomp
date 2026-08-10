@@ -409,34 +409,34 @@ void DrawRaceOptionMenu(s32 cursorRow) {
     u8 *firstNext;
     register s32 brightness;
     s32 marquee;
-    register u8 *prim asm("$18");
+    register RenderBufferAddress prim asm("$18");
 
     ot = g_DrawBuffer + 0xCC;
     {
         register void *drawPrim;
 
-        prim = SCRATCH_PRIM_CURSOR_AS(u8);
-        SetSprt((SPRT *)prim);
-        SetShadeTex((SPRT *)prim, 0);
-        ((SPRT *)prim)->x0 = 0x8C;
-        ((SPRT *)prim)->y0 = 0x5A;
-        ((SPRT *)prim)->w = 0x28;
-        ((SPRT *)prim)->h = 8;
-        ((SPRT *)prim)->u0 = 0xD8;
-        ((SPRT *)prim)->v0 = 0x38;
-        ((SPRT *)prim)->clut = 0x7893;
+        prim.bytes = SCRATCH_PRIM_CURSOR_AS(u8);
+        SetSprt(prim.sprite);
+        SetShadeTex(prim.sprite, 0);
+        prim.sprite->x0 = 0x8C;
+        prim.sprite->y0 = 0x5A;
+        prim.sprite->w = 0x28;
+        prim.sprite->h = 8;
+        prim.sprite->u0 = 0xD8;
+        prim.sprite->v0 = 0x38;
+        prim.sprite->clut = 0x7893;
         if (g_RaceOptionScroll0 & 0x10) {
-            asm("" : : "r"(prim));
+            asm("" : : "r"(prim.bytes));
             brightness = 0x80;
         } else {
             brightness = 0x40;
         }
-        ((SPRT *)prim)->t.r0 = brightness;
-        ((SPRT *)prim)->t.g0 = brightness;
-        ((SPRT *)prim)->t.b0 = brightness;
+        prim.sprite->t.r0 = brightness;
+        prim.sprite->t.g0 = brightness;
+        prim.sprite->t.b0 = brightness;
         asm("" ::: "memory");
-        drawPrim = prim;
-        prim += sizeof(SPRT);
+        drawPrim = prim.pointer;
+        prim.bytes += sizeof(SPRT);
         AddPrim(ot, drawPrim);
 
         g_RaceOptionScroll0 -= 4;
@@ -449,7 +449,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
         }
 
         firstNext =
-            QueueDrawAreaPrim(ot, prim, 0, 0, 0x140, 0xF0);
+            QueueDrawAreaPrim(ot, prim.bytes, 0, 0, 0x140, 0xF0);
     }
 
     {
@@ -495,16 +495,16 @@ void DrawRaceOptionMenu(s32 cursorRow) {
         drawPrim = QueueDrawAreaPrim(
             ot, scratchPacket, 0x72, 0x8A, 0x5C, 0xC);
         fontU = 0xD0;
-        prim = GameQueueSprite(
+        prim.bytes = GameQueueSprite(
             ot, drawPrim, 0x88, 0x6A, 0x30, 8, fontU, 0x10, 0x7893);
         if (g_GrandPrixMode != 0) {
-            prim = GameQueueSprite(
-                ot, prim, 0x88, 0x74, 0x30, 8, 0xA0, 0x28, 0x7893);
-            prim = GameQueueSprite(
-                ot, prim, 0x84, 0x7E, 0x30, 8, fontU, 0x28, 0x7893);
-            prim = GameQueueSprite(
+            prim.bytes = GameQueueSprite(
+                ot, prim.bytes, 0x88, 0x74, 0x30, 8, 0xA0, 0x28, 0x7893);
+            prim.bytes = GameQueueSprite(
+                ot, prim.bytes, 0x84, 0x7E, 0x30, 8, fontU, 0x28, 0x7893);
+            prim.bytes = GameQueueSprite(
                 ot,
-                prim,
+                prim.bytes,
                 0xB8,
                 0x7E,
                 8,
@@ -512,40 +512,40 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 g_CourseProgress->retriesRemaining * 8,
                 0,
                 0x78CC);
-            prim = GameQueueSprite(
-                ot, prim, 0x78, 0x7E, 8, 8, 0xD8, 8, 0x78CC);
-            prim = GameQueueSprite(
-                ot, prim, 0xC0, 0x7E, 8, 8, 0xE8, 8, 0x78CC);
+            prim.bytes = GameQueueSprite(
+                ot, prim.bytes, 0x78, 0x7E, 8, 8, 0xD8, 8, 0x78CC);
+            prim.bytes = GameQueueSprite(
+                ot, prim.bytes, 0xC0, 0x7E, 8, 8, 0xE8, 8, 0x78CC);
         } else {
-            prim = GameQueueSprite(
-                ot, prim, 0x85, 0x74, 0x38, 8, 0xA0, 0x40, 0x7893);
-            prim = GameQueueSprite(
-                ot, prim, 0x90, 0x7E, 0x28, 8, 0xD8, 0x40, 0x7893);
+            prim.bytes = GameQueueSprite(
+                ot, prim.bytes, 0x85, 0x74, 0x38, 8, 0xA0, 0x40, 0x7893);
+            prim.bytes = GameQueueSprite(
+                ot, prim.bytes, 0x90, 0x7E, 0x28, 8, 0xD8, 0x40, 0x7893);
         }
 
         {
             s32 y;
 
             y = selectedRow * 10 + 0x68;
-            prim = AddTilePrim(
-                ot, prim, 0x80, y, 0x40, 1, 0xFF, 0xFF, 0);
-            prim = AddTilePrim(
-                ot, prim, 0x80, y + 0xB, 0x40, 1, 0xFF, 0xFF, 0);
-            prim = AddTilePrim(
-                ot, prim, 0x80, y, 1, 0xB, 0xFF, 0xFF, 0);
-            prim = AddTilePrim(
-                ot, prim, 0xBF, y, 1, 0xB, 0xFF, 0xFF, 0);
+            prim.bytes = AddTilePrim(
+                ot, prim.bytes, 0x80, y, 0x40, 1, 0xFF, 0xFF, 0);
+            prim.bytes = AddTilePrim(
+                ot, prim.bytes, 0x80, y + 0xB, 0x40, 1, 0xFF, 0xFF, 0);
+            prim.bytes = AddTilePrim(
+                ot, prim.bytes, 0x80, y, 1, 0xB, 0xFF, 0xFF, 0);
+            prim.bytes = AddTilePrim(
+                ot, prim.bytes, 0xBF, y, 1, 0xB, 0xFF, 0xFF, 0);
         }
 
-        prim =
-            GameQueueTileTrans(ot, prim, 0x70, 0x50, 0x60, 0x48, 8, 8, 8);
+        prim.bytes =
+            GameQueueTileTrans(ot, prim.bytes, 0x70, 0x50, 0x60, 0x48, 8, 8, 8);
 
         {
             POLY_FT4 *quadBase;
             register POLY_FT4 *quad asm("$17");
 
             quadBase = (POLY_FT4 *)GameQueueTileTrans(
-                ot, prim, 0x70, 0x50, 0x60, 0x48, 8, 8, 8);
+                ot, prim.bytes, 0x70, 0x50, 0x60, 0x48, 8, 8, 8);
             {
                 register s32 leftTrig;
                 s16 left;
