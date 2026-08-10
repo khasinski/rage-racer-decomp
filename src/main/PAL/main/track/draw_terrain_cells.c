@@ -47,7 +47,7 @@ enum SkyOrderingTableIndex
 };
 void DrawSkyBackground(void)
 {
-  SkyRenderScratchpad *scratch = (SkyRenderScratchpad *)SCRATCHPAD_ADDR;
+  SkyRenderScratchpad *scratch = SCRATCHPAD_AS(SkyRenderScratchpad);
   s32 panelXFixed;
   s32 panelYFixed;
   s32 columnStepX;

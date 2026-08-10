@@ -271,7 +271,7 @@ void DrawLapNumber(void) {
         s32 tpage;
 
         finalScratch = (u8 *)scratch;
-        packet = (SPRT *)SCRATCHPAD_ADDR;
+        packet = SCRATCHPAD_AS(SPRT);
         ot = g_DrawBuffer + 0xCC;
         tpage = 9;
         *(u8 **)packet = finalScratch;
