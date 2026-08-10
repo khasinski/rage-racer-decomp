@@ -23,12 +23,19 @@ nonzero_inner:
         {
             u8 *dst;
             s32 offset;
+            RenderBufferAddress spriteAddress;
+            RenderBufferAddress baseAddress;
+            GameSpriteDescAddress descAddress;
 
-            dst = g_TachoNeedlePrim0PageA;
+            baseAddress.drawPacket = g_TachoNeedlePrim0PageA;
+            dst = baseAddress.bytes;
             dst = bufferOffset + dst;
             offset = rowOffset.byteOffset + 0x2C;
             dst += offset;
-            BuildSpriteFromDesc(dst, g_RaceHudSpriteDescsGp + rowOffset.byteOffset);
+            spriteAddress.bytes = dst;
+            descAddress.descriptors = g_RaceHudSpriteDescsGp;
+            descAddress.bytes += rowOffset.byteOffset;
+            BuildSpriteFromDesc(spriteAddress.sprite, descAddress.descriptors);
         }
         if (g_GrandPrixClass == 5 && row == 0xB) {
             cursor[0] += 0xE8;
@@ -48,14 +55,22 @@ nonzero_inner:
         s32 bufferOffset;
 
         row = 0;
-        rowOffset.bytes = g_TachoNeedlePrim0PageA;
+        rowOffset.drawPacket = g_TachoNeedlePrim0PageA;
         bufferOffset = 0;
 
 zero_outer:
         col = 0;
         cursor = rowOffset.bytes;
 zero_inner:
-        BuildSpriteFromDesc(cursor + (bufferOffset + 0x2C), g_RaceHudSpriteDescsTimeTrial + bufferOffset);
+        {
+            RenderBufferAddress spriteAddress;
+            GameSpriteDescAddress descAddress;
+
+            spriteAddress.bytes = cursor + (bufferOffset + 0x2C);
+            descAddress.descriptors = g_RaceHudSpriteDescsTimeTrial;
+            descAddress.bytes += bufferOffset;
+            BuildSpriteFromDesc(spriteAddress.sprite, descAddress.descriptors);
+        }
         cursor += 0x237E8;
         col++;
         if (col < 2) {

@@ -827,10 +827,6 @@ extern SVec g_RaceIntroCameraDelta;
 extern s32 g_RaceIntroCameraTimer;
 extern s32 g_ShiftTargetSpeed;
 extern s32 g_TachoNeedleFlash;
-extern u8 g_TachoNeedlePrim0[];
-extern u8 g_TachoNeedlePrim1[];
-extern u8 g_TachoNeedlePrim1PageA[];
-extern u8 g_TachoNeedlePrim1PageB[];
 extern s16 g_TorqueBandStart;
 extern s16 g_TorqueLossBandStart;
 
@@ -857,7 +853,6 @@ void UpdateCarTrafficAvoidance(GameCarRuntime *car, s32 carIndex);
 void AccumulateLapProgress();
 void AdvanceCarPosition();
 void ApplyCarKnockback();
-void BuildSpriteFromDesc();
 void ClearCarMotionState();
 s32 FindTrackSegment();
 s32 InterpolateTrackAngle();

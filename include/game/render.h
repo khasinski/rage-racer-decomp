@@ -146,7 +146,13 @@ typedef struct GameSpriteDesc {
     s32 semiTrans;
 } GameSpriteDesc;
 
+typedef union GameSpriteDescAddress {
+    u8 *bytes;
+    GameSpriteDesc *descriptors;
+} GameSpriteDescAddress;
+
 extern GameSpriteDesc g_TachoNeedleSprite;
+void BuildSpriteFromDesc(SPRT *prim, GameSpriteDesc *src);
 extern TimedDrawCommand g_MenuRowScript[];
 
 /* Angles are 12 bits throughout: 0x1000 is one full turn, and any angle that
@@ -945,8 +951,8 @@ extern u8 g_CarMirrorBadgeStyles[];
 extern u8 g_MirrorBadgeTexU[];
 extern u8 g_MirrorBadgeTexV[];
 extern u8 g_MirrorBadgeWidths[];
-extern u8 g_RaceHudSpriteDescsGp[];
-extern u8 g_RaceHudSpriteDescsTimeTrial[];
+extern GameSpriteDesc g_RaceHudSpriteDescsGp[];
+extern GameSpriteDesc g_RaceHudSpriteDescsTimeTrial[];
 extern Matrix g_CameraMatrixSaved;
 extern s32 g_MenuRowFlashLevels[];
 extern s32 g_MenuCursorPulsePhase;
@@ -955,7 +961,11 @@ extern Vec4 g_MirrorVisibleCellList[];
 extern u32 g_MirrorVisibleCellMask[];
 extern s16 g_MirrorDrawEnv0ClipY;
 extern s16 g_MirrorDrawEnv0ClipH;
-extern u8 g_TachoNeedlePrim0PageA[];
+extern DrawPacket g_TachoNeedlePrim0PageA[2];
+extern SPRT g_TachoNeedlePrim0[];
+extern DrawPacket g_TachoNeedlePrim1PageA;
+extern DrawPacket g_TachoNeedlePrim1PageB;
+extern SPRT g_TachoNeedlePrim1[];
 extern u8 g_RaceHudSprite11U0[];
 extern s16 g_MirrorDrawEnv1ClipY;
 extern s16 g_MirrorDrawEnv1ClipH;
