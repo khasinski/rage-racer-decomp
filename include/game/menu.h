@@ -90,7 +90,6 @@ extern u8 g_TeamNameChars[];
 extern s32 g_McMenuState;
 extern s32 g_McCardStatus;
 extern s32 g_McMenuSelection;
-extern s32 g_McMenuPhase;
 extern s32 g_McMenuSubState;
 
 /* The two eased current/target pairs of the 3D menu view, in 1/1000 units:

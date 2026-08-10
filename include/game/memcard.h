@@ -24,21 +24,26 @@
 #define MC_BLOCK_SIZE         0x1000
 #define MC_BLOCK_CHECKSUM_OFS 0xFFC
 
-#define MC_PROMPT_NONE          0x00
-#define MC_PROMPT_SELECT_SAVE   0x01  /* "Select file to save." */
-#define MC_PROMPT_SELECT_LOAD   0x02  /* "Select file to load." */
-#define MC_PROMPT_NO_CARD       0x03  /* "No Memory card." */
-#define MC_PROMPT_CARD_FULL     0x04  /* "Memory card full." */
-#define MC_PROMPT_NO_DATA       0x05  /* "No data in Memory card." */
-#define MC_PROMPT_NEW_CARD      0x06  /* "New Memory card." */
-#define MC_PROMPT_FORMAT_ASK    0x07  /* "Format Memory card?" */
-#define MC_PROMPT_OVERWRITE_ASK 0x09  /* "Overwrite old file?" */
-#define MC_PROMPT_ACCESSING     0x0F  /* "Now accessing Memory card." */
-#define MC_PROMPT_CARD_ERROR    0x10  /* "Memory card error." */
-#define MC_PROMPT_LOAD_OK       0x11  /* "LOAD DATA OK!" */
-#define MC_PROMPT_SAVE_OK       0x12  /* "SAVE DATA OK!" */
-#define MC_PROMPT_FORMAT_OK     0x13  /* "FORMAT DATA OK!" */
-#define MC_PROMPT_NO_FILE       0x14  /* "No file found." */
+typedef enum MemoryCardPrompt {
+    MC_PROMPT_INVALID = -1,
+    MC_PROMPT_NONE = 0x00,
+    MC_PROMPT_SELECT_SAVE = 0x01,
+    MC_PROMPT_SELECT_LOAD = 0x02,
+    MC_PROMPT_NO_CARD = 0x03,
+    MC_PROMPT_CARD_FULL = 0x04,
+    MC_PROMPT_NO_DATA = 0x05,
+    MC_PROMPT_NEW_CARD = 0x06,
+    MC_PROMPT_FORMAT_ASK = 0x07,
+    MC_PROMPT_OVERWRITE_ASK = 0x09,
+    MC_PROMPT_ACCESSING = 0x0F,
+    MC_PROMPT_CARD_ERROR = 0x10,
+    MC_PROMPT_LOAD_OK = 0x11,
+    MC_PROMPT_SAVE_OK = 0x12,
+    MC_PROMPT_FORMAT_OK = 0x13,
+    MC_PROMPT_NO_FILE = 0x14
+} MemoryCardPrompt;
+
+extern MemoryCardPrompt g_McMenuPhase;
 
 typedef union GameSaveHeaderRow {
     struct {
