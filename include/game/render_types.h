@@ -5,8 +5,10 @@
 #include "game/vector.h"
 #include "psyq/gpu.h"
 
+typedef s32 RaceHudPacketOffset;
+
 typedef union RenderBufferAddress {
-    s32 byteOffset;
+    RaceHudPacketOffset hudPacketOffset;
     s32 value;
     u8 *bytes;
     u8 **packetLink;

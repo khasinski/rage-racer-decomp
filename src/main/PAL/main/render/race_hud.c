@@ -206,7 +206,7 @@ void DrawSplitDelta(s32 delta, s32 y) {
     s32 temp;
     u8 *ot;
 
-    firstPrim.byteOffset = 0x237AC;
+    firstPrim.hudPacketOffset = 0x237AC;
     temp = 0x237C0;
     value = delta * 8;
     base = g_DrawBuffer;
@@ -215,7 +215,7 @@ void DrawSplitDelta(s32 delta, s32 y) {
     prim = base + temp;
 
     drawBuffer.context->layout.raceHud.labels[3].u0 = value;
-    AddPrim(g_DrawBuffer + 0xCC, base + firstPrim.byteOffset);
+    AddPrim(g_DrawBuffer + 0xCC, base + firstPrim.hudPacketOffset);
     firstPrim.bytes = prim;
 
     if (y > 0) {
