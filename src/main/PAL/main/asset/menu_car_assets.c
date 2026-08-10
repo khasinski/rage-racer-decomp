@@ -77,11 +77,11 @@ void LoadOptionScreenAssets(void) {
 
     if (g_AssetLoadState == 1) {
         if (LoadAsset(9, g_AssetBase) != 0) {
-            RegisterModelBank((ModelBankHeader *)(g_AssetBase + 4), 0);
+            RegisterModelBank(&GetOptionScreenAsset(g_AssetBase)->modelBank, 0);
             SelectModelBank(0);
 
             base = g_AssetBase;
-            offset = *(s32 *)base;
+            offset = GetOptionScreenAsset(base)->imageOffset;
             g_AssetLoadState = 0;
             g_ImageBlockBuffer = base + offset;
         }
