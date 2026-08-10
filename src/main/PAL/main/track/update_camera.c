@@ -353,7 +353,7 @@ block_52:
         chaseNodeOffset = cameraNodeIndex * 0x24;
         chaseNode = &g_TrackCameras[cameraNodeIndex];
         scratchAddress.words = &scratch[2];
-        scratchAddress.blocks[0] = *(Block16 *)chaseNode;
+        scratchAddress.blocks[0] = chaseNode->data.block;
         BuildRotMatrixY(objectRotation.halfwords, car->angleY);
         BuildRotMatrixX(matrixWork.halfwords, car->bodyPitch);
         MulMatrix2(matrixWork.halfwords, objectRotation.halfwords);
@@ -545,7 +545,7 @@ block_52:
         introNodeOffset = cameraNodeIndex * sizeof(GameTrackCameraNode);
         introNode.value = introNodeOffset + case4Base.value;
         scratchAddress.words = &scratch[2];
-        scratchAddress.blocks[0] = *(Block16 *)introNode.pointer;
+        scratchAddress.blocks[0] = introNode.pointer->data.block;
         if (((u8)nodeChanged) || (g_CameraModePrev != 4)) {
             g_CamPathFrame = 0;
         } else if (g_CamPathFrame < g_TrackCameras[cameraNodeIndex].duration) {

@@ -2,6 +2,7 @@
 #define GAME_TRACK_CAMERA_INTERNAL_H
 
 #include "common.h"
+#include "game/vector.h"
 
 typedef union GameTrackCameraData {
     struct {
@@ -17,6 +18,7 @@ typedef union GameTrackCameraData {
         s32 distance;
     } orientation;
     s32 value[4];
+    Block16 block;
 } GameTrackCameraData;
 
 typedef union TrackCameraSection {
