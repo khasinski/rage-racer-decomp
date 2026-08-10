@@ -52,7 +52,8 @@ void DrawText8x8(s32 x, s32 y, const u8 *str, s32 clutIndex) {
                 sprt->u0 = u;
                 sprt->v0 = v;
                 sprt->clut = clutIndex;
-                AddPrim(g_DrawBuffer + 0xCC, (void *)sprt);
+                spriteAddress.volatileSprite8 = sprt;
+                AddPrim(g_DrawBuffer + 0xCC, spriteAddress.pointer);
                 sprt++;
                 packet += sizeof(SPRT_8);
             }
@@ -171,7 +172,8 @@ void DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex) {
                 sprt->u0 = u;
                 sprt->v0 = v;
                 sprt->clut = clutIndex;
-                AddPrim(g_DrawBuffer + 0xCC, (void *)sprt);
+                spriteAddress.volatileSprite8 = sprt;
+                AddPrim(g_DrawBuffer + 0xCC, spriteAddress.pointer);
                 sprt++;
                 packet += sizeof(SPRT_8);
             }
