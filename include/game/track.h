@@ -194,6 +194,7 @@ typedef struct TrackEventData {
 
 typedef union TrackEventDataAddress {
     s32 byteOffset;
+    u8 *bytePointer;
     TrackEventData *pointer;
 } TrackEventDataAddress;
 

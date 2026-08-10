@@ -471,6 +471,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     u16 val122;
     s32 scene;
     u16 av;
+    TrackEventDataAddress eventAddress;
 
     ent->initializedFlag = 1;
     av = slots[pos].halves.modelId;
@@ -541,7 +542,8 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->avoidanceActive = 0;
         ent->reservedC4 = 0;
         ent->routeMarkerIndex = 0;
-        SeedCarLapProgress(ent, ((TrackEventData *)p)->rivalStarts[0][0].modelId);
+        eventAddress.bytePointer = p;
+        SeedCarLapProgress(ent, eventAddress.pointer->rivalStarts[0][0].modelId);
     }
 
     sub += g_RaceSeries * 144;
@@ -549,7 +551,8 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     {
         u16 model;
 
-        model = ((TrackEventData *)base)->rivalStarts[0][0].modelId;
+        eventAddress.bytePointer = base;
+        model = eventAddress.pointer->rivalStarts[0][0].modelId;
         ent->activeFlag = model;
         if ((s16)model != -1) {
             CarTrackLimitWork pair;
