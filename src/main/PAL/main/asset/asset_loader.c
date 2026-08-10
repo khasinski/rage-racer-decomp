@@ -110,7 +110,7 @@ void LoadDiscArchiveIndex(void) {
     GameCdLoadEntry *stream;
 
     printf(g_MsgNowLoading, g_PathRageBin, g_LoadBuffer);
-    if (DsSearchFile(&file, (char *)g_PathRageBin) == 0) {
+    if (DsSearchFile(&file, g_PathRageBin) == 0) {
         printf(g_MsgFileNotFound, g_PathRageBin);
     }
 
@@ -135,7 +135,7 @@ void LoadDiscArchiveIndex(void) {
     }
 
     printf(g_MsgNowSearching, g_PathRageStr);
-    if (DsSearchFile(&file, (char *)g_PathRageStr) == 0) {
+    if (DsSearchFile(&file, g_PathRageStr) == 0) {
         printf(g_MsgFileNotFound, g_PathRageStr);
     } else {
         printf(g_MsgSearchOk);
