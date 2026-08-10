@@ -111,6 +111,7 @@ typedef struct EffectVoice {
 typedef union EffectVoiceAddress {
     s32 byteOffset;
     s32 value;
+    u8 *bytes;
     s32 *wordPointer;
     s16 *halfwordPointer;
     EffectVoicePitch *pitchPointer;

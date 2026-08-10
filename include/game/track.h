@@ -287,6 +287,7 @@ typedef struct ShuttlePath {
 typedef union ShuttlePathPointAddress {
     s32 byteOffset;
     s32 value;
+    u8 *bytes;
     Vec4 *pointer;
 } ShuttlePathPointAddress;
 
@@ -581,6 +582,7 @@ typedef struct SpinningSceneryOrientation {
 typedef union SpinningSceneryDataAddress {
     s32 byteOffset;
     s32 value;
+    u8 *bytes;
     SpinningSceneryOrientation *orientationPointer;
     Vec4 *positionPointer;
     void *pointer;

@@ -82,7 +82,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     EffectCueBankAddress cueAddress;
 
                     cueAddress.pointer = tableBase;
-                    cueAddress.value += loopTblOff;
+                    cueAddress.bytes += loopTblOff;
                     cueCursor = cueAddress.entryPointer;
                 }
                 do {
@@ -92,7 +92,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                         g_EffectVoices[i].state = *stateBase;
                     }
                     scaleAddress.pointer = g_EffectCueTable;
-                    scaleAddress.value += loopTblOff;
+                    scaleAddress.bytes += loopTblOff;
                     scaleValue = scaleAddress.pointer->volumeScale;
                     scaled = volume * scaleValue;
                     cueValue = cueCursor[1].program.note;
@@ -170,7 +170,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                     EffectCueBankAddress cueAddress;
 
                     cueAddress.pointer = tableBase;
-                    cueAddress.value += loopTblOff;
+                    cueAddress.bytes += loopTblOff;
                     cueCursor = cueAddress.entryPointer;
                 }
                 do {
@@ -180,7 +180,7 @@ void SetPitchedSoundCue(s32 bank, s32 pitch, s32 volume) {
                         g_EffectVoices[i + 2].state = *stateBase;
                     }
                     scaleAddress.pointer = g_EffectCueTable;
-                    scaleAddress.value += loopTblOff;
+                    scaleAddress.bytes += loopTblOff;
                     scaleValue = scaleAddress.pointer->volumeScale;
                     scaled = volume * scaleValue;
                     cueValue = cueCursor[1].program.note;
@@ -262,7 +262,7 @@ void UpdateEffectVoiceStates(void) {
         switch (state) {
         case 0:
             toneAddress.pointer = g_EffectVoices;
-            toneAddress.value += offset;
+            toneAddress.bytes += offset;
             SsUtKeyOnV(voice >> 16, g_VabIds[0], *f0Ptr,
                           (s16)toneAddress.pointer->tone,
                           0x3C, 0, 0, 0);

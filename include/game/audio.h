@@ -27,6 +27,7 @@ typedef struct EffectCueBank {
 typedef union EffectCueBankAddress {
     s32 byteOffset;
     s32 value;
+    const u8 *bytes;
     const EffectCueBank *pointer;
     const EffectCueBankEntry *entryPointer;
 } EffectCueBankAddress;
@@ -148,6 +149,7 @@ typedef struct EngineSoundCurveRow {
 typedef union EngineSoundCurveAddress {
     s32 byteOffset;
     s32 value;
+    u8 *bytes;
     s32 *pointer;
 } EngineSoundCurveAddress;
 

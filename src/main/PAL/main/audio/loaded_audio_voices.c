@@ -33,7 +33,7 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     bank_offset = (((bank * 7) * 4) - bank) << 5;
     bank = row_offset + bank_offset;
     entryAddress.pointer = base;
-    entryAddress.value += bank;
+    entryAddress.bytes += bank;
     entry = entryAddress.pointer;
     scan = entry + 1;
     while (index < 9) {
@@ -49,11 +49,11 @@ s32 InterpolateAudioParameter(s32 parameter, s32 position, s32 bank) {
     index_offset = index * 4;
     curveAddress.pointer = base_minus;
     curveAddress.value = index_offset + curveAddress.value;
-    curveAddress.value += bank;
+    curveAddress.bytes += bank;
     lower_position = curveAddress.pointer;
     lowerValueAddress.pointer = base + 8;
     lowerValueAddress.value = index_offset + lowerValueAddress.value;
-    lowerValueAddress.value += bank;
+    lowerValueAddress.bytes += bank;
     upperValueAddress.pointer = base + 9;
     upperValueAddress.value = bank + upperValueAddress.value;
     upperValueAddress.value = index_offset + upperValueAddress.value;

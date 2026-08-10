@@ -35,25 +35,25 @@ void UpdateShuttleScenery(s32 instance) {
     altIndex = (1 - side) << 4;
     altIndex += phaseShift;
     basePointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    basePointAddress.value += baseIndex;
+    basePointAddress.bytes += baseIndex;
     altPointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    altPointAddress.value += altIndex;
+    altPointAddress.bytes += altIndex;
     entry->position.x = ((denom - step) * basePointAddress.pointer->x +
                          step * altPointAddress.pointer->x) / denom;
 
     denom = *limitPtr;
     basePointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    basePointAddress.value += baseIndex;
+    basePointAddress.bytes += baseIndex;
     altPointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    altPointAddress.value += altIndex;
+    altPointAddress.bytes += altIndex;
     entry->position.y = ((denom - step) * basePointAddress.pointer->y +
                          step * altPointAddress.pointer->y) / denom;
 
     denom = *limitPtr;
     basePointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    basePointAddress.value += baseIndex;
+    basePointAddress.bytes += baseIndex;
     altPointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    altPointAddress.value += altIndex;
+    altPointAddress.bytes += altIndex;
     entry->position.z = ((denom - step) * basePointAddress.pointer->z +
                          step * altPointAddress.pointer->z) / denom;
 
