@@ -105,15 +105,18 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
     }
 
     {
-        register u8 *src asm("$6") = (u8 *)base;
+        register GameSaveBlockAddress srcAddress asm("$6");
         s32 i;
+
+        srcAddress.pointer = base;
         for (i = 0; i < 13; i++) {
-            SavedCarSetup *grandPrixCar =
-                &((GameSaveBlock *)src)->carSetup[0][0];
-            SavedCarSetup *extraGrandPrixCar =
-                &((GameSaveBlock *)src)->carSetup[1][0];
-            SavedCarSetup *timeAttackCar =
-                &((GameSaveBlock *)src)->carSetup[2][0];
+            SavedCarSetup *grandPrixCar;
+            SavedCarSetup *extraGrandPrixCar;
+            SavedCarSetup *timeAttackCar;
+
+            grandPrixCar = &srcAddress.pointer->carSetup[0][0];
+            extraGrandPrixCar = &srcAddress.pointer->carSetup[1][0];
+            timeAttackCar = &srcAddress.pointer->carSetup[2][0];
 
             g_GrandPrixCars[i].modelVariant = grandPrixCar->modelVariant;
             g_GrandPrixCars[i].tireCompound = grandPrixCar->tireCompound;
@@ -133,20 +136,22 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
             g_TimeAttackCars[i].paintColor1 = timeAttackCar->paintColor1;
             g_TimeAttackCars[i].paintColor2 = timeAttackCar->paintColor2;
             g_TimeAttackCars[i].enabled = timeAttackCar->enabled;
-            src += sizeof(SavedCarSetup);
+            srcAddress.bytePointer += sizeof(SavedCarSetup);
         }
     }
 
     {
-        register u8 *src asm("$4") = (u8 *)base;
+        register GameSaveBlockAddress srcAddress asm("$4");
         s32 index = 0;
+
+        srcAddress.pointer = base;
         for (; index < 11; index++) {
             SavedClassRecord *saved =
-                &((GameSaveBlock *)src)->classRecords[0];
+                &srcAddress.pointer->classRecords[0];
 
             g_ClassRecords[index].place = saved->grade;
             g_ClassRecords[index].clears = saved->clears;
-            src += sizeof(SavedClassRecord);
+            srcAddress.bytePointer += sizeof(SavedClassRecord);
         }
     }
 
