@@ -372,7 +372,7 @@ void EnterRaceScene(void) {
     BuildRaceHudPrims(g_GrandPrixMode);
     g_AnimTimer = 0;
     g_SceneTimer = 0;
-    g_CameraViewMode = 0;
+    g_CameraViewMode = CAMERA_VIEW_CAR;
     g_RacePhase = 0;
     g_RaceCueFlags = 0;
     g_RivalCueFlags = 0x1FE;
@@ -532,7 +532,7 @@ void UpdateRaceScene(void) {
             inputMask = g_PadHeld;
             selectorMask = selectorMask == 0x23;
             if ((inputMask & g_PadMirrorMasks[selectorMask * 8]) &&
-                g_CameraViewMode == 0 && g_RacePhase == 2) {
+                g_CameraViewMode == CAMERA_VIEW_CAR && g_RacePhase == 2) {
                 if (g_PadPressed & 8) {
                     g_MirrorViewEnabled = 1;
                 } else if (g_PadPressed & 4) {

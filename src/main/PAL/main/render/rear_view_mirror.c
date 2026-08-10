@@ -42,7 +42,7 @@ s32 BeginMirrorPass(void) {
 
     if ((g_MirrorUnlocked != 0) &&
         (g_MirrorViewEnabled != 0) &&
-        (g_CameraViewMode == 0) &&
+        (g_CameraViewMode == CAMERA_VIEW_CAR) &&
         (g_GrandPrixMode != 0) &&
         (g_RacePhase == 2)) {
         mirrorEnabled = 1;

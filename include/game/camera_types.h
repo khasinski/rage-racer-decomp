@@ -3,6 +3,13 @@
 
 #include "common.h"
 
+typedef enum CameraViewMode {
+    CAMERA_VIEW_INVALID = -1,
+    CAMERA_VIEW_CAR,
+    CAMERA_VIEW_CHASE,
+    CAMERA_VIEW_TRACK
+} CameraViewMode;
+
 typedef struct CamRow {
     s32 textureSectionLo;
     s32 textureSectionHi;

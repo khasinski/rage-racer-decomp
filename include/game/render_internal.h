@@ -92,7 +92,7 @@ extern u32 g_MainVisibleCellMask[];
 extern Vec4 g_MainVisibleCellList[];
 extern u32 *g_VisibleCellMask;
 extern Vec4 *g_VisibleCellList;
-extern s32 g_CameraViewMode;
+extern CameraViewMode g_CameraViewMode;
 extern s16 g_AtanTable[];
 extern u8 *g_DrawBuffer;
 extern GameFrameContext g_FrameContexts[2];

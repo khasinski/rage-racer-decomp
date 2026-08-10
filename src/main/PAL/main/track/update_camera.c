@@ -34,7 +34,7 @@ typedef union CameraCarAddress {
     Block16 *blocks;
 } CameraCarAddress;
 
-void UpdateCamera(s32 cameraModeSel, GameRenderObject *car) {
+void UpdateCamera(CameraViewMode cameraModeSel, GameRenderObject *car) {
     s16 sp10[4];
     s32 sp18[3];
     s32 sp28[3];
