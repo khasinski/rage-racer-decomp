@@ -145,9 +145,18 @@ typedef union GameImageAssetHeaderWord {
 } GameImageAssetHeaderWord;
 
 typedef union GameImageAssetAddress {
+    void *pointer;
     GameImageAssetHeaderWord *words;
     GameImageBlock *block;
 } GameImageAssetAddress;
+
+static __inline__ GameImageAssetHeaderWord *GetImageAssetHeaderWords(
+    void *data) {
+    GameImageAssetAddress address;
+
+    address.pointer = data;
+    return address.words;
+}
 
 /* The offset table every asset pack starts with; sub-blocks live at
  * base + offsets[n]. Some packs only ever use the first three. */

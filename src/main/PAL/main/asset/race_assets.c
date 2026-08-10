@@ -113,7 +113,7 @@ void LoadRaceAssets(void) {
             pack = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = pack->offsets[2];
             g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
-            UploadImageBlock((GameImageAssetHeaderWord *)g_AssetBlockPtr);
+            UploadImageBlock(GetImageAssetHeaderWords(g_AssetBlockPtr));
             base = g_AssetLoadCursor;
             logoOffset = GetSceneAssetHeader(base)->offsets[3];
             shadowOffset = GetSceneAssetHeader(base)->offsets[4];
