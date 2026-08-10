@@ -138,7 +138,7 @@ zone_code_done:
         break;
     }
     zone.pointer++;
-    } while (zone.byteOffset < first.byteOffset + 0xF0);
+    } while (zone.value < first.value + 0xF0);
 
 done:
     switch (status) {
@@ -230,7 +230,7 @@ void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
             nextSlot %= 3;
             nextSlot <<= 2;
             sectorAddress.pointer = g_SectorTimes;
-            sectorAddress.byteOffset += nextSlot;
+            sectorAddress.value += nextSlot;
             g_LastSectorTime = *sectorAddress.pointer;
             goto split_update_done;
         }

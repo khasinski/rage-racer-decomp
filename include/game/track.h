@@ -90,6 +90,7 @@ typedef struct TrackZone {
 
 typedef union TrackZoneAddress {
     s32 byteOffset;
+    s32 value;
     TrackZone *pointer;
 } TrackZoneAddress;
 

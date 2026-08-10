@@ -20,6 +20,7 @@ typedef union CountdownPhase {
  * so the base is passed in rather than held in a pointer. */
 typedef union TileStripAddress {
     s32 byteOffset;
+    s32 value;
     u8 *bytes;
     TILE *tile;
 } TileStripAddress;
@@ -28,7 +29,7 @@ static __inline__ TILE *GetTileAtByteOffset(u8 *base, s32 byteOffset) {
     TileStripAddress address;
 
     address.bytes = base;
-    address.byteOffset = byteOffset + address.byteOffset;
+    address.value = byteOffset + address.value;
     return address.tile;
 }
 
@@ -286,8 +287,8 @@ void DrawStartCountdown(s32 sceneTimer) {
             RenderBufferAddress color;
 
             tileBase.pointer = tiles;
-            color.byteOffset = ((rowOffset + column) << 4) +
-                tileBase.byteOffset + sizeof(u32);
+            color.value = ((rowOffset + column) << 4) +
+                tileBase.value + sizeof(u32);
             colorBank = 0;
             if (phase.value == 4 || phaseIsNegative) {
                 colorBank = 1;

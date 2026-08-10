@@ -638,7 +638,7 @@ void RunRaceIntroCamera(PlayerCarRuntime *car, s32 mode) {
             RaceIntroCameraKey *p;
             RaceIntroCameraKey *q;
             keyAddress.scriptPointer = script;
-            keyAddress.byteOffset = off + keyAddress.byteOffset;
+            keyAddress.value = off + keyAddress.value;
             p = keyAddress.keyPointer;
             g_RaceIntroCameraCursor = p;
             *SCRATCH_VIEW_POSITION_BLOCK = *keyAddress.vectorPointer;

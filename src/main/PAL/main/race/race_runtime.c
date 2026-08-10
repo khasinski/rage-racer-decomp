@@ -616,7 +616,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     idxoff1_R4 = idx_R8;
     idxoff1_R4 = idxoff1_R4 * 16;
     p1_R4 = base_R9;
-    p1_R4.byteOffset += idxoff1_R4 + lev1_R3 * 192;
+    p1_R4.value += idxoff1_R4 + lev1_R3 * 192;
     ent2_R7->targetSpeed =
         (p1_R4.pointer->rivalAiConfigs[0][0].speed * 1168) / 160;
     ent2_R7->accelerationStep =
@@ -662,7 +662,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     lev2_R2 = g_RaceSeries;
     idxoff2_R4 = idx_R8 * 16;
     p2_R3 = base_R9;
-    p2_R3.byteOffset += idxoff2_R4 + lev2_R2 * 192;
+    p2_R3.value += idxoff2_R4 + lev2_R2 * 192;
     w = p2_R3.pointer->rivalAiConfigs[0][0].minimumSpeed;
     sub_R6->minimumSpeed = w;
     if (((s16) w) < 0x3D)
@@ -672,7 +672,7 @@ void InitRivalCarAi(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     lev2_R2 = g_RaceSeries;
     __asm__("" : "=r"(idxoff2_R4) : "0"(idxoff2_R4));
     p2_R3 = base_R9;
-    p2_R3.byteOffset += idxoff2_R4 + lev2_R2 * 192;
+    p2_R3.value += idxoff2_R4 + lev2_R2 * 192;
     w = p2_R3.pointer->rivalAiConfigs[0][0].initialEngineRpm;
     sub_R6->engineRpmLow = w;
     if (((s16) w) <= 0)
