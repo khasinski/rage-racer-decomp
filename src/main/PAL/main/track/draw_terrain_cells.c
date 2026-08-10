@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/race.h"
+#include "game/render.h"
 #include "game/render_internal.h"
 #include "game/track_internal.h"
 #include "game/terrain_internal.h"
@@ -519,6 +520,7 @@ void DrawSkyBackground(void)
         u8 color;
         POLY_G4 *g4Cursor = (POLY_G4 *)packetCursor;
         u32 *orderingTableBase;
+        RenderBufferAddress cursor;
         xWork = panelXFixed - rowStepX;
         adjW = xWork;
         if (xWork < 0)
@@ -575,7 +577,8 @@ void DrawSkyBackground(void)
         g4Cursor->b2 = color;
         orderingTableBase = scratch->orderingTable;
         AddPrim(&orderingTableBase[SKY_OT_NEAR], g4Cursor++);
-        nextPacket = (u8 *)g4Cursor;
+        cursor.polyG4 = g4Cursor;
+        nextPacket = cursor.bytes;
         asm("" : : "r"(upperBandXFixed));
       }
       {
