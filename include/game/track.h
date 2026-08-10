@@ -219,6 +219,11 @@ typedef union TrackPointTableAddress {
     GameTrackArcCenter *arcCenterPointer;
 } TrackPointTableAddress;
 
+typedef struct TrackPointTable {
+    s32 count;
+    GameTrackPoint points[1];
+} TrackPointTable;
+
 /* Track centreline points of the loaded course, g_TrackPointCount of them;
  * walked cyclically. */
 extern GameTrackPoint *g_TrackPoints;
