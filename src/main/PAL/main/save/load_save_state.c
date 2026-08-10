@@ -229,18 +229,18 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
                     RaceRecordAddress rankingSourceAddress;
                     k = 0;
                     timeAddress.wordPointer = cb78;
-                    timeAddress.byteOffset = iofc + timeAddress.byteOffset;
-                    destinationAddress.byteOffset = joff + timeAddress.byteOffset;
+                    timeAddress.value = iofc + timeAddress.value;
+                    destinationAddress.value = joff + timeAddress.value;
                     dst2 = destinationAddress.wordPointer;
                     saveAddress.pointer = base;
                     saveAddress.offset = iofc + saveAddress.offset;
                     timeSourceAddress.pointer = &saveAddress.pointer->timeRecords[0][0][0];
-                    sourceAddress.byteOffset = joff + timeSourceAddress.byteOffset;
+                    sourceAddress.value = joff + timeSourceAddress.value;
                     src2 = sourceAddress.wordPointer;
                     dst1 = d1;
                     rankingSourceAddress.pointer =
                         &saveAddress.pointer->rankingRecords[0][0][0];
-                    sourceAddress.byteOffset = joff + rankingSourceAddress.byteOffset;
+                    sourceAddress.value = joff + rankingSourceAddress.value;
                     src1 = sourceAddress.wordPointer;
                     do {
                         s32 a0 = src1[0], a1 = src1[1], a2 = src1[2], a3 = src1[3];
@@ -295,9 +295,9 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
                     k = 0;
                     dst = dbase;
                     sourceAddress.saveBlock = base;
-                    sourceAddress.byteOffset =
-                        iofc + sourceAddress.byteOffset + 0xF5C;
-                    sourceAddress.byteOffset = joff + sourceAddress.byteOffset;
+                    sourceAddress.value =
+                        iofc + sourceAddress.value + 0xF5C;
+                    sourceAddress.value = joff + sourceAddress.value;
                     src = sourceAddress.pointer;
                     for (; k < 3; k++) {
                         *dst++ = *src++;

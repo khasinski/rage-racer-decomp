@@ -206,22 +206,22 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
                 middleDestinationAddress.bytePointer = middleDst;
                 totalOutputBaseAddress.pointer =
                     &middleDestinationAddress.pointer->bestTotalTimes[0][0][0];
-                totalOutputAddress.byteOffset =
-                    middleOffset + totalOutputBaseAddress.byteOffset;
+                totalOutputAddress.value =
+                    middleOffset + totalOutputBaseAddress.value;
                 totalOut = totalOutputAddress.pointer;
                 totalInputBaseAddress.pointer = totalBase;
-                totalInputOuterAddress.byteOffset =
-                    outerOffset + totalInputBaseAddress.byteOffset;
-                totalInputAddress.byteOffset =
-                    middleOffset + totalInputOuterAddress.byteOffset;
+                totalInputOuterAddress.value =
+                    outerOffset + totalInputBaseAddress.value;
+                totalInputAddress.value =
+                    middleOffset + totalInputOuterAddress.value;
                 totalIn = totalInputAddress.pointer;
                 lapOutputAddress.bytes = lapDst;
                 lapOut = lapOutputAddress.pointer;
                 lapInputBaseAddress.pointer = lapBase;
-                lapInputOuterAddress.byteOffset =
-                    outerOffset + lapInputBaseAddress.byteOffset;
-                lapInputAddress.byteOffset =
-                    middleOffset + lapInputOuterAddress.byteOffset;
+                lapInputOuterAddress.value =
+                    outerOffset + lapInputBaseAddress.value;
+                lapInputAddress.value =
+                    middleOffset + lapInputOuterAddress.value;
                 lapIn = lapInputAddress.pointer;
 
                 for (; inner < 2; inner++) {
@@ -277,22 +277,22 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
                 middleBlockAddress.bytePointer = middleDst;
                 timeDestinationBase.pointer =
                     (inner = 0, &middleBlockAddress.pointer->timeRecords[0][0][0]);
-                timeDestinationAddress.byteOffset =
-                    middleOffset + timeDestinationBase.byteOffset;
+                timeDestinationAddress.value =
+                    middleOffset + timeDestinationBase.value;
                 timeDst = timeDestinationAddress.wordPointer;
                 timeInputBaseAddress.wordPointer = timeBase;
-                timeInputOuterAddress.byteOffset =
-                    currentOuterOffset + timeInputBaseAddress.byteOffset;
-                timeInputAddress.byteOffset =
-                    middleOffset + timeInputOuterAddress.byteOffset;
+                timeInputOuterAddress.value =
+                    currentOuterOffset + timeInputBaseAddress.value;
+                timeInputAddress.value =
+                    middleOffset + timeInputOuterAddress.value;
                 timeIn = timeInputAddress.wordPointer;
                 rankingOutputAddress.bytePointer = rankingDst;
                 rankingOut = rankingOutputAddress.wordPointer;
                 rankingInputBaseAddress.wordPointer = rankingBase;
-                rankingInputOuterAddress.byteOffset =
-                    currentOuterOffset + rankingInputBaseAddress.byteOffset;
-                rankingInputAddress.byteOffset =
-                    middleOffset + rankingInputOuterAddress.byteOffset;
+                rankingInputOuterAddress.value =
+                    currentOuterOffset + rankingInputBaseAddress.value;
+                rankingInputAddress.value =
+                    middleOffset + rankingInputOuterAddress.value;
                 rankingIn = rankingInputAddress.wordPointer;
 
                 for (; inner < 5; inner++) {
@@ -344,10 +344,10 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
                 sectorOutputAddress.bytes = sectorDst;
                 sectorOut = sectorOutputAddress.pointer;
                 sectorInputBaseAddress.pointer = sectorBase;
-                sectorInputOuterAddress.byteOffset =
-                    currentOuterOffset + sectorInputBaseAddress.byteOffset;
-                sectorInputAddress.byteOffset =
-                    middleOffset + sectorInputOuterAddress.byteOffset;
+                sectorInputOuterAddress.value =
+                    currentOuterOffset + sectorInputBaseAddress.value;
+                sectorInputAddress.value =
+                    middleOffset + sectorInputOuterAddress.value;
                 sectorIn = sectorInputAddress.pointer;
 
                 for (; inner < 3; inner++) {
