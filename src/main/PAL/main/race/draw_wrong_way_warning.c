@@ -245,12 +245,15 @@ void DrawFullscreenFadeTile(s32 color, s32 tpage) {
 }
 
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
-    register SPRT_8 *out asm("$16") = (SPRT_8 *)prim;
+    RenderBufferAddress cursor;
+    register SPRT_8 *out asm("$16");
     s32 xReg = x;
     s32 yReg = y;
     register s32 codeReg asm("$17");
     register s32 clutReg asm("$20");
 
+    cursor.bytes = prim;
+    out = cursor.sprite8;
     asm("" : "=r"(xReg), "=r"(yReg) : "0"(xReg), "1"(yReg) : "$17");
     codeReg = digit;
     clutReg = clut;
