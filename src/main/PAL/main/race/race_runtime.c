@@ -479,7 +479,9 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     av = slots[pos].halves.modelId;
     sub = (pos + 1) * 12;
     {
-        u8 *baseValue = (u8 *)g_TrackEventData;
+        u8 *baseValue;
+        eventAddress.pointer = g_TrackEventData;
+        baseValue = eventAddress.bytePointer;
         base = baseValue;
     }
     ent->collisionFlag = 0;
@@ -491,7 +493,8 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
     {
         TrackRivalStart *p1;
 
-        p1 = (TrackRivalStart *)(base + (sub + scene * 144) + 0x354);
+        eventAddress.bytePointer = base + (sub + scene * 144) + 0x354;
+        p1 = eventAddress.rivalStart;
         ent->trackPointIndex = p1->trackPointIndex;
         ent->x = p1->x;
         ent->z = p1->z;

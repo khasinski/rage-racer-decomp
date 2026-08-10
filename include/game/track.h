@@ -198,6 +198,7 @@ typedef union TrackEventDataAddress {
     s32 byteOffset;
     u8 *bytePointer;
     TrackEventData *pointer;
+    TrackRivalStart *rivalStart;
 } TrackEventDataAddress;
 
 /*
