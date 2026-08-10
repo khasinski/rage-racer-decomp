@@ -173,7 +173,7 @@ void UpdatePathScenerySound(void) {
     s32 vol;
     s32 pitch;
     register s32 slew;
-    register u16 *frames asm("$5");
+    register PathSceneryClockAddress frames asm("$5");
     register u16 posFrame;
     register u16 rotFrame;
     PathSceneryPositionKey *sinRec;
@@ -400,14 +400,14 @@ void UpdatePathScenerySound(void) {
      * These pinned views and empty constraints reproduce the original
      * instruction schedule without generating code of their own.
      */
-    frames = (u16 *)&g_PathSceneryClock;
-    posFrame = frames[0];
-    rotFrame = frames[1];
+    frames.clock = &g_PathSceneryClock;
+    posFrame = frames.halfwords[0];
+    rotFrame = frames.halfwords[1];
     __asm__ volatile("" : "=r"(rotFrame) : "0"(rotFrame));
     dx = g_PlayerCar.x - g_PathSceneryTransform.position.w[0];
     posFrame = posFrame + 1;
-    frames[0] = posFrame;
-    frames[1] = rotFrame + 1;
+    frames.halfwords[0] = posFrame;
+    frames.halfwords[1] = rotFrame + 1;
     delta[0] = dx;
     delta[1] = dy = g_PlayerCar.y - g_PathSceneryTransform.position.w[1];
     delta[2] = dz = g_PlayerCar.z - g_PathSceneryTransform.position.w[2];
