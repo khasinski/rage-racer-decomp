@@ -20,6 +20,11 @@ typedef union SignedDivisionWork {
     u32 unsignedValue;
 } SignedDivisionWork;
 
+typedef union RankingTextBuffer {
+    char value[56];
+    volatile char first;
+} RankingTextBuffer;
+
 void DrawRankingPanel(s32 slideX) {
     s32 panel;
     SignedDivisionWork iter;
@@ -28,7 +33,7 @@ void DrawRankingPanel(s32 slideX) {
     s32 destination;
     s32 color;
     PlayerLapTimeAddress scoreOrX;
-    char text[56];
+    RankingTextBuffer text;
     s32 mode;
     s32 row;
     s32 doubledRow;
@@ -39,7 +44,7 @@ void DrawRankingPanel(s32 slideX) {
     panel = slideX;
     DrawProportionalText(panel + 0x10, 0x4C, g_CaptionLapTime2, 0x7852);
     mode = g_CourseIndex;
-    text[1] = 0x2F;
+    text.value[1] = 0x2F;
     limit = 6;
     if (mode != 3) {
         limit = 3;
@@ -58,18 +63,18 @@ void DrawRankingPanel(s32 slideX) {
             value = iter.value - doubledRow;
             value <<= 3;
             xOrField = value + 0x58;
-            *(volatile char *)&text[0] = iter.value + 0x31;
+            text.first = iter.value + 0x31;
             doubledRow = (doubledRow + row) << 5;
             scoreValue = *scoreOrX.timePointer;
             value = (destination = panel + 0x14);
-            FormatLapTime(&text[2], scoreValue);
+            FormatLapTime(&text.value[2], scoreValue);
             destination = doubledRow;
             destination = destination + value;
             color = 0x78CC;
             if (g_BestLapIndex == iter.value) {
                 color = 0x780F;
             }
-            DrawText8x8(destination, xOrField, text, color);
+            DrawText8x8(destination, xOrField, text.value, color);
             iter.value++;
             scoreOrX.byteOffset += 4;
         } while (iter.value < limit);
@@ -79,22 +84,22 @@ void DrawRankingPanel(s32 slideX) {
     scoreOrX.byteOffset = 0x82;
     destination = 0x78;
     do {
-        text[0] = g_PlaceSuffixNames[countOrIndex][0];
-        text[1] = g_PlaceSuffixNames[countOrIndex][1];
-        text[2] = g_PlaceSuffixNames[countOrIndex][2];
-        text[3] = 0x2F;
-        FormatLapTime(&text[4], g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].raceTime);
+        text.value[0] = g_PlaceSuffixNames[countOrIndex][0];
+        text.value[1] = g_PlaceSuffixNames[countOrIndex][1];
+        text.value[2] = g_PlaceSuffixNames[countOrIndex][2];
+        text.value[3] = 0x2F;
+        FormatLapTime(&text.value[4], g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].raceTime);
         xOrField = g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex].carIndex;
-        sprintf(&text[0xC], g_FmtRecordName,
+        sprintf(&text.value[0xC], g_FmtRecordName,
                       &g_RankingRecords[g_GrandPrixSeries][g_CourseIndex][countOrIndex],
                       g_CarClassNames[xOrField]);
         color = 0x78CC;
         if (g_RankingInsertRow == countOrIndex) {
             color = 0x780F;
         }
-        DrawText8x8(panel + 0x14, destination, text, color);
-        sprintf(text, g_FmtCarName, g_CarNames[xOrField]);
-        DrawText8x8(panel + 0x2C, scoreOrX.byteOffset, text, color);
+        DrawText8x8(panel + 0x14, destination, text.value, color);
+        sprintf(text.value, g_FmtCarName, g_CarNames[xOrField]);
+        DrawText8x8(panel + 0x2C, scoreOrX.byteOffset, text.value, color);
         destination += 0x14;
         scoreOrX.byteOffset += 0x14;
         countOrIndex++;
