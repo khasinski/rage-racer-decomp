@@ -75,7 +75,7 @@ void DrawCourseObjects(void) {
             SCRATCH_OBJECT_MATRIX_WORK->mtx.t[1] = transformed;
         }
         SetRotMatrix(&mtx);
-        SetTransMatrix((void *)0x1F800134);
+        SetTransMatrix(&SCRATCH_OBJECT_MATRIX_WORK->mtx);
 
         flags = obj->flags;
         if (flags & 8) {
