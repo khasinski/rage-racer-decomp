@@ -28,6 +28,7 @@ void DrawWrongWayWarning(void) {
     s32 temp;
     s32 uvOffset;
     u8 *ret;
+    RenderBufferAddress nextAddress;
 
     next = (SPRT *)SCRATCH;
     i = 0;
@@ -64,7 +65,8 @@ void DrawWrongWayWarning(void) {
         AddPrim(ot + 0xCC, oldPacket);
     } while (i < 3);
 
-    ret = GameQueueTileTrans(g_DrawBuffer + 0xCC, (u8 *)next, 0x64, 0x70, 0x78, 0x20, 8, 8, 8);
+    nextAddress.sprite = next;
+    ret = GameQueueTileTrans(g_DrawBuffer + 0xCC, nextAddress.bytes, 0x64, 0x70, 0x78, 0x20, 8, 8, 8);
     SCRATCH = ret;
     SCRATCH = QueueDrawModePrim(g_DrawBuffer + 0xCC, ret, 9);
 }
