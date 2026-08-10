@@ -63,7 +63,7 @@ void UpdateTitleAttract(void) {
     void *base;
     s32 color;
     s32 h88;
-    register s32 scratch asm("$22");
+    register RenderBufferAddress scratch asm("$22");
     s32 hF0;
     s32 clut0;
     void *next;
@@ -90,11 +90,11 @@ void UpdateTitleAttract(void) {
     yA0 = 0xA0;
     asm("" : "=r"(x28), "=r"(yA0) : "0"(x28), "1"(yA0)); /* Match note: materialize first-call argument registers before the stack-arg temp. */
     color = 0x7E00;
-    scratch = SCRATCHPAD_ADDR;
+    scratch.byteOffset = SCRATCHPAD_ADDR;
     hF0 = 0xF0;
-    asm("" : "=r"(scratch), "=r"(hF0) : "0"(scratch), "1"(hF0)); /* Match note: keep scratchpad base and 0xf0 materialized before the first stack-arg temp. */
+    asm("" : "=r"(scratch.byteOffset), "=r"(hF0) : "0"(scratch.byteOffset), "1"(hF0)); /* Match note: keep scratchpad base and 0xf0 materialized before the first stack-arg temp. */
     tmp = 0x18;
-    next = *(void **)scratch;
+    next = *scratch.pointerLink;
     h88 = 0x88;
     clut0 = 0x7DC0;
 
@@ -108,7 +108,7 @@ void UpdateTitleAttract(void) {
     }
 
     next = GameQueueShadedSprite(base, next, 0x34, 0x18, 0x6C, h88, 0, 0, color, alpha);
-    *(void **)scratch = GameQueueShadedTexturedRect(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
+    *scratch.pointerLink = GameQueueShadedTexturedRect(base, next, 0xA0, 0x18, -0x6C, h88, 0, 0, color, 0x99, alpha);
 }
 
 
