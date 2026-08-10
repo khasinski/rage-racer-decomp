@@ -731,12 +731,13 @@ void ScrollTeamLogoRight(void) {
             word = address.wordPointer;
             base2--;
             col--;
-            hi = word[0];
-            lo = word[-1];
+            word--;
+            hi = word[1];
+            lo = word[0];
             hi <<= 4;
             lo >>= 28;
             hi |= lo;
-            word[0] = hi;
+            word[1] = hi;
         } while (col > 0);
 
         {
