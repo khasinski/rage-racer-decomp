@@ -160,7 +160,7 @@ s32 UpdateCarTrackState(GameCarRuntime *obj, s32 trackPointIndex, CarTrackLimits
                                 ((arcAngle - (s16)sweptAngle) * spad->nextPointRadius.value)) /
                                arcAngle;
             }
-            *(s32 *)0x1F800130 = interpolated;
+            CAR_TRACK_POINT_RADIUS = interpolated;
         }
         arcLateral =
             (s16)(RAW(spad->carRadius.half.low) - RAW(spad->pointRadius.half.low));

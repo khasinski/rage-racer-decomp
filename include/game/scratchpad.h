@@ -130,6 +130,7 @@ typedef struct CarTrackScratch {
 } CarTrackScratch;
 
 #define CAR_TRACK_SCRATCH ((CarTrackScratch *)0x1F80011C)
+#define CAR_TRACK_POINT_RADIUS (*(s32 *)0x1F800130)
 
 #define SCRATCHPAD_ADDR 0x1F800000
 #define SCRATCHPAD_AS(type) ((type *)SCRATCHPAD_ADDR)
