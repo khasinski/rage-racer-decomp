@@ -346,7 +346,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       {
         curveSlot.valuePointer++;
         bandSlot += 1;
-        specSlot.byteOffset += 4;
+        specSlot.wordPointer++;
         if (bandSlot < bandEnd)
         {
           goto loop_68;
@@ -403,7 +403,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       {
         assistStep = assistStep + 1;
         block_89:
-        gearCurve.byteOffset += 4;
+        gearCurve.valuePointer++;
 
         if (assistStep >= bandEnd)
         {

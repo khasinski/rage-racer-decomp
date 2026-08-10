@@ -416,6 +416,7 @@ typedef union GameCarSpecAddress {
     s32 value;
     void *data;
     u8 *bytes;
+    s32 *wordPointer;
     GameCarSpec *pointer;
 } GameCarSpecAddress;
 
