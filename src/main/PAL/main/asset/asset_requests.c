@@ -18,7 +18,7 @@ void LoadBootAssets(void) {
 
     switch (g_AssetLoadState) {
     case 1:
-        base = (u8 *)g_LoadBuffer;
+        base = GetAssetBytes(g_LoadBuffer);
         loadedSize = LoadAsset(1, base);
         if (loadedSize != 0) {
             UploadLoadBufferImage();

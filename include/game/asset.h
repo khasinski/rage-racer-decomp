@@ -90,6 +90,8 @@ extern s32 g_LoadBuffer[];
 typedef union AssetAddress {
     s32 offset;
     void *pointer;
+    u8 *bytes;
+    u16 *halfwords;
     s32 *words;
     struct CarImageData *carImage;
     struct ModelBankHeader *modelBank;
@@ -106,6 +108,20 @@ static __inline__ s32 *GetAssetWords(void *data) {
 
     address.pointer = data;
     return address.words;
+}
+
+static __inline__ u8 *GetAssetBytes(void *data) {
+    AssetAddress address;
+
+    address.pointer = data;
+    return address.bytes;
+}
+
+static __inline__ u16 *GetAssetHalfwords(void *data) {
+    AssetAddress address;
+
+    address.pointer = data;
+    return address.halfwords;
 }
 
 static __inline__ struct CourseModelAssetHeader *GetCourseModelAssetHeader(

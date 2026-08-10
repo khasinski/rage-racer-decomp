@@ -75,7 +75,7 @@ void LoadRaceAssets(void) {
             g_AssetBlockPtr = header;
             g_AssetBlockPtr2 = table;
             g_AssetSubBlockPtr = body;
-            StartAudioSlotLoad(3, header, body, (u16 *)table);
+            StartAudioSlotLoad(3, header, body, GetAssetHalfwords(table));
             pack = GetSceneAssetHeader(g_AssetLoadCursor);
             offset = pack->offsets[4];
             g_AssetBlockPtr = GetSceneAssetAddress(pack, offset);
