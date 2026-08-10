@@ -76,12 +76,12 @@ void UpdateRouteScenery(void) {
         t0v = rec->duration - t;
         g_RouteSceneryRotX =
             (rec[1].rotationX * t + rec->rotationX * t0v) / rec->duration;
-        r4354 = (RAW(rec[1].rotationY) * t + RAW(rec->rotationY) * t0v) /
-                RAW(rec->duration);
+        r4354 = (RAW(rec[1].rotationY) * t + rec->rotationY * t0v) /
+                rec->duration;
         g_RouteSceneryRotY = r4354;
         g_RouteSceneryRotZ =
-            (RAW(rec[1].rotationZ) * t + RAW(rec->rotationZ) * t0v) /
-            RAW(rec->duration);
+            (RAW(rec[1].rotationZ) * t + rec->rotationZ * t0v) /
+            rec->duration;
         vin.vx = 0;
         vin.vy = 0;
         vin.vz = -RAW(rec->speed) * 4;
