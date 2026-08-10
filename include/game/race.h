@@ -5,6 +5,7 @@
 #include "game/waypoint.h"
 #include "game/vector.h"
 #include "game/replay.h"
+#include "game/render_types.h"
 
 struct PlayerCarRuntime;
 struct GameCarRuntime;
@@ -382,7 +383,7 @@ extern char g_TextPressStart[];
 extern char g_TextResult[];
 extern char g_TextTimeAttack[];
 extern char g_TextTryAgain[];
-extern u8 *g_TileStripBuffers[2];
+extern RenderBufferAddress g_TileStripBuffers[2];
 extern u8 g_TileStripStorage[];
 extern s32 g_TimeRecordInsertRow;
 extern u8 g_TimeRecordNameCodes[];

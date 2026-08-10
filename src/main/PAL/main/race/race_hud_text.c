@@ -131,8 +131,8 @@ u8 *QueueDrawAreaPrim(void *ot, u8 *packet, s16 x, s16 y, s32 w, s32 h) {
 }
 
 void BuildTileStrips(void) {
-    u8 **initBuffers;
-    u8 **buffers;
+    RenderBufferAddress *initBuffers;
+    RenderBufferAddress *buffers;
     s32 row;
     s32 col;
     s32 linear;
@@ -151,8 +151,8 @@ void BuildTileStrips(void) {
 
     initBuffers = g_TileStripBuffers;
     firstBuffer = g_TileStripStorage;
-    initBuffers[0] = firstBuffer;
-    g_TileStripBuffers[1] = firstBuffer + 12000;
+    initBuffers[0].bytes = firstBuffer;
+    g_TileStripBuffers[1].bytes = firstBuffer + 12000;
     DrawSync(0);
 
     color = 0x20;
@@ -167,23 +167,23 @@ void BuildTileStrips(void) {
             xStep = 0;
             do {
                 linear = (row * 32) + col;
-                buffer = buffers[0];
+                buffer = buffers[0].bytes;
                 offset = linear * 16;
                 SetTile(GetTileAtByteOffset(buffer, offset));
-                storeBaseV1 = buffers[0];
+                storeBaseV1 = buffers[0].bytes;
                 GetTileAtByteOffset(storeBaseV1, offset)->w = 2;
-                storeBaseV1 = buffers[0];
+                storeBaseV1 = buffers[0].bytes;
                 GetTileAtByteOffset(storeBaseV1, offset)->h = 1;
-                storeBaseV1 = buffers[0];
+                storeBaseV1 = buffers[0].bytes;
                 GetTileAtByteOffset(storeBaseV1, offset)->x0 = 0xCD - xStep;
-                storeBaseV0 = buffers[0];
+                storeBaseV0 = buffers[0].bytes;
                 GetTileAtByteOffset(storeBaseV0, offset)->y0 = yStart;
-                GetTileAtByteOffset(buffers[0], offset)->t.r0 = color;
-                GetTileAtByteOffset(buffers[0], offset)->t.g0 = color;
-                GetTileAtByteOffset(buffers[0], offset)->t.b0 = color;
+                GetTileAtByteOffset(buffers[0].bytes, offset)->t.r0 = color;
+                GetTileAtByteOffset(buffers[0].bytes, offset)->t.g0 = color;
+                GetTileAtByteOffset(buffers[0].bytes, offset)->t.b0 = color;
 
                 if (linear > 0) {
-                    addPrimBase = buffers[0];
+                    addPrimBase = buffers[0].bytes;
                     prevOffset = offset - 0x10;
                     AddPrim(GetTileAtByteOffset(addPrimBase, prevOffset),
                             GetTileAtByteOffset(addPrimBase, offset));
@@ -258,7 +258,7 @@ void DrawStartCountdown(s32 sceneTimer) {
     row = 0;
     phaseIsNegative = phase.value < row;
     wipeStart = 7 - halfStep;
-    tiles = (TILE *)g_TileStripBuffers[g_FrameParity];
+    tiles = g_TileStripBuffers[g_FrameParity].tile;
 
     do {
         firstPattern = g_CountdownDigitPatterns;
