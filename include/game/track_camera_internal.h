@@ -34,21 +34,22 @@ typedef struct GameTrackCameraNode {
     TrackCameraSection trackSection;
 } GameTrackCameraNode;
 
-typedef union GameTrackCameraNodeAddress {
-    u32 value;
-    GameTrackCameraNode *pointer;
-} GameTrackCameraNodeAddress;
-
 typedef struct TrackCameraTable {
     s32 seriesOffset[2];
     s32 defaultOffset;
 } TrackCameraTable;
 
+typedef union GameTrackCameraNodeAddress {
+    u32 value;
+    GameTrackCameraNode *pointer;
+    TrackCameraTable *table;
+} GameTrackCameraNodeAddress;
+
 static __inline__ GameTrackCameraNode *ResolveTrackCameraOffset(
     TrackCameraTable *table, s32 offset) {
     GameTrackCameraNodeAddress address;
 
-    address.pointer = (GameTrackCameraNode *)table;
+    address.table = table;
     address.value += offset;
     return address.pointer;
 }
