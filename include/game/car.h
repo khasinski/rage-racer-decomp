@@ -193,6 +193,14 @@ typedef union GameCarRuntimeAddress {
     Vec4 *vector4;
 } GameCarRuntimeAddress;
 
+static __inline__ GameCarRuntime *GetPlayerCarRuntime(
+    struct PlayerCarRuntime *car) {
+    GameCarRuntimeAddress address;
+
+    address.player = car;
+    return address.runtime;
+}
+
 static __inline__ struct GameRenderObject *GetCarRenderObject(
     GameCarRuntime *car) {
     GameCarRuntimeAddress address;

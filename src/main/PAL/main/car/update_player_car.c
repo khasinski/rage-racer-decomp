@@ -253,7 +253,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     tmp.x = (p->accelPos * 6) / 1280 + car->x + car->motionX;
     tmp.z = (p->brakePos * 6) / 1280 + car->z + car->motionZ;
     SetPlayerPosition(car, &tmp);
-    AccumulateLapProgress((GameCarRuntime *)car);
+    AccumulateLapProgress(GetPlayerCarRuntime(car));
 
     {
         s32 base = car->bodyYaw - 0xC00;

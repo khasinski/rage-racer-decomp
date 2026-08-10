@@ -84,7 +84,7 @@ void InitPlayerCar(PlayerCarRuntime *car)
   player->previousTrackPointIndex = player->trackPointIndex;
   player->headingAngle = player->bodyYaw;
   player->drive.targetHeading = player->headingAngle;
-  SeedCarLapProgress((GameCarRuntime *)car, 0);
+  SeedCarLapProgress(GetPlayerCarRuntime(car), 0);
   trackState.rightInset = 0;
   trackState.leftInset = 0;
   UpdateCarTrackState(car, player->trackPointIndex, &trackState);
