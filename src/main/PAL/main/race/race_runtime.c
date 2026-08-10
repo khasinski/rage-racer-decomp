@@ -496,7 +496,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         ent->y = 0;
     }
     {
-        s32 ret = FindTrackSegment((u8 *)ent, ent->trackPointIndex);
+        s32 ret = FindTrackSegment(ent, ent->trackPointIndex);
         s32 lev = g_RaceSeries;
         s32 idx;
         s32 levShift;
