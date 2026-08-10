@@ -38,9 +38,12 @@ void DrawRaceHudLabels(s32 mode) {
 }
 
 u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s32 b) {
-    TILE *tile = (TILE *)prim;
+    RenderBufferAddress cursor;
+    TILE *tile;
     u8 *oldPrim;
 
+    cursor.bytes = prim;
+    tile = cursor.tile;
     SetTile(tile);
 
     oldPrim = prim;
@@ -52,7 +55,7 @@ u8 *AddTilePrim(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h, s32 r, s32 g, s3
     tile->t.g0 = g;
     tile->t.b0 = b;
 
-    prim = (void *)((TILE *)prim + 1);
+    prim += sizeof(*tile);
     AddPrim(ot, oldPrim);
     return prim;
 }
