@@ -281,6 +281,7 @@ typedef struct ShuttlePath {
 
 typedef union ShuttlePathPointAddress {
     s32 byteOffset;
+    s32 value;
     Vec4 *pointer;
 } ShuttlePathPointAddress;
 

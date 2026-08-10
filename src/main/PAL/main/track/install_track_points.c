@@ -28,8 +28,8 @@ void InstallTrackPoints(TrackPointTable *trackData) {
     g_TrackLength = 0;
     g_TrackPointCount = count;
     arcCenterAddress.pointPointer = points;
-    arcCenterAddress.byteOffset =
-        count * sizeof(GameTrackPoint) + arcCenterAddress.byteOffset;
+    arcCenterAddress.value =
+        count * sizeof(GameTrackPoint) + arcCenterAddress.value;
     g_TrackArcCenters = arcCenterAddress.arcCenterPointer;
 
     i = 0;
@@ -38,8 +38,8 @@ void InstallTrackPoints(TrackPointTable *trackData) {
         do {
             index = i % limit;
             pointAddress.pointPointer = points;
-            pointAddress.byteOffset =
-                index * sizeof(GameTrackPoint) + pointAddress.byteOffset;
+            pointAddress.value =
+                index * sizeof(GameTrackPoint) + pointAddress.value;
             point = pointAddress.pointPointer;
             g_TrackLength += (s16)point->segmentLength;
             i++;

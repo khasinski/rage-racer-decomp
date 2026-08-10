@@ -35,25 +35,25 @@ void UpdateShuttleScenery(s32 instance) {
     altIndex = (1 - side) << 4;
     altIndex += phaseShift;
     basePointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    basePointAddress.byteOffset += baseIndex;
+    basePointAddress.value += baseIndex;
     altPointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    altPointAddress.byteOffset += altIndex;
+    altPointAddress.value += altIndex;
     entry->position.x = ((denom - step) * basePointAddress.pointer->x +
                          step * altPointAddress.pointer->x) / denom;
 
     denom = *limitPtr;
     basePointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    basePointAddress.byteOffset += baseIndex;
+    basePointAddress.value += baseIndex;
     altPointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    altPointAddress.byteOffset += altIndex;
+    altPointAddress.value += altIndex;
     entry->position.y = ((denom - step) * basePointAddress.pointer->y +
                          step * altPointAddress.pointer->y) / denom;
 
     denom = *limitPtr;
     basePointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    basePointAddress.byteOffset += baseIndex;
+    basePointAddress.value += baseIndex;
     altPointAddress.pointer = g_ShuttlePathPoints->endpoint;
-    altPointAddress.byteOffset += altIndex;
+    altPointAddress.value += altIndex;
     entry->position.z = ((denom - step) * basePointAddress.pointer->z +
                          step * altPointAddress.pointer->z) / denom;
 
@@ -103,8 +103,8 @@ void DrawShuttleScenery(s32 instance) {
     visibility = g_VisibleCellMask;
     bit = value + 0x400;
     visibilityAddress.pointer = visibility;
-    visibilityAddress.byteOffset =
-        (wordIndex << 2) + visibilityAddress.byteOffset;
+    visibilityAddress.value =
+        (wordIndex << 2) + visibilityAddress.value;
     wordPtr = visibilityAddress.pointer;
     if (bit < 0) {
         bit = value + 0xBFF;
