@@ -35,8 +35,7 @@ void LoadUpgradedCarModel(s32 carIndex) {
             SetCarModelSlot((CarModelAsset *)ptr, g_CarModelSlot < 1);
 
             asset->modelData.pointer = ptr + asset->modelData.offset;
-            RegisterModelBank((ModelBankHeader *)asset->modelData.pointer,
-                              g_CarModelSlot < 1);
+            RegisterModelBank(asset->modelData.modelBank, g_CarModelSlot < 1);
 
             asset->imageData.pointer = ptr + asset->imageData.offset;
             SetCarImageSlot(asset->imageData.carImage, g_CarModelSlot < 1);

@@ -87,7 +87,7 @@ void LoadCarSelectAssets(void) {
                 relOffset = model->modelData.offset;
                 modelPtr = carModelBase + relOffset;
                 model->modelData.pointer = modelPtr;
-                RegisterModelBank((ModelBankHeader *)modelPtr, 0);
+                RegisterModelBank(model->modelData.modelBank, 0);
 
                 model = g_CarModelAsset;
                 relOffset = model->imageData.offset;
@@ -147,8 +147,7 @@ void LoadCarModel(s32 carIndex) {
             SetCarModelSlot((CarModelAsset *)ptr, g_CarModelSlot < 1);
 
             asset->modelData.pointer = ptr + asset->modelData.offset;
-            RegisterModelBank((ModelBankHeader *)asset->modelData.pointer,
-                              g_CarModelSlot < 1);
+            RegisterModelBank(asset->modelData.modelBank, g_CarModelSlot < 1);
 
             asset->imageData.pointer = ptr + asset->imageData.offset;
             SetCarImageSlot(asset->imageData.carImage, g_CarModelSlot < 1);
