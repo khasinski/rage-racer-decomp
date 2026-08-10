@@ -88,7 +88,7 @@ extern u8 g_TeamNameChars[];
  * -1/-2/-3 error), not a record pointer; the others are selection/phase words.
  */
 extern s32 g_McMenuState;
-extern s32 g_McCardStatus;
+extern volatile s32 g_McCardStatus;
 extern s32 g_McMenuSelection;
 extern s32 g_McMenuSubState;
 

@@ -97,12 +97,12 @@ fade_update_done:
             }
             goto L_sw2;
         }
-        case 1: sd = g_McCardStatusV; c = 2; break;
-        case 2: sd = g_McCardStatusV; c = 1; break;
-        case -1: sd = g_McCardStatusV; c = 0xA; break;
-        case -2: sd = g_McCardStatusV; c = 0xB; break;
-        case -3: sd = g_McCardStatusV; c = 0x11; break;
-        default: sd = g_McCardStatusV; c = 0x11; break;
+        case 1: sd = g_McCardStatus; c = 2; break;
+        case 2: sd = g_McCardStatus; c = 1; break;
+        case -1: sd = g_McCardStatus; c = 0xA; break;
+        case -2: sd = g_McCardStatus; c = 0xB; break;
+        case -3: sd = g_McCardStatus; c = 0x11; break;
+        default: sd = g_McCardStatus; c = 0x11; break;
         }
         g_McNoCardTicks = 0;
         g_McMenuSubState = c;
@@ -124,14 +124,17 @@ L_sw2:
     }
     switch (g_McMenuSelection) {
     case 1:
-        if (g_McCardStatus == 1) {
+    {
+        s32 cardStatus = g_McCardStatus;
+        if (cardStatus == 1) {
             if (g_McLastMenuState != 2) {
                 g_McMenuState = 2;
             } else {
-                g_McMenuState = g_McCardStatus;
+                g_McMenuState = cardStatus;
             }
         }
         break;
+    }
     case 2:
         g_McMenuState = 2;
         break;
@@ -143,13 +146,16 @@ L_sw2:
         break;
     case -3:
     default:
-        if (g_McCardStatus == -3) {
+    {
+        s32 cardStatus = g_McCardStatus;
+        if (cardStatus == -3) {
             s32 r = g_McErrorTicks;
             g_McErrorTicks = r + 1;
             if (r >= 4) {
-                g_McMenuState = g_McCardStatus;
+                g_McMenuState = cardStatus;
             }
         }
+    }
     }
     if (g_McMenuState != 3) {
         g_McErrorTicks = 0;
@@ -712,14 +718,17 @@ slot_prompt_done:
     case -3:
     case 0:
     default:
+    {
+        s32 cardStatus = g_McCardStatus;
         g_McErrorPending = 1;
-        if (g_McCardStatus == -3) {
+        if (cardStatus == -3) {
             s32 t = g_McErrorCountdown;
             g_McErrorCountdown = t - 1;
             if (g_McErrorCountdown == 0) {
-                g_McMenuState = g_McCardStatus;
+                g_McMenuState = cardStatus;
             }
         }
+    }
     }
 
     if (g_McMenuState == 2) break;

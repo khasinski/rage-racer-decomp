@@ -4310,7 +4310,7 @@ Each of these compiles fine under one name; it is the *object file* that changes
 | Address | Names | Forcing reason |
 |---|---|---|
 | `D_8009AF90` | `g_RefSectorTimes` / `g_RefSectorTime0` | Retested: `g_RefSectorTimes[k]` in `UpdateLapAndFinish` still shifts the whole surrounding allocation. |
-| `D_8009B720`, `D_8009B72C`, `D_8009B740` | `g_McCardStatus` / `g_McMenuSubState` / `GameMenuLoadPhase` plus a `…V` alias each (22b retested `D_8009B720` and it still holds) | `save/update_memory_card_menu.c` reads each of the three **both** ways, and only the volatile spelling forces the reload retail has at those sites. A redeclaration cannot add the qualifier: gcc 2.6.3 keeps the first declaration's type (that is also why the `volatile` at `write_memory_card_save_file.c:196` is a no-op), so the alias needs its own identifier. Convention adopted: the volatile alias is the base name plus `V`. |
+| `D_8009B72C`, `D_8009B740` | `g_McMenuSubState` / `GameMenuLoadPhase` plus a `…V` alias each | `save/update_memory_card_menu.c` reads both words in forms for which only the volatile spelling forces the retail reload. A redeclaration cannot add the qualifier because gcc 2.6.3 keeps the first declaration's type, so these aliases still need separate treatment. |
 
 ### 22b. Second pass: collapsing the remaining two-name addresses
 
@@ -4362,7 +4362,6 @@ Still split, with the measurement:
 | Address | Names | What breaks |
 |---|---|---|
 | `D_80082FAC` | `g_McConfirmChoice` / `g_McConfirmChoice_v` | Two blocks in `UpdateMemoryCardMenu` are `PlaySoundCue(2); store 0; nv = 0xA;` and retail does **not** merge them. Non-volatile lets cross-jumping merge them (the whole block disappears); `*(volatile s32 *)&…` blocks the merge but costs the `la`; declaring the one name `volatile` moves ~3000 lines of the object. |
-| `D_8009B720` | `g_McCardStatus` / `g_McCardStatusV` | The six `case` bodies do reload without `volatile` (see above), but the allocation flips: retail puts the loaded status in `v1` and the case constant in `v0`, non-volatile swaps them and adds a `move v1,v0` for the call result. Reordering the locals does not flip it back. Single `volatile` declaration is −12 bytes. |
 | `D_801E4DE0`, `D_801E4DE2` | `g_PathScenery{Pos,Rot}Phase` / `…Cursor` | The easing expressions need the `PathSceneryCursor` struct (spelling `.phase` as the scalar is +40 bytes: `MEM_IN_STRUCT_P` again), and the `phase + 1` counter step needs the scalar (`cursor.phase = (u16)cursor.phase + 1` is the `la` form). The `= 0` stores work either way. |
 
 ### Hardware register mirrors
