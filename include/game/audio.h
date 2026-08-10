@@ -140,8 +140,8 @@ int CloseAudioSlot(s32 slot);
  * header carried them. */
 
 typedef struct EngineSoundCurveRow {
-    s32 left[9];
-    s32 right[9];
+    s32 positions[9];
+    s32 values[9];
 } EngineSoundCurveRow;
 
 typedef union EngineSoundCurveAddress {

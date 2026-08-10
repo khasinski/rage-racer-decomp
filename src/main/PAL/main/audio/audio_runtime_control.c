@@ -83,8 +83,8 @@ void LoadAudioParameterTable(u16 *table) {
                 s32 leftValue;
 
                 leftValue = *tableReg++;
-                g_EngineSoundCurves[bank][row].left[col] = leftValue;
-                g_EngineSoundCurves[bank][row].right[col] = *tableReg++;
+                g_EngineSoundCurves[bank][row].positions[col] = leftValue;
+                g_EngineSoundCurves[bank][row].values[col] = *tableReg++;
                 col++;
             } while (col < 9);
             row++;
