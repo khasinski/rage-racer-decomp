@@ -54,6 +54,8 @@ extern char *g_AssetPaths[];
  * which is exactly the end of the table.
  */
 #define ASSET_ROUND_SCREEN_BASE 0x4A
+#define ASSET_TIME_ATTACK_ROUND_SCREEN 0x55
+#define ASSET_VOICE_BANK        0x56
 #define ASSET_TRACK_1ST_BASE    0x57
 #define ASSET_TRACK_2ND_BASE    0x58
 

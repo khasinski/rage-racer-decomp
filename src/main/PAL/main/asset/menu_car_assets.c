@@ -121,7 +121,7 @@ void LoadRoundAssets(void) {
     state = g_AssetLoadState;
     switch (state) {
     case 1:
-        kind = 0x55;
+        kind = ASSET_TIME_ATTACK_ROUND_SCREEN;
         if (g_GrandPrixMode != 0) {
             register s32 index asm("$2") = g_GrandPrixSeries;
             s32 scaled;
@@ -130,7 +130,7 @@ void LoadRoundAssets(void) {
             scaled += index;
             index = g_GrandPrixClass;
             scaled <<= 1;
-            index += 0x4A;
+            index += ASSET_ROUND_SCREEN_BASE;
             kind = scaled + index;
         }
 
@@ -141,7 +141,7 @@ void LoadRoundAssets(void) {
         }
         break;
     case 2:
-        if (LoadAsset(0x56, g_AssetBlockPtr2) != 0) {
+        if (LoadAsset(ASSET_VOICE_BANK, g_AssetBlockPtr2) != 0) {
             u8 *header;
             u8 *first;
             u8 *second;
