@@ -157,7 +157,7 @@ void UpdateBgmSelect(void) {
     g_FadeLevel = g_FadeLevel + g_FadeStep;
     if (g_FadeLevel >= 256) {
         RequestOptionScreenAssets();
-        g_BgmSelectStep = 3;
+        g_BgmSelectStep = BGM_SELECT_STEP_EXIT;
         g_FadeLevel = 256;
         g_FadeStep = -4;
     }

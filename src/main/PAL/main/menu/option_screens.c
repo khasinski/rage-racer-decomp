@@ -270,7 +270,7 @@ void EnterBgmSelectScreen(void) {
     g_BgmSelectCursor = 1;
     g_BgmSelectShowUi = 1;
     g_BgmSelectCdTrack = 3;
-    g_BgmSelectStep = 0;
+    g_BgmSelectStep = BGM_SELECT_STEP_LOAD_ASSETS;
     g_SceneTimer = 0;
     g_BgmSelectTrack = 0;
     g_BgmChangeDelay = 0x1E;
@@ -305,7 +305,7 @@ void UpdateOptionSceneFade(void) {
             InitTrackScene();
             g_FadeStep = 0;
             g_FadeLevel = 0;
-            g_BgmSelectStep = 2;
+            g_BgmSelectStep = BGM_SELECT_STEP_ACTIVE;
         }
     }
     DrawProportionalText(0x5E, 0x72, g_TextNowLoading, 0x7812);
@@ -315,7 +315,7 @@ void UpdateBgmSelectLoad(void) {
     if (g_AssetLoadState == 0) {
         InstallCourseAssets();
         RequestTrackDataAssets();
-        g_BgmSelectStep = 1;
+        g_BgmSelectStep = BGM_SELECT_STEP_FADE_IN;
     }
 
     UpdateOptionSceneFade();
