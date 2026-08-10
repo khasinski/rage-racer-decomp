@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/prim.h"
+#include "game/render_types.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
@@ -79,6 +80,7 @@ void DrawSprite(ot, x0, y0, x1, y1, u0, v0, r, g, b, clutX, shadeTex, semiTrans,
     s32 semiTrans;
     u32 flags;
 {
+    RenderBufferAddress cursor;
     SPRT *prim;
     s32 shadeReg;
     s32 semiReg;
@@ -132,14 +134,17 @@ void DrawSprite(ot, x0, y0, x1, y1, u0, v0, r, g, b, clutX, shadeTex, semiTrans,
     base = (div + 0x1E0) << 6;
     prim->clut = base + (clutReg - (div * 20));
 
-    oldPrim = (u8 *)prim;
+    cursor.sprite = prim;
+    oldPrim = cursor.bytes;
     prim++;
     AddPrim(ot, oldPrim);
 
     clutReg = flags;
     flags &= 0x80;
     if (flags == 0) {
-        prim = (SPRT *)QueueDrawModePrim(ot, (u8 *)prim, clutReg & 0xFFFF);
+        cursor.sprite = prim;
+        cursor.bytes = QueueDrawModePrim(ot, cursor.bytes, clutReg & 0xFFFF);
+        prim = cursor.sprite;
     }
 
     SCRATCH_PRIM_CURSOR_AS(SPRT) = prim;
@@ -160,6 +165,7 @@ void DrawFlatTriangle(ot, x0, y0, x1, y1, x2, y2, r, g, b, semiTrans, flags)
     s32 semiTrans;
     u32 flags;
 {
+    RenderBufferAddress cursor;
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
     s32 y1Reg;
@@ -195,14 +201,17 @@ void DrawFlatTriangle(ot, x0, y0, x1, y1, x2, y2, r, g, b, semiTrans, flags)
     prim->t.g0 = gReg;
     prim->t.b0 = bReg;
 
-    oldPrim = (u8 *)prim;
+    cursor.polyF3 = prim;
+    oldPrim = cursor.bytes;
     prim++;
     AddPrim(ot, oldPrim);
 
     semiReg = flagsReg;
     flagsReg &= 0x80;
     if (flagsReg == 0) {
-        prim = (POLY_F3 *)QueueDrawModePrim(ot, (u8 *)prim, semiReg & 0xFFFF);
+        cursor.polyF3 = prim;
+        cursor.bytes = QueueDrawModePrim(ot, cursor.bytes, semiReg & 0xFFFF);
+        prim = cursor.polyF3;
     }
 
     SCRATCH_PRIM_CURSOR_AS(POLY_F3) = prim;
@@ -225,6 +234,7 @@ void DrawFlatQuad(ot, x0, y0, x1, y1, x2, y2, x3, y3, r, g, b, semiTrans, flags)
     s32 semiTrans;
     u32 flags;
 {
+    RenderBufferAddress cursor;
     POLY_F4 *prim;
     register s32 semiReg asm("$17");
     register u32 flagsReg asm("$16");
@@ -273,14 +283,17 @@ void DrawFlatQuad(ot, x0, y0, x1, y1, x2, y2, x3, y3, r, g, b, semiTrans, flags)
     prim->t.g0 = gLocal;
     prim->t.b0 = bLocal;
 
-    oldPrim = (u8 *)prim;
+    cursor.polyF4 = prim;
+    oldPrim = cursor.bytes;
     prim++;
     AddPrim(ot, oldPrim);
 
     semiReg = flagsReg;
     flagsReg &= 0x80;
     if (flagsReg == 0) {
-        prim = (POLY_F4 *)QueueDrawModePrim(ot, (u8 *)prim, semiReg & 0xFFFF);
+        cursor.polyF4 = prim;
+        cursor.bytes = QueueDrawModePrim(ot, cursor.bytes, semiReg & 0xFFFF);
+        prim = cursor.polyF4;
     }
 
     SCRATCH_PRIM_CURSOR_AS(POLY_F4) = prim;
@@ -319,6 +332,7 @@ void GameDrawTexturedQuad(ot, x0, y0, x1, y1, x2, y2, x3, y3,
     s32 semiTrans;
     u16 tpage;
 {
+    RenderBufferAddress cursor;
     POLY_FT4 *prim = SCRATCH_PRIM_CURSOR_AS(POLY_FT4);
     u32 d;
     u32 clutRow;
@@ -355,7 +369,8 @@ void GameDrawTexturedQuad(ot, x0, y0, x1, y1, x2, y2, x3, y3,
     rem = d - clutRow * 20;
     clut = clut + rem;
     prim->clut = clut;
-    oldPrim = (u8 *)prim;
+    cursor.polyFT4 = prim;
+    oldPrim = cursor.bytes;
     prim++;
     AddPrim(ot, oldPrim);
     SCRATCH_PRIM_CURSOR_AS(POLY_FT4) = prim;
@@ -363,6 +378,7 @@ void GameDrawTexturedQuad(ot, x0, y0, x1, y1, x2, y2, x3, y3,
 
 
 void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 alpha) {
+    RenderBufferAddress cursor;
     s32 x0Reg;
     s32 y0Reg;
     s32 x1Reg;
@@ -388,7 +404,8 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b
     asm("" : : "r"(x0Reg), "r"(y0Reg), "r"(x1Reg));
 
     SetTile(prim);
-    a0Reg = (u8 *)prim;
+    cursor.tile = prim;
+    a0Reg = cursor.bytes;
     SetSemiTrans(a0Reg, alphaValue != 0xFF);
 
     prim->x0 = x0Reg;
@@ -399,12 +416,14 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b
     prim->t.g0 = gReg;
     prim->t.b0 = bReg;
 
-    oldPrim = (u8 *)prim;
+    oldPrim = cursor.bytes;
     prim++;
     AddPrim(ot, oldPrim);
 
     if (alphaValue != 0xFF) {
-        prim = (TILE *)QueueDrawModePrim(ot, (u8 *)prim, alphaValue);
+        cursor.tile = prim;
+        cursor.bytes = QueueDrawModePrim(ot, cursor.bytes, alphaValue);
+        prim = cursor.tile;
     }
 
     SCRATCH_PRIM_CURSOR_AS(TILE) = prim;
@@ -412,6 +431,7 @@ void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b
 
 
 void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 alpha) {
+    RenderBufferAddress cursor;
     s32 x0Reg;
     s32 y0Reg;
     s32 x1Reg;
@@ -437,7 +457,8 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32
     asm("" : : "r"(x0Reg), "r"(y0Reg), "r"(x1Reg));
 
     SetLineF2(prim);
-    a0Reg = (u8 *)prim;
+    cursor.lineF2 = prim;
+    a0Reg = cursor.bytes;
     SetSemiTrans(a0Reg, alphaValue != 0xFF);
 
     prim->x0 = x0Reg;
@@ -448,12 +469,14 @@ void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32
     prim->t.g0 = gReg;
     prim->t.b0 = bReg;
 
-    oldPrim = (u8 *)prim;
+    oldPrim = cursor.bytes;
     prim++;
     AddPrim(ot, oldPrim);
 
     if (alphaValue != 0xFF) {
-        prim = (LINE_F2 *)QueueDrawModePrim(ot, (u8 *)prim, alphaValue);
+        cursor.lineF2 = prim;
+        cursor.bytes = QueueDrawModePrim(ot, cursor.bytes, alphaValue);
+        prim = cursor.lineF2;
     }
 
     SCRATCH_PRIM_CURSOR_AS(LINE_F2) = prim;
@@ -473,6 +496,7 @@ void DrawPolyLine3(ot, x0, y0, x1, y1, x2, y2, r, g, b, alpha)
     u8 b;
     u8 alpha;
 {
+    RenderBufferAddress cursor;
     LINE_F3 *prim;
     u8 *oldPrim;
 
@@ -490,12 +514,15 @@ void DrawPolyLine3(ot, x0, y0, x1, y1, x2, y2, r, g, b, alpha)
     prim->t.g0 = g;
     prim->t.b0 = b;
 
-    oldPrim = (u8 *)prim;
+    cursor.lineF3 = prim;
+    oldPrim = cursor.bytes;
     prim++;
     AddPrim(ot, oldPrim);
 
     if (alpha != 0xFF) {
-        prim = (LINE_F3 *)QueueDrawModePrim(ot, (u8 *)prim, alpha);
+        cursor.lineF3 = prim;
+        cursor.bytes = QueueDrawModePrim(ot, cursor.bytes, alpha);
+        prim = cursor.lineF3;
     }
 
     SCRATCH_PRIM_CURSOR_AS(LINE_F3) = prim;
@@ -503,6 +530,7 @@ void DrawPolyLine3(ot, x0, y0, x1, y1, x2, y2, r, g, b, alpha)
 
 
 void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha) {
+    RenderBufferAddress cursor;
     s16 x0Reg;
     s16 y0Reg;
     s16 x1Reg;
@@ -533,7 +561,8 @@ void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8
     b1Local = b1;
 
     SetLineG2(prim);
-    a0Reg = (u8 *)prim;
+    cursor.lineG2 = prim;
+    a0Reg = cursor.bytes;
     SetSemiTrans(a0Reg, alphaReg != 0xFF);
 
     prim->x0 = x0Reg;
@@ -547,12 +576,14 @@ void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8
     prim->g1 = g1Local;
     prim->b1 = b1Local;
 
-    oldPrim = (u8 *)prim;
+    oldPrim = cursor.bytes;
     prim++;
     AddPrim(ot, oldPrim);
 
     if (alphaReg != 0xFF) {
-        prim = (LINE_G2 *)QueueDrawModePrim(ot, (u8 *)prim, alphaReg);
+        cursor.lineG2 = prim;
+        cursor.bytes = QueueDrawModePrim(ot, cursor.bytes, alphaReg);
+        prim = cursor.lineG2;
     }
 
     SCRATCH_PRIM_CURSOR_AS(LINE_G2) = prim;
