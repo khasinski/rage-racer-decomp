@@ -11,6 +11,7 @@
 
 typedef union TeamLogoRotationBufferAddress {
     s32 byteOffset;
+    s32 value;
     s32 wordIndex;
     u32 *wordPointer;
 } TeamLogoRotationBufferAddress;
@@ -152,7 +153,7 @@ void RotateTeamLogoCcw(void) {
                 dst = destinationIndex.wordPointer;
                 destinationIndex.wordPointer = dst;
                 destinationBase.wordPointer = (stackBase = saved);
-                destinationIndex.byteOffset += destinationBase.byteOffset;
+                destinationIndex.byteOffset += destinationBase.value;
                 dst = destinationIndex.wordPointer;
                 shift = (limit - k) << 2;
                 *dst = 0;
@@ -197,9 +198,9 @@ void RotateTeamLogoCcw(void) {
     i = 0;
     dst = base;
     copyAddress.wordPointer = stackBase;
-    value1 = copyAddress.byteOffset;
+    value1 = copyAddress.value;
     do {
-        copyAddress.byteOffset = value1;
+        copyAddress.value = value1;
         value2 = *copyAddress.wordPointer;
         value1 += 4;
         i++;
@@ -248,7 +249,7 @@ void RotateTeamLogoCw(void) {
                 indexAddress.wordPointer = dst;
                 indexAddress.wordIndex *= 4;
                 copyAddress.wordPointer = (stackBase = saved);
-                indexAddress.byteOffset += copyAddress.byteOffset;
+                indexAddress.byteOffset += copyAddress.value;
                 dst = indexAddress.wordPointer;
                 *dst = 0;
                 value1 = src[0x00];
@@ -296,9 +297,9 @@ void RotateTeamLogoCw(void) {
     i = 0;
     dst = base;
     copyAddress.wordPointer = stackBase;
-    value1 = copyAddress.byteOffset;
+    value1 = copyAddress.value;
     do {
-        copyAddress.byteOffset = value1;
+        copyAddress.value = value1;
         value2 = *copyAddress.wordPointer;
         value1 += 4;
         i++;
