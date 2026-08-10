@@ -3,6 +3,7 @@
 #include "game/audio.h"
 #include "game/menu_types.h"
 #include "game/race.h"
+#include "game/render_types.h"
 #include "game/scratchpad.h"
 #include "game/screens.h"
 #include "game/state.h"
@@ -12,6 +13,11 @@ typedef union TeamLogoRotationBufferAddress {
     s32 byteOffset;
     u32 *wordPointer;
 } TeamLogoRotationBufferAddress;
+
+typedef union MenuOrderingTableAddress {
+    s32 byteOffset;
+    void *pointer;
+} MenuOrderingTableAddress;
 
 static inline TeamLogoColorSlot *GetTeamLogoPenSlot(void) {
     TeamLogoColorAddress address;
@@ -140,7 +146,9 @@ void RotateTeamLogoCcw(void) {
             k = 0;
             src = srcStart;
             do {
-                dst = (u32 *)(((i * 8 + k) * 8 + j) << 2);
+                destinationIndex.byteOffset =
+                    ((i * 8 + k) * 8 + j) << 2;
+                dst = destinationIndex.wordPointer;
                 destinationIndex.wordPointer = dst;
                 destinationBase.wordPointer = (stackBase = saved);
                 destinationIndex.byteOffset += destinationBase.byteOffset;
@@ -190,7 +198,8 @@ void RotateTeamLogoCcw(void) {
     copyAddress.wordPointer = stackBase;
     value1 = copyAddress.byteOffset;
     do {
-        value2 = *(u32 *)value1;
+        copyAddress.byteOffset = value1;
+        value2 = *copyAddress.wordPointer;
         value1 += 4;
         i++;
         *dst = value2;
@@ -227,7 +236,8 @@ void RotateTeamLogoCw(void) {
             k = 0;
             src = srcStart;
             do {
-                dst = (u32 *)((i * 8 + k) * 8);
+                indexAddress.byteOffset = (i * 8 + k) * 8;
+                dst = indexAddress.wordPointer;
                 indexAddress.wordPointer = dst;
                 indexAddress.byteOffset += 7;
                 dst = indexAddress.wordPointer;
@@ -287,7 +297,8 @@ void RotateTeamLogoCw(void) {
     copyAddress.wordPointer = stackBase;
     value1 = copyAddress.byteOffset;
     do {
-        value2 = *(u32 *)value1;
+        copyAddress.byteOffset = value1;
+        value2 = *copyAddress.wordPointer;
         value1 += 4;
         i++;
         *dst = value2;
@@ -763,8 +774,10 @@ void DrawMenuLightBurst(s32 arg) {
     void *s3;
     MenuLightBurstBand l1;
     MenuLightBurstBand l2;
+    MenuOrderingTableAddress orderingTableAddress;
 
-    s3 = (void *)(SCRATCH_OT_BASE_WORD + 0xAFC);
+    orderingTableAddress.byteOffset = SCRATCH_OT_BASE_WORD + 0xAFC;
+    s3 = orderingTableAddress.pointer;
     l1 = g_MenuLightBurstBandX;
     l2 = g_MenuLightBurstBandY;
 
@@ -821,8 +834,12 @@ void DrawMenuLightBurst(s32 arg) {
         SetPolyG4(prim);
         SetSemiTrans(prim, 0);
         {
-            POLY_G4 *quad = (POLY_G4 *)prim;
+            RenderBufferAddress primAddress;
+            POLY_G4 *quad;
             register s32 x asm("$3") = g_MenuLightBurstLevel;
+
+            primAddress.bytes = prim;
+            quad = primAddress.polyG4;
             value = x / 5 + (x >> 31);
             scaled = value - (x >> 31);
             quad->x3 = 0x13F;
