@@ -455,7 +455,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
     }
 
     {
-        register u8 *scratchPacket;
+        register RenderBufferAddress scratchPacket;
         register s32 fontU;
         register s16 scroll0;
         register char *marqueeBase asm("$16");
@@ -468,10 +468,10 @@ void DrawRaceOptionMenu(s32 cursorRow) {
             asm(
                 "" : "=r"(textY), "=r"(textColor) :
                 "0"(textY), "1"(textColor));
-            scratchPacket = SCRATCHPAD_BYTES;
+            scratchPacket.bytes = SCRATCHPAD_BYTES;
             scroll0 = g_RaceOptionScroll0;
             marqueeBase = &g_RaceOptionMarquee[0][0];
-            *(u8 **)scratchPacket = firstNext;
+            *scratchPacket.packetLink = firstNext;
             marquee = (g_SceneTimer & 3) * 40;
             DrawText8x8(
                 (scroll0 >> 2) + 0xA0,
@@ -493,9 +493,9 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 0x7811);
         }
 
-        scratchPacket = *(u8 **)scratchPacket;
+        scratchPacket.bytes = *scratchPacket.packetLink;
         drawPrim = QueueDrawAreaPrim(
-            ot, scratchPacket, 0x72, 0x8A, 0x5C, 0xC);
+            ot, scratchPacket.bytes, 0x72, 0x8A, 0x5C, 0xC);
         fontU = 0xD0;
         prim.bytes = GameQueueSprite(
             ot, drawPrim, 0x88, 0x6A, 0x30, 8, fontU, 0x10, 0x7893);

@@ -276,8 +276,9 @@ void DrawLapNumber(void) {
         packet = SCRATCHPAD_AS(SPRT);
         ot = g_DrawBuffer + 0xCC;
         tpage = 9;
-        *(u8 **)packet = finalScratch;
-        *(u8 **)packet = QueueDrawModePrim(ot, finalScratch, tpage);
+        scratchAddress.sprite = packet;
+        *scratchAddress.packetLink = finalScratch;
+        *scratchAddress.packetLink = QueueDrawModePrim(ot, finalScratch, tpage);
     }
 }
 

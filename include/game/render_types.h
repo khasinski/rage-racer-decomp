@@ -8,6 +8,7 @@
 typedef union RenderBufferAddress {
     s32 byteOffset;
     u8 *bytes;
+    u8 **packetLink;
     void *pointer;
     DrawPacket *drawPacket;
     SPRT *sprite;
