@@ -9,7 +9,7 @@
   "externs_in_c": 0,
   "field_macros": 0,
   "header_asm_aliases": 3,
-  "manual_byte_offsets": 209,
+  "manual_byte_offsets": 201,
   "pointer_integer_casts": 2,
   "raw_offset_dereferences": 0,
   "register_pins": 211,

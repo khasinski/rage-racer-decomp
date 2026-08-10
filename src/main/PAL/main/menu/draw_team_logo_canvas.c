@@ -662,7 +662,7 @@ void ScrollTeamLogoLeft(void) {
             TeamLogoCanvasAddress address;
 
             address.wordPointer = base2;
-            address.byteOffset = offset + address.byteOffset;
+            address.value = offset + address.value;
             addr = address.wordPointer;
             base2++;
             value = addr[0];
@@ -727,7 +727,7 @@ void ScrollTeamLogoRight(void) {
             u32 lo;
 
             address.wordPointer = base2;
-            address.byteOffset = offset + address.byteOffset;
+            address.value = offset + address.value;
             word = address.wordPointer;
             base2--;
             col--;
@@ -781,10 +781,10 @@ void FlipTeamLogoVertical(void) {
             TeamLogoCanvasAddress rightAddress;
 
             leftAddress.bytePointer = cursor;
-            leftAddress.byteOffset = leftOffset + leftAddress.byteOffset;
+            leftAddress.value = leftOffset + leftAddress.value;
             left = leftAddress.wordPointer;
             rightAddress.bytePointer = cursor;
-            rightAddress.byteOffset = rightOffset + rightAddress.byteOffset;
+            rightAddress.value = rightOffset + rightAddress.value;
             right = rightAddress.wordPointer;
             cursor += 4;
             temp = *left;
