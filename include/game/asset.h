@@ -124,6 +124,11 @@ typedef union GameImageAssetHeaderWord {
     s32 flags;
 } GameImageAssetHeaderWord;
 
+typedef union GameImageAssetAddress {
+    GameImageAssetHeaderWord *words;
+    GameImageBlock *block;
+} GameImageAssetAddress;
+
 /* The offset table every asset pack starts with; sub-blocks live at
  * base + offsets[n]. Some packs only ever use the first three. */
 typedef struct GameSceneAssetHeader {

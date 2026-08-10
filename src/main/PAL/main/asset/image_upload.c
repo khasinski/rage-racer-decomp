@@ -7,6 +7,7 @@
 
 void UploadImageBlock(GameImageAssetHeaderWord *asset) {
     GameImageBlock *block;
+    GameImageAssetAddress address;
     Rect rect;
     s32 flags;
 
@@ -15,17 +16,20 @@ void UploadImageBlock(GameImageAssetHeaderWord *asset) {
     asset++;
 
     if (flags & 8) {
-        block = (GameImageBlock *)asset;
+        address.words = asset;
+        block = address.block;
         rect.x = block->x;
         rect.y = block->y;
         rect.w = block->w;
         rect.h = block->h;
         LoadImage(&rect, block->pixels);
         DrawSync(0);
-        asset = (GameImageAssetHeaderWord *)block + (block->size >> 2);
+        address.block = block;
+        asset = address.words + (block->size >> 2);
     }
 
-    block = (GameImageBlock *)asset;
+    address.words = asset;
+    block = address.block;
     rect.x = block->x;
     rect.y = block->y;
     rect.w = block->w;
