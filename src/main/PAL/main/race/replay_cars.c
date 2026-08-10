@@ -230,7 +230,7 @@ void UpdateSplitTimes(PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent) {
             nextSlot %= 3;
             nextSlot <<= 2;
             sectorAddress.pointer = g_SectorTimes;
-            sectorAddress.value += nextSlot;
+            sectorAddress.bytes += nextSlot;
             g_LastSectorTime = *sectorAddress.pointer;
             goto split_update_done;
         }

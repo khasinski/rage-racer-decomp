@@ -177,13 +177,13 @@ timing_done:
                 if (grandPrixMode == 0) {
                     tableOffset = g_CourseIndex * 12 + ReadStableRaceSeries() * 48;
                     sectorAddress.table = g_BestSectorTimes;
-                    sectorAddress.value += tableOffset;
+                    sectorAddress.bytes += tableOffset;
                     sectorAddress.pointer[0] = g_RefSectorTimes.fields.first;
                     sectorAddress.pointer = &g_BestSectorTimes[0][0][1];
-                    sectorAddress.value += tableOffset;
+                    sectorAddress.bytes += tableOffset;
                     sectorAddress.pointer[0] = g_RefSectorTime1;
                     sectorAddress.pointer = &g_BestSectorTimes[0][0][2];
-                    sectorAddress.value += tableOffset;
+                    sectorAddress.bytes += tableOffset;
                     sectorAddress.pointer[0] = g_RefSectorTime2;
                 }
                 g_RacePhase = 4;
@@ -322,11 +322,11 @@ void EnterRaceScene(void) {
     g_SectorEndDistance[1] = g_SectorEndDistance[0] * 2;
     tableOffset = (mode * 12) + (scene * 48);
     sectorAddress.table = g_BestSectorTimes;
-    sectorAddress.value += tableOffset;
+    sectorAddress.bytes += tableOffset;
     g_RefSectorTimes.fields.first = sectorAddress.pointer[0];
     scene *= 32;
     sectorAddress.table = g_BestSectorTimes;
-    sectorAddress.value += tableOffset;
+    sectorAddress.bytes += tableOffset;
     g_RefSectorTime1 = sectorAddress.pointer[1];
     mode *= 8;
     do {
@@ -338,7 +338,7 @@ void EnterRaceScene(void) {
          * this file. Written indexed here, or with the three offsets folded
          * together, the schedule around these address calculations changes. */
         lapAddress.table = g_BestLapTimes;
-        lapAddress.value += scene;
+        lapAddress.bytes += scene;
         lapTableRow.bytes = lapAddress.bytes;
         count = mode + lapTableRow.value;
         scratch = g_GrandPrixMode * 4;
@@ -346,7 +346,7 @@ void EnterRaceScene(void) {
         lapAddress.value = scratch;
         entry = lapAddress.pointer;
         lastSectorAddress.table = g_BestSectorTimes;
-        lastSectorAddress.value += tableOffset;
+        lastSectorAddress.bytes += tableOffset;
         g_RefSectorTime2 = lastSectorAddress.pointer[2];
     } while (0);
     g_RefLapTime = *entry;
