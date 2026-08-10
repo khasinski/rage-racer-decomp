@@ -140,7 +140,7 @@ void InstallTerrainCellData(void *data) {
     address.data = data;
     g_TerrainCellGrid = address.grid;
     address.bytes += TERRAIN_CELL_GRID_SIZE;
-    g_CellVisibilityTable = address.visibility;
+    g_CellVisibilityTable = address.visibilityRows;
     address.bytes += CELL_VISIBILITY_TABLE_SIZE;
     header = address.header;
     ptr = header->cells;

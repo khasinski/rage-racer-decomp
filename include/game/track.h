@@ -4,6 +4,7 @@
 #include "common.h"
 
 #include "game/vector.h"
+#include "game/visibility.h"
 
 union GameEnvColor;
 struct GameRenderObject;
@@ -571,7 +572,7 @@ extern Vec4 g_StaticSceneryPos;
  * 32x32 cell grid (clut index in the low 10 bits) and the per-cell
  * visibility rows read by GetCellVisibility. */
 extern u16 *g_TerrainCellGrid;
-extern u32 *g_CellVisibilityTable;
+extern CellVisibilityRow *g_CellVisibilityTable;
 
 /*
  * Their byte sizes, which is all InstallTerrainCellData needs them for - it

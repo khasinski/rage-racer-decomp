@@ -2,6 +2,7 @@
 #define GAME_ASSET_H
 
 #include "common.h"
+#include "game/visibility.h"
 #include "psyq/cd_location.h"
 #include "psyq/gpu.h"
 
@@ -376,7 +377,7 @@ typedef struct TerrainCellAssetHeader {
 
 typedef struct TerrainCellAsset {
     u16 grid[32][32];
-    u32 visibility[32][32];
+    CellVisibilityRow visibility[32];
     TerrainCellAssetHeader header;
 } TerrainCellAsset;
 
@@ -384,7 +385,7 @@ typedef union TerrainCellAssetAddress {
     void *data;
     u8 *bytes;
     u16 *grid;
-    u32 *visibility;
+    CellVisibilityRow *visibilityRows;
     TerrainCellAsset *asset;
     TerrainCellAssetHeader *header;
 } TerrainCellAssetAddress;

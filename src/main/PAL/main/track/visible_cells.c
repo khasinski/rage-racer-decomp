@@ -104,19 +104,12 @@ u32 GetCellRegion(s32 x, s32 z) {
 
 
 u32 IsCellVisibleFromRegion(s32 cellX, s32 cellZ, s32 region) {
-    s32 x = cellX << 2;
-    s32 y;
-    VisibilityMaskAddress base;
-    VisibilityMaskAddress address;
+    u32 visibleRegions;
     u32 mask;
 
-    y = cellZ << 7;
-    base.pointer = g_CellVisibilityTable;
+    visibleRegions = g_CellVisibilityTable[cellZ][cellX];
     mask = 1;
-    y += base.byteOffset;
-    x += y;
-    address.byteOffset = x;
-    return (mask << region) & *address.pointer;
+    return (mask << region) & visibleRegions;
 }
 
 void BuildVisibleCells(s32 near, s32 far) {
