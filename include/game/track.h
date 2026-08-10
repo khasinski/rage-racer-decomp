@@ -478,7 +478,7 @@ typedef struct PathSceneryPositionData {
 
 typedef union SpinningSceneryAngleAddress {
     s32 byteOffset;
-    u16 *pointer;
+    s16 *pointer;
 } SpinningSceneryAngleAddress;
 
 typedef struct PathSceneryRotationData {
@@ -514,7 +514,7 @@ extern s32 g_RouteSceneryZ;
 extern ShuttlePath g_ShuttlePath2Points;
 extern s16 g_ShuttlePathTravelMax[];
 extern s16 g_SkyTileMap[][16];
-extern u16 g_SpinningSceneryAngle[];
+extern s16 g_SpinningSceneryAngle[];
 extern Vec4 g_SpinningSceneryPos[];
 extern u16 g_SpinningSceneryRate[];
 typedef struct SpinningSceneryOrientation {

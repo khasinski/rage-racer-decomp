@@ -11,11 +11,11 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
     s16 objectMatrix[16];
     s32 frame = timer;
     s32 update = animate;
-    u16 *dst;
+    s16 *dst;
     u16 *delta;
     u16 *deltaBase;
     s16 *work = objectMatrix;
-    register u16 *base asm("$21");
+    register s16 *base asm("$21");
     s32 offset;
     s32 end;
     s32 start;
@@ -59,7 +59,7 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
             dataAddress.byteOffset += offset;
             BuildRotMatrixY(yawMatrix, dataAddress.orientationPointer->yaw);
             MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, yawMatrix);
-            BuildRotMatrixZ(work, *(s16 *)dst);
+            BuildRotMatrixZ(work, *dst);
             MulMatrix2(yawMatrix, work);
             dataAddress.positionPointer = g_SpinningSceneryPos;
             dataAddress.byteOffset += offset;
