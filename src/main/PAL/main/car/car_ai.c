@@ -210,7 +210,7 @@ void UpdateCarCrestHop(GameCarRuntime *car) {
         return;
     }
 
-    value = GetCarCrestTrigger((GameCarRuntime *)obj);
+    value = GetCarCrestTrigger(obj);
     if (value == 0) {
         return;
     }
@@ -509,7 +509,7 @@ void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear) {
 target_speed_done:
   if (sub_R9->markerDirection != 0)
   {
-    UpdateCarSlideAngle((GameCarRuntime *)car, (s16) pitch);
+    UpdateCarSlideAngle(car, (s16) pitch);
   }
 
 }
