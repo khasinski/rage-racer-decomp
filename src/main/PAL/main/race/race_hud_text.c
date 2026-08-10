@@ -113,8 +113,8 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
  * it beside g_DrawBuffer. Here it turns into the 240-line y bias of the
  * drawing-area rect. */
 
-void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
-    void *oldPacket;
+u8 *QueueDrawAreaPrim(void *ot, u8 *packet, s16 x, s16 y, s32 w, s32 h) {
+    u8 *oldPacket;
     Rect rect;
     s32 offset;
 
@@ -125,7 +125,7 @@ void *QueueDrawAreaPrim(void *ot, void *packet, s16 x, s16 y, s32 w, s32 h) {
     rect.h = h;
     SetDrawArea((DrawPacket *)packet, &rect);
     oldPacket = packet;
-    packet = (DrawPacket *)packet + 1;
+    packet += sizeof(DrawPacket);
     AddPrim(ot, oldPacket);
     return packet;
 }
