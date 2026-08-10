@@ -228,10 +228,26 @@ typedef struct CarProgressWindow {
     u8 trailing[0x15A];
 } CarProgressWindow;
 
-#define GetCarProgressWindow(car) \
-    ((CarProgressWindow *)&(car)->progressB)
-#define GetCarProgressWindowProgressA(window) \
-    (((s32 *)(window))[-1])
+typedef union CarProgressWindowAddress {
+    s32 *progress;
+    CarProgressWindow *window;
+} CarProgressWindowAddress;
+
+static __inline__ CarProgressWindow *GetCarProgressWindow(
+    GameCarRuntime *car) {
+    CarProgressWindowAddress address;
+
+    address.progress = &car->progressB;
+    return address.window;
+}
+
+static __inline__ s32 GetCarProgressWindowProgressA(
+    CarProgressWindow *window) {
+    CarProgressWindowAddress address;
+
+    address.window = window;
+    return address.progress[-1];
+}
 
 typedef struct CarSurfaceSampleView {
     u16 x;

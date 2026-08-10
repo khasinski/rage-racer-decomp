@@ -56,11 +56,6 @@ typedef struct GameTrackPointHalfwordView {
     u16 segmentLength;
 } GameTrackPointHalfwordView;
 
-static inline GameTrackPointHalfwordView *GetTrackPointHalfwordView(
-    GameTrackPoint *point) {
-    return (GameTrackPointHalfwordView *)point;
-}
-
 typedef struct TrackAiSpeedKey {
     s16 progress;
     u16 pitch;
@@ -220,8 +215,17 @@ typedef struct GameTrackArcCenter {
 typedef union TrackPointTableAddress {
     s32 byteOffset;
     GameTrackPoint *pointPointer;
+    GameTrackPointHalfwordView *halfwordPointer;
     GameTrackArcCenter *arcCenterPointer;
 } TrackPointTableAddress;
+
+static inline GameTrackPointHalfwordView *GetTrackPointHalfwordView(
+    GameTrackPoint *point) {
+    TrackPointTableAddress address;
+
+    address.pointPointer = point;
+    return address.halfwordPointer;
+}
 
 typedef struct TrackPointTable {
     s32 count;
@@ -354,8 +358,16 @@ extern s32 g_RouteSceneryRotZ;
  */
 extern s32 g_RouteSceneryX;
 
+typedef union RouteSceneryPositionAddress {
+    s32 *x;
+    Vec4 *position;
+} RouteSceneryPositionAddress;
+
 static inline void SetRouteSceneryPosition(const Vec4 *position) {
-    *(Vec4 *)&g_RouteSceneryX = *position;
+    RouteSceneryPositionAddress address;
+
+    address.x = &g_RouteSceneryX;
+    *address.position = *position;
 }
 
 extern s16 g_ShuttlePathDwellMax[];
