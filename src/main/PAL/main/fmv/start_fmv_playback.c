@@ -36,7 +36,7 @@ void StartFmvPlayback(FmvWorkBuffers *buffers) {
     }
     g_FmvStreamEnded = 0;
     g_SceneTimer = 0;
-    g_FmvState = 1;
+    g_FmvState = FMV_PLAYBACK_DECODE;
     VSync(0);
     g_GameClock = 0;
 }

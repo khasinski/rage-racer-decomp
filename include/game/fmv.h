@@ -9,6 +9,13 @@ typedef union FmvUploadRectAddress {
     Rect *rectPointer;
 } FmvUploadRectAddress;
 
+typedef enum FmvPlaybackState {
+    FMV_PLAYBACK_INVALID = -1,
+    FMV_PLAYBACK_START,
+    FMV_PLAYBACK_DECODE,
+    FMV_PLAYBACK_FINISH
+} FmvPlaybackState;
+
 typedef struct FmvDecodeContext {
     volatile u32 *vlcBuffers[2];
     s32 vlcIndex;
@@ -55,6 +62,7 @@ typedef union FmvStripCursorAddress {
 
 extern FmvDecodeContext g_FmvDecodeContext;
 extern volatile u32 *g_FmvRingBuffer;
+extern FmvPlaybackState g_FmvState;
 
 void StartFmvPlayback(FmvWorkBuffers *buffers);
 void SetupFmvBuffers(FmvWorkBuffers *buffers);

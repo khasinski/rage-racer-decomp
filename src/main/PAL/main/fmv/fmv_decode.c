@@ -35,11 +35,11 @@ void DecodeFmvFrame(void) {
 
     WaitFmvDecode(&g_FmvDecodeContext, 0);
     if (g_FmvStreamEnded == 1) {
-        g_FmvState = 2;
+        g_FmvState = FMV_PLAYBACK_FINISH;
     }
     if (g_PadPressed & PAD_START) {
         StartCdVolumeFade(1);
-        g_FmvState = 2;
+        g_FmvState = FMV_PLAYBACK_FINISH;
     }
 }
 

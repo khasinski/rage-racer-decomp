@@ -913,7 +913,6 @@ extern Matrix g_MirrorViewMatrix;
 extern u8 g_CarModelByCourse[][11];
 extern s32 g_FmvFrameHeight;
 extern s32 g_FmvFrameWidth;
-extern s32 g_FmvState;
 extern s32 g_FmvStreamEnded;
 extern volatile u32 *g_FmvStripBuffers[];
 extern s16 g_FmvStripHeight;
