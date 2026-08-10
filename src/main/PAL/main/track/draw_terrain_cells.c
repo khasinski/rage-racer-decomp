@@ -775,7 +775,9 @@ void DrawSkyBackground(void)
         courseF4->t.g0 = (u8) g_EnvironmentColors.fields.slots[4].cur.bytes.g;
         {
           u8 *nextPacket;
-          nextPacket = (u8 *)(courseF4 + 1);
+          RenderBufferAddress cursor;
+          cursor.polyF4 = courseF4 + 1;
+          nextPacket = cursor.bytes;
           courseF4->t.b0 = (u8) g_EnvironmentColors.fields.slots[4].cur.bytes.b;
           AddPrim(&scratch->orderingTable[SKY_OT_NEAR], courseF4);
           packetCursor = nextPacket;
