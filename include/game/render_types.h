@@ -7,6 +7,7 @@
 
 typedef union RenderBufferAddress {
     s32 byteOffset;
+    s32 value;
     u8 *bytes;
     u8 **packetLink;
     void **pointerLink;
