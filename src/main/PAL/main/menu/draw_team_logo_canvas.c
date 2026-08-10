@@ -771,7 +771,7 @@ void FlipTeamLogoVertical(void) {
         j = 0;
         leftOffset = i * 32;
         rightOffset = (mirror - i) << 5;
-        cursor = (u8 *)base;
+        cursor = GetTeamLogoCanvasBytes(base);
         do {
             u32 temp;
             u32 *left;

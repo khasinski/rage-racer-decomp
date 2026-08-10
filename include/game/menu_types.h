@@ -68,6 +68,13 @@ typedef union TeamLogoCanvasAddress {
     u32 *wordPointer;
 } TeamLogoCanvasAddress;
 
+static __inline__ u8 *GetTeamLogoCanvasBytes(u32 *words) {
+    TeamLogoCanvasAddress address;
+
+    address.wordPointer = words;
+    return address.bytePointer;
+}
+
 typedef struct PaintColorTable {
     Rgb colors[18];
 } PaintColorTable;
