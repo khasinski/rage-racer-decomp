@@ -8,18 +8,18 @@ void InstallCourseAssets(void) {
     s32 offset0;
     s32 offset1;
 
-    g_AssetBlockPtr = g_AssetBase + ((GameSceneAssetHeader *)g_AssetBase)->offsets[0];
+    g_AssetBlockPtr = g_AssetBase + GetSceneAssetHeader(g_AssetBase)->offsets[0];
     UploadImageAsset(g_AssetBlockPtr);
 
-    g_AssetBlockPtr = g_AssetBase + ((GameSceneAssetHeader *)g_AssetBase)->offsets[1];
+    g_AssetBlockPtr = g_AssetBase + GetSceneAssetHeader(g_AssetBase)->offsets[1];
     UploadImageAsset(g_AssetBlockPtr);
 
-    g_AssetBlockPtr = g_AssetBase + ((GameSceneAssetHeader *)g_AssetBase)->offsets[2];
+    g_AssetBlockPtr = g_AssetBase + GetSceneAssetHeader(g_AssetBase)->offsets[2];
     UploadImageBlock((GameImageAssetHeaderWord *)g_AssetBlockPtr);
 
     base = g_AssetBase;
-    offset0 = ((GameSceneAssetHeader *)base)->offsets[3];
-    offset1 = ((GameSceneAssetHeader *)base)->offsets[4];
+    offset0 = GetSceneAssetHeader(base)->offsets[3];
+    offset1 = GetSceneAssetHeader(base)->offsets[4];
     g_AssetBlockPtr = base + offset0;
     g_AssetSubBlockPtr = base + offset1;
     UploadImageAsset(g_AssetBlockPtr);
