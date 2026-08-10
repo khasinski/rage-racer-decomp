@@ -232,7 +232,7 @@ typedef union TextRenderWork {
                 s32 offset = ch - 0x76;
                 s32 index = offset * 4;
                 s32 width;
-                void *prim;
+                SPRT *prim;
                 u8 *ot;
                 s16 yOffset;
 
@@ -261,7 +261,7 @@ typedef union TextRenderWork {
                 packet += 20;
                 sprt->y0 = yOffset + t0.value;
                 width = g_HighFontWidth[index];
-                prim = (void *)sprt;
+                prim = sprt;
                 sprt->u0 = u;
                 sprt->v0 = v;
                 /* RAW() keeps this store ahead of the g_DrawBuffer load --
@@ -281,7 +281,7 @@ typedef union TextRenderWork {
             if (ch >= 0x61) {
                 s32 offset = ch - 0x61;
                 s32 width;
-                void *prim;
+                SPRT *prim;
                 u8 *ot;
 
                 s1 = offset * 4;
@@ -303,7 +303,7 @@ typedef union TextRenderWork {
                 packet += 20;
                 sprt->y0 = t0.value;
                 width = g_WordFontWidth[s1];
-                prim = (void *)sprt;
+                prim = sprt;
                 sprt->u0 = u;
                 sprt->v0 = v;
                 /* RAW() keeps this store ahead of the g_DrawBuffer load --
@@ -329,7 +329,7 @@ typedef union TextRenderWork {
                     s32 index = s1 * 2;
                     u8 *uCell;
                     u8 *vCell;
-                    void *prim;
+                    SPRT *prim;
                     u8 *ot;
 
                     asm volatile("" : "=r"(index) : "0"(index) : "$2");
@@ -353,7 +353,7 @@ typedef union TextRenderWork {
                     }
                     t0.value = (u16)home.y;
                     asm("" : "=r"(t0.value) : "0"(t0.value));
-                    prim = (void *)sprt;
+                    prim = sprt;
                     asm("" : "=r"(prim) : "0"(prim));
                     sprt->u0 = u;
                     sprt->v0 = v;
