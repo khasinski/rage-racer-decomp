@@ -131,8 +131,8 @@ void TriggerRaceCues(void) {
         temp = mask & loopFlags;
         if (temp == 0) {
             temp = g_RaceSeries;
-            entry.byteOffset = ((temp * 3) + i) << 2;
-            entry.value = entry.byteOffset + base.value;
+            entry.value =
+                (((temp * 3) + i) * sizeof(TrackSpeedCue)) + base.value;
             current = entry.pointer->speed[0][0].trackSection;
             temp = -1;
             if (current == temp) {
