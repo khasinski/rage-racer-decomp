@@ -859,7 +859,7 @@ void RankContenders(void);
 void SeedCarRouteMarkers(void);
 void SlowRivalAhead(GameCarRuntime *car, s32 carIndex);
 void SteerCarToTrackLine(PlayerCarRuntime *car);
-void TransformCollisionVector(s32 *input, s32 *output);
+void TransformCollisionVector(const s16 *input, s32 *output);
 void UpdateCarAiTargetSpeed(GameCarRuntime *car, s32 gear);
 void UpdateCarDrivetrain(PlayerCarRuntime *car);
 void UpdateCarDriving(PlayerCarRuntime *car, s32 unused);

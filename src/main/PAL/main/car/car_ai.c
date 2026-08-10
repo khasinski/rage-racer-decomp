@@ -574,7 +574,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                     rotation[0] = g_CarCollisionCorners[offset].x;
                     rotation[2] = g_CarCollisionCorners[offset].z;
                     rotation[1] = 0;
-                    TransformCollisionVector((s32 *)rotation, transformed);
+                    TransformCollisionVector(rotation, transformed);
                     carCorners[offset].x = transformed[0] >> 2;
                     carCorners[offset].z = transformed[2] >> 2;
                     quads[corner][offset] = carCorners[offset];
@@ -648,7 +648,7 @@ s32 CollideRivalCars(GameCarRuntime *car, s32 index) {
                     rotation[0] = g_CarCollisionCorners[corner].x;
                     rotation[2] = g_CarCollisionCorners[corner].z;
                     rotation[1] = 0;
-                    TransformCollisionVector((s32 *)rotation, transformed);
+                    TransformCollisionVector(rotation, transformed);
                     otherCorners[corner].x =
                         (transformed[0] >> 2) + velocityDelta[0];
                     otherCorners[corner].z =
