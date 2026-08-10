@@ -3,6 +3,7 @@
 #include "game/race.h"
 #include "game/player_car_internal.h"
 #include "game/render.h"
+#include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
@@ -153,15 +154,17 @@ void DrawTimeRemaining(s32 time) {
 /* The two race-position digits, from g_RacePosition; the tens digit is
  * blanked below 10 and the colour changes from 4th place down. */
 void DrawRacePosition(void) {
+    GameFrameContextAddress drawBuffer;
     u8 *base;
     s32 value;
     SPRT *left;
     SPRT *right;
 
     base = g_DrawBuffer;
+    drawBuffer.bytes = base;
     value = g_RacePosition;
-    left = (SPRT *)(base + 0x237AC);
-    right = (SPRT *)(base + 0x237C0);
+    left = &drawBuffer.context->layout.raceHud.labels[3];
+    right = &drawBuffer.context->layout.raceHud.labels[4];
 
     if (value >= 10) {
         left->u0 = 0x18;
@@ -188,7 +191,10 @@ void DrawRacePosition(void) {
 }
 
 void SetHudBlinkColor(s32 phase) {
-    ((SPRT *)(g_DrawBuffer + 0x23798))->clut = phase ? 0x7811 : 0x7800;
+    GameFrameContextAddress drawBuffer;
+
+    drawBuffer.bytes = g_DrawBuffer;
+    drawBuffer.context->layout.raceHud.labels[2].clut = phase ? 0x7811 : 0x7800;
 }
 
 void DrawSplitDelta(s32 delta, s32 y) {
