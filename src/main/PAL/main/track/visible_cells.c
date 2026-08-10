@@ -111,7 +111,7 @@ u32 IsCellVisibleFromRegion(s32 cellX, s32 cellZ, s32 region) {
     u32 mask;
 
     y = cellZ << 7;
-    base.pointer = (u32 *)g_CellVisibilityTable;
+    base.pointer = g_CellVisibilityTable;
     mask = 1;
     y += base.byteOffset;
     x += y;

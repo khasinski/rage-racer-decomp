@@ -261,6 +261,21 @@ typedef struct TerrainCellAssetHeader {
     AssetAddress cells[1];
 } TerrainCellAssetHeader;
 
+typedef struct TerrainCellAsset {
+    u16 grid[32][32];
+    u32 visibility[32][32];
+    TerrainCellAssetHeader header;
+} TerrainCellAsset;
+
+typedef union TerrainCellAssetAddress {
+    void *data;
+    u8 *bytes;
+    u16 *grid;
+    u32 *visibility;
+    TerrainCellAsset *asset;
+    TerrainCellAssetHeader *header;
+} TerrainCellAssetAddress;
+
 typedef struct CourseModelAssetEntry {
     AssetAddress geometry;
     s32 reserved;
@@ -285,7 +300,7 @@ void UploadCarImage(s32 slot);
 extern s32 g_PendingCarModelIndex;
 extern u8 *g_TrackTextureShadow;
 
-void InstallTerrainCellData(u8 *base);
+void InstallTerrainCellData(void *data);
 void InstallTrackEventData(void* eventData);
 void InstallTrackPoints(void* trackData);
 void LoadCourseAssets(void);
