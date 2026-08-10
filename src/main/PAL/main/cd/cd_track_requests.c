@@ -107,7 +107,7 @@ void StepCdPlayRequest(void) {
         }
         break;
     case 3:
-        g_CdCommandPending = -1;
+        g_CdCommandPending = CD_COMMAND_NONE;
         g_CdCommandStep = 0;
         break;
     }

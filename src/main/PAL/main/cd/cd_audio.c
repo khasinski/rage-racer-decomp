@@ -79,7 +79,7 @@ void StepCdPauseRequest(void) {
         break;
 
     case 6:
-        g_CdCommandPending = -1;
+        g_CdCommandPending = CD_COMMAND_NONE;
         g_CdCommandStep = 0;
         break;
     }
@@ -109,7 +109,7 @@ void StepCdResumeRequest(void) {
         }
         break;
     case 3:
-        g_CdCommandPending = -1;
+        g_CdCommandPending = CD_COMMAND_NONE;
         g_CdCommandStep = 0;
         break;
     }
@@ -126,7 +126,7 @@ void InitCdAudio(void) {
     BuildCdTrackTable();
 
     g_CdTrackPending = -1;
-    g_CdCommandPending = -1;
+    g_CdCommandPending = CD_COMMAND_NONE;
     g_CdCurrentTrack = 2;
     g_CdTrackStep = 0;
     g_CdCommandStep = 0;
@@ -144,13 +144,13 @@ void TickCdAudio(void) {
 
     if (g_CdTrackPending < 0) {
         switch (g_CdCommandPending) {
-        case 1:
+        case CD_COMMAND_PLAY:
             StepCdPlayRequest();
             break;
-        case 2:
+        case CD_COMMAND_PAUSE:
             StepCdPauseRequest();
             break;
-        case 3:
+        case CD_COMMAND_RESUME:
             StepCdResumeRequest();
             break;
         }
@@ -167,7 +167,7 @@ void TickCdAudio(void) {
             value = CdPosToInt_Local(&g_CdTrackLoopPoint[0]);
             if (value < temp) {
                 g_CdTrackStep = status;
-                g_CdCommandPending = 1;
+                g_CdCommandPending = CD_COMMAND_PLAY;
                 g_CdCommandStep = 0;
                 g_CdTrackPending = g_CdCurrentTrack;
             }

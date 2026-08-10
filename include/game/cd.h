@@ -6,6 +6,13 @@
 struct CdlLOC;
 struct CdlFILE;
 
+typedef enum CdCommandType {
+    CD_COMMAND_NONE = -1,
+    CD_COMMAND_PLAY = 1,
+    CD_COMMAND_PAUSE,
+    CD_COMMAND_RESUME
+} CdCommandType;
+
 extern u8 g_CdVolume;
 /*
  * CD-DA (music) front end. Nothing here talks to the drive directly: each call
@@ -43,7 +50,7 @@ void SetCdMixPreset(s32 preset);
 /*
  * The CD-DA pump. TickCdAudio runs once per frame from MainLoop and
  * issues at most one CdControl: a pending track goes to StepCdTrackRequest,
- * otherwise g_CdCommandPending 1/2/3 selects play / pause / resume. Each step
+ * otherwise g_CdCommandPending selects play, pause, or resume. Each step
  * function is a small state machine over g_CdTrackStep / g_CdCommandStep that
  * clears the pending value when it finishes. See docs/names.md 13.
  */
@@ -62,7 +69,7 @@ void BuildCdTrackTable(void);
 /* Declared identically by 27 translation units before this
  * header carried them. */
 
-extern s32 g_CdCommandPending;
+extern CdCommandType g_CdCommandPending;
 extern s32 g_CdCommandStep;
 extern u8 g_CdCurrentTrack;
 extern s32 g_CdFadeFrames;
