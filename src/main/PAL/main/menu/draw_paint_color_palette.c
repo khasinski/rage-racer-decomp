@@ -85,7 +85,7 @@ s32 DrawPaintColorPalette(s32 *counter, s32 step, s32 index) {
             PaintColorAddress colorAddress;
 
             colorAddress.pointer = localTable.colors;
-            colorAddress.value += i;
+            colorAddress.bytes += i;
             DrawSolidRect(ot, (s16)(xBaseHalf + colorIndex), (s16)(yBase + 0x210), 8,
                           0x10, colorAddress.pointer->r, colorAddress.pointer->g,
                           colorAddress.pointer->b, 0xFF);
