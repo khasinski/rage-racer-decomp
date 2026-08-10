@@ -31,7 +31,7 @@ void LoadEnvironmentCue(GameEnvironmentCue *cue) {
     g_EnvironmentColors.fields.slots[8].to = cue->colors[8];
     g_EnvironmentColors.fields.slots[8].from = g_EnvironmentColors.fields.slots[8].cur;
 
-    field28 = RAW(cue->duration);
+    field28 = cue->duration;
     mode = g_EnvironmentMode;
     g_EnvLerpDuration = field28;
     newMode = RAW(cue->mode);
