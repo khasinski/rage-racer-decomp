@@ -460,8 +460,16 @@ typedef struct CollisionContext
   s32 trackDelta;
 } CollisionContext;
 
+typedef union CollisionContextAddress {
+  SVec *rotation;
+  CollisionContext *context;
+} CollisionContextAddress;
+
 static inline CollisionContext *GetCollisionContext(SVec *rotation) {
-  return (CollisionContext *)rotation;
+  CollisionContextAddress address;
+
+  address.rotation = rotation;
+  return address.context;
 }
 
 s32 CollidePlayerWithCars(PlayerCarRuntime *car)
