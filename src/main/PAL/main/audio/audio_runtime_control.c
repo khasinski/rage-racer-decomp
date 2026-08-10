@@ -40,21 +40,19 @@ s32 IsSpuTransferDone(void) {
     return (value0 << 16) | (s16)value1;
 }
 
-/* Reads one tone out of the 2x6 g_SoundSlotTone grid, and writes it too when
+/* Reads one tone out of the 6x2 g_SoundSlotTone grid, and writes it too when
  * `tone` is not negative. Returns what was there before. */
 s32 SetSoundToneTableEntry(s32 slot, s32 vabSlot, s32 tone) {
-    s16 *base = &g_SoundSlotTone[0][0];
+    s16 (*table)[2];
     s16 *row;
     s16 *entry;
     s32 old;
-    SoundToneTableAddress rowAddress;
     SoundToneTableAddress entryAddress;
 
-    rowAddress.pointer = base;
-    rowAddress.value += slot * 4;
-    row = rowAddress.pointer;
+    table = g_SoundSlotTone;
+    row = table[slot];
     entryAddress.pointer = row;
-    entryAddress.value = vabSlot * 2 + entryAddress.value;
+    entryAddress.value = vabSlot * sizeof(*entry) + entryAddress.value;
     entry = entryAddress.pointer;
     old = *entry;
 
@@ -185,17 +183,15 @@ void SetReverbPreset(s32 type, s32 left, s32 right) {
 }
 
 void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
-    s16 *base = &g_SoundSlotTone[0][0];
+    s16 (*table)[2];
     s16 *row;
     s16 *entry;
-    SoundToneTableAddress rowAddress;
     SoundToneTableAddress entryAddress;
 
-    rowAddress.pointer = base;
-    rowAddress.value += slot * 4;
-    row = rowAddress.pointer;
+    table = g_SoundSlotTone;
+    row = table[slot];
     entryAddress.pointer = row;
-    entryAddress.value = tone * 2 + entryAddress.value;
+    entryAddress.value = tone * sizeof(*entry) + entryAddress.value;
     entry = entryAddress.pointer;
     SsUtKeyOnV((s16)(slot + 0xE), g_SoundScale.vabIds[(s16)vabSlot], *entry, 0, 0x3C, 0, 0, 0);
 }
