@@ -123,15 +123,8 @@ void LoadRoundAssets(void) {
     case 1:
         kind = ASSET_TIME_ATTACK_ROUND_SCREEN;
         if (g_GrandPrixMode != 0) {
-            register s32 index asm("$2") = g_GrandPrixSeries;
-            s32 scaled;
-
-            scaled = index << 1;
-            scaled += index;
-            index = g_GrandPrixClass;
-            scaled <<= 1;
-            index += ASSET_ROUND_SCREEN_BASE;
-            kind = scaled + index;
+            kind = ASSET_ROUND_SCREEN_BASE + g_GrandPrixSeries * 6 +
+                   g_GrandPrixClass;
         }
 
         result = LoadAsset(kind, g_ImageBlockBuffer);
