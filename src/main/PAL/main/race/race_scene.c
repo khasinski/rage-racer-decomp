@@ -150,14 +150,16 @@ timing_done:
                         s32 *cursor;
                         s32 element;
                         s32 accumulated;
+                        PlayerCarRaceStateAddress routeAddress;
 
                         result = 0;
                         if (count > 0) {
-                            cursor = (s32 *)route;
+                            routeAddress.state = route;
+                            cursor = routeAddress.words;
                             do {
-                                element = ((PlayerCarRaceState *)cursor)
-                                              ->timing.fields.lapTimes.table
-                                              .milliseconds[0];
+                                routeAddress.words = cursor;
+                                element = routeAddress.state->timing.fields
+                                              .lapTimes.table.milliseconds[0];
                                 accumulated = g_RaceTotalTime;
                                 accumulated += element;
                                 g_RaceTotalTime = accumulated;
@@ -174,7 +176,7 @@ timing_done:
                 }
                 if (grandPrixMode == 0) {
                     tableOffset = g_CourseIndex * 12 + ReadStableRaceSeries() * 48;
-                    sectorAddress.pointer = (s32 *)g_BestSectorTimes;
+                    sectorAddress.table = g_BestSectorTimes;
                     sectorAddress.byteOffset += tableOffset;
                     sectorAddress.pointer[0] = g_RefSectorTimes.fields.first;
                     sectorAddress.pointer = &g_BestSectorTimes[0][0][1];
@@ -319,11 +321,11 @@ void EnterRaceScene(void) {
     g_SectorEndDistance[0] = trackLength / 3;
     g_SectorEndDistance[1] = g_SectorEndDistance[0] * 2;
     tableOffset = (mode * 12) + (scene * 48);
-    sectorAddress.pointer = (s32 *)g_BestSectorTimes;
+    sectorAddress.table = g_BestSectorTimes;
     sectorAddress.byteOffset += tableOffset;
     g_RefSectorTimes.fields.first = sectorAddress.pointer[0];
     scene *= 32;
-    sectorAddress.pointer = (s32 *)g_BestSectorTimes;
+    sectorAddress.table = g_BestSectorTimes;
     sectorAddress.byteOffset += tableOffset;
     g_RefSectorTime1 = sectorAddress.pointer[1];
     mode *= 8;
@@ -335,14 +337,15 @@ void EnterRaceScene(void) {
          * which is how the same table is spelled four times elsewhere in
          * this file. Written indexed here, or with the three offsets folded
          * together, the schedule around these address calculations changes. */
-        lapAddress.pointer = (s32 *)g_BestLapTimes;
+        lapAddress.table = g_BestLapTimes;
         lapAddress.byteOffset += scene;
         lapTableRow.bytes = lapAddress.bytes;
         count = mode + lapTableRow.byteOffset;
         scratch = g_GrandPrixMode * 4;
         scratch += count;
-        entry = (s32 *)scratch;
-        lastSectorAddress.pointer = (s32 *)g_BestSectorTimes;
+        lapAddress.byteOffset = scratch;
+        entry = lapAddress.pointer;
+        lastSectorAddress.table = g_BestSectorTimes;
         lastSectorAddress.byteOffset += tableOffset;
         g_RefSectorTime2 = lastSectorAddress.pointer[2];
     } while (0);

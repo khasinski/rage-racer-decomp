@@ -526,6 +526,11 @@ typedef struct PlayerCarRaceState {
     PlayerRaceTiming timing;
 } PlayerCarRaceState;
 
+typedef union PlayerCarRaceStateAddress {
+    PlayerCarRaceState *state;
+    s32 *words;
+} PlayerCarRaceStateAddress;
+
 /* The player's 0x19C-byte race object. Its prefix shares the world/track
  * layout used by the rival cars, but +0xBC is the player drivetrain block,
  * not the rival AI view. */
