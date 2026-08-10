@@ -38,9 +38,17 @@ typedef struct TeamLogoSample {
 
 typedef union TeamLogoSampleAddress {
     s32 byteOffset;
+    void *data;
     TeamLogoSample *samplePointer;
     u16 *halfwordPointer;
 } TeamLogoSampleAddress;
+
+static __inline__ TeamLogoSample *GetTeamLogoSample(void *data) {
+    TeamLogoSampleAddress address;
+
+    address.data = data;
+    return address.samplePointer;
+}
 
 typedef union TeamLogoPixelWord {
     u16 value;

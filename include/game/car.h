@@ -371,9 +371,17 @@ typedef struct GameCarSpec {
 
 typedef union GameCarSpecAddress {
     s32 byteOffset;
+    void *data;
     u8 *bytes;
     GameCarSpec *pointer;
 } GameCarSpecAddress;
+
+static __inline__ GameCarSpec *GetGameCarSpec(void *data) {
+    GameCarSpecAddress address;
+
+    address.data = data;
+    return address.pointer;
+}
 
 extern GameCarSpec *g_CarSpec;
 

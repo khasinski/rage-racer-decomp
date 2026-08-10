@@ -60,7 +60,7 @@ void LoadCarSelectAssets(void) {
                 firstOffset = header->offsets[0];
                 secondBlock = GetSceneAssetAddress(header, blockOffset);
                 header = GetSceneAssetAddress(header, firstOffset);
-                g_TeamLogoSampleData = (TeamLogoSample *)header;
+                g_TeamLogoSampleData = GetTeamLogoSample(header);
                 g_AssetBlockPtr = secondBlock;
                 RegisterCourseModels(GetCourseModelAssetHeader(g_AssetBlockPtr));
 
