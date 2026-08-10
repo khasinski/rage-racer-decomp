@@ -106,10 +106,10 @@ void TriggerRaceCues(void) {
         finishAddress.byteOffset = g_RaceSeries * sizeof(TrackFinishCue);
         finishAddress.byteOffset += base.byteOffset;
         if (g_PlayerCar.trackSection == finishAddress.finishPointer->trackSection) {
-            entry.byteOffset = g_PlayerCar.lap;
-            if (entry.byteOffset == g_LapCount) {
-                entry.byteOffset = current | 8;
-                g_RaceCueFlags = entry.byteOffset;
+            entry.value = g_PlayerCar.lap;
+            if (entry.value == g_LapCount) {
+                entry.value = current | 8;
+                g_RaceCueFlags = entry.value;
                 if (g_WrongWayTimer < 10) {
                     PlaySoundCue(0x2A);
                 }
@@ -140,12 +140,12 @@ void TriggerRaceCues(void) {
 
             temp = state->trackSection;
             if (temp == current) {
-                entry.byteOffset = entry.pointer->speed[0][0].speedPercent;
+                entry.value = entry.pointer->speed[0][0].speedPercent;
                 temp = state->speedScale;
-                product = entry.byteOffset * temp;
+                product = entry.value * temp;
                 temp = product / 100;
-                entry.byteOffset = state->speed;
-                if (temp < entry.byteOffset) {
+                entry.value = state->speed;
+                if (temp < entry.value) {
                     temp = state->motionMode;
                     if (temp <= 0) {
                         temp = mask | loopFlags;

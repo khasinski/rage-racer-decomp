@@ -169,6 +169,7 @@ typedef struct TrackRaceCueData {
 
 typedef union TrackRaceCueAddress {
     s32 byteOffset;
+    s32 value;
     u8 *bytePointer;
     TrackFinishCue *finishPointer;
     TrackRaceCueData *pointer;
