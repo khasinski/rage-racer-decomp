@@ -4,6 +4,7 @@
 #include "common.h"
 #include "game/camera_types.h"
 #include "game/environment.h"
+#include "game/render_types.h"
 #include "game/vector.h"
 
 #include "game/scratchpad.h"
@@ -14,18 +15,6 @@ typedef union OrderingTableAddress {
     s32 byteOffset;
     void *pointer;
 } OrderingTableAddress;
-
-typedef union RenderBufferAddress {
-    s32 byteOffset;
-    u8 *bytes;
-    void *pointer;
-    SPRT *sprite;
-    SPRT_8 *sprite8;
-    TILE *tile;
-    POLY_F4 *polyF4;
-    POLY_G4 *polyG4;
-    CVec *color;
-} RenderBufferAddress;
 
 typedef union VisibilityMaskAddress {
     s32 byteOffset;

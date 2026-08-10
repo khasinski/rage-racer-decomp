@@ -1,5 +1,6 @@
 #include "common.h"
 #include "game/asset.h"
+#include "game/render_types.h"
 #include "game/render_internal.h"
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
@@ -71,6 +72,7 @@ void GameDrawText8x8Shaded(
     u8 **scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
     u8 *packet;
     u8 *prim;
+    RenderBufferAddress primAddress;
 
     packet = *scratch;
     if (*str != 0) {
@@ -112,7 +114,8 @@ void GameDrawText8x8Shaded(
                 sprt->t.g0 = intensity;
                 sprt->t.b0 = intensity;
                 asm("");
-                prim = (u8 *)sprt;
+                primAddress.volatileSprite8 = sprt;
+                prim = primAddress.bytes;
                 sprt->clut = clutIndex;
                 AddPrim(g_DrawBuffer + 0xCC, prim);
                 sprt++;

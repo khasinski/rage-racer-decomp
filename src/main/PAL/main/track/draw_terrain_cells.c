@@ -1,6 +1,6 @@
 #include "common.h"
 #include "game/race.h"
-#include "game/render.h"
+#include "game/render_types.h"
 #include "game/render_internal.h"
 #include "game/track_internal.h"
 #include "game/terrain_internal.h"
