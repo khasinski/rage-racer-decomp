@@ -18,6 +18,7 @@ typedef union TeamLogoRotationBufferAddress {
 
 typedef union MenuOrderingTableAddress {
     s32 byteOffset;
+    s32 value;
     void *pointer;
 } MenuOrderingTableAddress;
 
@@ -70,14 +71,14 @@ void FlipTeamLogoHorizontal(void) {
             lowPacked = 0;
             highPacked = 0;
             lowAddress.wordPointer = lowWordPtr;
-            addr = rowOffset + lowAddress.byteOffset;
-            lowAddress.byteOffset = addr;
+            addr = rowOffset + lowAddress.value;
+            lowAddress.value = addr;
             lowWord = *lowAddress.wordPointer;
             addr = highIndex << 2;
             highAddress.wordPointer = base;
-            highOffset = addr + highAddress.byteOffset;
+            highOffset = addr + highAddress.value;
             addr = rowOffset + highOffset;
-            highAddress.byteOffset = addr;
+            highAddress.value = addr;
             highWord = *highAddress.wordPointer;
             do {
                 lowPacked <<= 4;
@@ -94,16 +95,16 @@ void FlipTeamLogoHorizontal(void) {
                 TeamLogoCanvasAddress highStoreAddress;
 
                 lowStoreAddress.wordPointer = lowWordPtr;
-                lowAddr = rowOffset + lowStoreAddress.byteOffset;
+                lowAddr = rowOffset + lowStoreAddress.value;
                 lowWordPtr++;
                 colOffset += 4;
                 highAddr = highIndex << 2;
                 highStoreAddress.wordPointer = base;
-                highAddr += highStoreAddress.byteOffset;
+                highAddr += highStoreAddress.value;
                 highOffset = highAddr;
                 highAddr = rowOffset + highOffset;
-                highStoreAddress.byteOffset = highAddr;
-                lowStoreAddress.byteOffset = lowAddr;
+                highStoreAddress.value = highAddr;
+                lowStoreAddress.value = lowAddr;
                 *highStoreAddress.wordPointer = lowPacked;
                 *lowStoreAddress.wordPointer = highPacked;
             }
@@ -142,7 +143,7 @@ void RotateTeamLogoCcw(void) {
         value2 = limit - i;
         value2 <<= 2;
         sourceAddress.wordPointer = base;
-        sourceAddress.byteOffset = value2 + sourceAddress.byteOffset;
+        sourceAddress.value = value2 + sourceAddress.value;
         srcStart = sourceAddress.wordPointer;
         do {
             k = 0;
@@ -153,7 +154,7 @@ void RotateTeamLogoCcw(void) {
                 dst = destinationIndex.wordPointer;
                 destinationIndex.wordPointer = dst;
                 destinationBase.wordPointer = (stackBase = saved);
-                destinationIndex.byteOffset += destinationBase.value;
+                destinationIndex.value = destinationIndex.byteOffset + destinationBase.value;
                 dst = destinationIndex.wordPointer;
                 shift = (limit - k) << 2;
                 *dst = 0;
@@ -249,7 +250,7 @@ void RotateTeamLogoCw(void) {
                 indexAddress.wordPointer = dst;
                 indexAddress.wordIndex *= 4;
                 copyAddress.wordPointer = (stackBase = saved);
-                indexAddress.byteOffset += copyAddress.value;
+                indexAddress.value += copyAddress.value;
                 dst = indexAddress.wordPointer;
                 *dst = 0;
                 value1 = src[0x00];
@@ -778,7 +779,7 @@ void DrawMenuLightBurst(s32 arg) {
     MenuLightBurstBand l2;
     MenuOrderingTableAddress orderingTableAddress;
 
-    orderingTableAddress.byteOffset = SCRATCH_OT_BASE_WORD + 0xAFC;
+    orderingTableAddress.value = SCRATCH_OT_BASE_WORD + 0xAFC;
     s3 = orderingTableAddress.pointer;
     l1 = g_MenuLightBurstBandX;
     l2 = g_MenuLightBurstBandY;
