@@ -332,7 +332,11 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
         s32 bgmVolume = g_BgmVolumeSetting;
         s32 sfxVolume = g_SfxVolumeSetting;
         s32 monoOutput = g_MonoOutput;
-        u16 *checksumSrc = (u16 *)block;
+        GameSaveBlockAddress checksumAddress;
+        u16 *checksumSrc;
+
+        checksumAddress.pointer = block;
+        checksumSrc = checksumAddress.halfwordPointer;
 
         block->bgmVolume = bgmVolume;
         block->sfxVolume = sfxVolume;

@@ -14,12 +14,14 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
     {
         u32 sum;
         u32 checksumIndex;
+        GameSaveBlockAddress checksumAddress;
         u16 *p;
 
         i = 0;
         __asm__("" : "=r"(i) : "0"(i));
         sum = i;
-        p = (u16 *)base;
+        checksumAddress.pointer = base;
+        p = checksumAddress.halfwordPointer;
         do {
             sum += *p++;
             i++;
