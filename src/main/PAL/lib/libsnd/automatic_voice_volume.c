@@ -375,7 +375,6 @@ void SpuVmAutoPanTick(long voice) {
     clampValue = (short)index8 * 2;
     limit = (short)originalArg;
     *(u_short *)((u_char *)((u_char *)g_SndVoiceRegs + 2) + clampValue) = right;
-    asm("" : : : "memory");
     *(u_short *)((u_char *)g_SndVoiceRegs + clampValue) = left;
     g_SndVoiceFlags[limit] |= 3;
     }

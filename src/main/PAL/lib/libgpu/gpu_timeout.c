@@ -9,7 +9,7 @@ long Gpu_CheckTimeout(void) {
     long result;
     long *dc;
     register volatile u_long *gp1ForLog asm("$3");
-    register long pending asm("$5");
+    long pending;
     long gpuTail;
 
     switch (0) { default:
@@ -21,7 +21,6 @@ long Gpu_CheckTimeout(void) {
     }
 
     gp1ForLog = g_GpuGp1;
-    asm("" : "=r"(gp1ForLog) : "0"(gp1ForLog));
     (void)*gp1ForLog;
     pending = g_GpuQueueWriteIdx;
     gpuTail = g_GpuQueueReadIdx;
