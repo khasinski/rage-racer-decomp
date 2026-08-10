@@ -20,6 +20,9 @@ typedef union RenderBufferAddress {
     u8 *bytes;
     void *pointer;
     SPRT *sprite;
+    SPRT_8 *sprite8;
+    TILE *tile;
+    POLY_F4 *polyF4;
     CVec *color;
 } RenderBufferAddress;
 

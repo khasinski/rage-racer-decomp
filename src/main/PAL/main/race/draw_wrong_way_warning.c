@@ -157,7 +157,11 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
     prim->t.code = code7;
     AddPrim(g_DrawBuffer + 0xCC, prim);
     prim++;
-    SCRATCH = (u8 *)prim;
+    {
+        RenderBufferAddress cursor;
+        cursor.polyF4 = prim;
+        SCRATCH = cursor.bytes;
+    }
 
     {
         s32 x = cx + p->gearDigitDX;
@@ -196,7 +200,11 @@ s32 DrawTachometer(s32 rpm, s32 flash, s32 type, s32 amt) {
         q->y0 = v10;
         q++;
         AddPrim(g + 0xCC, tile);
-        SCRATCH = (u8 *)q;
+        {
+            RenderBufferAddress cursor;
+            cursor.tile = q;
+            SCRATCH = cursor.bytes;
+        }
     }
 }
 
@@ -229,7 +237,11 @@ void DrawFullscreenFadeTile(s32 color, s32 tpage) {
     prim = packet;
     packet++;
     AddPrim((u32 *)ot, (u32 *)prim);
-    SCRATCH = QueueDrawModePrim(g_DrawBuffer + 0xCC, (u8 *)packet, tpage);
+    {
+        RenderBufferAddress cursor;
+        cursor.tile = packet;
+        SCRATCH = QueueDrawModePrim(g_DrawBuffer + 0xCC, cursor.bytes, tpage);
+    }
 }
 
 u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
@@ -260,5 +272,9 @@ u8 *DrawHudDigit(u8 *prim, s32 x, s32 y, s32 digit, u16 clut) {
         AddPrim(ot + 0xCC, oldPrim);
     }
 
-    return (u8 *)out;
+    {
+        RenderBufferAddress cursor;
+        cursor.sprite8 = out;
+        return cursor.bytes;
+    }
 }
