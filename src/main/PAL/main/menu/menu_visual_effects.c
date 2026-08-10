@@ -1192,7 +1192,7 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
             s32 textShade;
             s32 textClut;
             s32 textFlags;
-            u8 *lastSuffix;
+            const char *lastSuffix;
 
             suffixX = 0x1E;
             asm("" : "=r"(suffixX) : "0"(suffixX));
@@ -1200,15 +1200,15 @@ s32 DrawRankingTable(s32 *progress, s32 step, s32 ranking) {
             textClut = 0x244;
             textFlags = 0x20;
             DrawLargeText(suffixX, (s16)(panelY + 0x82),
-                              (u8 *)g_MsgOrdinalSt, textShade, textShade,
+                              g_MsgOrdinalSt, textShade, textShade,
                               textShade, textClut, textFlags);
             DrawLargeText(suffixX, (s16)(panelY + 0xA2),
-                              (u8 *)g_MsgOrdinalNd, textShade, textShade,
+                              g_MsgOrdinalNd, textShade, textShade,
                               textShade, textClut, textFlags);
             DrawLargeText(0x1F, (s16)(panelY + 0xC2),
-                              (u8 *)g_MsgOrdinalRd, textShade, textShade,
+                              g_MsgOrdinalRd, textShade, textShade,
                               textShade, textClut, textFlags);
-            lastSuffix = (u8 *)g_MsgOrdinalTh;
+            lastSuffix = g_MsgOrdinalTh;
             DrawLargeText(suffixX, (s16)(panelY + 0xE2), lastSuffix,
                               textShade, textShade, textShade, textClut,
                               textFlags);

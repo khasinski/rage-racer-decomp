@@ -9,14 +9,14 @@
 void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
     s32 x0;
     s16 y;
-    u8 *str0;
+    const char *str0;
     u8 color;
     u8 g;
     u8 b;
     u16 clut;
     s32 flags;
 {
-    u8 *str;
+    const char *str;
     s32 x;
     u8 fl = flags;
     u32 *ot;

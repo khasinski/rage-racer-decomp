@@ -533,7 +533,7 @@ void DrawSmallText(
 void DrawLargeText(
     s32 x,
     s32 y,
-    u8 *str,
+    const char *str,
     s32 r,
     s32 g,
     s32 b,
