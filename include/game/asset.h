@@ -10,6 +10,7 @@ struct ModelBankHeader;
 struct CourseModelAssetHeader;
 struct SceneryMotionData;
 struct RaceIntroCameraScript;
+struct PathSceneryPositionData;
 
 /* Asset-load state machine phase (0 idle; 1..6 drive LoadAsset loads). */
 extern s32 g_AssetLoadState;
@@ -86,6 +87,7 @@ typedef union AssetAddress {
     struct CourseModelAssetHeader *courseModels;
     struct SceneryMotionData *sceneryMotion;
     struct RaceIntroCameraScript *raceIntroCamera;
+    struct PathSceneryPositionData *pathSceneryPosition;
 } AssetAddress;
 
 static __inline__ struct CourseModelAssetHeader *GetCourseModelAssetHeader(

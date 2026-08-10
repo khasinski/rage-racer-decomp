@@ -43,7 +43,7 @@ void InstallTrackEventData(void *resourceData) {
     callArg = g_MsgEventOk;
     cursor.pointer = base.bytes + cursor.offset;
     base.bytes += offset1;
-    g_PathSceneryPosData = cursor.pointer;
-    g_PathSceneryRotData = (PathSceneryRotationData *)base.bytes;
+    g_PathSceneryPosData = cursor.pathSceneryPosition;
+    g_PathSceneryRotData = base.pathSceneryRotation;
     printf(callArg);
 }

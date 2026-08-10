@@ -7,6 +7,7 @@
 
 union GameEnvColor;
 struct GameRenderObject;
+struct PathSceneryRotationData;
 typedef struct GameEnvironmentCue GameEnvironmentCue;
 
 
@@ -108,6 +109,7 @@ typedef struct TrackEventOffsets {
 typedef union TrackEventOffsetBase {
     volatile TrackEventOffsets *offsets;
     u8 *bytes;
+    struct PathSceneryRotationData *pathSceneryRotation;
 } TrackEventOffsetBase;
 
 typedef struct TrackAmbienceZone {
