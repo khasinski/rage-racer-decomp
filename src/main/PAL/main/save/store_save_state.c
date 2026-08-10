@@ -302,9 +302,13 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
                 SectorTimeTableAddress sectorInputBaseAddress;
                 SectorTimeTableAddress sectorInputOuterAddress;
                 SectorTimeTableAddress sectorInputAddress;
-                s32 *sectorOut = (inner = 0, (s32 *)sectorDst);
+                SectorTimeTableAddress sectorOutputAddress;
+                s32 *sectorOut;
                 s32 *sectorIn;
 
+                inner = 0;
+                sectorOutputAddress.bytes = sectorDst;
+                sectorOut = sectorOutputAddress.pointer;
                 sectorInputBaseAddress.pointer = sectorBase;
                 sectorInputOuterAddress.byteOffset =
                     currentOuterOffset + sectorInputBaseAddress.byteOffset;

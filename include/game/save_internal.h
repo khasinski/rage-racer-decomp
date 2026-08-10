@@ -33,6 +33,7 @@ extern s32 g_BestSectorTimes[2][4][3];
 typedef union SectorTimeTableAddress {
     s32 byteOffset;
     s32 *pointer;
+    u8 *bytes;
     GameSaveBlock *saveBlock;
 } SectorTimeTableAddress;
 
