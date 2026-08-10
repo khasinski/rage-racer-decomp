@@ -223,18 +223,18 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
     SetDefDispEnv((DispEnv *)&g_DispEnv1X, 0, 0, 0x140, height);
 
     {
-        register void *ptr;
+        register DrawEnv *ptr;
         register s32 g;
         register s32 b;
         register s32 smallWidth;
         s32 small_height;
 
-        ptr = base + 0x70;
+        ptr = &context->environment.mirrorDraw;
         g = 0x56;
         b = 0x12;
         smallWidth = 0x94;
         small_height = 0x24;
-        SetDefDrawEnv((DrawEnv *)ptr, g, b, smallWidth, small_height);
+        SetDefDrawEnv(ptr, g, b, smallWidth, small_height);
         SetDefDrawEnv(&g_MirrorDrawEnv1, 0x56, 0x102, 0x94, small_height);
     }
 
