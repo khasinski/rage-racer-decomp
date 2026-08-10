@@ -32,7 +32,7 @@ void DrawControllerSetupScene(s32 variant) {
     u8 *scratchBase = SCRATCHPAD_BYTES;
 
     g_ScratchViewZVolatile = 0;
-    g_ScratchViewZPointer = (void *)-0x1080;
+    g_ScratchViewZVolatile = -0x1080;
     position[2] = 0;
     position[1] = 0;
     position[0] = 0;
@@ -41,12 +41,12 @@ void DrawControllerSetupScene(s32 variant) {
     g_ScratchViewAngleZ = 0;
     g_ScratchViewAngleY = 0;
     g_ScratchViewAngleX = 0;
-    g_ScratchViewYPointer = 0;
+    g_ScratchViewY = 0;
     setupMode = g_GameMode - 10;
     if (setupMode < 2) {
-        g_ScratchViewZPointer = (void *)-0xC80;
+        g_ScratchViewZVolatile = -0xC80;
     } else {
-        g_ScratchViewYPointer = (void *)-0x40;
+        g_ScratchViewY = -0x40;
     }
     SetCameraRotMatrix();
 

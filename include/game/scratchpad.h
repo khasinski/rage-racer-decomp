@@ -173,9 +173,7 @@ typedef struct CarTrackScratch {
 
 extern s32 g_ScratchViewX asm("0x1F800008");
 extern s32 g_ScratchViewY asm("0x1F80000C");
-extern void *g_ScratchViewYPointer asm("0x1F80000C");
 extern volatile s32 g_ScratchViewZVolatile asm("0x1F800010");
-extern void *volatile g_ScratchViewZPointer asm("0x1F800010");
 extern s32 g_ScratchViewAngleX asm("0x1F800018");
 extern s32 g_ScratchViewAngleY asm("0x1F80001C");
 extern s32 g_ScratchViewAngleZ asm("0x1F800020");
