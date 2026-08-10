@@ -5,6 +5,7 @@
 #include "game/vector.h"
 
 struct PlayerCarRuntime;
+struct GameRenderObject;
 
 /*
  * Per-car entry. The two setup bytes are what the CUSTOMIZE screen edits and
@@ -185,10 +186,19 @@ typedef struct GameCarRuntime {
 typedef union GameCarRuntimeAddress {
     GameCarRuntime *runtime;
     struct PlayerCarRuntime *player;
+    struct GameRenderObject *renderObject;
     u32 *words;
     Block16 *blocks;
     LVec *vector;
 } GameCarRuntimeAddress;
+
+static __inline__ struct GameRenderObject *GetCarRenderObject(
+    GameCarRuntime *car) {
+    GameCarRuntimeAddress address;
+
+    address.runtime = car;
+    return address.renderObject;
+}
 
 typedef union CarBodyRotationAddress {
     s32 *words;

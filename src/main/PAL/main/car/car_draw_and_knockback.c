@@ -107,7 +107,7 @@ void DrawCars(void) {
     do {
         if (base->activeFlag != (i++, minus_one)) {
             if (base->aiEnabled == one) {
-                DrawCar((GameRenderObject *)base);
+                DrawCar(GetCarRenderObject(base));
             }
         }
         base++;
@@ -116,7 +116,7 @@ void DrawCars(void) {
 
 void DrawPlayerCarOnly(void) {
     SelectModelBank(1);
-    DrawCar((GameRenderObject *)g_Cars);
+    DrawCar(GetCarRenderObject(g_Cars));
 }
 
 void ClearCarMotionState(GameCarRuntime *car) {
