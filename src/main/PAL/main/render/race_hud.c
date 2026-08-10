@@ -219,12 +219,12 @@ void DrawSplitDelta(s32 delta, s32 y) {
     firstPrim.bytes = prim;
 
     if (y > 0) {
-        ((volatile SPRT *)prim)->u0 = 0x88;
+        firstPrim.volatileSprite->u0 = 0x88;
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot), "r"(prim));
         temp = 0x7810;
     } else if (y < 0) {
-        ((volatile SPRT *)prim)->u0 = 0x78;
+        firstPrim.volatileSprite->u0 = 0x78;
         ot = g_DrawBuffer;
         __asm__ volatile("" : : "r"(ot));
         temp = 0x780F;
