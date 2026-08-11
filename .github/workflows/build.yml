@@ -27,10 +27,12 @@ jobs:
       LD: mipsel-linux-gnu-ld
       NM: mipsel-linux-gnu-nm
       OBJCOPY: mipsel-linux-gnu-objcopy
+      READELF: mipsel-linux-gnu-readelf
       CPP: mipsel-linux-gnu-cpp
       MAKEFLAGS: >-
         AS=mipsel-linux-gnu-as LD=mipsel-linux-gnu-ld
         NM=mipsel-linux-gnu-nm OBJCOPY=mipsel-linux-gnu-objcopy
+        READELF=mipsel-linux-gnu-readelf
     steps:
       - uses: actions/checkout@v4
 

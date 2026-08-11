@@ -27,6 +27,7 @@ AS         := mipsel-none-elf-as
 LD         := mipsel-none-elf-ld
 NM         := mipsel-none-elf-nm
 OBJCOPY    := mipsel-none-elf-objcopy
+READELF    := mipsel-none-elf-readelf
 OBJDIFF    ?= build/toolchain/bin/objdiff-cli
 
 ASM_SRCS := $(shell find $(ASM_DIR) -name '*.s' -not -path '*/nonmatchings/*' 2>/dev/null)
@@ -124,7 +125,8 @@ progress:
 # writes the file decomp.dev ingests. Both need a build that already passed
 # `check`, because the target side is named from the verified build's symbols.
 expected: check
-	$(PY) tools/scripts/gen_expected.py --version $(VERSION) --basename $(BASENAME) --python $(PY)
+	$(PY) tools/scripts/gen_expected.py --version $(VERSION) --basename $(BASENAME) \
+	      --python $(PY) --as $(AS) --objcopy $(OBJCOPY) --readelf $(READELF)
 
 report: expected
 	$(PY) tools/scripts/gen_objdiff_config.py --version $(VERSION) --basename $(BASENAME)
