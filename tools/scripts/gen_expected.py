@@ -202,6 +202,50 @@ def apply_alias_renames(text, renames):
     return ''.join(out)
 
 
+AUTO_SYMBOL = re.compile(r'^(D_[0-9A-Fa-f]+) = 0x([0-9A-Fa-f]+);', re.MULTILINE)
+HILO = re.compile(r'%(hi|lo)\((D_[0-9A-Fa-f]+)\)')
+
+
+def invented_constants(auto_syms, vram_start):
+    """{name: value} for addresses splat named that are not addresses at all.
+
+    A `lui`/`addiu` pair loading a plain number looks exactly like one loading
+    an address, and the disassembler has to guess. Anything below where the
+    executable is loaded cannot be a pointer into it, so the guess was wrong:
+    the compiler wrote a constant and this has to say so too, or the pair reads
+    as a relocation the base does not have.
+    """
+    return {name: int(value, 16) for name, value in AUTO_SYMBOL.findall(auto_syms)
+            if int(value, 16) < vram_start}
+
+
+def halves(value):
+    """The lui/addiu pair for a constant, the way the assembler splits one."""
+    low = value & 0xFFFF
+    if low >= 0x8000:
+        low -= 0x10000
+    return (value - low) >> 16, low
+
+
+def inline_constant_pairs(text, constants):
+    def replace(match):
+        part, name = match.groups()
+        if name not in constants:
+            return match.group(0)
+        high, low = halves(constants[name])
+        return '0x%X' % high if part == 'hi' else '%d' % low
+
+    return HILO.sub(replace, text)
+
+
+C_FUNCTION = re.compile(r'^[A-Za-z_][\w \t\*]*?\b[A-Za-z_]\w*\s*\([^;{]*\)\s*\{', re.MULTILINE)
+
+
+def is_all_asm(text):
+    """True when a source file defines no C at all, only assembly it includes."""
+    return ('INCLUDE_ASM' in text or 'HANDWRITTEN_ASM' in text) and not C_FUNCTION.search(text)
+
+
 def is_data_only(text):
     """True when a disassembled file holds constants rather than a function.
 
@@ -334,6 +378,9 @@ def main(argv=None):
     parser.add_argument('--python', default=sys.executable)
     parser.add_argument('--readelf', default='mipsel-none-elf-readelf')
     parser.add_argument('--objcopy', default='mipsel-none-elf-objcopy')
+    # Where the executable is loaded. Anything the disassembler names below
+    # this cannot be a pointer into the image.
+    parser.add_argument('--vram-start', type=lambda v: int(v, 0), default=0x80010000)
     parser.add_argument('--as', dest='assembler', default='mipsel-none-elf-as')
     args = parser.parse_args(argv)
 
@@ -368,22 +415,54 @@ def main(argv=None):
                if section == '.text' and kind != 'STT_FUNC'}
     renames = alias_renames(
         (ROOT / 'linkers' / version / 'undefined_syms_manual.txt').read_text())
+    constants = invented_constants(
+        (ROOT / out_dir / 'undefined_syms_auto.txt').read_text(), args.vram_start)
+    if constants:
+        print('constants: %d address(es) splat named that are plain numbers' % len(constants))
     for source in (ROOT / asm_root).rglob('*.s'):
         text = strip_differ_aliases(source.read_text())
-        source.write_text(apply_alias_renames(retype_data_in_text(text, in_text), renames))
+        text = apply_alias_renames(retype_data_in_text(text, in_text), renames)
+        source.write_text(inline_constant_pairs(text, constants))
+
+    # The constant blobs hold no code and were never decompiled: both sides
+    # disassemble the same bytes out of the same EXE. `make split` then runs
+    # symbolise_data_words.py over the tree's copy, which this pass does not,
+    # so leaving them separate makes two spellings of one thing and nothing
+    # pairs. Take the tree's copy, exactly as the base assembles it.
+    blobs = 0
+    for source in (ROOT / out_dir / 'asm').rglob('*.s'):
+        if 'nonmatchings' in source.parts:
+            continue
+        original = ROOT / 'asm' / source.relative_to(ROOT / out_dir / 'asm')
+        if original.exists():
+            shutil.copyfile(original, source)
+            blobs += 1
+    print('data: %d blob(s) taken from the tree' % blobs)
 
 
     src_root = ROOT / out_dir / 'src' / basename
+    real_root = ROOT / 'src' / basename
     stubs = []
+    verbatim = 0
     for stub in sorted(src_root.rglob('*.c')):
         unit = str(stub.relative_to(src_root)).removesuffix('.c')
-        unit_dir = ROOT / asm_root / unit
-        names = ({p.stem for p in unit_dir.glob('*.s') if is_data_only(p.read_text())}
-                 if unit_dir.exists() else set())
-        stub.write_text(rewrite_stub(stub.read_text(), asm_root, unit, names))
+        real = real_root / ('%s.c' % unit)
+        if real.exists() and is_all_asm(real.read_text()):
+            # Nothing here was decompiled: the unit is one hand-written block
+            # the tree keeps as assembly on purpose, and the base object is
+            # built from that file. Splitting it again into one file per label
+            # only invites the two disassemblies to disagree over which
+            # addresses deserve a name. Use the same input for both sides.
+            shutil.copyfile(real, stub)
+            verbatim += 1
+        else:
+            unit_dir = ROOT / asm_root / unit
+            names = ({p.stem for p in unit_dir.glob('*.s') if is_data_only(p.read_text())}
+                     if unit_dir.exists() else set())
+            stub.write_text(rewrite_stub(stub.read_text(), asm_root, unit, names))
         stubs.append((stub, ROOT / out_dir / 'build' /
                       stub.relative_to(ROOT / out_dir).with_suffix('.c.o')))
-    print('units: %d stubs' % len(stubs))
+    print('units: %d stubs, %d taken verbatim (nothing in them is C)' % (len(stubs), verbatim))
 
     # The INCLUDE_ASM macro wraps each block in a throwaway function so the
     # compiler will carry the .include through. maspsx deletes the body but

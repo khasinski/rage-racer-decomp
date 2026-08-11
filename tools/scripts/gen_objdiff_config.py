@@ -95,12 +95,10 @@ def main(argv=None):
     parser.add_argument('--basename', default='main')
     parser.add_argument('--expected', default='expected')
     parser.add_argument('--output', default='objdiff.json')
-    # PAL/main/render/terrain_submission is the one game unit the base still
-    # builds from the tree's own disassembly, which reaches mid-function
-    # addresses through _hi/_lo linker symbols where a fresh split writes
-    # %hi/%lo. objdiff pairs the two ends of a relocation and cannot place an
-    # absolute, so it refuses to score the unit at all.
-    parser.add_argument('--skip', action='append', default=['PAL/main/render/terrain_submission'],
+    # Nothing needs this today. It stays because objdiff refuses to score a
+    # whole unit when it cannot pair one symbol, and the failure names no unit,
+    # so having somewhere to put one beats rediscovering that under pressure.
+    parser.add_argument('--skip', action='append', default=[],
                         help='unit objdiff cannot score; repeatable')
     args = parser.parse_args(argv)
 

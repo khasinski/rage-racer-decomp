@@ -3,6 +3,10 @@ import unittest
 from tools.scripts.gen_expected import (
     alias_renames,
     apply_alias_renames,
+    halves,
+    inline_constant_pairs,
+    invented_constants,
+    is_all_asm,
     is_data_only,
     parse_map_placement,
     retype_data_in_text,
@@ -163,6 +167,49 @@ class RewriteStubTest(unittest.TestCase):
     def test_does_not_pull_in_a_function_the_stub_already_includes(self):
         text = 'INCLUDE_ASM(const s32, "u", Fn);\n'
         self.assertNotIn("INCLUDE_RODATA", rewrite_stub(text, "asm", "u", {"Fn"}))
+
+
+class InventedConstantTest(unittest.TestCase):
+    AUTO = ("D_7FFFFF = 0x7FFFFF;\n"
+            "D_80000004 = 0x80000004;\n"
+            "g_MsgInsertController = 0x80010000;\n")
+
+    def test_only_addresses_below_the_image_are_constants(self):
+        # 0x80000004 is a real kernel address; 0x7FFFFF is 0x800000 - 1, which
+        # the compiler built with lui/addiu and the disassembler mistook for a
+        # pointer.
+        self.assertEqual(invented_constants(self.AUTO, 0x80000000), {"D_7FFFFF": 0x7FFFFF})
+
+    def test_splits_a_constant_the_way_the_assembler_does(self):
+        # The low half is signed, so the high half is carried by one.
+        self.assertEqual(halves(0x7FFFFF), (0x80, -1))
+        self.assertEqual(halves(0x12340000), (0x1234, 0))
+        self.assertEqual(halves(0x00001234), (0, 0x1234))
+
+    def test_rewrites_the_pair_as_literals(self):
+        text = ("    lui        $s0, %hi(D_7FFFFF)\n"
+                "    addiu      $s0, $s0, %lo(D_7FFFFF)\n")
+        out = inline_constant_pairs(text, {"D_7FFFFF": 0x7FFFFF})
+        self.assertIn("lui        $s0, 0x80\n", out)
+        self.assertIn("addiu      $s0, $s0, -1\n", out)
+
+    def test_leaves_a_real_symbol_alone(self):
+        text = "    lui $at, %hi(D_8009E694)\n"
+        self.assertEqual(inline_constant_pairs(text, {"D_7FFFFF": 0x7FFFFF}), text)
+
+
+class IsAllAsmTest(unittest.TestCase):
+    def test_a_unit_that_only_includes_assembly(self):
+        self.assertTrue(is_all_asm('#include "common.h"\n\nHANDWRITTEN_ASM("a/b", entry);\n'))
+
+    def test_a_unit_that_mixes_c_with_assembly_is_not(self):
+        # Copying such a unit's source over the target would make its C compare
+        # against itself.
+        source = 'INCLUDE_ASM("a/b", Fn);\n\nvoid Other(void) {\n}\n'
+        self.assertFalse(is_all_asm(source))
+
+    def test_plain_c_is_not(self):
+        self.assertFalse(is_all_asm("void Other(void) {\n}\n"))
 
 
 class IsDataOnlyTest(unittest.TestCase):
