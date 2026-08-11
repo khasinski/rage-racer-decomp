@@ -31,6 +31,17 @@
     )
 #endif
 
+/* A block that is assembly on purpose and always will be: a kernel entry
+   reached by `syscall`, or a BIOS call that jumps through a register. It
+   expands exactly like INCLUDE_ASM but has to be spelled differently, because
+   INCLUDE_ASM means "not decompiled yet" everywhere else in this tree.
+   tools/scripts/gen_nonmatching_asm.py reads the second argument of every
+   INCLUDE_ASM as a symbol it must disassemble out of the EXE, and here the
+   argument names a checked-in file instead. */
+#ifndef HANDWRITTEN_ASM
+#define HANDWRITTEN_ASM(FOLDER, NAME) INCLUDE_ASM(FOLDER, NAME)
+#endif
+
 #if INCLUDE_ASM_USE_MACRO_INC
 __asm__(".include \"include/macro.inc\"\n");
 #else
@@ -45,6 +56,10 @@ __asm__(".include \"include/labels.inc\"\n");
 
 #ifndef INCLUDE_RODATA
 #define INCLUDE_RODATA(FOLDER, NAME)
+#endif
+
+#ifndef HANDWRITTEN_ASM
+#define HANDWRITTEN_ASM(FOLDER, NAME)
 #endif
 
 #endif
