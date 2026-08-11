@@ -20,6 +20,17 @@ jobs:
     strategy:
       matrix:
         version: [PAL]
+    # The build reaches for an unprefixed cpp/as/ld through the environment as
+    # well as through make, so both have to be pointed at the cross tools.
+    env:
+      AS: mipsel-linux-gnu-as
+      LD: mipsel-linux-gnu-ld
+      NM: mipsel-linux-gnu-nm
+      OBJCOPY: mipsel-linux-gnu-objcopy
+      CPP: mipsel-linux-gnu-cpp
+      MAKEFLAGS: >-
+        AS=mipsel-linux-gnu-as LD=mipsel-linux-gnu-ld
+        NM=mipsel-linux-gnu-nm OBJCOPY=mipsel-linux-gnu-objcopy
     steps:
       - uses: actions/checkout@v4
 
@@ -33,7 +44,7 @@ jobs:
         run: |
           sudo dpkg --add-architecture i386
           sudo apt-get update
-          sudo apt-get install -y binutils-mipsel-linux-gnu libc6:i386
+          sudo apt-get install -y gcc-mipsel-linux-gnu libc6:i386
 
       - name: Fetch the game executable and compiler
         # A private repository holds the retail EXE and the gcc 2.6.3 cc1;
@@ -65,11 +76,9 @@ jobs:
       # against symbols the current sources no longer define.
       - name: Split
         run: make split VERSION=${{ matrix.version }}
-        env: { AS: mipsel-linux-gnu-as, LD: mipsel-linux-gnu-ld, NM: mipsel-linux-gnu-nm, OBJCOPY: mipsel-linux-gnu-objcopy, CPP: mipsel-linux-gnu-cpp }
 
       - name: Build and verify against the retail SHA-1
-        run: make build check VERSION=${{ matrix.version }} AS=mipsel-linux-gnu-as LD=mipsel-linux-gnu-ld NM=mipsel-linux-gnu-nm OBJCOPY=mipsel-linux-gnu-objcopy
-        env: { CPP: mipsel-linux-gnu-cpp, AS: mipsel-linux-gnu-as }
+        run: make build check VERSION=${{ matrix.version }}
 
       - name: Check the scaffolding ratchet and the tool tests
         run: |
@@ -83,8 +92,7 @@ jobs:
           chmod +x build/toolchain/bin/objdiff-cli
 
       - name: Generate the progress report
-        run: make report VERSION=${{ matrix.version }} AS=mipsel-linux-gnu-as LD=mipsel-linux-gnu-ld NM=mipsel-linux-gnu-nm OBJCOPY=mipsel-linux-gnu-objcopy
-        env: { CPP: mipsel-linux-gnu-cpp, AS: mipsel-linux-gnu-as }
+        run: make report VERSION=${{ matrix.version }}
 
       # The artifact name is the contract with decomp.dev: it takes the text
       # before _report as the version shown on the site.
