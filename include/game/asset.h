@@ -252,7 +252,6 @@ typedef union GameSceneAssetOffsetAddress {
 } GameSceneAssetOffsetAddress;
 
 typedef union GameSceneAssetAddress {
-    s32 byteOffset;
     s32 value;
     u8 *bytes;
     void *pointer;

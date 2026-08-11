@@ -412,7 +412,6 @@ typedef struct GameCarSpec {
 } GameCarSpec;
 
 typedef union GameCarSpecAddress {
-    s32 byteOffset;
     s32 value;
     void *data;
     u8 *bytes;
@@ -436,7 +435,6 @@ typedef struct GearCurveRow {
 } GearCurveRow;
 
 typedef union GearCurveAddress {
-    s32 byteOffset;
     s32 value;
     u8 *bytes;
     s32 *valuePointer;
@@ -540,7 +538,6 @@ enum {
 };
 
 typedef union PlayerLapTimeAddress {
-    s32 byteOffset;
     s32 value;
     u8 *bytes;
     s16 *halfwordPointer;

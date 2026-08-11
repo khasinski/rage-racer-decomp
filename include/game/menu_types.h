@@ -19,7 +19,6 @@ typedef struct RaceRecord {
 typedef s32 RaceRecordOffset;
 
 typedef union RaceRecordAddress {
-    s32 byteOffset;
     RaceRecordOffset recordOffset;
     s32 value;
     RaceRecord *pointer;
@@ -71,7 +70,6 @@ typedef union TeamLogoCanvas {
 } TeamLogoCanvas;
 
 typedef union TeamLogoCanvasAddress {
-    s32 byteOffset;
     s32 value;
     u8 *bytePointer;
     u32 *wordPointer;
@@ -89,7 +87,6 @@ typedef struct PaintColorTable {
 } PaintColorTable;
 
 typedef union PaintColorAddress {
-    s32 byteOffset;
     s32 value;
     u8 *bytes;
     Rgb *pointer;

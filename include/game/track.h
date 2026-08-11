@@ -89,7 +89,6 @@ typedef struct TrackZone {
 } TrackZone;
 
 typedef union TrackZoneAddress {
-    s32 byteOffset;
     s32 value;
     TrackZone *pointer;
 } TrackZoneAddress;
@@ -138,7 +137,6 @@ typedef struct TrackEventSoundZone {
 } TrackEventSoundZone;
 
 typedef union TrackEventSoundZoneAddress {
-    s32 byteOffset;
     s32 value;
     TrackEventSoundZone *pointer;
 } TrackEventSoundZoneAddress;
@@ -170,7 +168,6 @@ typedef struct TrackRaceCueData {
 } TrackRaceCueData;
 
 typedef union TrackRaceCueAddress {
-    s32 byteOffset;
     s32 value;
     u8 *bytePointer;
     TrackFinishCue *finishPointer;
@@ -194,7 +191,6 @@ typedef struct TrackEventData {
 } TrackEventData;
 
 typedef union TrackEventDataAddress {
-    s32 byteOffset;
     s32 value;
     u8 *bytePointer;
     TrackEventData *pointer;
@@ -285,7 +281,6 @@ typedef struct ShuttlePath {
 } ShuttlePath;
 
 typedef union ShuttlePathPointAddress {
-    s32 byteOffset;
     s32 value;
     u8 *bytes;
     Vec4 *pointer;
@@ -496,7 +491,6 @@ typedef struct PathSceneryPositionData {
 } PathSceneryPositionData;
 
 typedef union SpinningSceneryAngleAddress {
-    s32 byteOffset;
     s32 value;
     s16 *pointer;
 } SpinningSceneryAngleAddress;
@@ -507,7 +501,6 @@ typedef struct PathSceneryRotationData {
 } PathSceneryRotationData;
 
 typedef union PathSceneryKeyAddress {
-    s32 byteOffset;
     s32 value;
     PathSceneryPositionData *positionData;
     PathSceneryRotationData *rotationData;
@@ -580,7 +573,6 @@ typedef struct SpinningSceneryOrientation {
     u8 reserved[12];
 } SpinningSceneryOrientation;
 typedef union SpinningSceneryDataAddress {
-    s32 byteOffset;
     s32 value;
     u8 *bytes;
     SpinningSceneryOrientation *orientationPointer;

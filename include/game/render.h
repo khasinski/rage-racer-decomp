@@ -12,13 +12,11 @@
 #include "psyq/gte.h"
 
 typedef union OrderingTableAddress {
-    s32 byteOffset;
     s32 value;
     void *pointer;
 } OrderingTableAddress;
 
 typedef union VisibilityMaskAddress {
-    s32 byteOffset;
     s32 value;
     u32 *pointer;
 } VisibilityMaskAddress;
@@ -136,7 +134,6 @@ typedef struct TimedDrawCommand {
 } TimedDrawCommand;
 
 typedef union TimedDrawCommandAddress {
-    s32 byteOffset;
     s32 value;
     TimedDrawCommand *pointer;
 } TimedDrawCommandAddress;
@@ -867,7 +864,6 @@ typedef struct EnvironmentPalette {
 } EnvironmentPalette;
 
 typedef union EnvironmentPaletteAddress {
-    s32 byteOffset;
     s32 value;
     EnvironmentPalette *palettePointer;
     Rgb *colorPointer;
