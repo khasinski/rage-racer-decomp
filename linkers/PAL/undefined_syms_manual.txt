@@ -61,8 +61,8 @@ D_8006A010 = func_80069FA8 + 0x68;
 func_8006A048 = func_8006A018 + 0x30;
 func_8006A058 = func_8006A018 + 0x40;
 func_8006A3E8 = DeliverEvent + 0x10;
-func_8006DF24 = ChangeClearRCntStub + 0x10;
-func_8006DF34 = ChangeClearRCntStub + 0x20;
+func_8006DF24 = ChangeClearInterruptMask;
+func_8006DF34 = ChangeClearInterruptMask + 0x10;
 func_8006E654 = SysEnqIntRPStub + 0x10;
 func_8006E664 = SysEnqIntRPStub + 0x20;
 func_8006E674 = SysEnqIntRPStub + 0x30;
@@ -87,10 +87,7 @@ SaveKernelRegisters = func_8006E684;
    emits as a u_long[] in .text; the block carries the array's name, so the
    routine's name is an alias for it. */
 BiosExit = g_BiosCallStubs;
-ChangeClearRCnt = ChangeClearRCntStub;
-ChangeClearInterruptMask = ChangeClearInterruptMaskStub;
 SysEnqIntRP = SysEnqIntRPStub;
-ExitCriticalSection = ExitCriticalSectionStub;
 
 /* Branch targets inside a function, reached from a sibling function that
    is still hand-written assembly. */
