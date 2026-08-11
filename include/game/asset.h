@@ -446,7 +446,6 @@ void RegisterCourseModels(CourseModelAssetHeader *base);
 s32 RequestRaceStart(void);
 void ResetTrackTextureSwap(void);
 void SelectTrackCameraTable(void* block, s32 variant);
-/* Install sub-block 0 of the loaded .2ND track pack as the CamRow base. */
 void SetTrackCameraTable(void *table);
 void SetCourseObjects(void* table);
 void SetEnvPaletteTable(void* table);

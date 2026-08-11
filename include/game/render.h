@@ -176,10 +176,6 @@ typedef struct GameRenderAxisMatrix {
     s16 m[3][3];
 } GameRenderAxisMatrix;
 
-/*
- * Camera / horizon row. Base g_CamRow, indexed +8*screen. `horizon` is added
- * to / subtracted from a GameRenderObject's y during the view transform.
- */
 /* One display buffer, which is what InitRenderState sets that rectangle to.
  * See SetupDisplay240 below: the 240 mode is "two 320x240 buffers stacked at
  * y=0 / y=0xF0" and sets the GTE projection with SetGeomScreen(0x140). The

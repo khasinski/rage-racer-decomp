@@ -84,7 +84,7 @@ typedef union ScreenOffset {
 extern Matrix g_MirrorViewMatrix;
 extern Matrix g_SceneLightMatrix;
 extern u32 g_ScratchRenderMode;
-extern u8 *g_CamRow;
+extern TrackRenderTable *g_TrackRenderTable;
 extern FontGlyph g_SmallFontGlyphs[];
 extern FontGlyph g_LargeFontGlyphs[];
 extern CameraKey g_CameraPath[];

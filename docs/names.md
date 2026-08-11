@@ -271,7 +271,7 @@ variant).
 ### Track & rendering
 | Name | Addr | Words | Purpose |
 |---|---|---:|---|
-| `DrawCar` | 0x8001DFC0 | 445 | Draws one car, from the func_800389F0 loop over the 11 runtime entries (`activeFlag != -1 && field_BC == 1`). Culls on `out[2] >= 0`, then picks a LOD by Manhattan camera distance: < 3328 gives the full body plus three extra prims and a two-pass mirrored sub-part (the pass negates matrix columns 0 and 2 and the +0xC offset — the left/right wheels), < 9472 a single low-detail prim, beyond that nothing. Every submission is `*(s32 *)0x1F800084 = colour; func_80028DEC(0x1F800000, primId)` with primId clamped against the object-bank size `D_801E4168`. **Was described here as a "render-object transform".** What it reads through `D_8019C9A8` is described at §2's `CamRow` entry, which this row corrected. |
+| `DrawCar` | 0x8001DFC0 | 445 | Draws one car, from the func_800389F0 loop over the 11 runtime entries (`activeFlag != -1 && field_BC == 1`). Culls on `out[2] >= 0`, then picks a LOD by Manhattan camera distance: < 3328 gives the full body plus three extra prims and a two-pass mirrored sub-part (the pass negates matrix columns 0 and 2 and the model's render offset — the left/right wheels), < 9472 a single low-detail prim, beyond that nothing. Every submission is `*(s32 *)0x1F800084 = colour; func_80028DEC(0x1F800000, primId)` with primId clamped against the object-bank size `D_801E4168`. |
 
 ### CD / streaming
 | Name | Addr | Words | Purpose |
@@ -382,7 +382,8 @@ variant).
 | Struct | Size | Layout | Where used |
 |---|---:|---|---|
 | S22 | 0x10 | `s8 name[8]` (a.k.a. `pad[8]`); `s32 v8`; `s16 vC`; `s16 vE` | Ranking / time high-score record row. Tables `D_801E7744[][4][5]` (ranking) and `D_8019CB78[][4][5]` (time). Referenced by matched func_80021DB8 and by `DrawRankingTable`. |
-| CamRow | 0x14 | `u8 pad0[0xC]`; `s16 axis0`@0xC; `u16 axis1`@0xE; `u16 axis2`@0x10; `s16 horizon`@0x12 | The layout is as declared in `include/game/render.h`, but **the prose that came with it was wrong** and is corrected here: `D_8019C9A8` is a **pointer** (`SetTrackCameraTable` stores sub-block 0 of the track `.2ND` pack into it, 13a), the index is the per-object model selector `D_8007D3AC[g_CourseIndex][obj->field_AE]` rather than a screen number, `+0xC/0xE/0x10` is a mirrored sub-part offset vector and `+0x12` a Y bias restored on exit. Read by `DrawCar` (func_8001DFC0). |
+| TrackRenderTable | header 0x0C, model stride 0x08 | `s32 textureSectionLo`; `s32 textureSectionHi`; `s32 environmentScriptOffset`; `CarModelRenderParams models[]` | `D_8019C9A8` points to sub-block 0 of the track `.2ND` pack. The first three words are table-wide settings; the trailing records contain the per-model mirrored-part offset and Y bias used by `DrawCar`. |
+| CarModelRenderParams | 0x08 | `s16 axis0`; `u16 axis1`; `u16 axis2`; `s16 horizon` | Selected with `D_8007D3AC[g_CourseIndex][obj->field_AE]`. |
 | SoundScale | 0x0C | `s32 scale`; `s16 values[3]` | Volume-scale table at `D_801E6CA4`. Referenced by matched func_8005D414 and seed func_8005D050 (which aliases it via `asm("D_801E6CA4")` for a `.values` CSE). |
 | StStrHeader | 0x20 | `u16 state`; `u16 mode`; `u16 frame`; `u16 nSectors`; `u16 nFrames`; `u8 pad0A[0x12]`; `CdlLOC loc`@0x1C | CD stream ring header. Ring pointer `D_8009DF1C`, ring base `D_801E8AAC`. Referenced by seed func_8006D1D0 (`.state` read `lhu`). |
 
@@ -406,7 +407,7 @@ Landing status into headers is recorded in the change note at the end of this fi
 | 0x8009B200 | (block) | Menu / UI state block (~0x550 B), accessed field-by-field: cursor `D_8009B2F4`, busy `D_8009B308`, cursor-anim `D_8009B380`, load phase `D_8009B740`, memcard sub-state `D_8009B71C…`, scroll counters `D_8009B270[4]` / `D_8009B2C0`, car index `D_8009B374` (see menu.h). |
 | 0x8009DF1C | `D_8009DF1C` | Active `StStrHeader *` for CD streaming; points into the ring based at `D_801E8AAC` (`= (D_801E6C74<<5)+D_801E8AAC`). Ring indices `D_801E6C74`/`D_801E6C84`. |
 | 0x8009DF20 | (block) | Sound voice work buffer: voice*0x10 block at base + voice*0x34 block at 0x8009E0B8; per-voice status bytes `g_SndVoiceFlags` @ 0x8009E0A0 (see audio.h). |
-| 0x8019C9A8 | `D_8019C9A8` | A **pointer** to the `CamRow` table, installed by `SetTrackCameraTable` from sub-block 0 of the track `.2ND` pack; indexed by the per-object model selector, not by a screen number. (Said "camera/horizon rows, indexed `+8*screen`" — see §2's `CamRow` entry for what was wrong.) |
+| 0x8019C9A8 | `D_8019C9A8` | A pointer to `TrackRenderTable`, installed by `SetTrackCameraTable` from sub-block 0 of the track `.2ND` pack. |
 | 0x1F800000 | (scratchpad) | Render primitive scratch: `*(void**)0x1F800004` = OT/prim base; prims packed at 0x1F800000 (cursor `s2 += 0x28`). GTE engine state at 0x1F800068 / 0x1F80011C etc. |
 | 0x8007C704 | `g_AssetRequestType` (`D_8007C704`) | Active asset pipeline selector, `AssetRequestType` (asset.h). |
 | 0x8019CB14 | `g_GameMode` (`D_8019CB14`) | Current game mode; indexes `g_GameModeHandlers` (`D_8007D67C`). |
@@ -811,7 +812,7 @@ so the name is identical everywhere while the load stays `sltiu`.
 The four seed-only structs above were all landed into headers; `make check
 VERSION=PAL` stayed byte-identical (`main.exe: OK`) after each:
 
-- **CamRow** → `include/game/render.h` (new typedef; no compiled file defined it).
+- **TrackRenderTable / CarModelRenderParams** → `include/game/camera_types.h`.
 - **StStrHeader** → `include/psyq/cd.h` (new typedef; uses the existing `CdlLOC`).
 - **S22** → `include/game/menu.h`; local `typedef` removed from the matched
   `src/main/PAL/main/func_80021DB8.c`, which now `#include "game/menu.h"`.
@@ -6690,7 +6691,7 @@ the first thing that value looks like in a file that also does disc work.
 ### 45e. `0x8019C9A8` was never a constant
 
 `SetTrackCameraTable` was writing through a literal address.
-`configs/PAL/sym.bss.main.txt:386` gives `g_CamRow = 0x8019C9A8`, and four other
+`configs/PAL/sym.bss.main.txt` gives `g_TrackRenderTable = 0x8019C9A8`, and four other
 files in `render/`, `menu/` and `race/` already `extern` that symbol - each with
 its own pointee type, which is why `asset_loader.c` declares its own `void *`
 view rather than a shared one (the pattern of 38a).
@@ -6743,4 +6744,4 @@ different matter and is named - see `POLY_FT4_CODE` / `POLY_GT4_CODE`.
 | `0xF0` | `SCREEN_HEIGHT` | `game/render.h` |
 | `0x800` | `TERRAIN_CELL_GRID_SIZE` | `game/track.h` |
 | `0x1000` | `CELL_VISIBILITY_TABLE_SIZE` | `game/track.h` |
-| `0x8019C9A8` | `g_CamRow` (a symbol, not a constant) | `configs/PAL/sym.bss.main.txt` |
+| `0x8019C9A8` | `g_TrackRenderTable` (a symbol, not a constant) | `configs/PAL/sym.bss.main.txt` |

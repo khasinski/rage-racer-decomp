@@ -367,7 +367,7 @@ void EnterRaceScene(void) {
     }
     g_RaceTotalTime = 0;
     ResetMirrorState();
-    SeekEnvironmentScript(GetCamRow(g_CamRow, 0)->environmentScriptOffset);
+    SeekEnvironmentScript(g_TrackRenderTable->environmentScriptOffset);
     BuildTileStrips();
     BuildRaceHudPrims(g_GrandPrixMode);
     g_AnimTimer = 0;
