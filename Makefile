@@ -27,6 +27,7 @@ AS         := mipsel-none-elf-as
 LD         := mipsel-none-elf-ld
 NM         := mipsel-none-elf-nm
 OBJCOPY    := mipsel-none-elf-objcopy
+OBJDIFF    ?= build/toolchain/bin/objdiff-cli
 
 ASM_SRCS := $(shell find $(ASM_DIR) -name '*.s' -not -path '*/nonmatchings/*' 2>/dev/null)
 C_SRCS   := $(shell find $(SRC_DIR)/$(VERSION) -name '*.c' 2>/dev/null)
@@ -41,7 +42,7 @@ OBJS := $(ASM_OBJS) $(C_OBJS)
 C_DEPS := $(C_OBJS:.o=.o.d)
 -include $(C_DEPS)
 
-.PHONY: all setup stage split build check audit-code progress clean distclean help
+.PHONY: all setup stage split build check audit-code test progress expected report clean distclean help
 
 all: build check
 
@@ -107,8 +108,27 @@ audit-code:
 	$(PY) tools/scripts/code_debt.py --check
 	$(PY) -m unittest tools.tests.test_code_debt
 
+# Enumerated rather than discovered: tools/ has no __init__.py, so unittest
+# discovery cannot import it, but the namespace package resolves by name.
+TESTS := tools.tests.test_code_debt tools.tests.test_alloc_diff tools.tests.test_try_drop_raw \
+         tools.tests.test_gen_expected tools.tests.test_gen_objdiff_config
+
+test:
+	$(PY) -m unittest $(TESTS)
+
 progress:
 	$(PY) tools/scripts/progress_report.py
+
+# objdiff compares what this tree builds against objects disassembled from the
+# game itself. `expected` produces that second side; `report` scores it and
+# writes the file decomp.dev ingests. Both need a build that already passed
+# `check`, because the target side is named from the verified build's symbols.
+expected: check
+	$(PY) tools/scripts/gen_expected.py --version $(VERSION) --basename $(BASENAME) --python $(PY)
+
+report: expected
+	$(PY) tools/scripts/gen_objdiff_config.py --version $(VERSION) --basename $(BASENAME)
+	$(OBJDIFF) report generate -p . -o $(BUILD)/report.json
 
 clean:
 	rm -rf $(BUILD)
@@ -125,6 +145,9 @@ help:
 	@echo "  build VERSION=PAL Build split output"
 	@echo "  check VERSION=PAL Verify rebuilt EXE SHA-1"
 	@echo "  audit-code        Check that game-code scaffolding debt did not increase"
+	@echo "  test              Run the tooling unit tests"
 	@echo "  progress          Refresh badge JSON and print the progress table"
+	@echo "  expected          Build the objdiff target objects from the game EXE"
+	@echo "  report            Write build/$$(VERSION)/report.json for decomp.dev"
 	@echo "  clean             Remove build/ for selected VERSION"
 	@echo "  distclean         Also remove generated asm/linker output"

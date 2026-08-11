@@ -34,6 +34,18 @@ SUBSEGMENT = re.compile(
 )
 
 
+# Sony shipped libgpu, libgte, libspu and the rest with the SDK. Matching them
+# was necessary to relink the executable, but they are not this game and
+# counting them would inflate every number here with someone else's work. The
+# same split feeds decomp.dev; see tools/scripts/gen_objdiff_config.py.
+SDK_UNIT = re.compile(r"^[^/]+/lib/")
+
+
+def is_sdk(name: str) -> bool:
+    """True for a subsegment that belongs to the PsyQ libraries, not the game."""
+    return bool(SDK_UNIT.match(name))
+
+
 def color(percent: float) -> str:
     if percent >= 90:
         return "brightgreen"
@@ -295,6 +307,8 @@ def main() -> int:
     plain_bytes = 0
     handwritten_funcs = 0
     handwritten_bytes = 0
+    sdk_funcs = 0
+    sdk_bytes = 0
 
     for index, (start, kind, name) in enumerate(subsegments):
         if kind != "c":
@@ -308,6 +322,11 @@ def main() -> int:
 
         size = max(0, end - start)
         src = SRC_ROOT / f"{name}.c"
+
+        if is_sdk(name):
+            sdk_bytes += size
+            sdk_funcs += count_functions(src) if src.exists() else 1
+            continue
 
         if not src.exists():
             total_funcs += 1
@@ -386,6 +405,8 @@ def main() -> int:
         "A function counts as decompiled when it has no INCLUDE_ASM/INCLUDE_RODATA and no non-empty inline assembly, except sanctioned GTE/COP2 operations expressed through `psyq/gte_macros.h` (or an equivalent single documented cop2 op), which represent the hardware interface and do not lower progress (see `README.md`). Register/symbol asm labels and empty barriers used for matching do not lower progress. Functions are counted and classified INDIVIDUALLY rather than per file, because a translation unit may hold several functions and one function needing an assembly crutch must not reclassify the plain C beside it. Code bytes are attributed the same way: each function owns the bytes from its address to the next function in its unit, so grouping functions into a translation unit cannot move the totals. A unit whose addresses cannot all be resolved falls back to whole-subsegment attribution, where a mixed unit counts as plain only when every function in it is plain. The built executable is byte-identical to retail (`make check VERSION=PAL`).",
         "",
         f"{handwritten_funcs} functions ({handwritten_bytes} code bytes) are documented handwritten assembly (`HANDWRITTEN_ASM`, see `README.md`) and are excluded from the totals below.",
+        "",
+        f"A further {sdk_funcs} functions ({sdk_bytes} code bytes) are Sony's PsyQ libraries. They had to be matched to relink the executable, but they are not this game, so they are excluded as well.",
         "",
         "| Binary | Functions | % | Code bytes | % |",
         "|---|---:|---:|---:|---:|",
