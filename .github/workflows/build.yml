@@ -36,12 +36,14 @@ jobs:
           sudo apt-get install -y binutils-mipsel-linux-gnu libc6:i386
 
       - name: Fetch the game executable and compiler
-        # A private repository holds assets/PAL/main.exe, SYSTEM.CNF and the
-        # gcc 2.6.3 cc1. Neither can be published here.
+        # A private repository holds the retail EXE and the gcc 2.6.3 cc1;
+        # neither can be published here. Reached through a read-only deploy key
+        # rather than a token: it is scoped to that one repository and does not
+        # expire, so this does not quietly stop building in a year's time.
         uses: actions/checkout@v4
         with:
           repository: khasinski/rage-racer-assets
-          token: ${{ secrets.ASSETS_TOKEN }}
+          ssh-key: ${{ secrets.ASSETS_SSH_KEY }}
           path: .assets
 
       - name: Place them where the build expects
