@@ -7,7 +7,7 @@
  *
  * Hand-written assembly. It was previously carried as a u_long array in
  * .text, which meant the two block bounds and the saved-$ra slot were baked
- * in as literals and did not relocate; see docs/names.md on shiftability.
+ * in as literals and did not relocate.
  */
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -19,7 +19,7 @@
  * Evidence: it too was carried as a u_long array, which baked the two block
  *           bounds and the saved-$ra slot in as literals that did not relocate.
  *           As real assembly those became relocation records and the block
- *           follows the image when code size changes; see docs/names.md on
- *           shiftability. Decompiling it would undo that.
+ *           follows the image when code size changes. Decompiling it would
+ *           undo that.
  */
 INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libgte/exception_patch", func_80069FA8);

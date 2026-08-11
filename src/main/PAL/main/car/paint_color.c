@@ -20,7 +20,7 @@ enum PaintColor {
 /*
  * g_PaintBlendShade0 / g_PaintBlendShade1 (the two blended shade words this routine emits)
  * MUST keep the raw D_ spelling: they are referenced from the %hi/%lo pairs in
- * the inline asm below, which does not follow asm() labels. See names.md 12c.
+ * the inline asm below, which does not follow asm() labels.
  */
 void BlendPaintColor(u32 color0, u32 color1) {
     u32 a;

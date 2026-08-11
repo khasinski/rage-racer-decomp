@@ -32,7 +32,7 @@ plain C, and the built executable is byte-identical to retail.
 
 | Binary | Functions | Code bytes |
 |---|---:|---:|
-| `SCES_006.50 (main)` | 1105 / 1105 (100%) | 407904 / 407904 (100%) |
+| `SCES_006.50 (main)` | 648 / 648 (100%) | 313380 / 313380 (100%) |
 
 A function counts as decompiled when it carries no `INCLUDE_ASM` or
 `INCLUDE_RODATA` and no non-empty inline assembly. Three things are sanctioned
@@ -42,11 +42,23 @@ C; register and symbol `asm` labels; and empty barriers used to hold statement
 order. Functions are counted individually rather than per file, so one function
 needing a crutch cannot reclassify the plain C beside it.
 
-A further 48 functions (15804 code bytes) are documented handwritten assembly
-in the original game, marked `HANDWRITTEN_ASM`, and are excluded from the totals
-above rather than counted as failures.
+The table counts the game. Sony's PsyQ libraries - `libgpu`, `libgte`, `libspu`
+and the rest, another 472 functions and 100048 code bytes - had to be matched to
+relink the executable, but they are not this game, and counting them would
+credit the project with someone else's work. A further 26 functions (10280 code
+bytes) are handwritten assembly in the original, marked `HANDWRITTEN_ASM`: a
+kernel entry reached by `syscall`, a BIOS call that jumps through a register,
+and the boot stub that runs before `$gp` and `$sp` exist. Both groups are
+excluded rather than counted as failures.
 
 Regenerate the table and the badge JSON with `make progress`.
+
+Per-object progress is also published to
+[decomp.dev](https://decomp.dev/khasinski/rage-racer-decomp), where every unit
+is compared against an object disassembled from the retail executable rather
+than against this tree - see `tools/scripts/gen_expected.py`. Code and functions
+read 100%; data reads 99.88%, the missing 1872 bytes being jump tables that gcc
+emits into `.rodata` without a symbol, leaving objdiff nothing to pair them by.
 
 ## Layout
 
@@ -55,11 +67,11 @@ Regenerate the table and the badge JSON with `make progress`.
 - `src/main/` - decompiled C translation units for the main executable.
 - `include/` - project headers and local PSYQ-compatible declarations.
 - `tools/scripts/` - project-specific build and analysis helpers.
-- `docs/names.md` - the naming evidence: what each function and global is, and
-  why. Source files are named after their subject, not after whichever function
-  happens to sit first in them.
-Generated directories such as `asm/`, `linkers/`, `build/`, `assets/`, and
-`disc/` are intentionally ignored, along with local scratch/proposal work.
+
+Source files are named after their subject, not after whichever function happens
+to sit first in them. Generated directories such as `asm/`, `linkers/`, `build/`,
+`assets/`, and `disc/` are intentionally ignored, along with local
+scratch/proposal work.
 
 ## Toolchain
 

@@ -113,7 +113,7 @@ void UpdateIndexedEffectVoice(void);
  * table at D_800126D0 (stride 0x18); each cue owns a fixed pair of voices, and a
  * call keys that pair on, updates it in place, or keys it off at volume 0.
  * Pitched drives EffectVoice D_801E6D30[4] with a 7.7 note; Stereo drives
- * D_801E6D00[2] with independent volumes. See docs/names.md 1.
+ * D_801E6D00[2] with independent volumes.
  */
 void SetPitchedSoundCue(s32 cue, s32 pitch, s32 volume);
 void SetStereoSoundCue(s32 cue, s32 volLeft, s32 volRight);

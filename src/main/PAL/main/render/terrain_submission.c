@@ -5,8 +5,7 @@
 /*
  * Names for this unit's hand-written GTE engine routines. The addresses live in
  * configs/PAL/sym.main.txt, so the disassembly, the linker script and these
- * declarations all agree on one name. What each routine emits is worked out in
- * docs/names.md section 17.
+ * declarations all agree on one name.
  */
 
 /*

@@ -5,8 +5,8 @@
  * Exports, in link order: CompMatrix, MulMatrix0, MulRotMatrix0,
  * MulRotMatrix, SetMulMatrix, ApplyMatrixLV, ApplyRotMatrix (TransformCollisionVector),
  * ScaleMatrixL, PushMatrix, PopMatrix, ReadRotMatrix, ReadLightMatrix,
- * ReadColorMatrix.  Boundaries and names byte-matched against mtx_00.o;
- * see docs/names.md section 25.  HANDWRITTEN_ASM (asm-in-C), excluded from
+ * ReadColorMatrix.  Boundaries and names byte-matched against mtx_00.o.
+ * HANDWRITTEN_ASM (asm-in-C), excluded from
  * progress per docs/ASM_AND_GTE_POLICY.md.
  */
 

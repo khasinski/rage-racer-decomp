@@ -55,7 +55,7 @@ typedef struct CarTrackLimitWork {
 /*
  * The tail's multiply feeds the discarded rounding path below. GCC 2.6.3
  * removes that path and its mflo, but leaves the mult that sets the hard HI/LO
- * registers behind (docs/names.md 31f and 35c).
+ * registers behind.
  */
 
 

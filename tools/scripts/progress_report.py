@@ -141,9 +141,9 @@ def is_handwritten(path: Path) -> bool:
     return path.exists() and HANDWRITTEN_RE.search(path.read_text(errors="ignore")) is not None
 
 
-# A subsegment can cover several functions (see "Translation units" in
-# docs/names.md), so counting subsegments would under-report the binary as
-# functions are grouped. Count what a unit actually accounts for instead: one
+# A subsegment can cover several functions, so counting subsegments would
+# under-report the binary as functions are grouped. Count what a unit actually
+# accounts for instead: one
 # per INCLUDE_ASM stub plus one per function definition. `static inline`
 # helpers are excluded because they are inlined rather than emitted separately.
 # Note the symbol table cannot be used for this: the assembly marks some
