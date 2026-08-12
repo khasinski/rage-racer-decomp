@@ -160,7 +160,6 @@ void ApplyBodyColor1(u32 colour, CarImageData *imageData) {
 }
 
 
-
 void SetBodyColor1(u32 colour) {
     ApplyBodyColor1(colour, g_CarModelAsset->imageData.carImage);
     UploadCarImage(g_CarModelSlot);
@@ -215,7 +214,6 @@ void ApplyBodyColor2(u32 colour, CarImageData *imageData) {
     paletteAddress.palette->gradients.bodyColor2Gradient[4] = s2;
     paletteAddress.palette->gradients.bodyColor2Gradient[3] = c;
 }
-
 
 
 void SetBodyColor2(u32 colour) {

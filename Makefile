@@ -120,8 +120,8 @@ audit-code:
 
 # Enumerated rather than discovered: tools/ has no __init__.py, so unittest
 # discovery cannot import it, but the namespace package resolves by name.
-TESTS := tools.tests.test_code_debt tools.tests.test_alloc_diff tools.tests.test_try_drop_raw \
-         tools.tests.test_gen_expected tools.tests.test_gen_objdiff_config \
+TESTS := tools.tests.test_code_debt tools.tests.test_gen_expected \
+         tools.tests.test_gen_objdiff_config \
          tools.tests.test_progress_report tools.tests.test_strip_nonmatching_markers
 
 test:

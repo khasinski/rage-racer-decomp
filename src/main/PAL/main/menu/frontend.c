@@ -58,7 +58,6 @@ void UpdateMainMenuExit(void) {
 }
 
 
-
 void UpdateTitleAttract(void) {
     s32 alpha;
     void *base;

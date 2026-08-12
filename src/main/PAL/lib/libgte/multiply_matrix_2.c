@@ -4,7 +4,7 @@
  * PSY-Q 3.5 libgte object mtx_04.o (LIBGTE.A): MulMatrix2 (func_80069568).
  * Matrix x matrix multiply that stores the product back into m1.
  *
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  * Hand-written PSY-Q libgte routine (.set noreorder style); sibling of mtx_03
  * MulMatrix. The `lui $1,0xffff; and rN,rN,$1` masks (reserved assembler temp
  * $at, never allocated by cc1) and a t0-t8-only file are an

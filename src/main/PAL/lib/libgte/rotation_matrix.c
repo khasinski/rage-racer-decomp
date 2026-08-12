@@ -53,7 +53,7 @@ Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
 }
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Symbol:   func_80069D18 = RotMatrix (PSY-Q libgte; Sony's Run-Time Library
  *           Reference, 8-140). Builds a rotation MATRIX from an SVECTOR of

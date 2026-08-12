@@ -18,7 +18,6 @@ void BeginFmv(s32 returnScene) {
 }
 
 
-
 void UpdateFmv(void) {
     FmvWorkBufferAddress workAddress;
 

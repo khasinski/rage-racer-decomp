@@ -11,7 +11,6 @@ void DrawEngineSpecLabel(s32 x, s32 y, s32 label) {
 }
 
 
-
 void DrawCarEngineSpec(s32 slideRaw, s32 brightness) {
     u32 *ot;
     u8 buf[0x40];

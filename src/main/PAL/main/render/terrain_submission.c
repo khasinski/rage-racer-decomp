@@ -9,7 +9,7 @@
  */
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Symbol:   func_80027FF4 = SubmitTerrainCells  (cc=2.7.2 region, part of the GTE dispatch engine
  *           adjacent to func_80028120..func_8002A2CC)
@@ -31,7 +31,7 @@
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTerrainCells);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -51,7 +51,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", Submi
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTerrainCellFaces);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -71,7 +71,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", Submi
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitSubdividedTerrainQuad);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -91,7 +91,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitS
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", InterpolateSubdivRow);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -111,7 +111,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", Inter
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTerrainCellFacesFar);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -131,7 +131,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", Submi
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitModel);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  * func_80028E9C = SubmitModelFaces: the model's per-face RTPT / NCLIP /
  * AVSZ4 loop, dispatching each face through jtbl_8007DA14.
  * Hand-written GTE face loop. This is outside the o32 C ABI: sixteen slt
@@ -261,7 +261,7 @@ asm(
 );
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -281,7 +281,7 @@ asm(
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyF4);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -301,7 +301,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitP
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyFT4Raw);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -321,7 +321,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitP
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyG4);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -341,7 +341,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitP
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyGT4);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -361,7 +361,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitP
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitModel2);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -381,7 +381,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", Submi
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyF4Fog);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -401,7 +401,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitP
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyFT4Fog);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -421,7 +421,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitP
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyG4Fog);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -441,7 +441,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitP
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyGT4Fog);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -461,7 +461,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitP
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitCourseModel);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -481,7 +481,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", Submi
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyF4);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -501,7 +501,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitC
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyFT4);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -521,7 +521,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitC
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCourseSubdividedFT4);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -541,7 +541,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitC
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCourseSubdividedFT4Fog);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -561,7 +561,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitC
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitCourseModel2);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -581,7 +581,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", Submi
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", TransformCourseModel);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -601,7 +601,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", Trans
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyF4Fog);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated
@@ -621,7 +621,7 @@ INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitC
 INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyFT4Fog);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Part of the scratchpad (0x1F800000) GTE geometry/command engine, dispatched
  * through the jump tables jtbl_8007D9F4 / jtbl_8007DA14. Not compiler-generated

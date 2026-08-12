@@ -10,7 +10,7 @@
  * in as literals and did not relocate.
  */
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Symbol:   func_80069FA8 = Gte_PatchExceptionHandler (PSY-Q libgte).
  * Reason:   hand-written assembly, and deliberately kept that way. It reads the

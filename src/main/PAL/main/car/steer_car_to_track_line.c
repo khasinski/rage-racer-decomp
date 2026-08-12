@@ -12,7 +12,6 @@ typedef union EngineRpmAddress {
 } EngineRpmAddress;
 
 
-
 /*
  * AI route steering: projects a target point ahead of (or behind, per the
  * direction flag at car+0x110) the car on the track centre-line, offset

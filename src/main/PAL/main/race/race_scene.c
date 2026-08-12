@@ -43,15 +43,6 @@ static __inline__ void GameDebugLapResult(
 }
 
 
-
-
-
-
-
-
-
-
-
 s32 UpdateLapAndFinish(PlayerCarRuntime *car, s32 grandPrixMode) {
     s32 value;
     s32 result;

@@ -239,8 +239,6 @@ def inline_constant_pairs(text, constants):
     return HILO.sub(replace, text)
 
 
-
-
 def splat_config(base_config, out_dir, extra_symbols):
     """The split config again, pointed at an empty source tree.
 
@@ -295,7 +293,6 @@ def collect_symbols(placement):
         with path.open('rb') as handle:
             symbols.extend(object_symbols(ELFFile(handle), sections))
     return symbols
-
 
 
 def check_coverage(placement, out_dir, version, readelf):

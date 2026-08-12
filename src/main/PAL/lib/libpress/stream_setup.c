@@ -4,6 +4,8 @@
 #include "psyq/cd.h"
 #include "psyq/press_internal.h"
 
+/* The exception entry, reached by the hardware rather than called.
+ * See src/main/PAL/lib/libpress/stream_setup.s. */
 HANDWRITTEN_ASM("src/main/PAL/lib/libpress", stream_setup);
 
 /* StSetRing: installs the stream ring buffer (`base`, `size`) then clears it. */

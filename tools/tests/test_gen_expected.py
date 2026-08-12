@@ -157,7 +157,6 @@ class AliasRenameTest(unittest.TestCase):
         self.assertEqual(out, "    jal ChangeClearRCntStubEx\n")
 
 
-
 class InventedConstantTest(unittest.TestCase):
     AUTO = ("D_7FFFFF = 0x7FFFFF;\n"
             "D_80000004 = 0x80000004;\n"
@@ -185,8 +184,6 @@ class InventedConstantTest(unittest.TestCase):
     def test_leaves_a_real_symbol_alone(self):
         text = "    lui $at, %hi(D_8009E694)\n"
         self.assertEqual(inline_constant_pairs(text, {"D_7FFFFF": 0x7FFFFF}), text)
-
-
 
 
 class SectionSymbolTest(unittest.TestCase):

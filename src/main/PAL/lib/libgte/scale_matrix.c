@@ -1,7 +1,7 @@
 #include "common.h"
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Symbol:   func_80069728 = ScaleMatrix (PSY-Q libgte; see include/psyq/gte.h).
  *           m[i][j] *= v[j], 12-bit fixed point, returns m - exactly the

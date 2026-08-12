@@ -36,6 +36,8 @@ void clearKernelInterruptState(u_long *dst, long count) {
     }
 }
 
+/* BIOS call stubs and the kernel context save/restore.
+ * See src/main/PAL/lib/libapi/interrupt_runtime.s. */
 HANDWRITTEN_ASM("src/main/PAL/lib/libapi", interrupt_runtime);
 
 void *startIntrVSync(void) {

@@ -21,7 +21,7 @@
  * actually landed.
  */
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Symbol:   D_800630B4 = the PAL entry point named by the PS-EXE header.
  * Reason:   hand-written assembly, and deliberately kept that way. It runs

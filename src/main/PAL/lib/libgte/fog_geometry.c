@@ -108,12 +108,12 @@ s32 SquareRoot12(s32 square) {
     return ret;
 }
 
-/* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
-
+/* InitGeom: COP0 and GTE control registers, hand-written in the original.
+ * Excluded from progress. See src/main/PAL/lib/libgte/fog_geometry.s. */
 HANDWRITTEN_ASM("src/main/PAL/lib/libgte", fog_geometry);
 
 /*
- * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
+ * HANDWRITTEN_ASM - excluded from progress; see README.md.
  *
  * Symbol:   SquareRoot0
  * Address:  0x800689A8 (PAL/main, retail range [0x591A8, 0x5922C))
