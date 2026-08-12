@@ -1,3 +1,5 @@
+.include "macro.inc"
+
 .set noreorder
 .set noat
 .section .text, "ax"

@@ -260,6 +260,13 @@ def splat_config(base_config, out_dir, extra_symbols):
     options['ld_script_path'] = '%s/main.ld' % out_dir
     options['undefined_syms_auto_path'] = '%s/undefined_syms_auto.txt' % out_dir
     options['undefined_funcs_auto_path'] = '%s/undefined_funcs_auto.txt' % out_dir
+    # A hasm segment is one this tree keeps as hand-written assembly, and splat
+    # leaves those alone. The target side wants every segment disassembled out
+    # of the executable, so they go back to being ordinary code here.
+    for segment in config.get('segments', []):
+        for sub in segment.get('subsegments', []) if isinstance(segment, dict) else []:
+            if isinstance(sub, list) and len(sub) > 1 and sub[1] == 'hasm':
+                sub[1] = 'c'
     options['migrate_rodata_to_functions'] = True
     options['make_full_disasm_for_code'] = True
     options['disassemble_all'] = True
@@ -399,7 +406,10 @@ def main(argv=None):
             continue
         relative = obj[len(prefix):]
         if relative.startswith(src_lead):
-            unit = relative[len(src_lead):].removesuffix('.c.o')
+            # A unit built from C is <name>.c.o and one built straight from
+            # assembly is <name>.s.o; the disassembly is <name>.s either way.
+            unit = relative[len(src_lead):].removesuffix('.o')
+            unit = unit.removesuffix('.c').removesuffix('.s')
             source = asm_root / ('%s.s' % unit)
         else:
             source = ROOT / out_dir / relative.removesuffix('.o')

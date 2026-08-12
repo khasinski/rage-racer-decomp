@@ -33,9 +33,17 @@ OBJDIFF    ?= build/toolchain/bin/objdiff-cli
 ASM_SRCS := $(shell find $(ASM_DIR) -name '*.s' -not -path '*/nonmatchings/*' 2>/dev/null)
 C_SRCS   := $(shell find $(SRC_DIR)/$(VERSION) -name '*.c' 2>/dev/null)
 
+# A .s under src/ is either a translation unit in its own right - the original
+# shipped it as assembly and there is no C to write - or the assembly half of a
+# unit whose C sits beside it. Only the first kind is assembled on its own; the
+# second is pulled in by its .c and would collide with it here.
+SRC_ASM_ALL := $(shell find $(SRC_DIR)/$(VERSION) -name '*.s' 2>/dev/null)
+SRC_ASM  := $(foreach s,$(SRC_ASM_ALL),$(if $(wildcard $(s:.s=.c)),,$(s)))
+
 ASM_OBJS := $(ASM_SRCS:%.s=$(BUILD)/%.s.o)
 C_OBJS   := $(C_SRCS:%=$(BUILD)/%.o)
-OBJS := $(ASM_OBJS) $(C_OBJS)
+SRC_ASM_OBJS := $(SRC_ASM:%=$(BUILD)/%.o)
+OBJS := $(ASM_OBJS) $(C_OBJS) $(SRC_ASM_OBJS)
 
 # Header dependencies, written by cpp -MD in tools/scripts/cc.sh. Without
 # these a change under include/ leaves every dependent object stale, which
@@ -76,6 +84,10 @@ endef
 
 $(BUILD)/src/%.c.o: src/%.c | $(BUILD)
 	$(call compile_c_object)
+
+$(BUILD)/src/%.s.o: src/%.s | $(BUILD)
+	@mkdir -p $(dir $@)
+	$(AS) -EL -G0 -march=r3000 -mtune=r3000 -no-pad-sections -Iinclude -I$(ASM_DIR) -o $@ $<
 
 # A HANDWRITTEN_ASM unit pulls its assembly in with `.include`, which cpp never
 # sees, so -MD does not record it. Without this an edit to the .s leaves the
