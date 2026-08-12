@@ -20,8 +20,6 @@ assets/<version>/main.exe.
 """
 
 import argparse
-import concurrent.futures
-import os
 import pathlib
 import re
 import shutil
@@ -44,9 +42,6 @@ SECTIONS = ('.text', '.data', '.rodata', '.bss')
 GCC_LOCAL = re.compile(r'(?:^(?:LM\d+|\$L|__gnu_compiled|gcc2_compiled|_MACRO_INC_GUARD))'
                        r'|(?:\.NON_MATCHING$)')
 
-# splat writes the legacy three-argument form; this tree's macro takes the asm
-# folder and the symbol, so the stubs need rewriting before they will compile.
-INCLUDE_CALL = re.compile(r'INCLUDE_(ASM|RODATA)\(\s*[^,]+,\s*"([^"]+)"\s*,\s*(\w+)\s*\)')
 
 MAP_PLACEMENT = re.compile(
     r'^\s(\.\w+)\s+0x([0-9a-f]+)\s+0x([0-9a-f]+)\s+(build/\S+\.o)$', re.MULTILINE)
@@ -244,47 +239,6 @@ def inline_constant_pairs(text, constants):
     return HILO.sub(replace, text)
 
 
-C_FUNCTION = re.compile(r'^[A-Za-z_][\w \t\*]*?\b[A-Za-z_]\w*\s*\([^;{]*\)\s*\{', re.MULTILINE)
-
-
-def is_all_asm(text):
-    """True when a source file defines no C at all, only assembly it includes."""
-    return ('INCLUDE_ASM' in text or 'HANDWRITTEN_ASM' in text) and not C_FUNCTION.search(text)
-
-
-def is_data_only(text):
-    """True when a disassembled file holds constants rather than a function.
-
-    Only these may be pulled in with INCLUDE_RODATA. A function dragged in that
-    way lands in .rodata, where glabel's `.size label, . - label` straddles a
-    section boundary and the assembler rejects it - and splat sometimes writes
-    a trivial function as real C in the stub too, so including its assembly
-    would define the symbol twice.
-    """
-    return 'glabel' not in text
-
-
-def rewrite_stub(text, asm_root, unit, unit_asm_names):
-    """Turn splat's stub into something this tree's INCLUDE_ASM macro accepts.
-
-    Any constant file in the unit's directory that no INCLUDE_ASM mentions is
-    rodata splat could not attach to a function. It still belongs in the
-    object, so it gets pulled in explicitly - otherwise the target would be
-    missing data the base has, and the unit would score below what it deserves.
-    """
-    referenced = set()
-
-    def replace(match):
-        kind, folder, name = match.groups()
-        referenced.add(name)
-        return 'INCLUDE_%s("%s/%s", %s)' % (kind, asm_root, folder, name)
-
-    out = INCLUDE_CALL.sub(replace, text)
-    orphans = sorted(name for name in unit_asm_names if name not in referenced)
-    if orphans:
-        out += '\n' + '\n'.join(
-            'INCLUDE_RODATA("%s/%s", %s);' % (asm_root, unit, name) for name in orphans) + '\n'
-    return out
 
 
 def splat_config(base_config, out_dir, extra_symbols):
@@ -309,6 +263,8 @@ def splat_config(base_config, out_dir, extra_symbols):
     options['undefined_syms_auto_path'] = '%s/undefined_syms_auto.txt' % out_dir
     options['undefined_funcs_auto_path'] = '%s/undefined_funcs_auto.txt' % out_dir
     options['migrate_rodata_to_functions'] = True
+    options['make_full_disasm_for_code'] = True
+    options['disassemble_all'] = True
     options['symbol_addrs_path'] = list(options['symbol_addrs_path']) + [extra_symbols]
     return yaml.safe_dump(config, sort_keys=False)
 
@@ -321,6 +277,15 @@ def run(cmd, **kwargs):
     return done.stdout
 
 
+SECTION_SYMBOL = re.compile(r'^\s*([A-Za-z_]\w*)\s*=\s*0x([0-9A-Fa-f]+)\s*;', re.MULTILINE)
+
+
+def section_symbols(text):
+    """The linker's own section markers, as symbols the disassembler can use."""
+    return [(name, int(addr, 16), 'STT_NOTYPE', 0, None)
+            for name, addr in SECTION_SYMBOL.findall(text)]
+
+
 def collect_symbols(placement):
     symbols = []
     for obj, sections in sorted(placement.items()):
@@ -331,19 +296,6 @@ def collect_symbols(placement):
             symbols.extend(object_symbols(ELFFile(handle), sections))
     return symbols
 
-
-def compile_units(stubs, jobs):
-    """cc.sh per stub, in parallel. Returns the units that failed."""
-    def build(pair):
-        stub, obj = pair
-        obj.parent.mkdir(parents=True, exist_ok=True)
-        done = subprocess.run(['tools/scripts/cc.sh', str(stub.relative_to(ROOT)),
-                               str(obj.relative_to(ROOT))],
-                              cwd=ROOT, capture_output=True, text=True, errors='replace')
-        return (stub, done.stderr) if done.returncode != 0 else None
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as pool:
-        return [bad for bad in pool.map(build, stubs) if bad is not None]
 
 
 def check_coverage(placement, out_dir, version, readelf):
@@ -380,7 +332,6 @@ def main(argv=None):
     parser.add_argument('--version', default='PAL')
     parser.add_argument('--basename', default='main')
     parser.add_argument('--out', default='expected')
-    parser.add_argument('--jobs', type=int, default=os.cpu_count() or 4)
     parser.add_argument('--python', default=sys.executable)
     parser.add_argument('--readelf', default='mipsel-none-elf-readelf')
     parser.add_argument('--objcopy', default='mipsel-none-elf-objcopy')
@@ -404,6 +355,12 @@ def main(argv=None):
     (ROOT / out_dir).mkdir(parents=True)
 
     symbols = collect_symbols(placement)
+    # The markers main.ld computes are not in any object, but this tree's own
+    # disassembler knows them by name. Without them splat invents D_<address>
+    # for the end of bss and the two sides disagree about what the boot stub
+    # is pointing at.
+    symbols += section_symbols(
+        (ROOT / 'linkers' / version / ('section_syms.%s.txt' % basename)).read_text())
     sym_path = '%s/sym.from_build.txt' % out_dir
     (ROOT / sym_path).write_text(symbol_file(symbols))
     print('symbols: %d taken from the verified build' % len(symbols))
@@ -413,87 +370,61 @@ def main(argv=None):
     config_path.write_text(splat_config(base_config, out_dir, sym_path))
     run([args.python, '-m', 'splat', 'split', str(config_path.relative_to(ROOT))])
 
-    asm_root = '%s/asm/%s/%s/nonmatchings' % (out_dir, version, basename)
-    # Only the per-function disassembly is sanitised. The data blobs are
-    # assembled from the same files on both sides, so they have to stay
-    # byte-for-byte what the real build feeds its assembler.
+    asm_root = ROOT / out_dir / 'asm' / version / basename
+
+    # The constant blobs hold no code and were never decompiled: both sides
+    # assemble the same bytes out of the same file. `make split` runs
+    # symbolise_data_words.py over the tree's copy and this pass does not, so
+    # leaving them separate makes two spellings of one thing and nothing pairs.
+    blobs = 0
+    for source in (ROOT / out_dir / 'asm').rglob('*.s'):
+        original = ROOT / source.relative_to(ROOT / out_dir)
+        if original.exists():
+            shutil.copyfile(original, source)
+            blobs += 1
+
     in_text = {name: kind for name, _, kind, _, section in symbols
                if section == '.text' and kind != 'STT_FUNC'}
     renames = alias_renames(
         (ROOT / 'linkers' / version / 'undefined_syms_manual.txt').read_text())
     constants = invented_constants(
         (ROOT / out_dir / 'undefined_syms_auto.txt').read_text(), args.vram_start)
-    if constants:
-        print('constants: %d address(es) splat named that are plain numbers' % len(constants))
-    for source in (ROOT / asm_root).rglob('*.s'):
-        text = strip_differ_aliases(source.read_text())
-        text = apply_alias_renames(retype_data_in_text(text, in_text), renames)
-        source.write_text(inline_constant_pairs(text, constants))
 
-    # The constant blobs hold no code and were never decompiled: both sides
-    # disassemble the same bytes out of the same EXE. `make split` then runs
-    # symbolise_data_words.py over the tree's copy, which this pass does not,
-    # so leaving them separate makes two spellings of one thing and nothing
-    # pairs. Take the tree's copy, exactly as the base assembles it.
-    blobs = 0
-    for source in (ROOT / out_dir / 'asm').rglob('*.s'):
-        if 'nonmatchings' in source.parts:
+    # Everything the linker consumed, paired with the disassembly that stands
+    # in for it. splat writes one .s per translation unit, so a unit is
+    # assembled exactly the way the tree assembles its own hand-written
+    # assembly - no stub, no compiler, nothing to strip afterwards.
+    prefix = 'build/%s/' % version
+    src_lead = 'src/%s/' % basename
+    jobs = []
+    for obj in placement:
+        if not obj.startswith(prefix):
             continue
-        original = ROOT / 'asm' / source.relative_to(ROOT / out_dir / 'asm')
-        if original.exists():
-            shutil.copyfile(original, source)
-            blobs += 1
-    print('data: %d blob(s) taken from the tree' % blobs)
-
-
-    src_root = ROOT / out_dir / 'src' / basename
-    real_root = ROOT / 'src' / basename
-    stubs = []
-    verbatim = 0
-    for stub in sorted(src_root.rglob('*.c')):
-        unit = str(stub.relative_to(src_root)).removesuffix('.c')
-        real = real_root / ('%s.c' % unit)
-        if real.exists() and is_all_asm(real.read_text()):
-            # Nothing here was decompiled: the unit is one hand-written block
-            # the tree keeps as assembly on purpose, and the base object is
-            # built from that file. Splitting it again into one file per label
-            # only invites the two disassemblies to disagree over which
-            # addresses deserve a name. Use the same input for both sides.
-            shutil.copyfile(real, stub)
-            verbatim += 1
+        relative = obj[len(prefix):]
+        if relative.startswith(src_lead):
+            unit = relative[len(src_lead):].removesuffix('.c.o')
+            source = asm_root / ('%s.s' % unit)
         else:
-            unit_dir = ROOT / asm_root / unit
-            names = ({p.stem for p in unit_dir.glob('*.s') if is_data_only(p.read_text())}
-                     if unit_dir.exists() else set())
-            stub.write_text(rewrite_stub(stub.read_text(), asm_root, unit, names))
-        stubs.append((stub, ROOT / out_dir / 'build' /
-                      stub.relative_to(ROOT / out_dir).with_suffix('.c.o')))
-    print('units: %d stubs, %d taken verbatim (nothing in them is C)' % (len(stubs), verbatim))
+            source = ROOT / out_dir / relative.removesuffix('.o')
+        jobs.append((source, ROOT / out_dir / 'build' / relative))
 
-    # The INCLUDE_ASM macro wraps each block in a throwaway function so the
-    # compiler will carry the .include through. maspsx deletes the body but
-    # leaves the name behind as an undefined reference, which the real objects
-    # never have; left in, objdiff pairs one against a real function and gives
-    # up on the unit.
-    failures = compile_units(stubs, args.jobs)
-    for stub, err in failures:
-        sys.stderr.write('%s:\n%s\n' % (stub, err))
-    if failures:
-        raise SystemExit('%d unit(s) failed to compile' % len(failures))
-    for _, obj in stubs:
-        run([args.objcopy, '--wildcard', '--strip-symbol', '__maspsx_include_asm_hack_*',
-             str(obj.relative_to(ROOT))])
+    missing = [str(s) for s, _ in jobs if not s.exists()]
+    for name in missing:
+        sys.stderr.write('no disassembly for %s\n' % name)
+    if missing:
+        raise SystemExit('%d unit(s) have no disassembly' % len(missing))
 
-    for source in sorted((ROOT / out_dir / 'asm').rglob('*.s')):
-        if 'nonmatchings' in source.parts:
-            continue
-        obj = (ROOT / out_dir / 'build' /
-               source.relative_to(ROOT / out_dir)).with_suffix('.s.o')
+    for source, obj in jobs:
+        if source.is_relative_to(asm_root) and source.parent != asm_root:
+            text = strip_differ_aliases(source.read_text())
+            text = apply_alias_renames(retype_data_in_text(text, in_text), renames)
+            source.write_text(inline_constant_pairs(text, constants))
         obj.parent.mkdir(parents=True, exist_ok=True)
         run([args.assembler, '-EL', '-G0', '-march=r3000', '-mtune=r3000',
-             '-no-pad-sections', '-Iinclude',
-             '-I%s/asm/%s/%s' % (out_dir, version, basename),
+             '-no-pad-sections', '-Iinclude', '-I%s' % asm_root.relative_to(ROOT),
              '-o', str(obj.relative_to(ROOT)), str(source.relative_to(ROOT))])
+    print('units: %d assembled, %d of them data taken from the tree'
+          % (len(jobs), blobs))
 
     problems = check_coverage(placement, out_dir, version, args.readelf)
     for obj, why in problems:

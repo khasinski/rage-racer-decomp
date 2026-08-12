@@ -54,8 +54,11 @@ setup:
 stage:
 	$(PY) tools/scripts/stage_discs.py
 
+# Objects go too: a unit that pulls in generated assembly with `.include` has
+# no recorded dependency on it, so a re-split would otherwise leave it built
+# against the previous disassembly.
 split:
-	rm -rf $(ASM_DIR) $(LD_SCRIPT) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES) $(ADDR_HALVES)
+	rm -rf $(BUILD)/src $(ASM_DIR) $(LD_SCRIPT) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES) $(ADDR_HALVES)
 	$(PY) -m splat split $(SPLAT_CFG)
 	$(PY) tools/scripts/gen_nonmatching_asm.py --version $(VERSION) --basename $(BASENAME)
 	$(PY) tools/scripts/symbolise_data_words.py --version $(VERSION) --basename $(BASENAME)

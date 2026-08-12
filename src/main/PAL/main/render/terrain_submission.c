@@ -28,7 +28,7 @@
  * Revisit:  only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTerrainCells);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTerrainCells);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -48,7 +48,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTe
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTerrainCellFaces);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTerrainCellFaces);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -68,7 +68,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTe
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitSubdividedTerrainQuad);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitSubdividedTerrainQuad);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -88,7 +88,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitSubd
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", InterpolateSubdivRow);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", InterpolateSubdivRow);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -108,7 +108,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", Interpol
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTerrainCellFacesFar);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTerrainCellFacesFar);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -128,7 +128,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitTe
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitModel);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitModel);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -278,7 +278,7 @@ asm(
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyF4);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyF4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -298,7 +298,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPoly
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyFT4Raw);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyFT4Raw);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -318,7 +318,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPoly
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyG4);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyG4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -338,7 +338,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPoly
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyGT4);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyGT4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -358,7 +358,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPoly
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitModel2);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitModel2);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -378,7 +378,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitMo
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyF4Fog);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyF4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -398,7 +398,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPoly
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyFT4Fog);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyFT4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -418,7 +418,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPoly
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyG4Fog);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyG4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -438,7 +438,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPoly
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyGT4Fog);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPolyGT4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -458,7 +458,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitPoly
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitCourseModel);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitCourseModel);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -478,7 +478,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitCo
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyF4);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyF4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -498,7 +498,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCour
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyFT4);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyFT4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -518,7 +518,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCour
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCourseSubdividedFT4);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCourseSubdividedFT4);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -538,7 +538,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCour
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCourseSubdividedFT4Fog);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCourseSubdividedFT4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -558,7 +558,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCour
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitCourseModel2);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitCourseModel2);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -578,7 +578,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitCo
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", TransformCourseModel);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", TransformCourseModel);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -598,7 +598,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", Transfor
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyF4Fog);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyF4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -618,7 +618,7 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCour
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyFT4Fog);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCoursePolyFT4Fog);
 
 /*
  * HANDWRITTEN_ASM - excluded from progress (see docs/ASM_AND_GTE_POLICY.md).
@@ -638,4 +638,4 @@ INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", EmitCour
  * Revisit:   only with proof it was compiler-generated C.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitCourseSubdividedFaces);
+INCLUDE_ASM_TU("asm/PAL/main/nonmatchings/main/render/terrain_submission", SubmitCourseSubdividedFaces);

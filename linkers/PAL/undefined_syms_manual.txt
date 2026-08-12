@@ -62,9 +62,6 @@ func_8006DF34 = ChangeClearInterruptMask + 0x10;
 /* BIOS A0/B0 call stubs that live inside a hand-written block, so no object
    file gives them their real names.  Spelled through the func_ aliases above
    rather than as literal addresses, so they move with the code. */
-BiosSetMemSize = func_80063190;
-InitPad = func_800631F0;
-StartPad = func_80063200;
 
 /* Each of these is the first word of a hand-assembled block that a C file
    emits as a u_long[] in .text; the block carries the array's name, so the

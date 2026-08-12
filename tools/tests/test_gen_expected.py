@@ -6,11 +6,9 @@ from tools.scripts.gen_expected import (
     halves,
     inline_constant_pairs,
     invented_constants,
-    is_all_asm,
-    is_data_only,
     parse_map_placement,
     retype_data_in_text,
-    rewrite_stub,
+    section_symbols,
     strip_differ_aliases,
     symbol_file,
     unambiguous,
@@ -159,22 +157,6 @@ class AliasRenameTest(unittest.TestCase):
         self.assertEqual(out, "    jal ChangeClearRCntStubEx\n")
 
 
-class RewriteStubTest(unittest.TestCase):
-    def test_rewrites_to_the_two_argument_macro_with_a_full_path(self):
-        text = 'INCLUDE_ASM(const s32, "PAL/main/pad/init_pad", GameInitPad);\n'
-        out = rewrite_stub(text, "expected/asm", "PAL/main/pad/init_pad", set())
-        self.assertIn('INCLUDE_ASM("expected/asm/PAL/main/pad/init_pad", GameInitPad);', out)
-
-    def test_pulls_in_constants_no_function_claimed(self):
-        text = 'INCLUDE_ASM(const s32, "u", Fn);\n'
-        out = rewrite_stub(text, "asm", "u", {"Fn", "D_80011870"})
-        self.assertIn('INCLUDE_RODATA("asm/u", D_80011870);', out)
-        self.assertEqual(out.count("D_80011870"), 1)
-
-    def test_does_not_pull_in_a_function_the_stub_already_includes(self):
-        text = 'INCLUDE_ASM(const s32, "u", Fn);\n'
-        self.assertNotIn("INCLUDE_RODATA", rewrite_stub(text, "asm", "u", {"Fn"}))
-
 
 class InventedConstantTest(unittest.TestCase):
     AUTO = ("D_7FFFFF = 0x7FFFFF;\n"
@@ -205,26 +187,24 @@ class InventedConstantTest(unittest.TestCase):
         self.assertEqual(inline_constant_pairs(text, {"D_7FFFFF": 0x7FFFFF}), text)
 
 
-class IsAllAsmTest(unittest.TestCase):
-    def test_a_unit_that_only_includes_assembly(self):
-        self.assertTrue(is_all_asm('#include "common.h"\n\nHANDWRITTEN_ASM("a/b", entry);\n'))
-
-    def test_a_unit_that_mixes_c_with_assembly_is_not(self):
-        # Copying such a unit's source over the target would make its C compare
-        # against itself.
-        source = 'INCLUDE_ASM("a/b", Fn);\n\nvoid Other(void) {\n}\n'
-        self.assertFalse(is_all_asm(source))
-
-    def test_plain_c_is_not(self):
-        self.assertFalse(is_all_asm("void Other(void) {\n}\n"))
 
 
-class IsDataOnlyTest(unittest.TestCase):
-    def test_a_disassembled_function_is_not_data(self):
-        self.assertFalse(is_data_only("glabel Fn\n    jr $ra\n"))
+class SectionSymbolTest(unittest.TestCase):
+    TEXT = ("/* comment */\n"
+            "main_BSS_END = 0x801F2A10;\n"
+            "not_an_assignment\n")
 
-    def test_a_constant_block_is_data(self):
-        self.assertTrue(is_data_only(".section .rodata\ndlabel D_1\n.word 0\n"))
+    def test_reads_the_markers_the_linker_computes(self):
+        # They are in no object, so collect_symbols cannot see them, and
+        # without them the disassembler invents D_801F2A10 for the end of bss.
+        self.assertEqual(section_symbols(self.TEXT),
+                         [("main_BSS_END", 0x801F2A10, "STT_NOTYPE", 0, None)])
+
+    def test_they_are_not_typed_as_code(self):
+        # A section marker names a boundary, not something to disassemble.
+        name, _, kind, _, section = section_symbols(self.TEXT)[0]
+        self.assertEqual(kind, "STT_NOTYPE")
+        self.assertIsNone(section)
 
 
 if __name__ == "__main__":

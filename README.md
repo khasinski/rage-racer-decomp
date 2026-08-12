@@ -32,9 +32,9 @@ against the game function by function.
 
 | Scope | Functions | Code bytes | Data bytes |
 |---|---:|---:|---:|
-| Game code | 701 / 701 (100.00%) | 100.00% | 99.88% |
+| Game code | 704 / 704 (100.00%) | 100.00% | 99.88% |
 | PsyQ libraries | 497 / 497 (100.00%) | 100.00% | 0.00% |
-| **Whole executable** | **1198 / 1198 (100.00%)** | **100.00%** | **99.82%** |
+| **Whole executable** | **1201 / 1201 (100.00%)** | **100.00%** | **99.82%** |
 
 ### What "matched" means here
 
@@ -42,12 +42,12 @@ Two separate checks, and neither is a judgement about the source text:
 
 - `make check` links the executable and compares its SHA-1 against retail. This
   is the whole-image claim, and it either holds or it does not.
-- `make report` builds a second set of objects by disassembling the retail
-  executable itself, then has [objdiff](https://github.com/encounter/objdiff)
-  compare them with the objects this tree compiles, function by function. That
-  report is what feeds the table above and
-  [decomp.dev](https://decomp.dev/khasinski/rage-racer-decomp). See
-  `tools/scripts/gen_expected.py` for how the target side is produced.
+- `make report` disassembles the retail executable into one `.s` per
+  translation unit, assembles those, and has
+  [objdiff](https://github.com/encounter/objdiff) compare them with the objects
+  this tree compiles, function by function. That report is what feeds the table
+  above and [decomp.dev](https://decomp.dev/khasinski/rage-racer-decomp). See
+  `tools/scripts/gen_expected.py`.
 
 Earlier revisions of this file called a function decompiled when its source
 carried no `INCLUDE_ASM` and no inline assembly. That describes how the source

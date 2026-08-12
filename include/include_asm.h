@@ -31,6 +31,25 @@
     )
 #endif
 
+/* A whole translation unit that is assembly and nothing else.
+   INCLUDE_ASM wraps each block in a throwaway function so the compiler carries
+   the .include through; maspsx then drops the body but leaves the name behind
+   as an undefined reference. That reference is invisible in the linked image
+   but it is in the object, and an object assembled straight from the same .s
+   does not have it, so the two stop comparing. At file scope no wrapper is
+   needed - INCLUDE_RODATA has always worked this way. */
+#ifndef INCLUDE_ASM_TU
+#define INCLUDE_ASM_TU(FOLDER, NAME) \
+    __asm__( \
+        ".text # maspsx-keep\n" \
+        "\t.align\t2 # maspsx-keep\n" \
+        "\t.set\tnoreorder # maspsx-keep\n" \
+        "\t.set\tnoat # maspsx-keep\n" \
+        "\t.include \"" FOLDER "/" #NAME ".s\" # maspsx-keep\n" \
+        "\t.set\treorder # maspsx-keep\n" \
+        "\t.set\tat # maspsx-keep\n")
+#endif
+
 /* A block that is assembly on purpose and always will be: a kernel entry
    reached by `syscall`, or a BIOS call that jumps through a register. It
    expands exactly like INCLUDE_ASM but has to be spelled differently, because
@@ -56,6 +75,10 @@ __asm__(".include \"include/labels.inc\"\n");
 
 #ifndef INCLUDE_RODATA
 #define INCLUDE_RODATA(FOLDER, NAME)
+#endif
+
+#ifndef INCLUDE_ASM_TU
+#define INCLUDE_ASM_TU(FOLDER, NAME)
 #endif
 
 #ifndef HANDWRITTEN_ASM

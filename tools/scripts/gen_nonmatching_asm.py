@@ -20,7 +20,10 @@ BASE_OFF = 0x800
 
 
 SUBSEGMENT_RE = re.compile(r"\[0x([0-9A-Fa-f]+),\s*([^,\]]+),\s*([^,\]\s]+)")
-ASM_WRAP_RE = re.compile(r"INCLUDE_ASM\([^,]+,\s*([A-Za-z0-9_]+)\)")
+# Only an include that points into the generated asm/ tree names a symbol this
+# script must disassemble. One that points at src/ names a checked-in file, and
+# reading its stem as a symbol invents a function the game does not have.
+ASM_WRAP_RE = re.compile(r'INCLUDE_ASM(?:_TU)?\(\s*"asm/[^"]*"\s*,\s*([A-Za-z0-9_]+)\)')
 RODATA_WRAP_RE = re.compile(r"INCLUDE_RODATA\([^,]+,\s*([A-Za-z0-9_]+)\)")
 C_FUNC_RE = re.compile(
     r"^\s*(?:[A-Za-z_][A-Za-z0-9_]*\s+)+(?P<name>func_[0-9A-Fa-f]{8})\s*\([^;]*\)\s*\{",

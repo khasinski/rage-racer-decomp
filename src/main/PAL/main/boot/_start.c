@@ -36,4 +36,4 @@
  *           retail disc: every sampled pc was the baseline's plus exactly 0x40.
  *           Decompiling it would undo that.
  */
-HANDWRITTEN_ASM("src/main/PAL/main/boot", _start);
+INCLUDE_ASM_TU("src/main/PAL/main/boot", _start);
