@@ -57,16 +57,17 @@
 
 # Label to signal the symbol haven't been matched yet.
 #
-# Emits nothing. It used to declare \label.NON_MATCHING as a second global
-# object at the symbol's own address, for asm-differ to spot. Nothing is
-# unmatched any more, and the alias was not free: two symbols sharing one
-# address stop objdiff pairing that section at all, which reported every
-# constant blob in the game as 129 KB of unmatched data.
-#
-# The instruction and data words are untouched either way - this only removes
-# symbol table entries - so restoring the body is a one-line change if some
-# future tool wants the marker back.
+# Nothing in this tree invokes it. splat writes the marker above every symbol
+# it disassembles, which is its default and says nothing about whether that
+# symbol matches; tools/scripts/strip_nonmatching_markers.py takes those lines
+# back out during `make split` because the linked image is byte-identical to
+# retail, so the claim would be false. The macro itself stays intact and
+# working, so a genuinely unmatched symbol can still be marked as one.
 .macro nonmatching label, size=1
+    .global \label\().NON_MATCHING
+    .type \label\().NON_MATCHING, @object
+    .size \label\().NON_MATCHING, \size
+    \label\().NON_MATCHING:
 .endm
 
 .include "gte_macros.inc"

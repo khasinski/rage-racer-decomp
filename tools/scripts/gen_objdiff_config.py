@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 """Write objdiff.json: one unit per object the linker actually consumes.
 
-The unit list has to come from the map rather than from a glob over src/,
-because the two disagree in both directions - the map also carries the
-assembled data blobs, and a stray .c that no segment references would be
-counted as unmatched work that does not exist.
+Every object goes in. decomp.dev requires a report to account for every
+function in the binary so that projects on the site are measured the same way,
+so the game and the libraries are separated with a progress category rather
+than by dropping the libraries: `game` is the work of this project, `psyq` is
+Sony's library code that had to be matched to relink the executable. Both
+numbers stay visible and they add up to the whole executable.
+
+The unit list comes from the map rather than from a glob over src/, because the
+two disagree in both directions - the map also carries the assembled data
+blobs, and a stray .c that no segment references would be counted as unmatched
+work that does not exist.
 
 Every path under expected/<version>/build mirrors build/<version>, so a unit
 only needs its name once. Units are marked complete because this tree links to
@@ -36,23 +43,20 @@ def linked_objects(map_text, version):
     return [obj[len(prefix):] for obj in seen]
 
 
-def is_sdk(relative):
-    """True for the PsyQ libraries, which are Sony's code rather than the game.
+CATEGORIES = [
+    {'id': 'game', 'name': 'Game code'},
+    {'id': 'psyq', 'name': 'PsyQ libraries'},
+]
 
-    They had to be matched to relink the executable, but reporting them would
-    credit this project with someone else's work. tools/scripts/progress_report.py
-    draws the same line, so the site and the badge agree.
+
+def category(relative):
+    """Which half of the binary an object belongs to.
+
+    Sony's libraries live under lib/ and everything this project wrote lives
+    under main/. Both are reported; the category only decides which subtotal
+    the unit lands in.
     """
-    return '/lib/' in relative
-
-
-def excluded(relative, unscorable):
-    """Why this object stays out of the report, or None if it belongs in it."""
-    if is_sdk(relative):
-        return 'PsyQ library'
-    if unit_name(relative) in unscorable:
-        return 'objdiff cannot pair its symbols'
-    return None
+    return 'psyq' if '/lib/' in relative else 'game'
 
 
 def unit_name(relative):
@@ -74,6 +78,7 @@ def config(objects, version, expected_dir):
             'metadata': {
                 'complete': True,
                 'source_path': relative.removesuffix('.o'),
+                'progress_categories': [category(relative)],
             },
         })
     return {
@@ -83,8 +88,9 @@ def config(objects, version, expected_dir):
         'custom_args': ['-j'],
         'build_target': False,
         'build_base': True,
-        'watch_patterns': ['src/**/*.c', 'src/**/*.h', 'include/**/*.h', 'asm/**/*.s',
-                           'configs/**/*.yaml', 'configs/**/*.txt', 'Makefile'],
+        'watch_patterns': ['src/**/*.c', 'src/**/*.h', 'src/**/*.s', 'include/**/*.h',
+                           'asm/**/*.s', 'configs/**/*.yaml', 'configs/**/*.txt', 'Makefile'],
+        'progress_categories': CATEGORIES,
         'units': units,
     }
 
@@ -108,22 +114,19 @@ def main(argv=None):
 
     objects = linked_objects(map_path.read_text(), args.version)
     unscorable = set(args.skip)
-    kept, dropped = [], {}
-    for relative in objects:
-        why = excluded(relative, unscorable)
-        if why is None:
-            kept.append(relative)
-        else:
-            dropped.setdefault(why, []).append(unit_name(relative))
+    kept = [o for o in objects if unit_name(o) not in unscorable]
+    skipped = [unit_name(o) for o in objects if unit_name(o) in unscorable]
 
     written = config(kept, args.version, args.expected)
     (ROOT / args.output).write_text(json.dumps(written, indent=2) + '\n')
-    print('%s: %d of %d units' % (args.output, len(kept), len(objects)))
-    # Say what was left out and why. A report that quietly drops units reads as
-    # though it covered everything.
-    for why, names in sorted(dropped.items()):
-        print('  excluded, %s: %d unit(s)%s' % (
-            why, len(names), '' if len(names) > 3 else ' - %s' % ', '.join(names)))
+    counts = {}
+    for relative in kept:
+        counts[category(relative)] = counts.get(category(relative), 0) + 1
+    print('%s: %d units (%s)' % (args.output, len(kept),
+                                 ', '.join('%s %d' % kv for kv in sorted(counts.items()))))
+    # A report that quietly drops units reads as though it covered everything.
+    if skipped:
+        print('  skipped, objdiff cannot pair their symbols: %s' % ', '.join(skipped))
     return 0
 
 

@@ -1,9 +1,9 @@
 import unittest
 
 from tools.scripts.gen_objdiff_config import (
+    CATEGORIES,
+    category,
     config,
-    excluded,
-    is_sdk,
     linked_objects,
     unit_name,
 )
@@ -38,20 +38,22 @@ class UnitNameTest(unittest.TestCase):
                          "PAL/main/data/main/6BE64.data")
 
 
-class ExclusionTest(unittest.TestCase):
-    def test_the_psyq_libraries_are_not_the_game(self):
-        self.assertTrue(is_sdk("src/main/PAL/lib/libgte/leading_zero_count.c.o"))
-        self.assertFalse(is_sdk("src/main/PAL/main/pad/init_pad.c.o"))
+class CategoryTest(unittest.TestCase):
+    def test_the_psyq_libraries_are_their_own_category(self):
+        self.assertEqual(category("src/main/PAL/lib/libgte/leading_zero_count.c.o"), "psyq")
+        self.assertEqual(category("src/main/PAL/main/pad/init_pad.c.o"), "game")
 
-    def test_game_code_is_reported(self):
-        self.assertIsNone(excluded("src/main/PAL/main/pad/init_pad.c.o", set()))
+    def test_a_data_blob_counts_as_game_code(self):
+        # It is the game's data, and it has to land somewhere for the two
+        # category totals to add up to the whole executable.
+        self.assertEqual(category("asm/PAL/main/data/main/6BE64.data.s.o"), "game")
 
-    def test_each_exclusion_says_why(self):
-        self.assertEqual(excluded("src/main/PAL/lib/libgte/lzc.c.o", set()), "PsyQ library")
-        self.assertEqual(
-            excluded("src/main/PAL/main/render/terrain_submission.c.o",
-                     {"PAL/main/render/terrain_submission"}),
-            "objdiff cannot pair its symbols")
+    def test_every_category_used_is_declared(self):
+        # objdiff drops a unit's category silently if the config never declares
+        # it, which would quietly shrink a subtotal.
+        declared = {c["id"] for c in CATEGORIES}
+        for relative in ("src/main/PAL/lib/libgte/lzc.c.o", "src/main/PAL/main/pad/init_pad.c.o"):
+            self.assertIn(category(relative), declared)
 
 
 class ConfigTest(unittest.TestCase):
@@ -61,6 +63,16 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual(unit["base_path"], "build/PAL/src/main/PAL/main/pad/init_pad.c.o")
         self.assertEqual(unit["target_path"],
                          "expected/PAL/build/src/main/PAL/main/pad/init_pad.c.o")
+
+    def test_every_unit_carries_its_category(self):
+        written = config(["src/main/PAL/lib/libgte/lzc.c.o"], "PAL", "expected")
+        self.assertEqual(written["units"][0]["metadata"]["progress_categories"], ["psyq"])
+
+    def test_nothing_is_excluded_from_the_report(self):
+        # decomp.dev requires every function in the binary to be accounted for.
+        objects = ["src/main/PAL/main/pad/init_pad.c.o", "src/main/PAL/lib/libgte/lzc.c.o"]
+        written = config(objects, "PAL", "expected")
+        self.assertEqual(len(written["units"]), len(objects))
 
     def test_units_are_marked_complete(self):
         # The tree links to the original SHA-1, and `make check` proves it

@@ -60,6 +60,7 @@ split:
 	$(PY) tools/scripts/gen_nonmatching_asm.py --version $(VERSION) --basename $(BASENAME)
 	$(PY) tools/scripts/symbolise_data_words.py --version $(VERSION) --basename $(BASENAME)
 	$(PY) tools/scripts/symbolise_header.py --version $(VERSION) --basename $(BASENAME)
+	$(PY) tools/scripts/strip_nonmatching_markers.py --version $(VERSION) --basename $(BASENAME)
 
 $(BUILD)/asm/%.s.o: asm/%.s
 	@mkdir -p $(dir $@)
@@ -72,6 +73,11 @@ endef
 
 $(BUILD)/src/%.c.o: src/%.c | $(BUILD)
 	$(call compile_c_object)
+
+# A HANDWRITTEN_ASM unit pulls its assembly in with `.include`, which cpp never
+# sees, so -MD does not record it. Without this an edit to the .s leaves the
+# object stale and the build silently keeps the previous instructions.
+$(BUILD)/src/%.c.o: src/%.s
 
 $(BUILD):
 	@mkdir -p $@
@@ -112,13 +118,14 @@ audit-code:
 # Enumerated rather than discovered: tools/ has no __init__.py, so unittest
 # discovery cannot import it, but the namespace package resolves by name.
 TESTS := tools.tests.test_code_debt tools.tests.test_alloc_diff tools.tests.test_try_drop_raw \
-         tools.tests.test_gen_expected tools.tests.test_gen_objdiff_config
+         tools.tests.test_gen_expected tools.tests.test_gen_objdiff_config \
+         tools.tests.test_progress_report tools.tests.test_strip_nonmatching_markers
 
 test:
 	$(PY) -m unittest $(TESTS)
 
 progress:
-	$(PY) tools/scripts/progress_report.py
+	$(PY) tools/scripts/progress_report.py --version $(VERSION)
 
 # objdiff compares what this tree builds against objects disassembled from the
 # game itself. `expected` produces that second side; `report` scores it and

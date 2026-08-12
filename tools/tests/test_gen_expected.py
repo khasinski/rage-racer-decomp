@@ -65,14 +65,21 @@ class UnambiguousTest(unittest.TestCase):
 
 
 class SymbolFileTest(unittest.TestCase):
-    def test_types_only_what_the_compiler_called_a_function(self):
+    def test_everything_in_text_is_disassembled_as_code(self):
+        # gcc leaves a hand-written block untyped. Passing that through would
+        # have splat read it as data and dump it as .word, which pairs against
+        # nothing, because the base has instructions there.
         written = symbol_file([
             ("GameInitPad", 0x80013F48, "STT_FUNC", 0x38, ".text"),
             ("BiosExit", 0x80063D9C, "STT_NOTYPE", 0, ".text"),
         ])
         self.assertIn("GameInitPad = 0x80013F48; // type:func size:0x38", written)
-        self.assertIn("BiosExit = 0x80063D9C;", written)
-        self.assertNotIn("BiosExit = 0x80063D9C; // type:func", written)
+        self.assertIn("BiosExit = 0x80063D9C; // type:func", written)
+
+    def test_data_outside_text_is_left_as_data(self):
+        written = symbol_file([("g_AtanTable", 0x8007B664, "STT_OBJECT", 0x804, ".data")])
+        self.assertIn("g_AtanTable = 0x8007B664; // size:0x804", written)
+        self.assertNotIn("type:func", written)
 
     def test_sorts_by_address(self):
         written = symbol_file([
