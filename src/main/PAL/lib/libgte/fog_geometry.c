@@ -145,4 +145,3 @@ HANDWRITTEN_ASM("src/main/PAL/lib/libgte", fog_geometry);
  *   available to the build, or the routine is confirmed as a shippable
  *   library .s.
  */
-INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libgte/fog_geometry", SquareRoot0);

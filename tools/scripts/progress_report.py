@@ -7,7 +7,7 @@ object is compared, function by function, against an object disassembled from
 the retail executable. `make report` writes it; this only reads it.
 
 An earlier version of this script counted a function as done when its source
-carried no INCLUDE_ASM and no inline assembly. That measures how much of the
+carried no included assembly and no inline assembly. That measures how much of the
 tree is written in C, which is worth knowing but is not the same claim, and
 stating it as progress overstated the result: a function can be plain C and
 still compile to something the game never contained. The C-versus-assembly
@@ -33,7 +33,7 @@ BADGES = DOCS / "badges"
 # library is not the same work as decompiling the game.
 CATEGORY_NAMES = {"game": "Game code", "psyq": "PsyQ libraries"}
 
-ASM_INCLUDE = re.compile(r"\b(?:INCLUDE_ASM|INCLUDE_RODATA)\s*\(")
+ASM_INCLUDE = re.compile(r"\bHANDWRITTEN_ASM\s*\(")
 # Assembler directives count only where they can actually occur in C: inside a
 # string literal handed to asm(). Matched against bare source they also hit
 # ordinary struct field accesses -- `foo.word` on a union with a `word` member

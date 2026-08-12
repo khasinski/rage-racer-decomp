@@ -95,7 +95,7 @@ class CarriesAssemblyTest(unittest.TestCase):
         self.assertFalse(carries_assembly("void f(void) {\n    return;\n}\n"))
 
     def test_an_include_counts(self):
-        self.assertTrue(carries_assembly('INCLUDE_ASM("a/b", Fn);\n'))
+        self.assertTrue(carries_assembly('HANDWRITTEN_ASM("a/b", Fn);\n'))
 
     def test_an_inline_block_counts(self):
         self.assertTrue(carries_assembly('void f(void) {\n    asm volatile("nop");\n}\n'))
@@ -112,7 +112,7 @@ class SourceMixTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             (root / "plain.c").write_text("void a(void) {}\nvoid b(void) {}\n")
-            (root / "mixed.c").write_text('void a(void) {}\nINCLUDE_ASM("x", B);\n')
+            (root / "mixed.c").write_text('void a(void) {}\nHANDWRITTEN_ASM("x", B);\n')
             self.assertEqual(source_mix(root), (1, 2))
 
     def test_a_unit_mixing_c_and_assembly_is_not_plain(self):

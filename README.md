@@ -32,9 +32,9 @@ against the game function by function.
 
 | Scope | Functions | Code bytes | Data bytes |
 |---|---:|---:|---:|
-| Game code | 704 / 704 (100.00%) | 100.00% | 99.88% |
+| Game code | 705 / 705 (100.00%) | 100.00% | 99.88% |
 | PsyQ libraries | 497 / 497 (100.00%) | 100.00% | 0.00% |
-| **Whole executable** | **1201 / 1201 (100.00%)** | **100.00%** | **99.82%** |
+| **Whole executable** | **1202 / 1202 (100.00%)** | **100.00%** | **99.82%** |
 
 ### What "matched" means here
 
@@ -53,7 +53,7 @@ Earlier revisions of this file called a function decompiled when its source
 carried no `INCLUDE_ASM` and no inline assembly. That describes how the source
 is written, not whether it reproduces the game, and using it as the headline
 number overstated the result. It is still counted, separately and under its own
-name: **242 of 345 translation units are plain C**, the rest holding
+name: **237 of 337 translation units are plain C**, the rest holding
 hand-written assembly the original shipped that way.
 
 ### Where the remaining gap is

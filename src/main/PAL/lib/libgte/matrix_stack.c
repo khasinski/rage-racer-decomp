@@ -570,8 +570,6 @@ s32 TransformCollisionVector(s32 *in, s32 *out, s32 flag) {
  *           obtained AND verified not to regress already-matched functions.
  */
 
-INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libgte/matrix_stack", ScaleMatrixL);
-
 /* PushMatrix and PopMatrix: GTE control registers moved to and from the
  * matrix stack, hand-written in the original. Excluded from progress.
  * See src/main/PAL/lib/libgte/matrix_stack.s. */

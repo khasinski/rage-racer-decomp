@@ -77,4 +77,4 @@ Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
  * Revisit:  only if the exact cc1 variant that emits narrow multu is obtained
  *           AND verified not to regress already-matched functions.
  */
-INCLUDE_ASM("asm/PAL/main/nonmatchings/lib/libgte/rotation_matrix", RotMatrix);
+HANDWRITTEN_ASM("src/main/PAL/lib/libgte", rotation_matrix);
