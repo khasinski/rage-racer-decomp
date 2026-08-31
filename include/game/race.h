@@ -7,6 +7,8 @@
 #include "game/replay.h"
 #include "game/render_types.h"
 
+struct GameRenderObject;
+
 struct PlayerCarRuntime;
 struct GameCarRuntime;
 struct GameRenderSourcePoint;
@@ -430,8 +432,8 @@ void BuildRaceHudPrims(s32);
 void BuildTileStrips(void);
 void CommitClassProgress(void);
 s32 ComputeClassGrade(void);
-s32 CycleAttractCameraCar(u32 mask, s32 current);
-int CycleBgmSelectCameraCar();
+s32 CycleAttractCameraCar(s32 mask, s32 current);
+s32 CycleBgmSelectCameraCar(s32 mask, s32 current);
 void DrawAttractTitle(void);
 void DrawBgmSelectBar();
 void DrawLapNumber(void);
@@ -467,7 +469,8 @@ void SeedReplayCars(void);
 void SeedRouteScenery(void);
 void SeedWaypoints(void);
 void TriggerRaceCues(void);
-void UpdateFinishCamera(void* obj);
+/* void *: the caller passes g_PlayerCar, not a GameRenderObject. */
+void UpdateFinishCamera(void *obj);
 s32 UpdateLapAndFinish(struct PlayerCarRuntime *car, s32 grandPrixMode);
 void UpdatePrologueLoad(void);
 void UpdateRacePosition(void);

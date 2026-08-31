@@ -4,6 +4,7 @@
 #include "common.h"
 
 struct CdlLOC;
+
 struct CdlFILE;
 
 typedef enum CdCommandType {
@@ -91,6 +92,6 @@ extern struct CdlFILE g_CdSearchFile;
 extern s32 g_CdTocEntryCount;
 extern struct CdlLOC g_CdTrackElapsedLoc;
 
-void CdMix(u8* vol);
+long CdMix(u8 *vol);
 
 #endif

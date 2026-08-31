@@ -41,6 +41,24 @@ typedef struct DrawEnvPacket {
     u_long code[15];
 } DrawEnvPacket;
 
+/*
+ * DrawEnv without its trailing packet, which is what Gpu_BuildDrawEnvCmds
+ * reads. The texture window is the same eight bytes DrawEnv calls tw, spelled
+ * as the four command fields rather than as a rectangle.
+ */
+typedef struct DrawEnvPacketSource {
+    Rect clip;
+    short ofs[2];
+    GpuTexWindow tw;
+    u_short tpage;
+    u_char dtd;
+    u_char dfe;
+    u_char isbg;
+    u_char r0;
+    u_char g0;
+    u_char b0;
+} DrawEnvPacketSource;
+
 typedef struct DrawEnv {
     Rect clip;
     short ofs[2];

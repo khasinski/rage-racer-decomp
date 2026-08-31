@@ -1,7 +1,7 @@
 #include <sys/types.h>
 #include <string.h>
 
-long strcmp(u_char *lhs, u_char *rhs) {
+long strcmp(u8 *lhs, u8 *rhs) {
     long left;
 
     if ((lhs == 0) || (rhs == 0)) {

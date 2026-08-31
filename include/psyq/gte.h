@@ -49,11 +49,11 @@ void DpqColor3(
     void *v0,
     void *v1,
     void *v2,
-    s32 p,
+    s32 ir0,
     void *o0,
     void *o1,
     void *o2);
-void DpqColor(void *v0, void *rgb, s32 p, void *v1);
+void DpqColor(void *v0, void *rgb, s32 ir0, void *v1);
 void Intpl(void *in, s32 ir0, void *out);
 void *Square12(void *v0, void *v1);
 void *Square0(void *v0, void *v1);

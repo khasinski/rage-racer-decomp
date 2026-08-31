@@ -1,13 +1,13 @@
 #include <sys/types.h>
 #include <string.h>
 
-void memcpy(u_char *dst, u_char *src, long count) {
+void memcpy(u8 *dest, u8 *src, long count) {
     long i;
 
     i = count;
     while (i--) {
-        *dst = *src;
+        *dest = *src;
         src++;
-        dst++;
+        dest++;
     }
 }

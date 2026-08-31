@@ -6,6 +6,7 @@
 #include "psyq/cd_location.h"
 #include "psyq/gpu.h"
 
+
 struct GameCarSpec;
 struct CarImageData;
 struct ModelBankHeader;
@@ -437,7 +438,9 @@ extern TrackTextureShadowRow *g_TrackTextureShadow;
 
 void InstallTerrainCellData(void *data);
 void InstallTrackEventData(void* eventData);
-void InstallTrackPoints(void* trackData);
+/* The installers all take void *: every caller hands them the raw
+ * g_AssetBlockPtr, never the typed table the definition casts it to. */
+void InstallTrackPoints(void *trackData);
 void LoadCourseAssets(void);
 void LoadGrandPrixScreen(void);
 s32 PollAudioSlotLoad(void);
@@ -447,9 +450,10 @@ s32 RequestRaceStart(void);
 void ResetTrackTextureSwap(void);
 void SelectTrackCameraTable(void* block, s32 variant);
 void SetTrackCameraTable(void *table);
-void SetCourseObjects(void* table);
+void SetCourseObjects(void *table);
 void SetEnvPaletteTable(void* table);
-void SetEnvironmentScript(void* script);
+/* void *: the one caller hands it the raw asset block pointer. */
+void SetEnvironmentScript(void *script);
 void StoreTeamLogoImage(void* dst);
 void UploadImageAsset(void *asset);
 void UploadImageBlock(GameImageAssetHeaderWord *asset);

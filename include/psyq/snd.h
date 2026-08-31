@@ -39,15 +39,7 @@ short SsUtGetVVol(short voice, short *left, short *right);
  * parameters, not the SDK's short, because the game calls it unprototyped and
  * passes full words.
  */
-long SsUtKeyOnV(
-    long voice,
-    long vabId,
-    long prog,
-    long tone,
-    long note,
-    long fine,
-    long volL,
-    long volR);
+long SsUtKeyOnV( long voice, short vab_id, short program, short tone, u_short note, u_short fine, short left, short right);
 void _SsVmInit(int voices);
 
 void SsSetMVol(short left, short right);
@@ -123,7 +115,7 @@ long SpuVmApplyPitchBendToVoice(long voice, long note, long vab_id, long program
 long SpuVmApplyPitchBendByTone(long note, long vab_id, long program, long bend);
 void SsUtFlush(void);
 long SpuVmSeKeyOn(long seq, long vab_id, long program, long tone, long volume, long pan);
-long SpuVmSeKeyOff(long seq, long vab_id, long program, long tone);
+long SpuVmSeKeyOff(short seq_sep, short vab_id, short program, u_short note);
 void SpuVmRebuildVoiceTable(void);
 void SpuVmNoiseKeyOn(u_char voice);
 void SpuVmScaleVabVolume(long vabId, long value);
@@ -139,7 +131,7 @@ long SsUtGetProgPan(long vab_id, long program);
 long SsUtKeyOffV(long voice);
 long SsUtPitchBend(long voice, long vab_id, long program, long note, long pbend);
 long SsUtChangePitch(long voice, long vab_id, long program, long old_note, long old_fine, long new_note, long new_fine);
-long SsUtChangeADSR(long voice, long vab_id, long program, long old_note, long adsr1, long adsr2);
+long SsUtChangeADSR(long voice, long vab_id, long program, long tone, u_short adsr1, u_short adsr2);
 short SsUtGetDetVVol(short voice, short *left, short *right);
 short SsUtSetDetVVol(short voice, short left, short right);
 short SsUtSetVVol(short voice, short left, short right);

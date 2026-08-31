@@ -900,6 +900,9 @@ void AdvanceCarPosition();
 void ApplyCarKnockback();
 void ClearCarMotionState();
 s32 FindTrackSegment();
+/* Takes (pointIndex, weight), but deliberately left unprototyped: retail
+ * StartCarBodyKick calls it with the index alone and lets weight be whatever
+ * the last call left in $a1. A real prototype makes that call an error. */
 s32 InterpolateTrackAngle();
 s32 IsCarFacingBackwards(PlayerCarRuntime *car);
 s32 IsPointInQuad();

@@ -6,8 +6,8 @@
  * m2c saw them as (void): the values are already in a0/a1 when the tail call
  * is made. The signatures below are the ones the callers use -- CdMix from
  * cd/cd_audio_control.c and CdGetSector2 from sdk/CdReadDataReadyCallback.c. */
-long CdMix(CdlATV *vol) {
-    CD_vol(vol);
+long CdMix(u8 *vol) {
+    CD_vol((CdlATV *)vol);
     return 1;
 }
 

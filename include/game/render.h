@@ -311,6 +311,7 @@ typedef struct GameRenderSourcePoint {
  */
 void BuildRotMatrixZ(void *mtx, s32 angle);
 void BuildRotMatrixY(void *mtx, s32 angle);
+/* mtx stays void *: callers pass both a Matrix and a bare s16[16]. */
 void BuildRotMatrixX(void *mtx, s32 angle);
 /*
  * Composes Y*X*Z from the scratchpad camera angles (0x1F800018 / 0x1C / 0x20)
@@ -452,26 +453,8 @@ void GameDrawTexturedQuad(
     s32 semiTrans,
     s32 tpage);
 /* TILE: solid rectangle at (x, y) sized (w, h). */
-void DrawSolidRect(
-    void *ot,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h,
-    s32 r,
-    s32 g,
-    s32 b,
-    s32 alpha);
-void DrawLine(
-    void *ot,
-    s32 x0,
-    s32 y0,
-    s32 x1,
-    s32 y1,
-    s32 r,
-    s32 g,
-    s32 b,
-    s32 alpha);
+void DrawSolidRect(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 alpha);
+void DrawLine(void *ot, s32 x0, s32 y0, s32 x1, s32 y1, s32 r, s32 g, s32 b, s32 alpha);
 /* LINE_F3: flat-shaded 3-point polyline. */
 void DrawPolyLine3(
     void *ot,
@@ -486,19 +469,7 @@ void DrawPolyLine3(
     s32 b,
     s32 alpha);
 /* LINE_G2: line interpolating rgb0 -> rgb1. */
-void DrawGradientLine(
-    void *ot,
-    s32 x0,
-    s32 y0,
-    s32 x1,
-    u16 y1,
-    u8 r0,
-    u8 g0,
-    u8 b0,
-    u8 r1,
-    u8 g1,
-    u8 b1,
-    u8 alpha);
+void DrawGradientLine(void *ot, s32 x0, s32 y0, s32 x1, u16 y1, u8 r0, u8 g0, u8 b0, u8 r1, u8 g1, u8 b1, u8 alpha);
 /* Two-pixel-thick rectangle border, built from six DrawLine calls. */
 void DrawRectOutline(
     void *ot,
@@ -511,12 +482,7 @@ void DrawRectOutline(
     s32 b,
     s32 alpha);
 /* Clips (x, y, w, h) to the 320x480 frame and queues a SetDrawArea packet. */
-void SetDrawClipRect(
-    void *ot,
-    s32 x,
-    s32 y,
-    s32 w,
-    s32 h);
+void SetDrawClipRect(void *ot, s32 x, s32 y, s32 w, s32 h);
 
 /*
  * Text and number output, both built on DrawSprite. The two fonts differ
@@ -781,6 +747,21 @@ void SetDrawModePacket(u8 *prim, s32 tpage);
  * record_entry.c hands a packet pointer to x, several callers hand a char or
  * void pointer to str, and swap_car_model_slot.c passes only three arguments;
  * cc1 2.6.3 segfaults on those conversions rather than diagnosing them. */
+/*
+ * Left unprototyped on purpose. Retail calls these with the argument lists
+ * they happen to have: DrawText8x8 with three arguments in one place and four
+ * in another, the string as an s32 or an s16 * rather than a u8 *, and
+ * GameQueueShadedSprite with nine of its ten arguments. A real prototype turns
+ * every one of those call sites into an error. The signatures the definitions
+ * carry are:
+ *   DrawText8x8(s32 x, s32 y, const u8 *str, s32 clutIndex)
+ *   GameDrawText8x8Shaded(s32 x, s32 y, const u8 *str, s32 clut, u8 intensity)
+ *   DrawText8x8Trans(s32 x, s32 y, u8 *str, s32 clutIndex)
+ *   DrawProportionalText(s32 x, s32 y, u8 *str, s32 clutIndex)
+ *   GameQueueSprite(void *ot, u8 *prim, s32 x, s32 y, s32 w, s32 h,
+ *                   s32 u, s32 v, s32 clutIndex)
+ *   GameQueueShadedSprite(... the same, plus s32 intensity)
+ */
 void DrawText8x8();
 /* The body reads (s32, s32, u8 *, s32, u8); its callers were compiled
  * against a full word for every argument, so the list stays empty. */
@@ -927,7 +908,7 @@ void RestoreColorMatrix(void);
 s32 rsinCore(s32 angle);
 s32 rsin(s32 angle);
 s32 rcos(s32 angle);
-void *ApplyMatrixLV();
+void *ApplyMatrixLV(void *mtx, void *vec, void *out);
 s32 SquareRoot0(s32 square);
 void SubmitTerrainCells(void *ctx, void *cells, s32 count);
 s32 SetLookAtMatrix(const CameraLookAt *camera);
@@ -1019,14 +1000,20 @@ extern u8 g_WordFontV[];
 extern u8 g_WordFontWidth[];
 
 void BuildAxisRotMatrix(GameRenderAxisMatrix *out, s32 sinTerm, s32 cosTerm, s32 axis);
-s32 CdRead2(s32 mode);
-void DecDCTReset(s32 mode);
-void DecDCTin(volatile u32* bitstream, s32 mode);
+long CdRead2(long mode);
+void DecDCTReset(long mode);
+/* Spelled u32 here and u_long in libpress on purpose: the FMV code owns its
+ * bitstream as u32 buffers, and libpress keeps the SDK spelling throughout.
+ * The two are the same type to the linker but not to gcc 2.6.3, and neither
+ * side can move without dragging its whole layer along. */
+void DecDCTin(volatile u32 *bitstream, s32 mode);
 void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color);
 DrawPacket *DrawMirrorFrame(u8 *packet);
 void GPU_cw(void *packet);
-void Gpu_BuildDrawEnvCmds(void* packet, void* env);
-s32 Gpu_Reset(s32 mode);
+/* Both parameters stay void *: the one caller hands it a whole DrawEnv and
+ * the packet it embeds, while the definition reads only the head of each. */
+void Gpu_BuildDrawEnvCmds(void *packet, void *env);
+long Gpu_Reset(u_long mode);
 void MatrixApplyVectorComponents(Matrix *mtx, s32 x, s32 y, s32 z, s32 *outX, s32 *outY, s32 *outZ);
 void MatrixApplyZRotation(Matrix* mtx, s32 degrees);
 void MdecUnpackStatus(void *ctx, volatile u32 *slot);

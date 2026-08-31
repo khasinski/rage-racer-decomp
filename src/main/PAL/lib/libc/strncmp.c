@@ -1,7 +1,7 @@
 #include <sys/types.h>
 #include <string.h>
 
-long strncmp(u_char *lhs, u_char *rhs, long len) {
+long strncmp(u8 *lhs, u8 *rhs, long len) {
     long left;
     long right;
 

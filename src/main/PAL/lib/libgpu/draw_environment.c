@@ -49,18 +49,6 @@ void SetDrawMode(DrawPacket *pkt, long dfe, long dtd, long tpage, void *window) 
 }
 
 
-typedef struct DrawEnvPacketSource {
-    Rect clip;
-    short ofs[2];
-    GpuTexWindow tw;
-    u_short tpage;
-    u_char dtd;
-    u_char dfe;
-    u_char isbg;
-    u_char r0;
-    u_char g0;
-    u_char b0;
-} DrawEnvPacketSource;
 
 
 void Gpu_BuildDrawEnvCmds(u_long *packet, DrawEnvPacketSource *env) {
