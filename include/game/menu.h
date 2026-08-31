@@ -61,6 +61,9 @@ extern s32 g_TitleMenuSelection;
 extern s32 g_MenuOverlayPattern;
 
 /* Debug/status phase code written through an asset-load state machine. */
+/* Declared volatile in memcard_internal.h and plain here on purpose: the
+ * memory-card code polls it in a wait loop, and gcc 2.6.3 only reloads it per
+ * iteration under the qualifier. Unifying either way moves the code. */
 extern s32 GameMenuLoadPhase;
 
 /*
@@ -75,8 +78,8 @@ extern s32 g_MenuAltLayoutSetting;
 
 /* The two RaceRecord[series][course][5] high-score tables kept in the save block:
  * race ranking (+0x9A4) and time ranking (+0x8DC). */
-extern RaceRecord g_RankingRecords[][4][5];
-extern RaceRecord g_TimeRecords[][4][5];
+extern RaceRecord g_RankingRecords[2][4][5];
+extern RaceRecord g_TimeRecords[2][4][5];
 
 /* The team-name entry buffer and its length, capped at 6 characters. The pair is
  * also the first bytes of the memory-card save header row. */
@@ -90,7 +93,7 @@ extern u8 g_TeamNameChars[];
 extern s32 g_McMenuState;
 extern volatile s32 g_McCardStatus;
 extern s32 g_McMenuSelection;
-extern s32 g_McMenuSubState;
+extern volatile s32 g_McMenuSubState;
 
 /* The two eased current/target pairs of the 3D menu view, in 1/1000 units:
  * an angle (carousel wraps at 500000 per entry) and a translation. Screens set
