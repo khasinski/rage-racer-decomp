@@ -20,9 +20,9 @@ u32 func_80069CBC[3] __attribute__((section(".text"))) = { 0, 0, 0 };
  *     hides $2==dst from the optimizer. Stores therefore remain addressed
  *     through $5 rather than reusing $2 as the base pointer.
  */
-Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
-    s16 *srcp = (s16 *)src;
-    s16 *dstp = (s16 *)dst;
+Matrix *TransposeMatrix(Matrix *m0, Matrix *m1) {
+    s16 *srcp = (s16 *)m0;
+    s16 *dstp = (s16 *)m1;
     Matrix *ret;
     s32 value0;
     s32 value1;
@@ -30,7 +30,7 @@ Matrix *TransposeMatrix(Matrix *src, Matrix *dst) {
 
     value0 = srcp[0];
     __asm__ volatile("" : "=r"(value0) : "0"(value0) : "$2", "$3", "$6", "$7", "$8");
-    ret = dst;
+    ret = m1;
     dstp[0] = value0;
     value1 = srcp[3];
     __asm__ volatile("" : "=r"(ret), "=r"(value1), "=r"(value2) : "0"(ret), "1"(value1) : "$3", "$6", "$7", "$8", "$9");

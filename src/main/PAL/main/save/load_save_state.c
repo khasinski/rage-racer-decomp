@@ -110,9 +110,9 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
 
         srcAddress.pointer = base;
         for (i = 0; i < 13; i++) {
-            SavedCarSetup *grandPrixCar;
-            SavedCarSetup *extraGrandPrixCar;
-            SavedCarSetup *timeAttackCar;
+            CarEntry *grandPrixCar;
+            CarEntry *extraGrandPrixCar;
+            CarEntry *timeAttackCar;
 
             grandPrixCar = &srcAddress.pointer->carSetup[0][0];
             extraGrandPrixCar = &srcAddress.pointer->carSetup[1][0];
@@ -136,7 +136,7 @@ s32 LoadSaveStateBlock(GameSaveBlock *block) {
             g_TimeAttackCars[i].paintColor1 = timeAttackCar->paintColor1;
             g_TimeAttackCars[i].paintColor2 = timeAttackCar->paintColor2;
             g_TimeAttackCars[i].enabled = timeAttackCar->enabled;
-            srcAddress.bytePointer += sizeof(SavedCarSetup);
+            srcAddress.bytePointer += sizeof(CarEntry);
         }
     }
 

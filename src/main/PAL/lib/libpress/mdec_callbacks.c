@@ -1,9 +1,11 @@
+#include <sys/types.h>
+
 #include "common.h"
 #include "psyq/kernel.h"
 #include "psyq/press_internal.h"
 
-void DecDCTout(void) {
-    MDEC_out();
+void DecDCTout(volatile u_long *buf, long size) {
+    MDEC_out(buf, size);
 }
 
 void DecDCTinSync(void) {

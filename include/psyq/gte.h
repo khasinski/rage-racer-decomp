@@ -6,8 +6,8 @@
 #include "common.h"
 
 typedef struct Matrix {
-    short m[3][3];
-    long t[3];
+    s16 m[3][3];
+    s32 t[3];
 } Matrix;
 
 /*
@@ -25,44 +25,44 @@ void SetVertex1(void *v);
 void SetVertex2(void *v);
 void SetVertexTri(void *v0, void *v1, void *v2);
 void SetRGBfifo(void *rgb0, void *rgb1, void *rgb2);
-void SetIR123(long ir1, long ir2, long ir3);
-void SetIR0(long ir0);
-void SetSZfifo3(long sz1, long sz2, long sz3);
-void SetSZfifo4(long sz0, long sz1, long sz2, long sz3);
-void SetSXSYfifo(long sxy0, long sxy1, long sxy2);
-void SetRii(long r11, long r22, long r33);
-void SetMAC123(long mac1, long mac2, long mac3);
-void SetData32(long data);
+void SetIR123(s32 ir1, s32 ir2, s32 ir3);
+void SetIR0(s32 ir0);
+void SetSZfifo3(s32 sz1, s32 sz2, s32 sz3);
+void SetSZfifo4(s32 sz0, s32 sz1, s32 sz2, s32 sz3);
+void SetSXSYfifo(s32 sxy0, s32 sxy1, s32 sxy2);
+void SetRii(s32 r11, s32 r22, s32 r33);
+void SetMAC123(s32 mac1, s32 mac2, s32 mac3);
+void SetData32(s32 data);
 /* Perspective divide constants (control regs 27 / 28). */
-void SetDQA(long dqa);
-void SetDQB(long dqb);
+void SetDQA(s32 dqa);
+void SetDQB(s32 dqb);
 /* Fog: derives dqa from the near distance `a` and projection distance `h`. */
-void SetFogNear(long a, long h);
+void SetFogNear(s32 near, s32 projection);
 /* Background / far colours; each component is shifted left by 4 on the way in. */
-void SetBackColor(long rbk, long gbk, long bbk);
-void SetFarColor(long rfc, long gfc, long bfc);
-void SetGeomOffset(long ofx, long ofy);
-void SetGeomScreen(long h);
+void SetBackColor(s32 rbk, s32 gbk, s32 bbk);
+void SetFarColor(s32 rfc, s32 gfc, s32 bfc);
+void SetGeomOffset(s32 ofx, s32 ofy);
+void SetGeomScreen(s32 h);
 /* Single COP2 commands. */
 void LightColor(void *v0, void *v1);
 void DpqColor3(
     void *v0,
     void *v1,
     void *v2,
-    long p,
+    s32 p,
     void *o0,
     void *o1,
     void *o2);
-void DpqColor(void *v0, void *rgb, long p, void *v1);
-void Intpl(void *v0, long p, void *v1);
+void DpqColor(void *v0, void *rgb, s32 p, void *v1);
+void Intpl(void *in, s32 ir0, void *out);
 void *Square12(void *v0, void *v1);
 void *Square0(void *v0, void *v1);
-long AverageZ3(long sz0, long sz1, long sz2);
-long AverageZ4(long sz0, long sz1, long sz2, long sz3);
+s32 AverageZ3(s32 sz0, s32 sz1, s32 sz2);
+s32 AverageZ4(s32 sz0, s32 sz1, s32 sz2, s32 sz3);
 void OuterProduct12(void *v0, void *v1, void *v2);
 void OuterProduct0(void *v0, void *v1, void *v2);
-long NormalClip(long sxy0, long sxy1, long sxy2);
-long Lzc(long data);
+s32 NormalClip(s32 sxy0, s32 sxy1, s32 sxy2);
+s32 Lzc(s32 data);
 /* Transposes the 3x3 rotation part of m0 into m1, leaving the translation. */
 Matrix *TransposeMatrix(Matrix *m0, Matrix *m1);
 
@@ -76,10 +76,10 @@ Matrix *TransposeMatrix(Matrix *m0, Matrix *m1);
 void *MulMatrix(void *m0, void *m1);
 void *MulMatrix2(void *m0, void *m1);
 void *MulMatrix0(void *m0, void *m1, void *m2);
-/* v1 = m * v0 through the same MVMVA; v0 is a short vector, v1 gets MAC1..3. */
+/* v1 = m * v0 through the same MVMVA; v0 is a s16 vector, v1 gets MAC1..3. */
 void *ApplyMatrix(void *m, void *v0, void *v1);
 /* SVECTOR in, SVECTOR out; returns v1. LibRef47 8-23. */
-short *ApplyMatrixSV(void *m, void *v0, short *v1);
+s16 *ApplyMatrixSV(void *m, void *v0, s16 *v1);
 
 /* Matrix scaling. ScaleMatrix does m[i][j] *= v[j] (column j scaled by
  * v[j]); ScaleMatrixL does m[i][j] *= v[i]. LibRef47 8-150 / 8-151. */
@@ -89,7 +89,7 @@ void *ScaleMatrixL(void *m, void *v);
 void *RotMatrix(void *r, void *m);
 /* Square root in 12-bit fixed point: returns sqrt(a << 12), i.e. 64*sqrt(a).
  * Normalises with Lzc, then runs the hyperbolic CORDIC in CordicRotate. */
-long SquareRoot12(long a);
+s32 SquareRoot12(s32 square);
 
 /* Declared identically by 22 translation units before this
  * header carried them. */

@@ -3,6 +3,7 @@
 
 #include "common.h"
 
+#include "game/car.h"
 #include "game/menu_types.h"
 
 #include "psyq/gpu.h"
@@ -85,15 +86,6 @@ typedef struct MemoryCardMessageRow {
     u8 reserved[3];
 } MemoryCardMessageRow;
 
-typedef struct SavedCarSetup {
-    u8 modelVariant;
-    u8 tireCompound;
-    u8 transmission;
-    u8 paintColor1;
-    u8 paintColor2;
-    u8 enabled;
-    u8 reserved[2];
-} SavedCarSetup;
 
 typedef struct SavedClassRecord {
     u16 grade;
@@ -142,7 +134,7 @@ typedef struct GameSaveBlock {
     s16 bgmSelection;             /* +0x4C g_BgmSelection */
     u16 advancedUnlocked;  /* +0x4E g_AdvancedSeriesUnlocked */
     s32 maxClassReached[2];/* +0x50 g_MaxClassReached */
-    SavedCarSetup carSetup[3][13];
+    CarEntry carSetup[3][13];
     SavedClassRecord classRecords[11];
     u16 teamLogoClut[16];
     u16 teamLogoCanvas[0x400];

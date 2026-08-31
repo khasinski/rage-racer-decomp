@@ -82,11 +82,11 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
 
             saveAddress.pointer = block;
             for (i = 0; i < 13; i++) {
-                SavedCarSetup *grandPrixCar =
+                CarEntry *grandPrixCar =
                     &saveAddress.pointer->carSetup[0][0];
-                SavedCarSetup *extraGrandPrixCar =
+                CarEntry *extraGrandPrixCar =
                     &saveAddress.pointer->carSetup[1][0];
-                SavedCarSetup *timeAttackCar =
+                CarEntry *timeAttackCar =
                     &saveAddress.pointer->carSetup[2][0];
 
                 grandPrixCar->modelVariant = g_GrandPrixCars[i].modelVariant;
@@ -110,7 +110,7 @@ void StoreSaveStateBlock(GameSaveBlock *block) {
                 timeAttackCar->paintColor2 = g_TimeAttackCars[i].paintColor2;
                 timeAttackCar->enabled = g_TimeAttackCars[i].enabled;
 
-                saveAddress.bytePointer += sizeof(SavedCarSetup);
+                saveAddress.bytePointer += sizeof(CarEntry);
             }
         }
 

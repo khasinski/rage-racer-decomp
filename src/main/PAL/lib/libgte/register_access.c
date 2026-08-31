@@ -20,43 +20,43 @@ void SetVertexTri(void *v0, void *v1, void *v2) {
 
 /* --- SetRGBfifo.s --- */
 
-void SetRGBfifo(void *a, void *b, void *c) {
-    gte_lwc2(20, a);
-    gte_lwc2(21, b);
-    gte_lwc2(22, c);
+void SetRGBfifo(void *rgb0, void *rgb1, void *rgb2) {
+    gte_lwc2(20, rgb0);
+    gte_lwc2(21, rgb1);
+    gte_lwc2(22, rgb2);
 }
-void SetIR123(s32 a, s32 b, s32 c) {
-    gte_mtc2(a, 9);
-    gte_mtc2(b, 10);
-    gte_mtc2(c, 11);
+void SetIR123(s32 ir1, s32 ir2, s32 ir3) {
+    gte_mtc2(ir1, 9);
+    gte_mtc2(ir2, 10);
+    gte_mtc2(ir3, 11);
 }
-void SetIR0(s32 a) { gte_mtc2(a, 8); }
-void SetSZfifo3(s32 a, s32 b, s32 c) {
-    gte_mtc2(a, 17);
-    gte_mtc2(b, 18);
-    gte_mtc2(c, 19);
+void SetIR0(s32 ir0) { gte_mtc2(ir0, 8); }
+void SetSZfifo3(s32 sz1, s32 sz2, s32 sz3) {
+    gte_mtc2(sz1, 17);
+    gte_mtc2(sz2, 18);
+    gte_mtc2(sz3, 19);
 }
-void SetSZfifo4(s32 a, s32 b, s32 c, s32 d) {
-    gte_mtc2(a, 16);
-    gte_mtc2(b, 17);
-    gte_mtc2(c, 18);
-    gte_mtc2(d, 19);
+void SetSZfifo4(s32 sz0, s32 sz1, s32 sz2, s32 sz3) {
+    gte_mtc2(sz0, 16);
+    gte_mtc2(sz1, 17);
+    gte_mtc2(sz2, 18);
+    gte_mtc2(sz3, 19);
 }
-void SetSXSYfifo(s32 a, s32 b, s32 c) {
-    gte_mtc2(a, 12);
-    gte_mtc2(b, 13);
-    gte_mtc2(c, 14);
+void SetSXSYfifo(s32 sxy0, s32 sxy1, s32 sxy2) {
+    gte_mtc2(sxy0, 12);
+    gte_mtc2(sxy1, 13);
+    gte_mtc2(sxy2, 14);
 }
-void SetRii(s32 a, s32 b, s32 c) {
-    gte_ctc2(a, 0);
-    gte_ctc2(b, 2);
-    gte_ctc2(c, 4);
+void SetRii(s32 r11, s32 r22, s32 r33) {
+    gte_ctc2(r11, 0);
+    gte_ctc2(r22, 2);
+    gte_ctc2(r33, 4);
 }
-void SetMAC123(s32 a, s32 b, s32 c) {
-    gte_mtc2(a, 25);
-    gte_mtc2(b, 26);
-    gte_mtc2(c, 27);
+void SetMAC123(s32 mac1, s32 mac2, s32 mac3) {
+    gte_mtc2(mac1, 25);
+    gte_mtc2(mac2, 26);
+    gte_mtc2(mac3, 27);
 }
-void SetData32(s32 a) { gte_mtc2(a, 30); }
-void SetDQA(s32 a) { gte_ctc2(a, 27); }
-void SetDQB(s32 a) { gte_ctc2(a, 28); }
+void SetData32(s32 data) { gte_mtc2(data, 30); }
+void SetDQA(s32 dqa) { gte_ctc2(dqa, 27); }
+void SetDQB(s32 dqb) { gte_ctc2(dqb, 28); }

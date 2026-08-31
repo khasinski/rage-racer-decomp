@@ -533,7 +533,7 @@ void *ApplyMatrixLV(void *mtx, void *vec, void *out) {
 /* HANDWRITTEN_ASM - PSY-Q libgte hand-asm (matrix/GTE), excluded from progress (docs/ASM_AND_GTE_POLICY.md). */
 
 
-s32 TransformCollisionVector(s32 *in, s32 *out, s32 flag) {
+void TransformCollisionVector(const s16 *in, s32 *out) {
     asm volatile(
         "lw $8,0(%0)\n"
         "lw $9,4(%0)\n"

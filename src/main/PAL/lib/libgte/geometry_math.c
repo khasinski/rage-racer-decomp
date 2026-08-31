@@ -12,20 +12,20 @@
  * out here.  See docs/names.md section 25.
  */
 
-void SetBackColor(s32 a, s32 b, s32 c) {
-    s32 x = a * 16, y = b * 16, z = c * 16;
+void SetBackColor(s32 rbk, s32 gbk, s32 bbk) {
+    s32 x = rbk * 16, y = gbk * 16, z = bbk * 16;
     gte_ctc2(x, 13);
     gte_ctc2(y, 14);
     gte_ctc2(z, 15);
 }
-void SetFarColor(s32 a, s32 b, s32 c) {
-    s32 x = a * 16, y = b * 16, z = c * 16;
+void SetFarColor(s32 rfc, s32 gfc, s32 bfc) {
+    s32 x = rfc * 16, y = gfc * 16, z = bfc * 16;
     gte_ctc2(x, 21);
     gte_ctc2(y, 22);
     gte_ctc2(z, 23);
 }
-void SetGeomOffset(s32 a, s32 b) {
-    s32 x = a << 16, y = b << 16;
+void SetGeomOffset(s32 ofx, s32 ofy) {
+    s32 x = ofx << 16, y = ofy << 16;
     gte_ctc2(x, 24);
     gte_ctc2(y, 25);
 }
@@ -85,23 +85,23 @@ void *Square0(void *in, void *out) {
     return p;
 }
 
-s32 AverageZ3(s32 a, s32 b, s32 c) {
+s32 AverageZ3(s32 sz0, s32 sz1, s32 sz2) {
     s32 r;
-    gte_mtc2(a, 17);
-    gte_mtc2(b, 18);
-    gte_mtc2(c, 19);
+    gte_mtc2(sz0, 17);
+    gte_mtc2(sz1, 18);
+    gte_mtc2(sz2, 19);
     gte_nop();
     gte_avsz3();
     gte_mfc2(r, 7);
     return r;
 }
 
-s32 AverageZ4(s32 a, s32 b, s32 c, s32 d) {
+s32 AverageZ4(s32 sz0, s32 sz1, s32 sz2, s32 sz3) {
     s32 r;
-    gte_mtc2(a, 16);
-    gte_mtc2(b, 17);
-    gte_mtc2(c, 18);
-    gte_mtc2(d, 19);
+    gte_mtc2(sz0, 16);
+    gte_mtc2(sz1, 17);
+    gte_mtc2(sz2, 18);
+    gte_mtc2(sz3, 19);
     gte_nop();
     gte_avsz4();
     gte_mfc2(r, 7);
