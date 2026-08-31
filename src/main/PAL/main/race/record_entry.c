@@ -15,10 +15,6 @@
 #include "game/state.h"
 #include "psyq/gpu.h"
 
-typedef union SignedDivisionWork {
-    s32 value;
-    u32 unsignedValue;
-} SignedDivisionWork;
 
 typedef union RankingTextBuffer {
     char value[56];
@@ -27,7 +23,7 @@ typedef union RankingTextBuffer {
 
 void DrawRankingPanel(s32 slideX) {
     s32 panel;
-    SignedDivisionWork iter;
+    SignedWord iter;
     s32 countOrIndex;
     s32 xOrField;
     s32 destination;

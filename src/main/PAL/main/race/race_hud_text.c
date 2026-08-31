@@ -10,10 +10,6 @@
 #include "game/vector.h"
 #include "psyq/gpu.h"
 
-typedef union CountdownPhase {
-    s32 value;
-    u32 unsignedValue;
-} CountdownPhase;
 
 /* The strip buffers hold back-to-back 0x10-byte TILEs; SetTile is
  * SetTile. The retail code reloads the buffer base before each field store,
@@ -207,7 +203,7 @@ void BuildTileStrips(void) {
 
 void DrawStartCountdown(s32 sceneTimer) {
     s32 timer;
-    CountdownPhase phase;
+    SignedWord phase;
     s32 halfStep;
     s32 wipeStart;
     s32 row;

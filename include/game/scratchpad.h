@@ -46,18 +46,11 @@ typedef struct ObjectMatrixWork {
 
 #define SCRATCH_OBJECT_MATRIX_WORK ((ObjectMatrixWork *)0x1F80011C)
 
-typedef union ScratchViewCoordinate {
-    s32 value;
-    struct {
-        u16 low;
-        u16 high;
-    } half;
-} ScratchViewCoordinate;
 
 typedef struct ScratchViewCoordinates {
-    ScratchViewCoordinate x;
-    ScratchViewCoordinate y;
-    ScratchViewCoordinate z;
+    SplitWord x;
+    SplitWord y;
+    SplitWord z;
 } ScratchViewCoordinates;
 
 typedef union ScratchViewPosition {
@@ -78,22 +71,15 @@ typedef union ScratchBlockAddress {
     Block16 *blocks;
 } ScratchBlockAddress;
 
-typedef union CarTrackRadius {
-    s32 value;
-    struct {
-        u16 low;
-        u16 high;
-    } half;
-} CarTrackRadius;
 
 typedef struct CarTrackScratch {
     s32 arcCenterX;
     s32 arcCenterZ;
     s32 carToCenterX;
     s32 carToCenterZ;
-    CarTrackRadius carRadius;
-    CarTrackRadius pointRadius;
-    CarTrackRadius nextPointRadius;
+    SplitWord carRadius;
+    SplitWord pointRadius;
+    SplitWord nextPointRadius;
     u8 pad1C[8];
     s32 pointToCenterX;
     s32 nextPointToCenterX;

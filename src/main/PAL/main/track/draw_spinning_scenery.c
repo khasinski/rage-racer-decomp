@@ -25,8 +25,8 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
     s32 activeValue;
     s32 frameMask;
     SpinningSceneryDataAddress dataAddress;
-    SpinningSceneryAngleAddress cursorAddress;
-    SpinningSceneryAngleAddress endAddress;
+    ShortPointer cursorAddress;
+    ShortPointer endAddress;
 
     activeValue = g_CourseIndex;
     active = activeValue & 3;

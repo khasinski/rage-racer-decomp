@@ -13,6 +13,37 @@ typedef unsigned int u32;
 typedef float f32;
 
 /*
+ * Word views. The retail code reads the same storage at two widths or two
+ * signednesses all over the tree, and gcc 2.6.3 will not let a plain cast do
+ * it: a union member reference is what makes it reload the word. Each of these
+ * had been re-invented as a private typedef in a dozen headers and source
+ * files under a dozen names; they are all the same device and live here.
+ */
+typedef union SplitWord {
+    s32 value;
+    struct {
+        u16 low;
+        u16 high;
+    } half;
+} SplitWord;
+
+typedef union SignedWord {
+    s32 value;
+    u32 unsignedValue;
+} SignedWord;
+
+typedef union SignedHalf {
+    u16 value;
+    s16 signedValue;
+} SignedHalf;
+
+typedef union ShortPointer {
+    s32 value;
+    s16 *pointer;
+} ShortPointer;
+
+
+/*
  * Reads or writes a struct member without the compiler's "this lives inside a
  * struct" mark. That mark makes gcc 2.6.3 assume the access cannot alias a
  * plain global, which lets it move a neighbouring global store across the

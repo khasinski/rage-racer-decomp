@@ -47,7 +47,7 @@ s32 SetSoundToneTableEntry(s32 slot, s32 vabSlot, s32 tone) {
     s16 *row;
     s16 *entry;
     s32 old;
-    SoundToneTableAddress entryAddress;
+    ShortPointer entryAddress;
 
     table = g_SoundSlotTone;
     row = table[slot];
@@ -186,7 +186,7 @@ void PlaySoundSlotVoice(s32 slot, s32 tone, s32 vabSlot) {
     s16 (*table)[2];
     s16 *row;
     s16 *entry;
-    SoundToneTableAddress entryAddress;
+    ShortPointer entryAddress;
 
     table = g_SoundSlotTone;
     row = table[slot];

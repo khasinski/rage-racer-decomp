@@ -46,15 +46,11 @@ void SsSeqCalledTbyT(void) {
     g_SndUpdateLock = 0;
 }
 
-typedef union SeqVolume7128C {
-    short output;
-    u_short value;
-} SeqVolume7128C;
 
 void _SsSndCrescendo(short seq, short sep) {
     SeqStruct *score = &g_SndSeqTable[seq][sep];
-    SeqVolume7128C left;
-    SeqVolume7128C right;
+    SeqVolume left;
+    SeqVolume right;
     long next_left;
 
     score->unk98--;

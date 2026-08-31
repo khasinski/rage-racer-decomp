@@ -10,6 +10,12 @@
  * and callees disagree, and both spellings are load-bearing -- so those files
  * include this header instead of the full one.
  */
+/* One sequencer volume, written as a short and read back unsigned. */
+typedef union SeqVolume {
+    short output;
+    u_short value;
+} SeqVolume;
+
 typedef struct SeqStruct {
     u_char unk0;
     u_char pad1[3];

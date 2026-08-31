@@ -7,10 +7,6 @@
 #include "game/track_internal.h"
 #include "game/render.h"
 
-typedef union DrivetrainWheelSpeed {
-  s32 value;
-  u32 unsignedValue;
-} DrivetrainWheelSpeed;
 
 /*
  * Note on `gearCurve`: m2c merged two values into one temporary, so it starts
@@ -109,7 +105,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   s32 torqueLate;
   s32 coefficientBase;
   s32 coefficient;
-  DrivetrainWheelSpeed wheelSpeedScaled;
+  SignedWord wheelSpeedScaled;
   u16 arcFlags;
   u16 currentSpeed;
   u16 steerBiasNext;

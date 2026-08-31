@@ -7,10 +7,6 @@
 #include "game/sound.h"
 #include "game/car.h"
 
-typedef union PrizeScreenWork {
-    s32 value;
-    u32 unsignedValue;
-} PrizeScreenWork;
 
 
 /* Scene 19: counts the prize money and then the class-clear bonus into the save block. */
@@ -18,7 +14,7 @@ void UpdatePrizeMoneyScreen(void) {
     s32 lim1 = g_PrizeCountStep;
     s32 lim0 = g_BonusCountStep;
     PrizeScreenState st;
-    PrizeScreenWork t;
+    SignedWord t;
 
     if (g_PadHeld & PAD_CONFIRM) {
         lim1 <<= 2;

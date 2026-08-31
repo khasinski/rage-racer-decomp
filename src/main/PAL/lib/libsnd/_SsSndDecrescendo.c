@@ -5,16 +5,12 @@
 #include "psyq/snd_types.h"
 
 #include "psyq/snd_internal.h"
-typedef union SeqVolume71568 {
-    short output;
-    u_short value;
-} SeqVolume71568;
 
 
 void _SsSndDecrescendo(short seq, short sep) {
     SeqStruct *score = &g_SndSeqTable[seq][sep];
-    SeqVolume71568 left;
-    SeqVolume71568 right;
+    SeqVolume left;
+    SeqVolume right;
 
     score->unk98--;
 

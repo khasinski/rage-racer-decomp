@@ -490,10 +490,6 @@ typedef struct PathSceneryPositionData {
     PathSceneryPositionKey keys[1];
 } PathSceneryPositionData;
 
-typedef union SpinningSceneryAngleAddress {
-    s32 value;
-    s16 *pointer;
-} SpinningSceneryAngleAddress;
 
 typedef struct PathSceneryRotationData {
     s16 firstKey[2];
@@ -533,23 +529,15 @@ static __inline__ PathSceneryRotationKey *GetPathSceneryRotationKey(
 }
 
 extern PathSceneryPositionKey *g_PathSceneryPosKeys;
-typedef union PathSceneryRate {
-    u16 value;
-    s16 signedValue;
-} PathSceneryRate;
 
-typedef union PathSceneryPhase {
-    u16 value;
-    s16 signedValue;
-} PathSceneryPhase;
 
 typedef struct PathSceneryCursors {
-    PathSceneryPhase posPhase;
-    PathSceneryPhase rotPhase;
+    SignedHalf posPhase;
+    SignedHalf rotPhase;
     s16 posSpan;
     s16 rotSpan;
-    PathSceneryRate posRate;
-    PathSceneryRate rotRate;
+    SignedHalf posRate;
+    SignedHalf rotRate;
     s16 posIndex;
     s16 rotIndex;
 } PathSceneryCursors;
