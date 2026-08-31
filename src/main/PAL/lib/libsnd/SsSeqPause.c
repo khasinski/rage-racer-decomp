@@ -15,7 +15,7 @@ void SsSeqPause(long seq, long sep) {
     offset = sep * sizeof(SeqStruct);
     state = (SeqStruct *)((u_char *)*seq_entry + offset);
     SpuVmSeqKeyOff(((short)sep << 8) | (short)seq);
-    state->unk2b = 0;
+    state->playing = 0;
     offset = (long)((u_char *)*seq_entry + offset);
     ((SeqStruct *)offset)->flags &= ~SS_SEQ_FLAG_PAUSED;
 }

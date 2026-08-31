@@ -18,7 +18,7 @@ void SsSeqResume(long seq, long sep) {
     offset = index * 0xAC;
     base = *slot;
     one = 1;
-    ((SeqStruct *)(offset + (long)base))->unk2b = one;
+    ((SeqStruct *)(offset + (long)base))->playing = one;
     base = *slot;
     offset += (long)base;
     ((SeqStruct *)offset)->flags = ((SeqStruct *)offset)->flags & -9;

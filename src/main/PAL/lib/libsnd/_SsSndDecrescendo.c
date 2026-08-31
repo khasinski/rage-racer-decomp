@@ -12,15 +12,15 @@ void _SsSndDecrescendo(short seq, short sep) {
     SeqVolume left;
     SeqVolume right;
 
-    score->unk98--;
+    score->fade_ticks_left--;
 
-    if (score->unk42 > 0) {
-        if ((score->unk98 % score->unk42) == 0) {
-            score->unk40--;
-            if (score->unk40 > 0) {
+    if (score->fade_step > 0) {
+        if ((score->fade_ticks_left % score->fade_step) == 0) {
+            score->fade_steps_left--;
+            if (score->fade_steps_left > 0) {
                 SpuVmGetSeqVol((short)(seq | (sep << 8)), &left.output, &right.output);
-                if (((left.value - score->unk40) > 0) &&
-                    ((right.value - score->unk40) > 0) &&
+                if (((left.value - score->fade_steps_left) > 0) &&
+                    ((right.value - score->fade_steps_left) > 0) &&
                     (left.value != 1)) {
                     SpuVmSetSeqVol(seq | (sep << 8),
                                   left.value - 1,
@@ -32,20 +32,20 @@ void _SsSndDecrescendo(short seq, short sep) {
             } else {
                 g_SndSeqTable[seq][sep].flags &= ~0x20;
             }
-            if ((score->unk98 == 0) || (score->unk40 == 0)) {
+            if ((score->fade_ticks_left == 0) || (score->fade_steps_left == 0)) {
                 g_SndSeqTable[seq][sep].flags &= ~0x20;
             }
         }
     } else {
-        score->unk40 += score->unk42;
-        if (score->unk40 > 0) {
+        score->fade_steps_left += score->fade_step;
+        if (score->fade_steps_left > 0) {
             SpuVmGetSeqVol((short)(seq | (sep << 8)), &left.output, &right.output);
-            if (((u_long)(long)score->unk3E >=
-                 ((score->unk94 - score->unk98) * -score->unk42)) &&
-                (-score->unk42 < left.value)) {
+            if (((u_long)(long)score->fade_volume_range >=
+                 ((score->fade_ticks_total - score->fade_ticks_left) * -score->fade_step)) &&
+                (-score->fade_step < left.value)) {
                 SpuVmSetSeqVol(seq | (sep << 8),
-                              left.value + score->unk42,
-                              right.value + score->unk42,
+                              left.value + score->fade_step,
+                              right.value + score->fade_step,
                               0);
             } else {
                 SpuVmSetSeqVol(seq | (sep << 8), 1, 1, 0);
@@ -53,10 +53,10 @@ void _SsSndDecrescendo(short seq, short sep) {
         } else {
             g_SndSeqTable[seq][sep].flags &= ~0x20;
         }
-        if ((score->unk98 == 0) || (score->unk40 == 0)) {
+        if ((score->fade_ticks_left == 0) || (score->fade_steps_left == 0)) {
             g_SndSeqTable[seq][sep].flags &= ~0x20;
         }
     }
 
-    SpuVmGetSeqVol((short)(seq | (sep << 8)), &score->unk78, &score->unk7A);
+    SpuVmGetSeqVol((short)(seq | (sep << 8)), &score->cur_vol_left, &score->cur_vol_right);
 }

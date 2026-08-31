@@ -30,13 +30,13 @@ void SsSeqAdvanceChannelDelta(long seq, long channel) {
     period_copy = period;
 
     if (remaining > 0) {
-        count = state->unk6E;
+        count = state->tick_countdown;
         store_value = count;
         if (count > 0) {
             store_value--;
-            state->unk6E = store_value;
+            state->tick_countdown = store_value;
         } else if (count == 0) {
-            state->unk6E = period_copy;
+            state->tick_countdown = period_copy;
             store_value = state->delta_value - 1;
         state->delta_value = store_value;
                 return;

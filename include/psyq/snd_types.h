@@ -16,58 +16,82 @@ typedef union SeqVolume {
     u_short value;
 } SeqVolume;
 
+/*
+ * One SEQ score in g_SndSeqTable[seq][sep]: the parsed MIDI stream plus the
+ * sequencer state the tick callback advances. Field names come from what the
+ * libsnd sources here do with them; see docs/names.md 17.
+ *
+ * Loop markers. The SEQ format carries loops as controller events, which
+ * SsSeqSetChannelMode dispatches by number: 0x14 opens a loop and parks
+ * loop_pos at the current read position, 0x1E closes it, and the data byte in
+ * between is the repeat count. loop_count == 0x7F means loop forever.
+ *
+ * RPN and NRPN. Both arrive as two selection bytes followed by a data entry.
+ * rpn_pending and nrpn_pending count the selection bytes seen, so ContDataEntry
+ * acts when either reaches 2 and then clears it.
+ *
+ * Volume fades. _SsSndCrescendo and _SsSndDecrescendo run while flags bit 0x10
+ * or 0x20 is set, stepping the SPU sequence volume once every fade_step ticks
+ * (a negative fade_step instead adds that many units per tick) and clearing
+ * their flag when either counter reaches zero.
+ */
 typedef struct SeqStruct {
-    u_char unk0;
+    /* Score to hand to SsSeqRestartPlayback when this one ends; restart_seq
+     * stays 0xFF, meaning unchained, everywhere in this image. */
+    u_char restart_sep;
     u_char pad1[3];
     u_char *read_pos;
     u_char *next_sep_pos;
-    u_char *loop_pos;
-    u_char unk10;
-    u_char unk11;
+    u_char *loop_pos;      /* start of the open loop, parked by marker 0x14 */
+    u_char loop_count_set; /* the repeat count has been taken from the stream */
+    u_char running_status; /* last MIDI status byte: 0x90, 0xB0, 0xC0, 0xE0, 0xFF */
     u_char channel;
-    u_char unk13;
+    u_char rpn_param;      /* 0 bend range, 1 fine tune, 2 centre note */
     u_char play_mode;
-    u_char unk15;
-    u_char unk16;
+    u_char nrpn_lsb;
+    u_char nrpn_msb;       /* also the tone index, or 0x10 for every tone */
     u_char panpot[16];
-    u_char unk27;
-    u_char unk28;
-    u_char unk29;
-    u_char unk2a;
-    u_char unk2b;
+    u_char loop_marked;    /* marker 0x14 has opened a loop */
+    u_char loop_count;     /* repeats left; 0x7F loops forever */
+    u_char rpn_pending;    /* selection bytes seen, acted on at 2 */
+    u_char nrpn_pending;
+    u_char playing;        /* set by play and resume, cleared by pause; nothing
+                            * in this image reads it back */
     u_char programs[16];
-    u_char unk3C;
+    u_char restart_seq;
     u_char pad3D;
-    short unk3E;
-    short unk40;
-    short unk42;
+    short fade_volume_range;
+    short fade_steps_left;
+    short fade_step;       /* > 0 ticks per unit, < 0 units per tick */
     short tempo_step;
-    short unk46;
-    u_short unk48;
+    short play_count;      /* repeats requested by SsSeqPlay; 0 is endless */
+    u_short plays_started;
     short tempo_multiplier;
-    short unk4c;
+    short vab_id;
     short vol[16];
-    short unk6E;
+    short tick_countdown;  /* fractional-tick divider; -1 when unneeded */
     short tick_period;
-    short unk72;
+    short tick_period_initial;
     u_short left_volume;
     u_short right_volume;
-    short unk78;
-    short unk7A;
+    short cur_vol_left;    /* SPU volume read back after every fade step */
+    short cur_vol_right;
     long base_delta_value;
-    u_long unk80;
-    long base_unk84;
+    u_long elapsed_ticks;
+    long base_tempo;
     long delta_value;
     long tempo;
-    long flags;
-    u_long unk94;
-    u_long unk98;
-    long unk9C;
+    long flags;            /* 0x10 crescendo running, 0x20 decrescendo running */
+    u_long fade_ticks_total;
+    u_long fade_ticks_left;
+    long reserved9C;
     long tempo_countdown;
     u_long target_tempo;
     short padA8;
     short padAA;
 } SeqStruct;
+
+typedef char SeqStructSizeCheck[sizeof(SeqStruct) == 0xAC ? 1 : -1];
 
 typedef struct VabHdr {
     long form;

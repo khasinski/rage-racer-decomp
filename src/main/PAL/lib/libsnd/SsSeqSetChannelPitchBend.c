@@ -17,10 +17,10 @@ void SsSeqSetChannelPitchBend(long seq, long sep, long pitch, long amount) {
 
     if (((state->padAA >> channel) & 1) == 0 && state->left_volume != 0) {
         if ((u_char)amount != 0) {
-            SpuVmSeKeyOn((short)(seq_raw | (sep << 8)), state->unk4c, channel_state->programs[0], (u_char)pitchRaw, bend, pan);
+            SpuVmSeKeyOn((short)(seq_raw | (sep << 8)), state->vab_id, channel_state->programs[0], (u_char)pitchRaw, bend, pan);
             state->padA8 = bend;
         } else {
-            SpuVmSeKeyOff((short)(seq_raw | (sep << 8)), state->unk4c, channel_state->programs[0], (u_char)pitchRaw);
+            SpuVmSeKeyOff((short)(seq_raw | (sep << 8)), state->vab_id, channel_state->programs[0], (u_char)pitchRaw);
         }
     }
 }

@@ -18,21 +18,21 @@ void SsSetTableSize(u_char *table, short seq_count, short sep_count) {
     for (i = 0; i < g_SndSeqTableSMax; i++) {
         for (j = 0; j < g_SndSeqTableTMax; j++) {
             g_SndSeqTable[i][j].flags = 0;
-            g_SndSeqTable[i][j].unk3C = 0xFF;
-            g_SndSeqTable[i][j].unk0 = 0;
-            g_SndSeqTable[i][j].unk3E = 0;
-            g_SndSeqTable[i][j].unk40 = 0;
-            g_SndSeqTable[i][j].unk94 = 0;
-            g_SndSeqTable[i][j].unk98 = 0;
-            g_SndSeqTable[i][j].unk42 = 0;
+            g_SndSeqTable[i][j].restart_seq = 0xFF;
+            g_SndSeqTable[i][j].restart_sep = 0;
+            g_SndSeqTable[i][j].fade_volume_range = 0;
+            g_SndSeqTable[i][j].fade_steps_left = 0;
+            g_SndSeqTable[i][j].fade_ticks_total = 0;
+            g_SndSeqTable[i][j].fade_ticks_left = 0;
+            g_SndSeqTable[i][j].fade_step = 0;
             g_SndSeqTable[i][j].target_tempo = 0;
             g_SndSeqTable[i][j].tempo_countdown = 0;
-            g_SndSeqTable[i][j].unk9C = 0;
+            g_SndSeqTable[i][j].reserved9C = 0;
             g_SndSeqTable[i][j].tempo_step = 0;
             g_SndSeqTable[i][j].left_volume = 0x7F;
             g_SndSeqTable[i][j].right_volume = 0x7F;
-            g_SndSeqTable[i][j].unk78 = 0x7F;
-            g_SndSeqTable[i][j].unk7A = 0x7F;
+            g_SndSeqTable[i][j].cur_vol_left = 0x7F;
+            g_SndSeqTable[i][j].cur_vol_right = 0x7F;
         }
     }
 }

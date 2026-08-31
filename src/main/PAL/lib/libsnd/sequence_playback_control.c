@@ -25,13 +25,13 @@ void Snd_SetPlayMode(long seq, long sep, long playMode, long loopCount) {
     flagsState = (SeqStruct *)(sepOffset + (long)*sequence);
     mode = (u8)playMode;
     flagsState->flags &= ~4;
-    state->unk46 = loopCount;
+    state->play_count = loopCount;
 
     if (mode == 1) {
         playState = (SeqStruct *)(seqOffset + (long)*sequence);
         playState->flags |= 1;
-        state->unk48 = 0;
-        state->unk2b = 1;
+        state->plays_started = 0;
+        state->playing = 1;
         SpuVmSetSeqVol((short)(seq | (sep << 8)), state->left_volume, state->right_volume, 0);
     } else if (mode == 0) {
         stopState = (SeqStruct *)(seqOffset + (long)*sequence);
@@ -78,25 +78,25 @@ void _SsSndStop(seq, sep)
     SpuVmSeqKeyOff((sep << 8) | seq);
 
     score->delta_value = score->base_delta_value;
-    score->tempo = score->base_unk84;
-    score->tick_period = score->unk72;
+    score->tempo = score->base_tempo;
+    score->tick_period = score->tick_period_initial;
     score->read_pos = score->next_sep_pos;
     score->loop_pos = score->next_sep_pos;
-    score->unk2b = 0;
-    score->unk80 = 0;
-    score->unk27 = 0;
-    score->unk13 = 0;
+    score->playing = 0;
+    score->elapsed_ticks = 0;
+    score->loop_marked = 0;
+    score->rpn_param = 0;
     score->play_mode = 0;
-    score->unk29 = 0;
-    score->unk15 = 0;
-    score->unk16 = 0;
-    score->unk2a = 0;
+    score->rpn_pending = 0;
+    score->nrpn_lsb = 0;
+    score->nrpn_msb = 0;
+    score->nrpn_pending = 0;
     score->channel = 0;
-    score->unk48 = 0;
-    score->unk27 = 0;
-    score->unk28 = 0;
-    score->unk10 = 0;
-    score->unk11 = 0;
+    score->plays_started = 0;
+    score->loop_marked = 0;
+    score->loop_count = 0;
+    score->loop_count_set = 0;
+    score->running_status = 0;
 
     for (i = 0; i < 16; i++) {
         score->programs[i] = i;
@@ -104,8 +104,8 @@ void _SsSndStop(seq, sep)
         score->vol[i] = 0x7F;
     }
 
-    score->unk78 = 0x7F;
-    score->unk7A = 0x7F;
+    score->cur_vol_left = 0x7F;
+    score->cur_vol_right = 0x7F;
 }
 
 void SsSeqStop(long seq) {

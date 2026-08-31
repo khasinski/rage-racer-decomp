@@ -23,26 +23,26 @@ long SsSeqParseHeader(long slot, long vabId, u_char *seqBytes) {
     __asm__("" : "=r"(vabReg) : "0"(vabReg));
     s = (SeqStruct *)g_SndSeqTable[(short)vabReg];
 
-    s->unk4c = vabId;
+    s->vab_id = vabId;
     s->tempo_multiplier = 0;
-    s->unk13 = 0;
+    s->rpn_param = 0;
     s->play_mode = 0;
-    s->unk29 = 0;
-    s->unk15 = 0;
-    s->unk16 = 0;
-    s->unk2a = 0;
+    s->rpn_pending = 0;
+    s->nrpn_lsb = 0;
+    s->nrpn_msb = 0;
+    s->nrpn_pending = 0;
     s->channel = 0;
     s->base_delta_value = 0;
-    s->unk80 = 0;
-    s->base_unk84 = 0;
-    s->unk72 = 0;
-    s->unk48 = 0;
-    s->unk2b = 0;
+    s->elapsed_ticks = 0;
+    s->base_tempo = 0;
+    s->tick_period_initial = 0;
+    s->plays_started = 0;
+    s->playing = 0;
     s->delta_value = 0;
-    s->unk27 = 0;
-    s->unk28 = 0;
-    s->unk10 = 0;
-    s->unk11 = 0;
+    s->loop_marked = 0;
+    s->loop_count = 0;
+    s->loop_count_set = 0;
+    s->running_status = 0;
     s->padA8 = 0x7f;
     s->padAA = 0;
     for (i = 0; i < 16; i++) {
@@ -50,7 +50,7 @@ long SsSeqParseHeader(long slot, long vabId, u_char *seqBytes) {
         s->panpot[i] = 0x40;
         s->vol[i] = 0x7f;
     }
-    s->unk6E = 1;
+    s->tick_countdown = 1;
     s->read_pos = seqBytes;
 
     if (!(seqBytes[0] != 'S' && seqBytes[0] != 'p')) {
@@ -77,13 +77,13 @@ long SsSeqParseHeader(long slot, long vabId, u_char *seqBytes) {
     v24 = (b0 << 16) | (b1 << 8) | b2;
 
     q = 60000000 / v24;
-    s->base_unk84 = v24;
+    s->base_tempo = v24;
     if ((long)((u_long)v24 >> 1) < 60000000 % v24)
-        s->base_unk84 = q + 1;
+        s->base_tempo = q + 1;
     else
-        s->base_unk84 = q;
+        s->base_tempo = q;
 
-    s->tempo = s->base_unk84;
+    s->tempo = s->base_tempo;
     s->read_pos = s->read_pos + 2;
     ret = SsSeqReadDeltaTime((short)slotReg, 0);
 
@@ -93,20 +93,20 @@ long SsSeqParseHeader(long slot, long vabId, u_char *seqBytes) {
     s->delta_value = ret;
     s->loop_pos = s->read_pos;
 
-    prod = s->tempo_multiplier * s->base_unk84;
+    prod = s->tempo_multiplier * s->base_tempo;
     if ((u_long)(prod * 10) < D * 60) {
         long qi = (D * 600) / (u_long)prod;
-        s->unk6E = qi;
+        s->tick_countdown = qi;
         s->tick_period = qi;
     } else {
         long qe;
         __asm__ volatile("" ::: "memory");
-        qe = (u_long)(s->tempo_multiplier * s->base_unk84 * 10) / (D * 60);
-        s->unk6E = -1;
+        qe = (u_long)(s->tempo_multiplier * s->base_tempo * 10) / (D * 60);
+        s->tick_countdown = -1;
         s->tick_period = qe;
-        if (D * 30 < (u_long)(s->tempo_multiplier * s->base_unk84 * 10) % (D * 60))
+        if (D * 30 < (u_long)(s->tempo_multiplier * s->base_tempo * 10) % (D * 60))
             s->tick_period = qe + 1;
     }
-    s->unk72 = s->tick_period;
+    s->tick_period_initial = s->tick_period;
     return 0;
 }

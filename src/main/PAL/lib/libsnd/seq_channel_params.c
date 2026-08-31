@@ -12,15 +12,15 @@ void SsSeqSetPortamento(short seq, short sep, u_char value) {
 
     state = &g_SndSeqTable[seq][sep];
     channel = state->channel;
-    SsUtGetProgAtr(state->unk4c, state->programs[channel], &progAtr);
+    SsUtGetProgAtr(state->vab_id, state->programs[channel], &progAtr);
     for (tone = 0; tone < progAtr.tones; tone++) {
-        SsUtGetVagAtr(state->unk4c, state->programs[channel], (short)tone, &vagAtr);
+        SsUtGetVagAtr(state->vab_id, state->programs[channel], (short)tone, &vagAtr);
         if (value < 0x40) {
             vagAtr.mode = 2;
         } else if (value >= 0x40 && value < 0x80) {
             vagAtr.mode = 0;
         }
-        SsUtSetVagAtr(state->unk4c, state->programs[channel], (short)tone, &vagAtr);
+        SsUtSetVagAtr(state->vab_id, state->programs[channel], (short)tone, &vagAtr);
     }
 
     state->delta_value = SsSeqReadDeltaTime(seq, sep);
@@ -33,7 +33,7 @@ void SsSeqResetChannelNote(long seq, long sep) {
     SpuVmDamperOff();
 
     state->programs[state->channel] = state->channel;
-    state->unk13 = 0;
+    state->rpn_param = 0;
     state->play_mode = 0;
     state->vol[state->channel] = 0x7F;
     state->panpot[state->channel] = 0x40;
@@ -63,23 +63,23 @@ void SsSeqApplyControlChange(long seq, long sep, u_char value) {
     state = (SeqStruct *)(sep_offset + (long)base);
 
     switch (0) { default:
-    if (state->unk27 == 1) {
-        if (state->unk10 == 0) {
-            state->unk28 = value;
-            state->unk10 = 1;
+    if (state->loop_marked == 1) {
+        if (state->loop_count_set == 0) {
+            state->loop_count = value;
+            state->loop_count_set = 1;
             break;
         }
     }
 
-    if (state->unk16 != 0x1E) {
-        if (state->unk16 != 0x14) {
-            state->unk15 = value;
-            state->unk2a++;
+    if (state->nrpn_msb != 0x1E) {
+        if (state->nrpn_msb != 0x14) {
+            state->nrpn_lsb = value;
+            state->nrpn_pending++;
         }
     }
 
     }
-    if (state->unk16 == 0x28) {
+    if (state->nrpn_msb == 0x28) {
         long seq_cb;
         long sep_cb;
         void (*callback)(long, long, u_char);
@@ -122,25 +122,25 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
 
     switch (mode8) {
     case 0x14:
-    state->unk16 = mode;
-    state->unk27 = 1;
+    state->nrpn_msb = mode;
+    state->loop_marked = 1;
     state->delta_value = SsSeqReadDeltaTime(seq_s, sep_s);
     state->loop_pos = state->read_pos;
     return;
 
     case 0x1E:
-    state->unk16 = mode;
-    if (state->unk28 == 0) {
-        state->unk10 = 0;
+    state->nrpn_msb = mode;
+    if (state->loop_count == 0) {
+        state->loop_count_set = 0;
         break;
     }
-    if (state->unk28 < 0x7F) {
-        state->unk28--;
+    if (state->loop_count < 0x7F) {
+        state->loop_count--;
         state->delta_value = SsSeqReadDeltaTime(seq_s, sep_s);
-        if (state->unk28 != 0) {
+        if (state->loop_count != 0) {
             state->read_pos = state->loop_pos;
         } else {
-            state->unk10 = 0;
+            state->loop_count_set = 0;
         }
         return;
     }
@@ -152,8 +152,8 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
     default:
         seq_s = (short)seq_raw;
         sep_s = (short)sep_raw;
-        state->unk16 = mode;
-        state->unk2a++;
+        state->nrpn_msb = mode;
+        state->nrpn_pending++;
         break;
     }
     state->delta_value = SsSeqReadDeltaTime(seq_s, sep_s);
@@ -164,8 +164,8 @@ void SsSeqSetChannelMode(long seq, long sep, u_char mode) {
 void SsSeqSetChannelParam13(long seq, long sep, u_char value) {
     SeqStruct *state = &g_SndSeqTable[(short)seq][(short)sep];
 
-    state->unk13 = value;
-    state->unk29++;
+    state->rpn_param = value;
+    state->rpn_pending++;
     state->delta_value = SsSeqReadDeltaTime((short)seq, (short)sep);
 }
 
@@ -173,6 +173,6 @@ void SsSeqSetChannelParam14(long seq, long sep, u_char value) {
     SeqStruct *state = &g_SndSeqTable[(short)seq][(short)sep];
 
     state->play_mode = value;
-    state->unk29++;
+    state->rpn_pending++;
     state->delta_value = SsSeqReadDeltaTime((short)seq, (short)sep);
 }

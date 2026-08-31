@@ -7,7 +7,7 @@ void SsSeqApplyProgramChange(long seq, long sep) {
     u_char *read_pos = state->read_pos;
 
     state->read_pos++;
-    SpuVmApplyPitchBendByTone(((short)sep << 8) | (short)seq, state->unk4c, *((u_char *)((long)state->channel + (long)state + 0x2C)), *read_pos);
+    SpuVmApplyPitchBendByTone(((short)sep << 8) | (short)seq, state->vab_id, *((u_char *)((long)state->channel + (long)state + 0x2C)), *read_pos);
     state->delta_value = SsSeqReadDeltaTime((short)seq, (short)sep);
 }
 
@@ -32,10 +32,10 @@ void SsSeqSetChannelProgram(short seq, short channel, u_char program) {
 
             if ((u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) < (u_long)(g_SndTickResolution * 60)) {
                 short q = (u_long)(g_SndTickResolution * 600) / (u_long)(pSeq->tempo_multiplier * pSeq->tempo);
-                pSeq->unk6E = q;
+                pSeq->tick_countdown = q;
                 pSeq->tick_period = q;
             } else {
-                pSeq->unk6E = -1;
+                pSeq->tick_countdown = -1;
                 pSeq->tick_period =
                     (u_long)(pSeq->tempo_multiplier * pSeq->tempo * 10) / (u_long)(g_SndTickResolution * 60);
                 if ((u_long)(g_SndTickResolution * 30) <
@@ -47,17 +47,17 @@ void SsSeqSetChannelProgram(short seq, short channel, u_char program) {
             pSeq->delta_value = SsSeqReadDeltaTime(seq, channel);
         }
     } else {
-        long c = pSeq->unk48 + 1;
-        pSeq->unk48 = c;
+        long c = pSeq->plays_started + 1;
+        pSeq->plays_started = c;
 
-        if (pSeq->unk46 == 0) {
-            pSeq->unk80 = 0;
-            pSeq->unk27 = 0;
+        if (pSeq->play_count == 0) {
+            pSeq->elapsed_ticks = 0;
+            pSeq->loop_marked = 0;
             pSeq->delta_value = 0;
             pSeq->read_pos = pSeq->next_sep_pos;
-        } else if ((short)c < pSeq->unk46) {
-            pSeq->unk80 = 0;
-            pSeq->unk27 = 0;
+        } else if ((short)c < pSeq->play_count) {
+            pSeq->elapsed_ticks = 0;
+            pSeq->loop_marked = 0;
             pSeq->delta_value = 0;
             pSeq->read_pos = pSeq->next_sep_pos;
             pSeq->loop_pos = pSeq->next_sep_pos;
@@ -67,11 +67,11 @@ void SsSeqSetChannelProgram(short seq, short channel, u_char program) {
             g_SndSeqTable[seq][channel].flags &= ~2;
             g_SndSeqTable[seq][channel].flags |= 0x200;
             g_SndSeqTable[seq][channel].flags |= 4;
-            pSeq->unk2b = 0;
+            pSeq->playing = 0;
             pSeq->loop_pos = pSeq->next_sep_pos;
-            if (pSeq->unk3C != 0xff) {
-                pSeq->unk2b = 0;
-                SsSeqRestartPlayback(pSeq->unk3C, pSeq->unk0);
+            if (pSeq->restart_seq != 0xff) {
+                pSeq->playing = 0;
+                SsSeqRestartPlayback(pSeq->restart_seq, pSeq->restart_sep);
                 SpuVmSeqKeyOff((channel << 8) | seq);
             }
             SpuVmSeqKeyOff((channel << 8) | seq);
@@ -109,7 +109,7 @@ long SsSeqReadDeltaTime(long seq, long channel) {
     }
 
     ret = value * 10;
-    state->unk80 += ret;
+    state->elapsed_ticks += ret;
     return ret;
 }
 
@@ -172,8 +172,8 @@ void SsSeqRestartPlayback(short seq, short sep) {
     SeqStruct *state;
 
     state = &g_SndSeqTable[seq][sep];
-    state->unk46 = 1;
-    state->unk48 = 0;
+    state->play_count = 1;
+    state->plays_started = 0;
 
     g_SndSeqTable[seq][sep].flags &= ~0x100;
     g_SndSeqTable[seq][sep].flags &= ~0x8;
@@ -182,6 +182,6 @@ void SsSeqRestartPlayback(short seq, short sep) {
     g_SndSeqTable[seq][sep].flags &= ~0x200;
 
     state->read_pos = state->next_sep_pos;
-    state->unk2b = 1;
+    state->playing = 1;
     g_SndSeqTable[seq][sep].flags |= 1;
 }

@@ -48,7 +48,7 @@ void func_8006F90C(long seq, long sep, long value) {
     channel_offset = state->channel;
     channelStateRaw = (long)state + channel_offset;
     sep_raw = sep_arg;
-    SsUtGetProgAtr(state->unk4c, ((SeqStruct *)channelStateRaw)->programs[0], prog);
+    SsUtGetProgAtr(state->vab_id, ((SeqStruct *)channelStateRaw)->programs[0], prog);
 
     tone_count = progAttr.tones;
     i = 0;
@@ -58,9 +58,9 @@ void func_8006F90C(long seq, long sep, long value) {
         do {
             channelStateRaw = i << 16;
             channelStateRaw >>= 16;
-            SsUtGetVagAtr(state->unk4c, channelCopy->programs[0], channelStateRaw, vag);
+            SsUtGetVagAtr(state->vab_id, channelCopy->programs[0], channelStateRaw, vag);
             vagAttr.vibW = value_raw;
-            SsUtSetVagAtr(state->unk4c, channelCopy->programs[0], channelStateRaw, vag);
+            SsUtSetVagAtr(state->vab_id, channelCopy->programs[0], channelStateRaw, vag);
             i++;
         } while (i < progAttr.tones);
     }
@@ -114,7 +114,7 @@ void func_8006FA44(long seq, long sep, long value) {
     channel_offset = state->channel;
     channelStateRaw = (long)state + channel_offset;
     sep_raw = sep_arg;
-    SsUtGetProgAtr(state->unk4c, ((SeqStruct *)channelStateRaw)->programs[0], prog);
+    SsUtGetProgAtr(state->vab_id, ((SeqStruct *)channelStateRaw)->programs[0], prog);
 
     tone_count = progAttr.tones;
     i = 0;
@@ -124,9 +124,9 @@ void func_8006FA44(long seq, long sep, long value) {
         do {
             channelStateRaw = i << 16;
             channelStateRaw >>= 16;
-            SsUtGetVagAtr(state->unk4c, channelCopy->programs[0], channelStateRaw, vag);
+            SsUtGetVagAtr(state->vab_id, channelCopy->programs[0], channelStateRaw, vag);
             vagAttr.porT = value_raw;
-            SsUtSetVagAtr(state->unk4c, channelCopy->programs[0], channelStateRaw, vag);
+            SsUtSetVagAtr(state->vab_id, channelCopy->programs[0], channelStateRaw, vag);
             i++;
         } while (i < progAttr.tones);
     }
