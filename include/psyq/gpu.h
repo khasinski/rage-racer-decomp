@@ -326,13 +326,14 @@ void SetLineG4(void *prim);   /* 0x5C */
 #define CLUT_STP_BIT 0x8000
 
 /* Primitive attribute bits (bit 1 = semi-transparency, bit 0 = shade-texture). */
-void SetSemiTrans(void *prim, long enabled);
-void SetShadeTex(void *prim, long enabled);
+void SetSemiTrans(void *prim, s32 enabled);
+void SetShadeTex(void *prim, s32 enabled);
 
 /* Ordering-table / primitive-list plumbing (24-bit "next" pointer in the tag). */
-void SetPrimAddr(u_long *prim, u_long addr);
-void TermPrim(u_long *prim);
-long GetPrimAddr(u_long *prim);
+void SetPrimAddr(u32 *prim, u32 addr);
+void TermPrim(u32 *prim);
+s32 GetPrimAddr(u32 *prim);
+s32 IsEndPrim(u32 *prim);
 void AddPrim(void *ot, void *prim);
 void AddPrims(void *ot, void *first, void *last);
 void *ClearOTag(u_long *ot, long count);

@@ -1,44 +1,41 @@
 #include "common.h"
+#include "psyq/gpu.h"
 
-typedef struct PrimTag {
-    unsigned addr : 24;
-    unsigned len : 8;
-} PrimTag;
-
-s32 GetPrimAddr(u32 *p) {
-    return ((PrimTag *)p)->addr | 0x80000000;
+s32 GetPrimAddr(u32 *prim) {
+    return ((P_TAG *)prim)->addr | 0x80000000;
 }
 
-s32 IsEndPrim(u32 *p) {
-    return ((PrimTag *)p)->addr == 0x00FFFFFF;
+s32 IsEndPrim(u32 *prim) {
+    return ((P_TAG *)prim)->addr == 0x00FFFFFF;
 }
 
-void AddPrim(void *ot, void *p) {
-    PrimTag *otTag = (PrimTag *)ot;
-    PrimTag *primTag = (PrimTag *)p;
+void AddPrim(void *ot, void *prim) {
+    P_TAG *otTag = (P_TAG *)ot;
+    P_TAG *primTag = (P_TAG *)prim;
 
     primTag->addr = otTag->addr;
     otTag->addr = (u32)primTag;
 }
 
 void AddPrims(void *ot, void *first, void *last) {
-    PrimTag *otTag = (PrimTag *)ot;
-    PrimTag *firstTag = (PrimTag *)first;
-    PrimTag *lastTag = (PrimTag *)last;
+    P_TAG *otTag = (P_TAG *)ot;
+    P_TAG *firstTag = (P_TAG *)first;
+    P_TAG *lastTag = (P_TAG *)last;
 
     lastTag->addr = otTag->addr;
     otTag->addr = (u32)firstTag;
 }
 
-void SetPrimAddr(u32 *p, u32 addr) {
-    ((PrimTag *)p)->addr = addr;
+void SetPrimAddr(u32 *prim, u32 addr) {
+    ((P_TAG *)prim)->addr = addr;
 }
 
-void TermPrim(u32 *p) {
-    ((PrimTag *)p)->addr = 0x00FFFFFF;
+void TermPrim(u32 *prim) {
+    ((P_TAG *)prim)->addr = 0x00FFFFFF;
 }
 
-void SetSemiTrans(u8 *p, s32 abe) {
+void SetSemiTrans(void *prim, s32 abe) {
+    u8 *p = prim;
     s32 value;
 
     if (abe != 0) {
@@ -49,7 +46,8 @@ void SetSemiTrans(u8 *p, s32 abe) {
     p[7] = value;
 }
 
-void SetShadeTex(u8 *p, s32 tge) {
+void SetShadeTex(void *prim, s32 tge) {
+    u8 *p = prim;
     s32 value;
 
     if (tge != 0) {
@@ -60,92 +58,128 @@ void SetShadeTex(u8 *p, s32 tge) {
     p[7] = value;
 }
 
-void SetPolyF3(u8 *p) {
+void SetPolyF3(void *prim) {
+    u8 *p = prim;
+
     p[3] = 4;
     p[7] = 0x20;
 }
 
-void SetPolyFT3(u8 *p) {
+void SetPolyFT3(void *prim) {
+    u8 *p = prim;
+
     p[3] = 7;
     p[7] = 0x24;
 }
 
-void SetPolyG3(u8 *p) {
+void SetPolyG3(void *prim) {
+    u8 *p = prim;
+
     p[3] = 6;
     p[7] = 0x30;
 }
 
-void SetPolyGT3(u8 *p) {
+void SetPolyGT3(void *prim) {
+    u8 *p = prim;
+
     p[3] = 9;
     p[7] = 0x34;
 }
 
-void SetPolyF4(u8 *p) {
+void SetPolyF4(void *prim) {
+    u8 *p = prim;
+
     p[3] = 5;
     p[7] = 0x28;
 }
 
-void SetPolyFT4(u8 *p) {
+void SetPolyFT4(void *prim) {
+    u8 *p = prim;
+
     p[3] = 9;
     p[7] = 0x2C;
 }
 
-void SetPolyG4(u8 *p) {
+void SetPolyG4(void *prim) {
+    u8 *p = prim;
+
     p[3] = 8;
     p[7] = 0x38;
 }
 
-void SetPolyGT4(u8 *p) {
+void SetPolyGT4(void *prim) {
+    u8 *p = prim;
+
     p[3] = 0xC;
     p[7] = 0x3C;
 }
 
-void SetSprt8(u8 *p) {
+void SetSprt8(void *prim) {
+    u8 *p = prim;
+
     p[3] = 3;
     p[7] = 0x74;
 }
 
-void SetSprt16(u8 *p) {
+void SetSprt16(void *prim) {
+    u8 *p = prim;
+
     p[3] = 3;
     p[7] = 0x7C;
 }
 
-void SetSprt(u8 *p) {
+void SetSprt(void *prim) {
+    u8 *p = prim;
+
     p[3] = 4;
     p[7] = 0x64;
 }
 
-void SetTile1(u8 *p) {
+void SetTile1(void *prim) {
+    u8 *p = prim;
+
     p[3] = 2;
     p[7] = 0x68;
 }
 
-void SetTile8(u8 *p) {
+void SetTile8(void *prim) {
+    u8 *p = prim;
+
     p[3] = 2;
     p[7] = 0x70;
 }
 
-void SetTile16(u8 *p) {
+void SetTile16(void *prim) {
+    u8 *p = prim;
+
     p[3] = 2;
     p[7] = 0x78;
 }
 
-void SetTile(u8 *p) {
+void SetTile(void *prim) {
+    u8 *p = prim;
+
     p[3] = 3;
     p[7] = 0x60;
 }
 
-void SetLineF2(u8 *p) {
+void SetLineF2(void *prim) {
+    u8 *p = prim;
+
     p[3] = 3;
     p[7] = 0x40;
 }
 
-void SetLineG2(u8 *p) {
+void SetLineG2(void *prim) {
+    u8 *p = prim;
+
     p[3] = 4;
     p[7] = 0x50;
 }
 
-void SetLineF3(u8 *p) {
+void SetLineF3(void *prim) {
+    u8 *p = prim;
+
     u32 value;
 
     value = 0x55555555;
@@ -154,7 +188,9 @@ void SetLineF3(u8 *p) {
     *(u32 *)&p[0x14] = value;
 }
 
-void SetLineG3(u8 *p) {
+void SetLineG3(void *prim) {
+    u8 *p = prim;
+
     u32 value;
 
     value = 0x55555555;
@@ -163,7 +199,9 @@ void SetLineG3(u8 *p) {
     *(u32 *)&p[0x1C] = value;
 }
 
-void SetLineF4(u8 *p) {
+void SetLineF4(void *prim) {
+    u8 *p = prim;
+
     u32 value;
 
     value = 0x55555555;
@@ -172,7 +210,9 @@ void SetLineF4(u8 *p) {
     *(u32 *)&p[0x18] = value;
 }
 
-void SetLineG4(u8 *p) {
+void SetLineG4(void *prim) {
+    u8 *p = prim;
+
     u32 value;
 
     value = 0x55555555;
@@ -181,12 +221,16 @@ void SetLineG4(u8 *p) {
     *(u32 *)&p[0x24] = value;
 }
 
-void SetDrawPacketTag(u8 *p) {
+void SetDrawPacketTag(void *prim) {
+    u8 *p = prim;
+
     p[3] = 3;
     p[7] = 2;
 }
 
-void SetDrawMove(u8 *p) {
+void SetDrawMove(void *prim) {
+    u8 *p = prim;
+
     p[3] = 5;
     p[7] = 1;
     *(u32 *)&p[8] = 0x80000000;
