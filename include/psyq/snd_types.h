@@ -148,7 +148,7 @@ typedef struct SpuVoice {
     u_short env;
     short base_volume;
     signed char pan;
-    signed char unkB;
+    signed char padB;
     short note;
     short seq_sep;
     short program_index;
@@ -182,8 +182,8 @@ typedef struct SvmCurrentAttr {
     u_char pan;
     u_char program;
     u_char program_index;
-    u_char unk8;
-    u_char unk9;
+    u_char pad8;
+    u_char pad9;
     u_char master_volume;
     u_char master_pan;
     u_char tone;

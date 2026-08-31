@@ -43,7 +43,7 @@ typedef struct SpuCommonRegs {
     u_short noiseMode[2];
     u_short revMode[2];
     u_long chanOn;
-    u_short unknown;
+    u_short padReg;
     u_short revWorkAddr;
     u_short irqAddr;
     u_short transAddr;
@@ -54,7 +54,7 @@ typedef struct SpuCommonRegs {
     SpuVolume cdVol;
     SpuVolume extVol;
     SpuVolume mainVolCurrent;
-    SpuVolume unknownVol;
+    SpuVolume padVol;
 } SpuCommonRegs;
 
 typedef union SpuRegisterMap {

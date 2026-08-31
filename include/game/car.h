@@ -46,7 +46,7 @@ typedef union CarMotionValue {
 typedef struct GameCarRuntime {
     s32 x;
     /* +0x04 32 bits wide, not 16: `lw`/`sw` at nine sites in each of
-     * UpdateRaceCars / UpdateAttractCars, `s32 unk04` in
+     * UpdateRaceCars / UpdateAttractCars, `s32 pad04` in
      * UpdatePlayerCar's own layout, and the `*(s32 *)&ent->y` cast in
      * InitRivalCar that the old `s16` forced. See names.md 30. */
     s32 y;
@@ -57,7 +57,7 @@ typedef struct GameCarRuntime {
     s32 motionX;
     s32 motionY;
     s32 motionZ;
-    s32 field_1C;
+    s32 pad1C;
     s32 bodyPitch;
     s32 bodyYaw;
     s32 bodyRoll;
@@ -69,11 +69,11 @@ typedef struct GameCarRuntime {
     s32 reserved40;
     s32 steeringAngle;
     s32 wheelRotation;
-    s32 field_4C;
+    s32 pad4C;
     s32 modelPitch;
     s32 modelYaw;
     s32 modelRoll;
-    s32 field_5C;
+    s32 pad5C;
     s32 modelY;
     s32 bodyRollVelocity;
     s32 progressA;
@@ -81,7 +81,7 @@ typedef struct GameCarRuntime {
     s32 trackProgress;
     s32 previousTrackProgress;
     s16 trackSection;
-    s16 field_7A;
+    s16 pad7A;
     s16 velocityX;
     s16 velocityZ;
     s16 motionActive;
@@ -114,18 +114,18 @@ typedef struct GameCarRuntime {
     s16 facingBackwards;
     u8 padBA[2];
     s32 aiEnabled;
-    s32 field_C0;
+    s32 padC0;
     s32 reservedC4;
     s32 worldVelocityX;
     s32 reservedCC;
     s32 worldVelocityZ;
-    s32 field_D4;
+    s32 padD4;
     s32 reservedD8;
     s32 reservedDC;
     s32 reservedE0;
     s32 renderDepth;
-    s16 field_E8;
-    s16 field_EA;
+    s16 padE8;
+    s16 padEA;
     s32 targetYaw;
     CarSlideInput slideInput;
     s32 yawRate;
@@ -138,11 +138,11 @@ typedef struct GameCarRuntime {
     s16 nearbyCarCount;
     s16 racingLineHintState;
     s16 reserved110;
-    s16 field_112;
-    s16 field_114;
+    s16 pad112;
+    s16 pad114;
     s16 reserved116;
     s16 gridTargetProgress;
-    s16 field_11A;
+    s16 pad11A;
     s16 aiLateralOffset;
     s16 avoidanceTargetOffset;
     s16 avoidanceStep;
@@ -158,21 +158,21 @@ typedef struct GameCarRuntime {
     s32 engineRpm;
     s16 routeMarkerIndex;
     s16 routeMarkerActive;
-    s32 field_13C;
+    s32 pad13C;
     u8 pad140[0xC];
-    u8 field_14C;
-    u8 field_14D;
-    u8 field_14E;
-    u8 field_14F;
-    s32 field_150;
-    s32 field_154;
+    u8 pad14C;
+    u8 pad14D;
+    u8 pad14E;
+    u8 pad14F;
+    s32 pad150;
+    s32 pad154;
     u8 pad158[4];
     s16 acceleratorInput;
     s16 brakeInput;
-    s16 field_160;
-    s16 field_162;
+    s16 pad160;
+    s16 pad162;
     s32 previousTrackPointIndex;
-    s16 field_168;
+    s16 pad168;
     u8 pad16A[0x32];
 } GameCarRuntime;
 
@@ -463,16 +463,16 @@ typedef union CarInputAddress {
  * player object and 32-bit / AI-speed fields on the rival cars, so use
  * GameCarAiBlock for a g_Cars[] element. Evidence in names.md 30f. */
 typedef struct GameCarDrive {
-    s32 unk00;
-    s32 unk04;
+    s32 pad00;
+    s32 pad04;
     s32 accelPos;    /* +0x08 */
     s32 reserved0C;
     s32 brakePos;    /* +0x10 */
-    s32 unk14;
+    s32 pad14;
     s32 reserved18;
     s32 steerPos;    /* +0x1C */
     s32 reserved20;
-    s32 unk24;
+    s32 pad24;
     s32 launchThresholdIndex;
     s16 engineLoad;
     s16 drivetrainCoupled;
@@ -481,7 +481,7 @@ typedef struct GameCarDrive {
     s16 clutch;      /* +0x34 */
     s16 shiftSpeedDelta;
     s16 jumpTimer;
-    s16 unk3A;
+    s16 pad3A;
     s16 shiftRpmDelta;
     s16 bodyLiftOffset;
     s16 trackCurveMode;
@@ -494,10 +494,10 @@ typedef struct GameCarDrive {
     s32 launchHeading;
     s32 launchSpeed;
     s32 yawOffset;
-    s32 unk64;
+    s32 pad64;
     s32 standingStartBounceY;
     s32 standingStartBounceX;
-    s16 unk70;
+    s16 pad70;
     s16 unk72;
     s16 manual;      /* +0x74 */
     s16 gear;        /* +0x76 */
@@ -539,13 +539,13 @@ typedef union PlayerLapTimeAddress {
 
 typedef union PlayerRaceTiming {
     struct {
-        s32 field_A8;
+        s32 padA8;
         s16 lap;
-        s16 field_AE;
+        s16 padAE;
         PlayerLapTimes lapTimes;
     } fields;
     struct {
-        s32 field_A8;
+        s32 padA8;
         s32 words[13];
     } raw;
 } PlayerRaceTiming;
@@ -572,7 +572,7 @@ typedef struct PlayerCarRuntime {
     s32 motionX;
     s32 motionY;
     s32 motionZ;
-    s32 field_1C;
+    s32 pad1C;
     s32 bodyPitch;
     s32 bodyYaw;
     s32 bodyRoll;
@@ -584,11 +584,11 @@ typedef struct PlayerCarRuntime {
     s32 reserved40;
     s32 steeringAngle;
     s32 wheelRotation;
-    s32 field_4C;
+    s32 pad4C;
     s32 modelPitch;
     s32 modelYaw;
     s32 modelRoll;
-    s32 field_5C;
+    s32 pad5C;
     s32 modelY;
     s32 bodyRollVelocity;
     s32 progressA;
@@ -596,7 +596,7 @@ typedef struct PlayerCarRuntime {
     s32 trackProgress;
     s32 previousTrackProgress;
     s16 trackSection;
-    s16 field_7A;
+    s16 pad7A;
     s16 velocityX;
     s16 velocityZ;
     s16 motionActive;
@@ -627,7 +627,7 @@ typedef struct PlayerCarRuntime {
     GameCarDrive drive;
     s32 previousTrackPointIndex;
     s16 lap;
-    s16 field_16A;
+    s16 pad16A;
     PlayerLapTimes lapTimes;
 } PlayerCarRuntime;
 
