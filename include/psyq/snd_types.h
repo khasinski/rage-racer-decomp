@@ -46,7 +46,8 @@ typedef struct SeqStruct {
     u_char loop_count_set; /* the repeat count has been taken from the stream */
     u_char running_status; /* last MIDI status byte: 0x90, 0xB0, 0xC0, 0xE0, 0xFF */
     u_char channel;
-    u_char rpn_param;      /* 0 bend range, 1 fine tune, 2 centre note */
+    u_char rpn_param;      /* picks the VagAtr field data entry rewrites:
+                            * 0 pbmin/pbmax, 1 shift, 2 center */
     u_char play_mode;
     u_char nrpn_lsb;
     u_char nrpn_msb;       /* also the tone index, or 0x10 for every tone */
