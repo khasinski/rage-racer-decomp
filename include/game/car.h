@@ -498,7 +498,7 @@ typedef struct GameCarDrive {
     s32 standingStartBounceY;
     s32 standingStartBounceX;
     s16 pad70;
-    s16 unk72;
+    s16 pad72;
     s16 manual;      /* +0x74 */
     s16 gear;        /* +0x76 */
     s32 engineRpm;   /* +0x78 */
