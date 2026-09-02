@@ -2,6 +2,10 @@
 #include "game/car.h"
 #include "game/track.h"
 
+#ifndef EARLY_CAR_WIDTH_USES_TWO_THIRDS
+#define EARLY_CAR_WIDTH_USES_TWO_THIRDS 0
+#endif
+
 
 /*
  * Clamps the car's lateral offset (aiLateralOffset) to a fraction of the track
@@ -33,18 +37,28 @@ void ClampCarLateralOffset(GameCarRuntime *car, s32 carIndex) {
         if (current < 0) {
             trackIndex = carReg->trackPointIndex;
             point = &g_TrackPoints[trackIndex];
+#if EARLY_CAR_WIDTH_USES_TWO_THIRDS
+            limit = (point->leftHalfWidth * 2) / 3;
+#else
             limit = point->leftHalfWidth;
+#endif
         } else {
             trackIndex = carReg->trackPointIndex;
             point = &g_TrackPoints[trackIndex];
+#if EARLY_CAR_WIDTH_USES_TWO_THIRDS
+            limit = (point->rightHalfWidth * 2) / 3;
+#else
             limit = point->rightHalfWidth;
+#endif
         }
+#if !EARLY_CAR_WIDTH_USES_TWO_THIRDS
         scaled = limit * 4;
         scaled += limit;
         if (scaled < 0) {
             scaled += 7;
         }
         limit = scaled >> 3;
+#endif
     } else {
         GameTrackPoint *point;
 

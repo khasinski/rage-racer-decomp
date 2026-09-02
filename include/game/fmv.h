@@ -71,7 +71,8 @@ void InitFmvContext(volatile FmvDecodeContext *ctx, s32 width, s32 height,
 void OpenFmvStream();
 s32 PresentFmvFrame(FmvDecodeContext *ctx);
 void *GetFmvFrame(FmvDecodeContext *ctx);
-void StartStreamRead(void *loc);
+/* Some regional callers omit the unused location argument. */
+void StartStreamRead();
 void WaitFmvDecode(FmvDecodeContext *ctx, s32 mode);
 
 #endif

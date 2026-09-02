@@ -3,5 +3,25 @@
     "start": "0x25038",
     "end": "0x250B4",
     "path": "JAP10/main/race/time_conversion"
+  },
+  {
+    "start": "0xF12C",
+    "end": "0xF304",
+    "path": "JAP10/main/fmv/open_fmv_stream"
+  },
+  {
+    "start": "0x505A4",
+    "end": "0x50C44",
+    "path": "JAP10/main/save/memory_card_io"
+  },
+  {
+    "start": "0x4F6D8",
+    "end": "0x4F90C",
+    "path": "JAP10/main/save/save_header"
+  },
+  {
+    "start": "0x2A264",
+    "end": "0x2A3A4",
+    "path": "JAP10/main/car/clamp_car_lateral_offset"
   }
 ]

@@ -1,5 +1,13 @@
 /* Manual Japanese v1.0 linker symbols go here. */
 func_80034838 = FramesToMilliseconds;
+func_8001E92C = OpenFmvStream;
+StartStreamRead = 0x8001EE08;
+func_8005FFA4 = WriteMemoryCardSaveSlot;
+g_SaveTitleSjis = 0x800125DC;
+func_8005EF38 = BuildSaveIconBlock;
+g_FmtString = 0x80012D54;
+g_SaveIconRect = 0x8009AC04;
+func_80039A64 = ClampCarLateralOffset;
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */
