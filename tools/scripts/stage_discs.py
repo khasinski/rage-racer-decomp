@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import argparse
 import os
 import shutil
 import struct
@@ -22,8 +23,11 @@ class Version:
     serial: str
     exe_name: str
     sha1: str
-    cue: Path
-    track01: Path
+    cue: Path | None = None
+    track01: Path | None = None
+    archive: Path | None = None
+    archive_cue: str | None = None
+    archive_track01: str | None = None
 
 
 VERSIONS = [
@@ -42,6 +46,23 @@ VERSIONS = [
         sha1="2661e8bf18d209c98fd70d33e18ab88b10abd52b",
         cue=HOME / "Downloads/Rage Racer/Rage Racer.cue",
         track01=HOME / "Downloads/Rage Racer/Rage Racer (Track 01).bin",
+    ),
+    Version(
+        name="JAP10",
+        serial="SLPS-006.00 (v1.0)",
+        exe_name="SLPS_006.00",
+        sha1="f0ca386e1c7b2c5961b8c2a53cc751a83ae0d406",
+        archive=HOME / "Downloads/Rage Racer (Japan) (v1.0).7z",
+        archive_cue="Rage Racer (Japan) (v1.0).cue",
+        archive_track01="Rage Racer (Japan) (v1.0) (Track 01).bin",
+    ),
+    Version(
+        name="JAP11",
+        serial="SLPS-006.00 (v1.1)",
+        exe_name="SLPS_006.00",
+        sha1="bfa7a4cf466480133c10845eae632a0c4e122360",
+        cue=HOME / "Downloads/old/Rage Racer (Japan)/Rage Racer (Japan).cue",
+        track01=HOME / "Downloads/old/Rage Racer (Japan)/Rage Racer (Japan) (Track 01).bin",
     ),
 ]
 
@@ -97,20 +118,50 @@ def sha1(path: Path) -> str:
     return h.hexdigest()
 
 
-def stage(version: Version) -> None:
-    for path in (version.cue, version.track01):
-        if not path.exists():
-            raise FileNotFoundError(path)
+def resolve_disc_inputs(version: Version, build_dir: Path) -> tuple[Path, Path]:
+    if version.archive is None:
+        if version.cue is None or version.track01 is None:
+            raise ValueError(f"{version.name}: incomplete disc input configuration")
+        return version.cue, version.track01
 
+    if not version.archive.exists():
+        raise FileNotFoundError(version.archive)
+    if version.archive_cue is None or version.archive_track01 is None:
+        raise ValueError(f"{version.name}: incomplete archive member configuration")
+    extracted_dir = build_dir / "disc"
+    cue = extracted_dir / version.archive_cue
+    track01 = extracted_dir / version.archive_track01
+    if not cue.exists() or not track01.exists():
+        extracted_dir.mkdir(parents=True, exist_ok=True)
+        result = subprocess.run(
+            [
+                "7z", "x", "-y", f"-o{extracted_dir}", str(version.archive),
+                version.archive_cue, version.archive_track01,
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        if not cue.exists() or not track01.exists():
+            sys.stderr.write(result.stdout)
+            raise RuntimeError(f"failed to extract {version.name} disc inputs")
+    return cue, track01
+
+
+def stage(version: Version) -> None:
     disc_dir = ROOT / "disc" / version.name
     asset_dir = ROOT / "assets" / version.name
     build_dir = ROOT / "build" / "extract" / version.name
+    cue, track01 = resolve_disc_inputs(version, build_dir)
+    for path in (cue, track01):
+        if not path.exists():
+            raise FileNotFoundError(path)
 
-    force_symlink(version.cue, disc_dir / version.cue.name)
-    force_symlink(version.track01, disc_dir / version.track01.name)
+    force_symlink(cue, disc_dir / cue.name)
+    force_symlink(track01, disc_dir / track01.name)
 
     iso_path = build_dir / "track01.iso"
-    raw2352_to_iso(version.track01, iso_path)
+    raw2352_to_iso(track01, iso_path)
     with tempfile.TemporaryDirectory(prefix=f"rage-{version.name.lower()}-") as tmp:
         extracted = Path(tmp)
         extract_from_iso(iso_path, extracted, version.exe_name, "SYSTEM.CNF")
@@ -130,7 +181,16 @@ def stage(version: Version) -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--version", action="append", choices=[version.name for version in VERSIONS],
+        help="stage only the selected version (repeatable; default: all)",
+    )
+    args = parser.parse_args()
+    selected = set(args.version or [version.name for version in VERSIONS])
     for version in VERSIONS:
+        if version.name not in selected:
+            continue
         stage(version)
     return 0
 

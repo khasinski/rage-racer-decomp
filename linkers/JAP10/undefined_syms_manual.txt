@@ -1,0 +1,2 @@
+/* Manual Japanese v1.0 linker symbols go here. */
+main_LOAD_SIZE = main_ROM_END - main_ROM_START;

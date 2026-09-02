@@ -1,0 +1,5 @@
+# Structurally equivalent, but regional immediate constants differ.
+PAL/main/race/replay_recording
+PAL/main/race/replay
+PAL/main/car/car_orientation
+PAL/main/render/race_hud

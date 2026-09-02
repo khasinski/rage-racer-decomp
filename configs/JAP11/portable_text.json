@@ -1,0 +1,1926 @@
+{
+  "version": "JAP11",
+  "portable_units": 232,
+  "portable_text_bytes": 203888,
+  "text_aliases": 2,
+  "selected": [
+    {
+      "start": "0x4518",
+      "end": "0x4B6C",
+      "path": "PAL/main/pad/init_pad"
+    },
+    {
+      "start": "0x4B6C",
+      "end": "0x547C",
+      "path": "PAL/main/pad/controller_setup_scene"
+    },
+    {
+      "start": "0x547C",
+      "end": "0x59CC",
+      "path": "PAL/main/pad/pad_config_screen"
+    },
+    {
+      "start": "0x59CC",
+      "end": "0x5A14",
+      "path": "PAL/main/pad/begin_controller_config"
+    },
+    {
+      "start": "0x6DC8",
+      "end": "0x7A04",
+      "path": "PAL/main/render/text"
+    },
+    {
+      "start": "0x7A04",
+      "end": "0x7EBC",
+      "path": "PAL/main/render/draw_packet_queue"
+    },
+    {
+      "start": "0x7EBC",
+      "end": "0x8248",
+      "path": "PAL/main/asset/model_banks"
+    },
+    {
+      "start": "0x8BA4",
+      "end": "0x90E4",
+      "path": "PAL/main/asset/car_assets"
+    },
+    {
+      "start": "0x90E4",
+      "end": "0x9638",
+      "path": "PAL/main/asset/menu_car_assets"
+    },
+    {
+      "start": "0x9DA4",
+      "end": "0x9F10",
+      "path": "PAL/main/asset/install_course_assets"
+    },
+    {
+      "start": "0xA954",
+      "end": "0xAB34",
+      "path": "PAL/main/asset/image_upload"
+    },
+    {
+      "start": "0xAB34",
+      "end": "0xAFF4",
+      "path": "PAL/main/render/rot_matrix"
+    },
+    {
+      "start": "0xAFF4",
+      "end": "0xB5E4",
+      "path": "PAL/main/render/rear_view_mirror"
+    },
+    {
+      "start": "0xD978",
+      "end": "0xD9A4",
+      "path": "PAL/main/render/load_track_texture_page_range"
+    },
+    {
+      "start": "0xD9A4",
+      "end": "0xDB54",
+      "path": "PAL/main/menu/team_logo"
+    },
+    {
+      "start": "0xDB54",
+      "end": "0xDC34",
+      "path": "PAL/main/menu/team_name_texture"
+    },
+    {
+      "start": "0xDC34",
+      "end": "0xE11C",
+      "path": "PAL/main/car/paint_color"
+    },
+    {
+      "start": "0xED20",
+      "end": "0xEE08",
+      "path": "PAL/main/fmv/fmv_scene"
+    },
+    {
+      "start": "0xEF10",
+      "end": "0xF180",
+      "path": "PAL/main/fmv/fmv_decode"
+    },
+    {
+      "start": "0xF180",
+      "end": "0xF1C8",
+      "path": "PAL/main/fmv/setup_fmv_buffers"
+    },
+    {
+      "start": "0xF1C8",
+      "end": "0xF3A8",
+      "path": "PAL/main/fmv/open_fmv_stream"
+    },
+    {
+      "start": "0xF3A8",
+      "end": "0xF74C",
+      "path": "PAL/main/fmv/stream_playback"
+    },
+    {
+      "start": "0x1029C",
+      "end": "0x10D24",
+      "path": "PAL/main/race/result_screens"
+    },
+    {
+      "start": "0x11840",
+      "end": "0x118A4",
+      "path": "PAL/main/audio/apply_audio_settings"
+    },
+    {
+      "start": "0x11AD4",
+      "end": "0x11B5C",
+      "path": "PAL/main/race/class_grade"
+    },
+    {
+      "start": "0x11B5C",
+      "end": "0x12024",
+      "path": "PAL/main/race/race_end_screens"
+    },
+    {
+      "start": "0x12024",
+      "end": "0x123D4",
+      "path": "PAL/main/race/records"
+    },
+    {
+      "start": "0x13B34",
+      "end": "0x13ECC",
+      "path": "PAL/main/menu/menu_hints"
+    },
+    {
+      "start": "0x13ECC",
+      "end": "0x14020",
+      "path": "PAL/main/menu/option_menu_fade"
+    },
+    {
+      "start": "0x160C0",
+      "end": "0x168EC",
+      "path": "PAL/main/race/bgm_select"
+    },
+    {
+      "start": "0x168EC",
+      "end": "0x169D8",
+      "path": "PAL/main/race/exit_bgm_select"
+    },
+    {
+      "start": "0x176A0",
+      "end": "0x17AF0",
+      "path": "PAL/lib/libcd/read_callbacks"
+    },
+    {
+      "start": "0x17AF0",
+      "end": "0x17CDC",
+      "path": "PAL/lib/libcd/read"
+    },
+    {
+      "start": "0x1A97C",
+      "end": "0x1AA54",
+      "path": "PAL/main/track/install_track_points"
+    },
+    {
+      "start": "0x1AA54",
+      "end": "0x1AADC",
+      "path": "PAL/main/car/angle_math"
+    },
+    {
+      "start": "0x1C0B0",
+      "end": "0x1C710",
+      "path": "PAL/main/car/lap_progress"
+    },
+    {
+      "start": "0x1F6EC",
+      "end": "0x1F898",
+      "path": "PAL/main/car/advance_car_position"
+    },
+    {
+      "start": "0x1FCE0",
+      "end": "0x1FD58",
+      "path": "PAL/main/track/blend_angle"
+    },
+    {
+      "start": "0x1FD58",
+      "end": "0x1FDE4",
+      "path": "PAL/main/track/interpolate_track_angle"
+    },
+    {
+      "start": "0x1FDE4",
+      "end": "0x1FE7C",
+      "path": "PAL/main/track/reverse_track_angle"
+    },
+    {
+      "start": "0x1FE7C",
+      "end": "0x1FF94",
+      "path": "PAL/main/track/interpolate_track_point"
+    },
+    {
+      "start": "0x1FF94",
+      "end": "0x2006C",
+      "path": "PAL/main/track/smooth_track_angle"
+    },
+    {
+      "start": "0x2006C",
+      "end": "0x21490",
+      "path": "PAL/main/car/steer_car_to_track_line"
+    },
+    {
+      "start": "0x21490",
+      "end": "0x22290",
+      "path": "PAL/main/car/car_track_state"
+    },
+    {
+      "start": "0x22290",
+      "end": "0x22DC8",
+      "path": "PAL/main/car/track_contact"
+    },
+    {
+      "start": "0x22DC8",
+      "end": "0x22F54",
+      "path": "PAL/main/render/tachometer_needle"
+    },
+    {
+      "start": "0x22F54",
+      "end": "0x23094",
+      "path": "PAL/main/render/build_race_hud_prims"
+    },
+    {
+      "start": "0x235D4",
+      "end": "0x23E10",
+      "path": "PAL/main/race/draw_wrong_way_warning"
+    },
+    {
+      "start": "0x23E10",
+      "end": "0x23F48",
+      "path": "PAL/main/race/draw_speed_digits"
+    },
+    {
+      "start": "0x24FB8",
+      "end": "0x25074",
+      "path": "PAL/main/asset/race_data_installation"
+    },
+    {
+      "start": "0x25074",
+      "end": "0x25104",
+      "path": "PAL/main/audio/sound_initialization"
+    },
+    {
+      "start": "0x25180",
+      "end": "0x259C8",
+      "path": "PAL/main/race/replay_cars"
+    },
+    {
+      "start": "0x259C8",
+      "end": "0x25B28",
+      "path": "PAL/main/race/draw_split_times"
+    },
+    {
+      "start": "0x273E8",
+      "end": "0x279F0",
+      "path": "PAL/main/race/waypoint_race"
+    },
+    {
+      "start": "0x28A2C",
+      "end": "0x291D8",
+      "path": "PAL/main/car/car_draw_and_knockback"
+    },
+    {
+      "start": "0x2A470",
+      "end": "0x2B01C",
+      "path": "PAL/main/car/rival_ai"
+    },
+    {
+      "start": "0x2B01C",
+      "end": "0x2B0AC",
+      "path": "PAL/main/race/update_race_position"
+    },
+    {
+      "start": "0x2CCCC",
+      "end": "0x2CF84",
+      "path": "PAL/main/track/update_finish_camera"
+    },
+    {
+      "start": "0x2CF84",
+      "end": "0x2D0A4",
+      "path": "PAL/main/track/seed_finish_camera_alt"
+    },
+    {
+      "start": "0x2D0A4",
+      "end": "0x2DF3C",
+      "path": "PAL/main/track/dynamic_track_views"
+    },
+    {
+      "start": "0x2DF3C",
+      "end": "0x2E0F8",
+      "path": "PAL/main/track/draw_spinning_scenery"
+    },
+    {
+      "start": "0x2E0F8",
+      "end": "0x2EC84",
+      "path": "PAL/main/track/scenery"
+    },
+    {
+      "start": "0x2EC84",
+      "end": "0x2EE28",
+      "path": "PAL/main/track/draw_flyby_scenery"
+    },
+    {
+      "start": "0x2EE28",
+      "end": "0x2F1BC",
+      "path": "PAL/main/track/update_route_scenery"
+    },
+    {
+      "start": "0x2F1BC",
+      "end": "0x2F434",
+      "path": "PAL/main/track/draw_route_scenery"
+    },
+    {
+      "start": "0x2F434",
+      "end": "0x2F798",
+      "path": "PAL/main/track/update_shuttle_scenery"
+    },
+    {
+      "start": "0x3124C",
+      "end": "0x313CC",
+      "path": "PAL/main/race/course_event_runtime"
+    },
+    {
+      "start": "0x313CC",
+      "end": "0x319D0",
+      "path": "PAL/main/track/visible_cells"
+    },
+    {
+      "start": "0x319D0",
+      "end": "0x32D50",
+      "path": "PAL/main/track/draw_terrain_cells"
+    },
+    {
+      "start": "0x32D50",
+      "end": "0x32E5C",
+      "path": "PAL/main/cd/cd_audio_control"
+    },
+    {
+      "start": "0x32E5C",
+      "end": "0x33130",
+      "path": "PAL/main/cd/cd_volume_fade"
+    },
+    {
+      "start": "0x33130",
+      "end": "0x3331C",
+      "path": "PAL/main/cd/cd_volume"
+    },
+    {
+      "start": "0x3331C",
+      "end": "0x33438",
+      "path": "PAL/main/cd/set_cd_mix_preset"
+    },
+    {
+      "start": "0x33CA8",
+      "end": "0x33D5C",
+      "path": "PAL/main/track/find_nearest_track_camera"
+    },
+    {
+      "start": "0x356CC",
+      "end": "0x3577C",
+      "path": "PAL/main/track/env_palette"
+    },
+    {
+      "start": "0x3577C",
+      "end": "0x35A5C",
+      "path": "PAL/main/track/load_environment_cue"
+    },
+    {
+      "start": "0x35A5C",
+      "end": "0x36318",
+      "path": "PAL/main/track/environment_script"
+    },
+    {
+      "start": "0x36790",
+      "end": "0x36A8C",
+      "path": "PAL/main/render/update_scripted_camera"
+    },
+    {
+      "start": "0x36A8C",
+      "end": "0x377C4",
+      "path": "PAL/main/render/draw_prims"
+    },
+    {
+      "start": "0x3A30C",
+      "end": "0x3BE74",
+      "path": "PAL/main/menu/draw_team_logo_canvas"
+    },
+    {
+      "start": "0x3E4B0",
+      "end": "0x3F190",
+      "path": "PAL/main/menu/draw_logo_sample_panel"
+    },
+    {
+      "start": "0x3F190",
+      "end": "0x3F798",
+      "path": "PAL/main/menu/draw_paint_color_palette"
+    },
+    {
+      "start": "0x403B4",
+      "end": "0x40548",
+      "path": "PAL/main/menu/draw_class_change_curtain"
+    },
+    {
+      "start": "0x42270",
+      "end": "0x42880",
+      "path": "PAL/main/menu/draw_car_engine_spec"
+    },
+    {
+      "start": "0x46FAC",
+      "end": "0x47890",
+      "path": "PAL/main/menu/design_mode"
+    },
+    {
+      "start": "0x47890",
+      "end": "0x48210",
+      "path": "PAL/main/menu/logo_screens"
+    },
+    {
+      "start": "0x48210",
+      "end": "0x496A0",
+      "path": "PAL/main/menu/design_screens"
+    },
+    {
+      "start": "0x4ADE8",
+      "end": "0x4B0C0",
+      "path": "PAL/main/menu/update_menu_mode"
+    },
+    {
+      "start": "0x4B0C0",
+      "end": "0x4B4A8",
+      "path": "PAL/main/audio/audio_runtime_control"
+    },
+    {
+      "start": "0x4B4A8",
+      "end": "0x4B4D0",
+      "path": "PAL/main/audio/stop_sound_slot_voice"
+    },
+    {
+      "start": "0x4BE74",
+      "end": "0x4BFF0",
+      "path": "PAL/main/audio/audio_settings"
+    },
+    {
+      "start": "0x4CA5C",
+      "end": "0x4DA34",
+      "path": "PAL/main/audio/sound_cues"
+    },
+    {
+      "start": "0x4DA34",
+      "end": "0x4E038",
+      "path": "PAL/main/audio/loaded_audio_voices"
+    },
+    {
+      "start": "0x4E038",
+      "end": "0x4E634",
+      "path": "PAL/main/audio/forced_voice_playback"
+    },
+    {
+      "start": "0x4E860",
+      "end": "0x4E924",
+      "path": "PAL/main/audio/set_vab_slot_voice_enabled"
+    },
+    {
+      "start": "0x4E924",
+      "end": "0x4E9D4",
+      "path": "PAL/main/audio/sequence_volume"
+    },
+    {
+      "start": "0x4E9D4",
+      "end": "0x4EBB4",
+      "path": "PAL/main/audio/sequence_playback"
+    },
+    {
+      "start": "0x4EBB4",
+      "end": "0x4EC18",
+      "path": "PAL/main/audio/apply_current_sequence_audio"
+    },
+    {
+      "start": "0x4EC18",
+      "end": "0x4ECC0",
+      "path": "PAL/main/save/memory_card_event_session"
+    },
+    {
+      "start": "0x4ECC0",
+      "end": "0x4EE28",
+      "path": "PAL/main/save/card_status"
+    },
+    {
+      "start": "0x4F3F4",
+      "end": "0x4F7A4",
+      "path": "PAL/main/save/memory_card_event_polling"
+    },
+    {
+      "start": "0x4F9D8",
+      "end": "0x50020",
+      "path": "PAL/main/save/store_save_state"
+    },
+    {
+      "start": "0x50020",
+      "end": "0x50670",
+      "path": "PAL/main/save/load_save_state"
+    },
+    {
+      "start": "0x533F4",
+      "end": "0x53424",
+      "path": "PAL/main/random/random15"
+    },
+    {
+      "start": "0x53C90",
+      "end": "0x53CE0",
+      "path": "PAL/lib/libc/memchr"
+    },
+    {
+      "start": "0x53CE0",
+      "end": "0x53D4C",
+      "path": "PAL/lib/libc/memmove"
+    },
+    {
+      "start": "0x53D4C",
+      "end": "0x53D7C",
+      "path": "PAL/lib/libc/strlen"
+    },
+    {
+      "start": "0x53D7C",
+      "end": "0x53DCC",
+      "path": "PAL/lib/libc/puts"
+    },
+    {
+      "start": "0x53DCC",
+      "end": "0x53E80",
+      "path": "PAL/lib/libc/putchar"
+    },
+    {
+      "start": "0x53F88",
+      "end": "0x54170",
+      "path": "PAL/lib/libpress/mdec_api"
+    },
+    {
+      "start": "0x54170",
+      "end": "0x54218",
+      "path": "PAL/lib/libpress/mdec_callbacks"
+    },
+    {
+      "start": "0x54A30",
+      "end": "0x54EA8",
+      "path": "PAL/lib/libgpu/texture_primitives"
+    },
+    {
+      "start": "0x54EA8",
+      "end": "0x54EE8",
+      "path": "PAL/lib/libgpu/primitive_debug"
+    },
+    {
+      "start": "0x54EE8",
+      "end": "0x55228",
+      "path": "PAL/lib/libgpu/primitive_packets"
+    },
+    {
+      "start": "0x55228",
+      "end": "0x5587C",
+      "path": "PAL/lib/libgpu/draw_packets"
+    },
+    {
+      "start": "0x5587C",
+      "end": "0x55C68",
+      "path": "PAL/lib/libgpu/graph_control"
+    },
+    {
+      "start": "0x55FA4",
+      "end": "0x561B8",
+      "path": "PAL/lib/libgpu/ordering_tables"
+    },
+    {
+      "start": "0x561F0",
+      "end": "0x566A0",
+      "path": "PAL/lib/libgpu/display_environment"
+    },
+    {
+      "start": "0x566A0",
+      "end": "0x56B34",
+      "path": "PAL/lib/libgpu/draw_environment"
+    },
+    {
+      "start": "0x56B34",
+      "end": "0x56FB0",
+      "path": "PAL/lib/libgpu/gpu_internal"
+    },
+    {
+      "start": "0x56FB0",
+      "end": "0x576B8",
+      "path": "PAL/lib/libgpu/image_commands"
+    },
+    {
+      "start": "0x576B8",
+      "end": "0x577E4",
+      "path": "PAL/lib/libgpu/gpu_commands"
+    },
+    {
+      "start": "0x577E4",
+      "end": "0x57AC8",
+      "path": "PAL/lib/libgpu/command_queue"
+    },
+    {
+      "start": "0x57AC8",
+      "end": "0x57DC4",
+      "path": "PAL/lib/libgpu/command_queue_execution"
+    },
+    {
+      "start": "0x57DC4",
+      "end": "0x57F00",
+      "path": "PAL/lib/libgpu/gpu_reset"
+    },
+    {
+      "start": "0x57F00",
+      "end": "0x5807C",
+      "path": "PAL/lib/libgpu/gpu_sync"
+    },
+    {
+      "start": "0x5807C",
+      "end": "0x58334",
+      "path": "PAL/lib/libgpu/gpu_timeout"
+    },
+    {
+      "start": "0x58334",
+      "end": "0x586AC",
+      "path": "PAL/main/render/matrix_apply"
+    },
+    {
+      "start": "0x597BC",
+      "end": "0x5986C",
+      "path": "PAL/lib/libgte/apply_matrix"
+    },
+    {
+      "start": "0x5999C",
+      "end": "0x59A4C",
+      "path": "PAL/lib/libgte/set_matrices"
+    },
+    {
+      "start": "0x59A4C",
+      "end": "0x59B5C",
+      "path": "PAL/lib/libgte/register_access"
+    },
+    {
+      "start": "0x59B5C",
+      "end": "0x59DC0",
+      "path": "PAL/lib/libgte/geometry_math"
+    },
+    {
+      "start": "0x59DC0",
+      "end": "0x59E00",
+      "path": "PAL/lib/libgte/leading_zero_count"
+    },
+    {
+      "start": "0x5A15C",
+      "end": "0x5A1F0",
+      "path": "PAL/lib/libpress/stream_setup"
+    },
+    {
+      "start": "0x5A1F0",
+      "end": "0x5A51C",
+      "path": "PAL/lib/libcd/initialization_and_toc"
+    },
+    {
+      "start": "0x5A52C",
+      "end": "0x5A5D8",
+      "path": "PAL/lib/libcd/drive_state"
+    },
+    {
+      "start": "0x5A5D8",
+      "end": "0x5A6E8",
+      "path": "PAL/lib/libcd/callbacks_and_sync"
+    },
+    {
+      "start": "0x5A6E8",
+      "end": "0x5AA90",
+      "path": "PAL/lib/libcd/command_control"
+    },
+    {
+      "start": "0x5AA90",
+      "end": "0x5ACA0",
+      "path": "PAL/lib/libcd/sector_data"
+    },
+    {
+      "start": "0x5B218",
+      "end": "0x5B498",
+      "path": "PAL/lib/libcd/command_sync"
+    },
+    {
+      "start": "0x5B498",
+      "end": "0x5B764",
+      "path": "PAL/lib/libcd/command_ready"
+    },
+    {
+      "start": "0x5B764",
+      "end": "0x5BBAC",
+      "path": "PAL/lib/libcd/command_write"
+    },
+    {
+      "start": "0x5BBAC",
+      "end": "0x5C044",
+      "path": "PAL/lib/libcd/drive_initialization"
+    },
+    {
+      "start": "0x5C044",
+      "end": "0x5C1B0",
+      "path": "PAL/lib/libcd/data_sync"
+    },
+    {
+      "start": "0x5C1B0",
+      "end": "0x5C3A0",
+      "path": "PAL/lib/libcd/sector_interrupts"
+    },
+    {
+      "start": "0x5C3A0",
+      "end": "0x5C680",
+      "path": "PAL/lib/libds/search_file"
+    },
+    {
+      "start": "0x5C680",
+      "end": "0x5C6A4",
+      "path": "PAL/lib/libcd/iso_name_compare"
+    },
+    {
+      "start": "0x5C6A4",
+      "end": "0x5CA28",
+      "path": "PAL/lib/libcd/iso_media"
+    },
+    {
+      "start": "0x5CA28",
+      "end": "0x5CCCC",
+      "path": "PAL/lib/libcd/iso_cache_file"
+    },
+    {
+      "start": "0x5CCCC",
+      "end": "0x5CD38",
+      "path": "PAL/lib/libcd/iso_read"
+    },
+    {
+      "start": "0x5CD38",
+      "end": "0x5CD6C",
+      "path": "PAL/lib/libc/memcpy"
+    },
+    {
+      "start": "0x5CD6C",
+      "end": "0x5CDD0",
+      "path": "PAL/lib/libc/strcmp"
+    },
+    {
+      "start": "0x5CDD0",
+      "end": "0x5CE50",
+      "path": "PAL/lib/libc/strncmp"
+    },
+    {
+      "start": "0x5CE50",
+      "end": "0x5D134",
+      "path": "PAL/lib/libpress/stream_read"
+    },
+    {
+      "start": "0x5D134",
+      "end": "0x5D314",
+      "path": "PAL/lib/libpress/stream_ring"
+    },
+    {
+      "start": "0x5D314",
+      "end": "0x5DC84",
+      "path": "PAL/lib/libpress/StCdInterrupt"
+    },
+    {
+      "start": "0x5DC84",
+      "end": "0x5DCB8",
+      "path": "PAL/lib/libapi/kernel_word_copy"
+    },
+    {
+      "start": "0x5E2EC",
+      "end": "0x5E4D4",
+      "path": "PAL/lib/libapi/interrupt_dispatch"
+    },
+    {
+      "start": "0x5E4D4",
+      "end": "0x5E628",
+      "path": "PAL/lib/libapi/interrupt_callbacks"
+    },
+    {
+      "start": "0x5E628",
+      "end": "0x5E6D4",
+      "path": "PAL/lib/libapi/stop_interrupts"
+    },
+    {
+      "start": "0x5E6D4",
+      "end": "0x5EC40",
+      "path": "PAL/lib/libapi/interrupt_runtime"
+    },
+    {
+      "start": "0x5EC40",
+      "end": "0x5EE20",
+      "path": "PAL/lib/libsnd/master_volume"
+    },
+    {
+      "start": "0x5EE20",
+      "end": "0x5F148",
+      "path": "PAL/lib/libsnd/SsSeqParseHeader"
+    },
+    {
+      "start": "0x5F148",
+      "end": "0x5F214",
+      "path": "PAL/lib/libsnd/SsSeqOpen"
+    },
+    {
+      "start": "0x5F214",
+      "end": "0x5F324",
+      "path": "PAL/lib/libsnd/SsSeqAdvanceChannelDelta"
+    },
+    {
+      "start": "0x5F324",
+      "end": "0x5F5D0",
+      "path": "PAL/lib/libsnd/SsSeqDispatchMidiEvent"
+    },
+    {
+      "start": "0x5F5D0",
+      "end": "0x5F738",
+      "path": "PAL/lib/libsnd/SsSeqSetChannelPitchBend"
+    },
+    {
+      "start": "0x5FA50",
+      "end": "0x5FCC0",
+      "path": "PAL/lib/libsnd/sequence_tone_modulation"
+    },
+    {
+      "start": "0x5FCC0",
+      "end": "0x60250",
+      "path": "PAL/lib/libsnd/seq_channel_params"
+    },
+    {
+      "start": "0x60250",
+      "end": "0x607F0",
+      "path": "PAL/lib/libapi/controller_data"
+    },
+    {
+      "start": "0x60AB4",
+      "end": "0x6115C",
+      "path": "PAL/lib/libsnd/sequence_program_change"
+    },
+    {
+      "start": "0x6115C",
+      "end": "0x616AC",
+      "path": "PAL/lib/libsnd/SsSeqCalledTbyT"
+    },
+    {
+      "start": "0x616AC",
+      "end": "0x61958",
+      "path": "PAL/lib/libsnd/_SsSndDecrescendo"
+    },
+    {
+      "start": "0x61958",
+      "end": "0x619F8",
+      "path": "PAL/lib/libsnd/SsSeqPause"
+    },
+    {
+      "start": "0x61A24",
+      "end": "0x61A8C",
+      "path": "PAL/lib/libsnd/SsSeqResume"
+    },
+    {
+      "start": "0x61A8C",
+      "end": "0x61C08",
+      "path": "PAL/lib/libsnd/SsSeqClose"
+    },
+    {
+      "start": "0x61C08",
+      "end": "0x61C50",
+      "path": "PAL/lib/libsnd/SsSeqCloseWrapper"
+    },
+    {
+      "start": "0x61C50",
+      "end": "0x61D38",
+      "path": "PAL/lib/libsnd/_SsInitTables"
+    },
+    {
+      "start": "0x61D38",
+      "end": "0x61D68",
+      "path": "PAL/lib/libsnd/ssinit"
+    },
+    {
+      "start": "0x61D88",
+      "end": "0x61FF0",
+      "path": "PAL/lib/libsnd/SsStartSoundTick"
+    },
+    {
+      "start": "0x62030",
+      "end": "0x62070",
+      "path": "PAL/lib/libsnd/SsSoundTickCallback"
+    },
+    {
+      "start": "0x62070",
+      "end": "0x620C0",
+      "path": "PAL/lib/libsnd/SsSoundTickVSyncCallback"
+    },
+    {
+      "start": "0x620C0",
+      "end": "0x62238",
+      "path": "PAL/lib/libapi/root_counters"
+    },
+    {
+      "start": "0x623A4",
+      "end": "0x62454",
+      "path": "PAL/lib/libsnd/SsStopSoundTick"
+    },
+    {
+      "start": "0x62454",
+      "end": "0x62634",
+      "path": "PAL/lib/libsnd/SsSetTableSize"
+    },
+    {
+      "start": "0x62634",
+      "end": "0x62A38",
+      "path": "PAL/lib/libsnd/sequence_playback_control"
+    },
+    {
+      "start": "0x62A38",
+      "end": "0x62C14",
+      "path": "PAL/lib/libsnd/_SsSndTempo"
+    },
+    {
+      "start": "0x62C14",
+      "end": "0x62D04",
+      "path": "PAL/lib/libsnd/voice_configuration"
+    },
+    {
+      "start": "0x62D04",
+      "end": "0x63200",
+      "path": "PAL/lib/libsnd/vab_opening"
+    },
+    {
+      "start": "0x63200",
+      "end": "0x632EC",
+      "path": "PAL/lib/libsnd/vab_transfer"
+    },
+    {
+      "start": "0x632EC",
+      "end": "0x63350",
+      "path": "PAL/lib/libsnd/damper"
+    },
+    {
+      "start": "0x63350",
+      "end": "0x63758",
+      "path": "PAL/lib/libsnd/program_attributes"
+    },
+    {
+      "start": "0x63758",
+      "end": "0x63964",
+      "path": "PAL/lib/libsnd/reverb_control"
+    },
+    {
+      "start": "0x63964",
+      "end": "0x63B2C",
+      "path": "PAL/lib/libsnd/SsUtSetVagAtr"
+    },
+    {
+      "start": "0x63B2C",
+      "end": "0x6448C",
+      "path": "PAL/lib/libsnd/voice_allocation"
+    },
+    {
+      "start": "0x6448C",
+      "end": "0x6495C",
+      "path": "PAL/lib/libsnd/SpuVmNoiseKeyOn"
+    },
+    {
+      "start": "0x6495C",
+      "end": "0x64AF8",
+      "path": "PAL/lib/libsnd/SpuVmKeyOnCore"
+    },
+    {
+      "start": "0x64AF8",
+      "end": "0x64CAC",
+      "path": "PAL/lib/libsnd/voice_pitch"
+    },
+    {
+      "start": "0x64CAC",
+      "end": "0x64E60",
+      "path": "PAL/lib/libsnd/SpuVmPitchBendVoice"
+    },
+    {
+      "start": "0x64E60",
+      "end": "0x65854",
+      "path": "PAL/lib/libsnd/automatic_voice_volume"
+    },
+    {
+      "start": "0x65854",
+      "end": "0x65C24",
+      "path": "PAL/lib/libsnd/SpuVmInit"
+    },
+    {
+      "start": "0x65C24",
+      "end": "0x65DF4",
+      "path": "PAL/lib/libsnd/voice_key_on_with_volume"
+    },
+    {
+      "start": "0x65DF4",
+      "end": "0x660E8",
+      "path": "PAL/lib/libsnd/spu_vm_pitchbend"
+    },
+    {
+      "start": "0x660E8",
+      "end": "0x66494",
+      "path": "PAL/lib/libsnd/SsUtFlush"
+    },
+    {
+      "start": "0x66494",
+      "end": "0x66A84",
+      "path": "PAL/lib/libsnd/SpuVmSeKeyOn"
+    },
+    {
+      "start": "0x66A84",
+      "end": "0x66C74",
+      "path": "PAL/lib/libsnd/SpuVmSeKeyOff"
+    },
+    {
+      "start": "0x66C74",
+      "end": "0x66D9C",
+      "path": "PAL/lib/libsnd/voice_key_on_internal"
+    },
+    {
+      "start": "0x66D9C",
+      "end": "0x6701C",
+      "path": "PAL/lib/libsnd/sequence_voice_volume"
+    },
+    {
+      "start": "0x6701C",
+      "end": "0x67160",
+      "path": "PAL/lib/libsnd/SpuVmSeqKeyOff"
+    },
+    {
+      "start": "0x67160",
+      "end": "0x672F0",
+      "path": "PAL/lib/libsnd/program_volume_pan"
+    },
+    {
+      "start": "0x672F0",
+      "end": "0x67BCC",
+      "path": "PAL/lib/libsnd/voice_key_on"
+    },
+    {
+      "start": "0x67BCC",
+      "end": "0x67DC0",
+      "path": "PAL/lib/libsnd/SsUtKeyOff"
+    },
+    {
+      "start": "0x67DC0",
+      "end": "0x6815C",
+      "path": "PAL/lib/libsnd/SsUtKeyOnV"
+    },
+    {
+      "start": "0x6815C",
+      "end": "0x68274",
+      "path": "PAL/lib/libsnd/SsUtKeyOffV"
+    },
+    {
+      "start": "0x68274",
+      "end": "0x687A0",
+      "path": "PAL/lib/libsnd/voice_parameter_updates"
+    },
+    {
+      "start": "0x687A0",
+      "end": "0x6897C",
+      "path": "PAL/lib/libsnd/_SsVmInit"
+    },
+    {
+      "start": "0x68AE8",
+      "end": "0x68B74",
+      "path": "PAL/lib/libspu/_spu_resetTransferControl"
+    },
+    {
+      "start": "0x68B74",
+      "end": "0x69090",
+      "path": "PAL/lib/libspu/_spu_init"
+    },
+    {
+      "start": "0x69090",
+      "end": "0x693C4",
+      "path": "PAL/lib/libspu/_spu_writeByIO"
+    },
+    {
+      "start": "0x693C4",
+      "end": "0x69564",
+      "path": "PAL/lib/libspu/_spu_transferCallback"
+    },
+    {
+      "start": "0x69564",
+      "end": "0x69744",
+      "path": "PAL/lib/libspu/_spu_startDmaTransfer"
+    },
+    {
+      "start": "0x69744",
+      "end": "0x699EC",
+      "path": "PAL/lib/libspu/_spu_t"
+    },
+    {
+      "start": "0x699EC",
+      "end": "0x69C04",
+      "path": "PAL/lib/libspu/_spu_Fw"
+    },
+    {
+      "start": "0x69C28",
+      "end": "0x69CA4",
+      "path": "PAL/lib/libspu/SpuQuit"
+    },
+    {
+      "start": "0x69CA4",
+      "end": "0x6A33C",
+      "path": "PAL/lib/libspu/allocator"
+    },
+    {
+      "start": "0x6A33C",
+      "end": "0x6A360",
+      "path": "PAL/lib/libspu/SpuSetNoiseVoice"
+    },
+    {
+      "start": "0x6A360",
+      "end": "0x6A414",
+      "path": "PAL/lib/libspu/_SpuSetAnyVoice"
+    },
+    {
+      "start": "0x6A414",
+      "end": "0x6A4E4",
+      "path": "PAL/lib/libspu/SpuSetReverb"
+    },
+    {
+      "start": "0x6A4E4",
+      "end": "0x6A5CC",
+      "path": "PAL/lib/libspu/_SpuIsInAllocateArea"
+    },
+    {
+      "start": "0x6B158",
+      "end": "0x6B1CC",
+      "path": "PAL/lib/libspu/SpuTransferStatus"
+    },
+    {
+      "start": "0x6B1CC",
+      "end": "0x6B260",
+      "path": "PAL/lib/libspu/SpuGetKeyStatus"
+    },
+    {
+      "start": "0x6B260",
+      "end": "0x6B414",
+      "path": "PAL/lib/libspu/transfer_control"
+    }
+  ],
+  "rejected": [
+    {
+      "path": "PAL/main/asset/asset_loader",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/asset/asset_requests",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/asset/race_assets",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/asset/fmv_requests",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/title_screen",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/frontend",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/prize_money_screen",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/race/record_entry",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/option_menu",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/car/update_player_car",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/car/car_ai",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/track/draw_scripted_scenery",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/track/zone_ambience",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/cd/cd_track_requests",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/cd/cd_audio",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/track/update_camera",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/render/matrix_builders",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/render/text_drawing",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/render/scripted_draw",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/car_spec_panel",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/menu_visual_effects",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/draw_car_name_plate",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/car_model_slots",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/course_select",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/car_select",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/shop_screens",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/save/memory_card_runtime",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/save/update_memory_card_menu",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/lib/libc/sprintf",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/lib/libcd/interrupt_status",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/lib/libsnd/SsSeqDispatchControlChange",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/lib/libsnd/SsSeqApplyNrpn",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/lib/libsnd/SsSetTickMode",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/lib/libspu/SpuSetCommonAttr",
+      "reason": "has non-text output",
+      "sections": [
+        ".rodata"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/controller_config",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/menu/negcon_calibration",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/boot/main_loop",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/lib/libc/printf",
+      "reason": "structural match is not unique",
+      "matches": 2
+    },
+    {
+      "path": "PAL/main/render/track_textures",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/menu/round_screen",
+      "reason": "unmapped externals",
+      "symbols": [
+        "SetupDisplay240"
+      ]
+    },
+    {
+      "path": "PAL/main/render/draw_player_car_model",
+      "reason": "unmapped externals",
+      "symbols": [
+        "g_ScratchRenderMode"
+      ]
+    },
+    {
+      "path": "PAL/main/fmv/start_fmv_playback",
+      "reason": "unmapped externals",
+      "symbols": [
+        "SetupDisplay240"
+      ]
+    },
+    {
+      "path": "PAL/main/race/replay_recording",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/race/replay",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/race/class_progress",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/save/save_defaults",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/menu/ending_still",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/boot/boot_scene",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/menu/option_screens",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/race/attract_demo",
+      "reason": "unmapped externals",
+      "symbols": [
+        "SetupDisplay240"
+      ]
+    },
+    {
+      "path": "PAL/main/race/prologue",
+      "reason": "unmapped externals",
+      "symbols": [
+        "SetupDisplay240"
+      ]
+    },
+    {
+      "path": "PAL/main/race/prologue_step",
+      "reason": "structural match is not unique",
+      "matches": 2
+    },
+    {
+      "path": "PAL/main/render/sprite_string",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/save/draw_memory_card_screen",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/render/terrain_submission",
+      "reason": "unmapped externals",
+      "symbols": [
+        "D_8009E694",
+        "EmitCoursePolyF4Fog_0x14_hi",
+        "EmitCoursePolyF4Fog_0x14_lo",
+        "EmitCoursePolyF4_0x10_hi",
+        "EmitCoursePolyF4_0x10_lo",
+        "EmitCoursePolyFT4Fog_hi",
+        "EmitCoursePolyFT4Fog_lo",
+        "EmitCoursePolyFT4_0x10_hi",
+        "EmitCoursePolyFT4_0x10_lo",
+        "EmitCourseSubdividedFT4Fog_hi",
+        "EmitCourseSubdividedFT4Fog_lo",
+        "EmitCourseSubdividedFT4_0xC_hi",
+        "EmitCourseSubdividedFT4_0xC_lo",
+        "SubmitCourseSubdividedFaces_0x2A8_hi",
+        "SubmitCourseSubdividedFaces_0x2A8_lo",
+        "SubmitCourseSubdividedFaces_0x350_hi",
+        "SubmitCourseSubdividedFaces_0x350_lo",
+        "__maspsx_include_asm_hack_EmitCoursePolyF4",
+        "__maspsx_include_asm_hack_EmitCoursePolyF4Fog",
+        "__maspsx_include_asm_hack_EmitCoursePolyFT4",
+        "__maspsx_include_asm_hack_EmitCoursePolyFT4Fog",
+        "__maspsx_include_asm_hack_EmitCourseSubdividedFT4",
+        "__maspsx_include_asm_hack_EmitCourseSubdividedFT4Fog",
+        "__maspsx_include_asm_hack_EmitPolyF4",
+        "__maspsx_include_asm_hack_EmitPolyF4Fog",
+        "__maspsx_include_asm_hack_EmitPolyFT4Fog",
+        "__maspsx_include_asm_hack_EmitPolyFT4Raw",
+        "__maspsx_include_asm_hack_EmitPolyG4",
+        "__maspsx_include_asm_hack_EmitPolyG4Fog",
+        "__maspsx_include_asm_hack_EmitPolyGT4",
+        "__maspsx_include_asm_hack_EmitPolyGT4Fog",
+        "__maspsx_include_asm_hack_EmitSubdividedTerrainQuad",
+        "__maspsx_include_asm_hack_InterpolateSubdivRow",
+        "__maspsx_include_asm_hack_SubmitCourseModel",
+        "__maspsx_include_asm_hack_SubmitCourseModel2",
+        "__maspsx_include_asm_hack_SubmitCourseSubdividedFaces",
+        "__maspsx_include_asm_hack_SubmitModel",
+        "__maspsx_include_asm_hack_SubmitModel2",
+        "__maspsx_include_asm_hack_SubmitTerrainCellFaces",
+        "__maspsx_include_asm_hack_SubmitTerrainCellFacesFar",
+        "__maspsx_include_asm_hack_SubmitTerrainCells",
+        "__maspsx_include_asm_hack_TransformCourseModel",
+        "jtbl_8007D9F4_hi",
+        "jtbl_8007D9F4_lo",
+        "jtbl_8007DA14_0x40_hi",
+        "jtbl_8007DA14_0x40_lo",
+        "jtbl_8007DA14_0x50_hi",
+        "jtbl_8007DA14_0x50_lo"
+      ]
+    },
+    {
+      "path": "PAL/main/car/update_car_drivetrain",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/car/car_orientation",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/car/update_car_driving",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/render/race_hud",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/race/race_hud_text",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/race/time_conversion",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/race/race_scene",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/race/race_runtime",
+      "reason": "unmapped externals",
+      "symbols": [
+        "g_ScratchRenderMode"
+      ]
+    },
+    {
+      "path": "PAL/main/car/clamp_car_lateral_offset",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/car/race_car_update",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/track/draw_path_scenery",
+      "reason": "unmapped externals",
+      "symbols": [
+        "g_ScratchRenderMode"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/draw_car_shop_price_panel",
+      "reason": "structural match is not unique",
+      "matches": 2
+    },
+    {
+      "path": "PAL/main/menu/draw_engineer_shop_price_panel",
+      "reason": "structural match is not unique",
+      "matches": 2
+    },
+    {
+      "path": "PAL/main/menu/menu_mode",
+      "reason": "unmapped externals",
+      "symbols": [
+        "SetupDisplay480"
+      ]
+    },
+    {
+      "path": "PAL/main/menu/swap_car_model_slot",
+      "reason": "unmapped externals",
+      "symbols": [
+        "D_1F800004"
+      ]
+    },
+    {
+      "path": "PAL/main/audio/sound_runtime",
+      "reason": "unmapped externals",
+      "symbols": [
+        "BiosExit"
+      ]
+    },
+    {
+      "path": "PAL/main/audio/audio_slot_loading",
+      "reason": "unmapped externals",
+      "symbols": [
+        "BiosExit",
+        "g_AudioRuntimeState"
+      ]
+    },
+    {
+      "path": "PAL/main/audio/effect_voice_runtime",
+      "reason": "unmapped externals",
+      "symbols": [
+        "g_AudioRuntimeState"
+      ]
+    },
+    {
+      "path": "PAL/main/audio/vab_sequence_slots",
+      "reason": "unmapped externals",
+      "symbols": [
+        "BiosExit",
+        "g_AudioRuntimeState"
+      ]
+    },
+    {
+      "path": "PAL/main/save/save_header",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/save/memory_card_io",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/save/memory_card_status",
+      "reason": "unmapped externals",
+      "symbols": [
+        "g_FmtPlayTime"
+      ]
+    },
+    {
+      "path": "PAL/main/save/memory_card_menu",
+      "reason": "unmapped externals",
+      "symbols": [
+        "SetupDisplay480"
+      ]
+    },
+    {
+      "path": "PAL/main/save/enter_memory_card_menu_from_load",
+      "reason": "unmapped externals",
+      "symbols": [
+        "SetupDisplay480"
+      ]
+    },
+    {
+      "path": "PAL/main/boot/__main",
+      "reason": "structural match is not unique",
+      "matches": 1061
+    },
+    {
+      "path": "PAL/main/boot/_start",
+      "reason": "unmapped externals",
+      "symbols": [
+        "D_8009A51C",
+        "__maspsx_include_asm_hack_D_800630B4",
+        "main_BSS_END"
+      ]
+    },
+    {
+      "path": "PAL/lib/libapi/exit_critical_section",
+      "reason": "structural match is not unique",
+      "matches": 2
+    },
+    {
+      "path": "PAL/lib/libapi/bios_file_stubs",
+      "reason": "structural match is not unique",
+      "matches": 4
+    },
+    {
+      "path": "PAL/main/random/seed_random",
+      "reason": "structural match is not unique",
+      "matches": 13
+    },
+    {
+      "path": "PAL/lib/libc/toupper",
+      "reason": "structural match is not unique",
+      "matches": 2
+    },
+    {
+      "path": "PAL/lib/libc/tolower",
+      "reason": "structural match is not unique",
+      "matches": 2
+    },
+    {
+      "path": "PAL/lib/libapi/bios_call_stubs",
+      "reason": "structural match is not unique",
+      "matches": 11
+    },
+    {
+      "path": "PAL/lib/libcard/_card_clear",
+      "reason": "unmapped externals",
+      "symbols": [
+        "_card_write"
+      ]
+    },
+    {
+      "path": "PAL/lib/libcard/_card_write",
+      "reason": "structural match is not unique",
+      "matches": 35
+    },
+    {
+      "path": "PAL/lib/libapi/new_card_stub",
+      "reason": "structural match is not unique",
+      "matches": 35
+    },
+    {
+      "path": "PAL/lib/libpress/mdec_runtime",
+      "reason": "unmapped externals",
+      "symbols": [
+        "D_800839A0",
+        "D_800939A0",
+        "__maspsx_include_asm_hack_MdecUnpackStatus",
+        "__maspsx_include_asm_hack_g_MdecVlcBufferSize"
+      ]
+    },
+    {
+      "path": "PAL/lib/libgpu/image_transfer",
+      "reason": "unmapped externals",
+      "symbols": [
+        "g_MoveImagePacket"
+      ]
+    },
+    {
+      "path": "PAL/lib/libgpu/draw_environment_state",
+      "reason": "structural match is not unique",
+      "matches": 2
+    },
+    {
+      "path": "PAL/lib/libgte/geo_00",
+      "reason": "unmapped externals",
+      "symbols": [
+        "D_80092B08",
+        "D_80093308",
+        "D_80093B08"
+      ]
+    },
+    {
+      "path": "PAL/lib/libgte/fog_geometry",
+      "reason": "unmapped externals",
+      "symbols": [
+        "D_80094B1C",
+        "__maspsx_include_asm_hack_SquareRoot0"
+      ]
+    },
+    {
+      "path": "PAL/lib/libgte/matrix_stack",
+      "reason": "unmapped externals",
+      "symbols": [
+        "__maspsx_include_asm_hack_ScaleMatrixL"
+      ]
+    },
+    {
+      "path": "PAL/lib/libgte/multiply_matrix",
+      "reason": "unmapped externals",
+      "symbols": [
+        "__maspsx_include_asm_hack_MulMatrix"
+      ]
+    },
+    {
+      "path": "PAL/lib/libgte/multiply_matrix_2",
+      "reason": "unmapped externals",
+      "symbols": [
+        "__maspsx_include_asm_hack_MulMatrix2"
+      ]
+    },
+    {
+      "path": "PAL/lib/libgte/scale_matrix",
+      "reason": "unmapped externals",
+      "symbols": [
+        "__maspsx_include_asm_hack_ScaleMatrix"
+      ]
+    },
+    {
+      "path": "PAL/lib/libgte/rotation_matrix",
+      "reason": "unmapped externals",
+      "symbols": [
+        "__maspsx_include_asm_hack_RotMatrix",
+        "g_RCosSinTable"
+      ]
+    },
+    {
+      "path": "PAL/lib/libgte/exception_patch",
+      "reason": "unmapped externals",
+      "symbols": [
+        "D_8006A010",
+        "D_8009AEDC",
+        "__maspsx_include_asm_hack_func_80069FA8",
+        "func_8006A048"
+      ]
+    },
+    {
+      "path": "PAL/lib/libapi/deliver_event_stub",
+      "reason": "structural match is not unique",
+      "matches": 35
+    },
+    {
+      "path": "PAL/lib/libcd/dma_start",
+      "reason": "unmapped externals",
+      "symbols": [
+        "D_800993D0"
+      ]
+    },
+    {
+      "path": "PAL/lib/libetc/vertical_sync",
+      "reason": "unmapped externals",
+      "symbols": [
+        "__maspsx_include_asm_hack_vertical_sync"
+      ]
+    },
+    {
+      "path": "PAL/lib/libapi/interrupt_initialization",
+      "reason": "unmapped externals",
+      "symbols": [
+        "SysEnqIntRP"
+      ]
+    },
+    {
+      "path": "PAL/lib/libsnd/SsSeqAdvanceChannelTick",
+      "reason": "structural match is not unique",
+      "matches": 2
+    },
+    {
+      "path": "PAL/lib/libsnd/SsQuit",
+      "reason": "structural match is not unique",
+      "matches": 16
+    },
+    {
+      "path": "PAL/lib/libsnd/SsStartSoundTickMode1",
+      "reason": "structural match is not unique",
+      "matches": 3
+    },
+    {
+      "path": "PAL/lib/libsnd/SsStartSoundTickMode0",
+      "reason": "structural match is not unique",
+      "matches": 3
+    },
+    {
+      "path": "PAL/lib/libspu/initialization",
+      "reason": "unmapped externals",
+      "symbols": [
+        "D_8009A710"
+      ]
+    },
+    {
+      "path": "PAL/lib/libspu/_SpuDataCallback",
+      "reason": "structural match is not unique",
+      "matches": 4
+    },
+    {
+      "path": "PAL/lib/libspu/reverb_parameters",
+      "reason": "unmapped externals",
+      "symbols": [
+        "WaitEvent"
+      ]
+    },
+    {
+      "path": "PAL/lib/libapi/wait_event",
+      "reason": "structural match is not unique",
+      "matches": 35
+    }
+  ]
+}

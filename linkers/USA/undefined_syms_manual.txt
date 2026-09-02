@@ -1,1 +1,2 @@
 /* Manual USA linker symbols go here. */
+main_LOAD_SIZE = main_ROM_END - main_ROM_START;

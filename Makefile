@@ -7,6 +7,8 @@ BASENAME   := main
 
 TARGET_SHA_PAL := 2913e15648eddef40821c5f666460abc04155ee6
 TARGET_SHA_USA := 2661e8bf18d209c98fd70d33e18ab88b10abd52b
+TARGET_SHA_JAP10 := f0ca386e1c7b2c5961b8c2a53cc751a83ae0d406
+TARGET_SHA_JAP11 := bfa7a4cf466480133c10845eae632a0c4e122360
 TARGET_SHA := $(TARGET_SHA_$(VERSION))
 
 ROOT       := $(abspath .)
@@ -31,7 +33,10 @@ READELF    := mipsel-none-elf-readelf
 OBJDIFF    ?= build/toolchain/bin/objdiff-cli
 
 ASM_SRCS := $(shell find $(ASM_DIR) -name '*.s' -not -path '*/nonmatchings/*' 2>/dev/null)
-C_SRCS   := $(shell find $(SRC_DIR)/$(VERSION) -name '*.c' 2>/dev/null)
+# Compile exactly the translation units named by the selected splat config.
+# Regional configs can therefore reuse a proven PAL C unit while leaving the
+# surrounding, changed code as regional assembly.
+C_SRCS   := $(shell awk -F, '/, c,/{gsub(/^[[:space:]]+|[[:space:]\]]+$$/, "", $$3); print "src/main/" $$3 ".c"}' $(SPLAT_CFG) 2>/dev/null)
 
 ASM_OBJS := $(ASM_SRCS:%.s=$(BUILD)/%.s.o)
 C_OBJS   := $(C_SRCS:%=$(BUILD)/%.o)
@@ -82,6 +87,13 @@ UNDEFINED_MANUAL := linkers/$(VERSION)/undefined_syms_manual.txt
 ADDR_ALIASES := linkers/$(VERSION)/undefined_addr_aliases.$(BASENAME).txt
 ADDR_HALVES := linkers/$(VERSION)/addr_halves.$(BASENAME).txt
 
+# A coarse assembly-only comparison target has no C relocations for
+# gen_nonmatching_asm.py to record. Keep the linker dependency present; once a
+# regional C source is introduced the split step overwrites it with real pairs.
+$(ADDR_HALVES):
+	@mkdir -p $(dir $@)
+	@touch $@
+
 build: $(OUT_BIN)
 
 # splat's undefined_syms_auto / undefined_funcs_auto are NOT linked in: every
@@ -89,9 +101,10 @@ build: $(OUT_BIN)
 # so linking them would pin each address forever. They stay on disk because the
 # disassembler reads them for symbol names. This target distils them down to
 # the addresses the link actually still needs, and only that file is linked.
-$(ADDR_ALIASES): $(OBJS) $(UNDEFINED_MANUAL) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_HALVES)
+$(ADDR_ALIASES): $(OBJS) $(UNDEFINED_MANUAL) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_HALVES) configs/$(VERSION)/sym.main.txt
 	$(PY) tools/scripts/gen_undefined_addr_aliases.py --nm $(NM) --output $@ \
 	      --source $(UNDEFINED_SYMS) --source $(UNDEFINED_FUNCS) \
+	      --source configs/$(VERSION)/sym.main.txt \
 	      --manual $(UNDEFINED_MANUAL) --manual $(ADDR_HALVES) $(OBJS)
 
 $(ELF): $(OBJS) $(LD_SCRIPT) $(UNDEFINED_MANUAL) $(ADDR_ALIASES) $(ADDR_HALVES)
@@ -143,7 +156,7 @@ help:
 	@echo "Targets:"
 	@echo "  setup             Create .venv and install Python tooling"
 	@echo "  stage             Symlink local disc dumps and extract boot EXEs"
-	@echo "  split VERSION=PAL Run splat for PAL or USA"
+	@echo "  split VERSION=PAL Run splat for PAL, USA, JAP10, or JAP11"
 	@echo "  build VERSION=PAL Build split output"
 	@echo "  check VERSION=PAL Verify rebuilt EXE SHA-1"
 	@echo "  audit-code        Check that game-code scaffolding debt did not increase"
