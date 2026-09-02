@@ -18,6 +18,7 @@
 #define FRAME_CONTEXT_ENVIRONMENT(offset)                                      \
     (*(volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + (offset)))
 
+#ifndef FRONTEND_ONLY_DISPLAY_SETUP
 
 void UpdateMainMenuExit(void) {
     s32 value;
@@ -192,6 +193,12 @@ void UpdateFrontend(void) {
     UpdateTitleAttract();
 }
 
+#else
+
+#ifndef DISPLAY_SCREEN_Y_BIAS
+#define DISPLAY_SCREEN_Y_BIAS 0x1D
+#endif
+
 /*
  * Empty stub; SetupDisplay240 and SetupDisplay480 both call it with one argument,
  * so the parameter is declared and ignored.
@@ -262,7 +269,7 @@ void SetupDisplay240(s32 r, s32 g, s32 b) {
         FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.r0 = r;
         FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.g0 = g;
         FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.b0 = b;
-        FRAME_CONTEXT_ENVIRONMENT(offset).display.screen.y = value2 + 0x1D;
+        FRAME_CONTEXT_ENVIRONMENT(offset).display.screen.y = value2 + DISPLAY_SCREEN_Y_BIAS;
         offset += stride;
     } while (i < 2);
 
@@ -315,7 +322,7 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
         FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.r0 = mode;
         FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.g0 = x;
         FRAME_CONTEXT_ENVIRONMENT(offset).mirrorDraw.b0 = y;
-        FRAME_CONTEXT_ENVIRONMENT(offset).display.screen.y = value2 + 0x1D;
+        FRAME_CONTEXT_ENVIRONMENT(offset).display.screen.y = value2 + DISPLAY_SCREEN_Y_BIAS;
         offset += stride;
     } while (i < 2);
 
@@ -324,5 +331,7 @@ void SetupDisplay480(s32 mode, s32 x, s32 y) {
 
     SCRATCH_CLIP_Y1 = 0x1E0;
 }
+
+#endif
 
 #undef FRAME_CONTEXT_ENVIRONMENT

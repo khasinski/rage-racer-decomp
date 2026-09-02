@@ -3,10 +3,10 @@
   "portable_units": 297,
   "portable_text_bytes": 322920,
   "portable_rodata_bytes": 2464,
-  "regional_units": 14,
-  "regional_text_bytes": 12404,
+  "regional_units": 15,
+  "regional_text_bytes": 13344,
   "text_aliases": 9,
-  "inferred_externals": 1934,
+  "inferred_externals": 1941,
   "selected": [
     {
       "start": "0x4B68",
@@ -1584,8 +1584,11 @@
     },
     {
       "path": "PAL/main/menu/frontend",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/menu/display_setup",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/fmv/start_fmv_playback",

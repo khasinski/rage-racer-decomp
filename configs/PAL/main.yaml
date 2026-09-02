@@ -138,6 +138,7 @@ segments:
       - [0xB180, c, PAL/main/render/rear_view_mirror]
       - [0xB770, c, PAL/main/menu/title_screen]
       - [0xC084, c, PAL/main/menu/frontend]
+      - [0xC694, c, PAL/main/menu/display_setup]
       - [0xCA48, c, PAL/main/menu/round_screen]
       - [0xDB0C, c, PAL/main/render/load_track_texture_page_range]
       - [0xDB38, c, PAL/main/menu/team_logo]

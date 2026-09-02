@@ -20,6 +20,11 @@
     "path": "JAP10/main/race/time_conversion"
   },
   {
+    "start": "0xC504",
+    "end": "0xC8B0",
+    "path": "JAP10/main/menu/display_setup"
+  },
+  {
     "start": "0xEE04",
     "end": "0xEEEC",
     "path": "JAP10/main/fmv/start_fmv_playback"

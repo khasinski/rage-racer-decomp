@@ -137,6 +137,7 @@ segments:
       - [0xAB30, c, PAL/main/render/rot_matrix]
       - [0xAFF0, c, PAL/main/render/rear_view_mirror]
       - [0xB5E0, asm, main/00B5E0_main]
+      - [0xC504, c, JAP10/main/menu/display_setup]
       - [0xC8B0, c, PAL/main/menu/round_screen]
       - [0xD974, c, PAL/main/render/load_track_texture_page_range]
       - [0xD9A0, c, PAL/main/menu/team_logo]
