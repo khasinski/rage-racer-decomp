@@ -3,8 +3,8 @@
   "portable_units": 297,
   "portable_text_bytes": 322920,
   "portable_rodata_bytes": 2464,
-  "regional_units": 11,
-  "regional_text_bytes": 10736,
+  "regional_units": 12,
+  "regional_text_bytes": 11508,
   "text_aliases": 9,
   "inferred_externals": 1912,
   "selected": [
@@ -1729,6 +1729,11 @@
     {
       "path": "PAL/main/render/race_hud",
       "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/race/race_hud_time",
+      "reason": "structural match is not unique",
+      "matches": 0
     },
     {
       "path": "PAL/main/race/race_hud_text",

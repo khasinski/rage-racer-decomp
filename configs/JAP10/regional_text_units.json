@@ -1,5 +1,10 @@
 [
   {
+    "start": "0x23E7C",
+    "end": "0x24180",
+    "path": "JAP10/main/race/race_hud_time"
+  },
+  {
     "start": "0x25038",
     "end": "0x250B4",
     "path": "JAP10/main/race/time_conversion"
