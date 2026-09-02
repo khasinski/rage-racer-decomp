@@ -1,12 +1,12 @@
 {
   "version": "JAP10",
-  "portable_units": 297,
-  "portable_text_bytes": 322920,
+  "portable_units": 299,
+  "portable_text_bytes": 325396,
   "portable_rodata_bytes": 2464,
-  "regional_units": 15,
-  "regional_text_bytes": 13344,
+  "regional_units": 16,
+  "regional_text_bytes": 13836,
   "text_aliases": 9,
-  "inferred_externals": 1941,
+  "inferred_externals": 1949,
   "selected": [
     {
       "start": "0x4B68",
@@ -189,6 +189,16 @@
       "path": "PAL/main/menu/option_menu",
       "rodata_start": "0x1790",
       "rodata_end": "0x17A8"
+    },
+    {
+      "start": "0x1545C",
+      "end": "0x15868",
+      "path": "PAL/main/menu/option_screens"
+    },
+    {
+      "start": "0x15A54",
+      "end": "0x15FF4",
+      "path": "PAL/main/menu/option_screens_tail"
     },
     {
       "start": "0x15FF4",
@@ -1643,9 +1653,8 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/menu/option_screens",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "path": "PAL/main/menu/screen_adjust_update",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/race/prologue",

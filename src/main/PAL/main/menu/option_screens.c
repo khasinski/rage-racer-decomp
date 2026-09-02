@@ -13,6 +13,8 @@
 #include "game/track.h"
 #include "psyq/gpu.h"
 
+#if !defined(OPTION_SCREENS_ONLY_SCREEN_ADJUST_UPDATE) && \
+    !defined(OPTION_SCREENS_ONLY_TAIL)
 
 /* g_GameModeHandlers[5]: left/right edits the selected audio setting, cancel restores it. */
 void UpdateSoundSettingAdjust(void) {
@@ -119,6 +121,21 @@ void DrawScreenAdjustScreen(void) {
     DrawOptionHintBar(3);
 }
 
+#elif defined(OPTION_SCREENS_ONLY_SCREEN_ADJUST_UPDATE)
+
+#ifndef SCREEN_ADJUST_MIN_Y
+#define SCREEN_ADJUST_MIN_Y (-31)
+#endif
+#ifndef SCREEN_ADJUST_MAX_Y
+#define SCREEN_ADJUST_MAX_Y 23
+#endif
+#ifndef SCREEN_ADJUST_MIN_X
+#define SCREEN_ADJUST_MIN_X (-10)
+#endif
+#ifndef SCREEN_ADJUST_Y_BIAS
+#define SCREEN_ADJUST_Y_BIAS 29
+#endif
+
 /* g_GameModeHandlers[6]: moves the screen offset and commits it to g_ScreenOffsetX/Y. */
 void UpdateScreenAdjustScreen(void) {
     s32 oldX;
@@ -134,20 +151,20 @@ void UpdateScreenAdjustScreen(void) {
     oldX = g_ScreenOffsetEditX;
     oldY = g_ScreenOffsetEditY;
 
-    if ((input & 0x1000) && (oldY >= -31)) {
+    if ((input & 0x1000) && (oldY >= SCREEN_ADJUST_MIN_Y)) {
         g_ScreenOffsetEditY = oldY - 1;
     }
 
     if (g_PadPressedRepeat & PAD_DOWN) {
         value = g_ScreenOffsetEditY;
-        if (value < 23) {
+        if (value < SCREEN_ADJUST_MAX_Y) {
             g_ScreenOffsetEditY = value + 1;
         }
     }
 
     if (g_PadPressedRepeat & PAD_LEFT) {
         value = g_ScreenOffsetEditX;
-        if (value >= -10) {
+        if (value >= SCREEN_ADJUST_MIN_X) {
             g_ScreenOffsetEditX = value - 1;
         }
     }
@@ -180,10 +197,12 @@ void UpdateScreenAdjustScreen(void) {
     }
 
     g_DispEnv0ScreenX = g_ScreenOffsetEditX;
-    g_DispEnv0ScreenY = g_ScreenOffsetEditY + 29;
+    g_DispEnv0ScreenY = g_ScreenOffsetEditY + SCREEN_ADJUST_Y_BIAS;
     g_DispEnv1ScreenX = g_ScreenOffsetEditX;
-    g_DispEnv1ScreenY = g_ScreenOffsetEditY + 29;
+    g_DispEnv1ScreenY = g_ScreenOffsetEditY + SCREEN_ADJUST_Y_BIAS;
 }
+
+#else
 
 void DrawOptionSceneOverlay(void) {
     u8 **scratch;
@@ -327,3 +346,5 @@ void UpdateBgmSelectFadeIn(void) {
     }
     UpdateOptionSceneFade();
 }
+
+#endif

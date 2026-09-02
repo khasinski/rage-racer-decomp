@@ -25,6 +25,11 @@
     "path": "JAP10/main/menu/display_setup"
   },
   {
+    "start": "0x15868",
+    "end": "0x15A54",
+    "path": "JAP10/main/menu/screen_adjust_update"
+  },
+  {
     "start": "0xEE04",
     "end": "0xEEEC",
     "path": "JAP10/main/fmv/start_fmv_playback"

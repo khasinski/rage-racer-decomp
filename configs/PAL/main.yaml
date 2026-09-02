@@ -168,6 +168,8 @@ segments:
       - [0x14260, c, PAL/main/menu/option_menu_fade]
       - [0x143B4, c, PAL/main/menu/option_menu]
       - [0x158BC, c, PAL/main/menu/option_screens]
+      - [0x15CC8, c, PAL/main/menu/screen_adjust_update]
+      - [0x15EB8, c, PAL/main/menu/option_screens_tail]
       - [0x16458, c, PAL/main/race/bgm_select]
       - [0x16C84, c, PAL/main/race/exit_bgm_select]
       - [0x16D70, c, PAL/main/race/attract_demo]
