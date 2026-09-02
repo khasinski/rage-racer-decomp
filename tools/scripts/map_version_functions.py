@@ -31,6 +31,9 @@ READELF_FUNC = re.compile(
 SYMBOL_ASSIGNMENT = re.compile(
     r"^([A-Za-z_$][A-Za-z0-9_$]*)\s*=\s*(0x[0-9a-fA-F]+)"
 )
+CONFIG_SEGMENT = re.compile(
+    r"^\s*- \[(0x[0-9A-Fa-f]+)(?:,\s*([^,\]]+))?(?:,\s*([^\]]+))?\]"
+)
 
 
 @dataclass
@@ -179,6 +182,36 @@ def read_named_functions(paths: list[Path]) -> dict[int, list[str]]:
     }
 
 
+def read_source_ranges(config: Path) -> list[tuple[int, int, str]]:
+    """Return executable address ranges for C units in a splat config."""
+
+    segments: list[tuple[int, str, str]] = []
+    for line in config.read_text().splitlines():
+        if match := CONFIG_SEGMENT.match(line):
+            segments.append(
+                (
+                    int(match.group(1), 16),
+                    (match.group(2) or "").strip(),
+                    (match.group(3) or "").strip(),
+                )
+            )
+    ranges: list[tuple[int, int, str]] = []
+    for index, (start, kind, path) in enumerate(segments[:-1]):
+        if kind == "c":
+            ranges.append(
+                (
+                    LOAD_ADDRESS + start - HEADER_SIZE,
+                    LOAD_ADDRESS + segments[index + 1][0] - HEADER_SIZE,
+                    path,
+                )
+            )
+    return ranges
+
+
+def source_path(address: int, ranges: list[tuple[int, int, str]]) -> str | None:
+    return next((path for start, end, path in ranges if start <= address < end), None)
+
+
 def signed_half(value: int) -> int:
     return value if value < 0x8000 else value - 0x10000
 
@@ -317,6 +350,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-exe", type=Path, default=Path("assets/PAL/main.exe"))
     parser.add_argument("--source-elf", type=Path, default=Path("build/PAL/main.elf"))
+    parser.add_argument("--source-config", type=Path, default=Path("configs/PAL/main.yaml"))
     parser.add_argument("--target-exe", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--report", type=Path)
@@ -360,6 +394,7 @@ def main() -> None:
     mapped_data, ambiguous_data = infer_data_addresses(
         source, target, functions, named_addresses
     )
+    source_ranges = read_source_ranges(args.source_config)
 
     lines = [
         "// Generated from structurally identical PAL function bodies.",
@@ -423,6 +458,19 @@ def main() -> None:
         "ambiguous_called_functions": len(ambiguous_functions),
         "mapped_data_symbols": len(mapped_data),
         "ambiguous_data_symbols": len(ambiguous_data),
+        "functions": [
+            {
+                "name": function.names[0],
+                "source_address": f"0x{function.address:08X}",
+                "target_address": (
+                    f"0x{function.target:08X}" if function.target is not None else None
+                ),
+                "size": function.size,
+                "exact_bytes": function.exact,
+                "source_path": source_path(function.address, source_ranges),
+            }
+            for function in functions
+        ],
         "unmapped": [
             {"name": function.names[0], "address": f"0x{function.address:08X}", "size": function.size}
             for function in functions

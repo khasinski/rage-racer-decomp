@@ -1,4 +1,5 @@
 /* Manual Japanese v1.0 linker symbols go here. */
+func_80034838 = FramesToMilliseconds;
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */

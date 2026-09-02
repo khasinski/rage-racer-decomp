@@ -202,6 +202,21 @@ def write_linker_aliases(path: Path, aliases: dict[str, int]) -> None:
     path.write_text("\n".join(lines) + "\n")
 
 
+def read_regional_units(path: Path) -> list[tuple[int, int, str, str]]:
+    """Read hand-decompiled regional C ranges preserved across ``make port``."""
+
+    if not path.exists():
+        return []
+    result: list[tuple[int, int, str, str]] = []
+    for unit in json.loads(path.read_text()):
+        start = int(unit["start"], 0)
+        end = int(unit["end"], 0)
+        if start >= end:
+            raise ValueError(f"invalid regional unit range 0x{start:X}..0x{end:X}")
+        result.append((start, end, "c", unit["path"]))
+    return result
+
+
 def append_text_aliases(
     target_symbols: Path,
     source_symbols: dict[str, int],
@@ -444,6 +459,11 @@ def main() -> None:
     )
     parser.add_argument("--report", type=Path)
     parser.add_argument(
+        "--regional-units",
+        type=Path,
+        help="JSON ranges for version-specific C units which make port must preserve",
+    )
+    parser.add_argument(
         "--exclude", type=Path,
         help="newline-separated PAL unit paths proven non-identical after linking",
     )
@@ -462,6 +482,9 @@ def main() -> None:
         f"configs/{args.version}/pal_text_aliases.txt"
     )
     report_path = args.report or Path(f"configs/{args.version}/portable_text.json")
+    regional_units_path = args.regional_units or Path(
+        f"configs/{args.version}/regional_text_units.json"
+    )
     exclude_path = args.exclude or Path(f"configs/{args.version}/nonportable_pal_text.txt")
     excluded = {
         line.strip()
@@ -696,6 +719,17 @@ def main() -> None:
 
     selected.sort()
     selected_segments.sort()
+    regional_units = read_regional_units(regional_units_path)
+    for regional_start, regional_end, _, regional_path in regional_units:
+        if any(
+            regional_start < selected_end and selected_start < regional_end
+            for selected_start, selected_end, _, _ in selected_segments
+        ):
+            raise ValueError(
+                f"regional unit {regional_path} overlaps an automatically selected unit"
+            )
+    selected_segments.extend(regional_units)
+    selected_segments.sort()
     payload_end = len(target_data)
     rewrite_main_subsegments(
         target_config,
@@ -722,6 +756,8 @@ def main() -> None:
             (rodata_end or 0) - (rodata_start or 0)
             for _, _, _, _, _, rodata_start, rodata_end in selected
         ),
+        "regional_units": len(regional_units),
+        "regional_text_bytes": sum(end - start for start, end, _, _ in regional_units),
         "text_aliases": aliases,
         "inferred_externals": len(inferred_externals),
         "selected": [

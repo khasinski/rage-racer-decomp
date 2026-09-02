@@ -188,7 +188,7 @@ segments:
       - [0x23E7C, asm, main/023E7C_main]
       - [0x24EEC, c, PAL/main/asset/race_data_installation]
       - [0x24FA8, c, PAL/main/audio/sound_initialization]
-      - [0x25038, asm, main/025038_main]
+      - [0x25038, c, JAP10/main/race/time_conversion]
       - [0x250B4, c, PAL/main/race/replay_cars]
       - [0x258FC, c, PAL/main/race/draw_split_times]
       - [0x25A5C, asm, main/025A5C_main]

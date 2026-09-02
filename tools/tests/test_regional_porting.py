@@ -3,10 +3,16 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tools.scripts.map_version_functions import LOAD_ADDRESS, normalize
+from tools.scripts.map_version_functions import (
+    LOAD_ADDRESS,
+    normalize,
+    read_source_ranges,
+    source_path,
+)
 from tools.scripts.port_pal_text_units import (
     infer_exact_address,
     infer_range_start,
+    read_regional_units,
     rewrite_main_subsegments,
 )
 
@@ -81,6 +87,34 @@ class ConfigRewriteTest(unittest.TestCase):
         self.assertIn("[0x920, rodata, main/000920_main]", result)
         self.assertIn("[0x1000, asm, main/001000_main]", result)
         self.assertIn("[0x1100, c, PAL/code]", result)
+
+    def test_reads_regional_c_units(self):
+        with tempfile.TemporaryDirectory() as temp:
+            manifest = Path(temp) / "regional_text_units.json"
+            manifest.write_text(
+                '[{"start":"0x1200","end":"0x1280","path":"JAP10/code"}]'
+            )
+            self.assertEqual(
+                read_regional_units(manifest),
+                [(0x1200, 0x1280, "c", "JAP10/code")],
+            )
+
+
+class FunctionSourceRangeTest(unittest.TestCase):
+    def test_assigns_functions_to_c_units(self):
+        config_text = """segments:
+  - [0x800, c, PAL/first]
+  - [0x880, asm, gap]
+  - [0x900, c, PAL/second]
+  - [0x980]
+"""
+        with tempfile.TemporaryDirectory() as temp:
+            config = Path(temp) / "main.yaml"
+            config.write_text(config_text)
+            ranges = read_source_ranges(config)
+        self.assertEqual(source_path(LOAD_ADDRESS + 4, ranges), "PAL/first")
+        self.assertIsNone(source_path(LOAD_ADDRESS + 0x84, ranges))
+        self.assertEqual(source_path(LOAD_ADDRESS + 0x104, ranges), "PAL/second")
 
 
 if __name__ == "__main__":
