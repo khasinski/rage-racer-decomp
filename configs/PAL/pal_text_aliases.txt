@@ -1,0 +1,1 @@
+/* PAL is the source version and needs no regional text aliases. */

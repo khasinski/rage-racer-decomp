@@ -1107,6 +1107,8 @@ SpuSetCommonAttr = 0x8007AFE0; // type:func
 
 // Changed callees inferred from corresponding PAL J/JAL sites.
 // Conflicting observations deliberately remain unnamed assembly.
+InitSubsystems = 0x800163A4; // type:func inferred from 1 call(s)
+SetupDisplay480 = 0x8001C05C; // type:func inferred from 4 call(s)
 SubmitTerrainCells = 0x80027E10; // type:func inferred from 3 call(s)
 SubmitModel = 0x80028C08; // type:func inferred from 23 call(s)
 SubmitCourseModel = 0x800294D0; // type:func inferred from 12 call(s)
@@ -1118,6 +1120,7 @@ UpdateLapAndFinish = 0x800356AC; // type:func inferred from 1 call(s)
 UpdateRaceCars = 0x8003AE48; // type:func inferred from 1 call(s)
 UpdateAttractCars = 0x8003B894; // type:func inferred from 3 call(s)
 BuildSaveIconBlock = 0x8005F3D0; // type:func inferred from 1 call(s)
+WriteMemoryCardSaveSlot = 0x8006043C; // type:func inferred from 1 call(s)
 BiosBuInit = 0x80062E90; // type:func inferred from 1 call(s)
 BiosSetMemSize = 0x80062EA0; // type:func inferred from 1 call(s)
 OpenEvent = 0x80062EB0; // type:func inferred from 9 call(s)
@@ -1135,6 +1138,8 @@ BiosFileWrite = 0x80062F70; // type:func inferred from 5 call(s)
 BiosFileClose = 0x80062F80; // type:func inferred from 5 call(s)
 BiosFormatDevice = 0x80062F90; // type:func inferred from 1 call(s)
 BiosFirstFile = 0x80062FA0; // type:func inferred from 1 call(s)
+BiosNextFile = 0x80062FB0; // type:func inferred from 1 call(s)
+g_BiosCallStubs = 0x80063AAC; // type:func inferred from 10 call(s)
 _card_info = 0x80063ABC; // type:func inferred from 3 call(s)
 _card_load = 0x80063ACC; // type:func inferred from 3 call(s)
 InitCARD = 0x80063ADC; // type:func inferred from 1 call(s)
@@ -1148,6 +1153,7 @@ MulMatrix2 = 0x80069278; // type:func inferred from 85 call(s)
 ScaleMatrix = 0x80069438; // type:func inferred from 8 call(s)
 RotMatrix = 0x80069A28; // type:func inferred from 4 call(s)
 DeliverEvent = 0x8006A0E8; // type:func inferred from 4 call(s)
+SysEnqIntRPStub = 0x8006E354; // type:func inferred from 1 call(s)
 ReturnFromException = 0x8006E364; // type:func inferred from 2 call(s)
 ResetEntryInt = 0x8006E374; // type:func inferred from 1 call(s)
 HookEntryInt = 0x8006E384; // type:func inferred from 2 call(s)
@@ -2674,6 +2680,13 @@ g_SndKeyOffLow = 0x801F4330; // inferred from 22 reference(s)
 g_SndKeyOffHigh = 0x801F4334; // inferred from 21 reference(s)
 
 // PAL text-unit aliases begin (generated)
-SysEnqIntRPStub = 0x8006E354; // type:func
+_card_write = 0x80063B34; // type:func
+func_80069724 = 0x80069434; // type:func
+func_80069C94 = 0x800699A4; // type:func
+func_8006A018 = 0x80069D28; // type:func
+func_8006B330 = 0x8006B040; // type:func
 RestoreKernelRegisters = 0x8006E3D0; // type:func
+func_80075420 = 0x80075130; // type:func
+func_80076060 = 0x80075D70; // type:func
+WaitEvent = 0x8007AD14; // type:func
 // PAL text-unit aliases end (generated)

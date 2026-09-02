@@ -48,7 +48,7 @@ OBJS := $(ASM_OBJS) $(C_OBJS)
 C_DEPS := $(C_OBJS:.o=.o.d)
 -include $(C_DEPS)
 
-.PHONY: all setup stage split build check audit-code test progress expected report clean distclean help
+.PHONY: all setup stage port split build check audit-code test progress expected report clean distclean help
 
 all: build check
 
@@ -58,6 +58,13 @@ setup:
 
 stage:
 	$(PY) tools/scripts/stage_discs.py
+
+port:
+	@if [ "$(VERSION)" = PAL ]; then echo "port requires VERSION=USA, JAP10, or JAP11" >&2; exit 2; fi
+	$(PY) tools/scripts/map_version_functions.py --target-exe $(TARGET_BIN) \
+	      --output configs/$(VERSION)/sym.main.txt \
+	      --report $(BUILD)/function-map.json
+	$(PY) tools/scripts/port_pal_text_units.py $(VERSION)
 
 split:
 	rm -rf $(ASM_DIR) $(LD_SCRIPT) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES) $(ADDR_HALVES)
@@ -86,6 +93,7 @@ UNDEFINED_FUNCS := linkers/$(VERSION)/undefined_funcs_auto.$(BASENAME).txt
 UNDEFINED_MANUAL := linkers/$(VERSION)/undefined_syms_manual.txt
 ADDR_ALIASES := linkers/$(VERSION)/undefined_addr_aliases.$(BASENAME).txt
 ADDR_HALVES := linkers/$(VERSION)/addr_halves.$(BASENAME).txt
+PAL_TEXT_ALIASES := configs/$(VERSION)/pal_text_aliases.txt
 
 # A coarse assembly-only comparison target has no C relocations for
 # gen_nonmatching_asm.py to record. Keep the linker dependency present; once a
@@ -101,15 +109,17 @@ build: $(OUT_BIN)
 # so linking them would pin each address forever. They stay on disk because the
 # disassembler reads them for symbol names. This target distils them down to
 # the addresses the link actually still needs, and only that file is linked.
-$(ADDR_ALIASES): $(OBJS) $(UNDEFINED_MANUAL) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_HALVES) configs/$(VERSION)/sym.main.txt
+$(ADDR_ALIASES): $(OBJS) $(UNDEFINED_MANUAL) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_HALVES) $(PAL_TEXT_ALIASES) configs/$(VERSION)/sym.main.txt
 	$(PY) tools/scripts/gen_undefined_addr_aliases.py --nm $(NM) --output $@ \
 	      --source $(UNDEFINED_SYMS) --source $(UNDEFINED_FUNCS) \
 	      --source configs/$(VERSION)/sym.main.txt \
-	      --manual $(UNDEFINED_MANUAL) --manual $(ADDR_HALVES) $(OBJS)
+	      --manual $(UNDEFINED_MANUAL) --manual $(ADDR_HALVES) \
+	      --manual $(PAL_TEXT_ALIASES) $(OBJS)
 
-$(ELF): $(OBJS) $(LD_SCRIPT) $(UNDEFINED_MANUAL) $(ADDR_ALIASES) $(ADDR_HALVES)
+$(ELF): $(OBJS) $(LD_SCRIPT) $(UNDEFINED_MANUAL) $(ADDR_ALIASES) $(ADDR_HALVES) $(PAL_TEXT_ALIASES)
 	$(LD) -EL -T $(LD_SCRIPT) \
 	      -T $(UNDEFINED_MANUAL) -T $(ADDR_ALIASES) -T $(ADDR_HALVES) \
+	      -T $(PAL_TEXT_ALIASES) \
 	      -Map $(BUILD)/$(BASENAME).map -o $@
 
 $(OUT_BIN): $(ELF)
@@ -125,7 +135,8 @@ audit-code:
 # Enumerated rather than discovered: tools/ has no __init__.py, so unittest
 # discovery cannot import it, but the namespace package resolves by name.
 TESTS := tools.tests.test_code_debt tools.tests.test_alloc_diff tools.tests.test_try_drop_raw \
-         tools.tests.test_gen_expected tools.tests.test_gen_objdiff_config
+         tools.tests.test_gen_expected tools.tests.test_gen_objdiff_config \
+         tools.tests.test_regional_porting
 
 test:
 	$(PY) -m unittest $(TESTS)
@@ -156,6 +167,7 @@ help:
 	@echo "Targets:"
 	@echo "  setup             Create .venv and install Python tooling"
 	@echo "  stage             Symlink local disc dumps and extract boot EXEs"
+	@echo "  port VERSION=USA  Refresh a regional split from the verified PAL build"
 	@echo "  split VERSION=PAL Run splat for PAL, USA, JAP10, or JAP11"
 	@echo "  build VERSION=PAL Build split output"
 	@echo "  check VERSION=PAL Verify rebuilt EXE SHA-1"

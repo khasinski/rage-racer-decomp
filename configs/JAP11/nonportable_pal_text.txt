@@ -5,3 +5,6 @@ PAL/main/race/replay_recording
 PAL/main/race/replay
 PAL/main/car/car_orientation
 PAL/main/render/race_hud
+PAL/main/menu/draw_car_name_plate
+PAL/main/menu/title_screen
+PAL/main/race/prologue

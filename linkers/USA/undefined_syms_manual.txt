@@ -1,2 +1,9 @@
 /* Manual USA linker symbols go here. */
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
+
+/* Region-independent aliases used by PAL translation units. */
+g_AudioRuntimeState = g_AudioLoadedSlotMask;
+g_FinalSkyOrderingTable = 0x1F800004;
+g_ScratchRenderMode = 0x1F800084;
+BiosExit = g_BiosCallStubs;
+SysEnqIntRP = SysEnqIntRPStub;

@@ -340,6 +340,20 @@ def main() -> None:
     ]
     named_addresses = read_named_addresses(symbol_paths)
     named_functions = read_named_functions(symbol_paths)
+    # Some hand-written callable stubs are stored as words in .text and are
+    # consequently typed as data in the PAL symbols. A J/JAL target proves
+    # their callable role for regional mapping.
+    for address, address_names in named_addresses.items():
+        names = named_functions.setdefault(address, [])
+        names.extend(name for name in address_names if name not in names)
+        names.sort(key=name_rank)
+    # The linked PAL ELF also contains semantic function names which predate
+    # the hand-maintained symbol file. Include them so a changed callee can be
+    # recovered from matching call sites even when its own body cannot map.
+    for function in functions:
+        names = named_functions.setdefault(function.address, [])
+        names.extend(name for name in function.names if name not in names)
+        names.sort(key=name_rank)
     inferred_functions, ambiguous_functions = infer_called_functions(
         source, target, functions, named_functions
     )
