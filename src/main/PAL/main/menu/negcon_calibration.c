@@ -8,6 +8,10 @@
 #include "game/state.h"
 #include "game/input_internal.h"
 
+#ifndef NEGCON_CALIBRATION_USES_JAPANESE_SPRITES
+#define NEGCON_CALIBRATION_USES_JAPANESE_SPRITES 0
+#endif
+
 /* Copied into a local solely to preserve the retail code shape. */
 
 /* The 0..3 steering-play setting this screen edits. */
@@ -29,17 +33,38 @@ void DrawNegconSteerPlayScreen(void) {
     s32 y;
 
     unused = g_NegconSteerPlayUvQuad;
+#if !NEGCON_CALIBRATION_USES_JAPANESE_SPRITES
     DrawSpriteString(0x18, 0x30, g_MsgNegconSteerPlay, 0x7F81);
+#endif
     ot = g_DrawBuffer + 0xCC;
     prim = SCRATCH_PRIM_CURSOR_AS(u8);
     prim = DrawLeftArrow(ot, prim, 0x28, 0xE0, g_NegconSteerPlay != 0);
     prim = DrawRightArrow(ot, prim, 0x108, 0xE0, g_NegconSteerPlay != 3);
+#if NEGCON_CALIBRATION_USES_JAPANESE_SPRITES
+    prim = GameQueueSpriteTrans(
+        ot, prim, 0x18, 0x30, 0x3C, 0x18, 0, 0, 0x7F81);
+    prim = GameQueueSpriteTrans(
+        ot, prim, 0x50, 0x30, 0x40, 0x18, 0x58, 0x18, 0x7F81);
+#else
     prim = GameQueueSpriteTrans(
         ot, prim, 0x70, 0x30, 0xC, 0x18, 0x8C, 0x18, 0x7F81);
+#endif
     prim = GameQueueSpriteTrans(
-        ot, prim, 0x7C, 0x30, 0xC, 0x18, g_NegconSteerPlay * 12 + 152, 0x18, 0x7F81);
+        ot, prim,
+#if NEGCON_CALIBRATION_USES_JAPANESE_SPRITES
+        0x90,
+#else
+        0x7C,
+#endif
+        0x30, 0xC, 0x18, g_NegconSteerPlay * 12 + 152, 0x18, 0x7F81);
     prim = GameQueueSpriteTrans(
-        ot, prim, 0x88, 0x30, 0xC, 0x18, 0x6C, 0x30, 0x7F81);
+        ot, prim,
+#if NEGCON_CALIBRATION_USES_JAPANESE_SPRITES
+        0x9C,
+#else
+        0x88,
+#endif
+        0x30, 0xC, 0x18, 0x6C, 0x30, 0x7F81);
     prim = QueueDrawModePrim(ot, prim, 0x3F);
     prim = AddTilePrim(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
     prim = AddTilePrim(ot, prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
@@ -113,11 +138,19 @@ void DrawNegconMaxTwistScreen(void) {
     s32 w;
 
     unused = g_NegconMaxTwistUvQuad;
+#if !NEGCON_CALIBRATION_USES_JAPANESE_SPRITES
     DrawSpriteString(0x18, 0x30, g_MsgNegconMaxTwist, 0x7F81);
+#endif
     ot = g_DrawBuffer + 0xCC;
     prim = SCRATCH_PRIM_CURSOR_AS(u8);
     prim = DrawLeftArrow(ot, prim, 0x28, 0xE0, g_NegconMaxTwist != 0);
     prim = DrawRightArrow(ot, prim, 0x108, 0xE0, g_NegconMaxTwist != 3);
+#if NEGCON_CALIBRATION_USES_JAPANESE_SPRITES
+    prim = GameQueueSpriteTrans(
+        ot, prim, 0x18, 0x30, 0x24, 0x18, 0, 0, 0x7F81);
+    prim = GameQueueSpriteTrans(
+        ot, prim, 0x3C, 0x30, 0x18, 0x18, 0xC8, 0x18, 0x7F81);
+#endif
     if (g_NegconMaxTwist == 3) {
         xoff = 0;
         w = 0x24;
@@ -126,8 +159,20 @@ void DrawNegconMaxTwistScreen(void) {
         w = 0x18;
     }
     prim = GameQueueSpriteTrans(
-        ot, prim, xoff + 0x88, 0x30, w, 0x18, g_NegconMaxTwist * 24, 0x30, 0x7F81);
-    prim = GameQueueSpriteTrans(ot, prim, 0xAC, 0x30, 4, 0x18, 0x78, 0x30, 0x7F81);
+        ot, prim,
+#if NEGCON_CALIBRATION_USES_JAPANESE_SPRITES
+        xoff + 0x54,
+#else
+        xoff + 0x88,
+#endif
+        0x30, w, 0x18, g_NegconMaxTwist * 24, 0x30, 0x7F81);
+    prim = GameQueueSpriteTrans(ot, prim,
+#if NEGCON_CALIBRATION_USES_JAPANESE_SPRITES
+        0x78,
+#else
+        0xAC,
+#endif
+        0x30, 4, 0x18, 0x78, 0x30, 0x7F81);
     prim = QueueDrawModePrim(ot, prim, 0x3F);
     prim = AddTilePrim(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
     SCRATCH_PRIM_CURSOR_AS(u8) =

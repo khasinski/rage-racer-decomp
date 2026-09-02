@@ -9,6 +9,10 @@
 #include "game/render.h"
 #include "game/save_internal.h"
 
+#ifndef SERIES_CLEAR_PRESERVES_PROGRESS
+#define SERIES_CLEAR_PRESERVES_PROGRESS 1
+#endif
+
 void DrawPrizeMoneyPanel(s32 s0) {
     u8 sp[16];
     if (g_RaceProgress->money.value > 0x3B9AC9FF) {
@@ -128,6 +132,7 @@ void AdvanceGrandPrixClass(void) {
 
     if (g_ClassCompleted != 0) {
         if (g_SeriesCleared != 0) {
+#if SERIES_CLEAR_PRESERVES_PROGRESS
             s32 magic;
             GameRaceProgress *afterPtr;
 
@@ -138,6 +143,9 @@ void AdvanceGrandPrixClass(void) {
             afterPtr = g_RaceProgress;
             afterPtr->money.value = magic;
             afterPtr->maxClassReached = oldValue;
+#else
+            ResetProgressSlot(g_CarTable, g_RaceProgress);
+#endif
             ResetCourseProgress(0);
             BeginEndingFmv(0x21);
         } else {

@@ -7,6 +7,10 @@
 #include "game/state.h"
 #include "game/input_internal.h"
 
+#ifndef NEGCON_NEUTRAL_USES_SPRITES
+#define NEGCON_NEUTRAL_USES_SPRITES 0
+#endif
+
 
 /* The two 0..7 selections; g_PadType picks which one the screen edits. */
 
@@ -135,10 +139,18 @@ void DrawNegconNeutralScreen(void) {
     u8 *ot;
     u8 *prim;
 
+#if NEGCON_NEUTRAL_USES_SPRITES
+    ot = g_DrawBuffer + 0xD0;
+    prim = *cursor;
+    prim = GameQueueSpriteTrans(ot, prim, 0x18, 0x30, 0x100, 0x18, 0, 0, 0x7F81);
+    prim = GameQueueSpriteTrans(ot, prim, 0x18, 0x48, 0x5C, 0x18, 0, 0x18, 0x7F81);
+    prim = QueueDrawModePrim(ot, prim, 0x3F);
+#else
     DrawSpriteString(0x18, 0x30, g_MsgNegconUntwistedLine1, 0x7F81);
     DrawSpriteString(0x18, 0x48, g_MsgNegconUntwistedLine2, 0x7F81);
     ot = g_DrawBuffer + 0xD0;
     prim = *cursor;
+#endif
     prim = AddTilePrim(ot, prim, 0, 0x28, 0x124, 0x40, 0, 0, 0);
     *cursor = AddTilePrim(ot, prim, 0, 0x26, 0x125, 0x44, 0xFF, 0xFF, 0xFF);
 }

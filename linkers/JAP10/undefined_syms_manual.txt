@@ -8,6 +8,13 @@ func_8005EF38 = BuildSaveIconBlock;
 g_FmtString = 0x80012D54;
 g_SaveIconRect = 0x8009AC04;
 func_80039A64 = ClampCarLateralOffset;
+func_800156F4 = DrawNegconNeutralScreen;
+func_800208A8 = AdvanceGrandPrixClass;
+func_80015994 = DrawNegconSteerPlayScreen;
+func_80015E94 = DrawNegconMaxTwistScreen;
+g_NegconSteerPlayUvQuad = 0x80010028;
+g_NegconMaxTwistUvQuad = 0x80010030;
+g_NegconPlayPercent = 0x8007BABC;
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */

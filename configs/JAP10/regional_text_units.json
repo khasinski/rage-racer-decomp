@@ -23,5 +23,20 @@
     "start": "0x2A264",
     "end": "0x2A3A4",
     "path": "JAP10/main/car/clamp_car_lateral_offset"
+  },
+  {
+    "start": "0x5A10",
+    "end": "0x6194",
+    "path": "JAP10/main/menu/controller_config"
+  },
+  {
+    "start": "0x10C58",
+    "end": "0x11358",
+    "path": "JAP10/main/race/class_progress"
+  },
+  {
+    "start": "0x6194",
+    "end": "0x6A3C",
+    "path": "JAP10/main/menu/negcon_calibration"
   }
 ]
