@@ -1,12 +1,12 @@
 {
   "version": "JAP10",
-  "portable_units": 299,
-  "portable_text_bytes": 325396,
+  "portable_units": 301,
+  "portable_text_bytes": 326200,
   "portable_rodata_bytes": 2464,
-  "regional_units": 16,
-  "regional_text_bytes": 13836,
+  "regional_units": 17,
+  "regional_text_bytes": 14160,
   "text_aliases": 9,
-  "inferred_externals": 1949,
+  "inferred_externals": 1951,
   "selected": [
     {
       "start": "0x4B68",
@@ -172,6 +172,16 @@
       "path": "PAL/main/race/record_entry",
       "rodata_start": "0x1774",
       "rodata_end": "0x1790"
+    },
+    {
+      "start": "0x13600",
+      "end": "0x13738",
+      "path": "PAL/main/boot/boot_scene"
+    },
+    {
+      "start": "0x1387C",
+      "end": "0x13A68",
+      "path": "PAL/main/boot/boot_scene_tail"
     },
     {
       "start": "0x13A68",
@@ -1648,9 +1658,8 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/boot/boot_scene",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "path": "PAL/main/boot/boot_logo_update",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/menu/screen_adjust_update",

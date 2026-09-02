@@ -10,6 +10,7 @@
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
+#if !defined(BOOT_SCENE_ONLY_LOGO_UPDATE) && !defined(BOOT_SCENE_ONLY_TAIL)
 
 void DrawBootLogo(void) {
     u8 *base;
@@ -44,7 +45,10 @@ void DrawBootLogo(void) {
     *scratch = QueueDrawModePrim(base, next, 5);
 }
 
+#elif defined(BOOT_SCENE_ONLY_LOGO_UPDATE)
+
 void UpdateBootLogoScene(void) {
+#ifndef BOOT_LOGO_JAPAN
     BootLogoState state;
 
     if (g_BootLogoTimer < 110) {
@@ -114,7 +118,55 @@ void UpdateBootLogoScene(void) {
             SetDispMask(1);
         }
     }
+#else
+    BootLogoState state;
+
+    state = g_BootLogoState;
+    switch (state) {
+    case BOOT_LOGO_STATE_FADE_IN: {
+        u32 sceneTime;
+
+        sceneTime = g_SceneTimer;
+        if (sceneTime < 0x102) {
+            g_SceneTimer += 3;
+        }
+        if (g_AssetLoadState == 0) {
+            g_BootLogoState = BOOT_LOGO_STATE_HOLD;
+        }
+        break;
+    }
+    case BOOT_LOGO_STATE_HOLD:
+        g_SceneTimer -= 3;
+        if (g_SceneTimer == 0) {
+            g_BootLogoState = BOOT_LOGO_STATE_FADE_OUT;
+            SetupDisplay240(0, 0, 0);
+        }
+        break;
+    case BOOT_LOGO_STATE_FADE_OUT: {
+        u32 sceneTime;
+
+        g_SceneTimer++;
+        sceneTime = g_SceneTimer;
+        if (sceneTime >= 21) {
+            BeginIntroFmv(3);
+        }
+        break;
+    }
+    }
+
+    if (g_BootLogoState != BOOT_LOGO_STATE_FADE_OUT) {
+        u32 sceneTime;
+
+        DrawBootLogo();
+        sceneTime = g_SceneTimer;
+        if (sceneTime >= 10) {
+            SetDispMask(1);
+        }
+    }
+#endif
 }
+
+#else
 
 void InstallSceneLighting(void) {
     g_SceneColorMatrix = g_DefaultColorMatrix;
@@ -150,3 +202,5 @@ void EnterAttractScene(void) {
         g_FadeStep = -8;
     }
 }
+
+#endif

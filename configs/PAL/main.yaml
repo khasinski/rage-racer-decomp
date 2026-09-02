@@ -164,6 +164,8 @@ segments:
       - [0x125B8, c, PAL/main/race/record_entry]
       - [0x137AC, c, PAL/main/menu/ending_still]
       - [0x1397C, c, PAL/main/boot/boot_scene]
+      - [0x13AB4, c, PAL/main/boot/boot_logo_update]
+      - [0x13CDC, c, PAL/main/boot/boot_scene_tail]
       - [0x13EC8, c, PAL/main/menu/menu_hints]
       - [0x14260, c, PAL/main/menu/option_menu_fade]
       - [0x143B4, c, PAL/main/menu/option_menu]

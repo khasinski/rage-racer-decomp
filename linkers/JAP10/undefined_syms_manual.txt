@@ -32,6 +32,7 @@ func_80015994 = DrawNegconSteerPlayScreen;
 func_80015E94 = DrawNegconMaxTwistScreen;
 func_8001BD0C = SetupDisplay240;
 func_80025068 = UpdateScreenAdjustScreen;
+func_80022F38 = UpdateBootLogoScene;
 g_NegconSteerPlayUvQuad = 0x80010028;
 g_NegconMaxTwistUvQuad = 0x80010030;
 g_NegconPlayPercent = 0x8007BABC;
@@ -39,6 +40,7 @@ g_DispEnv0ScreenX = 0x8019C544;
 g_DispEnv0ScreenY = 0x8019C546;
 g_DispEnv1ScreenX = 0x801BFD2C;
 g_DispEnv1ScreenY = 0x801BFD2E;
+g_BootLogoState = 0x8007CD94;
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */
