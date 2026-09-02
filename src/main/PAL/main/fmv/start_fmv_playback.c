@@ -7,9 +7,15 @@
 #include "game/cd.h"
 #include "psyq/kernel.h"
 
+#ifndef FMV_RETRY_INITIAL_FRAME
+#define FMV_RETRY_INITIAL_FRAME 1
+#endif
+
 void StartFmvPlayback(FmvWorkBuffers *buffers) {
+#if FMV_RETRY_INITIAL_FRAME
     s32 fail;
     char frame_pad[8];
+#endif
 
     SetDispMask(0);
     g_FmvFrameWidth = 0;
@@ -26,6 +32,7 @@ void StartFmvPlayback(FmvWorkBuffers *buffers) {
         InitFmvContext(buf, 0, 0x18, 0, 0x108);
     }
     OpenFmvStream(UploadFmvSlice);
+#if FMV_RETRY_INITIAL_FRAME
     fail = -1;
     while (1) {
         FmvDecodeContext *buf = &g_FmvDecodeContext;
@@ -34,6 +41,9 @@ void StartFmvPlayback(FmvWorkBuffers *buffers) {
         }
         StartStreamRead(g_StreamLoc);
     }
+#else
+    PresentFmvFrame(&g_FmvDecodeContext);
+#endif
     g_FmvStreamEnded = 0;
     g_SceneTimer = 0;
     g_FmvState = FMV_PLAYBACK_DECODE;

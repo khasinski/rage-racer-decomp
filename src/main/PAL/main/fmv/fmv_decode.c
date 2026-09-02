@@ -9,10 +9,20 @@
 #include "game/fmv_decode_internal.h"
 #include "game/fmv_internal.h"
 
+#ifndef FMV_RECOVER_DECODE_STREAM
+#define FMV_RECOVER_DECODE_STREAM 1
+#endif
+
+#ifndef FMV_STREAM_LOC_SIZE
+#define FMV_STREAM_LOC_SIZE 16
+#endif
+
 void DecodeFmvFrame(void) {
+#if FMV_RECOVER_DECODE_STREAM
     s32 value;
     u32 sector;
-    u8 streamLoc[16];
+#endif
+    u8 streamLoc[FMV_STREAM_LOC_SIZE];
 
     g_SceneTimer++;
     if (g_SceneTimer == 4) {
@@ -22,6 +32,7 @@ void DecodeFmvFrame(void) {
     DecDCTin(g_FmvDecodeContext.vlcBuffers[g_FmvDecodeContext.vlcIndex], 3);
     DecDCTout(g_FmvStripBuffers[g_FmvStripIndex], (g_FmvStripWidth * g_FmvStripHeight) / 2);
 
+#if FMV_RECOVER_DECODE_STREAM
     while (PresentFmvFrame(&g_FmvDecodeContext) == -1) {
         value = StGetBackloc(streamLoc);
         printf(g_MsgFmvSector, value);
@@ -32,6 +43,9 @@ void DecodeFmvFrame(void) {
             StartStreamRead(streamLoc);
         }
     }
+#else
+    PresentFmvFrame(&g_FmvDecodeContext);
+#endif
 
     WaitFmvDecode(&g_FmvDecodeContext, 0);
     if (g_FmvStreamEnded == 1) {

@@ -3,8 +3,8 @@
   "portable_units": 297,
   "portable_text_bytes": 322920,
   "portable_rodata_bytes": 2464,
-  "regional_units": 8,
-  "regional_text_bytes": 9108,
+  "regional_units": 11,
+  "regional_text_bytes": 10736,
   "text_aliases": 9,
   "inferred_externals": 1912,
   "selected": [

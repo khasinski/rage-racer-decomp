@@ -5,9 +5,24 @@
     "path": "JAP10/main/race/time_conversion"
   },
   {
+    "start": "0xEE04",
+    "end": "0xEEEC",
+    "path": "JAP10/main/fmv/start_fmv_playback"
+  },
+  {
+    "start": "0xEEEC",
+    "end": "0xF0E4",
+    "path": "JAP10/main/fmv/fmv_decode"
+  },
+  {
     "start": "0xF12C",
     "end": "0xF304",
     "path": "JAP10/main/fmv/open_fmv_stream"
+  },
+  {
+    "start": "0xF304",
+    "end": "0xF680",
+    "path": "JAP10/main/fmv/stream_playback"
   },
   {
     "start": "0x505A4",
