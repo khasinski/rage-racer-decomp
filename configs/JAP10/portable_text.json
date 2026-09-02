@@ -3,10 +3,10 @@
   "portable_units": 297,
   "portable_text_bytes": 322920,
   "portable_rodata_bytes": 2464,
-  "regional_units": 12,
-  "regional_text_bytes": 11508,
+  "regional_units": 14,
+  "regional_text_bytes": 12404,
   "text_aliases": 9,
-  "inferred_externals": 1912,
+  "inferred_externals": 1934,
   "selected": [
     {
       "start": "0x4B68",
@@ -1566,9 +1566,13 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/boot/main_loop",
+      "path": "PAL/main/boot/init_subsystems",
       "reason": "structural match is not unique",
       "matches": 0
+    },
+    {
+      "path": "PAL/main/boot/main_loop",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/render/track_textures",

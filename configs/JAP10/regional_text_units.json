@@ -1,5 +1,15 @@
 [
   {
+    "start": "0x6A3C",
+    "end": "0x6B80",
+    "path": "JAP10/main/boot/init_subsystems"
+  },
+  {
+    "start": "0x6B80",
+    "end": "0x6DBC",
+    "path": "JAP10/main/boot/main_loop"
+  },
+  {
     "start": "0x23E7C",
     "end": "0x24180",
     "path": "JAP10/main/race/race_hud_time"

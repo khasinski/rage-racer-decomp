@@ -14,52 +14,10 @@
 #include "psyq/gpu.h"
 #include "psyq/kernel.h"
 #include "psyq/snd.h"
-/*
- * One-shot boot chain called from MainLoop: sequencer, sound runtime, GPU
- * and DMA, the pad, then the persistent settings block reset to its defaults
- * (NeGcon uncalibrated, both button mappings on preset 0) and the scratchpad
- * camera block primed before the first frame.
- */
-void InitSubsystems(void) {
-    ssinit();
-    InitSoundRuntime();
-    ResetGraph(0);
-    SetGraphDebug(0);
-    SetDispMask(0);
-    g_ScreenOffsetY.value = 0;
-    g_ScreenOffsetX.value = 0;
-    SetDMAInterruptState(1);
-    InitGeom();
-    GameInitPad();
-    RestartMemoryCard();
-    g_NegconSteerPlay = 1;
-    g_PadMappingIndex = 0;
-    g_NegconMappingIndex = 0;
-    g_NegconSteerNeutral = 0;
-    g_NegconNeutralI = 0;
-    g_NegconNeutralII = 0;
-    g_NegconNeutralL = 0;
-    g_NegconMaxTwist = 0;
-    g_PadErrorState = PAD_ERROR_STATE_NONE;
-    g_PadValidateCountdown = 0x21;
-    g_PadErrorHoldBits = 0;
-    g_MirrorMode = 0;
-    ResetReplayFrameCounts();
-    ApplyPadButtonMapping();
-    InitRecordTables();
-    InitRenderState(5);
-    InitSaveDefaults();
-    SCRATCH_VIEW_Y = -64;
-    SCRATCH_VIEW_Z = -256;
-    g_AdvancedSeriesUnlocked = 0;
-    SCRATCH_VIEW_X = 0;
-    SCRATCH_VIEW_ANGLE_X = 0x100;
-    SCRATCH_VIEW_ANGLE_Y = 0;
-    SCRATCH_VIEW_ANGLE_Z = 0;
-    SetCameraRotMatrix();
-}
 
-
+#ifndef BOOT_DISPLAY_SETUP
+#define BOOT_DISPLAY_SETUP SetupDisplay240
+#endif
 /* Scene handlers, indexed by g_SceneId. */
 
 /*
@@ -84,7 +42,7 @@ void MainLoop(void) {
     InitCdAudio();
     g_FrameSyncThreshold = 0x80;
     SetDispMask(0);
-    SetupDisplay240(0, 0, 0);
+    BOOT_DISPLAY_SETUP(0, 0, 0);
     g_SceneTimer = 0;
     g_SceneId = 1;
     RequestBootAssets();
