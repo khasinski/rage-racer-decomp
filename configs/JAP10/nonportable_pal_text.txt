@@ -16,3 +16,4 @@ PAL/main/race/prologue
 PAL/main/boot/main_loop
 PAL/main/menu/display_setup
 PAL/main/menu/prize_money_screen
+PAL/main/car/update_car_driving

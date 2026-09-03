@@ -189,7 +189,7 @@ segments:
       - [0x1BFE4, c, PAL/main/car/lap_progress]
       - [0x1C644, asm, main/01C644_main]
       - [0x1F620, c, PAL/main/car/advance_car_position]
-      - [0x1F7CC, asm, main/01F7CC_main]
+      - [0x1F7CC, c, JAP10/main/car/update_car_driving]
       - [0x1FC14, c, PAL/main/track/blend_angle]
       - [0x1FC8C, c, PAL/main/track/interpolate_track_angle]
       - [0x1FD18, c, PAL/main/track/reverse_track_angle]

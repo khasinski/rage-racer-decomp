@@ -47,6 +47,11 @@
     "rodata_end": "0x1600"
   },
   {
+    "start": "0x1F7CC",
+    "end": "0x1FC14",
+    "path": "JAP10/main/car/update_car_driving"
+  },
+  {
     "start": "0xEE04",
     "end": "0xEEEC",
     "path": "JAP10/main/fmv/start_fmv_playback"

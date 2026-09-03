@@ -51,8 +51,11 @@ void UpdateCarDriving(PlayerCarRuntime *car, s32 unused) {
     spec = g_CarSpec;
     if (spec->redline + 1000 < route->engineRpm) {
         s16 v = g_SteerHoldFrames;
-        if (v >= 41 && route->gear == spec->topGear &&
-            car->shiftState == 0) {
+        if (v >= 41 && route->gear == spec->topGear
+#ifndef CAR_DRIVING_IGNORE_SHIFT_STATE
+            && car->shiftState == 0
+#endif
+        ) {
             idx = v + 24;
             if (idx >= 101) {
                 idx = 100;
