@@ -8,3 +8,7 @@ PAL/main/render/race_hud
 PAL/main/menu/draw_car_name_plate
 PAL/main/menu/title_screen
 PAL/main/race/prologue
+PAL/main/boot/main_loop
+PAL/main/menu/frontend
+PAL/main/race/race_scene
+PAL/lib/libgte/fog_geometry

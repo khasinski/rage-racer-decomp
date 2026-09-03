@@ -1,10 +1,12 @@
 {
   "version": "JAP11",
-  "portable_units": 302,
-  "portable_text_bytes": 326840,
+  "portable_units": 318,
+  "portable_text_bytes": 343352,
   "portable_rodata_bytes": 2464,
-  "text_aliases": 9,
-  "inferred_externals": 1963,
+  "regional_units": 0,
+  "regional_text_bytes": 0,
+  "text_aliases": 10,
+  "inferred_externals": 2068,
   "selected": [
     {
       "start": "0x4518",
@@ -197,6 +199,21 @@
       "rodata_end": "0x1794"
     },
     {
+      "start": "0x135C8",
+      "end": "0x136CC",
+      "path": "PAL/main/menu/update_ending_still"
+    },
+    {
+      "start": "0x136CC",
+      "end": "0x13804",
+      "path": "PAL/main/boot/boot_scene"
+    },
+    {
+      "start": "0x13948",
+      "end": "0x13B34",
+      "path": "PAL/main/boot/boot_scene_tail"
+    },
+    {
       "start": "0x13B34",
       "end": "0x13ECC",
       "path": "PAL/main/menu/menu_hints"
@@ -212,6 +229,16 @@
       "path": "PAL/main/menu/option_menu",
       "rodata_start": "0x1794",
       "rodata_end": "0x17AC"
+    },
+    {
+      "start": "0x15528",
+      "end": "0x15934",
+      "path": "PAL/main/menu/option_screens"
+    },
+    {
+      "start": "0x15B20",
+      "end": "0x160C0",
+      "path": "PAL/main/menu/option_screens_tail"
     },
     {
       "start": "0x160C0",
@@ -244,6 +271,16 @@
       "path": "PAL/lib/libcd/read"
     },
     {
+      "start": "0x17CDC",
+      "end": "0x17D74",
+      "path": "PAL/main/render/draw_shadowed_tile"
+    },
+    {
+      "start": "0x17D74",
+      "end": "0x18074",
+      "path": "PAL/main/save/draw_memory_card_screen"
+    },
+    {
       "start": "0x1A97C",
       "end": "0x1AA54",
       "path": "PAL/main/track/install_track_points"
@@ -257,6 +294,11 @@
       "start": "0x1C0B0",
       "end": "0x1C710",
       "path": "PAL/main/car/lap_progress"
+    },
+    {
+      "start": "0x1F660",
+      "end": "0x1F6EC",
+      "path": "PAL/main/car/draw_player_tachometer"
     },
     {
       "start": "0x1F6EC",
@@ -324,6 +366,11 @@
       "path": "PAL/main/race/draw_speed_digits"
     },
     {
+      "start": "0x2424C",
+      "end": "0x24990",
+      "path": "PAL/main/race/race_hud_text"
+    },
+    {
       "start": "0x24FB8",
       "end": "0x25074",
       "path": "PAL/main/asset/race_data_installation"
@@ -374,6 +421,16 @@
       "start": "0x2B01C",
       "end": "0x2B0AC",
       "path": "PAL/main/race/update_race_position"
+    },
+    {
+      "start": "0x2B0AC",
+      "end": "0x2B2C4",
+      "path": "PAL/main/car/steer_car_along_route"
+    },
+    {
+      "start": "0x2C698",
+      "end": "0x2CCCC",
+      "path": "PAL/main/car/race_camera_setup"
     },
     {
       "start": "0x2CCCC",
@@ -557,6 +614,11 @@
       "start": "0x3A30C",
       "end": "0x3BE74",
       "path": "PAL/main/menu/draw_team_logo_canvas"
+    },
+    {
+      "start": "0x3BE74",
+      "end": "0x3D514",
+      "path": "PAL/main/menu/menu_visual_effects"
     },
     {
       "start": "0x3E4B0",
@@ -863,6 +925,11 @@
       "path": "PAL/lib/libpress/mdec_callbacks"
     },
     {
+      "start": "0x54218",
+      "end": "0x54698",
+      "path": "PAL/lib/libpress/mdec_runtime"
+    },
+    {
       "start": "0x54A30",
       "end": "0x54EA8",
       "path": "PAL/lib/libgpu/texture_primitives"
@@ -986,6 +1053,11 @@
       "start": "0x59DC0",
       "end": "0x59E00",
       "path": "PAL/lib/libgte/leading_zero_count"
+    },
+    {
+      "start": "0x59E00",
+      "end": "0x59E5C",
+      "path": "PAL/lib/libgte/rotation_matrix"
     },
     {
       "start": "0x5A15C",
@@ -1123,6 +1195,16 @@
       "start": "0x5DCB8",
       "end": "0x5DE74",
       "path": "PAL/lib/libcd/dma_start"
+    },
+    {
+      "start": "0x5DE74",
+      "end": "0x5E058",
+      "path": "PAL/lib/libetc/vertical_sync"
+    },
+    {
+      "start": "0x5E078",
+      "end": "0x5E210",
+      "path": "PAL/lib/libetc/interrupt_wrappers"
     },
     {
       "start": "0x5E210",
@@ -1585,9 +1667,13 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/boot/main_loop",
+      "path": "PAL/main/boot/init_subsystems",
       "reason": "structural match is not unique",
       "matches": 0
+    },
+    {
+      "path": "PAL/main/boot/main_loop",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/render/track_textures",
@@ -1599,6 +1685,10 @@
     },
     {
       "path": "PAL/main/menu/frontend",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/menu/display_setup",
       "reason": "structural match is not unique",
       "matches": 0
     },
@@ -1625,17 +1715,17 @@
       "reason": "linked bytes differ"
     },
     {
-      "path": "PAL/main/menu/ending_still",
+      "path": "PAL/main/menu/draw_ending_still",
       "reason": "structural match is not unique",
       "matches": 0
     },
     {
-      "path": "PAL/main/boot/boot_scene",
+      "path": "PAL/main/boot/boot_logo_update",
       "reason": "structural match is not unique",
       "matches": 0
     },
     {
-      "path": "PAL/main/menu/option_screens",
+      "path": "PAL/main/menu/screen_adjust_update",
       "reason": "structural match is not unique",
       "matches": 0
     },
@@ -1644,12 +1734,12 @@
       "reason": "linked bytes differ"
     },
     {
-      "path": "PAL/main/render/sprite_string",
+      "path": "PAL/main/render/draw_sprite_string",
       "reason": "structural match is not unique",
       "matches": 0
     },
     {
-      "path": "PAL/main/save/draw_memory_card_screen",
+      "path": "PAL/main/save/draw_memory_card_message",
       "reason": "structural match is not unique",
       "matches": 0
     },
@@ -1730,7 +1820,12 @@
       "reason": "linked bytes differ"
     },
     {
-      "path": "PAL/main/race/race_hud_text",
+      "path": "PAL/main/race/race_hud_time",
+      "reason": "structural match is not unique",
+      "matches": 0
+    },
+    {
+      "path": "PAL/main/race/race_option_menu",
       "reason": "structural match is not unique",
       "matches": 0
     },
@@ -1740,9 +1835,13 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/race/race_scene",
+      "path": "PAL/main/race/update_lap_and_finish",
       "reason": "structural match is not unique",
       "matches": 0
+    },
+    {
+      "path": "PAL/main/race/race_scene",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/car/clamp_car_lateral_offset",
@@ -1755,7 +1854,7 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/menu/menu_visual_effects",
+      "path": "PAL/main/menu/draw_ranking_table",
       "reason": "structural match is not unique",
       "matches": 0
     },
@@ -1788,7 +1887,7 @@
       ]
     },
     {
-      "path": "PAL/lib/libpress/mdec_runtime",
+      "path": "PAL/lib/libpress/mdec_unpack_status",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_MdecUnpackStatus",
@@ -1797,6 +1896,10 @@
     },
     {
       "path": "PAL/lib/libgte/fog_geometry",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/lib/libgte/square_root_0",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_SquareRoot0"
@@ -1831,7 +1934,7 @@
       ]
     },
     {
-      "path": "PAL/lib/libgte/rotation_matrix",
+      "path": "PAL/lib/libgte/rot_matrix_asm",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_RotMatrix"
@@ -1845,7 +1948,7 @@
       ]
     },
     {
-      "path": "PAL/lib/libetc/vertical_sync",
+      "path": "PAL/lib/libetc/vertical_sync_asm",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_vertical_sync"
