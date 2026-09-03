@@ -1,10 +1,12 @@
 {
   "version": "USA",
-  "portable_units": 311,
-  "portable_text_bytes": 346844,
+  "portable_units": 328,
+  "portable_text_bytes": 358228,
   "portable_rodata_bytes": 2716,
-  "text_aliases": 9,
-  "inferred_externals": 2038,
+  "regional_units": 4,
+  "regional_text_bytes": 7300,
+  "text_aliases": 10,
+  "inferred_externals": 2132,
   "selected": [
     {
       "start": "0x4728",
@@ -229,6 +231,21 @@
       "rodata_end": "0x17F8"
     },
     {
+      "start": "0x1377C",
+      "end": "0x13880",
+      "path": "PAL/main/menu/update_ending_still"
+    },
+    {
+      "start": "0x13880",
+      "end": "0x139B8",
+      "path": "PAL/main/boot/boot_scene"
+    },
+    {
+      "start": "0x13AFC",
+      "end": "0x13CE8",
+      "path": "PAL/main/boot/boot_scene_tail"
+    },
+    {
       "start": "0x13CE8",
       "end": "0x14080",
       "path": "PAL/main/menu/menu_hints"
@@ -244,6 +261,16 @@
       "path": "PAL/main/menu/option_menu",
       "rodata_start": "0x17F8",
       "rodata_end": "0x1810"
+    },
+    {
+      "start": "0x156DC",
+      "end": "0x15AE8",
+      "path": "PAL/main/menu/option_screens"
+    },
+    {
+      "start": "0x15CD4",
+      "end": "0x16274",
+      "path": "PAL/main/menu/option_screens_tail"
     },
     {
       "start": "0x16274",
@@ -277,13 +304,23 @@
     },
     {
       "start": "0x17E90",
+      "end": "0x18008",
+      "path": "PAL/main/render/draw_sprite_string"
+    },
+    {
+      "start": "0x18008",
       "end": "0x180A0",
-      "path": "PAL/main/render/sprite_string"
+      "path": "PAL/main/render/draw_shadowed_tile"
     },
     {
       "start": "0x180A0",
-      "end": "0x18610",
+      "end": "0x183A0",
       "path": "PAL/main/save/draw_memory_card_screen"
+    },
+    {
+      "start": "0x183A0",
+      "end": "0x18610",
+      "path": "PAL/main/save/draw_memory_card_message"
     },
     {
       "start": "0x1ACCC",
@@ -299,6 +336,11 @@
       "start": "0x1C3FC",
       "end": "0x1CA5C",
       "path": "PAL/main/car/lap_progress"
+    },
+    {
+      "start": "0x1F9AC",
+      "end": "0x1FA38",
+      "path": "PAL/main/car/draw_player_tachometer"
     },
     {
       "start": "0x1FA38",
@@ -361,6 +403,16 @@
       "path": "PAL/main/race/draw_speed_digits"
     },
     {
+      "start": "0x245C8",
+      "end": "0x24D0C",
+      "path": "PAL/main/race/race_hud_text"
+    },
+    {
+      "start": "0x24D0C",
+      "end": "0x2533C",
+      "path": "PAL/main/race/race_option_menu"
+    },
+    {
       "start": "0x2533C",
       "end": "0x253F8",
       "path": "PAL/main/asset/race_data_installation"
@@ -411,6 +463,16 @@
       "start": "0x2B3A0",
       "end": "0x2B430",
       "path": "PAL/main/race/update_race_position"
+    },
+    {
+      "start": "0x2B430",
+      "end": "0x2B648",
+      "path": "PAL/main/car/steer_car_along_route"
+    },
+    {
+      "start": "0x2CA1C",
+      "end": "0x2D050",
+      "path": "PAL/main/car/race_camera_setup"
     },
     {
       "start": "0x2D050",
@@ -597,8 +659,13 @@
     },
     {
       "start": "0x3C1F8",
+      "end": "0x3D898",
+      "path": "PAL/main/menu/menu_visual_effects"
+    },
+    {
+      "start": "0x3D898",
       "end": "0x3E87C",
-      "path": "PAL/main/menu/menu_visual_effects",
+      "path": "PAL/main/menu/draw_ranking_table",
       "rodata_start": "0x2134",
       "rodata_end": "0x21A0"
     },
@@ -914,6 +981,11 @@
       "path": "PAL/lib/libpress/mdec_callbacks"
     },
     {
+      "start": "0x545E4",
+      "end": "0x54A64",
+      "path": "PAL/lib/libpress/mdec_runtime"
+    },
+    {
       "start": "0x54DFC",
       "end": "0x55274",
       "path": "PAL/lib/libgpu/texture_primitives"
@@ -1037,6 +1109,11 @@
       "start": "0x5A18C",
       "end": "0x5A1CC",
       "path": "PAL/lib/libgte/leading_zero_count"
+    },
+    {
+      "start": "0x5A1CC",
+      "end": "0x5A228",
+      "path": "PAL/lib/libgte/rotation_matrix"
     },
     {
       "start": "0x5A528",
@@ -1174,6 +1251,16 @@
       "start": "0x5E084",
       "end": "0x5E240",
       "path": "PAL/lib/libcd/dma_start"
+    },
+    {
+      "start": "0x5E240",
+      "end": "0x5E424",
+      "path": "PAL/lib/libetc/vertical_sync"
+    },
+    {
+      "start": "0x5E444",
+      "end": "0x5E5DC",
+      "path": "PAL/lib/libetc/interrupt_wrappers"
     },
     {
       "start": "0x5E5DC",
@@ -1626,9 +1713,13 @@
   ],
   "rejected": [
     {
-      "path": "PAL/main/boot/main_loop",
+      "path": "PAL/main/boot/init_subsystems",
       "reason": "structural match is not unique",
       "matches": 0
+    },
+    {
+      "path": "PAL/main/boot/main_loop",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/menu/title_screen",
@@ -1636,6 +1727,10 @@
     },
     {
       "path": "PAL/main/menu/frontend",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/menu/display_setup",
       "reason": "structural match is not unique",
       "matches": 0
     },
@@ -1648,17 +1743,17 @@
       "reason": "linked bytes differ"
     },
     {
-      "path": "PAL/main/menu/ending_still",
+      "path": "PAL/main/menu/draw_ending_still",
       "reason": "structural match is not unique",
       "matches": 0
     },
     {
-      "path": "PAL/main/boot/boot_scene",
+      "path": "PAL/main/boot/boot_logo_update",
       "reason": "structural match is not unique",
       "matches": 0
     },
     {
-      "path": "PAL/main/menu/option_screens",
+      "path": "PAL/main/menu/screen_adjust_update",
       "reason": "structural match is not unique",
       "matches": 0
     },
@@ -1748,7 +1843,7 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/race/race_hud_text",
+      "path": "PAL/main/race/race_hud_time",
       "reason": "structural match is not unique",
       "matches": 0
     },
@@ -1758,9 +1853,13 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/race/race_scene",
+      "path": "PAL/main/race/update_lap_and_finish",
       "reason": "structural match is not unique",
       "matches": 0
+    },
+    {
+      "path": "PAL/main/race/race_scene",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/car/clamp_car_lateral_offset",
@@ -1797,7 +1896,7 @@
       ]
     },
     {
-      "path": "PAL/lib/libpress/mdec_runtime",
+      "path": "PAL/lib/libpress/mdec_unpack_status",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_MdecUnpackStatus",
@@ -1806,6 +1905,10 @@
     },
     {
       "path": "PAL/lib/libgte/fog_geometry",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/lib/libgte/square_root_0",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_SquareRoot0"
@@ -1840,7 +1943,7 @@
       ]
     },
     {
-      "path": "PAL/lib/libgte/rotation_matrix",
+      "path": "PAL/lib/libgte/rot_matrix_asm",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_RotMatrix"
@@ -1854,7 +1957,7 @@
       ]
     },
     {
-      "path": "PAL/lib/libetc/vertical_sync",
+      "path": "PAL/lib/libetc/vertical_sync_asm",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_vertical_sync"

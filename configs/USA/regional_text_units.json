@@ -1,0 +1,24 @@
+[
+  {
+    "start": "0x6CE8",
+    "end": "0x6F24",
+    "path": "USA/main/boot/main_loop"
+  },
+  {
+    "start": "0xC05C",
+    "end": "0xC66C",
+    "path": "JAP10/main/menu/frontend",
+    "rodata_start": "0x141C",
+    "rodata_end": "0x1430"
+  },
+  {
+    "start": "0x26608",
+    "end": "0x2776C",
+    "path": "JAP10/main/race/race_scene"
+  },
+  {
+    "start": "0x58BE4",
+    "end": "0x58EB8",
+    "path": "JAP10/lib/libgte/fog_geometry"
+  }
+]

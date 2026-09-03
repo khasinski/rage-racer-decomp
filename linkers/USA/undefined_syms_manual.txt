@@ -1,4 +1,9 @@
 /* Manual USA linker symbols go here. */
+/* JAP10-named symbols the shared fog_geometry source references; the USA
+ * addresses are recovered from the retail relocation sites. */
+D_800941B4 = 0x80094814;
+func_80069804 = 0x80069CB8;
+
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */

@@ -5,3 +5,7 @@ PAL/main/car/car_orientation
 PAL/main/render/race_hud
 PAL/main/menu/title_screen
 PAL/main/race/prologue
+PAL/main/menu/frontend
+PAL/main/race/race_scene
+PAL/lib/libgte/fog_geometry
+PAL/main/boot/main_loop
