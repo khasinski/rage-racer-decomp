@@ -169,5 +169,15 @@
     "start": "0x5DF70",
     "end": "0x5DF90",
     "path": "PAL/lib/libetc/vertical_sync_asm"
+  },
+  {
+    "start": "0x117D8",
+    "end": "0x11A08",
+    "path": "JAP10/main/save/save_defaults"
+  },
+  {
+    "start": "0x58730",
+    "end": "0x58A04",
+    "path": "JAP10/lib/libgte/fog_geometry"
   }
 ]
