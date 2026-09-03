@@ -1,4 +1,106 @@
 /* Manual Japanese v1.1 linker symbols go here. */
+
+/* Local disassembly names for functions the regional C units define. */
+func_8001BD10 = SetupDisplay240;
+func_80020C24 = UpdatePrizeMoneyScreen;
+func_80023004 = UpdateBootLogoScene;
+func_80025134 = UpdateScreenAdjustScreen;
+func_80028B30 = func_80028A64;
+func_80028B94 = func_80028AC8;
+func_80028C24 = func_80028B58;
+func_80028CFC = func_80028C30;
+func_80028EBC = func_80028DF0;
+func_80028F24 = func_80028E58;
+func_80028FB0 = func_80028EE4;
+func_80029088 = func_80028FBC;
+func_800291D8 = func_8002910C;
+/* Entry point inside the relocatable GTE exception patch blob. */
+func_800698A4 = 0x800698A4;
+
+/* Address halves the handwritten terrain engine loads directly. */
+terrain_primitive_table_hi = jtbl_8007D294_main >> 16;
+terrain_primitive_table_lo = jtbl_8007D294_main & 0xFFFF;
+model_primitive_table_hi = jtbl_8007D2B4_main >> 16;
+model_primitive_table_lo = jtbl_8007D2B4_main & 0xFFFF;
+course_model_dispatch_1_hi = (jtbl_8007D2B4_main + 0x40) >> 16;
+course_model_dispatch_1_lo = (jtbl_8007D2B4_main + 0x40) & 0xFFFF;
+course_model_dispatch_2_hi = (jtbl_8007D2B4_main + 0x50) >> 16;
+course_model_dispatch_2_lo = (jtbl_8007D2B4_main + 0x50) & 0xFFFF;
+course_model_continue_0_hi = course_model_continue_0 >> 16;
+course_model_continue_0_lo = course_model_continue_0 & 0xFFFF;
+course_model_continue_1_hi = course_model_continue_1 >> 16;
+course_model_continue_1_lo = course_model_continue_1 & 0xFFFF;
+course_model_continue_2_hi = course_model_continue_2 >> 16;
+course_model_continue_2_lo = course_model_continue_2 & 0xFFFF;
+course_model_continue_3_hi = course_model_continue_3 >> 16;
+course_model_continue_3_lo = course_model_continue_3 & 0xFFFF;
+course_model_continue_4_hi = course_model_continue_4 >> 16;
+course_model_continue_4_lo = course_model_continue_4 & 0xFFFF;
+course_model_continue_5_hi = course_model_continue_5 >> 16;
+course_model_continue_5_lo = course_model_continue_5 & 0xFFFF;
+course_model_continue_6_hi = course_model_continue_6 >> 16;
+course_model_continue_6_lo = course_model_continue_6 & 0xFFFF;
+course_model_continue_7_hi = course_model_continue_7 >> 16;
+course_model_continue_7_lo = course_model_continue_7 & 0xFFFF;
+
+/* Data and bss addresses recovered from the retail JAP11 relocation sites. */
+func_800698A4 = 0x8006998C;
+g_BootLogoState = 0x8007CE7C;
+g_CarCornerOffsets = 0x8007D350;
+g_ClockTextBuffer = 0x8007D7B0;
+g_ClockTextMinUnits = 0x8007D7B1;
+g_ClockTextSecTens = 0x8007D7B3;
+g_ClockTextSecUnits = 0x8007D7B4;
+g_DispEnv0ScreenX = 0x8019C62C;
+g_DispEnv0ScreenY = 0x8019C62E;
+g_DispEnv1ScreenX = 0x801BFE14;
+g_DispEnv1ScreenY = 0x801BFE16;
+g_DrawEnv1 = 0x801BFDB0;
+g_FmtString = 0x80012D58;
+g_LaunchSpeedThresholds = 0x8007D360;
+g_McMessageColumnX = 0x8007D288;
+g_McMessageRows = 0x8007D23C;
+g_MirrorDrawEnv1 = 0x801BFE20;
+g_MsgOrdinalNd = 0x8001172C;
+g_MsgOrdinalRd = 0x80011730;
+g_MsgOrdinalSt = 0x80011728;
+g_MsgOrdinalTh = 0x80011734;
+g_NegconAccelMask = 0x801E4300;
+g_NegconAnalogI = 0x801E3B04;
+g_NegconAnalogII = 0x801E3B06;
+g_NegconAnalogL = 0x801E3B08;
+g_NegconBrakeMask = 0x801E4302;
+g_NegconMaxTwistUvQuad = 0x80010030;
+g_NegconPlayPercent = 0x8007BBA4;
+g_NegconSteerPlayUvQuad = 0x80010028;
+g_PadAccelMask = 0x801E42F0;
+g_PadBrakeMask = 0x801E42F2;
+g_PadShiftMasks = 0x801E42F4;
+g_PlayerTargetRpm = 0x8009DF98;
+g_PlayerThrottle = 0x8009DFC0;
+g_RaceOptionMarquee = 0x8007D7D4;
+g_RaceOptionPulseAngle = 0x8007D7CC;
+g_RaceOptionScroll0 = 0x8007D7D0;
+g_RaceOptionScroll1 = 0x8007D7D2;
+g_SaveIconRect = 0x8009ACEC;
+g_ShiftTargetSpeed = 0x8007D314;
+g_TorqueBandStart = 0x801E38A2;
+g_TorqueLossBandStart = 0x801E38E2;
+
+/* JAP10-named data the shared handwritten sources reference; the JAP11
+ * addresses are recovered from the retail relocation sites. */
+D_80083048 = 0x80083130;
+D_80093048 = 0x80093130;
+D_800941B4 = 0x8009429C;
+D_800941C4 = 0x800942AC;
+D_80094344 = 0x8009442C;
+D_80094350 = 0x80094438;
+D_80094354 = 0x8009443C;
+D_800945D4 = 0x800946BC;
+D_80094605 = 0x800946ED;
+D_80094654 = 0x8009473C;
+D_8009A584 = 0x8009A66C;
+
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */

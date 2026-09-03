@@ -1,0 +1,158 @@
+[
+  {
+    "start": "0x6A40",
+    "end": "0x6B84",
+    "path": "JAP10/main/boot/init_subsystems"
+  },
+  {
+    "start": "0x6B84",
+    "end": "0x6DC0",
+    "path": "JAP10/main/boot/main_loop"
+  },
+  {
+    "start": "0x23F48",
+    "end": "0x2424C",
+    "path": "JAP10/main/race/race_hud_time"
+  },
+  {
+    "start": "0x25104",
+    "end": "0x25180",
+    "path": "JAP10/main/race/time_conversion"
+  },
+  {
+    "start": "0xC508",
+    "end": "0xC8B4",
+    "path": "JAP10/main/menu/display_setup"
+  },
+  {
+    "start": "0x15934",
+    "end": "0x15B20",
+    "path": "JAP10/main/menu/screen_adjust_update"
+  },
+  {
+    "start": "0x13804",
+    "end": "0x13948",
+    "path": "JAP10/main/boot/boot_logo_update"
+  },
+  {
+    "start": "0x18074",
+    "end": "0x182C0",
+    "path": "JAP10/main/save/draw_memory_card_message"
+  },
+  {
+    "start": "0x182C0",
+    "end": "0x1A97C",
+    "path": "JAP10/main/render/terrain_submission"
+  },
+  {
+    "start": "0x11424",
+    "end": "0x11840",
+    "path": "JAP10/main/menu/prize_money_screen",
+    "rodata_start": "0x15E0",
+    "rodata_end": "0x1604"
+  },
+  {
+    "start": "0x1F898",
+    "end": "0x1FCE0",
+    "path": "JAP10/main/car/update_car_driving"
+  },
+  {
+    "start": "0x24990",
+    "end": "0x24FB8",
+    "path": "JAP10/main/race/race_option_menu"
+  },
+  {
+    "start": "0x25B28",
+    "end": "0x26284",
+    "path": "JAP10/main/race/update_lap_and_finish"
+  },
+  {
+    "start": "0x2B2C4",
+    "end": "0x2C698",
+    "path": "JAP10/main/car/race_car_updates"
+  },
+  {
+    "start": "0x1AADC",
+    "end": "0x1C0B0",
+    "path": "JAP10/main/car/update_car_drivetrain"
+  },
+  {
+    "start": "0x4F7A4",
+    "end": "0x4F9D8",
+    "path": "JAP10/main/save/save_header"
+  },
+  {
+    "start": "0x2A330",
+    "end": "0x2A470",
+    "path": "JAP10/main/car/clamp_car_lateral_offset"
+  },
+  {
+    "start": "0x5A14",
+    "end": "0x6198",
+    "path": "JAP10/main/menu/controller_config"
+  },
+  {
+    "start": "0x10D24",
+    "end": "0x11424",
+    "path": "JAP10/main/race/class_progress"
+  },
+  {
+    "start": "0x6198",
+    "end": "0x6A40",
+    "path": "JAP10/main/menu/negcon_calibration"
+  },
+  {
+    "start": "0x1E194",
+    "end": "0x1F660",
+    "path": "JAP10/main/car/update_player_car",
+    "rodata_start": "0x1A20",
+    "rodata_end": "0x1A40"
+  },
+  {
+    "start": "0x3D514",
+    "end": "0x3E4B0",
+    "path": "JAP10/main/menu/draw_ranking_table",
+    "rodata_start": "0x1F3C",
+    "rodata_end": "0x1FA8"
+  },
+  {
+    "start": "0x531F8",
+    "end": "0x53374",
+    "path": "JAP11/main/boot/startup_and_bios"
+  },
+  {
+    "start": "0x54698",
+    "end": "0x54A30",
+    "path": "JAP10/lib/libpress/mdec_unpack_status"
+  },
+  {
+    "start": "0x58AEC",
+    "end": "0x597BC",
+    "path": "JAP10/lib/libgte/matrix_routines"
+  },
+  {
+    "start": "0x5986C",
+    "end": "0x5999C",
+    "path": "JAP10/lib/libgte/scale_matrix"
+  },
+  {
+    "start": "0x59E5C",
+    "end": "0x5A15C",
+    "path": "JAP10/lib/libgte/rotation_and_exception"
+  },
+  {
+    "start": "0x5E058",
+    "end": "0x5E078",
+    "path": "PAL/lib/libetc/vertical_sync_asm"
+  },
+  {
+    "start": "0x118A4",
+    "end": "0x11AD4",
+    "path": "JAP10/main/save/save_defaults"
+  },
+  {
+    "start": "0x58818",
+    "end": "0x58AEC",
+    "path": "JAP10/lib/libgte/fog_geometry"
+  }
+]

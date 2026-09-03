@@ -12,7 +12,9 @@ nonmatching D_80063DB0
 dlabel D_80063DB0
     /* 545B0 80063DB0 FFFFFF00 */ .word 0x00FFFFFF /* invalid instruction */
     /* 545B4 80063DB4 0680083C */ .word 0x3C088006
-    /* 545B8 80063DB8 B03D0825 */ .word 0x25083DB0
+    /* 545B8 80063DB8 B03D0825 */  addiu      $t0, $t0, %lo(D_80063DB0)
+    /* The blob stores its own load address, so the immediate must relocate
+     * with the unit rather than stay the Japanese 1.0 constant. */
     /* 545BC 80063DBC FFFF8120 */ .word 0x2081FFFF
     /* 545C0 80063DC0 04002018 */ .word 0x18200004
     /* 545C4 80063DC4 0000028D */ .word 0x8D020000
