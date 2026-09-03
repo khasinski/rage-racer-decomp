@@ -3,8 +3,8 @@
   "portable_units": 302,
   "portable_text_bytes": 326968,
   "portable_rodata_bytes": 2464,
-  "regional_units": 24,
-  "regional_text_bytes": 31020,
+  "regional_units": 26,
+  "regional_text_bytes": 40340,
   "text_aliases": 9,
   "inferred_externals": 1952,
   "selected": [
@@ -1745,8 +1745,7 @@
     },
     {
       "path": "PAL/main/car/update_player_car",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/car/update_car_driving",
@@ -1785,8 +1784,7 @@
     },
     {
       "path": "PAL/main/menu/menu_visual_effects",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/menu/draw_car_name_plate",

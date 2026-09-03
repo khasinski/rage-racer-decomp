@@ -127,5 +127,12 @@
     "path": "JAP10/main/car/update_player_car",
     "rodata_start": "0x1A1C",
     "rodata_end": "0x1A3C"
+  },
+  {
+    "start": "0x3D448",
+    "end": "0x3E3E4",
+    "path": "JAP10/main/menu/draw_ranking_table",
+    "rodata_start": "0x1F38",
+    "rodata_end": "0x1FA4"
   }
 ]

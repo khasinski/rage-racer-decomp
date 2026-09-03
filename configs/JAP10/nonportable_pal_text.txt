@@ -22,3 +22,4 @@ PAL/main/race/race_scene
 PAL/main/car/race_car_update
 PAL/main/car/update_car_drivetrain
 PAL/main/car/update_player_car
+PAL/main/menu/menu_visual_effects
