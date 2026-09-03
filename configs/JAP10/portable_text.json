@@ -1,12 +1,12 @@
 {
   "version": "JAP10",
-  "portable_units": 320,
-  "portable_text_bytes": 359064,
+  "portable_units": 321,
+  "portable_text_bytes": 363516,
   "portable_rodata_bytes": 2612,
   "regional_units": 26,
   "regional_text_bytes": 40340,
   "text_aliases": 9,
-  "inferred_externals": 1975,
+  "inferred_externals": 2018,
   "selected": [
     {
       "start": "0x4514",
@@ -418,6 +418,11 @@
       "start": "0x258FC",
       "end": "0x25A5C",
       "path": "PAL/main/race/draw_split_times"
+    },
+    {
+      "start": "0x261B8",
+      "end": "0x2731C",
+      "path": "PAL/main/race/race_scene"
     },
     {
       "start": "0x2731C",
@@ -1826,7 +1831,7 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/race/race_scene",
+      "path": "PAL/main/race/update_lap_and_finish",
       "reason": "linked bytes differ"
     },
     {

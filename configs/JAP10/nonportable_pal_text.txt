@@ -7,7 +7,7 @@ PAL/main/menu/display_setup
 PAL/main/menu/prize_money_screen
 PAL/main/car/update_car_driving
 PAL/main/race/race_option_menu
-PAL/main/race/race_scene
+PAL/main/race/update_lap_and_finish
 PAL/main/car/race_car_update
 PAL/main/car/update_car_drivetrain
 PAL/main/car/update_player_car
