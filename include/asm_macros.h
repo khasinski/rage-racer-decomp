@@ -41,5 +41,6 @@
  */
 #define MATCH_REGISTER(type, name, reg) register type name asm(reg)
 #define KEEP_REGISTER(value) asm("" : "=r"(value) : "0"(value))
+#define MOVE_REGISTER(dst, src) asm("move %0, %1" : "=r"(dst) : "r"(src))
 
 #endif

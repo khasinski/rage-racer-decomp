@@ -67,6 +67,11 @@
     "path": "JAP10/main/car/race_car_updates"
   },
   {
+    "start": "0x1AA10",
+    "end": "0x1BFE4",
+    "path": "JAP10/main/car/update_car_drivetrain"
+  },
+  {
     "start": "0xEE04",
     "end": "0xEEEC",
     "path": "JAP10/main/fmv/start_fmv_playback"

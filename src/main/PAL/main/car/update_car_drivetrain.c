@@ -1,4 +1,5 @@
 #include "common.h"
+#include "asm_macros.h"
 #include "game/state.h"
 #include "game/track.h"
 #include "game/race.h"
@@ -78,6 +79,13 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   s32 bandSlot;
   s32 bandCurve;
   s32 assistStep;
+#ifdef CAR_FULL_NEGCON_STEERING_ASSIST
+  MATCH_REGISTER(s32, lossBandCursor, "$5");
+  s32 regionalStackPad[2];
+#define LOSS_BAND_CURSOR lossBandCursor
+#else
+#define LOSS_BAND_CURSOR assistStep
+#endif
   int shiftTimerActive;
   s32 lossCurve;
   s32 dragTerm;
@@ -367,19 +375,23 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       }
     }
     bandEnd = g_TorqueLossBandEnd[bandIndex];
-    assistStep = lossBase;
+#ifdef CAR_FULL_NEGCON_STEERING_ASSIST
+    MOVE_REGISTER(lossBandCursor, lossBase);
+#else
+    LOSS_BAND_CURSOR = lossBase;
+#endif
     bandScale = 0;
-    if (assistStep < bandEnd)
+    if (LOSS_BAND_CURSOR < bandEnd)
     {
       engineSpeedLoss = drive->engineRpm;
-      gearCurve.value = (assistStep * 4) + config.value;
+      gearCurve.value = (LOSS_BAND_CURSOR * 4) + config.value;
       loop_83:
       lossTorque = gearCurve.specPointer->torqueLossRpm[0];
 
       if (engineSpeedLoss >= lossTorque)
       {
         curveSlot.value = gearCurve.specPointer->torqueLossRpm[1];
-        assistStep += 1;
+        LOSS_BAND_CURSOR += 1;
         if (curveSlot.value >= engineSpeedLoss)
         {
           lossCurve = curveSlot.value - lossTorque;
@@ -397,11 +409,11 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       }
       else
       {
-        assistStep = assistStep + 1;
+        LOSS_BAND_CURSOR = LOSS_BAND_CURSOR + 1;
         block_89:
         gearCurve.valuePointer++;
 
-        if (assistStep >= bandEnd)
+        if (LOSS_BAND_CURSOR >= bandEnd)
         {
           goto block_90;
         }
@@ -604,6 +616,16 @@ shift_interpolation_done:
     {
       assistStep = 1;
     }
+#ifdef CAR_FULL_NEGCON_STEERING_ASSIST
+    if (drive->steerPos >= 0)
+    {
+      steerLoad += drive->steerPos / assistStep;
+    }
+    else
+    {
+      steerLoad -= drive->steerPos / assistStep;
+    }
+#else
     shiftRemaining = drive->steerPos;
     assistArmed = shiftRemaining >= 0;
     if (assistArmed)
@@ -614,6 +636,7 @@ shift_interpolation_done:
     {
       steerLoad -= ((shiftRemaining * 5) / 6) / assistStep;
     }
+#endif
   }
   trackHeadingError = GetAngleDistance(car->headingAngle,
                                        0xC00 - g_TrackPoints[car->trackPointIndex].angle);
@@ -731,7 +754,16 @@ shift_interpolation_done:
     {
       frontLoadScaled = (g_CarSpec->referenceTurnRadius) * 0x64;
     }
+#ifdef CAR_DOWNFORCE_RADIUS_FLOOR
+    downforceScale = frontLoadScaled;
+    if (frontLoadScaled >= CAR_DOWNFORCE_RADIUS_FLOOR)
+    {
+      downforceScale = (g_CarSpec->referenceTurnRadius) * 0x64;
+    }
+    if (downforceScale <= 0)
+#else
     if ((frontLoadScaled <= 0) || ((downforceScale = (g_CarSpec->referenceTurnRadius) * 0x64, downforceScale <= 0)))
+#endif
     {
       downforceScale = (g_CarSpec->referenceTurnRadius) * 0x64;
     }

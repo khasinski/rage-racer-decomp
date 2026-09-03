@@ -185,7 +185,7 @@ segments:
       - [0x181F4, asm, main/0181F4_main]
       - [0x1A8B0, c, PAL/main/track/install_track_points]
       - [0x1A988, c, PAL/main/car/angle_math]
-      - [0x1AA10, asm, main/01AA10_main]
+      - [0x1AA10, c, JAP10/main/car/update_car_drivetrain]
       - [0x1BFE4, c, PAL/main/car/lap_progress]
       - [0x1C644, asm, main/01C644_main]
       - [0x1F620, c, PAL/main/car/advance_car_position]

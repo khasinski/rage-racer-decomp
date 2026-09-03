@@ -34,6 +34,7 @@ func_800340C4 = DrawRaceOptionMenu;
 func_8003525C = UpdateLapAndFinish;
 func_8003A9F8 = UpdateRaceCars;
 func_8003B444 = UpdateAttractCars;
+func_8002A210 = UpdateCarDrivetrain;
 func_80015994 = DrawNegconSteerPlayScreen;
 func_80015E94 = DrawNegconMaxTwistScreen;
 func_8001BD0C = SetupDisplay240;
@@ -54,6 +55,12 @@ g_RaceOptionPulseAngle = 0x8007D6E4;
 g_RaceOptionScroll0 = 0x8007D6E8;
 g_RaceOptionScroll1 = 0x8007D6EA;
 g_RaceOptionMarquee = 0x8007D6EC;
+g_TorqueBandStart = 0x801E378A;
+g_TorqueLossBandStart = 0x801E37CA;
+g_ShiftTargetSpeed = 0x8007D22C;
+UpdateCarLaunch = 0x8002F95C;
+UpdateCarAirborne = 0x80030140;
+UpdateCarStandingStart = 0x800304F0;
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */

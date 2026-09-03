@@ -3,8 +3,8 @@
   "portable_units": 302,
   "portable_text_bytes": 326968,
   "portable_rodata_bytes": 2464,
-  "regional_units": 23,
-  "regional_text_bytes": 25432,
+  "regional_units": 24,
+  "regional_text_bytes": 31020,
   "text_aliases": 9,
   "inferred_externals": 1952,
   "selected": [
@@ -1737,8 +1737,7 @@
     },
     {
       "path": "PAL/main/car/update_car_drivetrain",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/car/car_orientation",
