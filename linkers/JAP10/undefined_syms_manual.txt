@@ -31,6 +31,7 @@ func_800208A8 = AdvanceGrandPrixClass;
 func_80020B58 = UpdatePrizeMoneyScreen;
 func_8002EFCC = UpdateCarDriving;
 func_800340C4 = DrawRaceOptionMenu;
+func_8003525C = UpdateLapAndFinish;
 func_80015994 = DrawNegconSteerPlayScreen;
 func_80015E94 = DrawNegconMaxTwistScreen;
 func_8001BD0C = SetupDisplay240;

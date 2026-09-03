@@ -18,3 +18,4 @@ PAL/main/menu/display_setup
 PAL/main/menu/prize_money_screen
 PAL/main/car/update_car_driving
 PAL/main/race/race_hud_text
+PAL/main/race/race_scene

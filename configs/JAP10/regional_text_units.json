@@ -57,6 +57,11 @@
     "path": "JAP10/main/race/race_option_menu"
   },
   {
+    "start": "0x25A5C",
+    "end": "0x261B8",
+    "path": "JAP10/main/race/update_lap_and_finish"
+  },
+  {
     "start": "0xEE04",
     "end": "0xEEEC",
     "path": "JAP10/main/fmv/start_fmv_playback"
