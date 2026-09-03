@@ -61,6 +61,17 @@ g_ShiftTargetSpeed = 0x8007D22C;
 UpdateCarLaunch = 0x8002F95C;
 UpdateCarAirborne = 0x80030140;
 UpdateCarStandingStart = 0x800304F0;
+g_PadShiftMasks = 0x801E41DC;
+g_PadAccelMask = 0x801E41D8;
+g_PadBrakeMask = 0x801E41DA;
+g_NegconAccelMask = 0x801E41E8;
+g_NegconBrakeMask = 0x801E41EA;
+g_NegconAnalogI = 0x801E39EC;
+g_NegconAnalogII = 0x801E39EE;
+g_NegconAnalogL = 0x801E39F0;
+g_CarCornerOffsets = 0x8007D268;
+g_PlayerTargetRpm = 0x8009DEB0;
+g_PlayerThrottle = 0x8009DED8;
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */

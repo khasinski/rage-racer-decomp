@@ -1,13 +1,18 @@
 {
   "version": "JAP10",
-  "portable_units": 302,
-  "portable_text_bytes": 326968,
-  "portable_rodata_bytes": 2464,
+  "portable_units": 313,
+  "portable_text_bytes": 348736,
+  "portable_rodata_bytes": 2612,
   "regional_units": 26,
   "regional_text_bytes": 40340,
   "text_aliases": 9,
   "inferred_externals": 1952,
   "selected": [
+    {
+      "start": "0x4514",
+      "end": "0x4B68",
+      "path": "PAL/main/pad/init_pad"
+    },
     {
       "start": "0x4B68",
       "end": "0x5478",
@@ -87,6 +92,11 @@
       "rodata_end": "0x13A0"
     },
     {
+      "start": "0xA394",
+      "end": "0xA950",
+      "path": "PAL/main/render/track_textures"
+    },
+    {
       "start": "0xA950",
       "end": "0xAB30",
       "path": "PAL/main/asset/image_upload"
@@ -100,6 +110,20 @@
       "start": "0xAFF0",
       "end": "0xB5E0",
       "path": "PAL/main/render/rear_view_mirror"
+    },
+    {
+      "start": "0xB5E0",
+      "end": "0xBEF4",
+      "path": "PAL/main/menu/title_screen",
+      "rodata_start": "0x13A0",
+      "rodata_end": "0x13B4"
+    },
+    {
+      "start": "0xBEF4",
+      "end": "0xC504",
+      "path": "PAL/main/menu/frontend",
+      "rodata_start": "0x13B8",
+      "rodata_end": "0x13CC"
     },
     {
       "start": "0xC8B0",
@@ -142,6 +166,16 @@
       "path": "PAL/main/fmv/setup_fmv_buffers"
     },
     {
+      "start": "0xF680",
+      "end": "0xF8D0",
+      "path": "PAL/main/race/replay_recording"
+    },
+    {
+      "start": "0xF8D0",
+      "end": "0x101D0",
+      "path": "PAL/main/race/replay"
+    },
+    {
       "start": "0x101D0",
       "end": "0x10C58",
       "path": "PAL/main/race/result_screens"
@@ -150,6 +184,11 @@
       "start": "0x11774",
       "end": "0x117D8",
       "path": "PAL/main/audio/apply_audio_settings"
+    },
+    {
+      "start": "0x117D8",
+      "end": "0x11A08",
+      "path": "PAL/main/save/save_defaults"
     },
     {
       "start": "0x11A08",
@@ -226,6 +265,11 @@
       "path": "PAL/main/race/attract_demo"
     },
     {
+      "start": "0x16E7C",
+      "end": "0x17588",
+      "path": "PAL/main/race/prologue"
+    },
+    {
       "start": "0x17588",
       "end": "0x175D4",
       "path": "PAL/main/race/prologue_step"
@@ -259,6 +303,11 @@
       "start": "0x1BFE4",
       "end": "0x1C644",
       "path": "PAL/main/car/lap_progress"
+    },
+    {
+      "start": "0x1C644",
+      "end": "0x1E0C8",
+      "path": "PAL/main/car/car_orientation"
     },
     {
       "start": "0x1F620",
@@ -314,6 +363,11 @@
       "start": "0x22E88",
       "end": "0x22FC8",
       "path": "PAL/main/render/build_race_hud_prims"
+    },
+    {
+      "start": "0x22FC8",
+      "end": "0x23508",
+      "path": "PAL/main/render/race_hud"
     },
     {
       "start": "0x23508",
@@ -579,6 +633,13 @@
       "start": "0x3FA18",
       "end": "0x3FD64",
       "path": "PAL/main/menu/draw_engineer_shop_price_panel"
+    },
+    {
+      "start": "0x3FD64",
+      "end": "0x402E8",
+      "path": "PAL/main/menu/draw_car_name_plate",
+      "rodata_start": "0x1FE0",
+      "rodata_end": "0x204C"
     },
     {
       "start": "0x402E8",
@@ -1577,10 +1638,6 @@
   ],
   "rejected": [
     {
-      "path": "PAL/main/pad/init_pad",
-      "reason": "linked bytes differ"
-    },
-    {
       "path": "PAL/main/menu/controller_config",
       "reason": "structural match is not unique",
       "matches": 0
@@ -1597,18 +1654,6 @@
     },
     {
       "path": "PAL/main/boot/main_loop",
-      "reason": "linked bytes differ"
-    },
-    {
-      "path": "PAL/main/render/track_textures",
-      "reason": "linked bytes differ"
-    },
-    {
-      "path": "PAL/main/menu/title_screen",
-      "reason": "linked bytes differ"
-    },
-    {
-      "path": "PAL/main/menu/frontend",
       "reason": "linked bytes differ"
     },
     {
@@ -1636,24 +1681,12 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/race/replay_recording",
-      "reason": "linked bytes differ"
-    },
-    {
-      "path": "PAL/main/race/replay",
-      "reason": "linked bytes differ"
-    },
-    {
       "path": "PAL/main/race/class_progress",
       "reason": "structural match is not unique",
       "matches": 0
     },
     {
       "path": "PAL/main/menu/prize_money_screen",
-      "reason": "linked bytes differ"
-    },
-    {
-      "path": "PAL/main/save/save_defaults",
       "reason": "linked bytes differ"
     },
     {
@@ -1667,10 +1700,6 @@
     },
     {
       "path": "PAL/main/menu/screen_adjust_update",
-      "reason": "linked bytes differ"
-    },
-    {
-      "path": "PAL/main/race/prologue",
       "reason": "linked bytes differ"
     },
     {
@@ -1740,19 +1769,11 @@
       "reason": "linked bytes differ"
     },
     {
-      "path": "PAL/main/car/car_orientation",
-      "reason": "linked bytes differ"
-    },
-    {
       "path": "PAL/main/car/update_player_car",
       "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/car/update_car_driving",
-      "reason": "linked bytes differ"
-    },
-    {
-      "path": "PAL/main/render/race_hud",
       "reason": "linked bytes differ"
     },
     {
@@ -1784,10 +1805,6 @@
     },
     {
       "path": "PAL/main/menu/menu_visual_effects",
-      "reason": "linked bytes differ"
-    },
-    {
-      "path": "PAL/main/menu/draw_car_name_plate",
       "reason": "linked bytes differ"
     },
     {
