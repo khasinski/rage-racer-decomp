@@ -3,8 +3,8 @@
   "portable_units": 302,
   "portable_text_bytes": 326968,
   "portable_rodata_bytes": 2464,
-  "regional_units": 22,
-  "regional_text_bytes": 20356,
+  "regional_units": 23,
+  "regional_text_bytes": 25432,
   "text_aliases": 9,
   "inferred_externals": 1952,
   "selected": [
@@ -1782,8 +1782,7 @@
     },
     {
       "path": "PAL/main/car/race_car_update",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/menu/menu_visual_effects",

@@ -62,6 +62,11 @@
     "path": "JAP10/main/race/update_lap_and_finish"
   },
   {
+    "start": "0x2B1F8",
+    "end": "0x2C5CC",
+    "path": "JAP10/main/car/race_car_updates"
+  },
+  {
     "start": "0xEE04",
     "end": "0xEEEC",
     "path": "JAP10/main/fmv/start_fmv_playback"

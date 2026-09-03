@@ -11,6 +11,20 @@
 #include "game/vector.h"
 #include "psyq/gte.h"
 
+#ifdef RACE_CAR_WORLD_STEP_QUARTER
+#define RACE_CAR_WORLD_STEP(value) ((value) / 256)
+#else
+#define RACE_CAR_WORLD_STEP(value) ((value) * 6 / 1280)
+#endif
+#ifndef RACE_CAR_HOP_RISE
+#define RACE_CAR_HOP_RISE 72
+#endif
+#ifndef RACE_CAR_HOP_FALL
+#define RACE_CAR_HOP_FALL 216
+#endif
+
+#ifndef RACE_CAR_UPDATE_ONLY_MAIN_PASSES
+
 
 
 
@@ -104,6 +118,8 @@ void SteerCarAlongRoute(GameCarRuntime *car) {
         car->bodyYaw = value;
     }
 }
+
+#endif
 
 /*
  * Runs the rival-car update passes used by an interactive race. Cars 4..10
@@ -260,8 +276,8 @@ void UpdateRaceCars(void) {
                 base->x = base->x + walk->motionX;
                 walk->z = walk->z + walk->motionZ;
             }
-            vpos.x = drive->worldVelocityX * 6 / 1280 + base->x;
-            vpos.z = drive->worldVelocityZ * 6 / 1280 + walk->z;
+            vpos.x = RACE_CAR_WORLD_STEP(drive->worldVelocityX) + base->x;
+            vpos.z = RACE_CAR_WORLD_STEP(drive->worldVelocityZ) + walk->z;
             /*
              * Retail only initializes x and z before copying all four words.
              * Its uninitialized y and w stores are intentionally preserved.
@@ -340,7 +356,7 @@ void UpdateRaceCars(void) {
                 if (state == 1) {
                     s32 n = (s16)tick;
                     lastBase->y =
-                        lastBase->verticalMotionRate * n + n * n * 72 / 100
+                        lastBase->verticalMotionRate * n + n * n * RACE_CAR_HOP_RISE / 100
                         + lastBase->y;
                     if (lastBase->y >= limit) {
                         lastBase->verticalMotionState = 0;
@@ -355,7 +371,7 @@ void UpdateRaceCars(void) {
                     }
                 } else {
                     s16 n = tick - (u16)lastBase->verticalMotionRate;
-                    lastBase->y = lastBase->verticalTargetY + n * n * 216 / 100;
+                    lastBase->y = lastBase->verticalTargetY + n * n * RACE_CAR_HOP_FALL / 100;
                     if (lastBase->y >= limit) {
                         lastBase->verticalMotionState = 0;
                     }
@@ -499,8 +515,8 @@ void UpdateAttractCars(void) {
                 car->x = car->x + base->motionX;
                 base->z = base->z + base->motionZ;
             }
-            vTmp.x = drive->worldVelocityX * 6 / 1280 + car->x;
-            vTmp.z = drive->worldVelocityZ * 6 / 1280 + base->z;
+            vTmp.x = RACE_CAR_WORLD_STEP(drive->worldVelocityX) + car->x;
+            vTmp.z = RACE_CAR_WORLD_STEP(drive->worldVelocityZ) + base->z;
             /*
              * Retail only initializes x and z before copying all four words.
              * Its uninitialized y and w stores are intentionally preserved.
@@ -580,7 +596,7 @@ void UpdateAttractCars(void) {
                 if (state == 1) {
                     s32 t = (s16)tick;
                     base->y =
-                        base->verticalMotionRate * t + t * t * 72 / 100 + base->y;
+                        base->verticalMotionRate * t + t * t * RACE_CAR_HOP_RISE / 100 + base->y;
                     if (base->y >= limit) {
                         base->verticalMotionState = 0;
                     }
@@ -594,7 +610,7 @@ void UpdateAttractCars(void) {
                     }
                 } else {
                     s16 n = tick - (u16)base->verticalMotionRate;
-                    base->y = base->verticalTargetY + n * n * 216 / 100;
+                    base->y = base->verticalTargetY + n * n * RACE_CAR_HOP_FALL / 100;
                     if (base->y >= limit) {
                         base->verticalMotionState = 0;
                     }
@@ -620,6 +636,8 @@ void UpdateAttractCars(void) {
     } while (i < 11);
     }
 }
+
+#ifndef RACE_CAR_UPDATE_ONLY_MAIN_PASSES
 
 void RunRaceIntroCamera(PlayerCarRuntime *car, s32 mode) {
     PlayerCarPositionView target;
@@ -789,3 +807,5 @@ void SeedFinishCamera(PlayerCarRuntime *car) {
     g_CameraCarSeedYaw = index;
     g_CameraCar.bodyYaw = index;
 }
+
+#endif
