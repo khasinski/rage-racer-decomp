@@ -1,10 +1,10 @@
 {
   "version": "JAP11",
-  "portable_units": 318,
-  "portable_text_bytes": 343352,
+  "portable_units": 319,
+  "portable_text_bytes": 344820,
   "portable_rodata_bytes": 2464,
-  "regional_units": 30,
-  "regional_text_bytes": 53428,
+  "regional_units": 31,
+  "regional_text_bytes": 55152,
   "text_aliases": 10,
   "inferred_externals": 2068,
   "selected": [
@@ -90,6 +90,11 @@
       "path": "PAL/main/asset/fmv_requests",
       "rodata_start": "0x1370",
       "rodata_end": "0x13A0"
+    },
+    {
+      "start": "0xA398",
+      "end": "0xA954",
+      "path": "PAL/main/render/track_textures"
     },
     {
       "start": "0xA954",
@@ -1673,10 +1678,6 @@
     },
     {
       "path": "PAL/main/boot/main_loop",
-      "reason": "linked bytes differ"
-    },
-    {
-      "path": "PAL/main/render/track_textures",
       "reason": "linked bytes differ"
     },
     {

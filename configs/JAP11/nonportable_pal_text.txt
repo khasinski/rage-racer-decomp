@@ -1,5 +1,4 @@
 # Structurally equivalent, but regional immediates or referenced data differ.
-PAL/main/render/track_textures
 PAL/main/save/save_defaults
 PAL/main/race/replay_recording
 PAL/main/race/replay

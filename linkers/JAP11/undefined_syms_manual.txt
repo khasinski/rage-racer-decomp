@@ -44,6 +44,7 @@ course_model_continue_7_hi = course_model_continue_7 >> 16;
 course_model_continue_7_lo = course_model_continue_7 & 0xFFFF;
 
 /* Data and bss addresses recovered from the retail JAP11 relocation sites. */
+g_SaveTitleSjis = 0x800125E0;
 func_800698A4 = 0x8006998C;
 g_BootLogoState = 0x8007CE7C;
 g_CarCornerOffsets = 0x8007D350;

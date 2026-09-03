@@ -154,5 +154,10 @@
     "start": "0x58818",
     "end": "0x58AEC",
     "path": "JAP10/lib/libgte/fog_geometry"
+  },
+  {
+    "start": "0x50670",
+    "end": "0x50D2C",
+    "path": "JAP11/main/save/memory_card_io"
   }
 ]
