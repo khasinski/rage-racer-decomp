@@ -16,7 +16,7 @@
 s32 PresentFmvFrame(FmvDecodeContext *ctx) {
     void *p;
     register FmvDecodeContext *state asm("$18") = ctx;
-    register s32 attempts asm("$16") = 0x800000;
+    s32 attempts = 0x800000;
 
 retry_frame:
     p = GetFmvFrame(state);

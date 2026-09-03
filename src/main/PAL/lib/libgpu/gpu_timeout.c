@@ -8,7 +8,7 @@ long Gpu_CheckTimeout(void) {
     long state;
     long result;
     long *dc;
-    register volatile u_long *gp1ForLog asm("$3");
+    volatile u_long *gp1ForLog;
     long pending;
     long gpuTail;
 

@@ -686,7 +686,7 @@ loop:
 void GameDrawMenuButton(s32 x0, s32 y0, s32 x1, s32 y1,
                    u8 r, u8 g, u8 b,
                    s32 flags, s32 textX, s32 textY, u8 *caption) {
-    register s32 f asm("$16") = flags;
+    s16 f = flags;
     register s32 p0 asm("$18") = x0;
     register void *ot = SCRATCH_OT_BASE_AS(void);
     register s32 p1 asm("$20") = y0;

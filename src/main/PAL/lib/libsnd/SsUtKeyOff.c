@@ -36,7 +36,7 @@ long SsUtKeyOff(long voice, long vab_id, long program, long tone, long note) {
                 ((u_short *)g_SndSpuRegs)[202] = 0;
                 ((u_short *)g_SndSpuRegs)[203] = 0;
             } else {
-                *(short *)&g_SndCurrentVoice = original_voice;
+                g_SndCurrentVoice = original_voice;
                 current_voice = g_SndCurrentVoice;
                 if (current_voice < 16) {
                     bits_lower = 1 << current_voice;

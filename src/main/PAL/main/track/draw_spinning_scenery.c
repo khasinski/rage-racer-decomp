@@ -19,7 +19,7 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
     s32 offset;
     s32 end;
     s32 start;
-    s32 loopIndex;
+    s16 loopIndex;
     s32 limit;
     s32 active;
     s32 activeValue;
@@ -40,7 +40,6 @@ void DrawSpinningScenery(s32 timer, s32 animate) {
     }
 
     loopIndex = start;
-    asm("" : "=r"(loopIndex) : "0"(loopIndex));
     if (loopIndex < end) {
         deltaBase = g_SpinningSceneryRate;
         delta = &deltaBase[active];

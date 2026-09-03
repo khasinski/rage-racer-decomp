@@ -53,7 +53,7 @@ long SpuVmApplyPitchBendToVoice(long voice, long note, long vab_id, long program
         j = (short)raw;
         off2 = ((((j * 3) * 4) + j) * 4);
         c = *(u_char *)&((u_char *)g_SndVoiceState + 20)[off2];
-        (*(u_short *)&g_SndCurrentVoice) = raw;
+        g_SndCurrentVoice = raw;
         g_SndCurrentTone = c;
         ret = SpuVmCalculateTonePitch((u_short)base, (u_short)bal);
         *(short *)&((u_char *)g_SndVoiceRegs + 4)[j * 16] = ret;

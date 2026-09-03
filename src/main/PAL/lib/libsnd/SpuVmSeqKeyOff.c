@@ -18,11 +18,11 @@ void SpuVmSeqKeyOff(long wanted) {
     voice = 0;
     if (g_SndVoiceCount != 0) {
         seq_sep = (short)wanted;
-        current = &(*(u_short *)&g_SndCurrentVoice);
+        current = (u_short *)&g_SndCurrentVoice;
         do {
             if (g_SndVoiceState[voice].seq_sep == seq_sep) {
                 *current = voice;
-                selected_voice = (*(u_short *)&g_SndCurrentVoice);
+                selected_voice = g_SndCurrentVoice;
                 selected_index = selected_voice;
                 if (selected_index < 0x10) {
                     bits_lower = 1 << selected_index;
