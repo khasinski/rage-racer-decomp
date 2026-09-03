@@ -1,12 +1,12 @@
 {
   "version": "JAP10",
-  "portable_units": 317,
-  "portable_text_bytes": 355080,
+  "portable_units": 319,
+  "portable_text_bytes": 357204,
   "portable_rodata_bytes": 2612,
   "regional_units": 26,
   "regional_text_bytes": 40340,
   "text_aliases": 9,
-  "inferred_externals": 1967,
+  "inferred_externals": 1969,
   "selected": [
     {
       "start": "0x4514",
@@ -445,6 +445,16 @@
       "start": "0x2AF50",
       "end": "0x2AFE0",
       "path": "PAL/main/race/update_race_position"
+    },
+    {
+      "start": "0x2AFE0",
+      "end": "0x2B1F8",
+      "path": "PAL/main/car/steer_car_along_route"
+    },
+    {
+      "start": "0x2C5CC",
+      "end": "0x2CC00",
+      "path": "PAL/main/car/race_camera_setup"
     },
     {
       "start": "0x2CC00",
