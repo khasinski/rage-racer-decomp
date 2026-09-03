@@ -66,7 +66,7 @@ glabel SubmitTerrainCells
     /* 182B8 80027AB8 04004224 */   addiu     $v0, $v0, 0x4
     /* 182BC 80027ABC E8FFA010 */  beqz       $a1, .L80027A60
     /* 182C0 80027AC0 800082AC */   sw        $v0, 0x80($a0)
-    /* 182C4 80027AC4 C89E000C */  jal        func_80027B20
+    /* 182C4 80027AC4 C89E000C */  jal        SubmitTerrainCellFaces
     /* 182C8 80027AC8 00000000 */   nop
     /* 182CC 80027ACC 8000828C */  lw         $v0, 0x80($a0)
     /* 182D0 80027AD0 F9FF0010 */  b          .L80027AB8
@@ -82,7 +82,7 @@ glabel SubmitTerrainCells
   .L80027AF0:
     /* 182F0 80027AF0 DBFFA010 */  beqz       $a1, .L80027A60
     /* 182F4 80027AF4 800082AC */   sw        $v0, 0x80($a0)
-    /* 182F8 80027AF8 E1A1000C */  jal        func_80028784
+    /* 182F8 80027AF8 E1A1000C */  jal        SubmitTerrainCellFacesFar
     /* 182FC 80027AFC 00000000 */   nop
     /* 18300 80027B00 8000828C */  lw         $v0, 0x80($a0)
     /* 18304 80027B04 F9FF0010 */  b          .L80027AEC
@@ -95,9 +95,9 @@ glabel SubmitTerrainCells
 endlabel SubmitTerrainCells
 
 /* Handwritten function */
-nonmatching func_80027B20, 0xCCC
+nonmatching SubmitTerrainCellFaces, 0xCCC
 
-glabel func_80027B20
+glabel SubmitTerrainCellFaces
     /* 18320 80027B20 FFFFAE30 */  andi       $t6, $a1, 0xFFFF
     /* 18324 80027B24 FEFFCF25 */  addiu      $t7, $t6, -0x2
     /* 18328 80027B28 0300E105 */  bgez       $t7, .L80027B38
@@ -364,7 +364,7 @@ glabel func_80027B20
     /* 18704 80027F04 D2FF0010 */  b          .L80027E50
     /* 18708 80027F08 2800A520 */   addi      $a1, $a1, 0x28 /* handwritten instruction */
   .L80027F0C:
-    /* 1870C 80027F0C 9DA0000C */  jal        func_80028274
+    /* 1870C 80027F0C 9DA0000C */  jal        EmitSubdividedTerrainQuad
     /* 18710 80027F10 00000000 */   nop
     /* 18714 80027F14 CEFF0010 */  b          .L80027E50
     /* 18718 80027F18 00000000 */   nop
@@ -410,7 +410,7 @@ glabel func_80027B20
     /* 187B0 80027FB0 A7FF0010 */  b          .L80027E50
     /* 187B4 80027FB4 2800A520 */   addi      $a1, $a1, 0x28 /* handwritten instruction */
   .L80027FB8:
-    /* 187B8 80027FB8 9DA0000C */  jal        func_80028274
+    /* 187B8 80027FB8 9DA0000C */  jal        EmitSubdividedTerrainQuad
     /* 187BC 80027FBC A00096E8 */   swc2      $22, 0xA0($a0)
     /* 187C0 80027FC0 A3FF0010 */  b          .L80027E50
     /* 187C4 80027FC4 00000000 */   nop
@@ -489,7 +489,7 @@ glabel func_80027B20
     /* 188D8 800280D8 00004DAC */  sw         $t5, 0x0($v0)
     /* 188DC 800280DC 0000A3AC */  sw         $v1, 0x0($a1)
     /* 188E0 800280E0 0C00A520 */  addi       $a1, $a1, 0xC /* handwritten instruction */
-    /* 188E4 800280E4 9DA0000C */  jal        func_80028274
+    /* 188E4 800280E4 9DA0000C */  jal        EmitSubdividedTerrainQuad
     /* 188E8 800280E8 00000000 */   nop
     /* 188EC 800280EC 9000998C */  lw         $t9, 0x90($a0)
     /* 188F0 800280F0 0800A0AC */  sw         $zero, 0x8($a1)
@@ -578,7 +578,7 @@ glabel func_80027B20
     /* 18A2C 8002822C 00004DAC */  sw         $t5, 0x0($v0)
     /* 18A30 80028230 0000A3AC */  sw         $v1, 0x0($a1)
     /* 18A34 80028234 0C00A520 */  addi       $a1, $a1, 0xC /* handwritten instruction */
-    /* 18A38 80028238 9DA0000C */  jal        func_80028274
+    /* 18A38 80028238 9DA0000C */  jal        EmitSubdividedTerrainQuad
     /* 18A3C 8002823C A00096E8 */   swc2      $22, 0xA0($a0)
     /* 18A40 80028240 9000998C */  lw         $t9, 0x90($a0)
     /* 18A44 80028244 0800A0AC */  sw         $zero, 0x8($a1)
@@ -593,7 +593,7 @@ glabel func_80027B20
     /* 18A68 80028268 0000AFAC */  sw         $t7, 0x0($a1)
     /* 18A6C 8002826C F8FE0010 */  b          .L80027E50
     /* 18A70 80028270 0C00A520 */   addi      $a1, $a1, 0xC /* handwritten instruction */
-  alabel func_80028274
+  alabel EmitSubdividedTerrainQuad
     /* 18A74 80028274 C8008EAC */  sw         $t6, 0xC8($a0)
     /* 18A78 80028278 CC008FAC */  sw         $t7, 0xCC($a0)
     /* 18A7C 8002827C D00098A4 */  sh         $t8, 0xD0($a0)
@@ -660,7 +660,7 @@ glabel func_80027B20
     /* 18B6C 8002836C D1009890 */  lbu        $t8, 0xD1($a0)
     /* 18B70 80028370 F40099AC */  sw         $t9, 0xF4($a0)
     /* 18B74 80028374 F80098AC */  sw         $t8, 0xF8($a0)
-    /* 18B78 80028378 95A1000C */  jal        func_80028654
+    /* 18B78 80028378 95A1000C */  jal        InterpolateSubdivRow
     /* 18B7C 8002837C 21608000 */   addu      $t4, $a0, $zero
     /* 18B80 80028380 00100224 */  addiu      $v0, $zero, 0x1000
   .L80028384:
@@ -720,7 +720,7 @@ glabel func_80027B20
     /* 18C58 80028458 1100984A */  intpl
     /* 18C5C 8002845C E40089E8 */  swc2       $9, 0xE4($a0)
     /* 18C60 80028460 E8008AE8 */  swc2       $10, 0xE8($a0)
-    /* 18C64 80028464 95A1000C */  jal        func_80028654
+    /* 18C64 80028464 95A1000C */  jal        InterpolateSubdivRow
     /* 18C68 80028468 EC008BE8 */   swc2      $11, 0xEC($a0)
     /* 18C6C 8002846C 21608000 */  addu       $t4, $a0, $zero
     /* 18C70 80028470 00100324 */  addiu      $v1, $zero, 0x1000
@@ -853,7 +853,7 @@ glabel func_80027B20
     /* 18E48 80028648 00B8CF48 */  ctc2       $t7, $23 /* handwritten instruction */
     /* 18E4C 8002864C 0800E003 */  jr         $ra
     /* 18E50 80028650 00000000 */   nop
-  alabel func_80028654
+  alabel InterpolateSubdivRow
     /* 18E54 80028654 21688001 */  addu       $t5, $t4, $zero
     /* 18E58 80028658 D4009994 */  lhu        $t9, 0xD4($a0)
     /* 18E5C 8002865C D800988C */  lw         $t8, 0xD8($a0)
@@ -932,7 +932,7 @@ glabel func_80027B20
     /* 18F78 80028778 6401AEE9 */   swc2      $14, 0x164($t5)
     /* 18F7C 8002877C 0800E003 */  jr         $ra
     /* 18F80 80028780 00000000 */   nop
-  alabel func_80028784
+  alabel SubmitTerrainCellFacesFar
     /* 18F84 80028784 FFFFAE30 */  andi       $t6, $a1, 0xFFFF
     /* 18F88 80028788 FEFFCF25 */  addiu      $t7, $t6, -0x2
     /* 18F8C 8002878C 0300E105 */  bgez       $t7, .L8002879C
@@ -961,7 +961,7 @@ glabel func_80027B20
     /* 18FE0 800287E0 800088AC */   sw        $t0, 0x80($a0)
     /* 18FE4 800287E4 0800E003 */  jr         $ra
     /* 18FE8 800287E8 00000000 */   nop
-endlabel func_80027B20
+endlabel SubmitTerrainCellFaces
 
 /* Handwritten function */
 nonmatching SubmitModel, 0xB0
@@ -1001,7 +1001,7 @@ glabel SubmitModel
   .L80028868:
     /* 19068 80028868 0800A010 */  beqz       $a1, .L8002888C
     /* 1906C 8002886C 800088AC */   sw        $t0, 0x80($a0)
-    /* 19070 80028870 27A2000C */  jal        func_8002889C
+    /* 19070 80028870 27A2000C */  jal        SubmitModelFaces
     /* 19074 80028874 0400A524 */   addiu     $a1, $a1, 0x4
     /* 19078 80028878 8000888C */  lw         $t0, 0x80($a0)
     /* 1907C 8002887C 00000000 */  nop
@@ -1016,9 +1016,9 @@ glabel SubmitModel
 endlabel SubmitModel
 
 /* Handwritten function */
-nonmatching func_8002889C, 0x1C8
+nonmatching SubmitModelFaces, 0x1C8
 
-glabel func_8002889C
+glabel SubmitModelFaces
     /* 1909C 8002889C FFFFAF30 */  andi       $t7, $a1, 0xFFFF
     /* 190A0 800288A0 C0780F00 */  sll        $t7, $t7, 3
     /* 190A4 800288A4 07800E3C */  lui        $t6, model_primitive_table_hi
@@ -1141,12 +1141,12 @@ glabel func_8002889C
     /* 19258 80028A58 000086AC */  sw         $a2, 0x0($a0)
     /* 1925C 80028A5C 0800E003 */  jr         $ra
     /* 19260 80028A60 00000000 */   nop
-endlabel func_8002889C
+endlabel SubmitModelFaces
 
 /* Handwritten function */
-nonmatching func_80028A64, 0x64
+nonmatching EmitPolyF4, 0x64
 
-glabel func_80028A64
+glabel EmitPolyF4
     /* 19264 80028A64 0800CEAC */  sw         $t6, 0x8($a2)
     /* 19268 80028A68 0C00CFAC */  sw         $t7, 0xC($a2)
     /* 1926C 80028A6C 1000D8AC */  sw         $t8, 0x10($a2)
@@ -1172,12 +1172,12 @@ glabel func_80028A64
     /* 192BC 80028ABC 000086AC */  sw         $a2, 0x0($a0)
     /* 192C0 80028AC0 0800E003 */  jr         $ra
     /* 192C4 80028AC4 00000000 */   nop
-endlabel func_80028A64
+endlabel EmitPolyF4
 
 /* Handwritten function */
-nonmatching func_80028AC8, 0x90
+nonmatching EmitPolyFT4Raw, 0x90
 
-glabel func_80028AC8
+glabel EmitPolyFT4Raw
     /* 192C8 80028AC8 0800CEAC */  sw         $t6, 0x8($a2)
     /* 192CC 80028ACC 1000CFAC */  sw         $t7, 0x10($a2)
     /* 192D0 80028AD0 1800D8AC */  sw         $t8, 0x18($a2)
@@ -1214,12 +1214,12 @@ glabel func_80028AC8
     /* 1934C 80028B4C 000086AC */  sw         $a2, 0x0($a0)
     /* 19350 80028B50 0800E003 */  jr         $ra
     /* 19354 80028B54 00000000 */   nop
-endlabel func_80028AC8
+endlabel EmitPolyFT4Raw
 
 /* Handwritten function */
-nonmatching func_80028B58, 0xD8
+nonmatching EmitPolyG4, 0xD8
 
-glabel func_80028B58
+glabel EmitPolyG4
     /* 19358 80028B58 0800CEAC */  sw         $t6, 0x8($a2)
     /* 1935C 80028B5C 1000CFAC */  sw         $t7, 0x10($a2)
     /* 19360 80028B60 1800D8AC */  sw         $t8, 0x18($a2)
@@ -1274,12 +1274,12 @@ glabel func_80028B58
     /* 19424 80028C24 000086AC */  sw         $a2, 0x0($a0)
     /* 19428 80028C28 0800E003 */  jr         $ra
     /* 1942C 80028C2C 00000000 */   nop
-endlabel func_80028B58
+endlabel EmitPolyG4
 
 /* Handwritten function */
-nonmatching func_80028C30, 0x110
+nonmatching EmitPolyGT4, 0x110
 
-glabel func_80028C30
+glabel EmitPolyGT4
     /* 19430 80028C30 0800CEAC */  sw         $t6, 0x8($a2)
     /* 19434 80028C34 1400CFAC */  sw         $t7, 0x14($a2)
     /* 19438 80028C38 2000D8AC */  sw         $t8, 0x20($a2)
@@ -1348,12 +1348,12 @@ glabel func_80028C30
     /* 19534 80028D34 000086AC */  sw         $a2, 0x0($a0)
     /* 19538 80028D38 0800E003 */  jr         $ra
     /* 1953C 80028D3C 00000000 */   nop
-endlabel func_80028C30
+endlabel EmitPolyGT4
 
 /* Handwritten function */
-nonmatching func_80028D40, 0xB0
+nonmatching SubmitModel2, 0xB0
 
-glabel func_80028D40
+glabel SubmitModel2
     /* 19540 80028D40 5000868C */  lw         $a2, 0x50($a0)
     /* 19544 80028D44 80280500 */  sll        $a1, $a1, 2
     /* 19548 80028D48 2130A600 */  addu       $a2, $a1, $a2
@@ -1388,7 +1388,7 @@ glabel func_80028D40
   .L80028DBC:
     /* 195BC 80028DBC 0800A010 */  beqz       $a1, .L80028DE0
     /* 195C0 80028DC0 800088AC */   sw        $t0, 0x80($a0)
-    /* 195C4 80028DC4 27A2000C */  jal        func_8002889C
+    /* 195C4 80028DC4 27A2000C */  jal        SubmitModelFaces
     /* 195C8 80028DC8 00000000 */   nop
     /* 195CC 80028DCC 8000888C */  lw         $t0, 0x80($a0)
     /* 195D0 80028DD0 00000000 */  nop
@@ -1400,12 +1400,12 @@ glabel func_80028D40
     /* 195E4 80028DE4 00000000 */  nop
     /* 195E8 80028DE8 0800E003 */  jr         $ra
     /* 195EC 80028DEC 00000000 */   nop
-endlabel func_80028D40
+endlabel SubmitModel2
 
 /* Handwritten function */
-nonmatching func_80028DF0, 0x68
+nonmatching EmitPolyF4Fog, 0x68
 
-glabel func_80028DF0
+glabel EmitPolyF4Fog
     /* 195F0 80028DF0 0800CEAC */  sw         $t6, 0x8($a2)
     /* 195F4 80028DF4 0C00CFAC */  sw         $t7, 0xC($a2)
     /* 195F8 80028DF8 1000D8AC */  sw         $t8, 0x10($a2)
@@ -1432,12 +1432,12 @@ glabel func_80028DF0
     /* 1964C 80028E4C 000086AC */  sw         $a2, 0x0($a0)
     /* 19650 80028E50 0800E003 */  jr         $ra
     /* 19654 80028E54 00000000 */   nop
-endlabel func_80028DF0
+endlabel EmitPolyF4Fog
 
 /* Handwritten function */
-nonmatching func_80028E58, 0x8C
+nonmatching EmitPolyFT4Fog, 0x8C
 
-glabel func_80028E58
+glabel EmitPolyFT4Fog
     /* 19658 80028E58 0800CEAC */  sw         $t6, 0x8($a2)
     /* 1965C 80028E5C 1000CFAC */  sw         $t7, 0x10($a2)
     /* 19660 80028E60 1800D8AC */  sw         $t8, 0x18($a2)
@@ -1473,12 +1473,12 @@ glabel func_80028E58
     /* 196D8 80028ED8 000086AC */  sw         $a2, 0x0($a0)
     /* 196DC 80028EDC 0800E003 */  jr         $ra
     /* 196E0 80028EE0 00000000 */   nop
-endlabel func_80028E58
+endlabel EmitPolyFT4Fog
 
 /* Handwritten function */
-nonmatching func_80028EE4, 0xD8
+nonmatching EmitPolyG4Fog, 0xD8
 
-glabel func_80028EE4
+glabel EmitPolyG4Fog
     /* 196E4 80028EE4 0800CEAC */  sw         $t6, 0x8($a2)
     /* 196E8 80028EE8 1000CFAC */  sw         $t7, 0x10($a2)
     /* 196EC 80028EEC 1800D8AC */  sw         $t8, 0x18($a2)
@@ -1533,12 +1533,12 @@ glabel func_80028EE4
     /* 197B0 80028FB0 000086AC */  sw         $a2, 0x0($a0)
     /* 197B4 80028FB4 0800E003 */  jr         $ra
     /* 197B8 80028FB8 00000000 */   nop
-endlabel func_80028EE4
+endlabel EmitPolyG4Fog
 
 /* Handwritten function */
-nonmatching func_80028FBC, 0xF8
+nonmatching EmitPolyGT4Fog, 0xF8
 
-glabel func_80028FBC
+glabel EmitPolyGT4Fog
     /* 197BC 80028FBC 0800CEAC */  sw         $t6, 0x8($a2)
     /* 197C0 80028FC0 1400CFAC */  sw         $t7, 0x14($a2)
     /* 197C4 80028FC4 2000D8AC */  sw         $t8, 0x20($a2)
@@ -1601,13 +1601,13 @@ glabel func_80028FBC
     /* 198A8 800290A8 000086AC */  sw         $a2, 0x0($a0)
     /* 198AC 800290AC 0800E003 */  jr         $ra
     /* 198B0 800290B0 00000000 */   nop
-endlabel func_80028FBC
+endlabel EmitPolyGT4Fog
 
 nonmatching SubmitCourseModel, 0x58
 
 glabel SubmitCourseModel
     /* 198B4 800290B4 8C009FAC */  sw         $ra, 0x8C($a0)
-    /* 198B8 800290B8 2AA6000C */  jal        func_800298A8
+    /* 198B8 800290B8 2AA6000C */  jal        TransformCourseModel
     /* 198BC 800290BC 4800888C */   lw        $t0, 0x48($a0)
   .L800290C0:
     /* 198C0 800290C0 0E00A010 */  beqz       $a1, .L800290FC
@@ -1633,9 +1633,9 @@ glabel SubmitCourseModel
 endlabel SubmitCourseModel
 
 /* Handwritten function */
-nonmatching func_8002910C, 0xFA4
+nonmatching EmitCoursePolyF4, 0xFA4
 
-glabel func_8002910C
+glabel EmitCoursePolyF4
     /* 1990C 8002910C 02800A3C */  lui        $t2, course_model_continue_0_hi
     /* 19910 80029110 1C914A35 */  ori        $t2, $t2, course_model_continue_0_lo
     /* 19914 80029114 5B020010 */  b          .L80029A84
@@ -2119,7 +2119,7 @@ glabel func_8002910C
     /* 1A04C 8002984C 2800A220 */   addi      $v0, $a1, 0x28 /* handwritten instruction */
   alabel SubmitCourseModel2
     /* 1A050 80029850 8C009FAC */  sw         $ra, 0x8C($a0)
-    /* 1A054 80029854 2AA6000C */  jal        func_800298A8
+    /* 1A054 80029854 2AA6000C */  jal        TransformCourseModel
     /* 1A058 80029858 4800888C */   lw        $t0, 0x48($a0)
   .L8002985C:
     /* 1A05C 8002985C 0E00A010 */  beqz       $a1, .L80029898
@@ -2142,7 +2142,7 @@ glabel func_8002910C
     /* 1A09C 8002989C 00000000 */  nop
     /* 1A0A0 800298A0 0800E003 */  jr         $ra
     /* 1A0A4 800298A4 00000000 */   nop
-  alabel func_800298A8
+  alabel TransformCourseModel
     /* 1A0A8 800298A8 80300500 */  sll        $a2, $a1, 2
     /* 1A0AC 800298AC C0280500 */  sll        $a1, $a1, 3
     /* 1A0B0 800298B0 2128A600 */  addu       $a1, $a1, $a2
@@ -2683,4 +2683,4 @@ glabel func_8002910C
     /* 1A8A4 8002A0A4 D2008DA4 */  sh         $t5, 0xD2($a0)
     /* 1A8A8 8002A0A8 A1FC0010 */  b          .L80029330
     /* 1A8AC 8002A0AC A00096E8 */   swc2      $22, 0xA0($a0)
-endlabel func_8002910C
+endlabel EmitCoursePolyF4

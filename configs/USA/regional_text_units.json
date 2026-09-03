@@ -20,5 +20,134 @@
     "start": "0x58BE4",
     "end": "0x58EB8",
     "path": "JAP10/lib/libgte/fog_geometry"
+  },
+  {
+    "start": "0x6BA4",
+    "end": "0x6CE8",
+    "path": "JAP10/main/boot/init_subsystems"
+  },
+  {
+    "start": "0x242C4",
+    "end": "0x245C8",
+    "path": "JAP10/main/race/race_hud_time"
+  },
+  {
+    "start": "0x25488",
+    "end": "0x25504",
+    "path": "JAP10/main/race/time_conversion"
+  },
+  {
+    "start": "0xC66C",
+    "end": "0xCA18",
+    "path": "JAP10/main/menu/display_setup"
+  },
+  {
+    "start": "0x15AE8",
+    "end": "0x15CD4",
+    "path": "JAP10/main/menu/screen_adjust_update"
+  },
+  {
+    "start": "0x139B8",
+    "end": "0x13AFC",
+    "path": "JAP10/main/boot/boot_logo_update"
+  },
+  {
+    "start": "0x18610",
+    "end": "0x1ACCC",
+    "path": "JAP10/main/render/terrain_submission"
+  },
+  {
+    "start": "0x1FBE4",
+    "end": "0x2002C",
+    "path": "JAP10/main/car/update_car_driving"
+  },
+  {
+    "start": "0x25EAC",
+    "end": "0x26608",
+    "path": "JAP10/main/race/update_lap_and_finish"
+  },
+  {
+    "start": "0x2B648",
+    "end": "0x2CA1C",
+    "path": "JAP10/main/car/race_car_updates"
+  },
+  {
+    "start": "0x4FB70",
+    "end": "0x4FDA4",
+    "path": "JAP10/main/save/save_header"
+  },
+  {
+    "start": "0x2A6B4",
+    "end": "0x2A7F4",
+    "path": "JAP10/main/car/clamp_car_lateral_offset"
+  },
+  {
+    "start": "0x535C4",
+    "end": "0x53740",
+    "path": "USA/main/boot/startup_and_bios"
+  },
+  {
+    "start": "0x54A64",
+    "end": "0x54DFC",
+    "path": "JAP10/lib/libpress/mdec_unpack_status"
+  },
+  {
+    "start": "0x58EB8",
+    "end": "0x59B88",
+    "path": "JAP10/lib/libgte/matrix_routines"
+  },
+  {
+    "start": "0x59C38",
+    "end": "0x59D68",
+    "path": "JAP10/lib/libgte/scale_matrix"
+  },
+  {
+    "start": "0x5A228",
+    "end": "0x5A528",
+    "path": "JAP10/lib/libgte/rotation_and_exception"
+  },
+  {
+    "start": "0x5E424",
+    "end": "0x5E444",
+    "path": "PAL/lib/libetc/vertical_sync_asm"
+  },
+  {
+    "start": "0xF8B0",
+    "end": "0xFB00",
+    "path": "JAP10/main/race/replay_recording"
+  },
+  {
+    "start": "0xFB00",
+    "end": "0x10400",
+    "path": "JAP10/main/race/replay"
+  },
+  {
+    "start": "0x170FC",
+    "end": "0x17808",
+    "path": "USA/main/race/prologue"
+  },
+  {
+    "start": "0x1CA5C",
+    "end": "0x1E4E0",
+    "path": "JAP10/main/car/car_orientation"
+  },
+  {
+    "start": "0x233E0",
+    "end": "0x23920",
+    "path": "JAP10/main/render/race_hud"
+  },
+  {
+    "start": "0x1E4E0",
+    "end": "0x1F9AC",
+    "path": "JAP10/main/car/update_player_car",
+    "rodata_start": "0x1C18",
+    "rodata_end": "0x1C38"
+  },
+  {
+    "start": "0xB748",
+    "end": "0xC05C",
+    "path": "JAP11/main/menu/title_screen",
+    "rodata_start": "0x1404",
+    "rodata_end": "0x1418"
   }
 ]

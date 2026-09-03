@@ -3,8 +3,8 @@
   "portable_units": 328,
   "portable_text_bytes": 358228,
   "portable_rodata_bytes": 2716,
-  "regional_units": 4,
-  "regional_text_bytes": 7300,
+  "regional_units": 29,
+  "regional_text_bytes": 55296,
   "text_aliases": 10,
   "inferred_externals": 2132,
   "selected": [
@@ -1714,8 +1714,7 @@
   "rejected": [
     {
       "path": "PAL/main/boot/init_subsystems",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/boot/main_loop",
@@ -1731,8 +1730,7 @@
     },
     {
       "path": "PAL/main/menu/display_setup",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/race/replay_recording",
@@ -1749,13 +1747,11 @@
     },
     {
       "path": "PAL/main/boot/boot_logo_update",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/menu/screen_adjust_update",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/race/prologue",
@@ -1763,56 +1759,7 @@
     },
     {
       "path": "PAL/main/render/terrain_submission",
-      "reason": "unmapped externals",
-      "symbols": [
-        "EmitCoursePolyF4Fog_0x14_hi",
-        "EmitCoursePolyF4Fog_0x14_lo",
-        "EmitCoursePolyF4_0x10_hi",
-        "EmitCoursePolyF4_0x10_lo",
-        "EmitCoursePolyFT4Fog_hi",
-        "EmitCoursePolyFT4Fog_lo",
-        "EmitCoursePolyFT4_0x10_hi",
-        "EmitCoursePolyFT4_0x10_lo",
-        "EmitCourseSubdividedFT4Fog_hi",
-        "EmitCourseSubdividedFT4Fog_lo",
-        "EmitCourseSubdividedFT4_0xC_hi",
-        "EmitCourseSubdividedFT4_0xC_lo",
-        "SubmitCourseSubdividedFaces_0x2A8_hi",
-        "SubmitCourseSubdividedFaces_0x2A8_lo",
-        "SubmitCourseSubdividedFaces_0x350_hi",
-        "SubmitCourseSubdividedFaces_0x350_lo",
-        "__maspsx_include_asm_hack_EmitCoursePolyF4",
-        "__maspsx_include_asm_hack_EmitCoursePolyF4Fog",
-        "__maspsx_include_asm_hack_EmitCoursePolyFT4",
-        "__maspsx_include_asm_hack_EmitCoursePolyFT4Fog",
-        "__maspsx_include_asm_hack_EmitCourseSubdividedFT4",
-        "__maspsx_include_asm_hack_EmitCourseSubdividedFT4Fog",
-        "__maspsx_include_asm_hack_EmitPolyF4",
-        "__maspsx_include_asm_hack_EmitPolyF4Fog",
-        "__maspsx_include_asm_hack_EmitPolyFT4Fog",
-        "__maspsx_include_asm_hack_EmitPolyFT4Raw",
-        "__maspsx_include_asm_hack_EmitPolyG4",
-        "__maspsx_include_asm_hack_EmitPolyG4Fog",
-        "__maspsx_include_asm_hack_EmitPolyGT4",
-        "__maspsx_include_asm_hack_EmitPolyGT4Fog",
-        "__maspsx_include_asm_hack_EmitSubdividedTerrainQuad",
-        "__maspsx_include_asm_hack_InterpolateSubdivRow",
-        "__maspsx_include_asm_hack_SubmitCourseModel",
-        "__maspsx_include_asm_hack_SubmitCourseModel2",
-        "__maspsx_include_asm_hack_SubmitCourseSubdividedFaces",
-        "__maspsx_include_asm_hack_SubmitModel",
-        "__maspsx_include_asm_hack_SubmitModel2",
-        "__maspsx_include_asm_hack_SubmitTerrainCellFaces",
-        "__maspsx_include_asm_hack_SubmitTerrainCellFacesFar",
-        "__maspsx_include_asm_hack_SubmitTerrainCells",
-        "__maspsx_include_asm_hack_TransformCourseModel",
-        "jtbl_8007D9F4_hi",
-        "jtbl_8007D9F4_lo",
-        "jtbl_8007DA14_0x40_hi",
-        "jtbl_8007DA14_0x40_lo",
-        "jtbl_8007DA14_0x50_hi",
-        "jtbl_8007DA14_0x50_lo"
-      ]
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/car/update_car_drivetrain",
@@ -1825,13 +1772,11 @@
     },
     {
       "path": "PAL/main/car/update_player_car",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/car/update_car_driving",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/render/race_hud",
@@ -1844,18 +1789,15 @@
     },
     {
       "path": "PAL/main/race/race_hud_time",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/race/time_conversion",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/race/update_lap_and_finish",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/race/race_scene",
@@ -1863,18 +1805,15 @@
     },
     {
       "path": "PAL/main/car/clamp_car_lateral_offset",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/car/race_car_update",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/save/save_header",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/save/memory_card_io",
@@ -1883,10 +1822,7 @@
     },
     {
       "path": "PAL/main/boot/_start",
-      "reason": "unmapped externals",
-      "symbols": [
-        "__maspsx_include_asm_hack_D_800630B4"
-      ]
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/lib/libapi/exit_critical_section",
@@ -1897,11 +1833,7 @@
     },
     {
       "path": "PAL/lib/libpress/mdec_unpack_status",
-      "reason": "unmapped externals",
-      "symbols": [
-        "__maspsx_include_asm_hack_MdecUnpackStatus",
-        "__maspsx_include_asm_hack_g_MdecVlcBufferSize"
-      ]
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/lib/libgte/fog_geometry",
@@ -1916,10 +1848,7 @@
     },
     {
       "path": "PAL/lib/libgte/matrix_stack",
-      "reason": "unmapped externals",
-      "symbols": [
-        "__maspsx_include_asm_hack_ScaleMatrixL"
-      ]
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/lib/libgte/multiply_matrix",
@@ -1937,17 +1866,11 @@
     },
     {
       "path": "PAL/lib/libgte/scale_matrix",
-      "reason": "unmapped externals",
-      "symbols": [
-        "__maspsx_include_asm_hack_ScaleMatrix"
-      ]
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/lib/libgte/rot_matrix_asm",
-      "reason": "unmapped externals",
-      "symbols": [
-        "__maspsx_include_asm_hack_RotMatrix"
-      ]
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/lib/libgte/exception_patch",
@@ -1958,10 +1881,7 @@
     },
     {
       "path": "PAL/lib/libetc/vertical_sync_asm",
-      "reason": "unmapped externals",
-      "symbols": [
-        "__maspsx_include_asm_hack_vertical_sync"
-      ]
+      "reason": "linked bytes differ"
     }
   ]
 }

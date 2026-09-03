@@ -104,6 +104,24 @@ g_NegconAnalogL = 0x801E39F0;
 g_CarCornerOffsets = 0x8007D268;
 g_PlayerTargetRpm = 0x8009DEB0;
 g_PlayerThrottle = 0x8009DED8;
+/* Local disassembly names for the terrain engine labels. */
+func_80027B20 = SubmitTerrainCellFaces;
+func_80028274 = EmitSubdividedTerrainQuad;
+func_80028654 = InterpolateSubdivRow;
+func_80028784 = SubmitTerrainCellFacesFar;
+func_8002889C = SubmitModelFaces;
+func_80028A64 = EmitPolyF4;
+func_80028AC8 = EmitPolyFT4Raw;
+func_80028B58 = EmitPolyG4;
+func_80028C30 = EmitPolyGT4;
+func_80028D40 = SubmitModel2;
+func_80028DF0 = EmitPolyF4Fog;
+func_80028E58 = EmitPolyFT4Fog;
+func_80028EE4 = EmitPolyG4Fog;
+func_80028FBC = EmitPolyGT4Fog;
+func_8002910C = EmitCoursePolyF4;
+func_800298A8 = TransformCourseModel;
+
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */

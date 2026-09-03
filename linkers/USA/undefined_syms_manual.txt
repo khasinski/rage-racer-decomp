@@ -4,6 +4,87 @@
 D_800941B4 = 0x80094814;
 func_80069804 = 0x80069CB8;
 
+/* Local disassembly names for functions the regional units define. */
+func_80028EE4 = EmitPolyFT4Raw;
+func_800231B8 = UpdateBootLogoScene;
+func_800252E8 = UpdateScreenAdjustScreen;
+func_80028E80 = EmitPolyF4;
+func_80028F74 = EmitPolyG4;
+func_8002904C = EmitPolyGT4;
+func_8002920C = EmitPolyF4Fog;
+func_80029274 = EmitPolyFT4Fog;
+func_80029300 = EmitPolyG4Fog;
+func_800293D8 = EmitPolyGT4Fog;
+func_80029528 = EmitCoursePolyF4;
+func_8002F3E4 = UpdateCarDriving;
+
+/* Address halves the handwritten terrain engine loads directly. */
+terrain_primitive_table_hi = jtbl_8007D6FC_main >> 16;
+terrain_primitive_table_lo = jtbl_8007D6FC_main & 0xFFFF;
+model_primitive_table_hi = jtbl_8007D71C_main >> 16;
+model_primitive_table_lo = jtbl_8007D71C_main & 0xFFFF;
+course_model_dispatch_1_hi = (jtbl_8007D71C_main + 0x40) >> 16;
+course_model_dispatch_1_lo = (jtbl_8007D71C_main + 0x40) & 0xFFFF;
+course_model_dispatch_2_hi = (jtbl_8007D71C_main + 0x50) >> 16;
+course_model_dispatch_2_lo = (jtbl_8007D71C_main + 0x50) & 0xFFFF;
+course_model_continue_0_hi = course_model_continue_0 >> 16;
+course_model_continue_0_lo = course_model_continue_0 & 0xFFFF;
+course_model_continue_1_hi = course_model_continue_1 >> 16;
+course_model_continue_1_lo = course_model_continue_1 & 0xFFFF;
+course_model_continue_2_hi = course_model_continue_2 >> 16;
+course_model_continue_2_lo = course_model_continue_2 & 0xFFFF;
+course_model_continue_3_hi = course_model_continue_3 >> 16;
+course_model_continue_3_lo = course_model_continue_3 & 0xFFFF;
+course_model_continue_4_hi = course_model_continue_4 >> 16;
+course_model_continue_4_lo = course_model_continue_4 & 0xFFFF;
+course_model_continue_5_hi = course_model_continue_5 >> 16;
+course_model_continue_5_lo = course_model_continue_5 & 0xFFFF;
+course_model_continue_6_hi = course_model_continue_6 >> 16;
+course_model_continue_6_lo = course_model_continue_6 & 0xFFFF;
+course_model_continue_7_hi = course_model_continue_7 >> 16;
+course_model_continue_7_lo = course_model_continue_7 & 0xFFFF;
+
+/* Data and bss addresses recovered from the retail USA relocation sites. */
+UpdateCarDrivetrain = 0x8002A62C;
+func_800698A4 = 0x80069D58;
+g_BootLogoState = 0x8007D24C;
+g_CarCornerOffsets = 0x8007D7B8;
+g_ClockTextBuffer = 0x8007DC18;
+g_ClockTextMinUnits = 0x8007DC19;
+g_ClockTextSecTens = 0x8007DC1B;
+g_ClockTextSecUnits = 0x8007DC1C;
+g_DispEnv0ScreenX = 0x8019CBA4;
+g_DispEnv0ScreenY = 0x8019CBA6;
+g_DispEnv1ScreenX = 0x801C038C;
+g_DispEnv1ScreenY = 0x801C038E;
+g_DrawEnv1 = 0x801C0328;
+g_FmtString = 0x80012F6C;
+g_LaunchSpeedThresholds = 0x8007D7C8;
+g_MirrorDrawEnv1 = 0x801C0398;
+g_NegconAccelMask = 0x801E487C;
+g_NegconAnalogI = 0x801E407C;
+g_NegconAnalogII = 0x801E407E;
+g_NegconAnalogL = 0x801E4080;
+g_NegconBrakeMask = 0x801E487E;
+g_PadAccelMask = 0x801E486C;
+g_PadBrakeMask = 0x801E486E;
+g_PadShiftMasks = 0x801E4870;
+g_PlayerTargetRpm = 0x8009E510;
+g_PlayerThrottle = 0x8009E538;
+g_SaveIconRect = 0x8009B264;
+
+/* JAP10-named data in the shared handwritten sources; USA sits 0x660 later. */
+D_80083048 = 0x800836A8;
+D_80093048 = 0x800936A8;
+D_800941C4 = 0x80094824;
+D_80094344 = 0x800949A4;
+D_80094350 = 0x800949B0;
+D_80094354 = 0x800949B4;
+D_800945D4 = 0x80094C34;
+D_80094605 = 0x80094C65;
+D_80094654 = 0x80094CB4;
+D_8009A584 = 0x8009ABE4;
+
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */

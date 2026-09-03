@@ -5,15 +5,15 @@ func_8001BD10 = SetupDisplay240;
 func_80020C24 = UpdatePrizeMoneyScreen;
 func_80023004 = UpdateBootLogoScene;
 func_80025134 = UpdateScreenAdjustScreen;
-func_80028B30 = func_80028A64;
-func_80028B94 = func_80028AC8;
-func_80028C24 = func_80028B58;
-func_80028CFC = func_80028C30;
-func_80028EBC = func_80028DF0;
-func_80028F24 = func_80028E58;
-func_80028FB0 = func_80028EE4;
-func_80029088 = func_80028FBC;
-func_800291D8 = func_8002910C;
+func_80028B30 = EmitPolyF4;
+func_80028B94 = EmitPolyFT4Raw;
+func_80028C24 = EmitPolyG4;
+func_80028CFC = EmitPolyGT4;
+func_80028EBC = EmitPolyF4Fog;
+func_80028F24 = EmitPolyFT4Fog;
+func_80028FB0 = EmitPolyG4Fog;
+func_80029088 = EmitPolyGT4Fog;
+func_800291D8 = EmitCoursePolyF4;
 /* Entry point inside the relocatable GTE exception patch blob. */
 func_800698A4 = 0x800698A4;
 
