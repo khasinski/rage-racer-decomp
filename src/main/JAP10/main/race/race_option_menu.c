@@ -1,0 +1,6 @@
+#define RACE_HUD_TEXT_ONLY_OPTION
+#define RACE_OPTION_MARQUEE_WIDTH 16
+#define RACE_OPTION_SCROLL_LIMIT -0x90
+#define RACE_OPTION_SCROLL_RESET 0xC0
+#define RACE_OPTION_SIMPLE_MARQUEE_SCALE
+#include "../../../PAL/main/race/race_hud_text.c"

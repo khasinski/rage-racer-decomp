@@ -30,6 +30,7 @@ func_800156F4 = DrawNegconNeutralScreen;
 func_800208A8 = AdvanceGrandPrixClass;
 func_80020B58 = UpdatePrizeMoneyScreen;
 func_8002EFCC = UpdateCarDriving;
+func_800340C4 = DrawRaceOptionMenu;
 func_80015994 = DrawNegconSteerPlayScreen;
 func_80015E94 = DrawNegconMaxTwistScreen;
 func_8001BD0C = SetupDisplay240;
@@ -46,6 +47,10 @@ g_BootLogoState = 0x8007CD94;
 g_McMessageRows = 0x8007D154;
 g_McMessageColumnX = 0x8007D1A0;
 g_LaunchSpeedThresholds = 0x8007D278;
+g_RaceOptionPulseAngle = 0x8007D6E4;
+g_RaceOptionScroll0 = 0x8007D6E8;
+g_RaceOptionScroll1 = 0x8007D6EA;
+g_RaceOptionMarquee = 0x8007D6EC;
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */

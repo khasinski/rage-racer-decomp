@@ -1009,6 +1009,7 @@ void DecDCTReset(long mode);
 void DecDCTin(volatile u32 *bitstream, s32 mode);
 void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color);
 DrawPacket *DrawMirrorFrame(u8 *packet);
+u8 *QueueDrawAreaPrim(void *ot, DrawPacket *packet, s16 x, s16 y, s32 w, s32 h);
 void GPU_cw(void *packet);
 /* Both parameters stay void *: the one caller hands it a whole DrawEnv and
  * the packet it embeds, while the definition reads only the head of each. */

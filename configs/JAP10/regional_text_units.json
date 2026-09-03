@@ -52,6 +52,11 @@
     "path": "JAP10/main/car/update_car_driving"
   },
   {
+    "start": "0x248C4",
+    "end": "0x24EEC",
+    "path": "JAP10/main/race/race_option_menu"
+  },
+  {
     "start": "0xEE04",
     "end": "0xEEEC",
     "path": "JAP10/main/fmv/start_fmv_playback"
