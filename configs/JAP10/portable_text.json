@@ -1,11 +1,11 @@
 {
   "version": "JAP10",
-  "portable_units": 321,
-  "portable_text_bytes": 363516,
+  "portable_units": 326,
+  "portable_text_bytes": 366376,
   "portable_rodata_bytes": 2612,
   "regional_units": 26,
   "regional_text_bytes": 40340,
-  "text_aliases": 9,
+  "text_aliases": 10,
   "inferred_externals": 2018,
   "selected": [
     {
@@ -966,6 +966,11 @@
       "path": "PAL/lib/libpress/mdec_callbacks"
     },
     {
+      "start": "0x54130",
+      "end": "0x545B0",
+      "path": "PAL/lib/libpress/mdec_runtime"
+    },
+    {
       "start": "0x54948",
       "end": "0x54DC0",
       "path": "PAL/lib/libgpu/texture_primitives"
@@ -1066,6 +1071,11 @@
       "path": "PAL/lib/libgte/geo_00"
     },
     {
+      "start": "0x58730",
+      "end": "0x58A04",
+      "path": "PAL/lib/libgte/fog_geometry"
+    },
+    {
       "start": "0x596D4",
       "end": "0x59784",
       "path": "PAL/lib/libgte/apply_matrix"
@@ -1089,6 +1099,11 @@
       "start": "0x59CD8",
       "end": "0x59D18",
       "path": "PAL/lib/libgte/leading_zero_count"
+    },
+    {
+      "start": "0x59D18",
+      "end": "0x59D74",
+      "path": "PAL/lib/libgte/rotation_matrix"
     },
     {
       "start": "0x5A074",
@@ -1226,6 +1241,16 @@
       "start": "0x5DBD0",
       "end": "0x5DD8C",
       "path": "PAL/lib/libcd/dma_start"
+    },
+    {
+      "start": "0x5DD8C",
+      "end": "0x5DF70",
+      "path": "PAL/lib/libetc/vertical_sync"
+    },
+    {
+      "start": "0x5DF90",
+      "end": "0x5E128",
+      "path": "PAL/lib/libetc/interrupt_wrappers"
     },
     {
       "start": "0x5E128",
@@ -1873,7 +1898,7 @@
       ]
     },
     {
-      "path": "PAL/lib/libpress/mdec_runtime",
+      "path": "PAL/lib/libpress/mdec_unpack_status",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_MdecUnpackStatus",
@@ -1881,7 +1906,7 @@
       ]
     },
     {
-      "path": "PAL/lib/libgte/fog_geometry",
+      "path": "PAL/lib/libgte/square_root_0",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_SquareRoot0"
@@ -1916,7 +1941,7 @@
       ]
     },
     {
-      "path": "PAL/lib/libgte/rotation_matrix",
+      "path": "PAL/lib/libgte/rot_matrix_asm",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_RotMatrix"
@@ -1930,7 +1955,7 @@
       ]
     },
     {
-      "path": "PAL/lib/libetc/vertical_sync",
+      "path": "PAL/lib/libetc/vertical_sync_asm",
       "reason": "unmapped externals",
       "symbols": [
         "__maspsx_include_asm_hack_vertical_sync"

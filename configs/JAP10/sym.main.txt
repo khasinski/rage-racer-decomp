@@ -2647,6 +2647,7 @@ g_SndKeyOffHigh = 0x801F3CA0; // inferred from 21 reference(s)
 _card_write = 0x80063680; // type:func
 func_80069724 = 0x80068F80; // type:func
 func_80069C94 = 0x800694F0; // type:func
+func_80069CBC = 0x80069518; // type:func
 func_8006A018 = 0x80069874; // type:func
 func_8006B330 = 0x8006AB8C; // type:func
 RestoreKernelRegisters = 0x8006DF1C; // type:func
