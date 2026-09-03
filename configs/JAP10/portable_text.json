@@ -1,18 +1,13 @@
 {
   "version": "JAP10",
-  "portable_units": 326,
-  "portable_text_bytes": 366376,
-  "portable_rodata_bytes": 2612,
-  "regional_units": 26,
-  "regional_text_bytes": 40340,
+  "portable_units": 314,
+  "portable_text_bytes": 340900,
+  "portable_rodata_bytes": 2464,
+  "regional_units": 33,
+  "regional_text_bytes": 55940,
   "text_aliases": 10,
   "inferred_externals": 2018,
   "selected": [
-    {
-      "start": "0x4514",
-      "end": "0x4B68",
-      "path": "PAL/main/pad/init_pad"
-    },
     {
       "start": "0x4B68",
       "end": "0x5478",
@@ -112,20 +107,6 @@
       "path": "PAL/main/render/rear_view_mirror"
     },
     {
-      "start": "0xB5E0",
-      "end": "0xBEF4",
-      "path": "PAL/main/menu/title_screen",
-      "rodata_start": "0x13A0",
-      "rodata_end": "0x13B4"
-    },
-    {
-      "start": "0xBEF4",
-      "end": "0xC504",
-      "path": "PAL/main/menu/frontend",
-      "rodata_start": "0x13B8",
-      "rodata_end": "0x13CC"
-    },
-    {
       "start": "0xC8B0",
       "end": "0xD974",
       "path": "PAL/main/menu/round_screen"
@@ -166,16 +147,6 @@
       "path": "PAL/main/fmv/setup_fmv_buffers"
     },
     {
-      "start": "0xF680",
-      "end": "0xF8D0",
-      "path": "PAL/main/race/replay_recording"
-    },
-    {
-      "start": "0xF8D0",
-      "end": "0x101D0",
-      "path": "PAL/main/race/replay"
-    },
-    {
       "start": "0x101D0",
       "end": "0x10C58",
       "path": "PAL/main/race/result_screens"
@@ -184,11 +155,6 @@
       "start": "0x11774",
       "end": "0x117D8",
       "path": "PAL/main/audio/apply_audio_settings"
-    },
-    {
-      "start": "0x117D8",
-      "end": "0x11A08",
-      "path": "PAL/main/save/save_defaults"
     },
     {
       "start": "0x11A08",
@@ -270,11 +236,6 @@
       "path": "PAL/main/race/attract_demo"
     },
     {
-      "start": "0x16E7C",
-      "end": "0x17588",
-      "path": "PAL/main/race/prologue"
-    },
-    {
       "start": "0x17588",
       "end": "0x175D4",
       "path": "PAL/main/race/prologue_step"
@@ -313,11 +274,6 @@
       "start": "0x1BFE4",
       "end": "0x1C644",
       "path": "PAL/main/car/lap_progress"
-    },
-    {
-      "start": "0x1C644",
-      "end": "0x1E0C8",
-      "path": "PAL/main/car/car_orientation"
     },
     {
       "start": "0x1F594",
@@ -380,11 +336,6 @@
       "path": "PAL/main/render/build_race_hud_prims"
     },
     {
-      "start": "0x22FC8",
-      "end": "0x23508",
-      "path": "PAL/main/render/race_hud"
-    },
-    {
       "start": "0x23508",
       "end": "0x23D44",
       "path": "PAL/main/race/draw_wrong_way_warning"
@@ -418,11 +369,6 @@
       "start": "0x258FC",
       "end": "0x25A5C",
       "path": "PAL/main/race/draw_split_times"
-    },
-    {
-      "start": "0x261B8",
-      "end": "0x2731C",
-      "path": "PAL/main/race/race_scene"
     },
     {
       "start": "0x2731C",
@@ -673,13 +619,6 @@
       "start": "0x3FA18",
       "end": "0x3FD64",
       "path": "PAL/main/menu/draw_engineer_shop_price_panel"
-    },
-    {
-      "start": "0x3FD64",
-      "end": "0x402E8",
-      "path": "PAL/main/menu/draw_car_name_plate",
-      "rodata_start": "0x1FE0",
-      "rodata_end": "0x204C"
     },
     {
       "start": "0x402E8",
@@ -1069,11 +1008,6 @@
       "start": "0x585C4",
       "end": "0x58730",
       "path": "PAL/lib/libgte/geo_00"
-    },
-    {
-      "start": "0x58730",
-      "end": "0x58A04",
-      "path": "PAL/lib/libgte/fog_geometry"
     },
     {
       "start": "0x596D4",
@@ -1703,6 +1637,10 @@
   ],
   "rejected": [
     {
+      "path": "PAL/main/pad/init_pad",
+      "reason": "linked bytes differ"
+    },
+    {
       "path": "PAL/main/menu/controller_config",
       "reason": "structural match is not unique",
       "matches": 0
@@ -1719,6 +1657,14 @@
     },
     {
       "path": "PAL/main/boot/main_loop",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/menu/title_screen",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/menu/frontend",
       "reason": "linked bytes differ"
     },
     {
@@ -1746,12 +1692,24 @@
       "matches": 0
     },
     {
+      "path": "PAL/main/race/replay_recording",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/race/replay",
+      "reason": "linked bytes differ"
+    },
+    {
       "path": "PAL/main/race/class_progress",
       "reason": "structural match is not unique",
       "matches": 0
     },
     {
       "path": "PAL/main/menu/prize_money_screen",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/save/save_defaults",
       "reason": "linked bytes differ"
     },
     {
@@ -1765,6 +1723,10 @@
     },
     {
       "path": "PAL/main/menu/screen_adjust_update",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/race/prologue",
       "reason": "linked bytes differ"
     },
     {
@@ -1834,11 +1796,19 @@
       "reason": "linked bytes differ"
     },
     {
+      "path": "PAL/main/car/car_orientation",
+      "reason": "linked bytes differ"
+    },
+    {
       "path": "PAL/main/car/update_player_car",
       "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/car/update_car_driving",
+      "reason": "linked bytes differ"
+    },
+    {
+      "path": "PAL/main/render/race_hud",
       "reason": "linked bytes differ"
     },
     {
@@ -1860,6 +1830,10 @@
       "reason": "linked bytes differ"
     },
     {
+      "path": "PAL/main/race/race_scene",
+      "reason": "linked bytes differ"
+    },
+    {
       "path": "PAL/main/car/clamp_car_lateral_offset",
       "reason": "structural match is not unique",
       "matches": 0
@@ -1872,6 +1846,10 @@
       "path": "PAL/main/menu/draw_ranking_table",
       "reason": "structural match is not unique",
       "matches": 0
+    },
+    {
+      "path": "PAL/main/menu/draw_car_name_plate",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/save/save_header",
@@ -1904,6 +1882,10 @@
         "__maspsx_include_asm_hack_MdecUnpackStatus",
         "__maspsx_include_asm_hack_g_MdecVlcBufferSize"
       ]
+    },
+    {
+      "path": "PAL/lib/libgte/fog_geometry",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/lib/libgte/square_root_0",

@@ -40,6 +40,11 @@
     "path": "JAP10/main/save/draw_memory_card_message"
   },
   {
+    "start": "0x181F4",
+    "end": "0x1A8B0",
+    "path": "JAP10/main/render/terrain_submission"
+  },
+  {
     "start": "0x11358",
     "end": "0x11774",
     "path": "JAP10/main/menu/prize_money_screen",
@@ -134,5 +139,35 @@
     "path": "JAP10/main/menu/draw_ranking_table",
     "rodata_start": "0x1F38",
     "rodata_end": "0x1FA4"
+  },
+  {
+    "start": "0x53110",
+    "end": "0x5328C",
+    "path": "JAP10/main/boot/startup_and_bios"
+  },
+  {
+    "start": "0x545B0",
+    "end": "0x54948",
+    "path": "JAP10/lib/libpress/mdec_unpack_status"
+  },
+  {
+    "start": "0x58A04",
+    "end": "0x596D4",
+    "path": "JAP10/lib/libgte/matrix_routines"
+  },
+  {
+    "start": "0x59784",
+    "end": "0x598B4",
+    "path": "JAP10/lib/libgte/scale_matrix"
+  },
+  {
+    "start": "0x59D74",
+    "end": "0x5A074",
+    "path": "JAP10/lib/libgte/rotation_and_exception"
+  },
+  {
+    "start": "0x5DF70",
+    "end": "0x5DF90",
+    "path": "PAL/lib/libetc/vertical_sync_asm"
   }
 ]

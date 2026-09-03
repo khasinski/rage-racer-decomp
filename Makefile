@@ -42,6 +42,12 @@ ASM_OBJS := $(ASM_SRCS:%.s=$(BUILD)/%.s.o)
 C_OBJS   := $(C_SRCS:%=$(BUILD)/%.o)
 OBJS := $(ASM_OBJS) $(C_OBJS)
 
+# HANDWRITTEN_ASM expands to an assembler .include, which cpp's dependency
+# output cannot see.  Add the sibling assembly file explicitly so editing a
+# named GTE/COP2 (or other hand-written) routine cannot leave a stale object.
+HANDWRITTEN_ASM_C_SRCS := $(foreach src,$(C_SRCS),$(if $(wildcard $(src:.c=.s)),$(src)))
+$(foreach src,$(HANDWRITTEN_ASM_C_SRCS),$(eval $(BUILD)/$(src).o: $(src:.c=.s)))
+
 # Header dependencies, written by cpp -MD in tools/scripts/cc.sh. Without
 # these a change under include/ leaves every dependent object stale, which
 # has repeatedly hidden real breakage behind a passing build.

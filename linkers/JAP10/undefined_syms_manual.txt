@@ -25,6 +25,38 @@ g_SaveTitleSjis = 0x800125DC;
 func_8005EF38 = BuildSaveIconBlock;
 g_FmtString = 0x80012D54;
 g_SaveIconRect = 0x8009AC04;
+g_MsgOrdinalSt = 0x80011724;
+g_MsgOrdinalNd = 0x80011728;
+g_MsgOrdinalRd = 0x8001172C;
+g_MsgOrdinalTh = 0x80011730;
+
+/* The terrain renderer builds these pointers with lui/ori rather than the
+ * usual sign-adjusted %hi/%lo relocation pair.  Linker-computed halves retain
+ * the retail encoding while allowing the code and tables to move. */
+terrain_primitive_table_hi = jtbl_8007D1AC_main >> 16;
+terrain_primitive_table_lo = jtbl_8007D1AC_main & 0xFFFF;
+model_primitive_table_hi = jtbl_8007D1CC_main >> 16;
+model_primitive_table_lo = jtbl_8007D1CC_main & 0xFFFF;
+course_model_dispatch_1_hi = (jtbl_8007D1CC_main + 0x40) >> 16;
+course_model_dispatch_1_lo = (jtbl_8007D1CC_main + 0x40) & 0xFFFF;
+course_model_dispatch_2_hi = (jtbl_8007D1CC_main + 0x50) >> 16;
+course_model_dispatch_2_lo = (jtbl_8007D1CC_main + 0x50) & 0xFFFF;
+course_model_continue_0_hi = course_model_continue_0 >> 16;
+course_model_continue_0_lo = course_model_continue_0 & 0xFFFF;
+course_model_continue_1_hi = course_model_continue_1 >> 16;
+course_model_continue_1_lo = course_model_continue_1 & 0xFFFF;
+course_model_continue_2_hi = course_model_continue_2 >> 16;
+course_model_continue_2_lo = course_model_continue_2 & 0xFFFF;
+course_model_continue_3_hi = course_model_continue_3 >> 16;
+course_model_continue_3_lo = course_model_continue_3 & 0xFFFF;
+course_model_continue_4_hi = course_model_continue_4 >> 16;
+course_model_continue_4_lo = course_model_continue_4 & 0xFFFF;
+course_model_continue_5_hi = course_model_continue_5 >> 16;
+course_model_continue_5_lo = course_model_continue_5 & 0xFFFF;
+course_model_continue_6_hi = course_model_continue_6 >> 16;
+course_model_continue_6_lo = course_model_continue_6 & 0xFFFF;
+course_model_continue_7_hi = course_model_continue_7 >> 16;
+course_model_continue_7_lo = course_model_continue_7 & 0xFFFF;
 func_80039A64 = ClampCarLateralOffset;
 func_800156F4 = DrawNegconNeutralScreen;
 func_800208A8 = AdvanceGrandPrixClass;
