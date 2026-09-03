@@ -217,7 +217,7 @@ segments:
       - [0x23508, c, PAL/main/race/draw_wrong_way_warning]
       - [0x23D44, c, PAL/main/race/draw_speed_digits]
       - [0x23E7C, c, JAP10/main/race/race_hud_time]
-      - [0x24180, asm, main/024180_main]
+      - [0x24180, c, PAL/main/race/race_hud_text]
       - [0x248C4, c, JAP10/main/race/race_option_menu]
       - [0x24EEC, c, PAL/main/asset/race_data_installation]
       - [0x24FA8, c, PAL/main/audio/sound_initialization]

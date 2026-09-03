@@ -1,12 +1,12 @@
 {
   "version": "JAP10",
-  "portable_units": 319,
-  "portable_text_bytes": 357204,
+  "portable_units": 320,
+  "portable_text_bytes": 359064,
   "portable_rodata_bytes": 2612,
   "regional_units": 26,
   "regional_text_bytes": 40340,
   "text_aliases": 9,
-  "inferred_externals": 1969,
+  "inferred_externals": 1975,
   "selected": [
     {
       "start": "0x4514",
@@ -393,6 +393,11 @@
       "start": "0x23D44",
       "end": "0x23E7C",
       "path": "PAL/main/race/draw_speed_digits"
+    },
+    {
+      "start": "0x24180",
+      "end": "0x248C4",
+      "path": "PAL/main/race/race_hud_text"
     },
     {
       "start": "0x24EEC",
@@ -1812,7 +1817,7 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/race/race_hud_text",
+      "path": "PAL/main/race/race_option_menu",
       "reason": "linked bytes differ"
     },
     {

@@ -6,7 +6,7 @@ PAL/main/save/draw_memory_card_message
 PAL/main/menu/display_setup
 PAL/main/menu/prize_money_screen
 PAL/main/car/update_car_driving
-PAL/main/race/race_hud_text
+PAL/main/race/race_option_menu
 PAL/main/race/race_scene
 PAL/main/car/race_car_update
 PAL/main/car/update_car_drivetrain

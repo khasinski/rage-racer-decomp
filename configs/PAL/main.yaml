@@ -209,6 +209,7 @@ segments:
       - [0x24418, c, PAL/main/race/draw_speed_digits]
       - [0x24550, c, PAL/main/race/race_hud_time]
       - [0x24858, c, PAL/main/race/race_hud_text]
+      - [0x24F9C, c, PAL/main/race/race_option_menu]
       - [0x255CC, c, PAL/main/asset/race_data_installation]
       - [0x25688, c, PAL/main/audio/sound_initialization]
       - [0x25718, c, PAL/main/race/time_conversion]
