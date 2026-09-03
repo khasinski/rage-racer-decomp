@@ -8,7 +8,6 @@
 #include "game/scratchpad.h"
 #include "psyq/gpu.h"
 
-
 void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
     volatile SPRT *packet;
     long idx;
@@ -60,11 +59,4 @@ void DrawSpriteString(long x, long y, u_char *str, long clutIndex) {
     SetDrawMode(packetAddress.drawPacket, 0, 1, 0x1D, g_DrawModeEnv);
     AddPrim(g_DrawBuffer + 0xCC, next);
     SCRATCH_PRIM_CURSOR_AS(u_char) = next + 0xC;
-}
-
-u8 *DrawShadowedTile(void *ot, u8 *prim, s32 x, s32 y) {
-    u8 *next;
-
-    next = AddTilePrim(ot, prim, x + 1, y + 2, 0xC2, 0x1C, 0, 0, 0);
-    return AddTilePrim(ot, next, x, y, 0xC4, 0x20, 0xFF, 0xFF, 0xFF);
 }

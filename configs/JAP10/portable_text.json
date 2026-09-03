@@ -1,12 +1,12 @@
 {
   "version": "JAP10",
-  "portable_units": 314,
-  "portable_text_bytes": 348996,
+  "portable_units": 316,
+  "portable_text_bytes": 349288,
   "portable_rodata_bytes": 2612,
   "regional_units": 26,
   "regional_text_bytes": 40340,
   "text_aliases": 9,
-  "inferred_externals": 1952,
+  "inferred_externals": 1954,
   "selected": [
     {
       "start": "0x4514",
@@ -290,6 +290,11 @@
       "path": "PAL/lib/libcd/read"
     },
     {
+      "start": "0x17C10",
+      "end": "0x17CA8",
+      "path": "PAL/main/render/draw_shadowed_tile"
+    },
+    {
       "start": "0x17CA8",
       "end": "0x17FA8",
       "path": "PAL/main/save/draw_memory_card_screen"
@@ -313,6 +318,11 @@
       "start": "0x1C644",
       "end": "0x1E0C8",
       "path": "PAL/main/car/car_orientation"
+    },
+    {
+      "start": "0x1F594",
+      "end": "0x1F620",
+      "path": "PAL/main/car/draw_player_tachometer"
     },
     {
       "start": "0x1F620",
@@ -1708,7 +1718,7 @@
       "reason": "linked bytes differ"
     },
     {
-      "path": "PAL/main/render/sprite_string",
+      "path": "PAL/main/render/draw_sprite_string",
       "reason": "structural match is not unique",
       "matches": 0
     },
