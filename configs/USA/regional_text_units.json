@@ -149,5 +149,20 @@
     "path": "JAP11/main/menu/title_screen",
     "rodata_start": "0x1404",
     "rodata_end": "0x1418"
+  },
+  {
+    "start": "0x1AE2C",
+    "end": "0x1C3FC",
+    "path": "USA/main/car/update_car_drivetrain"
+  },
+  {
+    "start": "0x23920",
+    "end": "0x2418C",
+    "path": "USA/main/race/draw_wrong_way_warning"
+  },
+  {
+    "start": "0x50A3C",
+    "end": "0x510F8",
+    "path": "USA/main/save/memory_card_io"
   }
 ]

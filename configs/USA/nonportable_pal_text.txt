@@ -28,3 +28,6 @@ PAL/main/race/time_conversion
 PAL/main/race/update_lap_and_finish
 PAL/main/render/terrain_submission
 PAL/main/save/save_header
+PAL/main/car/update_car_drivetrain
+PAL/main/race/draw_wrong_way_warning
+PAL/main/save/memory_card_io

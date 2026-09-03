@@ -3,8 +3,8 @@
   "portable_units": 328,
   "portable_text_bytes": 358228,
   "portable_rodata_bytes": 2716,
-  "regional_units": 29,
-  "regional_text_bytes": 55296,
+  "regional_units": 32,
+  "regional_text_bytes": 64760,
   "text_aliases": 10,
   "inferred_externals": 2132,
   "selected": [
@@ -1763,8 +1763,7 @@
     },
     {
       "path": "PAL/main/car/update_car_drivetrain",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/car/car_orientation",
@@ -1784,8 +1783,7 @@
     },
     {
       "path": "PAL/main/race/draw_wrong_way_warning",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/race/race_hud_time",
@@ -1817,8 +1815,7 @@
     },
     {
       "path": "PAL/main/save/memory_card_io",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/boot/_start",

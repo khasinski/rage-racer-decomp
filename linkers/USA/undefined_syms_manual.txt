@@ -85,6 +85,15 @@ D_80094605 = 0x80094C65;
 D_80094654 = 0x80094CB4;
 D_8009A584 = 0x8009ABE4;
 
+g_PlayerGear = 0x8009E50E;
+g_SaveTitleSjis = 0x800127D8;
+g_ShiftTargetSpeed = 0x8007D77C;
+g_TachoFaceB = 0x8007DC0A;
+g_TachoFaceG = 0x8007DC09;
+g_TachoFaceR = 0x8007DC08;
+g_TorqueBandStart = 0x801E3E1A;
+g_TorqueLossBandStart = 0x801E3E5A;
+
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */
