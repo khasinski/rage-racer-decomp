@@ -15,9 +15,6 @@
 #include "psyq/kernel.h"
 #include "psyq/snd.h"
 
-#ifndef BOOT_DISPLAY_SETUP
-#define BOOT_DISPLAY_SETUP SetupDisplay240
-#endif
 /* Scene handlers, indexed by g_SceneId. */
 
 /*
@@ -42,7 +39,7 @@ void MainLoop(void) {
     InitCdAudio();
     g_FrameSyncThreshold = 0x80;
     SetDispMask(0);
-    BOOT_DISPLAY_SETUP(0, 0, 0);
+    SetupDisplay240(0, 0, 0);
     g_SceneTimer = 0;
     g_SceneId = 1;
     RequestBootAssets();

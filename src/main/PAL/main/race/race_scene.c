@@ -52,9 +52,6 @@ static __inline__ void GameDebugLapResult(
 
 
 
-#ifndef LAP_TIME_RANDOM_RANGE
-#define LAP_TIME_RANDOM_RANGE 40
-#endif
 
 s32 UpdateLapAndFinish(PlayerCarRuntime *car, s32 grandPrixMode) {
     s32 value;
@@ -86,11 +83,7 @@ s32 UpdateLapAndFinish(PlayerCarRuntime *car, s32 grandPrixMode) {
                 .milliseconds[route->timing.fields.lap - 1] = FramesToMilliseconds(
                 route->timing.fields.lapTimes.table
                     .frameCounts[route->timing.fields.lap - 1],
-#ifdef LAP_TIME_RANDOM_MASK
-                Random15() & LAP_TIME_RANDOM_MASK);
-#else
-                Random15() % LAP_TIME_RANDOM_RANGE);
-#endif
+                Random15() % 40);
             if (route->timing.fields.lapTimes.table
                     .milliseconds[route->timing.fields.lap - 1] > 0x927BE) {
                 route->timing.fields.lapTimes.table
@@ -286,7 +279,6 @@ timing_done:
     return returnValue;
 }
 
-#ifndef RACE_SCENE_ONLY_LAP_UPDATE
 
 void EnterRaceScene(void) {
     s32 pad[2];
@@ -747,5 +739,3 @@ update_race:
     }
 
 }
-
-#endif

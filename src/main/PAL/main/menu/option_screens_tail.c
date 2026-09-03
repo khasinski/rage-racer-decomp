@@ -1,2 +1,157 @@
-#define OPTION_SCREENS_ONLY_TAIL
-#include "option_screens.c"
+#include "common.h"
+#include "game/prim.h"
+#include "game/asset.h"
+#include "game/asset_internal.h"
+#include "game/audio.h"
+#include "game/car.h"
+#include "game/menu.h"
+#include "game/race.h"
+#include "game/render.h"
+#include "game/render_internal.h"
+#include "game/scratchpad.h"
+#include "game/state.h"
+#include "game/track.h"
+#include "psyq/gpu.h"
+
+void DrawOptionSceneOverlay(void) {
+    u8 **scratch;
+    void *base;
+    u8 *pkt;
+    s32 target;
+    s32 value;
+    s32 w120;
+    s32 two;
+    s32 white;
+    s32 h1c0;
+    u8 *rawBase;
+
+    if (g_GameMode != 9) {
+        DrawPadTypeHint();
+    }
+
+    target = 0xF0;
+    if (g_GameMode == 6) {
+        target = 0x1E0;
+    }
+
+    value = g_OptionLetterboxHeight;
+    if (value < target) {
+        g_OptionLetterboxHeight = value + 4;
+    } else if (target < value) {
+        g_OptionLetterboxHeight = value - 4;
+    }
+
+    scratch = &SCRATCH_PRIM_CURSOR_AS(u8);
+    rawBase = g_DrawBuffer;
+    base = rawBase + 0xBC8;
+    pkt = *scratch;
+
+    if (g_GameMode == 6) {
+        w120 = 0x120;
+        two = 2;
+        white = 0xFF;
+        pkt = AddTilePrim(base, pkt, 0x10, 0x20, w120, two, white, white, white);
+        pkt = AddTilePrim(base, pkt, 0x10, 0x1C0, w120, two, white, white, white);
+        h1c0 = 0x1C0;
+        pkt = GameQueueLine(base, pkt, 0x10, 0x20, 0x10, h1c0, white, white, white);
+        pkt = GameQueueLine(base, pkt, 0x130, 0x20, 0x130, h1c0, white, white, white);
+    }
+
+    *scratch = AddTilePrim(base, pkt, 0, 0, 0x140, g_OptionLetterboxHeight, 0x85, 0x15, 0xE);
+}
+
+/* Scene 23: the setup / OPTION scene, dispatching g_GameModeHandlers[g_GameMode]. */
+void UpdateOptionScene(void) {
+    SCRATCH_PRIM_CURSOR_AS(u8) = AddTilePrim(
+        g_DrawBuffer + 204, SCRATCH_PRIM_CURSOR_AS(u8), 0, 0, 0x140, 2, 0, 0, 0);
+    g_AnimTimer = g_AnimTimer + 1;
+    g_SceneTimer = g_SceneTimer + 1;
+    if (g_SceneTimer == 2) {
+        SetDispMask(1);
+    }
+    g_GameModeHandlers[g_GameMode]();
+    DrawOptionSceneOverlay();
+}
+
+void InitTrackScene(void) {
+    InitRenderState(5);
+    LoadTrackTexturePageRange();
+    InitTrackLighting();
+    g_TrackWalkStart = g_TrackEventData->trackWalkStart;
+    BuildStartingGrid();
+    SetTrackTexturePageNow(g_Cars[g_CameraCarIndex].trackSection);
+    SeekEnvironmentScript(g_TrackRenderTable->environmentScriptOffset);
+    g_CameraViewMode = CAMERA_VIEW_TRACK;
+    g_AnimTimer = 0;
+    g_SceneTimer = 0;
+    g_FrameSyncThreshold = 0x180;
+    InitShuttleScenery();
+}
+
+void EnterBgmSelectScreen(void) {
+    SetDispMask(0);
+    SetupDisplay240(0, 0, 0);
+    g_FrameSyncThreshold = 0x80;
+    g_FadeLevel = 0x13C;
+    g_FadeStep = -4;
+    g_SceneId = 0x1C;
+    g_BgmSelectCursor = 1;
+    g_BgmSelectShowUi = 1;
+    g_BgmSelectCdTrack = 3;
+    g_BgmSelectStep = BGM_SELECT_STEP_LOAD_ASSETS;
+    g_SceneTimer = 0;
+    g_BgmSelectTrack = 0;
+    g_BgmChangeDelay = 0x1E;
+    g_CdTrackEnded = 0;
+    g_CameraCarIndex = 0;
+}
+
+void UpdateOptionSceneFade(void) {
+    s32 d;
+    s32 v;
+    if (g_SceneTimer == 0xF) {
+        SetDispMask(1);
+    }
+    d = g_FadeStep;
+    if (d < 0) {
+        s32 e = g_FadeLevel;
+        e += d;
+        g_FadeLevel = e;
+        if (g_FadeLevel < 0) {
+            g_FadeLevel = 0;
+            g_FadeStep = 0;
+        }
+        DrawFullscreenFadeTile(g_FadeLevel, 0x49);
+    } else if (d > 0) {
+        s32 e = g_FadeLevel;
+        e += d;
+        v = e;
+        g_FadeLevel = v;
+        DrawFullscreenFadeTile(v, 0x49);
+        if (g_FadeLevel >= 257) {
+            SetDispMask(0);
+            InitTrackScene();
+            g_FadeStep = 0;
+            g_FadeLevel = 0;
+            g_BgmSelectStep = BGM_SELECT_STEP_ACTIVE;
+        }
+    }
+    DrawProportionalText(0x5E, 0x72, g_TextNowLoading, 0x7812);
+}
+
+void UpdateBgmSelectLoad(void) {
+    if (g_AssetLoadState == 0) {
+        InstallCourseAssets();
+        RequestTrackDataAssets();
+        g_BgmSelectStep = BGM_SELECT_STEP_FADE_IN;
+    }
+
+    UpdateOptionSceneFade();
+}
+
+void UpdateBgmSelectFadeIn(void) {
+    if (g_AssetLoadState == 0) {
+        g_FadeStep = 4;
+    }
+    UpdateOptionSceneFade();
+}

@@ -13,9 +13,6 @@
 #include "psyq/kernel.h"
 #include "psyq/snd.h"
 
-#ifndef INIT_SUBSYSTEMS_ENABLE_DMA_INTERRUPTS
-#define INIT_SUBSYSTEMS_ENABLE_DMA_INTERRUPTS 1
-#endif
 
 /* One-shot boot chain run before the first frame. */
 void InitSubsystems(void) {
@@ -26,9 +23,7 @@ void InitSubsystems(void) {
     SetDispMask(0);
     g_ScreenOffsetY.value = 0;
     g_ScreenOffsetX.value = 0;
-#if INIT_SUBSYSTEMS_ENABLE_DMA_INTERRUPTS
     SetDMAInterruptState(1);
-#endif
     InitGeom();
     GameInitPad();
     RestartMemoryCard();

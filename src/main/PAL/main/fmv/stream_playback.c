@@ -10,47 +10,14 @@
 #include "psyq/kernel.h"
 #include "game/fmv_internal.h"
 
-#ifndef FMV_END_STREAM_BY_CLOCK
-#define FMV_END_STREAM_BY_CLOCK 0
-#endif
 
-#ifndef FMV_SIMPLE_STREAM_READ
-#define FMV_SIMPLE_STREAM_READ 0
-#endif
 
-#ifndef FMV_PRESENT_RETRIES
-#define FMV_PRESENT_RETRIES 1
-#endif
 
 s32 PresentFmvFrame(FmvDecodeContext *ctx) {
-#if FMV_PRESENT_RETRIES != 1
-    void *p;
-    register FmvDecodeContext *state asm("$18") = ctx;
-    register s32 attempts asm("$16") = FMV_PRESENT_RETRIES;
-
-retry_frame:
-    p = GetFmvFrame(state);
-    attempts--;
-    if (p != 0) {
-        goto present_frame;
-    }
-    if (attempts == 0) {
-        goto frame_failed;
-    }
-    goto retry_frame;
-
-present_frame:
-    state->vlcIndex = (state->vlcIndex == 0);
-    MdecUnpackStatus(p, state->vlcBuffers[state->vlcIndex]);
-    return StFreeRing(p);
-
-frame_failed:
-    ;
-#else
     void *p;
     s32 retry;
 
-    for (retry = FMV_PRESENT_RETRIES; retry != 0; retry--) {
+    for (retry = 1; retry != 0; retry--) {
         p = GetFmvFrame(ctx);
         if (p != 0) {
             ctx->vlcIndex = (ctx->vlcIndex == 0);
@@ -59,7 +26,6 @@ frame_failed:
         }
     }
     return -1;
-#endif
 }
 
 void *GetFmvFrame(FmvDecodeContext *ctx) {
@@ -95,11 +61,6 @@ void *GetFmvFrame(FmvDecodeContext *ctx) {
     if (entry->frame >= g_StreamSectorCount) {
         g_FmvStreamEnded = 1;
     }
-#if FMV_END_STREAM_BY_CLOCK
-    if (g_GameClock >= g_StreamSectorLimit) {
-        g_FmvStreamEnded = 1;
-    }
-#endif
     w = entry->width;
     if ((g_FmvFrameWidth != w) || (g_FmvFrameHeight != entry->height)) {
         h = entry->height;
@@ -164,29 +125,6 @@ void WaitFmvDecode(FmvDecodeContext *state, s32 mode) {
 }
 
 void StartStreamRead(void *loc) {
-#if FMV_SIMPLE_STREAM_READ
-outer:
-    while (CdSync(1, 0) == 0) {
-    }
-
-send:
-    while (CdControl(0x15, g_StreamLoc, 0) == 0) {
-    }
-
-poll:
-    switch (CdSync(1, 0)) {
-    case 0:
-        goto poll;
-    case 2:
-        break;
-    default:
-        goto send;
-    }
-
-    if (CdRead2(0x1C0) == 0) {
-        goto outer;
-    }
-#else
     u8 byte;
 
 outer:
@@ -223,5 +161,4 @@ pollNext:
     if (CdRead2(0x1E0) == 0) {
         goto outer;
     }
-#endif
 }

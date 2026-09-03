@@ -108,14 +108,10 @@ void UpdatePrizeMoneyScreen(void) {
         st = PRIZE_SCREEN_STATE_FADE_OUT;
         goto Lstore;
     case PRIZE_SCREEN_STATE_FADE_OUT:
-#ifdef PRIZE_SCREEN_FIXED_FADE_STEP
-        g_SceneTimer += PRIZE_SCREEN_FIXED_FADE_STEP;
-#else
         if (g_SeriesCleared != 0)
             g_SceneTimer += 1;
         else
             g_SceneTimer += 2;
-#endif
         DrawFullscreenFadeTile(g_SceneTimer, 0x49);
         if (g_SceneTimer < 0x100U) break;
         AdvanceGrandPrixClass();

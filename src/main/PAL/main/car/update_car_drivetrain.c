@@ -79,13 +79,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
   s32 bandSlot;
   s32 bandCurve;
   s32 assistStep;
-#ifdef CAR_FULL_NEGCON_STEERING_ASSIST
-  MATCH_REGISTER(s32, lossBandCursor, "$5");
-  s32 regionalStackPad[2];
-#define LOSS_BAND_CURSOR lossBandCursor
-#else
 #define LOSS_BAND_CURSOR assistStep
-#endif
   int shiftTimerActive;
   s32 lossCurve;
   s32 dragTerm;
@@ -375,11 +369,7 @@ void UpdateCarDrivetrain(PlayerCarRuntime *carArg) {
       }
     }
     bandEnd = g_TorqueLossBandEnd[bandIndex];
-#ifdef CAR_FULL_NEGCON_STEERING_ASSIST
-    MOVE_REGISTER(lossBandCursor, lossBase);
-#else
     LOSS_BAND_CURSOR = lossBase;
-#endif
     bandScale = 0;
     if (LOSS_BAND_CURSOR < bandEnd)
     {
@@ -616,16 +606,6 @@ shift_interpolation_done:
     {
       assistStep = 1;
     }
-#ifdef CAR_FULL_NEGCON_STEERING_ASSIST
-    if (drive->steerPos >= 0)
-    {
-      steerLoad += drive->steerPos / assistStep;
-    }
-    else
-    {
-      steerLoad -= drive->steerPos / assistStep;
-    }
-#else
     shiftRemaining = drive->steerPos;
     assistArmed = shiftRemaining >= 0;
     if (assistArmed)
@@ -636,7 +616,6 @@ shift_interpolation_done:
     {
       steerLoad -= ((shiftRemaining * 5) / 6) / assistStep;
     }
-#endif
   }
   trackHeadingError = GetAngleDistance(car->headingAngle,
                                        0xC00 - g_TrackPoints[car->trackPointIndex].angle);
@@ -754,16 +733,7 @@ shift_interpolation_done:
     {
       frontLoadScaled = (g_CarSpec->referenceTurnRadius) * 0x64;
     }
-#ifdef CAR_DOWNFORCE_RADIUS_FLOOR
-    downforceScale = frontLoadScaled;
-    if (frontLoadScaled >= CAR_DOWNFORCE_RADIUS_FLOOR)
-    {
-      downforceScale = (g_CarSpec->referenceTurnRadius) * 0x64;
-    }
-    if (downforceScale <= 0)
-#else
     if ((frontLoadScaled <= 0) || ((downforceScale = (g_CarSpec->referenceTurnRadius) * 0x64, downforceScale <= 0)))
-#endif
     {
       downforceScale = (g_CarSpec->referenceTurnRadius) * 0x64;
     }

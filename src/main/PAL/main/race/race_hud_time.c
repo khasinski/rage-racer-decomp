@@ -10,9 +10,6 @@
 #include "game/vector.h"
 #include "psyq/gpu.h"
 
-#ifndef RACE_CLOCK_TICKS_PER_SECOND
-#define RACE_CLOCK_TICKS_PER_SECOND 25
-#endif
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
     s32 savedX;
@@ -73,7 +70,7 @@ void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {
     s32 tens2;
 
     savedY = y;
-    sec = ticks / RACE_CLOCK_TICKS_PER_SECOND;
+    sec = ticks / 25;
     tmp = sec / 60;
     min = tmp;
     tmp = sec - min * 60;

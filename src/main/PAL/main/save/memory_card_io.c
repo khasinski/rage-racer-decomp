@@ -3,13 +3,7 @@
 #include "psyq/kernel.h"
 #include "game/menu.h"
 
-#ifndef SAVE_SLOT_CLEAR_ICON_BLOCK
-#define SAVE_SLOT_CLEAR_ICON_BLOCK 1
-#endif
 
-#ifndef SAVE_TITLE_STRIDE
-#define SAVE_TITLE_STRIDE 0x46
-#endif
 
 s32 WriteMemoryCardSaveFile(
     char *path,
@@ -88,16 +82,14 @@ s32 WriteMemoryCardSaveSlot(s32 slot, GameSaveHeaderRow *header) {
     u8 block1[MC_BLOCK_SIZE];
     s32 i;
 
-#if SAVE_SLOT_CLEAR_ICON_BLOCK
     for (i = 0x1FF; i >= 0; i--) {
         block0[i] = 0;
     }
-#endif
 
     GameMenuLoadPhase = 0x1000;
     return WriteMemoryCardSaveFile(
         g_SaveFilePath + slot * 0x1A,
-        g_SaveTitleSjis + slot * SAVE_TITLE_STRIDE,
+        g_SaveTitleSjis + slot * 0x46,
         block0,
         header,
         block1);

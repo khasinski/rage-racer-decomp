@@ -10,7 +10,6 @@
 #include "game/vector.h"
 #include "psyq/gpu.h"
 
-#ifndef RACE_HUD_TEXT_ONLY_OPTION
 
 /* The strip buffers hold back-to-back 0x10-byte TILEs; SetTile is
  * SetTile. The retail code reloads the buffer base before each field store,
@@ -328,17 +327,7 @@ void DrawStartCountdown(s32 sceneTimer) {
 }
 
 
-#endif
 
-#ifndef RACE_OPTION_MARQUEE_WIDTH
-#define RACE_OPTION_MARQUEE_WIDTH 20
-#endif
-#ifndef RACE_OPTION_SCROLL_LIMIT
-#define RACE_OPTION_SCROLL_LIMIT -0x9C
-#endif
-#ifndef RACE_OPTION_SCROLL_RESET
-#define RACE_OPTION_SCROLL_RESET 0xF0
-#endif
 
 void DrawRaceOptionMenu(s32 cursorRow) {
     register s32 selectedRow = cursorRow;
@@ -378,11 +367,11 @@ void DrawRaceOptionMenu(s32 cursorRow) {
 
         g_RaceOptionScroll0 -= 4;
         g_RaceOptionScroll1 -= 4;
-        if ((g_RaceOptionScroll0 >> 2) < RACE_OPTION_SCROLL_LIMIT) {
-            g_RaceOptionScroll0 = RACE_OPTION_SCROLL_RESET;
+        if ((g_RaceOptionScroll0 >> 2) < -0x9C) {
+            g_RaceOptionScroll0 = 0xF0;
         }
-        if ((g_RaceOptionScroll1 >> 2) < RACE_OPTION_SCROLL_LIMIT) {
-            g_RaceOptionScroll1 = RACE_OPTION_SCROLL_RESET;
+        if ((g_RaceOptionScroll1 >> 2) < -0x9C) {
+            g_RaceOptionScroll1 = 0xF0;
         }
 
         firstNext =
@@ -405,16 +394,9 @@ void DrawRaceOptionMenu(s32 cursorRow) {
                 "0"(textY), "1"(textColor));
             scratchPacket.bytes = SCRATCHPAD_BYTES;
             scroll0 = g_RaceOptionScroll0;
-#ifdef RACE_OPTION_SIMPLE_MARQUEE_SCALE
-            marquee = g_SceneTimer;
-#endif
             marqueeBase = &g_RaceOptionMarquee[0][0];
             *scratchPacket.packetLink = firstNext;
-#ifdef RACE_OPTION_SIMPLE_MARQUEE_SCALE
-            marquee = (marquee & 3) * (RACE_OPTION_MARQUEE_WIDTH * 2);
-#else
-            marquee = (g_SceneTimer & 3) * (RACE_OPTION_MARQUEE_WIDTH * 2);
-#endif
+            marquee = (g_SceneTimer & 3) * (20 * 2);
             DrawText8x8(
                 (scroll0 >> 2) + 0xA0,
                 textY,
@@ -427,7 +409,7 @@ void DrawRaceOptionMenu(s32 cursorRow) {
             asm(
                 "" : "=r"(secondTextY) :
                 "0"(secondTextY));
-            marqueeBase += RACE_OPTION_MARQUEE_WIDTH;
+            marqueeBase += 20;
             DrawText8x8(
                 (g_RaceOptionScroll1 >> 2) + 0xA0,
                 secondTextY,

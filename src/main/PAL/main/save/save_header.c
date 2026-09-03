@@ -3,13 +3,7 @@
 #include "psyq/gpu.h"
 #include "game/menu.h"
 
-#ifndef SAVE_ICON_TYPE
-#define SAVE_ICON_TYPE 0x11
-#endif
 
-#ifndef SAVE_ICON_THREE_FRAMES
-#define SAVE_ICON_THREE_FRAMES 0
-#endif
 
 void ClearSaveHeaderRows(GameSaveHeaderRow *rows) {
     u8 *rowBytes = rows->bytes;
@@ -68,7 +62,7 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
 
     block[0] = 'S';
     block[1] = 'C';
-    block[2] = SAVE_ICON_TYPE;
+    block[2] = 0x11;
     block[3] = 1;
     sprintf(block + 4, g_FmtString, title);
 
@@ -92,11 +86,7 @@ void BuildSaveIconBlock(u8 *block, char *title, s32 iconTile, s32 imageX, s32 im
         StoreImage(frameRect, block + 0x80 + i * 0x80);
         DrawSync(0);
         i++;
-#if SAVE_ICON_THREE_FRAMES
-    } while (i < 3);
-#else
     } while (i <= 0);
-#endif
 }
 
 void WriteSaveHeaderRow(GameSaveHeaderRow *row) {

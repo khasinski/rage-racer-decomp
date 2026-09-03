@@ -17,6 +17,8 @@ from tools.scripts.port_pal_text_units import (
     rewrite_main_subsegments,
 )
 
+ROOT = Path(__file__).resolve().parents[2]
+
 
 def executable(*words: int) -> bytes:
     return bytes(0x800) + struct.pack(f"<{len(words)}I", *words)
@@ -128,6 +130,26 @@ class FunctionSourceRangeTest(unittest.TestCase):
         self.assertEqual(source_path(LOAD_ADDRESS + 4, ranges), "PAL/first")
         self.assertIsNone(source_path(LOAD_ADDRESS + 0x84, ranges))
         self.assertEqual(source_path(LOAD_ADDRESS + 0x104, ranges), "PAL/second")
+
+
+class RegionalSourceLayoutTest(unittest.TestCase):
+    def test_japanese_sources_do_not_include_pal_implementations(self):
+        source_root = ROOT / "src/main/JAP10"
+        offenders = []
+        for path in source_root.rglob("*.c"):
+            text = path.read_text()
+            if 'PAL/main/' in text or '#include "../../../PAL/' in text:
+                offenders.append(path.relative_to(ROOT).as_posix())
+        self.assertEqual(offenders, [])
+
+    def test_sources_do_not_include_other_c_files(self):
+        offenders = []
+        for version in ("PAL", "JAP10"):
+            source_root = ROOT / "src/main" / version
+            for path in source_root.rglob("*.c"):
+                if '#include "' in path.read_text() and '.c"' in path.read_text():
+                    offenders.append(path.relative_to(ROOT).as_posix())
+        self.assertEqual(offenders, [])
 
 
 if __name__ == "__main__":

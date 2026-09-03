@@ -7,20 +7,13 @@
 #include "game/fmv_internal.h"
 #include "psyq/press_internal.h"
 
-#ifndef FMV_STREAM_READ_USES_GLOBAL
-#define FMV_STREAM_READ_USES_GLOBAL 1
-#endif
 
 void OpenFmvStream(s32 callback) {
     DecDCTReset(0);
     DecDCToutCallback(callback);
     StSetRing(g_FmvRingBuffer, 0x20);
     StSetStream(1, 1, -1, 0, 0);
-#if FMV_STREAM_READ_USES_GLOBAL
     StartStreamRead(g_StreamLoc);
-#else
-    StartStreamRead();
-#endif
 }
 
 void UploadFmvSlice(void) {
