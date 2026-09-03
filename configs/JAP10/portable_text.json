@@ -1,7 +1,7 @@
 {
   "version": "JAP10",
-  "portable_units": 313,
-  "portable_text_bytes": 348736,
+  "portable_units": 314,
+  "portable_text_bytes": 348996,
   "portable_rodata_bytes": 2612,
   "regional_units": 26,
   "regional_text_bytes": 40340,
@@ -211,6 +211,11 @@
       "path": "PAL/main/race/record_entry",
       "rodata_start": "0x1774",
       "rodata_end": "0x1790"
+    },
+    {
+      "start": "0x134FC",
+      "end": "0x13600",
+      "path": "PAL/main/menu/update_ending_still"
     },
     {
       "start": "0x13600",
@@ -1690,7 +1695,7 @@
       "reason": "linked bytes differ"
     },
     {
-      "path": "PAL/main/menu/ending_still",
+      "path": "PAL/main/menu/draw_ending_still",
       "reason": "structural match is not unique",
       "matches": 0
     },

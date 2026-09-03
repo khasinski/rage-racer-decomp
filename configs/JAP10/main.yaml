@@ -173,7 +173,7 @@ segments:
       - [0x11A90, c, PAL/main/race/race_end_screens]
       - [0x11F58, c, PAL/main/race/records]
       - [0x12308, c, PAL/main/race/record_entry]
-      - [0x134FC, asm, main/0134FC_main]
+      - [0x134FC, c, PAL/main/menu/update_ending_still]
       - [0x13600, c, PAL/main/boot/boot_scene]
       - [0x13738, c, JAP10/main/boot/boot_logo_update]
       - [0x1387C, c, PAL/main/boot/boot_scene_tail]
