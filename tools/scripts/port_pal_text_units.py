@@ -217,6 +217,25 @@ def read_regional_units(path: Path) -> list[tuple[int, int, str, str]]:
     return result
 
 
+def read_regional_rodata(path: Path) -> list[tuple[int, int, str, str]]:
+    """Read optional regional read-only-data ranges paired with C units."""
+
+    if not path.exists():
+        return []
+    result: list[tuple[int, int, str, str]] = []
+    for unit in json.loads(path.read_text()):
+        if "rodata_start" not in unit and "rodata_end" not in unit:
+            continue
+        if "rodata_start" not in unit or "rodata_end" not in unit:
+            raise ValueError("regional rodata requires both start and end")
+        start = int(unit["rodata_start"], 0)
+        end = int(unit["rodata_end"], 0)
+        if start >= end:
+            raise ValueError(f"invalid regional rodata range 0x{start:X}..0x{end:X}")
+        result.append((start, end, ".rodata", unit.get("rodata_path", unit["path"])))
+    return result
+
+
 def append_text_aliases(
     target_symbols: Path,
     source_symbols: dict[str, int],
@@ -720,7 +739,8 @@ def main() -> None:
     selected.sort()
     selected_segments.sort()
     regional_units = read_regional_units(regional_units_path)
-    for regional_start, regional_end, _, regional_path in regional_units:
+    regional_segments = regional_units + read_regional_rodata(regional_units_path)
+    for regional_start, regional_end, _, regional_path in regional_segments:
         if any(
             regional_start < selected_end and selected_start < regional_end
             for selected_start, selected_end, _, _ in selected_segments
@@ -728,7 +748,7 @@ def main() -> None:
             raise ValueError(
                 f"regional unit {regional_path} overlaps an automatically selected unit"
             )
-    selected_segments.extend(regional_units)
+    selected_segments.extend(regional_segments)
     selected_segments.sort()
     payload_end = len(target_data)
     rewrite_main_subsegments(

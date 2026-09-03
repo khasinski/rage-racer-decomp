@@ -40,6 +40,13 @@
     "path": "JAP10/main/save/draw_memory_card_message"
   },
   {
+    "start": "0x11358",
+    "end": "0x11774",
+    "path": "JAP10/main/menu/prize_money_screen",
+    "rodata_start": "0x15DC",
+    "rodata_end": "0x1600"
+  },
+  {
     "start": "0xEE04",
     "end": "0xEEEC",
     "path": "JAP10/main/fmv/start_fmv_playback"

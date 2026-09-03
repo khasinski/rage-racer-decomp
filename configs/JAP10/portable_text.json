@@ -3,8 +3,8 @@
   "portable_units": 302,
   "portable_text_bytes": 326968,
   "portable_rodata_bytes": 2464,
-  "regional_units": 18,
-  "regional_text_bytes": 14748,
+  "regional_units": 19,
+  "regional_text_bytes": 15800,
   "text_aliases": 9,
   "inferred_externals": 1952,
   "selected": [
@@ -1650,8 +1650,7 @@
     },
     {
       "path": "PAL/main/menu/prize_money_screen",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/save/save_defaults",

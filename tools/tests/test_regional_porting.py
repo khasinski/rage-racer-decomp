@@ -12,6 +12,7 @@ from tools.scripts.map_version_functions import (
 from tools.scripts.port_pal_text_units import (
     infer_exact_address,
     infer_range_start,
+    read_regional_rodata,
     read_regional_units,
     rewrite_main_subsegments,
 )
@@ -97,6 +98,18 @@ class ConfigRewriteTest(unittest.TestCase):
             self.assertEqual(
                 read_regional_units(manifest),
                 [(0x1200, 0x1280, "c", "JAP10/code")],
+            )
+
+    def test_reads_regional_rodata(self):
+        with tempfile.TemporaryDirectory() as temp:
+            manifest = Path(temp) / "regional_text_units.json"
+            manifest.write_text(
+                '[{"start":"0x1200","end":"0x1280","path":"JAP10/code",'
+                '"rodata_start":"0x900","rodata_end":"0x924"}]'
+            )
+            self.assertEqual(
+                read_regional_rodata(manifest),
+                [(0x900, 0x924, ".rodata", "JAP10/code")],
             )
 
 

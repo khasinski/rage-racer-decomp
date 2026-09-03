@@ -28,6 +28,7 @@ g_SaveIconRect = 0x8009AC04;
 func_80039A64 = ClampCarLateralOffset;
 func_800156F4 = DrawNegconNeutralScreen;
 func_800208A8 = AdvanceGrandPrixClass;
+func_80020B58 = UpdatePrizeMoneyScreen;
 func_80015994 = DrawNegconSteerPlayScreen;
 func_80015E94 = DrawNegconMaxTwistScreen;
 func_8001BD0C = SetupDisplay240;

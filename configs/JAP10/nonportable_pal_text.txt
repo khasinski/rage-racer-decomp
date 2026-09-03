@@ -15,3 +15,4 @@ PAL/main/save/draw_memory_card_message
 PAL/main/race/prologue
 PAL/main/boot/main_loop
 PAL/main/menu/display_setup
+PAL/main/menu/prize_money_screen
