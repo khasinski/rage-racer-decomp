@@ -11,6 +11,25 @@
 #include "game/audio.h"
 #include "game/random.h"
 
+#ifdef PLAYER_CAR_DIRECT_STEERING
+#define PLAYER_CAR_STEER(value) (value)
+#else
+#define PLAYER_CAR_STEER(value) ((value) * 6 / 5)
+#endif
+
+#ifdef PLAYER_CAR_WORLD_STEP_QUARTER
+#define PLAYER_CAR_WORLD_STEP(value) ((value) / 256)
+#else
+#define PLAYER_CAR_WORLD_STEP(value) ((value) * 6 / 1280)
+#endif
+
+#ifndef PLAYER_CAR_HOP_RISE
+#define PLAYER_CAR_HOP_RISE 72
+#endif
+#ifndef PLAYER_CAR_HOP_FALL
+#define PLAYER_CAR_HOP_FALL 216
+#endif
+
 /*
  * Per-car physics / gear-shift driver (matched sibling of the ASM
  * UpdateAttractCars). Samples input, builds the car's orientation matrices, runs
@@ -123,11 +142,11 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         s32 spd = car->speed;
 
         if (spd < 256 && p->motionState == CAR_MOTION_DRIVING) {
-            p->targetHeading += ((p->steerPos * 6) / 5 * p->steeringGrip / 256) * spd / 0x10000;
+            p->targetHeading += (PLAYER_CAR_STEER(p->steerPos) * p->steeringGrip / 256) * spd / 0x10000;
         } else if (spd < 512 && p->motionState == CAR_MOTION_STANDING_START) {
-            p->targetHeading += ((p->steerPos * 6) / 5 * p->steeringGrip / 256) * spd / 0x20000;
+            p->targetHeading += (PLAYER_CAR_STEER(p->steerPos) * p->steeringGrip / 256) * spd / 0x20000;
         } else {
-            p->targetHeading += (p->steerPos * 6) / 5 * p->steeringGrip / 0x10000;
+            p->targetHeading += PLAYER_CAR_STEER(p->steerPos) * p->steeringGrip / 0x10000;
         }
     }
 
@@ -250,8 +269,8 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     sv1.vz = -p->bodyLiftOffset - 50;
     ApplyMatrix(&m2, &sv1, &car->motionX);
 
-    tmp.x = (p->accelPos * 6) / 1280 + car->x + car->motionX;
-    tmp.z = (p->brakePos * 6) / 1280 + car->z + car->motionZ;
+    tmp.x = PLAYER_CAR_WORLD_STEP(p->accelPos) + car->x + car->motionX;
+    tmp.z = PLAYER_CAR_WORLD_STEP(p->brakePos) + car->z + car->motionZ;
     SetPlayerPosition(car, &tmp);
     AccumulateLapProgress(GetPlayerCarRuntime(car));
 
@@ -320,7 +339,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         if (car->shiftState == 1) {
             s32 t = (s16)n;
 
-            car->y = car->shiftRef * t + (t * t * 72) / 100 + car->y;
+            car->y = car->shiftRef * t + (t * t * PLAYER_CAR_HOP_RISE) / 100 + car->y;
             if (car->y >= limit) {
                 car->shiftState = 0;
             }
@@ -335,7 +354,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
         } else {
             n = (s16)n - car->shiftRef;
 
-            car->y = car->shiftBase + (n * n * 216) / 100;
+            car->y = car->shiftBase + (n * n * PLAYER_CAR_HOP_FALL) / 100;
             if (car->y >= limit) {
                 car->shiftState = 0;
             }
@@ -524,6 +543,7 @@ void UpdatePlayerCar(PlayerCarRuntime *car) {
     p->gearDisp = p->gear;
 }
 
+#ifndef PLAYER_CAR_ONLY_UPDATE
 s32 DrawPlayerTachometer(void) {
     s32 value;
     s32 type;
@@ -555,3 +575,4 @@ s32 DrawPlayerTachometer(void) {
 
     return DrawTachometer(g_EngineRpm + g_EngineRpmJitter, g_TachoNeedleFlash, type, amount);
 }
+#endif

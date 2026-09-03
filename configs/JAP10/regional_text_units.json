@@ -120,5 +120,12 @@
     "start": "0x6194",
     "end": "0x6A3C",
     "path": "JAP10/main/menu/negcon_calibration"
+  },
+  {
+    "start": "0x1E0C8",
+    "end": "0x1F594",
+    "path": "JAP10/main/car/update_player_car",
+    "rodata_start": "0x1A1C",
+    "rodata_end": "0x1A3C"
   }
 ]
