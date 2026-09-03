@@ -35,6 +35,11 @@
     "path": "JAP10/main/boot/boot_logo_update"
   },
   {
+    "start": "0x17FA8",
+    "end": "0x181F4",
+    "path": "JAP10/main/save/draw_memory_card_message"
+  },
+  {
     "start": "0xEE04",
     "end": "0xEEEC",
     "path": "JAP10/main/fmv/start_fmv_playback"

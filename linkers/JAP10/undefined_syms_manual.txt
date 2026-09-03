@@ -41,6 +41,8 @@ g_DispEnv0ScreenY = 0x8019C546;
 g_DispEnv1ScreenX = 0x801BFD2C;
 g_DispEnv1ScreenY = 0x801BFD2E;
 g_BootLogoState = 0x8007CD94;
+g_McMessageRows = 0x8007D154;
+g_McMessageColumnX = 0x8007D1A0;
 main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 
 /* Region-independent aliases used by PAL translation units. */

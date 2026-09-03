@@ -1,12 +1,12 @@
 {
   "version": "JAP10",
-  "portable_units": 301,
-  "portable_text_bytes": 326200,
+  "portable_units": 302,
+  "portable_text_bytes": 326968,
   "portable_rodata_bytes": 2464,
-  "regional_units": 17,
-  "regional_text_bytes": 14160,
+  "regional_units": 18,
+  "regional_text_bytes": 14748,
   "text_aliases": 9,
-  "inferred_externals": 1951,
+  "inferred_externals": 1952,
   "selected": [
     {
       "start": "0x4B68",
@@ -239,6 +239,11 @@
       "start": "0x17A24",
       "end": "0x17C10",
       "path": "PAL/lib/libcd/read"
+    },
+    {
+      "start": "0x17CA8",
+      "end": "0x17FA8",
+      "path": "PAL/main/save/draw_memory_card_screen"
     },
     {
       "start": "0x1A8B0",
@@ -1675,9 +1680,8 @@
       "matches": 0
     },
     {
-      "path": "PAL/main/save/draw_memory_card_screen",
-      "reason": "structural match is not unique",
-      "matches": 0
+      "path": "PAL/main/save/draw_memory_card_message",
+      "reason": "linked bytes differ"
     },
     {
       "path": "PAL/main/render/terrain_submission",

@@ -30,4 +30,16 @@
  */
 #define LA_ORDERED(dst, sym, dep) __asm__("la %0, " #sym : "=r"(dst) : "r"(dep))
 
+/*
+ * MATCH_REGISTER(type, name, reg)
+ *   Pins a C value to the register selected by the retail compiler.
+ *
+ * KEEP_REGISTER(value)
+ *   Preserves that register choice across an optimization boundary without
+ *   emitting an instruction.  This is useful for paired cursor pointers when
+ *   GCC would otherwise replace one cursor with a second induction variable.
+ */
+#define MATCH_REGISTER(type, name, reg) register type name asm(reg)
+#define KEEP_REGISTER(value) asm("" : "=r"(value) : "0"(value))
+
 #endif

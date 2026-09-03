@@ -11,6 +11,7 @@ PAL/main/menu/title_screen
 PAL/main/menu/frontend
 PAL/main/menu/screen_adjust_update
 PAL/main/boot/boot_logo_update
+PAL/main/save/draw_memory_card_message
 PAL/main/race/prologue
 PAL/main/boot/main_loop
 PAL/main/menu/display_setup

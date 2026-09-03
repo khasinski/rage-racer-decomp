@@ -181,6 +181,7 @@ segments:
       - [0x17E88, c, PAL/lib/libcd/read]
       - [0x18074, c, PAL/main/render/sprite_string]
       - [0x18284, c, PAL/main/save/draw_memory_card_screen]
+      - [0x18584, c, PAL/main/save/draw_memory_card_message]
       - [0x187F4, c, PAL/main/render/terrain_submission]
       - [0x1AEB0, c, PAL/main/track/install_track_points]
       - [0x1AF88, c, PAL/main/car/angle_math]

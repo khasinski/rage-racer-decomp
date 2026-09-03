@@ -318,6 +318,7 @@ CdReadBreak = 0x800271D0;
 CdRead = 0x80027224;
 CdReadSync = 0x8002732C;
 CdReadCallback = 0x800273F8;
+DrawShadowedTile = 0x80027410;
 DrawMemoryCardScreen = 0x800274A8;
 DrawMemoryCardMessage = 0x800277A8;
 SubmitTerrainCells = 0x800279F4;
