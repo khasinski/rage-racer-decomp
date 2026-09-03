@@ -1,12 +1,12 @@
 {
   "version": "JAP10",
-  "portable_units": 316,
-  "portable_text_bytes": 349288,
+  "portable_units": 317,
+  "portable_text_bytes": 355080,
   "portable_rodata_bytes": 2612,
   "regional_units": 26,
   "regional_text_bytes": 40340,
   "text_aliases": 9,
-  "inferred_externals": 1954,
+  "inferred_externals": 1967,
   "selected": [
     {
       "start": "0x4514",
@@ -628,6 +628,11 @@
       "start": "0x3A240",
       "end": "0x3BDA8",
       "path": "PAL/main/menu/draw_team_logo_canvas"
+    },
+    {
+      "start": "0x3BDA8",
+      "end": "0x3D448",
+      "path": "PAL/main/menu/menu_visual_effects"
     },
     {
       "start": "0x3E3E4",
@@ -1819,8 +1824,9 @@
       "reason": "linked bytes differ"
     },
     {
-      "path": "PAL/main/menu/menu_visual_effects",
-      "reason": "linked bytes differ"
+      "path": "PAL/main/menu/draw_ranking_table",
+      "reason": "structural match is not unique",
+      "matches": 0
     },
     {
       "path": "PAL/main/save/save_header",

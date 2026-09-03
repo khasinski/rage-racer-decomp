@@ -269,7 +269,7 @@ segments:
       - [0x3813C, c, PAL/main/render/scripted_draw]
       - [0x38F9C, c, PAL/main/menu/car_spec_panel]
       - [0x3A240, c, PAL/main/menu/draw_team_logo_canvas]
-      - [0x3BDA8, asm, main/03BDA8_main]
+      - [0x3BDA8, c, PAL/main/menu/menu_visual_effects]
       - [0x3D448, c, JAP10/main/menu/draw_ranking_table]
       - [0x3E3E4, c, PAL/main/menu/draw_logo_sample_panel]
       - [0x3F0C4, c, PAL/main/menu/draw_paint_color_palette]
