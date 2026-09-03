@@ -179,5 +179,61 @@
     "start": "0x58730",
     "end": "0x58A04",
     "path": "JAP10/lib/libgte/fog_geometry"
+  },
+  {
+    "start": "0xB5E0",
+    "end": "0xBEF4",
+    "path": "JAP10/main/menu/title_screen",
+    "rodata_start": "0x13A0",
+    "rodata_end": "0x13B4"
+  },
+  {
+    "start": "0xBEF4",
+    "end": "0xC504",
+    "path": "JAP10/main/menu/frontend",
+    "rodata_start": "0x13B8",
+    "rodata_end": "0x13CC"
+  },
+  {
+    "start": "0xF680",
+    "end": "0xF8D0",
+    "path": "JAP10/main/race/replay_recording"
+  },
+  {
+    "start": "0xF8D0",
+    "end": "0x101D0",
+    "path": "JAP10/main/race/replay"
+  },
+  {
+    "start": "0x16E7C",
+    "end": "0x17588",
+    "path": "JAP10/main/race/prologue"
+  },
+  {
+    "start": "0x1C644",
+    "end": "0x1E0C8",
+    "path": "JAP10/main/car/car_orientation"
+  },
+  {
+    "start": "0x22FC8",
+    "end": "0x23508",
+    "path": "JAP10/main/render/race_hud"
+  },
+  {
+    "start": "0x261B8",
+    "end": "0x2731C",
+    "path": "JAP10/main/race/race_scene"
+  },
+  {
+    "start": "0x3FD64",
+    "end": "0x402E8",
+    "path": "JAP10/main/menu/draw_car_name_plate",
+    "rodata_start": "0x1FE0",
+    "rodata_end": "0x204C"
+  },
+  {
+    "start": "0x4514",
+    "end": "0x4B68",
+    "path": "JAP10/main/pad/init_pad"
   }
 ]
