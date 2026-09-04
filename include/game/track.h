@@ -44,6 +44,9 @@ typedef struct GameTrackPoint {
     u16 segmentLength;
 } GameTrackPoint;
 
+typedef char GameTrackPointSizeCheck[
+    sizeof(GameTrackPoint) == 0x18 ? 1 : -1];
+
 typedef struct GameTrackPointHalfwordView {
     u16 x;
     u16 reserved02;
@@ -57,11 +60,17 @@ typedef struct GameTrackPointHalfwordView {
     u16 segmentLength;
 } GameTrackPointHalfwordView;
 
+typedef char GameTrackPointHalfwordViewSizeCheck[
+    sizeof(GameTrackPointHalfwordView) == 0x18 ? 1 : -1];
+
 typedef struct TrackAiSpeedKey {
     s16 progress;
     u16 pitch;
     s16 targetSpeeds[4];
 } TrackAiSpeedKey;
+
+typedef char TrackAiSpeedKeySizeCheck[
+    sizeof(TrackAiSpeedKey) == 0xC ? 1 : -1];
 
 typedef struct TrackRivalStart {
     s32 x;
@@ -69,6 +78,9 @@ typedef struct TrackRivalStart {
     s16 trackPointIndex;
     s16 modelId;
 } TrackRivalStart;
+
+typedef char TrackRivalStartSizeCheck[
+    sizeof(TrackRivalStart) == 0xC ? 1 : -1];
 
 typedef struct TrackRivalAiConfig {
     s16 speed;
@@ -80,6 +92,9 @@ typedef struct TrackRivalAiConfig {
     u16 initialEngineRpm;
     u16 reserved;
 } TrackRivalAiConfig;
+
+typedef char TrackRivalAiConfigSizeCheck[
+    sizeof(TrackRivalAiConfig) == 0x10 ? 1 : -1];
 
 typedef struct TrackZone {
     s32 start;
@@ -104,6 +119,9 @@ typedef struct TrackEventOffsets {
     s32 flybyScenery;
 } TrackEventOffsets;
 
+typedef char TrackEventOffsetsSizeCheck[
+    sizeof(TrackEventOffsets) == 0x18 ? 1 : -1];
+
 typedef union TrackEventOffsetBase {
     volatile TrackEventOffsets *offsets;
     u8 *bytes;
@@ -117,6 +135,9 @@ typedef struct TrackAmbienceZone {
     u16 flags;
 } TrackAmbienceZone;
 
+typedef char TrackAmbienceZoneSizeCheck[
+    sizeof(TrackAmbienceZone) == 0xC ? 1 : -1];
+
 typedef struct TrackRacingLineHint {
     s16 start;
     s16 end;
@@ -126,10 +147,16 @@ typedef struct TrackRacingLineHint {
     u16 reserved;
 } TrackRacingLineHint;
 
+typedef char TrackRacingLineHintSizeCheck[
+    sizeof(TrackRacingLineHint) == 0xC ? 1 : -1];
+
 typedef struct TrackCrestEvent {
     s32 progress;
     s32 motionValue;
 } TrackCrestEvent;
+
+typedef char TrackCrestEventSizeCheck[
+    sizeof(TrackCrestEvent) == 0x8 ? 1 : -1];
 
 typedef struct TrackEventSoundZone {
     s16 start;
@@ -137,6 +164,9 @@ typedef struct TrackEventSoundZone {
     s16 flags;
     u16 reserved;
 } TrackEventSoundZone;
+
+typedef char TrackEventSoundZoneSizeCheck[
+    sizeof(TrackEventSoundZone) == 0x8 ? 1 : -1];
 
 typedef union TrackEventSoundZoneAddress {
     s32 value;
@@ -153,21 +183,33 @@ typedef struct TrackPointAmbienceZone {
     s32 phase;
 } TrackPointAmbienceZone;
 
+typedef char TrackPointAmbienceZoneSizeCheck[
+    sizeof(TrackPointAmbienceZone) == 0x18 ? 1 : -1];
+
 typedef struct TrackFinishCue {
     s16 trackSection;
     s16 reserved;
 } TrackFinishCue;
+
+typedef char TrackFinishCueSizeCheck[
+    sizeof(TrackFinishCue) == 0x4 ? 1 : -1];
 
 typedef struct TrackSpeedCue {
     s16 trackSection;
     s16 speedPercent;
 } TrackSpeedCue;
 
+typedef char TrackSpeedCueSizeCheck[
+    sizeof(TrackSpeedCue) == 0x4 ? 1 : -1];
+
 typedef struct TrackRaceCueData {
     TrackFinishCue finish[2];
     u8 reserved08[8];
     TrackSpeedCue speed[2][3];
 } TrackRaceCueData;
+
+typedef char TrackRaceCueDataSizeCheck[
+    sizeof(TrackRaceCueData) == 0x28 ? 1 : -1];
 
 typedef union TrackRaceCueAddress {
     s32 value;
@@ -192,6 +234,9 @@ typedef struct TrackEventData {
     TrackRaceCueData raceCues;
 } TrackEventData;
 
+typedef char TrackEventDataSizeCheck[
+    sizeof(TrackEventData) == 0x1CF4 ? 1 : -1];
+
 typedef union TrackEventDataAddress {
     s32 value;
     u8 *bytePointer;
@@ -214,6 +259,9 @@ typedef struct GameTrackArcCenter {
     s32 z;      /* +0x04 */
     s32 reserved08;  /* +0x08 never read */
 } GameTrackArcCenter;
+
+typedef char GameTrackArcCenterSizeCheck[
+    sizeof(GameTrackArcCenter) == 0xC ? 1 : -1];
 
 typedef s32 TrackPointOffset;
 
@@ -282,6 +330,8 @@ typedef struct ShuttlePath {
     Vec4 endpoint[2];
 } ShuttlePath;
 
+typedef char ShuttlePathSizeCheck[sizeof(ShuttlePath) == 0x20 ? 1 : -1];
+
 typedef union ShuttlePathPointAddress {
     s32 value;
     u8 *bytes;
@@ -304,6 +354,9 @@ typedef struct GameShuttleScenery {
     s32 angleZ;        /* +0x28 Z rotation (BuildRotMatrixZ) */
     u8 pad2C[8];
 } GameShuttleScenery;
+
+typedef char GameShuttleScenerySizeCheck[
+    sizeof(GameShuttleScenery) == 0x34 ? 1 : -1];
 
 /* The two shuttle instances. Instance 1 used to carry eight split symbols of
  * its own, g_Shuttle1DwellCounter..g_Shuttle1AngleZ; they were this array's
