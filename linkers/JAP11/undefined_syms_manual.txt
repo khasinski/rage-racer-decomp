@@ -17,15 +17,20 @@ func_800291D8 = EmitCoursePolyF4;
 /* Entry point inside the relocatable GTE exception patch blob. */
 func_800698A4 = 0x800698A4;
 
-/* Address halves the handwritten terrain engine loads directly. */
-terrain_primitive_table_hi = jtbl_8007D294_main >> 16;
-terrain_primitive_table_lo = jtbl_8007D294_main & 0xFFFF;
-model_primitive_table_hi = jtbl_8007D2B4_main >> 16;
-model_primitive_table_lo = jtbl_8007D2B4_main & 0xFFFF;
-course_model_dispatch_1_hi = (jtbl_8007D2B4_main + 0x40) >> 16;
-course_model_dispatch_1_lo = (jtbl_8007D2B4_main + 0x40) & 0xFFFF;
-course_model_dispatch_2_hi = (jtbl_8007D2B4_main + 0x50) >> 16;
-course_model_dispatch_2_lo = (jtbl_8007D2B4_main + 0x50) & 0xFFFF;
+/* The terrain renderer builds these pointers with lui/ori rather than the
+ * usual sign-adjusted %hi/%lo relocation pair.  These two tables still live
+ * in the retained regional assembly blob, so keep their retail addresses
+ * beside the derived halves until that blob is decompiled. */
+terrain_primitive_table_addr = 0x8007D294;
+model_primitive_table_addr = 0x8007D2B4;
+terrain_primitive_table_hi = terrain_primitive_table_addr >> 16;
+terrain_primitive_table_lo = terrain_primitive_table_addr & 0xFFFF;
+model_primitive_table_hi = model_primitive_table_addr >> 16;
+model_primitive_table_lo = model_primitive_table_addr & 0xFFFF;
+course_model_dispatch_1_hi = (model_primitive_table_addr + 0x40) >> 16;
+course_model_dispatch_1_lo = (model_primitive_table_addr + 0x40) & 0xFFFF;
+course_model_dispatch_2_hi = (model_primitive_table_addr + 0x50) >> 16;
+course_model_dispatch_2_lo = (model_primitive_table_addr + 0x50) & 0xFFFF;
 course_model_continue_0_hi = course_model_continue_0 >> 16;
 course_model_continue_0_lo = course_model_continue_0 & 0xFFFF;
 course_model_continue_1_hi = course_model_continue_1 >> 16;

@@ -122,7 +122,7 @@ build: $(OUT_BIN)
 # so linking them would pin each address forever. They stay on disk because the
 # disassembler reads them for symbol names. This target distils them down to
 # the addresses the link actually still needs, and only that file is linked.
-$(ADDR_ALIASES): tools/scripts/gen_undefined_addr_aliases.py $(OBJS) $(UNDEFINED_MANUAL) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_HALVES) $(PAL_TEXT_ALIASES) configs/$(VERSION)/sym.main.txt
+$(ADDR_ALIASES): $(OBJS) $(UNDEFINED_MANUAL) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_HALVES) $(PAL_TEXT_ALIASES) configs/$(VERSION)/sym.main.txt
 	$(PY) tools/scripts/gen_undefined_addr_aliases.py --nm $(NM) --output $@ \
 	      --source $(UNDEFINED_SYMS) --source $(UNDEFINED_FUNCS) \
 	      --source configs/$(VERSION)/sym.main.txt \
@@ -131,7 +131,7 @@ $(ADDR_ALIASES): tools/scripts/gen_undefined_addr_aliases.py $(OBJS) $(UNDEFINED
 
 $(ELF): $(OBJS) $(LD_SCRIPT) $(UNDEFINED_MANUAL) $(ADDR_ALIASES) $(ADDR_HALVES) $(PAL_TEXT_ALIASES)
 	$(LD) -EL -T $(LD_SCRIPT) \
-	      -T $(ADDR_ALIASES) -T $(UNDEFINED_MANUAL) -T $(ADDR_HALVES) \
+	      -T $(UNDEFINED_MANUAL) -T $(ADDR_ALIASES) -T $(ADDR_HALVES) \
 	      -T $(PAL_TEXT_ALIASES) \
 	      -Map $(BUILD)/$(BASENAME).map -o $@
 
@@ -148,8 +148,7 @@ audit-code:
 # Enumerated rather than discovered: tools/ has no __init__.py, so unittest
 # discovery cannot import it, but the namespace package resolves by name.
 TESTS := tools.tests.test_code_debt tools.tests.test_gen_expected \
-         tools.tests.test_gen_objdiff_config tools.tests.test_gen_undefined_addr_aliases \
-         tools.tests.test_progress_report \
+         tools.tests.test_gen_objdiff_config tools.tests.test_progress_report \
          tools.tests.test_strip_nonmatching_markers tools.tests.test_regional_porting
 
 test:

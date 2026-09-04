@@ -32,7 +32,6 @@ from pathlib import Path
 ADDR_SYM_RE = re.compile(r"^D_([0-9A-Fa-f]{8})$")
 ASSIGN_RE = re.compile(r"^([\w.]+)\s*=")
 ABS_ASSIGN_RE = re.compile(r"^([\w.]+)\s*=\s*(0x[0-9A-Fa-f]+|\d+)\s*;")
-RHS_NAME_RE = re.compile(r"(?<![A-Za-z0-9_.$])[A-Za-z_.$][A-Za-z0-9_.$]*")
 ADDRESS_NAME_RE = re.compile(r"^(D_|func_|jtbl_|\.L)")
 
 
@@ -105,44 +104,15 @@ def known_addresses(paths: list[Path]) -> dict[str, int]:
     return known
 
 
-def assigned_dependencies(paths: list[Path]) -> set[str]:
-    """Names used on the right-hand side of linker-script assignments.
-
-    These references do not occur in an object relocation, but GNU ld still
-    needs their definitions while evaluating the script.  In particular, the
-    regional terrain units derive encoded address halves from Splat-named jump
-    tables that otherwise exist only in ``undefined_syms_auto``.
-    """
-    dependencies: set[str] = set()
-    for path in paths:
-        if not path.exists():
-            continue
-        for line in path.read_text().splitlines():
-            code = line.split("//", 1)[0].split("/*", 1)[0]
-            if "=" not in code:
-                continue
-            dependencies.update(RHS_NAME_RE.findall(code.split("=", 1)[1]))
-    return dependencies
-
-
 def main() -> int:
     args = parse_args()
     undefined, defined = symbol_tables(args.nm, args.objects)
+    unresolved = undefined - defined - assigned_names(args.manual)
+
     known = known_addresses(args.source)
-    assigned = assigned_names(args.manual)
-    unresolved = undefined - defined - assigned
-    script_dependencies = assigned_dependencies(args.manual) & known.keys()
-    # GNU ld on Ubuntu cannot use the object-defined jump-table labels while
-    # evaluating the supplemental script.  Those tables still live in the
-    # retained regional assembly blob, so bootstrap only those addresses.  Do
-    # not pin ordinary object symbols merely because a script refers to them.
-    script_bootstrap = {
-        sym for sym in script_dependencies - assigned if sym.startswith("jtbl_")
-    }
-    required = unresolved | script_bootstrap
     pins: list[tuple[str, int]] = []
     missing: list[str] = []
-    for sym in sorted(required):
+    for sym in sorted(unresolved):
         if sym in known:
             pins.append((sym, known[sym]))
             continue
