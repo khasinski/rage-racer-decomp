@@ -24,6 +24,9 @@ struct GameEnvironmentCue {
     u16 spareTarget;
 };
 
+typedef char GameEnvironmentCueSizeCheck[
+    sizeof(struct GameEnvironmentCue) == 0x30 ? 1 : -1];
+
 typedef union GameEnvironmentScriptAddress {
     u32 *words;
     struct GameEnvironmentCue *cues;
@@ -35,6 +38,9 @@ typedef struct GameEnvColorSlot {
     GameEnvColor to;
 } GameEnvColorSlot;
 
+typedef char GameEnvColorSlotSizeCheck[
+    sizeof(GameEnvColorSlot) == 0xC ? 1 : -1];
+
 typedef union GameEnvironmentColors {
     struct {
         s16 fogEnabled;
@@ -42,6 +48,14 @@ typedef union GameEnvironmentColors {
     } fields;
     u32 fogColorWord;
 } GameEnvironmentColors;
+
+/* The fields occupy the retail symbol's exact 0x6E bytes. The word overlay
+ * raises the C union's alignment and rounds sizeof to 0x70; this type is never
+ * used as an array or to allocate the assembly-owned BSS object. */
+typedef char GameEnvironmentColorsPayloadSizeCheck[
+    sizeof(((GameEnvironmentColors *)0)->fields) == 0x6E ? 1 : -1];
+typedef char GameEnvironmentColorsOverlaySizeCheck[
+    sizeof(GameEnvironmentColors) == 0x70 ? 1 : -1];
 
 extern GameEnvironmentColors g_EnvironmentColors;
 

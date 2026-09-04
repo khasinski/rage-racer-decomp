@@ -160,6 +160,9 @@ typedef struct EngineSoundState {
     s32 volumeScale;
 } EngineSoundState;
 
+typedef char EngineSoundStateSizeCheck[
+    sizeof(EngineSoundState) == 0x2C ? 1 : -1];
+
 extern EngineSoundCurveRow g_EngineSoundCurves[2][12];
 extern EngineSoundState g_EngineSoundState;
 

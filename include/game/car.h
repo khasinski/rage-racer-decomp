@@ -176,6 +176,9 @@ typedef struct GameCarRuntime {
     u8 pad16A[0x32];
 } GameCarRuntime;
 
+typedef char GameCarRuntimeSizeCheck[
+    sizeof(GameCarRuntime) == 0x19C ? 1 : -1];
+
 typedef union GameCarRuntimeAddress {
     GameCarRuntime *runtime;
     struct PlayerCarRuntime *player;
@@ -518,6 +521,8 @@ typedef struct GameCarDrive {
     s16 hudLapHighlightRow;
 } GameCarDrive;
 
+typedef char GameCarDriveSizeCheck[sizeof(GameCarDrive) == 0xA8 ? 1 : -1];
+
 typedef union PlayerLapTimes {
     struct {
         s32 frameCounts[6];
@@ -630,6 +635,9 @@ typedef struct PlayerCarRuntime {
     s16 pad16A;
     PlayerLapTimes lapTimes;
 } PlayerCarRuntime;
+
+typedef char PlayerCarRuntimeSizeCheck[
+    sizeof(PlayerCarRuntime) == 0x19C ? 1 : -1];
 
 typedef union PlayerRaceCueStateAddress {
     s16 *trackSection;

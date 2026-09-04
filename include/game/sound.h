@@ -9,6 +9,8 @@ typedef struct SoundScale {
     s16 vabIds[8];
 } SoundScale;
 
+typedef char SoundScaleSizeCheck[sizeof(SoundScale) == 0x14 ? 1 : -1];
+
 /*
  * Volume-scale record at 0x801E6CA4. Its `.scale` word is the master scale
  * applied to every sound-effect voice volume, 0..0x80: SetEffectVolumeScale
@@ -48,6 +50,8 @@ typedef struct MusicChannel {
     MusicChannelWordValue volRight; /* +0x14 scaled right volume */
 } MusicChannel; /* sizeof 0x18 */
 
+typedef char MusicChannelSizeCheck[sizeof(MusicChannel) == 0x18 ? 1 : -1];
+
 typedef union MusicChannelAddress {
     s32 value;
     u8 *bytes;
@@ -80,6 +84,9 @@ typedef struct AudioRuntimeState {
     MusicChannel musicChannels[2];      /* +0x64 */
 } AudioRuntimeState;
 
+typedef char AudioRuntimeStateSizeCheck[
+    sizeof(AudioRuntimeState) == 0x94 ? 1 : -1];
+
 extern AudioRuntimeState g_AudioRuntimeState;
 
 /* Effect voice, 4 elements for hardware voices 10..13. SetPitchedSoundCue walks it
@@ -107,6 +114,8 @@ typedef struct EffectVoice {
     EffectVoicePitch pitch; /* +0x0C pitch */
     s32 volume;    /* +0x10 volume */
 } EffectVoice; /* sizeof 0x14 */
+
+typedef char EffectVoiceSizeCheck[sizeof(EffectVoice) == 0x14 ? 1 : -1];
 
 typedef union EffectVoiceAddress {
     s32 value;

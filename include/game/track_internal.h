@@ -31,6 +31,9 @@ typedef struct PathSceneryClock {
     s16 rotRateNeg;
 } PathSceneryClock;
 
+typedef char PathSceneryClockSizeCheck[
+    sizeof(PathSceneryClock) == 0x8 ? 1 : -1];
+
 typedef union PathSceneryClockAddress {
     PathSceneryClock *clock;
     u16 *halfwords;
@@ -40,6 +43,9 @@ typedef struct PathSceneryTransform {
     Block16 position;
     SVec rotation;
 } PathSceneryTransform;
+
+typedef char PathSceneryTransformSizeCheck[
+    sizeof(PathSceneryTransform) == 0x18 ? 1 : -1];
 
 extern GameTrackArcCenter *g_TrackArcCenters;
 extern s32 g_EnvScriptClock;

@@ -88,6 +88,8 @@ typedef struct TrackZone {
     s16 value;
 } TrackZone;
 
+typedef char TrackZoneSizeCheck[sizeof(TrackZone) == 0xC ? 1 : -1];
+
 typedef union TrackZoneAddress {
     s32 value;
     TrackZone *pointer;
@@ -427,10 +429,16 @@ typedef struct SceneryMotionKeyframe {
     s16 reserved;
 } SceneryMotionKeyframe;
 
+typedef char SceneryMotionKeyframeSizeCheck[
+    sizeof(SceneryMotionKeyframe) == 0xC ? 1 : -1];
+
 typedef struct SceneryMotionStart {
     Vec4 position;
     s32 reserved[4];
 } SceneryMotionStart;
+
+typedef char SceneryMotionStartSizeCheck[
+    sizeof(SceneryMotionStart) == 0x20 ? 1 : -1];
 
 typedef struct SceneryMotionData {
     s16 triggerSection[2][2];
@@ -438,6 +446,9 @@ typedef struct SceneryMotionData {
     SceneryMotionStart start[2];
     SceneryMotionKeyframe keyframes[1];
 } SceneryMotionData;
+
+typedef char SceneryMotionDataSizeCheck[
+    sizeof(SceneryMotionData) == 0x5C ? 1 : -1];
 
 typedef struct FlybySceneryState {
     s32 timer;
@@ -452,6 +463,9 @@ typedef struct FlybySceneryState {
     s32 reserved2C;
     s32 volume;
 } FlybySceneryState;
+
+typedef char FlybySceneryStateSizeCheck[
+    sizeof(FlybySceneryState) == 0x34 ? 1 : -1];
 
 extern SceneryMotionKeyframe *g_FlybySceneryKeyframe;
 extern s32 g_FogNear;
@@ -473,6 +487,9 @@ typedef union PathSceneryPositionKey {
     Block16 position;
 } PathSceneryPositionKey;
 
+typedef char PathSceneryPositionKeySizeCheck[
+    sizeof(PathSceneryPositionKey) == 0x14 ? 1 : -1];
+
 typedef union PathSceneryRotationKey {
     struct {
         s16 x;
@@ -484,6 +501,9 @@ typedef union PathSceneryRotationKey {
     } fields;
     SVec rotation;
 } PathSceneryRotationKey;
+
+typedef char PathSceneryRotationKeySizeCheck[
+    sizeof(PathSceneryRotationKey) == 0xC ? 1 : -1];
 
 typedef struct PathSceneryPositionData {
     s16 firstKey[2];
@@ -541,6 +561,9 @@ typedef struct PathSceneryCursors {
     s16 posIndex;
     s16 rotIndex;
 } PathSceneryCursors;
+
+typedef char PathSceneryCursorsSizeCheck[
+    sizeof(PathSceneryCursors) == 0x10 ? 1 : -1];
 
 extern PathSceneryCursors g_PathSceneryCursors;
 extern s16 g_PathSceneryRotHalfDelta[3];
