@@ -64,7 +64,7 @@ void UploadFmvSlice(void) {
             bufferAddr = bufferCursor.byteAddress + relativeAddress;
         }
         bufferAddress.byteAddress = bufferAddr;
-        DecDCTout(bufferAddress.bufferEnd[-2], pixelCount / 2);
+        DecDCTout(bufferAddress.stripBufferFromIndex[-2], pixelCount / 2);
     } else {
         g_FmvStripDone = 1;
         next = index == 0;

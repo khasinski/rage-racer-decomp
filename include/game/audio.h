@@ -156,6 +156,10 @@ typedef struct EngineSoundState {
     s32 bank;
     s32 extraVabLoaded;
     s32 maxRpm;
+    /* ForceSoundSlotVoicePlayback keeps this member's address in a saved
+     * register. Its base[-4], base[-3], and base[6] accesses are position,
+     * bank, and volumeScale; spelling them as members changes that register's
+     * base and breaks the original instruction stream. */
     s32 slotActive[6];
     s32 volumeScale;
 } EngineSoundState;

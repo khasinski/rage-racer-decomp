@@ -59,7 +59,9 @@ typedef union FmvWorkBufferAddress {
 
 typedef union FmvStripCursorAddress {
     volatile s32 *index;
-    volatile u32 **bufferEnd;
+    /* With byteAddress based at FmvDecodeContext.stripIndex (+0x14), backing
+     * up two pointers reaches stripBuffers (+0x0C). */
+    volatile u32 **stripBufferFromIndex;
     s32 byteAddress;
 } FmvStripCursorAddress;
 
