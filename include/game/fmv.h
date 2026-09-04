@@ -35,6 +35,9 @@ typedef struct FmvDecodeContext {
     s32 decodeComplete;
 } FmvDecodeContext;
 
+typedef char FmvDecodeContextSizeCheck[
+    sizeof(FmvDecodeContext) == 0x38 ? 1 : -1];
+
 typedef union FmvDecodeContextAddress {
     FmvDecodeContext *pointer;
     volatile FmvDecodeContext *volatilePointer;

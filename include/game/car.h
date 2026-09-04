@@ -38,6 +38,9 @@ typedef struct CarTrackLimits {
     s16 leftKnockbackMode;
 } CarTrackLimits;
 
+typedef char CarTrackLimitsSizeCheck[
+    sizeof(CarTrackLimits) == 0x8 ? 1 : -1];
+
 typedef union CarMotionValue {
     s16 value;
     u16 unsignedValue;
@@ -273,6 +276,9 @@ typedef struct CarCollisionPoint {
     s16 x;
     s16 z;
 } CarCollisionPoint;
+
+typedef char CarCollisionPointSizeCheck[
+    sizeof(CarCollisionPoint) == 0x4 ? 1 : -1];
 
 typedef union CarCollisionPointValue {
     CarCollisionPoint point;

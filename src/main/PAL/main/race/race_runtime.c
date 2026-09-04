@@ -14,10 +14,14 @@
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
-typedef struct CarTrackLimitWork {
-    s32 reserved[4];
+/* Stack shape needed by SeedTrackEventObject's call to UpdateCarTrackState. */
+typedef struct CarTrackLimitStackLayout {
+    s32 padding[4];
     CarTrackLimits limits;
-} CarTrackLimitWork;
+} CarTrackLimitStackLayout;
+
+typedef char CarTrackLimitStackLayoutSizeCheck[
+    sizeof(CarTrackLimitStackLayout) == 0x18 ? 1 : -1];
 
 
 /*
@@ -560,7 +564,7 @@ void InitRivalCar(GameCarRuntime *ent, s32 pos, RaceGridSlot *slots) {
         model = eventAddress.pointer->rivalStarts[0][0].modelId;
         ent->activeFlag = model;
         if ((s16)model != -1) {
-            CarTrackLimitWork pair;
+            CarTrackLimitStackLayout pair;
 
             pair.limits.rightInset = 20;
             pair.limits.leftInset = -20;
