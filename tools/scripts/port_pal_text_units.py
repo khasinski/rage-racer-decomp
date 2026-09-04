@@ -460,6 +460,32 @@ def rewrite_main_subsegments(
     config.write_text("\n".join(lines[: subsegments_index + 1] + generated + lines[block_end:]) + "\n")
 
 
+def validate_text_coverage(
+    segments: list[tuple[int, int, str, str]], text_start: int
+) -> tuple[int, int]:
+    """Require source units to cover the regional executable text contiguously."""
+    ordered = sorted(segments)
+    if not ordered:
+        raise ValueError("regional executable has no source-covered text units")
+    if ordered[0][0] != text_start:
+        raise ValueError(
+            f"source coverage starts at 0x{ordered[0][0]:X}, expected 0x{text_start:X}"
+        )
+
+    cursor = text_start
+    for start, end, _, path in ordered:
+        if start != cursor:
+            relation = "overlap" if start < cursor else "gap"
+            raise ValueError(
+                f"source coverage {relation} before {path}: "
+                f"0x{cursor:X} -> 0x{start:X}"
+            )
+        if end <= start:
+            raise ValueError(f"empty source-covered text unit: {path}")
+        cursor = end
+    return cursor, cursor - text_start
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("version", choices=("USA", "JAP10", "JAP11"))
@@ -750,6 +776,10 @@ def main() -> None:
             )
     selected_segments.extend(regional_segments)
     selected_segments.sort()
+    text_end, covered_text_bytes = validate_text_coverage(
+        [segment for segment in selected_segments if segment[2] == "c"],
+        target_text_start,
+    )
     payload_end = len(target_data)
     rewrite_main_subsegments(
         target_config,
@@ -778,6 +808,11 @@ def main() -> None:
         ),
         "regional_units": len(regional_units),
         "regional_text_bytes": sum(end - start for start, end, _, _ in regional_units),
+        "source_units": len(selected) + len(regional_units),
+        "source_text_bytes": covered_text_bytes,
+        "text_start": f"0x{target_text_start:X}",
+        "text_end": f"0x{text_end:X}",
+        "source_coverage_percent": 100.0,
         "text_aliases": aliases,
         "inferred_externals": len(inferred_externals),
         "selected": [
@@ -801,7 +836,8 @@ def main() -> None:
     report_path.write_text(json.dumps(report, indent=2) + "\n")
     print(
         f"{args.version}: reused {report['portable_units']} PAL C text units "
-        f"({report['portable_text_bytes']} bytes); the rest remains assembly"
+        f"({report['portable_text_bytes']} bytes); source coverage "
+        f"{report['source_text_bytes']}/{text_end - target_text_start} bytes (100%)"
     )
 
 

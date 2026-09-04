@@ -415,7 +415,8 @@ def main() -> int:
     # The decompilation is complete, so the table lives in README.md and does
     # not move any more. Only the badge JSON is regenerated here.
     print("\n".join(lines))
-    return 0
+    # Completion is a maintained invariant now, not merely a badge claim.
+    return 0 if plain_funcs == total_funcs and plain_bytes == total_bytes else 1
 
 
 if __name__ == "__main__":

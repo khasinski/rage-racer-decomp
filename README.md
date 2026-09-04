@@ -26,12 +26,13 @@ the two Japanese executables have a `0x8A800`-byte payload.
 
 ## Progress
 
-**The decompilation is complete.** Every function in the PAL executable is
-plain C, and the built executable is byte-identical to retail.
+**The decompilation is complete.** Every compiler-generated game function in
+the PAL executable is plain C, and the built executable is byte-identical to
+retail.
 
 | Binary | Functions | Code bytes |
 |---|---:|---:|
-| `SCES_006.50 (main)` | 1105 / 1105 (100%) | 407904 / 407904 (100%) |
+| `SCES_006.50 (main)` | 648 / 648 (100%) | 313380 / 313380 (100%) |
 
 A function counts as decompiled when it carries no `INCLUDE_ASM` or
 `INCLUDE_RODATA` and no non-empty inline assembly. Three things are sanctioned
@@ -41,25 +42,32 @@ C; register and symbol `asm` labels; and empty barriers used to hold statement
 order. Functions are counted individually rather than per file, so one function
 needing a crutch cannot reclassify the plain C beside it.
 
-A further 48 functions (15804 code bytes) are documented handwritten assembly
+A further 26 functions (10280 code bytes) are documented handwritten assembly
 in the original game, marked `HANDWRITTEN_ASM`, and are excluded from the totals
 above rather than counted as failures.
 
+Sony's 473 PsyQ library functions (100048 code bytes) are also excluded from
+the game-code denominator; they are nevertheless matched because the complete
+executable must relink byte-for-byte.
+
 Regenerate the table and the badge JSON with `make progress`.
 
-The regional targets are deliberately measured by directly reusable PAL
-translation units rather than claiming changed regional code as decompiled:
+The regional targets also have complete source coverage. Unchanged translation
+units reuse PAL C; actual regional differences live in separate USA/Japanese C
+files. Original hand-written GTE/COP2, MDEC and startup routines remain clearly
+marked `HANDWRITTEN_ASM` sources rather than being misrepresented as generated
+C.
 
-| Target | Reused PAL C units | Reused text bytes |
-|---|---:|---:|
-| USA | 311 / 345 | 346844 |
-| Japan v1.0 | 297 / 345 | 322920 |
-| Japan v1.1 | 302 / 345 | 326840 |
+| Target | Source-covered text | Coverage | Reused PAL C units | Reused PAL text |
+|---|---:|---:|---:|---:|
+| USA | 422988 / 422988 bytes | 100% | 328 / 360 | 358228 bytes |
+| Japan v1.0 | 422316 / 422316 bytes | 100% | 314 / 359 | 340900 bytes |
+| Japan v1.1 | 422544 / 422544 bytes | 100% | 319 / 359 | 344820 bytes |
 
-Every included unit is verified by the retail executable SHA-1. Units with a
-different instruction structure, different regional constants, or a PAL
-`INCLUDE_ASM` body remain regional assembly. The exact selection and rejection
-reason is recorded in `configs/<version>/portable_text.json`.
+`make port VERSION=<region>` now rejects a gap or overlap anywhere in the
+executable text range. Every build is additionally verified against its retail
+SHA-1. The exact portable/regional selection and coverage totals are recorded
+in `configs/<version>/portable_text.json`.
 
 ## Layout
 

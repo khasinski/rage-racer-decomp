@@ -5,6 +5,11 @@
   "portable_rodata_bytes": 2464,
   "regional_units": 40,
   "regional_text_bytes": 77724,
+  "source_units": 359,
+  "source_text_bytes": 422544,
+  "text_start": "0x4518",
+  "text_end": "0x6B7A8",
+  "source_coverage_percent": 100.0,
   "text_aliases": 10,
   "inferred_externals": 2068,
   "selected": [

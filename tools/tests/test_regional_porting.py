@@ -1,3 +1,5 @@
+import json
+import re
 import struct
 import tempfile
 import unittest
@@ -15,6 +17,7 @@ from tools.scripts.port_pal_text_units import (
     read_regional_rodata,
     read_regional_units,
     rewrite_main_subsegments,
+    validate_text_coverage,
 )
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -114,6 +117,21 @@ class ConfigRewriteTest(unittest.TestCase):
                 [(0x900, 0x924, ".rodata", "JAP10/code")],
             )
 
+    def test_validates_contiguous_source_coverage(self):
+        segments = [
+            (0x1000, 0x1080, "c", "PAL/first"),
+            (0x1080, 0x1100, "c", "USA/second"),
+        ]
+        self.assertEqual(validate_text_coverage(segments, 0x1000), (0x1100, 0x100))
+
+    def test_rejects_a_source_coverage_gap(self):
+        segments = [
+            (0x1000, 0x1080, "c", "PAL/first"),
+            (0x1090, 0x1100, "c", "USA/second"),
+        ]
+        with self.assertRaisesRegex(ValueError, "coverage gap"):
+            validate_text_coverage(segments, 0x1000)
+
 
 class FunctionSourceRangeTest(unittest.TestCase):
     def test_assigns_functions_to_c_units(self):
@@ -133,18 +151,47 @@ class FunctionSourceRangeTest(unittest.TestCase):
 
 
 class RegionalSourceLayoutTest(unittest.TestCase):
-    def test_japanese_sources_do_not_include_pal_implementations(self):
-        source_root = ROOT / "src/main/JAP10"
+    def test_regional_sources_do_not_include_pal_implementations(self):
         offenders = []
-        for path in source_root.rglob("*.c"):
-            text = path.read_text()
-            if 'PAL/main/' in text or '#include "../../../PAL/' in text:
-                offenders.append(path.relative_to(ROOT).as_posix())
+        for version in ("USA", "JAP10", "JAP11"):
+            for path in (ROOT / "src" / "main" / version).rglob("*.c"):
+                text = path.read_text()
+                if 'PAL/main/' in text or '#include "../../../PAL/' in text:
+                    offenders.append(path.relative_to(ROOT).as_posix())
         self.assertEqual(offenders, [])
+
+
+class RegionalCoverageManifestTest(unittest.TestCase):
+    def test_every_regional_text_range_has_source(self):
+        asm_segment = re.compile(r"\[0x([0-9A-Fa-f]+),\s*asm,")
+        for version in ("USA", "JAP10", "JAP11"):
+            with self.subTest(version=version):
+                config_dir = ROOT / "configs" / version
+                report = json.loads((config_dir / "portable_text.json").read_text())
+                text_start = int(report["text_start"], 16)
+                text_end = int(report["text_end"], 16)
+
+                self.assertEqual(report["source_coverage_percent"], 100.0)
+                self.assertEqual(report["source_text_bytes"], text_end - text_start)
+                self.assertEqual(
+                    report["source_units"],
+                    report["portable_units"] + report["regional_units"],
+                )
+
+                regional = json.loads(
+                    (config_dir / "regional_text_units.json").read_text()
+                )
+                for unit in [*report["selected"], *regional]:
+                    source = ROOT / "src" / "main" / f'{unit["path"]}.c'
+                    self.assertTrue(source.is_file(), source)
+
+                for match in asm_segment.finditer((config_dir / "main.yaml").read_text()):
+                    address = int(match.group(1), 16)
+                    self.assertFalse(text_start <= address < text_end)
 
     def test_sources_do_not_include_other_c_files(self):
         offenders = []
-        for version in ("PAL", "JAP10"):
+        for version in ("PAL", "USA", "JAP10", "JAP11"):
             source_root = ROOT / "src/main" / version
             for path in source_root.rglob("*.c"):
                 if '#include "' in path.read_text() and '.c"' in path.read_text():
