@@ -42,7 +42,7 @@ void DrawCourseObjects(void) {
             continue;
         }
 
-        BuildRotMatrixY(&mtx, obj->field2);
+        BuildRotMatrixY(&mtx, obj->rotationY);
         MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx);
         {
             s32 transformed;

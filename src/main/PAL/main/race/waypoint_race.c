@@ -24,7 +24,7 @@
  * track index (player lap - 1) / 10, clamped to 0..9, which selects a
  * TrackWaypointSeed row in g_WaypointSeeds. Each slot i is seeded at
  * origin + step*i (x,y), with the fixed constants 0x1766 and 0x174, and marked
- * inactive. Register pins and the raw tail-offset writes are match-load-bearing.
+ * inactive. The typed runtime layout preserves the retail 0x38-byte slot stride.
  */
 
 void UpdateWaypointRaceScene(void) {
@@ -177,7 +177,7 @@ void SeedWaypoints(void) {
         waypoint->motion.height = 0x1766;
         waypoint->motion.rotationY = 0x174;
         waypoint->motion.rotationZ = 0;
-        waypoint->motion.field1C = 0;
+        waypoint->motion.rotationX = 0;
         waypoint++;
     }
 

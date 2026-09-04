@@ -332,7 +332,7 @@ variant).
 | GameShuttleScenery | track.h | 0x34 | Shuttle scenery prop state, `D_801E4FB8[2]`. |
 | GameTrackPoint | track.h | 0x18 | Track centerline point: x/z/y, angle, segmentLength. Array at `D_8009E688`. |
 | TrackWaypointSeed | waypoint.h | 0xC | Waypoint seed: origin + step. |
-| TrackWaypointRuntime | waypoint.h | 0x38 | Waypoint runtime: position/velocity/scale/magnitude. |
+| TrackWaypointRuntime | waypoint.h | 0x38 | Waypoint runtime: position/rotation/velocity/magnitude. |
 | GameRaceProgress | race.h | 0x14 | Race state/lap/progression/elapsedTime. |
 | GameRaceRanking | race.h | var | Ranking: count + values[]. |
 | GameAssetTripleHeader | asset.h | 0xC | Three sub-asset offsets. |
@@ -706,11 +706,10 @@ share a `%hi`. The unlinked `.o` diff shows `sw v,8(at)` where retail has
   `AVOID_BLOCKED` / `AVOID_NEARBY` macros, because as struct members they let
   gcc hoist the `D_8009E778` load out of the loop. The other ten accesses in the
   function convert fine.
-- **`TrackWaypointRuntime` in func_80037860.** Retail keeps a second induction
-  variable biased to `&waypoint->velocityMagnitude` and addresses the velocity
-  block at negative displacements off it. Written as `waypoint->field` the
-  second iv disappears and every store re-bases; 24 accesses stay raw with an
-  offset->field map in a comment.
+- **`TrackWaypointRuntime` in func_80037860.** An initial conversion lost
+  retail's second induction variable biased to `&waypoint->velocityMagnitude`.
+  Later source reshaping recovered the same allocation with direct typed fields;
+  the complete 0x38-byte runtime record is now expressed without raw offsets.
 - **`GameCarSpec`'s colour fields in func_8003351C, and `GameCarRuntime` in
   func_8003A728 / func_8003A280 / func_80038FF0.** Same class of problem from
   the other direction: retail addresses these off a *biased* base register

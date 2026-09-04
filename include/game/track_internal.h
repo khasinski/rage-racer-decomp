@@ -7,12 +7,14 @@
 
 typedef struct CourseObject {
     s16 modelId;
-    s16 field2;
+    s16 rotationY;
     s32 x;
     s32 y;
     s32 z;
     s32 flags;
 } CourseObject;
+
+typedef char CourseObjectSizeCheck[sizeof(CourseObject) == 0x14 ? 1 : -1];
 
 typedef struct CourseObjectTable {
     u32 count;

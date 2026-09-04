@@ -15,10 +15,6 @@
 #include "psyq/cd.h"
 #include "psyq/gpu.h"
 
-#define FRAME_CONTEXT_ENVIRONMENT(offset)                                      \
-    (*(volatile GameFrameEnvironmentHeader *)(g_FrameContexts[0].bytes + (offset)))
-
-
 void UpdateMainMenuExit(void) {
     s32 value;
     GameRaceProgress *ptr;
@@ -191,6 +187,3 @@ void UpdateFrontend(void) {
 
     UpdateTitleAttract();
 }
-
-
-#undef FRAME_CONTEXT_ENVIRONMENT

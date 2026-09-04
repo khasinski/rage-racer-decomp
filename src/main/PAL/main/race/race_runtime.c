@@ -31,8 +31,7 @@ typedef struct CarTrackLimitWork {
  * counter g_WaypointsCollected, plays cue 0xA, marks the slot active and seeds its
  * velocity from g_PlayerVelocity. An active slot integrates position from velocity
  * with 15/16 per-frame damping and grows its Z rotation toward 0x400, retiring to
- * state 2 once motion decays to zero. Register pins and raw tail-relative field
- * offsets are match-load-bearing.
+ * state 2 once motion decays to zero. Named fields cover the complete retail slot.
  */
 
 /* Counts how many of the 6 waypoint slots are active (active != 0). */
@@ -113,19 +112,19 @@ void UpdateWaypoints(void) {
                 PlaySoundCue(0xA);
 
                 waypoint->active = activeState;
-                waypoint->motion.velocity.vector = g_PlayerVelocity[0];
+                waypoint->motion.velocity = g_PlayerVelocity[0];
 
-                waypoint->motion.velocity.fields.x *= 2;
-                waypoint->motion.velocity.fields.y *= 2;
+                waypoint->motion.velocity.x *= 2;
+                waypoint->motion.velocity.z *= 2;
                 waypoint->motion.velocityMagnitude =
-                    ((waypoint->motion.velocity.fields.x * waypoint->motion.velocity.fields.x) + (waypoint->motion.velocity.fields.y * waypoint->motion.velocity.fields.y)) /
+                    ((waypoint->motion.velocity.x * waypoint->motion.velocity.x) + (waypoint->motion.velocity.z * waypoint->motion.velocity.z)) /
                     0x2000;
             }
         } else if (waypoint->active == activeState) {
-            waypoint->motion.x += waypoint->motion.velocity.fields.x / 0x100;
-            waypoint->motion.y += waypoint->motion.velocity.fields.y / 0x100;
-            waypoint->motion.velocity.fields.x = (waypoint->motion.velocity.fields.x * 15) / 16;
-            waypoint->motion.velocity.fields.y = (waypoint->motion.velocity.fields.y * 15) / 16;
+            waypoint->motion.x += waypoint->motion.velocity.x / 0x100;
+            waypoint->motion.y += waypoint->motion.velocity.z / 0x100;
+            waypoint->motion.velocity.x = (waypoint->motion.velocity.x * 15) / 16;
+            waypoint->motion.velocity.z = (waypoint->motion.velocity.z * 15) / 16;
             waypoint->motion.rotationY += waypoint->motion.velocityMagnitude / 0x100;
             waypoint->motion.velocityMagnitude = (waypoint->motion.velocityMagnitude * 15) / 16;
 
@@ -135,7 +134,7 @@ void UpdateWaypoints(void) {
                 waypoint->motion.rotationZ = 0x400;
             }
 
-            if ((waypoint->motion.velocity.fields.x == 0) && (waypoint->motion.velocity.fields.y == 0) && (waypoint->motion.velocityMagnitude == 0)) {
+            if ((waypoint->motion.velocity.x == 0) && (waypoint->motion.velocity.z == 0) && (waypoint->motion.velocityMagnitude == 0)) {
                 waypoint->active = 2;
             }
         }
