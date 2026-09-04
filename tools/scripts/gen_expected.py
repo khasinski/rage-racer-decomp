@@ -8,12 +8,11 @@ nothing. This produces the target side by running splat a second time against
 an empty source tree, so every function comes back as disassembly of the
 original EXE, then compiling those stubs with the same compiler.
 
-Symbol names come from the verified build's own object files, not from
-configs/<version>/sym.main.txt. That file has fallen behind the source: it
-still calls func_80013F48 what the C now calls GameInitPad, and objdiff pairs
-symbols by name, so those units would read as entirely unmatched even though
-the bytes are identical. Reading the names back out of a build that passed
-`make check` cannot invent a name for an address the game does not have.
+Symbol names preferentially come from the verified build's own object files.
+configs/<version>/sym.main.txt has fallen behind the source: it may still call
+func_80013F48 what the C now calls GameInitPad, and objdiff pairs symbols by
+name. The regional symbol files still supply labels not exported by an object,
+but only at names and addresses the verified build did not already occupy.
 
 Only the names are borrowed. Every byte in the result is disassembled from
 assets/<version>/main.exe.
@@ -47,6 +46,8 @@ GCC_LOCAL = re.compile(r'(?:^(?:LM\d+|\$L|__gnu_compiled|gcc2_compiled|_MACRO_IN
 # splat writes the legacy three-argument form; this tree's macro takes the asm
 # folder and the symbol, so the stubs need rewriting before they will compile.
 INCLUDE_CALL = re.compile(r'INCLUDE_(ASM|RODATA)\(\s*[^,]+,\s*"([^"]+)"\s*,\s*(\w+)\s*\)')
+CURRENT_INCLUDE_CALL = re.compile(
+    r'INCLUDE_(?:ASM|RODATA)\(\s*"[^"]+"\s*,\s*(\w+)\s*\)')
 
 MAP_PLACEMENT = re.compile(
     r'^\s(\.\w+)\s+0x([0-9a-f]+)\s+0x([0-9a-f]+)\s+(build/\S+\.o)$', re.MULTILINE)
@@ -107,7 +108,7 @@ def unambiguous(symbols):
     return [s for s in symbols if len(seen[s[0]]) == 1]
 
 
-def symbol_file(symbols):
+def symbol_file(symbols, segment=None):
     """The symbols as a splat symbol_addrs file, sorted so the diff stays readable.
 
     Only a symbol the compiler typed as a function is declared one here. The
@@ -123,9 +124,82 @@ def symbol_file(symbols):
             notes.append('type:func')
         if size:
             notes.append('size:0x%X' % size)
+        if segment:
+            notes.append('segment:%s' % segment)
         suffix = ' // %s' % ' '.join(notes) if notes else ''
         lines.append('%s = 0x%08X;%s' % (name, addr, suffix))
     return '\n'.join(lines) + '\n'
+
+
+CONFIG_SYMBOL = re.compile(r'^([A-Za-z_.$][\w.$]*)\s*=\s*(0x[0-9A-Fa-f]+);')
+
+
+def configured_function_addresses(configured_texts):
+    addresses = set()
+    for text in configured_texts:
+        for line in text.splitlines():
+            match = CONFIG_SYMBOL.match(line.strip())
+            if match is not None and 'type:func' in line:
+                addresses.add(int(match.group(2), 16))
+    return addresses
+
+
+def c_subsegment_addresses(config):
+    """Addresses splat must regard as functions to create each C stub."""
+    addresses = set()
+    for segment in config.get('segments', []):
+        if not isinstance(segment, dict) or segment.get('type', 'code') != 'code':
+            continue
+        vrom = segment.get('start')
+        vram = segment.get('vram')
+        if vrom is None or vram is None:
+            continue
+        for subsegment in segment.get('subsegments', []):
+            if (isinstance(subsegment, list) and len(subsegment) >= 2
+                    and subsegment[1] in ('c', '.c')):
+                addresses.add(vram + subsegment[0] - vrom)
+    return addresses
+
+
+def merged_symbol_file(symbols, configured_texts, forced_function_addresses=(), segment=None):
+    """Build symbols plus only the non-conflicting configured fallbacks.
+
+    Some assembly objects do not export every function boundary needed by
+    splat. The checked-in regional tables retain those boundaries, but cannot
+    be passed alongside the generated table wholesale: splat rejects duplicate
+    definitions, and an old generic name can mask a newer source name at the
+    same address.
+    """
+    function_addresses = (configured_function_addresses(configured_texts)
+                          | set(forced_function_addresses))
+    symbols = [
+        (name, address, 'STT_FUNC' if address in function_addresses else kind,
+         size, section)
+        for name, address, kind, size, section in unambiguous(symbols)
+    ]
+    occupied_names = {symbol[0] for symbol in symbols}
+    occupied_addresses = {symbol[1] for symbol in symbols}
+    fallbacks = []
+    for text in configured_texts:
+        for line in text.splitlines():
+            match = CONFIG_SYMBOL.match(line.strip())
+            if match is None:
+                continue
+            name, address_text = match.groups()
+            address = int(address_text, 16)
+            if name in occupied_names or address in occupied_addresses:
+                continue
+            fallback = line.strip()
+            if segment:
+                fallback += (' segment:%s' if '//' in fallback else ' // segment:%s') % segment
+            fallbacks.append(fallback)
+            occupied_names.add(name)
+            occupied_addresses.add(address)
+    generated = symbol_file(symbols, segment).rstrip()
+    if fallbacks:
+        generated += ('\n// Fallback labels not exported by the verified build.\n'
+                      + '\n'.join(fallbacks))
+    return generated + '\n'
 
 
 DIFFER_ALIAS = re.compile(r'^nonmatching\s.*$\n?', re.MULTILINE)
@@ -266,7 +340,10 @@ def rewrite_stub(text, asm_root, unit, unit_asm_names):
     object, so it gets pulled in explicitly - otherwise the target would be
     missing data the base has, and the unit would score below what it deserves.
     """
-    referenced = set()
+    # Regional configs already ask splat for this tree's current two-argument
+    # macro form. Count those before adding unattached rodata; otherwise every
+    # already-emitted jump table is included a second time.
+    referenced = {match.group(1) for match in CURRENT_INCLUDE_CALL.finditer(text)}
 
     def replace(match):
         kind, folder, name = match.groups()
@@ -303,7 +380,11 @@ def splat_config(base_config, out_dir, extra_symbols):
     options['undefined_syms_auto_path'] = '%s/undefined_syms_auto.txt' % out_dir
     options['undefined_funcs_auto_path'] = '%s/undefined_funcs_auto.txt' % out_dir
     options['migrate_rodata_to_functions'] = True
-    options['symbol_addrs_path'] = list(options['symbol_addrs_path']) + [extra_symbols]
+    # The verified build is the authoritative, current symbol inventory. Do
+    # not also retain the retail split's symbol files: most names occur in
+    # both, and current splat rejects those duplicate definitions before it
+    # can produce the target objects.
+    options['symbol_addrs_path'] = [extra_symbols]
     return yaml.safe_dump(config, sort_keys=False)
 
 
@@ -398,12 +479,19 @@ def main(argv=None):
     (ROOT / out_dir).mkdir(parents=True)
 
     symbols = collect_symbols(placement)
+    base_config = (ROOT / 'configs' / version / ('%s.yaml' % basename)).read_text()
+    base_document = yaml.safe_load(base_config)
+    base_options = base_document['options']
+    configured_paths = base_options.get('symbol_addrs_path', [])
+    if isinstance(configured_paths, str):
+        configured_paths = [configured_paths]
+    configured_texts = [(ROOT / path).read_text() for path in configured_paths]
     sym_path = '%s/sym.from_build.txt' % out_dir
-    (ROOT / sym_path).write_text(symbol_file(symbols))
+    (ROOT / sym_path).write_text(merged_symbol_file(
+        symbols, configured_texts, c_subsegment_addresses(base_document), basename))
     print('symbols: %d taken from the verified build' % len(symbols))
 
     config_path = ROOT / out_dir / 'splat.yaml'
-    base_config = (ROOT / 'configs' / version / ('%s.yaml' % basename)).read_text()
     config_path.write_text(splat_config(base_config, out_dir, sym_path))
     run([args.python, '-m', 'splat', 'split', str(config_path.relative_to(ROOT))])
 

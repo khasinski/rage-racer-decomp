@@ -1,8 +1,8 @@
 name: Build
 
-# decomp.dev only reads workflow runs on the default branch triggered by a
-# push, and only artifacts named <version>_report. Everything else here exists
-# so that a report is never published from a build that did not match.
+# decomp.dev discovers versions from artifacts named <version>_report in this
+# workflow. Everything else here exists so that a report is never published
+# from a build that did not match the corresponding retail executable.
 on:
   push:
     branches: [main]
@@ -19,7 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [PAL]
+        include:
+          - version: PAL
+            report_version: SCES_006.50
+          - version: USA
+            report_version: SLUS_004.03
+          - version: JAP10
+            report_version: SLPS_006.00-v1.0
+          - version: JAP11
+            report_version: SLPS_006.00-v1.1
     # The build reaches for an unprefixed cpp/as/ld through the environment as
     # well as through make, so both have to be pointed at the cross tools.
     env:
@@ -102,5 +110,5 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v4
         with:
-          name: SCES_006.50_report
+          name: ${{ matrix.report_version }}_report
           path: build/${{ matrix.version }}/report.json

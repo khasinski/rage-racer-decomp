@@ -12,3 +12,33 @@ versions:
       compiled_target: build/PAL/main.exe
       elf: build/PAL/main.elf
       asm: asm/PAL/main
+  - name: usa
+    fullname: USA (SLUS_004.03)
+    sha1: 2661e8bf18d209c98fd70d33e18ab88b10abd52b
+    paths:
+      target: assets/USA/main.exe
+      build_dir: build/USA
+      map: build/USA/main.map
+      compiled_target: build/USA/main.exe
+      elf: build/USA/main.elf
+      asm: asm/USA/main
+  - name: jap10
+    fullname: Japan v1.0 (SLPS_006.00)
+    sha1: f0ca386e1c7b2c5961b8c2a53cc751a83ae0d406
+    paths:
+      target: assets/JAP10/main.exe
+      build_dir: build/JAP10
+      map: build/JAP10/main.map
+      compiled_target: build/JAP10/main.exe
+      elf: build/JAP10/main.elf
+      asm: asm/JAP10/main
+  - name: jap11
+    fullname: Japan v1.1 (SLPS_006.00)
+    sha1: bfa7a4cf466480133c10845eae632a0c4e122360
+    paths:
+      target: assets/JAP11/main.exe
+      build_dir: build/JAP11
+      map: build/JAP11/main.map
+      compiled_target: build/JAP11/main.exe
+      elf: build/JAP11/main.elf
+      asm: asm/JAP11/main

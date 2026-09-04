@@ -306,12 +306,12 @@
       }
     },
     {
-      "name": "PAL/main/menu/menu_visual_effects",
-      "target_path": "expected/PAL/build/src/main/PAL/main/menu/menu_visual_effects.c.o",
-      "base_path": "build/PAL/src/main/PAL/main/menu/menu_visual_effects.c.o",
+      "name": "PAL/main/menu/draw_ranking_table",
+      "target_path": "expected/PAL/build/src/main/PAL/main/menu/draw_ranking_table.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/menu/draw_ranking_table.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/main/menu/menu_visual_effects.c"
+        "source_path": "src/main/PAL/main/menu/draw_ranking_table.c"
       }
     },
     {
@@ -531,6 +531,15 @@
       }
     },
     {
+      "name": "PAL/main/boot/init_subsystems",
+      "target_path": "expected/PAL/build/src/main/PAL/main/boot/init_subsystems.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/boot/init_subsystems.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/boot/init_subsystems.c"
+      }
+    },
+    {
       "name": "PAL/main/boot/main_loop",
       "target_path": "expected/PAL/build/src/main/PAL/main/boot/main_loop.c.o",
       "base_path": "build/PAL/src/main/PAL/main/boot/main_loop.c.o",
@@ -627,6 +636,15 @@
       "metadata": {
         "complete": true,
         "source_path": "src/main/PAL/main/render/rear_view_mirror.c"
+      }
+    },
+    {
+      "name": "PAL/main/menu/display_setup",
+      "target_path": "expected/PAL/build/src/main/PAL/main/menu/display_setup.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/menu/display_setup.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/menu/display_setup.c"
       }
     },
     {
@@ -819,12 +837,21 @@
       }
     },
     {
-      "name": "PAL/main/menu/ending_still",
-      "target_path": "expected/PAL/build/src/main/PAL/main/menu/ending_still.c.o",
-      "base_path": "build/PAL/src/main/PAL/main/menu/ending_still.c.o",
+      "name": "PAL/main/menu/update_ending_still",
+      "target_path": "expected/PAL/build/src/main/PAL/main/menu/update_ending_still.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/menu/update_ending_still.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/main/menu/ending_still.c"
+        "source_path": "src/main/PAL/main/menu/update_ending_still.c"
+      }
+    },
+    {
+      "name": "PAL/main/menu/draw_ending_still",
+      "target_path": "expected/PAL/build/src/main/PAL/main/menu/draw_ending_still.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/menu/draw_ending_still.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/menu/draw_ending_still.c"
       }
     },
     {
@@ -834,6 +861,24 @@
       "metadata": {
         "complete": true,
         "source_path": "src/main/PAL/main/boot/boot_scene.c"
+      }
+    },
+    {
+      "name": "PAL/main/boot/boot_logo_update",
+      "target_path": "expected/PAL/build/src/main/PAL/main/boot/boot_logo_update.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/boot/boot_logo_update.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/boot/boot_logo_update.c"
+      }
+    },
+    {
+      "name": "PAL/main/boot/boot_scene_tail",
+      "target_path": "expected/PAL/build/src/main/PAL/main/boot/boot_scene_tail.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/boot/boot_scene_tail.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/boot/boot_scene_tail.c"
       }
     },
     {
@@ -861,6 +906,24 @@
       "metadata": {
         "complete": true,
         "source_path": "src/main/PAL/main/menu/option_screens.c"
+      }
+    },
+    {
+      "name": "PAL/main/menu/screen_adjust_update",
+      "target_path": "expected/PAL/build/src/main/PAL/main/menu/screen_adjust_update.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/menu/screen_adjust_update.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/menu/screen_adjust_update.c"
+      }
+    },
+    {
+      "name": "PAL/main/menu/option_screens_tail",
+      "target_path": "expected/PAL/build/src/main/PAL/main/menu/option_screens_tail.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/menu/option_screens_tail.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/menu/option_screens_tail.c"
       }
     },
     {
@@ -909,12 +972,21 @@
       }
     },
     {
-      "name": "PAL/main/render/sprite_string",
-      "target_path": "expected/PAL/build/src/main/PAL/main/render/sprite_string.c.o",
-      "base_path": "build/PAL/src/main/PAL/main/render/sprite_string.c.o",
+      "name": "PAL/main/render/draw_sprite_string",
+      "target_path": "expected/PAL/build/src/main/PAL/main/render/draw_sprite_string.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/render/draw_sprite_string.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/main/render/sprite_string.c"
+        "source_path": "src/main/PAL/main/render/draw_sprite_string.c"
+      }
+    },
+    {
+      "name": "PAL/main/render/draw_shadowed_tile",
+      "target_path": "expected/PAL/build/src/main/PAL/main/render/draw_shadowed_tile.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/render/draw_shadowed_tile.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/render/draw_shadowed_tile.c"
       }
     },
     {
@@ -924,6 +996,24 @@
       "metadata": {
         "complete": true,
         "source_path": "src/main/PAL/main/save/draw_memory_card_screen.c"
+      }
+    },
+    {
+      "name": "PAL/main/save/draw_memory_card_message",
+      "target_path": "expected/PAL/build/src/main/PAL/main/save/draw_memory_card_message.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/save/draw_memory_card_message.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/save/draw_memory_card_message.c"
+      }
+    },
+    {
+      "name": "PAL/main/render/terrain_submission",
+      "target_path": "expected/PAL/build/src/main/PAL/main/render/terrain_submission.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/render/terrain_submission.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/render/terrain_submission.c"
       }
     },
     {
@@ -969,6 +1059,15 @@
       "metadata": {
         "complete": true,
         "source_path": "src/main/PAL/main/car/car_orientation.c"
+      }
+    },
+    {
+      "name": "PAL/main/car/draw_player_tachometer",
+      "target_path": "expected/PAL/build/src/main/PAL/main/car/draw_player_tachometer.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/car/draw_player_tachometer.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/car/draw_player_tachometer.c"
       }
     },
     {
@@ -1107,12 +1206,30 @@
       }
     },
     {
+      "name": "PAL/main/race/race_hud_time",
+      "target_path": "expected/PAL/build/src/main/PAL/main/race/race_hud_time.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/race/race_hud_time.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/race/race_hud_time.c"
+      }
+    },
+    {
       "name": "PAL/main/race/race_hud_text",
       "target_path": "expected/PAL/build/src/main/PAL/main/race/race_hud_text.c.o",
       "base_path": "build/PAL/src/main/PAL/main/race/race_hud_text.c.o",
       "metadata": {
         "complete": true,
         "source_path": "src/main/PAL/main/race/race_hud_text.c"
+      }
+    },
+    {
+      "name": "PAL/main/race/race_option_menu",
+      "target_path": "expected/PAL/build/src/main/PAL/main/race/race_option_menu.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/race/race_option_menu.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/race/race_option_menu.c"
       }
     },
     {
@@ -1161,6 +1278,15 @@
       }
     },
     {
+      "name": "PAL/main/race/update_lap_and_finish",
+      "target_path": "expected/PAL/build/src/main/PAL/main/race/update_lap_and_finish.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/race/update_lap_and_finish.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/race/update_lap_and_finish.c"
+      }
+    },
+    {
       "name": "PAL/main/race/race_scene",
       "target_path": "expected/PAL/build/src/main/PAL/main/race/race_scene.c.o",
       "base_path": "build/PAL/src/main/PAL/main/race/race_scene.c.o",
@@ -1170,12 +1296,12 @@
       }
     },
     {
-      "name": "PAL/main/race/waypoint_race",
-      "target_path": "expected/PAL/build/src/main/PAL/main/race/waypoint_race.c.o",
-      "base_path": "build/PAL/src/main/PAL/main/race/waypoint_race.c.o",
+      "name": "PAL/main/race/wheel_mode",
+      "target_path": "expected/PAL/build/src/main/PAL/main/race/wheel_mode.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/race/wheel_mode.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/main/race/waypoint_race.c"
+        "source_path": "src/main/PAL/main/race/wheel_mode.c"
       }
     },
     {
@@ -1224,12 +1350,30 @@
       }
     },
     {
+      "name": "PAL/main/car/steer_car_along_route",
+      "target_path": "expected/PAL/build/src/main/PAL/main/car/steer_car_along_route.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/car/steer_car_along_route.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/car/steer_car_along_route.c"
+      }
+    },
+    {
       "name": "PAL/main/car/race_car_update",
       "target_path": "expected/PAL/build/src/main/PAL/main/car/race_car_update.c.o",
       "base_path": "build/PAL/src/main/PAL/main/car/race_car_update.c.o",
       "metadata": {
         "complete": true,
         "source_path": "src/main/PAL/main/car/race_car_update.c"
+      }
+    },
+    {
+      "name": "PAL/main/car/race_camera_setup",
+      "target_path": "expected/PAL/build/src/main/PAL/main/car/race_camera_setup.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/car/race_camera_setup.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/car/race_camera_setup.c"
       }
     },
     {
@@ -1446,6 +1590,15 @@
       "metadata": {
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_team_logo_canvas.c"
+      }
+    },
+    {
+      "name": "PAL/main/menu/menu_visual_effects",
+      "target_path": "expected/PAL/build/src/main/PAL/main/menu/menu_visual_effects.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/menu/menu_visual_effects.c.o",
+      "metadata": {
+        "complete": true,
+        "source_path": "src/main/PAL/main/menu/menu_visual_effects.c"
       }
     },
     {

@@ -1,16 +1,21 @@
 import unittest
 
+import yaml
+
 from tools.scripts.gen_expected import (
     alias_renames,
     apply_alias_renames,
+    c_subsegment_addresses,
     halves,
     inline_constant_pairs,
     invented_constants,
     is_all_asm,
     is_data_only,
+    merged_symbol_file,
     parse_map_placement,
     retype_data_in_text,
     rewrite_stub,
+    splat_config,
     strip_differ_aliases,
     symbol_file,
     unambiguous,
@@ -80,6 +85,61 @@ class SymbolFileTest(unittest.TestCase):
             ("first", 0x100, "STT_FUNC", 4, ".text"),
         ])
         self.assertLess(written.index("first"), written.index("second"))
+
+    def test_can_assign_generated_symbols_to_the_executable_segment(self):
+        written = symbol_file(
+            [("Fn", 0x100, "STT_FUNC", 4, ".text")], segment="main")
+        self.assertIn("type:func size:0x4 segment:main", written)
+
+    def test_configured_symbols_only_fill_unoccupied_names_and_addresses(self):
+        symbols = [("CurrentName", 0x100, "STT_FUNC", 4, ".text")]
+        configured = """\
+OldName = 0x00000100; // type:func
+CurrentName = 0x00000200; // type:func
+MissingBoundary = 0x00000300; // type:func
+"""
+        written = merged_symbol_file(symbols, [configured])
+        self.assertIn("CurrentName = 0x00000100;", written)
+        self.assertIn("MissingBoundary = 0x00000300; // type:func", written)
+        self.assertNotIn("OldName", written)
+        self.assertNotIn("0x00000200", written)
+
+    def test_configured_function_type_upgrades_the_current_name(self):
+        symbols = [("CurrentName", 0x100, "STT_NOTYPE", 0, ".text")]
+        written = merged_symbol_file(
+            symbols, ["OldName = 0x00000100; // type:func\n"])
+        self.assertIn("CurrentName = 0x00000100; // type:func", written)
+        self.assertNotIn("OldName", written)
+
+    def test_c_subsegment_start_is_forced_to_a_function_for_splat(self):
+        symbols = [("EmbeddedAsm", 0x80010100, "STT_NOTYPE", 0, ".text")]
+        written = merged_symbol_file(symbols, [], {0x80010100})
+        self.assertIn("EmbeddedAsm = 0x80010100; // type:func", written)
+
+
+class CSubsegmentAddressesTest(unittest.TestCase):
+    def test_converts_rom_offsets_to_vram(self):
+        config = {
+            "segments": [{
+                "type": "code", "start": 0x800, "vram": 0x80010000,
+                "subsegments": [[0x900, "c", "first"], [0xA00, "rodata", "data"]],
+            }]
+        }
+        self.assertEqual(c_subsegment_addresses(config), {0x80010100})
+
+
+class SplatConfigTest(unittest.TestCase):
+    def test_replaces_stale_symbol_files_with_verified_build_symbols(self):
+        base = """
+options:
+  asm_path: asm/PAL/main
+  symbol_addrs_path:
+    - configs/PAL/sym.main.txt
+    - configs/PAL/sym.bss.main.txt
+"""
+        config = yaml.safe_load(splat_config(base, "expected/PAL", "expected/PAL/sym.from_build.txt"))
+        self.assertEqual(config["options"]["symbol_addrs_path"],
+                         ["expected/PAL/sym.from_build.txt"])
 
 
 class StripDifferAliasesTest(unittest.TestCase):
@@ -167,6 +227,11 @@ class RewriteStubTest(unittest.TestCase):
     def test_does_not_pull_in_a_function_the_stub_already_includes(self):
         text = 'INCLUDE_ASM(const s32, "u", Fn);\n'
         self.assertNotIn("INCLUDE_RODATA", rewrite_stub(text, "asm", "u", {"Fn"}))
+
+    def test_does_not_duplicate_current_form_rodata(self):
+        text = 'INCLUDE_RODATA("asm/u", Table);\n'
+        out = rewrite_stub(text, "asm", "u", {"Table"})
+        self.assertEqual(out.count("Table"), 1)
 
 
 class InventedConstantTest(unittest.TestCase):
