@@ -537,8 +537,9 @@ extern s32 g_TeamNameScreenProgress;
 extern s32 g_PaintColorScreenProgress;
 extern s32 g_CarShopScreenProgress;
 extern u32 g_EngineSpecStep;
-extern s32 D_8009B304;
-extern s32 D_8009B328;
+/* Zeroed by InitMenuMode and never read by any retail code path. */
+extern s32 g_UnusedMenuInitWord0;
+extern s32 g_UnusedMenuInitWord1;
 extern s32 g_PlayerRenderY;
 extern s32 g_PlayerTireCompound;
 extern s16 g_PlayerTransmission;
@@ -554,7 +555,8 @@ extern s32 g_CarShopOption;
 extern u8 g_TimeAttackCarTires[];
 extern u8 g_TimeAttackCarTransmissions[];
 extern u8 g_TimeAttackCarEnabled[];
-extern s32 D_801E4D74;
+/* A third write-only word reset by InitMenuMode, in the shared BSS block. */
+extern s32 g_UnusedMenuInitWord2;
 extern s32 g_TitleFadeLevel;
 extern s32 g_PaintColorCursor;
 extern s32 g_TeamLogoOption;

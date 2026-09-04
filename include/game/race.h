@@ -310,8 +310,9 @@ void UpdateZoneAmbience(s32 zone);
  * header carried them. */
 
 extern s16 g_EndingSceneLatch;
-extern s32 D_801E4248;
-extern s16 D_801E4CF8;
+/* Write-only remnants reset alongside lap timing and race cue state. */
+extern s32 g_UnusedLapTimingWord;
+extern s16 g_UnusedRaceInitHalfword;
 extern s16 g_AttractTitleDelays[];
 extern s32 g_BestLapIndex;
 extern s32 g_BgmRandomLabelTimer;

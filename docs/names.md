@@ -3000,7 +3000,7 @@ alias-collision check 19a asks for (one name per address, one address per name).
 | `D_8019CB38` / `D_8019CB3A` | referenced from `%hi`/`%lo` inline asm (12c). Since named `g_PaintBlendShade0` / `…1` for the *C* uses in the same file; the inline-asm references still spell them raw, which is the point of the entry. |
 | `g_PlayerAutoSteer` | both writes in the image store zero, so the one reader (skip the pad, freeze the steering) can never fire |
 | `g_DriveBoostTimer` | same shape: initialised to zero, only ever decremented |
-| `g_EngineRpmSnapshot`, `D_801E4248`, `D_801E4CF8`, `D_801E4D84`, `g_RouteSceneryArmed`, `g_CameraCarSeedYaw`, `g_StandingStartState` | written, never read anywhere in the image |
+| `g_EngineRpmSnapshot`, `g_UnusedLapTimingWord`, `g_UnusedRaceInitHalfword`, `D_801E4D84`, `g_RouteSceneryArmed`, `g_CameraCarSeedYaw`, `g_StandingStartState` | written, never read anywhere in the image |
 | `g_EndingSceneLatch` | its only reader is the guard on its own write, so it has no effect — and it lives in the unreachable waypoint mode (15f) |
 
 ## 19. Front-end globals pass (`menu/ save/ asset/ cd/ fmv/ audio/ pad/ boot/`)

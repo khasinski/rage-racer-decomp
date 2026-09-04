@@ -55,7 +55,7 @@ void EnterRaceScene(void) {
     mode = (count = g_CourseIndex);
     scene = ReadStableRaceSeries();
     g_LapTimeMs = 0;
-    D_801E4248 = 0;
+    g_UnusedLapTimingWord = 0;
     g_LapTimeSaturated = 0;
     g_SectorEndDistance[2] = trackLength;
     g_SectorEndDistance[0] = trackLength / 3;
@@ -130,7 +130,7 @@ void EnterRaceScene(void) {
     g_RaceFadeTimer = 0;
     InitEffectVoiceRuntime();
     g_RivalCueEnabled = 1;
-    D_801E4CF8 = (g_PlayerAutoSteer = (g_RaceCueDelay = 0));
+    g_UnusedRaceInitHalfword = (g_PlayerAutoSteer = (g_RaceCueDelay = 0));
     do {
     } while (0);
     g_SceneId = 12;
