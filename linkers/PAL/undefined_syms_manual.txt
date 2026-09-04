@@ -12,7 +12,7 @@ g_AudioRuntimeState = g_AudioLoadedSlotMask;
 
 /* Scratchpad (0x1F800000) locations the render code reaches by name.  They
    sit outside every segment, so no object can define them. */
-g_FinalSkyOrderingTable = 0x1F800004;
+g_ScratchOrderingTableBaseWord = 0x1F800004;
 g_ScratchRenderMode = 0x1F800084;
 
 /* Mid-function entry points, as offsets from the function that contains

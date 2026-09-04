@@ -140,6 +140,7 @@ typedef struct CarTrackScratch {
 #define SCRATCH_OT_BASE_AS(type)     (*(type **)0x1F800004)
 #define SCRATCH_OT_BASE              SCRATCH_OT_BASE_AS(void)
 #define SCRATCH_OT_BASE_WORD         (*(s32 *)0x1F800004)
+extern s32 g_ScratchOrderingTableBaseWord;
 
 /* The srav amount InitRenderState installs; see SCRATCH_FACE_OT_SHIFT below. */
 #define SCRATCH_OT_SHIFT             (*(s32 *)0x1F800064)

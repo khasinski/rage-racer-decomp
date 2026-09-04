@@ -619,7 +619,9 @@ u8 code;
   lastColumn = w - 1;
   x1 = (s16) (leftX + lastColumn);
   rowY = (s16) y_R18;
-  h = (((((((((h - 1) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu) & 0xFFFFFFFFFFFFFFFFu;
+  /* The out-of-range mask is codegen-significant: it schedules the four
+   * promoted u8 arguments before the height decrement, as in retail. */
+  h = (h - 1) & 0xFFFFFFFFFFFFFFFFu;
   DrawLine(buf, (s16)x0, (s16)rowY, (s16)x1, (s16)rowY, r, g, b, code);
   DrawLine(buf, (s16)x0, (s16)(y_R18 + 1), (s16)x1, (s16)(y_R18 + 1), r, g, b, code);
   ytop2 = (s16) (y_R18 + 2);

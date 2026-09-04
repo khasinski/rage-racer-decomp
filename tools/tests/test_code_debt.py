@@ -29,6 +29,8 @@ void f(u8 *base, void *ptr) {
     sampleAddress.value += 4;
     asm volatile("");
     value += ({ s32 temporary = 2; temporary; });
+    value &= 0xFFFFFFFFFFFFFFFFu;
+    value += D_80001234;
     asm(".globl func_80001234\nfunc_80001234 = f + 4");
     value += object->field_20 + object->unk14;
 }
@@ -50,6 +52,8 @@ void f(u8 *base, void *ptr) {
         self.assertEqual(counts["register_pins"], 2)
         self.assertEqual(counts["empty_barriers"], 1)
         self.assertEqual(counts["statement_expressions"], 1)
+        self.assertEqual(counts["oversized_integer_constants"], 1)
+        self.assertEqual(counts["raw_symbol_references"], 1)
         self.assertEqual(counts["asm_aliases"], 1)
         self.assertEqual(counts["unknown_fields"], 2)
         self.assertEqual(counts["externs_in_c"], 1)

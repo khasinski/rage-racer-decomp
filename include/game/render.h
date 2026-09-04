@@ -879,9 +879,12 @@ extern s32 g_IsEnvironmentMode4;
 
 extern char g_FmtGpuTPage[];
 extern s16 g_CarModelBankTable[][2];
-extern s16 D_80092B08[];
-extern s16 D_80093308[];
-extern s16 D_80093B08[];
+/* Synthetic bases used by retail's full-angle indexing. Each symbol is that
+ * many s16 elements before g_SinTable; only indexes which land in g_SinTable
+ * are read. */
+extern s16 g_SinTableBiasC00[];
+extern s16 g_SinTableBias800[];
+extern s16 g_SinTableBias400[];
 extern Matrix g_MirrorViewMatrix;
 extern u8 g_CarModelByCourse[][11];
 extern s32 g_FmvFrameHeight;

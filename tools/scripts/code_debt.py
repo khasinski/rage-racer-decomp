@@ -55,6 +55,10 @@ PATTERNS = {
         r"\b(?:__asm__|asm)\s*(?:volatile\s*)?\(\s*\"\""
     ),
     "statement_expressions": re.compile(r"\(\s*\{"),
+    "oversized_integer_constants": re.compile(
+        r"\b0x[0-9A-Fa-f]{9,}(?:[uUlL]*)\b"
+    ),
+    "raw_symbol_references": re.compile(r"\bD_[0-9A-Fa-f]{6,}\b"),
     "asm_aliases": re.compile(r"\.globl\s+func_[0-9A-Fa-f]+"),
     "header_asm_aliases": re.compile(
         r'^\s*extern\b[^;\n]*\basm\s*\(\s*"(?!0x)', re.MULTILINE

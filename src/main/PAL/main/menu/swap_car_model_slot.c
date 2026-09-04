@@ -177,7 +177,7 @@ void DrawMenuCarView(void) {
     *q = s2 + 30;
     g_PlayerCar.pose.position[2] = 0;
     SelectModelBank(14);
-    D_1F800004 += 120;
+    g_ScratchOrderingTableBaseWord += 120;
     SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &g_PlayerCar.pose.position[0], &mtxA);
     SCRATCH_ENV_MODE4 = 0;
     {
@@ -187,7 +187,7 @@ void DrawMenuCarView(void) {
         }
         SubmitModel(SCRATCHPAD, a1);
     }
-    D_1F800004 -= 120;
+    g_ScratchOrderingTableBaseWord -= 120;
 }
 
 /* The course diorama behind COURSE SELECT and RANKING, with the carousel easing. */

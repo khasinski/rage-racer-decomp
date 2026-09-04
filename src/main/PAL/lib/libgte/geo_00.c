@@ -27,7 +27,7 @@ s32 rsinCore(s32 angle) {
     }
 
     if (angle < 0xC01) {
-        return -D_80093308[angle];
+        return -g_SinTableBias800[angle];
     }
 
     return -g_SinTable[0x1000 - angle];
@@ -45,12 +45,12 @@ s32 rcos(s32 angle) {
             return g_SinTable[0x400 - angle];
         }
 
-        return -D_80093B08[angle];
+        return -g_SinTableBias400[angle];
     }
 
     if (angle < 0xC01) {
         return -g_SinTable[0xC00 - angle];
     }
 
-    return D_80092B08[angle];
+    return g_SinTableBiasC00[angle];
 }
