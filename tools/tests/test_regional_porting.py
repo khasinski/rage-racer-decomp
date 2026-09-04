@@ -182,8 +182,12 @@ class RegionalCoverageManifestTest(unittest.TestCase):
                     (config_dir / "regional_text_units.json").read_text()
                 )
                 for unit in [*report["selected"], *regional]:
-                    source = ROOT / "src" / "main" / f'{unit["path"]}.c'
-                    self.assertTrue(source.is_file(), source)
+                    stem = ROOT / "src" / "main" / unit["path"]
+                    sources = [stem.with_suffix(".c"), stem.with_suffix(".s")]
+                    self.assertTrue(
+                        any(source.is_file() for source in sources),
+                        " or ".join(str(source) for source in sources),
+                    )
 
                 for match in asm_segment.finditer((config_dir / "main.yaml").read_text()):
                     address = int(match.group(1), 16)

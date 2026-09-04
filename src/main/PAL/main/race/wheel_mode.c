@@ -11,13 +11,6 @@
 #include "game/player_car_internal.h"
 
 
-
-
-
-
-
-
-
 /*
  * Initializes the six wheel props used by WheelMode. The
  * `magic`/mult/mfhi block is the compiler's divide-by-10 idiom computing the

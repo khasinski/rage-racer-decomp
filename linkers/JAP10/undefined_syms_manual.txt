@@ -128,5 +128,3 @@ main_LOAD_SIZE = main_ROM_END - main_ROM_START;
 g_AudioRuntimeState = g_AudioLoadedSlotMask;
 g_ScratchOrderingTableBaseWord = 0x1F800004;
 g_ScratchRenderMode = 0x1F800084;
-BiosExit = g_BiosCallStubs;
-SysEnqIntRP = SysEnqIntRPStub;

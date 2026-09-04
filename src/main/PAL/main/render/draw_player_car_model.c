@@ -9,7 +9,6 @@
 #include "psyq/gte.h"
 
 
-
 /*
  * GameRenderObject -> GPU-primitive submitter. Subtracts the active view's
  * horizon from the object's y, builds a stack of rotation matrices from the

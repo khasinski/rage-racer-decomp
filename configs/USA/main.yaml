@@ -14,6 +14,7 @@ options:
 
   migrate_rodata_to_functions: False
   find_file_boundaries: True
+  hasm_in_src_path: True
 
   asm_function_macro: glabel
   asm_jtbl_label_macro: jlabel
@@ -315,13 +316,13 @@ segments:
       - [0x54198, c, PAL/lib/libc/putchar]
       - [0x5424C, c, PAL/lib/libc/toupper]
       - [0x5427C, c, PAL/lib/libc/tolower]
-      - [0x542AC, c, PAL/lib/libapi/bios_call_stubs]
+      - [0x542AC, hasm, PAL/lib/libapi/bios_call_stubs]
       - [0x542FC, c, PAL/lib/libcard/_card_clear]
       - [0x54334, c, PAL/lib/libcard/_card_write]
       - [0x54344, c, PAL/lib/libapi/new_card_stub]
       - [0x54354, c, PAL/lib/libpress/mdec_api]
       - [0x5453C, c, PAL/lib/libpress/mdec_callbacks]
-      - [0x545E4, c, PAL/lib/libpress/mdec_runtime]
+      - [0x545E4, c, JAP10/lib/libpress/mdec_runtime]
       - [0x54A64, c, JAP10/lib/libpress/mdec_unpack_status]
       - [0x54DFC, c, PAL/lib/libgpu/texture_primitives]
       - [0x55274, c, PAL/lib/libgpu/primitive_debug]

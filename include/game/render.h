@@ -867,7 +867,7 @@ extern s32 g_IsEnvironmentMode4;
 
 /*
  * Per-view cell culling, rebuilt every frame by BuildVisibleCells and swapped in
- * lockstep for the mirror pass. Per-file types; see docs/names.md 12c.
+ * lockstep for the mirror pass. Per-file types.
  *   g_VisibleCellMask  g_VisibleCellMask  32 words, mask[sy] |= 1 << sx over the grid
  *   g_VisibleCellList  g_VisibleCellList  the matching visible-cell record list
  *   g_SceneLightMatrix g_SceneLightMatrix  assigned from a per-scene constant, then

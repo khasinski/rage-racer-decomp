@@ -26,31 +26,23 @@ the two Japanese executables have a `0x8A800`-byte payload.
 
 ## Progress
 
-**The decompilation is complete.** Every compiler-generated game function in
-the PAL executable is plain C, and the built executable is byte-identical to
-retail.
+**The decompilation is complete.** The PAL build matches all 1202 discovered
+functions and all 423440 code bytes, and the linked executable is byte-identical
+to retail.
 
-| Binary | Functions | Code bytes |
-|---|---:|---:|
-| `SCES_006.50 (main)` | 648 / 648 (100%) | 313380 / 313380 (100%) |
+| Scope | Functions | Code bytes | Data bytes |
+|---|---:|---:|---:|
+| Game code | 705 / 705 (100.00%) | 100.00% | 99.88% |
+| PsyQ libraries | 497 / 497 (100.00%) | 100.00% | 0.00% |
+| **Whole executable** | **1202 / 1202 (100.00%)** | **100.00%** | **99.82%** |
 
-A function counts as decompiled when it carries no `INCLUDE_ASM` or
-`INCLUDE_RODATA` and no non-empty inline assembly. Three things are sanctioned
-and do not lower the count: GTE/COP2 operations expressed through
-`psyq/gte_macros.h`, which are the hardware interface and cannot be written in
-C; register and symbol `asm` labels; and empty barriers used to hold statement
-order. Functions are counted individually rather than per file, so one function
-needing a crutch cannot reclassify the plain C beside it.
-
-A further 26 functions (10280 code bytes) are documented handwritten assembly
-in the original game, marked `HANDWRITTEN_ASM`, and are excluded from the totals
-above rather than counted as failures.
-
-Sony's 473 PsyQ library functions (100048 code bytes) are also excluded from
-the game-code denominator; they are nevertheless matched because the complete
-executable must relink byte-for-byte.
-
-Regenerate the table and the badge JSON with `make progress`.
+The table comes from objdiff comparisons between objects built from this tree
+and objects reconstructed directly from the retail executable. The remaining
+data percentage is unpaired padding or unnamed table data, not a difference in
+the linked image. Of the 409 source translation units across the supported
+regions, 282 are plain C; the rest contain hand-written assembly shipped by the
+original game. Regenerate the report, table, and badge JSON with
+`make report progress`.
 
 The regional targets also have complete source coverage. Unchanged translation
 units reuse PAL C; actual regional differences live in separate USA/Japanese C

@@ -215,7 +215,6 @@ void ApplyCarKnockback(GameCarRuntime *car) {
 }
 
 
-
 /*
  * Collision / boundary response: sets the car's knock-back motion vector
  * (velocityX / velocityZ, motionTimer, motionActive) from a push direction and

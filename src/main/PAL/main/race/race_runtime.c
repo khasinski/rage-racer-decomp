@@ -41,28 +41,11 @@ typedef char CarTrackLimitStackLayoutSizeCheck[
 /* Counts how many of the six WheelMode wheels have been hit (active != 0). */
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
  * The tail's multiply feeds the discarded rounding path below. GCC 2.6.3
  * removes that path and its mflo, but leaves the mult that sets the hard HI/LO
- * registers behind (docs/names.md 31f and 35c).
+ * registers behind.
  */
-
-
-
 
 
 /*

@@ -5,7 +5,6 @@
 #include "game/render_internal.h"
 
 
-
 void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
     s32 x0;
     s16 y;
@@ -126,7 +125,6 @@ void DrawSmallText(x0, y, str0, color, g, b, clut, flags)
         SCRATCH_PRIM_CURSOR_AS(void) = next;
     }
 }
-
 
 
 void DrawLargeText(x0, y, str0, color, g, b, clut, flags)
@@ -353,7 +351,6 @@ s32 GameDrawNumber(x, y, flags, value, r, g, b, clut, primitiveCount)
         QueueDrawModePrim(ot, SCRATCH_PRIM_CURSOR_AS(void), primitiveCount + 27);
     return drawn;
 }
-
 
 
 void DrawBitPatternOverlay(s32 pattern) {

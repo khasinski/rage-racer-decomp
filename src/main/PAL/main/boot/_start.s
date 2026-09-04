@@ -1,11 +1,13 @@
+.include "macro.inc"
+
 .set noreorder
 .set noat
 .section .text, "ax"
 
 .globl D_800630B4
 D_800630B4:
-/* 800630B4 3C02800A */  lui $v0, %hi(g_SpuRevAttrTable + 0x2A8)
-/* 800630B8 2442AED8 */  addiu $v0, $v0, %lo(g_SpuRevAttrTable + 0x2A8)
+/* 800630B4 3C02800A */  lui $v0, %hi(D_8009AED8)
+/* 800630B8 2442AED8 */  addiu $v0, $v0, %lo(D_8009AED8)
 /* 800630BC 3C03801F */  lui $v1, %hi(main_BSS_END)
 /* 800630C0 24632A10 */  addiu $v1, $v1, %lo(main_BSS_END)
 .L800630C4:
@@ -29,21 +31,21 @@ D_800630B4:
 /* 80063108 24842A10 */  addiu $a0, $a0, %lo(main_BSS_END)
 /* 8006310C 000420C0 */  sll $a0, $a0, 3
 /* 80063110 000420C2 */  srl $a0, $a0, 3
-/* 80063114 3C03800A */  lui $v1, %hi(D_8009A51C + 0x4)
-/* 80063118 8C63A520 */  lw $v1, %lo(D_8009A51C + 0x4)($v1)
+/* 80063114 3C03800A */  lui $v1, %hi(D_8009A520)
+/* 80063118 8C63A520 */  lw $v1, %lo(D_8009A520)($v1)
 /* 8006311C 00000000 */  nop
 /* 80063120 00432823 */  subu $a1, $v0, $v1
 /* 80063124 00A42823 */  subu $a1, $a1, $a0
 /* 80063128 00882025 */  or $a0, $a0, $t0
-/* 8006312C 3C01800A */  lui $at, %hi(g_SpuRevAttrTable + 0x2A8)
-/* 80063130 AC3FAED8 */  sw $ra, %lo(g_SpuRevAttrTable + 0x2A8)($at)
-/* 80063134 3C1C800A */  lui $gp, %hi(g_SpuRevAttrTable + 0x2A8)
-/* 80063138 279CAED8 */  addiu $gp, $gp, %lo(g_SpuRevAttrTable + 0x2A8)
+/* 8006312C 3C01800A */  lui $at, %hi(D_8009AED8)
+/* 80063130 AC3FAED8 */  sw $ra, %lo(D_8009AED8)($at)
+/* 80063134 3C1C800A */  lui $gp, %hi(D_8009AED8)
+/* 80063138 279CAED8 */  addiu $gp, $gp, %lo(D_8009AED8)
 /* 8006313C 03A0F021 */  addu $fp, $sp, $zero
 /* 80063140 0C018C5C */  jal func_80063170
 /* 80063144 20840004 */  addi $a0, $a0, 0x4
-/* 80063148 3C1F800A */  lui $ra, %hi(g_SpuRevAttrTable + 0x2A8)
-/* 8006314C 8FFFAED8 */  lw $ra, %lo(g_SpuRevAttrTable + 0x2A8)($ra)
+/* 80063148 3C1F800A */  lui $ra, %hi(D_8009AED8)
+/* 8006314C 8FFFAED8 */  lw $ra, %lo(D_8009AED8)($ra)
 /* 80063150 00000000 */  nop
 /* 80063154 0C005944 */  jal MainLoop
 /* 80063158 00000000 */  nop
@@ -66,6 +68,8 @@ BiosBuInit:
 /* 80063184 01400008 */  jr $t2
 /* 80063188 24090070 */  addiu $t1, $zero, 0x70
 /* 8006318C 00000000 */  nop
+.globl BiosSetMemSize
+BiosSetMemSize:
 /* 80063190 240A00A0 */  addiu $t2, $zero, 0xA0
 /* 80063194 01400008 */  jr $t2
 /* 80063198 2409009F */  addiu $t1, $zero, 0x9F
@@ -100,10 +104,14 @@ DisableEvent:
 /* 800631E4 01400008 */  jr $t2
 /* 800631E8 2409000D */  addiu $t1, $zero, 0xD
 /* 800631EC 00000000 */  nop
+.globl InitPad
+InitPad:
 /* 800631F0 240A00B0 */  addiu $t2, $zero, 0xB0
 /* 800631F4 01400008 */  jr $t2
 /* 800631F8 24090012 */  addiu $t1, $zero, 0x12
 /* 800631FC 00000000 */  nop
+.globl StartPad
+StartPad:
 /* 80063200 240A00B0 */  addiu $t2, $zero, 0xB0
 /* 80063204 01400008 */  jr $t2
 /* 80063208 24090013 */  addiu $t1, $zero, 0x13

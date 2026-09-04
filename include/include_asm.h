@@ -3,12 +3,23 @@
 
 #if !defined(M2CTX) && !defined(PERMUTER)
 
-#ifndef INCLUDE_ASM_USE_MACRO_INC
-#define INCLUDE_ASM_USE_MACRO_INC 1
-#endif
+/* A block the original shipped as assembly, sitting inside a unit that is
+   otherwise C: a kernel entry reached by `syscall`, a BIOS call that jumps
+   through a register, a GTE routine that moves coprocessor control registers.
+   The assembly lives in a .s beside the source and is pulled in here so that
+   it lands at the right offset within the unit.
 
-#ifndef INCLUDE_ASM
-#define INCLUDE_ASM(FOLDER, NAME) \
+   A unit that is assembly end to end needs none of this. It is a .s in its own
+   right, declared `hasm` in the split config and assembled directly - see the
+   Makefile. This macro exists only for the mixed case, where the assembly has
+   to be interleaved with compiled C.
+
+   The block is wrapped in a throwaway function because the compiler will not
+   carry a file-scope `.include` through maspsx untouched. maspsx drops the
+   body and leaves the name behind as an undefined reference, which is harmless
+   in the image. */
+#ifndef HANDWRITTEN_ASM
+#define HANDWRITTEN_ASM(FOLDER, NAME) \
     void __maspsx_include_asm_hack_##NAME(void) { \
         __asm__( \
             ".text # maspsx-keep\n" \
@@ -22,41 +33,9 @@
     }
 #endif
 
-#ifndef INCLUDE_RODATA
-#define INCLUDE_RODATA(FOLDER, NAME) \
-    __asm__( \
-        ".section .rodata\n" \
-        "    .include \"" FOLDER "/" #NAME ".s\"\n" \
-        ".section .text" \
-    )
-#endif
-
-/* A block that is assembly on purpose and always will be: a kernel entry
-   reached by `syscall`, or a BIOS call that jumps through a register. It
-   expands exactly like INCLUDE_ASM but has to be spelled differently, because
-   INCLUDE_ASM means "not decompiled yet" everywhere else in this tree.
-   tools/scripts/gen_nonmatching_asm.py reads the second argument of every
-   INCLUDE_ASM as a symbol it must disassemble out of the EXE, and here the
-   argument names a checked-in file instead. */
-#ifndef HANDWRITTEN_ASM
-#define HANDWRITTEN_ASM(FOLDER, NAME) INCLUDE_ASM(FOLDER, NAME)
-#endif
-
-#if INCLUDE_ASM_USE_MACRO_INC
 __asm__(".include \"include/macro.inc\"\n");
-#else
-__asm__(".include \"include/labels.inc\"\n");
-#endif
 
 #else
-
-#ifndef INCLUDE_ASM
-#define INCLUDE_ASM(FOLDER, NAME)
-#endif
-
-#ifndef INCLUDE_RODATA
-#define INCLUDE_RODATA(FOLDER, NAME)
-#endif
 
 #ifndef HANDWRITTEN_ASM
 #define HANDWRITTEN_ASM(FOLDER, NAME)

@@ -37,10 +37,12 @@ ASM_SRCS := $(shell find $(ASM_DIR) -name '*.s' -not -path '*/nonmatchings/*' 2>
 # Regional configs can therefore reuse a proven PAL C unit while leaving the
 # surrounding, changed code as regional assembly.
 C_SRCS   := $(shell awk -F, '/, c,/{gsub(/^[[:space:]]+|[[:space:]\]]+$$/, "", $$3); print "src/main/" $$3 ".c"}' $(SPLAT_CFG) 2>/dev/null)
+SRC_ASM  := $(shell awk -F, '/, hasm,/{gsub(/^[[:space:]]+|[[:space:]\]]+$$/, "", $$3); print "src/main/" $$3 ".s"}' $(SPLAT_CFG) 2>/dev/null)
 
 ASM_OBJS := $(ASM_SRCS:%.s=$(BUILD)/%.s.o)
 C_OBJS   := $(C_SRCS:%=$(BUILD)/%.o)
-OBJS := $(ASM_OBJS) $(C_OBJS)
+SRC_ASM_OBJS := $(SRC_ASM:%=$(BUILD)/%.o)
+OBJS := $(ASM_OBJS) $(C_OBJS) $(SRC_ASM_OBJS)
 
 # HANDWRITTEN_ASM expands to an assembler .include, which cpp's dependency
 # output cannot see.  Add the sibling assembly file explicitly so editing a
@@ -73,11 +75,12 @@ port:
 	$(PY) tools/scripts/port_pal_text_units.py $(VERSION)
 
 split:
-	rm -rf $(ASM_DIR) $(LD_SCRIPT) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES) $(ADDR_HALVES)
+	rm -rf $(BUILD)/src $(ASM_DIR) $(LD_SCRIPT) $(UNDEFINED_SYMS) $(UNDEFINED_FUNCS) $(ADDR_ALIASES) $(ADDR_HALVES)
 	$(PY) -m splat split $(SPLAT_CFG)
 	$(PY) tools/scripts/gen_nonmatching_asm.py --version $(VERSION) --basename $(BASENAME)
 	$(PY) tools/scripts/symbolise_data_words.py --version $(VERSION) --basename $(BASENAME)
 	$(PY) tools/scripts/symbolise_header.py --version $(VERSION) --basename $(BASENAME)
+	$(PY) tools/scripts/strip_nonmatching_markers.py --version $(VERSION) --basename $(BASENAME)
 
 $(BUILD)/asm/%.s.o: asm/%.s
 	@mkdir -p $(dir $@)
@@ -90,6 +93,10 @@ endef
 
 $(BUILD)/src/%.c.o: src/%.c | $(BUILD)
 	$(call compile_c_object)
+
+$(BUILD)/src/%.s.o: src/%.s | $(BUILD)
+	@mkdir -p $(dir $@)
+	$(AS) -EL -G0 -march=r3000 -mtune=r3000 -no-pad-sections -Iinclude -I$(ASM_DIR) -o $@ $<
 
 $(BUILD):
 	@mkdir -p $@
@@ -140,15 +147,15 @@ audit-code:
 
 # Enumerated rather than discovered: tools/ has no __init__.py, so unittest
 # discovery cannot import it, but the namespace package resolves by name.
-TESTS := tools.tests.test_code_debt tools.tests.test_alloc_diff tools.tests.test_try_drop_raw \
-         tools.tests.test_gen_expected tools.tests.test_gen_objdiff_config \
-         tools.tests.test_regional_porting
+TESTS := tools.tests.test_code_debt tools.tests.test_gen_expected \
+         tools.tests.test_gen_objdiff_config tools.tests.test_progress_report \
+         tools.tests.test_strip_nonmatching_markers tools.tests.test_regional_porting
 
 test:
 	$(PY) -m unittest $(TESTS)
 
 progress:
-	$(PY) tools/scripts/progress_report.py
+	$(PY) tools/scripts/progress_report.py --version $(VERSION)
 
 # objdiff compares what this tree builds against objects disassembled from the
 # game itself. `expected` produces that second side; `report` scores it and

@@ -10,10 +10,6 @@
 #include "game/player_car_internal.h"
 
 
-
-
-
-
 void SeedReplayCars(void) {
     ReplayCarAddress primary;
     ReplayCarAddress secondary;

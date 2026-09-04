@@ -9,12 +9,10 @@ from tools.scripts.gen_expected import (
     halves,
     inline_constant_pairs,
     invented_constants,
-    is_all_asm,
-    is_data_only,
     merged_symbol_file,
     parse_map_placement,
     retype_data_in_text,
-    rewrite_stub,
+    section_symbols,
     splat_config,
     strip_differ_aliases,
     symbol_file,
@@ -70,14 +68,21 @@ class UnambiguousTest(unittest.TestCase):
 
 
 class SymbolFileTest(unittest.TestCase):
-    def test_types_only_what_the_compiler_called_a_function(self):
+    def test_everything_in_text_is_disassembled_as_code(self):
+        # gcc leaves a hand-written block untyped. Passing that through would
+        # have splat read it as data and dump it as .word, which pairs against
+        # nothing, because the base has instructions there.
         written = symbol_file([
             ("GameInitPad", 0x80013F48, "STT_FUNC", 0x38, ".text"),
             ("BiosExit", 0x80063D9C, "STT_NOTYPE", 0, ".text"),
         ])
         self.assertIn("GameInitPad = 0x80013F48; // type:func size:0x38", written)
-        self.assertIn("BiosExit = 0x80063D9C;", written)
-        self.assertNotIn("BiosExit = 0x80063D9C; // type:func", written)
+        self.assertIn("BiosExit = 0x80063D9C; // type:func", written)
+
+    def test_data_outside_text_is_left_as_data(self):
+        written = symbol_file([("g_AtanTable", 0x8007B664, "STT_OBJECT", 0x804, ".data")])
+        self.assertIn("g_AtanTable = 0x8007B664; // size:0x804", written)
+        self.assertNotIn("type:func", written)
 
     def test_sorts_by_address(self):
         written = symbol_file([
@@ -111,11 +116,6 @@ MissingBoundary = 0x00000300; // type:func
         self.assertIn("CurrentName = 0x00000100; // type:func", written)
         self.assertNotIn("OldName", written)
 
-    def test_c_subsegment_start_is_forced_to_a_function_for_splat(self):
-        symbols = [("EmbeddedAsm", 0x80010100, "STT_NOTYPE", 0, ".text")]
-        written = merged_symbol_file(symbols, [], {0x80010100})
-        self.assertIn("EmbeddedAsm = 0x80010100; // type:func", written)
-
 
 class CSubsegmentAddressesTest(unittest.TestCase):
     def test_converts_rom_offsets_to_vram(self):
@@ -129,15 +129,16 @@ class CSubsegmentAddressesTest(unittest.TestCase):
 
 
 class SplatConfigTest(unittest.TestCase):
-    def test_replaces_stale_symbol_files_with_verified_build_symbols(self):
+    def test_uses_only_the_already_merged_symbol_file(self):
         base = """
 options:
   asm_path: asm/PAL/main
   symbol_addrs_path:
     - configs/PAL/sym.main.txt
-    - configs/PAL/sym.bss.main.txt
+segments: []
 """
-        config = yaml.safe_load(splat_config(base, "expected/PAL", "expected/PAL/sym.from_build.txt"))
+        config = yaml.safe_load(splat_config(
+            base, "expected/PAL", "expected/PAL/sym.from_build.txt"))
         self.assertEqual(config["options"]["symbol_addrs_path"],
                          ["expected/PAL/sym.from_build.txt"])
 
@@ -212,28 +213,6 @@ class AliasRenameTest(unittest.TestCase):
         self.assertEqual(out, "    jal ChangeClearRCntStubEx\n")
 
 
-class RewriteStubTest(unittest.TestCase):
-    def test_rewrites_to_the_two_argument_macro_with_a_full_path(self):
-        text = 'INCLUDE_ASM(const s32, "PAL/main/pad/init_pad", GameInitPad);\n'
-        out = rewrite_stub(text, "expected/asm", "PAL/main/pad/init_pad", set())
-        self.assertIn('INCLUDE_ASM("expected/asm/PAL/main/pad/init_pad", GameInitPad);', out)
-
-    def test_pulls_in_constants_no_function_claimed(self):
-        text = 'INCLUDE_ASM(const s32, "u", Fn);\n'
-        out = rewrite_stub(text, "asm", "u", {"Fn", "D_80011870"})
-        self.assertIn('INCLUDE_RODATA("asm/u", D_80011870);', out)
-        self.assertEqual(out.count("D_80011870"), 1)
-
-    def test_does_not_pull_in_a_function_the_stub_already_includes(self):
-        text = 'INCLUDE_ASM(const s32, "u", Fn);\n'
-        self.assertNotIn("INCLUDE_RODATA", rewrite_stub(text, "asm", "u", {"Fn"}))
-
-    def test_does_not_duplicate_current_form_rodata(self):
-        text = 'INCLUDE_RODATA("asm/u", Table);\n'
-        out = rewrite_stub(text, "asm", "u", {"Table"})
-        self.assertEqual(out.count("Table"), 1)
-
-
 class InventedConstantTest(unittest.TestCase):
     AUTO = ("D_7FFFFF = 0x7FFFFF;\n"
             "D_80000004 = 0x80000004;\n"
@@ -263,26 +242,22 @@ class InventedConstantTest(unittest.TestCase):
         self.assertEqual(inline_constant_pairs(text, {"D_7FFFFF": 0x7FFFFF}), text)
 
 
-class IsAllAsmTest(unittest.TestCase):
-    def test_a_unit_that_only_includes_assembly(self):
-        self.assertTrue(is_all_asm('#include "common.h"\n\nHANDWRITTEN_ASM("a/b", entry);\n'))
+class SectionSymbolTest(unittest.TestCase):
+    TEXT = ("/* comment */\n"
+            "main_BSS_END = 0x801F2A10;\n"
+            "not_an_assignment\n")
 
-    def test_a_unit_that_mixes_c_with_assembly_is_not(self):
-        # Copying such a unit's source over the target would make its C compare
-        # against itself.
-        source = 'INCLUDE_ASM("a/b", Fn);\n\nvoid Other(void) {\n}\n'
-        self.assertFalse(is_all_asm(source))
+    def test_reads_the_markers_the_linker_computes(self):
+        # They are in no object, so collect_symbols cannot see them, and
+        # without them the disassembler invents D_801F2A10 for the end of bss.
+        self.assertEqual(section_symbols(self.TEXT),
+                         [("main_BSS_END", 0x801F2A10, "STT_NOTYPE", 0, None)])
 
-    def test_plain_c_is_not(self):
-        self.assertFalse(is_all_asm("void Other(void) {\n}\n"))
-
-
-class IsDataOnlyTest(unittest.TestCase):
-    def test_a_disassembled_function_is_not_data(self):
-        self.assertFalse(is_data_only("glabel Fn\n    jr $ra\n"))
-
-    def test_a_constant_block_is_data(self):
-        self.assertTrue(is_data_only(".section .rodata\ndlabel D_1\n.word 0\n"))
+    def test_they_are_not_typed_as_code(self):
+        # A section marker names a boundary, not something to disassemble.
+        name, _, kind, _, section = section_symbols(self.TEXT)[0]
+        self.assertEqual(kind, "STT_NOTYPE")
+        self.assertIsNone(section)
 
 
 if __name__ == "__main__":
