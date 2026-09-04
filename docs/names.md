@@ -331,8 +331,8 @@ variant).
 | GameSpriteDesc | render.h | 0x14 | Pre-baked SPRT description at `D_8007DAE0`. |
 | GameShuttleScenery | track.h | 0x34 | Shuttle scenery prop state, `D_801E4FB8[2]`. |
 | GameTrackPoint | track.h | 0x18 | Track centerline point: x/z/y, angle, segmentLength. Array at `D_8009E688`. |
-| TrackWaypointSeed | waypoint.h | 0xC | Waypoint seed: origin + step. |
-| TrackWaypointRuntime | waypoint.h | 0x38 | Waypoint runtime: position/rotation/velocity/magnitude. |
+| WheelModeSeed | wheel_mode.h | 0xC | WheelMode wheel-line seed: origin + step. |
+| WheelModeWheel | wheel_mode.h | 0x38 | Wheel prop state: hit state, position, rotation, velocity and magnitude. |
 | GameRaceProgress | race.h | 0x14 | Race state/lap/progression/elapsedTime. |
 | GameRaceRanking | race.h | var | Ranking: count + values[]. |
 | GameAssetTripleHeader | asset.h | 0xC | Three sub-asset offsets. |
@@ -706,8 +706,8 @@ share a `%hi`. The unlinked `.o` diff shows `sw v,8(at)` where retail has
   `AVOID_BLOCKED` / `AVOID_NEARBY` macros, because as struct members they let
   gcc hoist the `D_8009E778` load out of the loop. The other ten accesses in the
   function convert fine.
-- **`TrackWaypointRuntime` in func_80037860.** An initial conversion lost
-  retail's second induction variable biased to `&waypoint->velocityMagnitude`.
+- **`WheelModeWheel` in `UpdateWheelModeWheels`.** An initial conversion lost
+  retail's second induction variable biased to `&wheel->motion.velocityMagnitude`.
   Later source reshaping recovered the same allocation with direct typed fields;
   the complete 0x38-byte runtime record is now expressed without raw offsets.
 - **`GameCarSpec`'s colour fields in func_8003351C, and `GameCarRuntime` in
@@ -733,7 +733,7 @@ share a `%hi`. The unlinked `.o` diff shows `sw v,8(at)` where retail has
 ### Still on raw offsets, by size
 
 `func_8003591C` (46), `LoadSaveStateBlock` (42), `func_80037808` (39, the
-waypoint tail plus the handful of width casts), `func_8005F88C` (33),
+WheelMode tail plus the handful of width casts), `func_8005F88C` (33),
 `func_80048078` (27), `func_80038FF0` (24), `func_8003F700` (20),
 `func_80074D1C` (18), `func_8003351C` (18), `func_80046600` (16),
 `SsUtPitchBend` / `SsSetTableSize` (16 each), `func_8003F0F8` (12, static
@@ -1946,15 +1946,19 @@ objdump -d build/PAL/main.elf | grep -cE 'jal[ \t]+8003cdf4 '
 ```
 
 
-- **`race/update_waypoint_race_scene.c` and the waypoint half of
-  `race/waypoints.c` are an unreachable game mode.**
+- **`race/wheel_mode.c` and the WheelMode half of `race/race_runtime.c` are an
+  unreachable game mode.**
   `func_80037200` and `func_80037D90` have zero references and are not in the
-  scene table, and with them go `SeedWaypoints`, `UpdateWaypoints`,
-  `DrawWaypoints`, `CountActiveWaypoints`, `DrawLapNumber`,
+  scene table, and with them go `SeedWheelModeWheels`, `UpdateWheelModeWheels`,
+  `DrawWheelModeWheels`, `CountHitWheelModeWheels`, `DrawLapNumber`,
   `ApplyTrackReverbZone` and `func_80038288`. `UpdateFreeLookCamera`
   (`func_8003CF14`) and `g_FreeCameraAngleOffset` are reachable only from it.
   `func_80037D90` draws `"CONGRATULATIONS!!"` and counts to 257 laps, so the cut
-  mode was some kind of collect-the-waypoints event.
+  The scene's operative counter is the lap number. Six wheels from model 2 of
+  the player's car bank are placed in a line and react physically when hit,
+  while `g_WheelModeHitCount` is never consulted by the completion logic. A
+  small drift/practice course is plausible, but no surviving code proves the
+  original design intent; the neutral recovered name is **WheelMode**.
 - **`SeedFinishCameraAlt` (`func_8003CDF4`)** is
   instruction-for-instruction `SeedFinishCamera` with three constants
   changed, and has zero references.
@@ -3001,7 +3005,7 @@ alias-collision check 19a asks for (one name per address, one address per name).
 | `g_PlayerAutoSteer` | both writes in the image store zero, so the one reader (skip the pad, freeze the steering) can never fire |
 | `g_DriveBoostTimer` | same shape: initialised to zero, only ever decremented |
 | `g_EngineRpmSnapshot`, `g_UnusedLapTimingWord`, `g_UnusedRaceInitHalfword`, `D_801E4D84`, `g_RouteSceneryArmed`, `g_CameraCarSeedYaw`, `g_StandingStartState` | written, never read anywhere in the image |
-| `g_EndingSceneLatch` | its only reader is the guard on its own write, so it has no effect — and it lives in the unreachable waypoint mode (15f) |
+| `g_WheelModeSceneLatch` | its only reader is the guard on its own write, so it has no effect — and it lives in the unreachable WheelMode (15f) |
 
 ## 19. Front-end globals pass (`menu/ save/ asset/ cd/ fmv/ audio/ pad/ boot/`)
 
@@ -5073,7 +5077,7 @@ positive; `field_A8` is zeroed instead when `field_128 < field_12E` and
 `field_A4 >= 0x321`. `field_A4` itself decays by 94/100 per frame in the AI pass
 (`0x51EB851F`, `sra 5`, on `94 * field_A4`) and by 97/100 twice in the last pass.
 So `field_130` is a speed cap in acceleration units, which is the reading
-`UpdateCarTrafficAvoidance` and `IsCarNearWaypoint` already take.
+`UpdateCarTrafficAvoidance` and `IsCarNearWheelModeWheel` already take.
 
 `field_98` is a four-state vertical-hop machine over `field_9A` (frame counter),
 `field_9C` (launch rate) and `field_9E` (target height), writing `y` at 0x04:
@@ -5117,7 +5121,7 @@ The two objects share the stride and much of the layout but not the meaning of
 these bytes. The same split explains `manual` / `gear` at `GameCarDrive` +0x74 /
 +0x76: absolute 0x130 and 0x132 are the transmission flag and the gear on the
 player object, and an acceleration cap and a clamped speed floor on the AI cars
-(`UpdateCarTrafficAvoidance`, `IsCarNearWaypoint`). **`GameCarDrive` was
+(`UpdateCarTrafficAvoidance`, `IsCarNearWheelModeWheel`). **`GameCarDrive` was
 therefore left alone**, and the four AI-side 32-bit fields were added to
 `GameCarAiBlock` instead, which is the view that already exists for exactly this
 purpose.
@@ -5134,7 +5138,7 @@ the conversion of these two functions must spell the test
 `(s16)car->motionTimer > 0`. Verified by probe: a `u16` field under an explicit
 `(s16)` cast compiles to `lh` + `blez`, identical to a genuine `s16` field.
 
-Nothing found contradicts `GameTrackPoint`, `waypoint.h` or `track.h`; neither
+Nothing found contradicts `GameTrackPoint`, `wheel_mode.h` or `track.h`; neither
 function touches them.
 
 ### 30g. Aggregates on the stack

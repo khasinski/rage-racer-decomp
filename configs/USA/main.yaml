@@ -214,7 +214,7 @@ segments:
       - [0x25D4C, c, PAL/main/race/draw_split_times]
       - [0x25EAC, c, JAP10/main/race/update_lap_and_finish]
       - [0x26608, c, JAP10/main/race/race_scene]
-      - [0x2776C, c, PAL/main/race/waypoint_race]
+      - [0x2776C, c, PAL/main/race/wheel_mode]
       - [0x27D74, c, PAL/main/race/race_runtime]
       - [0x28DB0, c, PAL/main/car/car_draw_and_knockback]
       - [0x2955C, c, PAL/main/car/car_ai]

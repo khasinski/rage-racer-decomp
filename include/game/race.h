@@ -2,7 +2,7 @@
 #define GAME_RACE_H
 
 #include "common.h"
-#include "game/waypoint.h"
+#include "game/wheel_mode.h"
 #include "game/vector.h"
 #include "game/replay.h"
 #include "game/render_types.h"
@@ -278,7 +278,7 @@ extern s32 g_RivalCueFlags;
 extern s32 g_SectorEndDistance[];
 extern s32 g_SeriesCleared;
 extern s16 g_TrackZoneCode;
-extern s32 g_WaypointSpawnCooldown;
+extern s32 g_WheelModeCooldown;
 
 /*
  * None of the Draw* functions below draw. Each one packs primitives at the
@@ -309,7 +309,7 @@ void UpdateZoneAmbience(s32 zone);
 /* Declared identically by 153 translation units before this
  * header carried them. */
 
-extern s16 g_EndingSceneLatch;
+extern s16 g_WheelModeSceneLatch;
 /* Write-only remnants reset alongside lap timing and race cue state. */
 extern s32 g_UnusedLapTimingWord;
 extern s16 g_UnusedRaceInitHalfword;
@@ -425,7 +425,7 @@ extern u8 g_TileStripStorage[];
 extern s32 g_TimeRecordInsertRow;
 extern u8 g_TimeRecordNameCodes[];
 extern u8 g_TimeTextBuffer[];
-extern s32 g_WaypointsCollected;
+extern s32 g_WheelModeHitCount;
 
 s32 BeginMirrorPass(void);
 void BeginReplay(void);
@@ -454,7 +454,7 @@ void DrawSplitTimes(void);
 void DrawStartGridScenery(s32 flags);
 void DrawTimeRecordPanel(s32 slideX);
 void DrawTimeRemaining(s32 time);
-void DrawWaypoints(void);
+void DrawWheelModeWheels(void);
 void ExitPrologue(void);
 s32 FramesToMilliseconds(s32 frames, s32 millis);
 s32 GetAttractTitleFade(s32 element);
@@ -468,7 +468,7 @@ void SeedFinishCamera(struct PlayerCarRuntime *car);
 void SeedFlybyScenery(void);
 void SeedReplayCars(void);
 void SeedRouteScenery(void);
-void SeedWaypoints(void);
+void SeedWheelModeWheels(void);
 void TriggerRaceCues(void);
 /* void *: the caller passes g_PlayerCar, not a GameRenderObject. */
 void UpdateFinishCamera(void *obj);
@@ -478,7 +478,7 @@ void UpdateRacePosition(void);
 void UpdateReplayCars(void);
 void UpdateRivalCueGate(void);
 void UpdateSplitTimes(struct PlayerCarRuntime *car, s32 grandPrixMode, s32 lapEvent);
-void UpdateWaypoints(void);
+void UpdateWheelModeWheels(void);
 void ExitRaceScene(s32 sceneId);
 s32 GetTrackZoneBlend(s32 position);
 void PlayCountdownCues(s32 timer);
@@ -493,9 +493,9 @@ extern void (*g_BgmSelectSteps[])(void);
  * header carried them. */
 
 extern CVec g_CountdownCellColors[];
-extern TrackWaypointSeed g_WaypointSeeds[];
-extern TrackWaypointRuntime g_Waypoints[];
+extern WheelModeSeed g_WheelModeSeeds[];
+extern WheelModeWheel g_WheelModeWheels[];
 
-s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint);
+s32 IsCarNearWheelModeWheel(WheelModeWheel *wheel);
 
 #endif

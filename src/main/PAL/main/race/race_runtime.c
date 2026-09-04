@@ -10,7 +10,7 @@
 #include "game/scratchpad.h"
 #include "game/state.h"
 #include "game/vector.h"
-#include "game/waypoint.h"
+#include "game/wheel_mode.h"
 #include "psyq/gpu.h"
 #include "psyq/gte.h"
 
@@ -25,20 +25,20 @@ typedef char CarTrackLimitStackLayoutSizeCheck[
 
 
 /*
- * Waypoint proximity test: returns 1 if the waypoint's (x,y) lies within a
+ * WheelMode prop proximity test: returns 1 if the wheel's (x,y) lies within a
  * +/-0x40 box around the player car centre, else 0.
  */
 
 /*
- * Per-frame waypoint spawn/update state machine over the 6 slots. An idle slot
- * (active==0) that the car is near (IsCarNearWaypoint) spawns: increments the spawn
- * counter g_WaypointsCollected, plays cue 0xA, marks the slot active and seeds its
+ * Per-frame WheelMode wheel state machine over the six slots. A standing wheel
+ * (active==0) hit by the car increments g_WheelModeHitCount, plays cue 0xA,
+ * marks the wheel active and seeds its
  * velocity from g_PlayerVelocity. An active slot integrates position from velocity
  * with 15/16 per-frame damping and grows its Z rotation toward 0x400, retiring to
  * state 2 once motion decays to zero. Named fields cover the complete retail slot.
  */
 
-/* Counts how many of the 6 waypoint slots are active (active != 0). */
+/* Counts how many of the six WheelMode wheels have been hit (active != 0). */
 
 
 
@@ -74,9 +74,9 @@ typedef char CarTrackLimitStackLayoutSizeCheck[
  * accessed by raw byte offset (its first 0xE8 mirror GameRenderObject).
  */
 
-s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint) {
+s32 IsCarNearWheelModeWheel(WheelModeWheel *wheel) {
     s32 center_x = g_PlayerCar.x;
-    s32 x = waypoint->motion.x;
+    s32 x = wheel->motion.x;
     s32 ret = 0;
 
     if ((center_x - 0x40) < x) {
@@ -84,7 +84,7 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint) {
 
         if (x < max_x) {
             s32 center_y = g_PlayerCar.z;
-            s32 y = waypoint->motion.y;
+            s32 y = wheel->motion.y;
 
             if ((center_y - 0x40) < y) {
                 s32 max_y = center_y + 0x40;
@@ -97,54 +97,54 @@ s32 IsCarNearWaypoint(TrackWaypointRuntime *waypoint) {
     return ret;
 }
 
-void UpdateWaypoints(void) {
-    TrackWaypointRuntime *waypoint;
+void UpdateWheelModeWheels(void) {
+    WheelModeWheel *wheel;
     s32 i;
     s32 activeState;
 
-    if (g_WaypointSpawnCooldown != 0) {
-        g_WaypointSpawnCooldown--;
+    if (g_WheelModeCooldown != 0) {
+        g_WheelModeCooldown--;
     }
 
-    waypoint = g_Waypoints;
+    wheel = g_WheelModeWheels;
     i = 0;
     activeState = 1;
     do {
-        if (waypoint->active == 0) {
-            if (IsCarNearWaypoint(waypoint) != 0) {
-                g_WaypointsCollected++;
+        if (wheel->active == 0) {
+            if (IsCarNearWheelModeWheel(wheel) != 0) {
+                g_WheelModeHitCount++;
                 PlaySoundCue(0xA);
 
-                waypoint->active = activeState;
-                waypoint->motion.velocity = g_PlayerVelocity[0];
+                wheel->active = activeState;
+                wheel->motion.velocity = g_PlayerVelocity[0];
 
-                waypoint->motion.velocity.x *= 2;
-                waypoint->motion.velocity.z *= 2;
-                waypoint->motion.velocityMagnitude =
-                    ((waypoint->motion.velocity.x * waypoint->motion.velocity.x) + (waypoint->motion.velocity.z * waypoint->motion.velocity.z)) /
+                wheel->motion.velocity.x *= 2;
+                wheel->motion.velocity.z *= 2;
+                wheel->motion.velocityMagnitude =
+                    ((wheel->motion.velocity.x * wheel->motion.velocity.x) + (wheel->motion.velocity.z * wheel->motion.velocity.z)) /
                     0x2000;
             }
-        } else if (waypoint->active == activeState) {
-            waypoint->motion.x += waypoint->motion.velocity.x / 0x100;
-            waypoint->motion.y += waypoint->motion.velocity.z / 0x100;
-            waypoint->motion.velocity.x = (waypoint->motion.velocity.x * 15) / 16;
-            waypoint->motion.velocity.z = (waypoint->motion.velocity.z * 15) / 16;
-            waypoint->motion.rotationY += waypoint->motion.velocityMagnitude / 0x100;
-            waypoint->motion.velocityMagnitude = (waypoint->motion.velocityMagnitude * 15) / 16;
+        } else if (wheel->active == activeState) {
+            wheel->motion.x += wheel->motion.velocity.x / 0x100;
+            wheel->motion.y += wheel->motion.velocity.z / 0x100;
+            wheel->motion.velocity.x = (wheel->motion.velocity.x * 15) / 16;
+            wheel->motion.velocity.z = (wheel->motion.velocity.z * 15) / 16;
+            wheel->motion.rotationY += wheel->motion.velocityMagnitude / 0x100;
+            wheel->motion.velocityMagnitude = (wheel->motion.velocityMagnitude * 15) / 16;
 
-            if (waypoint->motion.rotationZ < 0x400) {
-                waypoint->motion.rotationZ += 0x80;
+            if (wheel->motion.rotationZ < 0x400) {
+                wheel->motion.rotationZ += 0x80;
             } else {
-                waypoint->motion.rotationZ = 0x400;
+                wheel->motion.rotationZ = 0x400;
             }
 
-            if ((waypoint->motion.velocity.x == 0) && (waypoint->motion.velocity.z == 0) && (waypoint->motion.velocityMagnitude == 0)) {
-                waypoint->active = 2;
+            if ((wheel->motion.velocity.x == 0) && (wheel->motion.velocity.z == 0) && (wheel->motion.velocityMagnitude == 0)) {
+                wheel->active = 2;
             }
         }
 
         i++;
-        waypoint++;
+        wheel++;
     } while (i < 6);
 }
 
@@ -153,18 +153,18 @@ static inline void ClearScratchRenderMode37AAC(void) {
 }
 
 /*
- * Renders the 6 waypoints. For each active-shaped slot it builds a rotation
- * matrix from the waypoint's Y and Z rotations and emits
+ * Renders the six WheelMode wheels. Each wheel uses model 2 from the player's
+ * car model bank and is submitted twice, with the second half rotated 180 degrees.
  * two GTE draw primitives (SubmitModel) into the scratchpad OT: the second is
  * the same billboard rotated by 0x800 (180 degrees).
  */
-void DrawWaypoints(void) {
+void DrawWheelModeWheels(void) {
     Matrix mtx0;
     Matrix mtx1;
     s32 drawId;
     s32 i;
     Matrix *mtx1Ptr;
-    TrackWaypointRuntime *waypoint;
+    WheelModeWheel *wheel;
     s32 frameValue;
     s32 drawArg;
 
@@ -172,14 +172,14 @@ void DrawWaypoints(void) {
     SelectModelBank(0);
     i = 0;
     mtx1Ptr = &mtx1;
-    waypoint = g_Waypoints;
+    wheel = g_WheelModeWheels;
 
     do {
-        BuildRotMatrixY(&mtx0, waypoint->motion.rotationY);
+        BuildRotMatrixY(&mtx0, wheel->motion.rotationY);
         MulMatrix2(SCRATCH_VIEW_MATRIX_GTE, &mtx0);
-        BuildRotMatrixZ(mtx1Ptr, waypoint->motion.rotationZ);
+        BuildRotMatrixZ(mtx1Ptr, wheel->motion.rotationZ);
         MulMatrix(&mtx0, mtx1Ptr);
-        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &waypoint->motion, &mtx0);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &wheel->motion, &mtx0);
         frameValue = g_ModelBankCount;
         ClearScratchRenderMode37AAC();
         drawArg = 1;
@@ -190,7 +190,7 @@ void DrawWaypoints(void) {
 
         BuildRotMatrixY(mtx1Ptr, 0x800);
         MulMatrix2(&mtx0, mtx1Ptr);
-        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &waypoint->motion, mtx1Ptr);
+        SetGteObjectMatrix(SCRATCH_OBJECT_MATRIX_WORK, &wheel->motion, mtx1Ptr);
         frameValue = g_ModelBankCount;
         ClearScratchRenderMode37AAC();
         drawArg = 1;
@@ -200,12 +200,12 @@ void DrawWaypoints(void) {
         SubmitModel(SCRATCHPAD, drawArg);
 
         i++;
-        waypoint++;
+        wheel++;
     } while (i < 6);
 }
 
-s32 CountActiveWaypoints(void) {
-    TrackWaypointRuntime *ptr = g_Waypoints;
+s32 CountHitWheelModeWheels(void) {
+    WheelModeWheel *ptr = g_WheelModeWheels;
     s32 count = 0;
     s32 i = 5;
 
@@ -285,7 +285,7 @@ void DrawLapNumber(void) {
     }
 }
 
-void DrawEndingScreen(void) {
+void UpdateWheelModeScene(void) {
     s16 *p;
     u32 sceneTimer;
     s32 x = 0;
@@ -299,15 +299,15 @@ void DrawEndingScreen(void) {
     }
     {
         u32 endingFrame = g_SceneTimer;
-        if (endingFrame >= 571 && g_EndingSceneLatch == 0) {
-            g_EndingSceneLatch = 1;
+        if (endingFrame >= 571 && g_WheelModeSceneLatch == 0) {
+            g_WheelModeSceneLatch = 1;
         }
     }
 
     if (g_PlayerCar.progressB + g_PlayerCar.progressA >= g_PlayerCar.lap * g_TrackLength) {
         if (g_PlayerCar.lap < 257) {
             g_PlayerCar.lap = g_PlayerCar.lap + 1;
-            SeedWaypoints();
+            SeedWheelModeWheels();
         }
     }
     if (g_PlayerCar.lap >= 257) {
@@ -348,8 +348,8 @@ void DrawEndingScreen(void) {
     } else {
         if (g_RacePhase == 0) {
             RunRaceIntroCamera(&g_PlayerCar, sceneTimer);
-            g_EndingSceneLatch = 0;
-            g_WaypointsCollected = 0;
+            g_WheelModeSceneLatch = 0;
+            g_WheelModeHitCount = 0;
             goto race_intro_update_done;
         }
     }
@@ -391,8 +391,8 @@ race_intro_update_done:
     DrawPlayerTachometer();
     UpdateTrackEventSound(*p);
     if (g_RacePhase < 3) {
-        UpdateWaypoints();
-        DrawWaypoints();
+        UpdateWheelModeWheels();
+        DrawWheelModeWheels();
     }
 }
 
@@ -424,7 +424,7 @@ void ApplyTrackReverbZone(s32 position) {
     SetReverbDepth(depth, depth);
 }
 
-s32 GetWaypointAngle(s32 position) {
+s32 GetWheelModeAngle(s32 position) {
     s32 trackLength;
     s32 value;
     register s32 temp asm("v0");

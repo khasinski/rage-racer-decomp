@@ -7,7 +7,7 @@
 #include "game/screens.h"
 #include "game/state.h"
 #include "game/track.h"
-#include "game/waypoint.h"
+#include "game/wheel_mode.h"
 #include "game/player_car_internal.h"
 
 
@@ -19,15 +19,15 @@
 
 
 /*
- * Initializes the 6 TrackWaypointRuntime slots for the current course. The
+ * Initializes the six wheel props used by WheelMode. The
  * `magic`/mult/mfhi block is the compiler's divide-by-10 idiom computing the
  * track index (player lap - 1) / 10, clamped to 0..9, which selects a
- * TrackWaypointSeed row in g_WaypointSeeds. Each slot i is seeded at
+ * WheelModeSeed row in g_WheelModeSeeds. Each wheel i is seeded at
  * origin + step*i (x,y), with the fixed constants 0x1766 and 0x174, and marked
  * inactive. The typed runtime layout preserves the retail 0x38-byte slot stride.
  */
 
-void UpdateWaypointRaceScene(void) {
+void UpdateFreeCameraRaceScene(void) {
     s32 value;
     s32 option;
     u32 pausePhase;
@@ -153,10 +153,10 @@ void UpdateWaypointRaceScene(void) {
     UpdateTrackEventSound(g_PlayerCar.trackSection);
 }
 
-void SeedWaypoints(void) {
-    TrackWaypointRuntime *waypoint;
+void SeedWheelModeWheels(void) {
+    WheelModeWheel *wheel;
     s32 i;
-    TrackWaypointSeed *seed;
+    WheelModeSeed *seed;
     s32 track;
 
     track = g_PlayerCar.lap - 1;
@@ -167,19 +167,19 @@ void SeedWaypoints(void) {
         track = 9;
     }
 
-    waypoint = g_Waypoints;
-    seed = &g_WaypointSeeds[track];
+    wheel = g_WheelModeWheels;
+    seed = &g_WheelModeSeeds[track];
 
     for (i = 0; i < 6; i++) {
-        waypoint->active = 0;
-        waypoint->motion.x = seed->x + seed->stepX * i;
-        waypoint->motion.y = seed->y + seed->stepY * i;
-        waypoint->motion.height = 0x1766;
-        waypoint->motion.rotationY = 0x174;
-        waypoint->motion.rotationZ = 0;
-        waypoint->motion.rotationX = 0;
-        waypoint++;
+        wheel->active = 0;
+        wheel->motion.x = seed->x + seed->stepX * i;
+        wheel->motion.y = seed->y + seed->stepY * i;
+        wheel->motion.height = 0x1766;
+        wheel->motion.rotationY = 0x174;
+        wheel->motion.rotationZ = 0;
+        wheel->motion.rotationX = 0;
+        wheel++;
     }
 
-    g_WaypointSpawnCooldown = 0;
+    g_WheelModeCooldown = 0;
 }

@@ -403,7 +403,7 @@
     {
       "start": "0x273E8",
       "end": "0x279F0",
-      "path": "PAL/main/race/waypoint_race"
+      "path": "PAL/main/race/wheel_mode"
     },
     {
       "start": "0x279F0",
