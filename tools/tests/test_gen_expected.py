@@ -11,6 +11,7 @@ from tools.scripts.gen_expected import (
     invented_constants,
     merged_symbol_file,
     parse_map_placement,
+    restore_text_symbol_boundaries,
     retype_data_in_text,
     section_symbols,
     splat_config,
@@ -142,7 +143,6 @@ segments: []
         self.assertEqual(config["options"]["symbol_addrs_path"],
                          ["expected/PAL/sym.from_build.txt"])
 
-
 class StripDifferAliasesTest(unittest.TestCase):
     def test_removes_the_alias_line_and_nothing_else(self):
         text = "nonmatching Lzc, 0x18\nglabel Lzc\n    jr $ra\n"
@@ -151,6 +151,37 @@ class StripDifferAliasesTest(unittest.TestCase):
     def test_leaves_an_instruction_mentioning_the_word_alone(self):
         text = "    addiu $a0, $zero, 0x2 /* nonmatching */\n"
         self.assertEqual(strip_differ_aliases(text), text)
+
+
+class RestoreTextSymbolBoundariesTest(unittest.TestCase):
+    TEXT = (".include \"macro.inc\"\n"
+            "glabel First\n"
+            "    /* 100 80000100 00000000 */ nop\n"
+            "endlabel First\n"
+            "    /* 104 80000104 00000000 */ nop\n"
+            "    /* 108 80000108 00000000 */ nop\n")
+
+    def test_restores_a_missing_compiled_function(self):
+        symbols = [("Second", 0x80000104, "STT_FUNC", 4, ".text")]
+        out = restore_text_symbol_boundaries(self.TEXT, symbols)
+        self.assertIn("glabel Second\n    /* 104", out)
+        self.assertIn("endlabel Second\n    /* 108", out)
+
+    def test_restores_handwritten_symbol_without_changing_its_type(self):
+        symbols = [("BiosStub", 0x80000104, "STT_NOTYPE", 4, ".text")]
+        out = restore_text_symbol_boundaries(self.TEXT, symbols)
+        self.assertIn(".global BiosStub\nBiosStub:\n    /* 104", out)
+        self.assertNotIn("glabel BiosStub", out)
+
+    def test_does_not_duplicate_an_existing_label(self):
+        symbols = [("First", 0x80000100, "STT_FUNC", 4, ".text")]
+        out = restore_text_symbol_boundaries(self.TEXT, symbols)
+        self.assertEqual(out.count("glabel First"), 1)
+
+    def test_does_not_create_a_range_for_a_zero_sized_function_alias(self):
+        symbols = [("PrivateEntry", 0x80000104, "STT_FUNC", 0, ".text")]
+        out = restore_text_symbol_boundaries(self.TEXT, symbols)
+        self.assertNotIn("PrivateEntry", out)
 
 
 class RetypeDataInTextTest(unittest.TestCase):

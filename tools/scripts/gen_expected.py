@@ -305,6 +305,55 @@ def inline_constant_pairs(text, constants):
     return HILO.sub(replace, text)
 
 
+INSTRUCTION_VRAM = re.compile(r'/\*\s+[0-9A-Fa-f]+\s+([0-9A-Fa-f]{8})\s+')
+
+
+def restore_text_symbol_boundaries(text, symbols):
+    """Restore labels splat omits for unreachable assembly and trampolines.
+
+    The retail disassembly can discover ordinary called functions itself. It
+    cannot discover every BIOS trampoline or the C routine immediately after
+    an exception entry, even when the verified base object exports both names.
+    Re-emitting those object symbols gives objdiff identical boundaries on the
+    two sides without changing a single instruction word.
+    """
+    definitions = re.findall(
+        r'^(?:glabel|dlabel|jlabel)\s+([A-Za-z_.$][\w.$]*)|'
+        r'^([A-Za-z_.$][\w.$]*):', text, re.MULTILINE)
+    existing_names = {name for pair in definitions for name in pair if name}
+    starts = {}
+    ends = {}
+    for name, address, kind, size, section in symbols:
+        if section != '.text' or name in existing_names:
+            continue
+        if kind == 'STT_FUNC':
+            # A zero-sized function is normally an alias or private entry
+            # inside a hand-written unit. Giving it another target-side range
+            # can make two symbols compete for the same objdiff pairing.
+            if not size:
+                continue
+            starts.setdefault(address, []).append('glabel %s\n' % name)
+            ends.setdefault(address + size, []).append('endlabel %s\n' % name)
+        else:
+            starts.setdefault(address, []).append('.global %s\n%s:\n' % (name, name))
+
+    out = []
+    seen_addresses = set()
+    for line in text.splitlines(keepends=True):
+        match = INSTRUCTION_VRAM.search(line)
+        if match is not None:
+            address = int(match.group(1), 16)
+            if address not in seen_addresses:
+                out.extend(ends.get(address, []))
+                out.extend(starts.get(address, []))
+                seen_addresses.add(address)
+        out.append(line)
+    for address in sorted(ends):
+        if address not in seen_addresses:
+            out.extend(ends[address])
+    return ''.join(out)
+
+
 def splat_config(base_config, out_dir, extra_symbols):
     """The split config again, pointed at an empty source tree.
 
@@ -359,14 +408,14 @@ def section_symbols(text):
             for name, addr in SECTION_SYMBOL.findall(text)]
 
 
-def collect_symbols(placement):
-    symbols = []
+def collect_symbols_by_object(placement):
+    symbols = {}
     for obj, sections in sorted(placement.items()):
         path = ROOT / obj
         if not path.exists():
             continue
         with path.open('rb') as handle:
-            symbols.extend(object_symbols(ELFFile(handle), sections))
+            symbols[obj] = object_symbols(ELFFile(handle), sections)
     return symbols
 
 
@@ -433,7 +482,8 @@ def main(argv=None):
         configured_paths = [configured_paths]
     configured_texts = [(ROOT / path).read_text() for path in configured_paths]
 
-    symbols = collect_symbols(placement)
+    symbols_by_object = collect_symbols_by_object(placement)
+    symbols = [symbol for group in symbols_by_object.values() for symbol in group]
     # The markers main.ld computes are not in any object, but this tree's own
     # disassembler knows them by name. Without them splat invents D_<address>
     # for the end of bss and the two sides disagree about what the boot stub
@@ -488,17 +538,19 @@ def main(argv=None):
             source = asm_root / ('%s.s' % unit)
         else:
             source = ROOT / out_dir / relative.removesuffix('.o')
-        jobs.append((source, ROOT / out_dir / 'build' / relative))
+        jobs.append((source, ROOT / out_dir / 'build' / relative,
+                     symbols_by_object.get(obj, [])))
 
-    missing = [str(s) for s, _ in jobs if not s.exists()]
+    missing = [str(s) for s, _, _ in jobs if not s.exists()]
     for name in missing:
         sys.stderr.write('no disassembly for %s\n' % name)
     if missing:
         raise SystemExit('%d unit(s) have no disassembly' % len(missing))
 
-    for source, obj in jobs:
+    for source, obj, object_syms in jobs:
         if source.is_relative_to(asm_root) and source.parent != asm_root:
             text = strip_differ_aliases(source.read_text())
+            text = restore_text_symbol_boundaries(text, object_syms)
             text = apply_alias_renames(retype_data_in_text(text, in_text), renames)
             source.write_text(inline_constant_pairs(text, constants))
         obj.parent.mkdir(parents=True, exist_ok=True)

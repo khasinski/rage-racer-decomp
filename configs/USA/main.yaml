@@ -316,7 +316,7 @@ segments:
       - [0x54198, c, PAL/lib/libc/putchar]
       - [0x5424C, c, PAL/lib/libc/toupper]
       - [0x5427C, c, PAL/lib/libc/tolower]
-      - [0x542AC, hasm, PAL/lib/libapi/bios_call_stubs]
+      - [0x542AC, c, PAL/lib/libapi/bios_call_stubs]
       - [0x542FC, c, PAL/lib/libcard/_card_clear]
       - [0x54334, c, PAL/lib/libcard/_card_write]
       - [0x54344, c, PAL/lib/libapi/new_card_stub]

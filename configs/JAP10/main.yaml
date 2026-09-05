@@ -328,7 +328,7 @@ segments:
       - [0x53CE4, c, PAL/lib/libc/putchar]
       - [0x53D98, c, PAL/lib/libc/toupper]
       - [0x53DC8, c, PAL/lib/libc/tolower]
-      - [0x53DF8, hasm, PAL/lib/libapi/bios_call_stubs]
+      - [0x53DF8, c, PAL/lib/libapi/bios_call_stubs]
       - [0x53E48, c, PAL/lib/libcard/_card_clear]
       - [0x53E80, c, PAL/lib/libcard/_card_write]
       - [0x53E90, c, PAL/lib/libapi/new_card_stub]

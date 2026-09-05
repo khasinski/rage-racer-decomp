@@ -162,6 +162,21 @@ class RegionalSourceLayoutTest(unittest.TestCase):
                     offenders.append(path.relative_to(ROOT).as_posix())
         self.assertEqual(offenders, [])
 
+    def test_handwritten_units_are_exposed_through_c_wrappers(self):
+        offenders = []
+        for version in ("PAL", "USA", "JAP10", "JAP11"):
+            document = yaml.safe_load(
+                (ROOT / "configs" / version / "main.yaml").read_text()
+            )
+            for segment in document.get("segments", []):
+                if not isinstance(segment, dict):
+                    continue
+                for subsegment in segment.get("subsegments", []):
+                    if (isinstance(subsegment, list) and len(subsegment) >= 3
+                            and subsegment[1] == "hasm"):
+                        offenders.append((version, subsegment[2]))
+        self.assertEqual(offenders, [])
+
 
 class RegionalCoverageManifestTest(unittest.TestCase):
     def test_every_regional_text_range_has_source(self):

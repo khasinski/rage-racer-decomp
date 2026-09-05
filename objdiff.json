@@ -1458,11 +1458,11 @@
     },
     {
       "name": "PAL/main/render/terrain_submission",
-      "target_path": "expected/PAL/build/src/main/PAL/main/render/terrain_submission.s.o",
-      "base_path": "build/PAL/src/main/PAL/main/render/terrain_submission.s.o",
+      "target_path": "expected/PAL/build/src/main/PAL/main/render/terrain_submission.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/render/terrain_submission.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/main/render/terrain_submission.s",
+        "source_path": "src/main/PAL/main/render/terrain_submission.c",
         "progress_categories": [
           "game"
         ]
@@ -2694,11 +2694,11 @@
     },
     {
       "name": "PAL/main/boot/_start",
-      "target_path": "expected/PAL/build/src/main/PAL/main/boot/_start.s.o",
-      "base_path": "build/PAL/src/main/PAL/main/boot/_start.s.o",
+      "target_path": "expected/PAL/build/src/main/PAL/main/boot/_start.c.o",
+      "base_path": "build/PAL/src/main/PAL/main/boot/_start.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/main/boot/_start.s",
+        "source_path": "src/main/PAL/main/boot/_start.c",
         "progress_categories": [
           "game"
         ]
@@ -2706,11 +2706,11 @@
     },
     {
       "name": "PAL/lib/libapi/exit_critical_section",
-      "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/exit_critical_section.s.o",
-      "base_path": "build/PAL/src/main/PAL/lib/libapi/exit_critical_section.s.o",
+      "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/exit_critical_section.c.o",
+      "base_path": "build/PAL/src/main/PAL/lib/libapi/exit_critical_section.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/lib/libapi/exit_critical_section.s",
+        "source_path": "src/main/PAL/lib/libapi/exit_critical_section.c",
         "progress_categories": [
           "psyq"
         ]
@@ -2838,11 +2838,11 @@
     },
     {
       "name": "PAL/lib/libapi/bios_call_stubs",
-      "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/bios_call_stubs.s.o",
-      "base_path": "build/PAL/src/main/PAL/lib/libapi/bios_call_stubs.s.o",
+      "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/bios_call_stubs.c.o",
+      "base_path": "build/PAL/src/main/PAL/lib/libapi/bios_call_stubs.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/lib/libapi/bios_call_stubs.s",
+        "source_path": "src/main/PAL/lib/libapi/bios_call_stubs.c",
         "progress_categories": [
           "psyq"
         ]
@@ -3186,11 +3186,11 @@
     },
     {
       "name": "PAL/lib/libgte/multiply_matrix",
-      "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/multiply_matrix.s.o",
-      "base_path": "build/PAL/src/main/PAL/lib/libgte/multiply_matrix.s.o",
+      "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/multiply_matrix.c.o",
+      "base_path": "build/PAL/src/main/PAL/lib/libgte/multiply_matrix.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/lib/libgte/multiply_matrix.s",
+        "source_path": "src/main/PAL/lib/libgte/multiply_matrix.c",
         "progress_categories": [
           "psyq"
         ]
@@ -3198,11 +3198,11 @@
     },
     {
       "name": "PAL/lib/libgte/multiply_matrix_2",
-      "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/multiply_matrix_2.s.o",
-      "base_path": "build/PAL/src/main/PAL/lib/libgte/multiply_matrix_2.s.o",
+      "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/multiply_matrix_2.c.o",
+      "base_path": "build/PAL/src/main/PAL/lib/libgte/multiply_matrix_2.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/lib/libgte/multiply_matrix_2.s",
+        "source_path": "src/main/PAL/lib/libgte/multiply_matrix_2.c",
         "progress_categories": [
           "psyq"
         ]
@@ -3222,11 +3222,11 @@
     },
     {
       "name": "PAL/lib/libgte/scale_matrix",
-      "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/scale_matrix.s.o",
-      "base_path": "build/PAL/src/main/PAL/lib/libgte/scale_matrix.s.o",
+      "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/scale_matrix.c.o",
+      "base_path": "build/PAL/src/main/PAL/lib/libgte/scale_matrix.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/lib/libgte/scale_matrix.s",
+        "source_path": "src/main/PAL/lib/libgte/scale_matrix.c",
         "progress_categories": [
           "psyq"
         ]
@@ -3294,11 +3294,11 @@
     },
     {
       "name": "PAL/lib/libgte/rot_matrix_asm",
-      "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/rot_matrix_asm.s.o",
-      "base_path": "build/PAL/src/main/PAL/lib/libgte/rot_matrix_asm.s.o",
+      "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/rot_matrix_asm.c.o",
+      "base_path": "build/PAL/src/main/PAL/lib/libgte/rot_matrix_asm.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/lib/libgte/rot_matrix_asm.s",
+        "source_path": "src/main/PAL/lib/libgte/rot_matrix_asm.c",
         "progress_categories": [
           "psyq"
         ]
@@ -3306,11 +3306,11 @@
     },
     {
       "name": "PAL/lib/libgte/exception_patch",
-      "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/exception_patch.s.o",
-      "base_path": "build/PAL/src/main/PAL/lib/libgte/exception_patch.s.o",
+      "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/exception_patch.c.o",
+      "base_path": "build/PAL/src/main/PAL/lib/libgte/exception_patch.c.o",
       "metadata": {
         "complete": true,
-        "source_path": "src/main/PAL/lib/libgte/exception_patch.s",
+        "source_path": "src/main/PAL/lib/libgte/exception_patch.c",
         "progress_categories": [
           "psyq"
         ]

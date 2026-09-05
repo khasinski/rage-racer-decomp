@@ -39,7 +39,7 @@ to retail.
 The table comes from objdiff comparisons between objects built from this tree
 and objects reconstructed directly from the retail executable. The remaining
 data percentage is unpaired padding or unnamed table data, not a difference in
-the linked image. Of the 409 source translation units across the supported
+the linked image. Of the 418 source translation units across the supported
 regions, 282 are plain C; the rest contain hand-written assembly shipped by the
 original game. Regenerate the report, table, and badge JSON with
 `make report progress`.
