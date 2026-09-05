@@ -67,7 +67,7 @@ segments:
     vram: 0x80010000
     align: 4
     subalign: 4
-    bss_size: 0x0
+    bss_size: 0x1594A4
     subsegments:
       - [0x800, rodata, main/000800_main]
       - [0x12B8, .rodata, PAL/main/asset/asset_loader]
@@ -484,5 +484,6 @@ segments:
       - [0x6B0E4, c, PAL/lib/libspu/SpuGetKeyStatus]
       - [0x6B178, c, PAL/lib/libspu/transfer_control]
       - [0x6B32C, c, PAL/lib/libspu/SpuSetCommonAttr]
-      - [0x6B6C0, asm, main/06B6C0_main]
+      - [0x6B6C0, data, main/06B6C0_main]
+      - {start: 0x8B000, type: bss, vram: 0x8009A800, bss_size: 0x1594A4, name: main/bss}
       - [0x8B000]

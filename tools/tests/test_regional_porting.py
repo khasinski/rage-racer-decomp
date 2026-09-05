@@ -5,6 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import yaml
+
 from tools.scripts.map_version_functions import (
     LOAD_ADDRESS,
     normalize,
@@ -201,6 +203,35 @@ class RegionalCoverageManifestTest(unittest.TestCase):
                 if '#include "' in path.read_text() and '.c"' in path.read_text():
                     offenders.append(path.relative_to(ROOT).as_posix())
         self.assertEqual(offenders, [])
+
+
+class RegionalDataLayoutTest(unittest.TestCase):
+    LAYOUTS = {
+        "USA": (0x6BB74, 0x8B800, 0x8009B000, 0x801F4338),
+        "JAP10": (0x6B6C0, 0x8B000, 0x8009A800, 0x801F3CA4),
+        "JAP11": (0x6B7A8, 0x8B000, 0x8009A800, 0x801F3DBC),
+    }
+
+    def test_regional_tail_is_data_and_bss_is_accounted_for(self):
+        for version, (data_start, image_end, bss_start, bss_end) in self.LAYOUTS.items():
+            with self.subTest(version=version):
+                document = yaml.safe_load(
+                    (ROOT / "configs" / version / "main.yaml").read_text()
+                )
+                main = next(segment for segment in document["segments"]
+                            if segment.get("name") == "main")
+                subsegments = main["subsegments"]
+
+                data = next(sub for sub in subsegments
+                            if isinstance(sub, list) and sub[0] == data_start)
+                self.assertEqual(data[1], "data")
+
+                bss = next(sub for sub in subsegments
+                           if isinstance(sub, dict) and sub.get("type") == "bss")
+                self.assertEqual(bss["start"], image_end)
+                self.assertEqual(bss["vram"], bss_start)
+                self.assertEqual(bss["bss_size"], bss_end - bss_start)
+                self.assertEqual(main["bss_size"], bss_end - bss_start)
 
 
 if __name__ == "__main__":
