@@ -21,6 +21,7 @@ void SeekEnvironmentScript(s32 targetTime) {
     EnvironmentScriptLocation scriptLocation;
     s16 *fogOut;
     s16 *fogTarget;
+    s32 *cueTime;
 
     scriptLocation.time = targetTime;
     clock = (scriptLocation.time + g_EnvScriptLength) % g_EnvScriptLength;
@@ -57,7 +58,8 @@ void SeekEnvironmentScript(s32 targetTime) {
     g_EnvironmentColors.fields.slots[8].cur = g_EnvScriptCursor->colors[8];
 
     g_EnvironmentMode = g_EnvScriptCursor->mode;
-    nextId = RAW(g_EnvScriptCursor[1].time);
+    cueTime = &g_EnvScriptCursor[1].time;
+    nextId = *cueTime;
     g_EnvScriptCursor = g_EnvScriptCursor + 1;
     if (nextId < 0) {
         g_EnvScriptCursor = g_EnvScriptCues;
@@ -66,7 +68,8 @@ void SeekEnvironmentScript(s32 targetTime) {
     cue = g_EnvScriptCursor;
     duration = cue->duration;
     g_EnvLerpDuration = duration;
-    frame = (u16)g_EnvScriptClock - (u16)RAW(cue->time);
+    cueTime = &cue->time;
+    frame = (u16)g_EnvScriptClock - (u16)*cueTime;
     g_EnvLerpFrame = frame;
     clampedFrame = frame;
     /* Keep the unclamped store and the call-value copy as distinct lifetimes. */

@@ -15,8 +15,10 @@ symbols by name, so those units would read as entirely unmatched even though
 the bytes are identical. Reading the names back out of a build that passed
 `make check` cannot invent a name for an address the game does not have.
 
-Only the names are borrowed. Every byte in the result is disassembled from
-assets/<version>/main.exe.
+Names, types, boundaries and relocation locations are borrowed for pairing.
+Code is disassembled from assets/<version>/main.exe; initialized data and
+relocation addends are reconstructed from its bytes. BSS has no retail bytes
+and is checked only for layout consistency.
 """
 
 import argparse
@@ -308,6 +310,68 @@ def inline_constant_pairs(text, constants):
 INSTRUCTION_VRAM = re.compile(r'/\*\s+[0-9A-Fa-f]+\s+([0-9A-Fa-f]{8})\s+')
 
 
+def restore_word_relocations(text, relocations, linked_symbols):
+    """Annotate HI16/LO16 relocations hidden inside a .word block.
+
+    Splat can treat a data word followed by code as one data symbol, leaving
+    its instruction words literal. Pairing still needs the relocation used by
+    the base. Derive its addend from the retail instruction, never the base's
+    contents. Ordinary mnemonic instructions retain splat's own relocations.
+    """
+    words = {}
+    for line in text.splitlines():
+        location = INSTRUCTION_VRAM.search(line)
+        word = re.search(r'\.word\s+0x([0-9A-Fa-f]{8})\b', line)
+        if location and word:
+            words[int(location[1], 16)] = int(word[1], 16)
+    out = []
+    for line in text.splitlines(keepends=True):
+        location = INSTRUCTION_VRAM.search(line)
+        word = re.search(r'\.word\s+0x([0-9A-Fa-f]{8})\b', line)
+        relocation = relocations.get(int(location[1], 16)) if location else None
+        if word and relocation:
+            kind, name = relocation
+            address = int(location[1], 16)
+            value = int(word[1], 16)
+            if kind == 5:  # R_MIPS_HI16: recover the full addend from its LO16.
+                lows = [at for at, rel in relocations.items()
+                        if at > address and rel == (6, name) and at in words]
+                if not lows:
+                    raise ValueError('literal HI16 has no following literal LO16')
+                low = words[min(lows)] & 0xFFFF
+                low = low - 0x10000 if low & 0x8000 else low
+                full = ((value & 0xFFFF) << 16) + low
+                addend = ((full - linked_symbols[name] + 0x8000) >> 16) & 0xFFFF
+                relocation_name = 'R_MIPS_HI16'
+            elif kind == 6:
+                addend = (value - linked_symbols[name]) & 0xFFFF
+                relocation_name = 'R_MIPS_LO16'
+            else:
+                raise ValueError('unsupported relocation %d at %s to %s inside literal text word'
+                                 % (kind, location[1], name))
+            value = (value & 0xFFFF0000) | addend
+            out.append('.reloc ., %s, %s\n' % (relocation_name, name))
+            line = line[:word.start(1)] + '%08X' % value + line[word.end(1):]
+        out.append(line)
+    return ''.join(out)
+
+
+def text_relocations(elf, placement):
+    result = {}
+    for section in elf.iter_sections():
+        if section['sh_type'] != 'SHT_REL':
+            continue
+        if elf.get_section(section['sh_info']).name != '.text':
+            continue
+        table = elf.get_section(section['sh_link'])
+        for relocation in section.iter_relocations():
+            symbol = table.get_symbol(relocation['r_info_sym'])
+            if symbol.name and symbol['st_info']['type'] != 'STT_SECTION':
+                result[placement['.text'][0] + relocation['r_offset']] = (
+                    relocation['r_info_type'], symbol.name)
+    return result
+
+
 def restore_text_symbol_boundaries(text, symbols):
     """Restore labels splat omits for unreachable assembly and trampolines.
 
@@ -351,6 +415,13 @@ def restore_text_symbol_boundaries(text, symbols):
     for address in sorted(ends):
         if address not in seen_addresses:
             out.extend(ends[address])
+    # Splat may extend a data label across unreachable BIOS trampolines. The
+    # explicitly declared object extent is the data boundary, even when the
+    # disassembler emitted an enddlabel much later.
+    for name, _, kind, size, section in symbols:
+        if section == '.text' and kind == 'STT_OBJECT' and size:
+            out.append('.type %s, @object\n' % name)
+            out.append('.size %s, %d\n' % (name, size))
     return ''.join(out)
 
 
@@ -419,6 +490,89 @@ def collect_symbols_by_object(placement):
     return symbols
 
 
+def retail_data_source(elf, placement, retail, linked_symbols):
+    """Reconstruct a data object's contents from retail, using ELF annotations.
+
+    Symbol boundaries and relocation locations are pairing metadata only.
+    Neither section contents nor relocation addends are read from the base.
+    BSS has no on-disc contents: its extent is a layout check, not a byte match.
+    """
+    table = elf.get_section_by_name('.symtab')
+    out = []
+    for index, section in enumerate(elf.iter_sections()):
+        name = section.name
+        if name not in SECTIONS or not section['sh_size']:
+            continue
+        if name == '.text':
+            raise ValueError('data object contains executable .text')
+        address, size = placement[name]
+        if size != section['sh_size']:
+            raise ValueError('data section size differs from linker placement')
+        bss = name == '.bss'
+        offset = address if address < 0x800 else address - 0x80010000 + 0x800
+        if not bss and (offset < 0 or offset + size > len(retail)):
+            raise ValueError('data section extends outside retail executable')
+        payload = b'' if bss else retail[offset:offset + size]
+        flags = 'a' if name == '.rodata' else 'aw'
+        out.append('.section %s, "%s", @%s' %
+                   (name, flags, 'nobits' if bss else 'progbits'))
+        labels = {}
+        for symbol in table.iter_symbols():
+            if (symbol['st_shndx'] != index or not symbol.name
+                    or symbol['st_info']['type'] == 'STT_SECTION'
+                    or GCC_LOCAL.search(symbol.name)):
+                continue
+            value = symbol['st_value']
+            if value > size or value + symbol['st_size'] > size:
+                raise ValueError('data symbol extends beyond section')
+            lines = labels.setdefault(value, [])
+            binding = symbol['st_info']['bind']
+            if binding != 'STB_LOCAL':
+                lines.append('.weak ' + symbol.name if binding == 'STB_WEAK'
+                             else '.global ' + symbol.name)
+            if symbol['st_info']['type'] == 'STT_OBJECT':
+                lines.append('.type %s, @object' % symbol.name)
+            lines.extend([symbol.name + ':',
+                          '.size %s, %d' % (symbol.name, symbol['st_size'])])
+        relocs = {}
+        for relsection in elf.iter_sections():
+            if relsection['sh_type'] != 'SHT_REL' or relsection['sh_info'] != index:
+                continue
+            reltable = elf.get_section(relsection['sh_link'])
+            for relocation in relsection.iter_relocations():
+                at = relocation['r_offset']
+                if bss or relocation['r_info_type'] != 2 or at + 4 > size:
+                    raise ValueError('unsupported data relocation (expected R_MIPS_32)')
+                target = reltable.get_symbol(relocation['r_info_sym'])
+                if target['st_info']['type'] == 'STT_SECTION':
+                    target_name = elf.get_section(target['st_shndx']).name
+                    target_address = placement[target_name][0]
+                else:
+                    target_name = target.name
+                    target_address = linked_symbols[target_name]
+                word = int.from_bytes(payload[at:at + 4], 'little')
+                addend = (word - target_address) & 0xFFFFFFFF
+                relocs[at] = '.word %s + 0x%X' % (target_name, addend)
+        boundaries = sorted(set(labels) | set(relocs) | {0, size})
+        cursor = 0
+        for boundary in boundaries:
+            if boundary < cursor:
+                raise ValueError('symbol or relocation overlaps a data relocation')
+            if boundary > cursor:
+                if bss:
+                    out.append('.space %d' % (boundary - cursor))
+                else:
+                    for start in range(cursor, boundary, 32):
+                        out.append('.byte ' + ','.join('0x%02X' % b for b in
+                                   payload[start:min(start + 32, boundary)]))
+            out.extend(labels.get(boundary, []))
+            cursor = boundary
+            if boundary in relocs:
+                out.append(relocs[boundary])
+                cursor += 4
+    return '\n'.join(out) + '\n'
+
+
 def check_coverage(placement, out_dir, version, readelf):
     """Every unit's target sections must be the size the linker gave the base.
 
@@ -429,8 +583,6 @@ def check_coverage(placement, out_dir, version, readelf):
     """
     problems = []
     for obj, sections in sorted(placement.items()):
-        if '/src/' not in obj:
-            continue
         target = ROOT / out_dir / 'build' / obj.split('build/%s/' % version, 1)[1]
         if not target.exists():
             problems.append((obj, 'target object missing'))
@@ -440,7 +592,7 @@ def check_coverage(placement, out_dir, version, readelf):
             m = re.search(r'\[\s*\d+\]\s+(\.\w+)\s+\w+\s+[0-9a-f]+\s+[0-9a-f]+\s+([0-9a-f]+)', line)
             if m:
                 sizes[m.group(1)] = int(m.group(2), 16)
-        for section in ('.text', '.rodata', '.data'):
+        for section in SECTIONS:
             want = sections.get(section, (0, 0))[1]
             got = sizes.get(section, 0)
             if want != got:
@@ -501,16 +653,25 @@ def main(argv=None):
 
     asm_root = ROOT / out_dir / 'asm' / version / basename
 
-    # The constant blobs hold no code and were never decompiled: both sides
-    # assemble the same bytes out of the same file. `make split` runs
-    # symbolise_data_words.py over the tree's copy and this pass does not, so
-    # leaving them separate makes two spellings of one thing and nothing pairs.
+    # Reconstruct data from retail bytes, retaining only the base's symbol and
+    # relocation annotations for pairing. Never copy the tree's data contents.
+    retail = (ROOT / base_document['options']['target_path']).read_bytes()
+    with (build_dir / (basename + '.elf')).open('rb') as handle:
+        linked = ELFFile(handle)
+        linked_symbols = {s.name: s['st_value'] for s in
+                          linked.get_section_by_name('.symtab').iter_symbols()
+                          if s['st_shndx'] != 'SHN_UNDEF'}
     blobs = 0
-    for source in (ROOT / out_dir / 'asm').rglob('*.s'):
-        original = ROOT / source.relative_to(ROOT / out_dir)
-        if original.exists():
-            shutil.copyfile(original, source)
-            blobs += 1
+    for obj, sections in placement.items():
+        relative = obj.removeprefix('build/%s/' % version)
+        if not relative.startswith('asm/'):
+            continue
+        source = ROOT / out_dir / relative.removesuffix('.o')
+        with (ROOT / obj).open('rb') as handle:
+            text = retail_data_source(ELFFile(handle), sections, retail, linked_symbols)
+        source.parent.mkdir(parents=True, exist_ok=True)
+        source.write_text(text)
+        blobs += 1
 
     in_text = {name: kind for name, _, kind, _, section in symbols
                if section == '.text' and kind != 'STT_FUNC'}
@@ -552,12 +713,16 @@ def main(argv=None):
             text = strip_differ_aliases(source.read_text())
             text = restore_text_symbol_boundaries(text, object_syms)
             text = apply_alias_renames(retype_data_in_text(text, in_text), renames)
+            base_obj = 'build/%s/%s' % (version, obj.relative_to(ROOT / out_dir / 'build'))
+            with (ROOT / base_obj).open('rb') as handle:
+                relocations = text_relocations(ELFFile(handle), placement[base_obj])
+            text = restore_word_relocations(text, relocations, linked_symbols)
             source.write_text(inline_constant_pairs(text, constants))
         obj.parent.mkdir(parents=True, exist_ok=True)
         run([args.assembler, '-EL', '-G0', '-march=r3000', '-mtune=r3000',
              '-no-pad-sections', '-Iinclude', '-I%s' % asm_root.relative_to(ROOT),
              '-o', str(obj.relative_to(ROOT)), str(source.relative_to(ROOT))])
-    print('units: %d assembled, %d of them data taken from the tree'
+    print('units: %d assembled, %d of them data reconstructed from retail'
           % (len(jobs), blobs))
 
     problems = check_coverage(placement, out_dir, version, args.readelf)

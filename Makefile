@@ -147,7 +147,7 @@ audit-code:
 
 # Enumerated rather than discovered: tools/ has no __init__.py, so unittest
 # discovery cannot import it, but the namespace package resolves by name.
-TESTS := tools.tests.test_code_debt tools.tests.test_gen_expected \
+TESTS := tools.tests.test_audit_report tools.tests.test_classify_embedded_data tools.tests.test_code_debt tools.tests.test_gen_expected \
          tools.tests.test_gen_objdiff_config tools.tests.test_progress_report \
          tools.tests.test_strip_nonmatching_markers tools.tests.test_regional_porting
 
@@ -167,7 +167,9 @@ expected: check
 
 report: expected
 	$(PY) tools/scripts/gen_objdiff_config.py --version $(VERSION) --basename $(BASENAME)
-	$(OBJDIFF) report generate -p . -o $(BUILD)/report.json
+	$(OBJDIFF) report generate -p . -o $(BUILD)/report.raw.json
+	$(PY) tools/scripts/classify_embedded_data.py --version $(VERSION)
+	$(PY) tools/scripts/audit_report.py --version $(VERSION)
 
 clean:
 	rm -rf $(BUILD)

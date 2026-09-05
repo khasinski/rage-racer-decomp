@@ -153,6 +153,15 @@ class FunctionSourceRangeTest(unittest.TestCase):
 
 
 class RegionalSourceLayoutTest(unittest.TestCase):
+    def test_reserved_executable_header_is_not_code(self):
+        document = yaml.safe_load(
+            (ROOT / "configs/JAP10/main.yaml").read_text())
+        tail = next(s for s in document["segments"]
+                    if isinstance(s, dict) and s.get("name") == "header_tail")
+        self.assertEqual(tail["start"], 0x7C)
+        self.assertEqual(tail["subsegments"],
+                         [[0x7C, "data", "header_tail"], [0x800]])
+
     def test_regional_sources_do_not_include_pal_implementations(self):
         offenders = []
         for version in ("USA", "JAP10", "JAP11"):

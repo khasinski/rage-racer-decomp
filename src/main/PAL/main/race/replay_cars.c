@@ -92,7 +92,10 @@ s32 GetTrackZoneBlend(s32 position) {
         }
 
         rawCode = zone.pointer->code;
-        RAW(g_TrackZoneCode) = rawCode;
+        {
+            s16 *zoneCode = &g_TrackZoneCode;
+            *zoneCode = rawCode;
+        }
         code = (s16)rawCode;
         if (!(code == 0)) {
         if (code > 0) {

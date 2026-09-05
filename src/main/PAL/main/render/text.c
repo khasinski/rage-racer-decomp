@@ -270,9 +270,10 @@ typedef union TextRenderWork {
                 prim = sprt;
                 sprt->u0 = u;
                 sprt->v0 = v;
-                /* RAW() keeps this store ahead of the g_DrawBuffer load --
-                 * see common.h. */
-                RAW(sprt->h) = height;
+                {
+                    s16 *heightOut = &sprt->h;
+                    *heightOut = height;
+                }
                 ot = g_DrawBuffer;
                 t0.value = (u16)home.clut;
                 ot += 0xCC;
@@ -312,9 +313,10 @@ typedef union TextRenderWork {
                 prim = sprt;
                 sprt->u0 = u;
                 sprt->v0 = v;
-                /* RAW() keeps this store ahead of the g_DrawBuffer load --
-                 * see common.h. */
-                RAW(sprt->h) = height;
+                {
+                    s16 *heightOut = &sprt->h;
+                    *heightOut = height;
+                }
                 ot = g_DrawBuffer;
                 t0.value = (u16)home.clut;
                 ot += 0xCC;

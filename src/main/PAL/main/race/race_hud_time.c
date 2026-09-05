@@ -12,10 +12,6 @@
 
 
 void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
-    s32 savedX;
-    register s32 savedY asm("$10");
-    s32 savedColor;
-    register s32 localDivisor asm("$4");
     s32 whole;
     s32 fraction;
     s32 minutes;
@@ -25,16 +21,12 @@ void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
     s32 fractionTens;
     s32 remainder;
 
-    savedX = x;
-    savedY = y;
-    localDivisor = divisor;
-    savedColor = color;
     if (value >= 0) {
-        whole = value / localDivisor;
-        remainder = value % localDivisor;
+        whole = value / divisor;
+        remainder = value % divisor;
 
         minutes = whole / 60;
-        fraction = (remainder * 1000) / localDivisor;
+        fraction = (remainder * 1000) / divisor;
         seconds = whole % 60;
         g_TimeTextBuffer[0] = minutes + '0';
 
@@ -57,7 +49,7 @@ void DrawTimeValue(s32 x, s32 y, s32 value, s32 color, s32 divisor) {
         g_TimeTextBuffer[7] = '-';
     }
 
-    DrawText8x8(savedX, savedY, g_TimeTextBuffer, savedColor);
+    DrawText8x8(x, y, g_TimeTextBuffer, color);
 }
 
 void DrawMinuteSecondTime(s32 x, s32 y, s32 ticks, s32 color) {

@@ -38,6 +38,8 @@ void SeedRouteScenery(void) {
     SceneryMotionKeyframe *keyframe;
     s32 keyframeIndex;
     s32 value;
+    s16 *rotationY;
+    s16 *rotationZ;
 
     g_RouteSceneryArmed = 1;
     g_RouteSceneryClock = 1;
@@ -52,8 +54,10 @@ void SeedRouteScenery(void) {
     keyframe = &data->keyframes[keyframeIndex];
 
     g_RouteSceneryRotX = keyframe->rotationX;
-    g_RouteSceneryRotY = RAW(keyframe->rotationY);
-    value = RAW(keyframe->rotationZ);
+    rotationY = &keyframe->rotationY;
+    g_RouteSceneryRotY = *rotationY;
+    rotationZ = &keyframe->rotationZ;
+    value = *rotationZ;
     g_RouteSceneryKeyframe = keyframe;
     g_RouteSceneryRotZ = value;
 }

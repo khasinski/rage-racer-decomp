@@ -1,0 +1,14 @@
+{
+  "src/main/PAL/main/boot/_start.c": {"D_80063160": [172, 16]},
+  "src/main/USA/main/boot/startup_and_bios.c": {"g_BootStackTops": [172, 16]},
+  "src/main/JAP10/main/boot/startup_and_bios.c": {"g_BootStackTops": [172, 16]},
+  "src/main/JAP11/main/boot/startup_and_bios.c": {"g_BootStackTops": [172, 16]},
+  "src/main/PAL/lib/libpress/mdec_runtime.c": {
+    "g_MdecVlcBufferSize": [1152, 4],
+    "D_800648C8": [2036, 36]
+  },
+  "src/main/JAP10/lib/libpress/mdec_unpack_status.c": {
+    "D_80063DB0": [0, 4],
+    "D_80064124": [884, 36]
+  }
+}

@@ -2,16 +2,14 @@
 """Print the progress table and refresh the badge JSON from the objdiff report.
 
 Progress is whether the code this tree produces is the code the game shipped,
-so the numbers come from the same objdiff report decomp.dev ingests: every
+so the numbers come from the same classified report decomp.dev ingests: every
 object is compared, function by function, against an object disassembled from
-the retail executable. `make report` writes it; this only reads it.
+the retail executable. Audited embedded data is moved out of the function
+ledger, with raw objdiff output retained separately. `make report` writes it.
 
-An earlier version of this script counted a function as done when its source
-carried no included assembly and no inline assembly. That measures how much of the
-tree is written in C, which is worth knowing but is not the same claim, and
-stating it as progress overstated the result: a function can be plain C and
-still compile to something the game never contained. The C-versus-assembly
-count is still printed, under its own name.
+Matching and completion are different measures. Source-form categories show
+which units retain assembly, and completion allows inline instructions and
+compiler constraints but excludes included ASM and raw opcode arrays.
 """
 
 from __future__ import annotations
@@ -109,6 +107,8 @@ def table(report: dict) -> list[str]:
         "|---|---:|---:|---:|",
     ]
     for category in report.get("categories", []):
+        if category["id"] not in CATEGORY_NAMES:
+            continue
         measures = category["measures"]
         rows.append(
             "| %s | %d / %d (%.2f%%) | %.2f%% | %.2f%% |"
@@ -140,7 +140,7 @@ def main(argv=None) -> int:
     parser.add_argument("--report", default=None)
     args = parser.parse_args(argv)
 
-    report_path = Path(args.report) if args.report else (
+    report_path = Path(args.report).resolve() if args.report else (
         ROOT / "build" / args.version / "report.json")
     if not report_path.exists():
         raise SystemExit("%s missing - run `make report` first" % report_path)
@@ -165,7 +165,6 @@ def main(argv=None) -> int:
         code_pct,
     )
 
-    plain, units = source_mix(ROOT / "src" / "main")
     lines = [
         "# Decompilation Progress",
         "",
@@ -180,12 +179,20 @@ def main(argv=None) -> int:
         "",
     ]
     lines.extend(table(report))
-    lines += [
-        "",
-        "%d of %d translation units are plain C, the rest holding hand-written "
-        "assembly the original shipped that way. That is a separate measure "
-        "from the table above and does not feed it." % (plain, units),
-    ]
+    lines += ["", "Source form (a separate partition of the same units):", "",
+              "| Source form | Units | Code bytes in these units |",
+              "|---|---:|---:|"]
+    for category in report.get("categories", []):
+        if category["id"].startswith("source_"):
+            measures = category["measures"]
+            lines.append("| %s | %d | %d |" % (category["name"],
+                         count(measures, "total_units"), count(measures, "total_code")))
+    lines += ["", "Completion marks C units without included assembly or raw opcode arrays; inline "
+              "instructions, header intrinsics and compiler constraints are allowed. "
+              "Mixed C/ASM units stay in the retained-assembly category in full. "
+              "These unit-level totals do not measure how many instructions are C. "
+              "Extracted data and BSS are accounted for but do not count as C "
+              "decompilation. BSS matching measures layout only."]
     print("\n".join(lines))
     # Completion is a maintained invariant now, not merely a badge claim.
     # Data can contain unnamed padding/jump-table words that objdiff does not

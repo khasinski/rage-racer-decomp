@@ -131,7 +131,8 @@ class ReportShapeTest(unittest.TestCase):
             self.skipTest("run `make report` first")
         report = json.loads(path.read_text())
         self.assertIn("measures", report)
-        self.assertEqual({c["id"] for c in report.get("categories", [])}, {"game", "psyq"})
+        self.assertTrue({"game", "psyq"}.issubset(
+            {c["id"] for c in report.get("categories", [])}))
         for key in ("matched_functions", "total_functions", "matched_code_percent"):
             self.assertIn(key, report["measures"])
 

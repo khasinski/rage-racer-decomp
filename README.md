@@ -2,7 +2,7 @@
 
 ![functions](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fkhasinski%2Frage-racer-decomp%2Fmain%2Fdocs%2Fbadges%2Ffunctions.json) ![code](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fkhasinski%2Frage-racer-decomp%2Fmain%2Fdocs%2Fbadges%2Fcode.json)
 
-A complete, byte-exact decompilation of the PAL PlayStation release of
+A byte-exact source reconstruction of the PAL PlayStation release of
 Rage Racer, target `SCES-006.50`, plus byte-exact USA and Japanese regional
 builds which reuse the PAL C wherever the compiler output translates directly.
 
@@ -26,29 +26,48 @@ the two Japanese executables have a `0x8A800`-byte payload.
 
 ## Progress
 
-**The decompilation is complete.** The PAL build matches all 1202 discovered
-functions and all 423440 code bytes, and the linked executable is byte-identical
+**Executable matching is complete.** The PAL build matches all 1200 reported
+functions and all 423420 code bytes, and the linked executable is byte-identical
 to retail.
 
 | Scope | Functions | Code bytes | Data bytes |
 |---|---:|---:|---:|
-| Game code | 705 / 705 (100.00%) | 100.00% | 99.88% |
-| PsyQ libraries | 497 / 497 (100.00%) | 100.00% | 0.00% |
-| **Whole executable** | **1202 / 1202 (100.00%)** | **100.00%** | **99.82%** |
+| Game code | 704 / 704 (100.00%) | 100.00% | 99.88% |
+| PsyQ libraries | 496 / 496 (100.00%) | 100.00% | 4.18% |
+| **Whole executable** | **1200 / 1200 (100.00%)** | **100.00%** | **99.82%** |
 
 The table comes from objdiff comparisons between objects built from this tree
 and objects reconstructed directly from the retail executable. The remaining
 data percentage is unpaired padding or unnamed table data, not a difference in
-the linked image. Of the 418 source translation units across the supported
-regions, 282 are plain C; the rest contain hand-written assembly shipped by the
-original game. Regenerate the report, table, and badge JSON with
-`make report progress`.
+the linked image. Initialized reference data is reconstructed from retail bytes;
+BSS has no file contents and its matching score measures layout only.
+The report reclassifies 56 audited data bytes embedded in `.text`; the original
+objdiff output is retained as `build/<version>/report.raw.json`, alongside the
+correction log `report.embedded-data.json`.
+
+Matching does not imply complete C decompilation. The PAL report also exposes
+this separate partition of the same units:
+
+| Source form | Units | Code bytes in these units |
+|---|---:|---:|
+| C units (header intrinsics allowed) | 247 | 214012 |
+| C units with inline ASM or compiler constraints | 96 | 189684 |
+| Units with retained ASM or raw opcodes | 21 | 19724 |
+| Extracted data and BSS layout | 25 | 0 |
+
+`complete` marks C units without included assembly or raw opcode arrays. Inline instructions, header
+intrinsics, register pins and barriers are permitted and disclosed above.
+Mixed C/ASM units are counted entirely under retained assembly, so these are
+unit-level counts, not percentages of instructions decompiled to C. The
+assembly units remain in the matching denominator even when `complete` is false.
+Regenerate with `make report progress`; see [reporting policy](docs/ASM_AND_GTE_POLICY.md).
 
 The regional targets also have complete source coverage. Unchanged translation
 units reuse PAL C; actual regional differences live in separate USA/Japanese C
-files. Original hand-written GTE/COP2, MDEC and startup routines remain clearly
-marked `HANDWRITTEN_ASM` sources rather than being misrepresented as generated
-C.
+files. Reconstructed GTE/COP2, MDEC and startup assembly is included through
+`HANDWRITTEN_ASM`. These wrappers do not count as completed C. Handwritten
+origin is inferred from instruction idioms and calling conventions; the macro
+name itself is not evidence of the original source language.
 
 | Target | Source-covered text | Coverage | Reused PAL C units | Reused PAL text |
 |---|---:|---:|---:|---:|

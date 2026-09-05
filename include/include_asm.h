@@ -3,16 +3,15 @@
 
 #if !defined(M2CTX) && !defined(PERMUTER)
 
-/* A block the original shipped as assembly, sitting inside a unit that is
-   otherwise C: a kernel entry reached by `syscall`, a BIOS call that jumps
+/* A reconstructed assembly block: a kernel entry reached by `syscall`, a BIOS call that jumps
    through a register, a GTE routine that moves coprocessor control registers.
    The assembly lives in a .s beside the source and is pulled in here so that
    it lands at the right offset within the unit.
 
-   A unit that is assembly end to end needs none of this. It is a .s in its own
-   right, declared `hasm` in the split config and assembled directly - see the
-   Makefile. This macro exists only for the mixed case, where the assembly has
-   to be interleaved with compiled C.
+   Used both for mixed C/ASM units and assembly-only wrappers. In either case
+   the report classifies the unit as included assembly, not completed C.
+   The historical macro name does not prove the original source language;
+   see docs/ASM_AND_GTE_POLICY.md for the reporting convention.
 
    The block is wrapped in a throwaway function because the compiler will not
    carry a file-scope `.include` through maspsx untouched. maspsx drops the

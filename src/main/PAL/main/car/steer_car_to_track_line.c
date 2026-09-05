@@ -245,14 +245,18 @@ void UpdateCarLaunch(PlayerCarRuntime *carArg, s32 unused) {
             lo /= specAddress.pointer->gearRatio[0];
             {
                 EngineRpmAddress shiftTarget;
+                s16 *jumpTimer;
+                CarMotionState *motionState;
 
                 asm volatile("" : : : "memory");
                 offset = drive->gear;
                 firstHeading = (u16)drive->engineRpm;
                 offset <<= 2;
                 asm volatile("" : :);
-                RAW(drive->jumpTimer) = 0x14;
-                RAW(drive->motionState) = CAR_MOTION_AIRBORNE;
+                jumpTimer = &drive->jumpTimer;
+                *jumpTimer = 0x14;
+                motionState = &drive->motionState;
+                *motionState = CAR_MOTION_AIRBORNE;
                 g_ShiftTargetRpm = lo;
                 shiftTarget.value = &g_ShiftTargetRpm;
                 drive->shiftRpmDelta = *shiftTarget.rpm - firstHeading;

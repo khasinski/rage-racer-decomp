@@ -25,6 +25,22 @@
     {
       "id": "psyq",
       "name": "PsyQ libraries"
+    },
+    {
+      "id": "source_c",
+      "name": "C units (header intrinsics allowed)"
+    },
+    {
+      "id": "source_inline",
+      "name": "C units with inline ASM or compiler constraints"
+    },
+    {
+      "id": "source_assembly",
+      "name": "Units with retained ASM or raw opcodes"
+    },
+    {
+      "id": "source_data",
+      "name": "Extracted data and BSS layout"
     }
   ],
   "units": [
@@ -33,10 +49,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/header.s.o",
       "base_path": "build/PAL/asm/PAL/main/header.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/header.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -45,10 +62,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/000800_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/000800_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/000800_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -60,7 +78,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/asset/asset_loader.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -69,10 +88,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/001338_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/001338_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/001338_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -84,7 +104,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/asset/asset_requests.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -96,7 +117,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/asset/race_assets.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -105,10 +127,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/0013D0_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/0013D0_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/0013D0_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -120,7 +143,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/asset/fmv_requests.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -132,7 +156,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/title_screen.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -141,10 +166,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/001418_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/001418_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/001418_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -156,7 +182,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/frontend.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -165,10 +192,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/001430_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/001430_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/001430_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -180,7 +208,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/prize_money_screen.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -189,10 +218,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/001668_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/001668_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/001668_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -204,7 +234,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/record_entry.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -216,7 +247,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/option_menu.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -225,10 +257,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/001810_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/001810_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/001810_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -240,7 +273,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/update_player_car.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -249,10 +283,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/001C38_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/001C38_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/001C38_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -264,7 +299,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/car_ai.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -276,7 +312,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/draw_scripted_scenery.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -288,7 +325,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/zone_ambience.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -297,10 +335,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/001CD4_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/001CD4_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/001CD4_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -312,7 +351,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/cd/cd_track_requests.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -324,7 +364,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/cd/cd_audio.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -336,7 +377,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/update_camera.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -348,7 +390,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/matrix_builders.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -360,7 +403,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/text_drawing.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -369,10 +413,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/001FB8_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/001FB8_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/001FB8_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -384,7 +429,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/scripted_draw.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -396,7 +442,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/car_spec_panel.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -405,10 +452,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/002098_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/002098_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/002098_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -420,7 +468,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_ranking_table.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -429,10 +478,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/0021A0_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/0021A0_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/0021A0_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -444,7 +494,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_car_name_plate.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -453,10 +504,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/002248_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/002248_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/002248_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -468,7 +520,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/car_model_slots.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -477,10 +530,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/0022B4_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/0022B4_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/0022B4_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -492,7 +546,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/course_select.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -501,10 +556,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/0023A0_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/0023A0_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/0023A0_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -516,7 +572,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/car_select.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -525,10 +582,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/0023D4_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/0023D4_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/0023D4_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -540,7 +598,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/shop_screens.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -549,10 +608,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/00242C_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/00242C_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/00242C_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -564,7 +624,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/memory_card_runtime.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -573,10 +634,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/002FCC_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/002FCC_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/002FCC_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -588,7 +650,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/update_memory_card_menu.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -597,10 +660,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/0039E4_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/0039E4_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/0039E4_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -612,7 +676,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/sprintf.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -621,10 +686,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/003AC0_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/003AC0_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/003AC0_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -636,7 +702,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/interrupt_status.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -645,10 +712,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/00409C_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/00409C_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/00409C_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -660,7 +728,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqDispatchControlChange.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -672,7 +741,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqApplyNrpn.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -684,7 +754,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSetTickMode.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -693,10 +764,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/0046C0_main.rodata.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/0046C0_main.rodata.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/0046C0_main.rodata.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -708,7 +780,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/SpuSetCommonAttr.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -720,7 +793,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/pad/init_pad.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -732,7 +806,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/pad/controller_setup_scene.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -744,7 +819,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/pad/pad_config_screen.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -756,7 +832,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/pad/begin_controller_config.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -768,7 +845,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/controller_config.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -780,7 +858,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/negcon_calibration.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -792,7 +871,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/boot/init_subsystems.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -804,7 +884,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/boot/main_loop.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -816,7 +897,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/printf.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -828,7 +910,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/text.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -840,7 +923,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/draw_packet_queue.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -852,7 +936,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/asset/model_banks.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -864,7 +949,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/asset/car_assets.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -876,7 +962,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/asset/menu_car_assets.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -888,7 +975,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/asset/install_course_assets.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -900,7 +988,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/track_textures.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -912,7 +1001,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/asset/image_upload.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -924,7 +1014,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/rot_matrix.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -936,7 +1027,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/rear_view_mirror.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -948,7 +1040,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/display_setup.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -960,7 +1053,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/round_screen.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -972,7 +1066,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/load_track_texture_page_range.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -984,7 +1079,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/team_logo.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -996,7 +1092,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/team_name_texture.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1008,7 +1105,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/paint_color.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1020,7 +1118,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/draw_player_car_model.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1032,7 +1131,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/fmv/fmv_scene.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1044,7 +1144,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/fmv/start_fmv_playback.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1056,7 +1157,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/fmv/fmv_decode.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1068,7 +1170,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/fmv/setup_fmv_buffers.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1080,7 +1183,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/fmv/open_fmv_stream.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1092,7 +1196,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/fmv/stream_playback.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1104,7 +1209,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/replay_recording.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1116,7 +1222,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/replay.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1128,7 +1235,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/result_screens.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1140,7 +1248,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/class_progress.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1152,7 +1261,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/apply_audio_settings.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1164,7 +1274,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/save_defaults.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1176,7 +1287,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/class_grade.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1188,7 +1300,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/race_end_screens.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1200,7 +1313,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/records.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1212,7 +1326,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/update_ending_still.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1224,7 +1339,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_ending_still.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1236,7 +1352,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/boot/boot_scene.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1248,7 +1365,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/boot/boot_logo_update.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1260,7 +1378,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/boot/boot_scene_tail.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1272,7 +1391,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/menu_hints.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1284,7 +1404,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/option_menu_fade.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1296,7 +1417,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/option_screens.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1308,7 +1430,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/screen_adjust_update.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1320,7 +1443,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/option_screens_tail.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1332,7 +1456,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/bgm_select.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1344,7 +1469,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/exit_bgm_select.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1356,7 +1482,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/attract_demo.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1368,7 +1495,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/prologue.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1380,7 +1508,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/prologue_step.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1392,7 +1521,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/read_callbacks.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -1404,7 +1534,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/read.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -1416,7 +1547,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/draw_sprite_string.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1428,7 +1560,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/draw_shadowed_tile.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1440,7 +1573,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/draw_memory_card_screen.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1452,7 +1586,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/draw_memory_card_message.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1461,10 +1596,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/main/render/terrain_submission.c.o",
       "base_path": "build/PAL/src/main/PAL/main/render/terrain_submission.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/main/render/terrain_submission.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_assembly"
         ]
       }
     },
@@ -1476,7 +1612,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/install_track_points.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1488,7 +1625,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/angle_math.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1500,7 +1638,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/update_car_drivetrain.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1512,7 +1651,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/lap_progress.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1524,7 +1664,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/car_orientation.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1536,7 +1677,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/draw_player_tachometer.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1548,7 +1690,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/advance_car_position.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1560,7 +1703,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/update_car_driving.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1572,7 +1716,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/blend_angle.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1584,7 +1729,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/interpolate_track_angle.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1596,7 +1742,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/reverse_track_angle.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1608,7 +1755,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/interpolate_track_point.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1620,7 +1768,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/smooth_track_angle.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1632,7 +1781,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/steer_car_to_track_line.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1644,7 +1794,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/car_track_state.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1656,7 +1807,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/track_contact.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1668,7 +1820,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/tachometer_needle.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1680,7 +1833,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/build_race_hud_prims.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1692,7 +1846,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/race_hud.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1704,7 +1859,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/draw_wrong_way_warning.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1716,7 +1872,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/draw_speed_digits.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1728,7 +1885,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/race_hud_time.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1740,7 +1898,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/race_hud_text.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1752,7 +1911,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/race_option_menu.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1764,7 +1924,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/asset/race_data_installation.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1776,7 +1937,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/sound_initialization.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1788,7 +1950,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/time_conversion.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1800,7 +1963,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/replay_cars.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1812,7 +1976,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/draw_split_times.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1824,7 +1989,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/update_lap_and_finish.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1836,7 +2002,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/race_scene.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1848,7 +2015,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/wheel_mode.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1860,7 +2028,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/race_runtime.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1872,7 +2041,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/car_draw_and_knockback.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1884,7 +2054,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/clamp_car_lateral_offset.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1896,7 +2067,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/rival_ai.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1908,7 +2080,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/update_race_position.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1920,7 +2093,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/steer_car_along_route.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1932,7 +2106,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/race_car_update.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1944,7 +2119,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/car/race_camera_setup.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1956,7 +2132,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/update_finish_camera.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -1968,7 +2145,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/seed_finish_camera_alt.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1980,7 +2158,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/dynamic_track_views.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -1992,7 +2171,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/draw_spinning_scenery.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2004,7 +2184,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/scenery.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2016,7 +2197,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/draw_flyby_scenery.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2028,7 +2210,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/update_route_scenery.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2040,7 +2223,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/draw_route_scenery.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2052,7 +2236,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/update_shuttle_scenery.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2064,7 +2249,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/draw_path_scenery.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2076,7 +2262,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/race/course_event_runtime.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2088,7 +2275,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/visible_cells.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2100,7 +2288,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/draw_terrain_cells.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2112,7 +2301,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/cd/cd_audio_control.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2124,7 +2314,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/cd/cd_volume_fade.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2136,7 +2327,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/cd/cd_volume.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2148,7 +2340,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/cd/set_cd_mix_preset.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2160,7 +2353,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/find_nearest_track_camera.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2172,7 +2366,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/env_palette.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2184,7 +2379,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/load_environment_cue.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2196,7 +2392,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/track/environment_script.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2208,7 +2405,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/update_scripted_camera.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2220,7 +2418,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/draw_prims.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2232,7 +2431,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_team_logo_canvas.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2244,7 +2444,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/menu_visual_effects.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2256,7 +2457,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_logo_sample_panel.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2268,7 +2470,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_paint_color_palette.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2280,7 +2483,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_car_shop_price_panel.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2292,7 +2496,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_engineer_shop_price_panel.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2304,7 +2509,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_class_change_curtain.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2316,7 +2522,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/menu_mode.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2328,7 +2535,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/swap_car_model_slot.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2340,7 +2548,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/draw_car_engine_spec.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2352,7 +2561,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/design_mode.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2364,7 +2574,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/logo_screens.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2376,7 +2587,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/design_screens.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2388,7 +2600,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/menu/update_menu_mode.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2400,7 +2613,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/audio_runtime_control.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2412,7 +2626,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/stop_sound_slot_voice.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2424,7 +2639,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/sound_runtime.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2436,7 +2652,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/audio_slot_loading.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2448,7 +2665,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/audio_settings.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2460,7 +2678,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/effect_voice_runtime.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2472,7 +2691,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/sound_cues.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2484,7 +2704,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/loaded_audio_voices.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2496,7 +2717,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/forced_voice_playback.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2508,7 +2730,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/vab_sequence_slots.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2520,7 +2743,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/set_vab_slot_voice_enabled.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2532,7 +2756,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/sequence_volume.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2544,7 +2769,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/sequence_playback.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2556,7 +2782,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/audio/apply_current_sequence_audio.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2568,7 +2795,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/memory_card_event_session.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2580,7 +2808,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/card_status.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2592,7 +2821,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/memory_card_event_polling.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2604,7 +2834,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/save_header.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2616,7 +2847,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/store_save_state.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2628,7 +2860,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/load_save_state.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -2640,7 +2873,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/memory_card_io.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2652,7 +2886,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/memory_card_status.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2664,7 +2899,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/memory_card_menu.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2676,7 +2912,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/save/enter_memory_card_menu_from_load.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2688,7 +2925,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/boot/__main.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2697,10 +2935,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/main/boot/_start.c.o",
       "base_path": "build/PAL/src/main/PAL/main/boot/_start.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/main/boot/_start.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_assembly"
         ]
       }
     },
@@ -2709,10 +2948,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/exit_critical_section.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libapi/exit_critical_section.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libapi/exit_critical_section.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -2721,10 +2961,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/bios_file_stubs.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libapi/bios_file_stubs.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libapi/bios_file_stubs.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -2736,7 +2977,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/random/random15.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2748,7 +2990,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/random/seed_random.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_c"
         ]
       }
     },
@@ -2760,7 +3003,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/memchr.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2772,7 +3016,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/memmove.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2784,7 +3029,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/strlen.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2796,7 +3042,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/puts.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2808,7 +3055,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/putchar.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2820,7 +3068,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/toupper.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2832,7 +3081,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/tolower.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2841,10 +3091,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/bios_call_stubs.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libapi/bios_call_stubs.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libapi/bios_call_stubs.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -2856,7 +3107,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcard/_card_clear.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2865,10 +3117,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libcard/_card_write.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libcard/_card_write.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libcard/_card_write.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -2877,10 +3130,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/new_card_stub.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libapi/new_card_stub.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libapi/new_card_stub.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -2892,7 +3146,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libpress/mdec_api.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2904,7 +3159,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libpress/mdec_callbacks.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2913,10 +3169,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libpress/mdec_runtime.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libpress/mdec_runtime.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libpress/mdec_runtime.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -2928,7 +3185,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/texture_primitives.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2940,7 +3198,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/primitive_debug.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2952,7 +3211,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/primitive_packets.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2964,7 +3224,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/draw_packets.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2976,7 +3237,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/graph_control.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -2988,7 +3250,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/image_transfer.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3000,7 +3263,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/ordering_tables.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3012,7 +3276,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/draw_environment_state.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3024,7 +3289,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/display_environment.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3036,7 +3302,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/draw_environment.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3048,7 +3315,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/gpu_internal.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3060,7 +3328,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/image_commands.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3072,7 +3341,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/gpu_commands.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3084,7 +3354,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/command_queue.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3096,7 +3367,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/command_queue_execution.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3108,7 +3380,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/gpu_reset.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3120,7 +3393,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgpu/gpu_sync.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3129,10 +3403,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libgpu/gpu_timeout.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libgpu/gpu_timeout.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libgpu/gpu_timeout.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3144,7 +3419,8 @@
         "complete": true,
         "source_path": "src/main/PAL/main/render/matrix_apply.c",
         "progress_categories": [
-          "game"
+          "game",
+          "source_inline"
         ]
       }
     },
@@ -3156,7 +3432,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgte/geo_00.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3165,10 +3442,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/fog_geometry.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libgte/fog_geometry.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libgte/fog_geometry.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3177,10 +3455,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/matrix_stack.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libgte/matrix_stack.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libgte/matrix_stack.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3189,10 +3468,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/multiply_matrix.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libgte/multiply_matrix.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libgte/multiply_matrix.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3201,10 +3481,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/multiply_matrix_2.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libgte/multiply_matrix_2.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libgte/multiply_matrix_2.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3216,7 +3497,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgte/apply_matrix.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3225,10 +3507,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/scale_matrix.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libgte/scale_matrix.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libgte/scale_matrix.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3240,7 +3523,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgte/set_matrices.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3252,7 +3536,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgte/register_access.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3264,7 +3549,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgte/geometry_math.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3276,7 +3562,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgte/leading_zero_count.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3288,7 +3575,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libgte/rotation_matrix.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3297,10 +3585,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/rot_matrix_asm.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libgte/rot_matrix_asm.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libgte/rot_matrix_asm.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3309,10 +3598,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libgte/exception_patch.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libgte/exception_patch.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libgte/exception_patch.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3321,10 +3611,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libpress/stream_setup.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libpress/stream_setup.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libpress/stream_setup.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3336,7 +3627,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/initialization_and_toc.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3345,10 +3637,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/deliver_event_stub.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libapi/deliver_event_stub.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libapi/deliver_event_stub.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3360,7 +3653,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/drive_state.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3372,7 +3666,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/callbacks_and_sync.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3384,7 +3679,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/command_control.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3396,7 +3692,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/sector_data.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3408,7 +3705,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/command_sync.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3420,7 +3718,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/command_ready.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3432,7 +3731,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/command_write.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3444,7 +3744,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/drive_initialization.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3456,7 +3757,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/data_sync.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3468,7 +3770,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/sector_interrupts.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3480,7 +3783,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libds/search_file.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3492,7 +3796,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/iso_name_compare.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3504,7 +3809,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/iso_media.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3516,7 +3822,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/iso_cache_file.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3528,7 +3835,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/iso_read.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3540,7 +3848,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/memcpy.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3552,7 +3861,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/strcmp.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3564,7 +3874,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libc/strncmp.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3576,7 +3887,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libpress/stream_read.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3588,7 +3900,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libpress/stream_ring.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3600,7 +3913,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libpress/StCdInterrupt.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3612,7 +3926,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libapi/kernel_word_copy.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3624,7 +3939,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libcd/dma_start.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3636,7 +3952,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libetc/vertical_sync.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3645,10 +3962,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libetc/vertical_sync_asm.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libetc/vertical_sync_asm.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libetc/vertical_sync_asm.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3660,7 +3978,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libetc/interrupt_wrappers.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3672,7 +3991,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libapi/interrupt_initialization.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3684,7 +4004,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libapi/interrupt_dispatch.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3696,7 +4017,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libapi/interrupt_callbacks.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3708,7 +4030,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libapi/stop_interrupts.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3717,10 +4040,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/interrupt_runtime.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libapi/interrupt_runtime.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libapi/interrupt_runtime.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -3732,7 +4056,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/master_volume.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3744,7 +4069,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqParseHeader.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3756,7 +4082,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqOpen.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3768,7 +4095,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqAdvanceChannelDelta.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3780,7 +4108,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqDispatchMidiEvent.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3792,7 +4121,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqSetChannelPitchBend.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3804,7 +4134,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/sequence_tone_modulation.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3816,7 +4147,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/seq_channel_params.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3828,7 +4160,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libapi/controller_data.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3840,7 +4173,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/sequence_program_change.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3852,7 +4186,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqCalledTbyT.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3864,7 +4199,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/_SsSndDecrescendo.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3876,7 +4212,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqPause.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3888,7 +4225,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqAdvanceChannelTick.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3900,7 +4238,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqResume.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3912,7 +4251,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqClose.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3924,7 +4264,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSeqCloseWrapper.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3936,7 +4277,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/_SsInitTables.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3948,7 +4290,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/ssinit.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3960,7 +4303,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsQuit.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3972,7 +4316,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsStartSoundTick.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -3984,7 +4329,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsStartSoundTickMode1.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -3996,7 +4342,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsStartSoundTickMode0.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4008,7 +4355,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSoundTickCallback.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4020,7 +4368,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSoundTickVSyncCallback.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4032,7 +4381,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libapi/root_counters.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4044,7 +4394,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsStopSoundTick.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4056,7 +4407,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsSetTableSize.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4068,7 +4420,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/sequence_playback_control.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4080,7 +4433,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/_SsSndTempo.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4092,7 +4446,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/voice_configuration.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4104,7 +4459,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/vab_opening.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4116,7 +4472,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/vab_transfer.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4128,7 +4485,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/damper.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4140,7 +4498,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/program_attributes.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4152,7 +4511,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/reverb_control.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4164,7 +4524,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsUtSetVagAtr.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4176,7 +4537,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/voice_allocation.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4188,7 +4550,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SpuVmNoiseKeyOn.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4200,7 +4563,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SpuVmKeyOnCore.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4212,7 +4576,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/voice_pitch.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4224,7 +4589,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SpuVmPitchBendVoice.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4236,7 +4602,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/automatic_voice_volume.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4248,7 +4615,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SpuVmInit.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4260,7 +4628,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/voice_key_on_with_volume.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4272,7 +4641,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/spu_vm_pitchbend.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4284,7 +4654,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsUtFlush.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4296,7 +4667,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SpuVmSeKeyOn.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4308,7 +4680,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SpuVmSeKeyOff.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4320,7 +4693,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/voice_key_on_internal.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4332,7 +4706,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/sequence_voice_volume.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4344,7 +4719,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SpuVmSeqKeyOff.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4356,7 +4732,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/program_volume_pan.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4368,7 +4745,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/voice_key_on.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4380,7 +4758,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsUtKeyOff.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4392,7 +4771,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsUtKeyOnV.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4404,7 +4784,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/SsUtKeyOffV.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4416,7 +4797,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/voice_parameter_updates.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4428,7 +4810,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libsnd/_SsVmInit.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4440,7 +4823,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/initialization.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4452,7 +4836,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/_spu_resetTransferControl.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4464,7 +4849,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/_spu_init.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4476,7 +4862,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/_spu_writeByIO.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4488,7 +4875,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/_spu_transferCallback.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4500,7 +4888,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/_spu_startDmaTransfer.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4512,7 +4901,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/_spu_t.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4524,7 +4914,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/_spu_Fw.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4536,7 +4927,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/_SpuDataCallback.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4548,7 +4940,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/SpuQuit.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4560,7 +4953,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/allocator.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4572,7 +4966,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/SpuSetNoiseVoice.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4584,7 +4979,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/_SpuSetAnyVoice.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_inline"
         ]
       }
     },
@@ -4596,7 +4992,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/SpuSetReverb.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4608,7 +5005,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/_SpuIsInAllocateArea.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4620,7 +5018,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/reverb_parameters.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4629,10 +5028,11 @@
       "target_path": "expected/PAL/build/src/main/PAL/lib/libapi/wait_event.c.o",
       "base_path": "build/PAL/src/main/PAL/lib/libapi/wait_event.c.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "src/main/PAL/lib/libapi/wait_event.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_assembly"
         ]
       }
     },
@@ -4644,7 +5044,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/SpuTransferStatus.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4656,7 +5057,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/SpuGetKeyStatus.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4668,7 +5070,8 @@
         "complete": true,
         "source_path": "src/main/PAL/lib/libspu/transfer_control.c",
         "progress_categories": [
-          "psyq"
+          "psyq",
+          "source_c"
         ]
       }
     },
@@ -4677,10 +5080,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/6BE64.data.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/6BE64.data.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/6BE64.data.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     },
@@ -4689,10 +5093,11 @@
       "target_path": "expected/PAL/build/asm/PAL/main/data/main/bss.bss.s.o",
       "base_path": "build/PAL/asm/PAL/main/data/main/bss.bss.s.o",
       "metadata": {
-        "complete": true,
+        "complete": false,
         "source_path": "asm/PAL/main/data/main/bss.bss.s",
         "progress_categories": [
-          "game"
+          "game",
+          "source_data"
         ]
       }
     }

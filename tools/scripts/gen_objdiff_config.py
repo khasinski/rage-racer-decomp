@@ -14,9 +14,9 @@ blobs, and a stray .c that no segment references would be counted as unmatched
 work that does not exist.
 
 Every path under expected/<version>/build mirrors build/<version>, so a unit
-only needs its name once. Units are marked complete because this tree links to
-the original SHA-1; `make check` is what makes that claim, and it runs before
-this does.
+only needs its name once. Completion describes C source recovery, independently
+of matching: included assembly is retained in the report but is not marked as
+decompiled C. Source-form categories expose inline assembly and data as well.
 """
 
 import argparse
@@ -46,7 +46,48 @@ def linked_objects(map_text, version):
 CATEGORIES = [
     {'id': 'game', 'name': 'Game code'},
     {'id': 'psyq', 'name': 'PsyQ libraries'},
+    {'id': 'source_c', 'name': 'C units (header intrinsics allowed)'},
+    {'id': 'source_inline', 'name': 'C units with inline ASM or compiler constraints'},
+    {'id': 'source_assembly', 'name': 'Units with retained ASM or raw opcodes'},
+    {'id': 'source_data', 'name': 'Extracted data and BSS layout'},
 ]
+
+
+def source_form(relative):
+    """Classify source syntax, not inferred original authorship or byte match.
+
+    A mixed unit stays in the assembly category in its entirety. Consequently
+    these per-unit measures are not estimates of the number of C instructions.
+    Header intrinsics are allowed in the C categories; pins and barriers do not
+    imply that the original author wrote assembly.
+    """
+    path = ROOT / relative.removesuffix('.o')
+    if relative.startswith('asm/'):
+        return 'source_data'
+    if path.suffix == '.s':
+        return 'source_assembly'
+    # Preserve string contents while removing comments, so a mention of
+    # HANDWRITTEN_ASM in a historical note cannot change the classification.
+    text = path.read_text()
+    text = re.sub(r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\'|/\*.*?\*/|//[^\n]*',
+                  lambda m: ' ' if m[0].startswith(('/*', '//')) else m[0],
+                  text, flags=re.DOTALL)
+    if re.search(r'\b(?:HANDWRITTEN_ASM|INCLUDE_ASM)\s*\(', text):
+        return 'source_assembly'
+    literals = re.findall(r'"(?:\\.|[^"\\])*"', text)
+    if any(re.search(r'\.(?:include|incbin|word|byte)\b', literal) for literal in literals):
+        return 'source_assembly'
+    # BIOS trampolines are also stored as C arrays of raw instruction words.
+    # Only provably zero padding is exempt from retained-assembly status.
+    for initializer in re.findall(
+            r'section\s*\(\s*"\.text"\s*\)\s*\)\s*\)\s*=\s*([^;]+);', text):
+        remainder = re.sub(r'\b(?:0[xX]0+|0+)[uUlL]*\b', '',
+                           re.sub(r'[{},]', ' ', initializer)).strip()
+        if remainder:
+            return 'source_assembly'
+    if re.search(r'\b(?:asm|__asm__)\s*(?:volatile\s*)?\(', text):
+        return 'source_inline'
+    return 'source_c'
 
 
 def category(relative):
@@ -71,14 +112,15 @@ def unit_name(relative):
 def config(objects, version, expected_dir):
     units = []
     for relative in objects:
+        form = source_form(relative)
         units.append({
             'name': unit_name(relative),
             'target_path': '%s/%s/build/%s' % (expected_dir, version, relative),
             'base_path': 'build/%s/%s' % (version, relative),
             'metadata': {
-                'complete': True,
+                'complete': form in ('source_c', 'source_inline'),
                 'source_path': relative.removesuffix('.o'),
-                'progress_categories': [category(relative)],
+                'progress_categories': [category(relative), form],
             },
         })
     return {
@@ -101,11 +143,6 @@ def main(argv=None):
     parser.add_argument('--basename', default='main')
     parser.add_argument('--expected', default='expected')
     parser.add_argument('--output', default='objdiff.json')
-    # Nothing needs this today. It stays because objdiff refuses to score a
-    # whole unit when it cannot pair one symbol, and the failure names no unit,
-    # so having somewhere to put one beats rediscovering that under pressure.
-    parser.add_argument('--skip', action='append', default=[],
-                        help='unit objdiff cannot score; repeatable')
     args = parser.parse_args(argv)
 
     map_path = ROOT / 'build' / args.version / ('%s.map' % args.basename)
@@ -113,20 +150,13 @@ def main(argv=None):
         raise SystemExit('%s missing - run `make build check` first' % map_path)
 
     objects = linked_objects(map_path.read_text(), args.version)
-    unscorable = set(args.skip)
-    kept = [o for o in objects if unit_name(o) not in unscorable]
-    skipped = [unit_name(o) for o in objects if unit_name(o) in unscorable]
-
-    written = config(kept, args.version, args.expected)
+    written = config(objects, args.version, args.expected)
     (ROOT / args.output).write_text(json.dumps(written, indent=2) + '\n')
     counts = {}
-    for relative in kept:
+    for relative in objects:
         counts[category(relative)] = counts.get(category(relative), 0) + 1
-    print('%s: %d units (%s)' % (args.output, len(kept),
+    print('%s: %d units (%s)' % (args.output, len(objects),
                                  ', '.join('%s %d' % kv for kv in sorted(counts.items()))))
-    # A report that quietly drops units reads as though it covered everything.
-    if skipped:
-        print('  skipped, objdiff cannot pair their symbols: %s' % ', '.join(skipped))
     return 0
 
 

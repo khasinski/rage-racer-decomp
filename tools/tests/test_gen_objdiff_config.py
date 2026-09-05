@@ -5,6 +5,7 @@ from tools.scripts.gen_objdiff_config import (
     category,
     config,
     linked_objects,
+    source_form,
     unit_name,
 )
 
@@ -65,20 +66,45 @@ class ConfigTest(unittest.TestCase):
                          "expected/PAL/build/src/main/PAL/main/pad/init_pad.c.o")
 
     def test_every_unit_carries_its_category(self):
-        written = config(["src/main/PAL/lib/libgte/lzc.c.o"], "PAL", "expected")
-        self.assertEqual(written["units"][0]["metadata"]["progress_categories"], ["psyq"])
+        written = config(["src/main/PAL/lib/libgte/leading_zero_count.c.o"], "PAL", "expected")
+        self.assertEqual(written["units"][0]["metadata"]["progress_categories"][0], "psyq")
 
     def test_nothing_is_excluded_from_the_report(self):
         # decomp.dev requires every function in the binary to be accounted for.
-        objects = ["src/main/PAL/main/pad/init_pad.c.o", "src/main/PAL/lib/libgte/lzc.c.o"]
+        objects = ["src/main/PAL/main/pad/init_pad.c.o", "src/main/PAL/lib/libgte/leading_zero_count.c.o"]
         written = config(objects, "PAL", "expected")
         self.assertEqual(len(written["units"]), len(objects))
 
-    def test_units_are_marked_complete(self):
-        # The tree links to the original SHA-1, and `make check` proves it
-        # before this ever runs.
+    def test_c_with_compiler_constraints_can_be_complete(self):
         written = config(["src/main/PAL/main/pad/init_pad.c.o"], "PAL", "expected")
         self.assertTrue(written["units"][0]["metadata"]["complete"])
+
+    def test_wrapping_assembly_does_not_mark_it_as_decompiled_c(self):
+        written = config(["src/main/PAL/main/render/terrain_submission.c.o"],
+                         "PAL", "expected")
+        self.assertFalse(written["units"][0]["metadata"]["complete"])
+        self.assertIn('source_assembly',
+                      written["units"][0]["metadata"]["progress_categories"])
+
+    def test_data_is_accounted_for_without_becoming_completed_c(self):
+        written = config(["asm/PAL/main/header.s.o"], "PAL", "expected")
+        self.assertFalse(written["units"][0]["metadata"]["complete"])
+        self.assertIn('source_data',
+                      written["units"][0]["metadata"]["progress_categories"])
+
+    def test_historical_assembly_comment_does_not_hide_c(self):
+        self.assertEqual(source_form('src/main/PAL/main/render/matrix_apply.c.o'),
+                         'source_inline')
+
+    def test_c_arrays_of_opcodes_are_retained_assembly(self):
+        self.assertEqual(source_form('src/main/PAL/lib/libapi/new_card_stub.c.o'),
+                         'source_assembly')
+        self.assertEqual(source_form('src/main/PAL/lib/libgpu/gpu_timeout.c.o'),
+                         'source_assembly')
+
+    def test_zero_text_padding_does_not_make_intrinsics_retained_assembly(self):
+        self.assertEqual(source_form('src/main/PAL/lib/libgte/leading_zero_count.c.o'),
+                         'source_c')
 
     def test_objdiff_is_told_not_to_build_the_target(self):
         # gen_expected.py owns that side; letting objdiff run make over it

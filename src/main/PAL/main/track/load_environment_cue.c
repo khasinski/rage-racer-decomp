@@ -9,6 +9,8 @@ void LoadEnvironmentCue(GameEnvironmentCue *cue) {
     s32 signedMode;
     s32 field28;
     u32 flag;
+    u16 *modePtr;
+    u16 *spareTarget;
 
     g_EnvironmentColors.fields.fogEnabled = 1;
 
@@ -34,16 +36,18 @@ void LoadEnvironmentCue(GameEnvironmentCue *cue) {
     field28 = cue->duration;
     mode = g_EnvironmentMode;
     g_EnvLerpDuration = field28;
-    newMode = RAW(cue->mode);
+    modePtr = &cue->mode;
+    newMode = *modePtr;
     g_EnvironmentMode = newMode;
-    flag = RAW(cue->spareTarget);
+    spareTarget = &cue->spareTarget;
+    flag = *spareTarget;
     g_EnvironmentModePrev = mode;
     g_EnvSpareLerp = ((flag >> 15) ^ 1);
     compareMode = 4;
 
     if (g_EnvSpareLerp != 0) {
         g_EnvSpareFrom = g_EnvironmentColors.fields.slots[0].cur.bytes.unused;
-        g_EnvSpareTo = RAW(cue->spareTarget);
+        g_EnvSpareTo = *spareTarget;
     }
 
     signedMode = (s16)newMode;

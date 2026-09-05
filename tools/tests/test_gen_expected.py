@@ -1,6 +1,12 @@
 import unittest
+import io
+import shutil
+import subprocess
+import tempfile
+from pathlib import Path
 
 import yaml
+from elftools.elf.elffile import ELFFile
 
 from tools.scripts.gen_expected import (
     alias_renames,
@@ -12,6 +18,8 @@ from tools.scripts.gen_expected import (
     merged_symbol_file,
     parse_map_placement,
     restore_text_symbol_boundaries,
+    restore_word_relocations,
+    retail_data_source,
     retype_data_in_text,
     section_symbols,
     splat_config,
@@ -26,6 +34,45 @@ MAP = """
  .debug_line    0x00000000      0x117 build/PAL/src/main/PAL/main/pad/init_pad.c.o
 LOAD build/PAL/src/main/PAL/main/pad/init_pad.c.o
 """
+
+
+class RetailDataSourceTest(unittest.TestCase):
+    def assemble(self, source):
+        assembler = (shutil.which('mipsel-none-elf-as')
+                     or shutil.which('mipsel-linux-gnu-as'))
+        if assembler is None:
+            self.skipTest('MIPS assembler required')
+        with tempfile.TemporaryDirectory() as temp:
+            obj = Path(temp) / 'test.o'
+            subprocess.run([assembler, '-EL', '-no-pad-sections', '-o', str(obj), '-'],
+                           input=source, text=True, capture_output=True, check=True)
+            return ELFFile(io.BytesIO(obj.read_bytes()))
+
+    def test_base_payload_and_relocation_addends_cannot_contaminate_target(self):
+        retail = bytes(0x800) + bytes.fromhex('7856341224000280')
+        placement = {'.data': (0x80010000, 8)}
+        targets = []
+        for poison, addend in [('0xDEADBEEF', '0x88'), ('0xBADCAFE', '0x99')]:
+            base = self.assemble('.data\n.global Data\n.type Data,@object\n'
+                                 'Data:\n.word %s\n.word Target + %s\n.size Data,8\n'
+                                 % (poison, addend))
+            source = retail_data_source(base, placement, retail,
+                                        {'Target': 0x80020000})
+            target = self.assemble(source)
+            targets.append(target.get_section_by_name('.data').data())
+            reloc = target.get_section_by_name('.rel.data').get_relocation(0)
+            self.assertEqual(reloc['r_offset'], 4)
+            self.assertEqual(reloc['r_info_type'], 2)
+        self.assertEqual(targets, [bytes.fromhex('7856341224000000')] * 2)
+
+    def test_bss_is_layout_only_and_code_is_rejected(self):
+        base = self.assemble('.bss\n.global Buffer\nBuffer:\n.space 128\n')
+        source = retail_data_source(base, {'.bss': (0x80100000, 128)}, b'', {})
+        target = self.assemble(source)
+        self.assertEqual(target.get_section_by_name('.bss')['sh_size'], 128)
+        code = self.assemble('.text\nnop\n')
+        with self.assertRaisesRegex(ValueError, 'executable .text'):
+            retail_data_source(code, {'.text': (0x80010000, 4)}, bytes(0x804), {})
 
 
 class ParseMapPlacementTest(unittest.TestCase):
@@ -182,6 +229,27 @@ class RestoreTextSymbolBoundariesTest(unittest.TestCase):
         symbols = [("PrivateEntry", 0x80000104, "STT_FUNC", 0, ".text")]
         out = restore_text_symbol_boundaries(self.TEXT, symbols)
         self.assertNotIn("PrivateEntry", out)
+
+    def test_literal_instruction_relocation_uses_retail_addend(self):
+        text = '    /* 545B8 80063DB8 00000000 */ .word 0x25083DB4\n'
+        out = restore_word_relocations(text, {0x80063DB8: (6, 'Buffer')},
+                                       {'Buffer': 0x80063DB0})
+        self.assertIn('.reloc ., R_MIPS_LO16, Buffer', out)
+        self.assertIn('.word 0x25080004', out)
+
+    def test_mnemonic_relocations_remain_owned_by_disassembler(self):
+        text = '    /* 545B8 80063DB8 00000000 */ addiu $t0,$t0,%lo(Buffer)\n'
+        self.assertEqual(restore_word_relocations(
+            text, {0x80063DB8: (6, 'Buffer')}, {'Buffer': 0x80063DB0}), text)
+
+    def test_literal_hi_lo_pair_reconstructs_signed_low_carry(self):
+        text = ('/* 100 80000100 00000000 */ .word 0x3C088007\n'
+                '/* 104 80000104 00000000 */ .word 0x25089004\n')
+        out = restore_word_relocations(text,
+            {0x80000100: (5, 'Buffer'), 0x80000104: (6, 'Buffer')},
+            {'Buffer': 0x80059000})
+        self.assertIn('.word 0x3C080001', out)
+        self.assertIn('.word 0x25080004', out)
 
 
 class RetypeDataInTextTest(unittest.TestCase):

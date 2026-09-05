@@ -50,7 +50,7 @@ segments:
 
   # The v1.0 mastering left non-ASCII build data in the otherwise reserved
   # header tail. Splat's PS-X header decoder expects that range to be text, so
-  # preserve it as raw assembly instead of discarding or sanitising it.
+  # preserve it as data. This reserved range is not executable code.
   - name: header_tail
     type: code
     start: 0x7C
@@ -58,7 +58,7 @@ segments:
     align: 4
     subalign: 4
     subsegments:
-      - [0x7C, asm, header_tail]
+      - [0x7C, data, header_tail]
       - [0x800]
 
   - name: main

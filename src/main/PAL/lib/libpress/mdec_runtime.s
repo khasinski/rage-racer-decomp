@@ -265,8 +265,7 @@ glabel MdecUnpackStatus
 /* 800648C0 03E00008 */  jr $ra
 /* 800648C4 20020001 */  addi $v0, $zero, 0x1
 endlabel MdecUnpackStatus
-.globl D_800648C8
-D_800648C8:
+dlabel D_800648C8
 /* 800648C8 00000000 */  nop
 /* 800648CC 00000000 */  nop
 /* 800648D0 00000000 */  nop
@@ -276,3 +275,4 @@ D_800648C8:
 /* 800648E0 00000000 */  nop
 /* 800648E4 00000000 */  nop
 /* 800648E8 00000000 */  nop
+enddlabel D_800648C8

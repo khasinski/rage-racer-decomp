@@ -35,6 +35,8 @@ void UpdateRouteScenery(void) {
     counter = counter + 1;
     {
         g_RouteSceneryFrame = counter;
+        /* A plain duration pointer reverses the operands of the address addu
+         * under GCC 2.6.3. Keep this last RAW access for byte matching. */
         if (RAW(kp[i].duration) == counter) {
             c = i + 1;
             g_RouteSceneryKeyIndex = c;
@@ -70,21 +72,27 @@ void UpdateRouteScenery(void) {
         SceneryMotionKeyframe *rec;
         s32 t;
         s32 t0v;
+        s16 *nextRotationY;
+        s16 *nextRotationZ;
+        s16 *speed;
 
         rec = g_RouteSceneryKeyframe + g_RouteSceneryKeyIndex;
         t = g_RouteSceneryFrame;
         t0v = rec->duration - t;
         g_RouteSceneryRotX =
             (rec[1].rotationX * t + rec->rotationX * t0v) / rec->duration;
-        r4354 = (RAW(rec[1].rotationY) * t + rec->rotationY * t0v) /
+        nextRotationY = &rec[1].rotationY;
+        r4354 = (*nextRotationY * t + rec->rotationY * t0v) /
                 rec->duration;
         g_RouteSceneryRotY = r4354;
+        nextRotationZ = &rec[1].rotationZ;
         g_RouteSceneryRotZ =
-            (RAW(rec[1].rotationZ) * t + rec->rotationZ * t0v) /
+            (*nextRotationZ * t + rec->rotationZ * t0v) /
             rec->duration;
         vin.vx = 0;
         vin.vy = 0;
-        vin.vz = -RAW(rec->speed) * 4;
+        speed = &rec->speed;
+        vin.vz = -*speed * 4;
         BuildRotMatrixY(&mtx0, 0x800 - r4354);
     }
 

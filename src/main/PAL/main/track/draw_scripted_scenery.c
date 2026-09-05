@@ -130,13 +130,15 @@ void InitPathScenery(void) {
     {
         PathSceneryPositionKey *positionKeys;
         PathSceneryRotationKey *rotationKeys;
+        s32 *currentX;
 
         positionKeys = g_PathSceneryPosKeys;
         g_PathSceneryVolume = 0;
         g_PathSceneryCursors.posIndex = 0;
         g_PathSceneryCursors.rotIndex = 0;
+        currentX = &positionKeys[0].fields.x;
         g_PathSceneryHalfDelta[0] =
-            (positionKeys[1].fields.x - RAW(positionKeys[0].fields.x)) / 2;
+            (positionKeys[1].fields.x - *currentX) / 2;
         g_PathSceneryHalfDelta[1] =
             (positionKeys[1].fields.y - positionKeys[0].fields.y) / 2;
         g_PathSceneryHalfDelta[2] =

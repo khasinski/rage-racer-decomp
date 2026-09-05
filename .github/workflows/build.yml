@@ -112,3 +112,11 @@ jobs:
         with:
           name: ${{ matrix.report_version }}_report
           path: build/${{ matrix.version }}/report.json
+
+      - name: Preserve the report audit trail
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.report_version }}_audit
+          path: |
+            build/${{ matrix.version }}/report.raw.json
+            build/${{ matrix.version }}/report.embedded-data.json

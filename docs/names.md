@@ -4,6 +4,10 @@ Consolidated reverse-engineering reference for the PAL `main` binary. Sources:
 `scratch/permuter-seeds/*.wip.c` header comments, the descriptive comments atop
 matched `src/main/PAL/main/*.c`, and `include/game/*.h` + `include/psyq/*.h`.
 
+Progress statements below are historical snapshots. The current
+[reporting policy](ASM_AND_GTE_POLICY.md) supersedes claims that assembly is
+excluded from matching or that a macro proves original handwritten authorship.
+
 Status legend:
 - **[INCLUDE_ASM]** — not yet decompiled; still an assembly stub in `src/`. A
   reverse-engineered WIP seed usually exists in `scratch/permuter-seeds/`.
