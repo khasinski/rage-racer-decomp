@@ -21,6 +21,13 @@ from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
+import yaml
+
+try:
+    from .gen_expected import main_segment_vram
+except ImportError:  # Direct execution adds tools/scripts rather than the repo root.
+    from gen_expected import main_segment_vram
+
 
 LOAD_ADDRESS = 0x80010000
 HEADER_SIZE = 0x800
@@ -87,7 +94,7 @@ def name_rank(name: str) -> tuple[int, int, str]:
     return (raw, len(name), name)
 
 
-def occurrences(haystack: bytes, needle: bytes) -> list[int]:
+def occurrences(haystack: bytes, needle: bytes, base: int = LOAD_ADDRESS) -> list[int]:
     found: list[int] = []
     start = 0
     while True:
@@ -95,7 +102,7 @@ def occurrences(haystack: bytes, needle: bytes) -> list[int]:
         if pos < 0:
             return found
         if pos % 4 == 0:
-            found.append(LOAD_ADDRESS + pos)
+            found.append(base + pos)
         start = pos + 4
 
 
@@ -119,7 +126,12 @@ def expected_address(functions: list[Function], index: int) -> int | None:
     return None
 
 
-def map_functions(source: bytes, target: bytes, functions: list[Function]) -> None:
+def map_functions(
+    source: bytes,
+    target: bytes,
+    functions: list[Function],
+    target_load_address: int = LOAD_ADDRESS,
+) -> None:
     target_normalized = normalize(target[HEADER_SIZE:])
     for function in functions:
         offset = HEADER_SIZE + function.address - LOAD_ADDRESS
@@ -127,7 +139,7 @@ def map_functions(source: bytes, target: bytes, functions: list[Function]) -> No
         if len(body) != function.size:
             continue
         skeleton = normalize(body)
-        function.candidates = occurrences(target_normalized, skeleton)
+        function.candidates = occurrences(target_normalized, skeleton, target_load_address)
         function.exact = target.find(body, HEADER_SIZE) >= 0
         if len(function.candidates) == 1:
             function.target = function.candidates[0]
@@ -221,6 +233,7 @@ def infer_data_addresses(
     target: bytes,
     functions: list[Function],
     named_addresses: dict[int, list[str]],
+    target_load_address: int = LOAD_ADDRESS,
 ) -> tuple[dict[int, tuple[int, int]], dict[int, dict[int, int]]]:
     """Infer regional data addresses from corresponding address loads.
 
@@ -244,7 +257,7 @@ def infer_data_addresses(
         if function.target is None:
             continue
         source_offset = HEADER_SIZE + function.address - LOAD_ADDRESS
-        target_offset = HEADER_SIZE + function.target - LOAD_ADDRESS
+        target_offset = HEADER_SIZE + function.target - target_load_address
         count = function.size // 4
         source_words = struct.unpack(
             f"<{count}I", source[source_offset : source_offset + count * 4]
@@ -306,6 +319,7 @@ def infer_called_functions(
     target: bytes,
     functions: list[Function],
     named_functions: dict[int, list[str]],
+    target_load_address: int = LOAD_ADDRESS,
 ) -> tuple[dict[int, tuple[int, int]], dict[int, dict[int, int]]]:
     """Map changed or zero-sized callees through corresponding J/JAL sites."""
 
@@ -314,7 +328,7 @@ def infer_called_functions(
         if function.target is None:
             continue
         source_offset = HEADER_SIZE + function.address - LOAD_ADDRESS
-        target_offset = HEADER_SIZE + function.target - LOAD_ADDRESS
+        target_offset = HEADER_SIZE + function.target - target_load_address
         count = function.size // 4
         source_words = struct.unpack(
             f"<{count}I", source[source_offset : source_offset + count * 4]
@@ -361,12 +375,32 @@ def main() -> None:
         help="PAL symbol file used to infer regional data addresses (repeatable)",
     )
     parser.add_argument("--readelf", default="mipsel-none-elf-readelf")
+    parser.add_argument("--target-config", type=Path)
+    parser.add_argument(
+        "--target-load-address",
+        type=lambda value: int(value, 0),
+        default=None,
+        help=(
+            "VRAM address the target executable's .text loads at. Defaults "
+            "to --target-config's own code segment vram (e.g. the DEMO "
+            "pre-release loads 0x8000 higher than PAL/USA/JAP10/JAP11), "
+            "falling back to 0x80010000 if neither is available."
+        ),
+    )
     args = parser.parse_args()
+    if args.target_load_address is not None:
+        target_load_address = args.target_load_address
+    elif args.target_config is not None:
+        target_load_address = main_segment_vram(
+            yaml.safe_load(args.target_config.read_text()), default=LOAD_ADDRESS
+        )
+    else:
+        target_load_address = LOAD_ADDRESS
 
     functions = read_functions(args.readelf, args.source_elf)
     source = args.source_exe.read_bytes()
     target = args.target_exe.read_bytes()
-    map_functions(source, target, functions)
+    map_functions(source, target, functions, target_load_address)
     mapped = [function for function in functions if function.target is not None]
     symbol_paths = args.source_symbols or [
         Path("configs/PAL/sym.main.txt"),
@@ -389,10 +423,10 @@ def main() -> None:
         names.extend(name for name in function.names if name not in names)
         names.sort(key=name_rank)
     inferred_functions, ambiguous_functions = infer_called_functions(
-        source, target, functions, named_functions
+        source, target, functions, named_functions, target_load_address
     )
     mapped_data, ambiguous_data = infer_data_addresses(
-        source, target, functions, named_addresses
+        source, target, functions, named_addresses, target_load_address
     )
     source_ranges = read_source_ranges(args.source_config)
 

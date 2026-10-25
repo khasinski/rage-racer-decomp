@@ -1,0 +1,102 @@
+/* Manual DEMO linker symbols go here. */
+
+/* Externals needed by cross-region regional_text_units.json reuses
+ * (JAP10/JAP11 source, demo-specific addresses). Recovered by matching
+ * each unit's lui/addiu|ori immediate pair against the same source's
+ * known regional address, the same technique port_pal_text_units.py
+ * uses for its own externals; see tools/scripts/port_pal_text_units.py
+ * infer_exact_address. */
+g_DispEnv1ScreenX = 0x801ACC70;
+g_DispEnv1ScreenY = 0x801ACC72;
+g_FmtString = 0x8001A620;
+g_SaveIconRect = 0x800A2344;
+g_SaveTitleSjis = 0x80019EA8;
+
+/* JAP10/main/render/terrain_submission.c reuse: its own helpers and the two
+ * lui/ori (not %hi/%lo) tables, recovered the same way. */
+course_model_continue_0 = 0x80030BF0;
+course_model_continue_1 = 0x80030C6C;
+course_model_continue_2 = 0x80030D10;
+course_model_continue_3 = 0x80030D84;
+course_model_continue_4 = 0x800314C0;
+course_model_continue_5 = 0x800316EC;
+course_model_continue_6 = 0x80031A48;
+course_model_continue_7 = 0x80031AF0;
+EmitSubdividedTerrainQuad = 0x8002FD48;
+InterpolateSubdivRow = 0x80030128;
+SubmitModelFaces = 0x80030370;
+SubmitTerrainCellFaces = 0x8002F5F4;
+SubmitTerrainCellFacesFar = 0x80030258;
+TransformCourseModel = 0x8003137C;
+g_AnimTimer = 0x800A5480;
+terrain_primitive_table_addr = 0x8008487C;
+model_primitive_table_addr = 0x8008489C;
+terrain_primitive_table_hi = terrain_primitive_table_addr >> 16;
+terrain_primitive_table_lo = terrain_primitive_table_addr & 0xFFFF;
+model_primitive_table_hi = model_primitive_table_addr >> 16;
+model_primitive_table_lo = model_primitive_table_addr & 0xFFFF;
+course_model_dispatch_1_hi = (model_primitive_table_addr + 0x40) >> 16;
+course_model_dispatch_1_lo = (model_primitive_table_addr + 0x40) & 0xFFFF;
+course_model_dispatch_2_hi = (model_primitive_table_addr + 0x50) >> 16;
+course_model_dispatch_2_lo = (model_primitive_table_addr + 0x50) & 0xFFFF;
+course_model_continue_0_hi = course_model_continue_0 >> 16;
+course_model_continue_0_lo = course_model_continue_0 & 0xFFFF;
+course_model_continue_1_hi = course_model_continue_1 >> 16;
+course_model_continue_1_lo = course_model_continue_1 & 0xFFFF;
+course_model_continue_2_hi = course_model_continue_2 >> 16;
+course_model_continue_2_lo = course_model_continue_2 & 0xFFFF;
+course_model_continue_3_hi = course_model_continue_3 >> 16;
+course_model_continue_3_lo = course_model_continue_3 & 0xFFFF;
+course_model_continue_4_hi = course_model_continue_4 >> 16;
+course_model_continue_4_lo = course_model_continue_4 & 0xFFFF;
+course_model_continue_5_hi = course_model_continue_5 >> 16;
+course_model_continue_5_lo = course_model_continue_5 & 0xFFFF;
+course_model_continue_6_hi = course_model_continue_6 >> 16;
+course_model_continue_6_lo = course_model_continue_6 & 0xFFFF;
+course_model_continue_7_hi = course_model_continue_7 >> 16;
+course_model_continue_7_lo = course_model_continue_7 & 0xFFFF;
+
+/* DEMO/main/cd/set_cd_mix_preset.c (truncated BuildCdTrackTable: no BGM
+ * search loop, so only the TOC-adjustment externals are needed). */
+g_CdTrackLocs = 0x800A1DBC;
+g_CdTocEntryCount = 0x801D3274;
+
+/* DEMO/main/boot/boot_logo_update.c */
+g_BootLogoState = 0x800843B4;
+
+/* DEMO/main/boot/main_loop.c */
+g_FrameCounter = 0x800A547C;
+g_SceneHandlers = 0x800830E0;
+func_80074B58 = 0x80074B58;
+g_TestMode = 0x801D351C;
+g_TestFrameLimit = 0x801D4854;
+g_TestParam = 0x801D0694;
+g_TestFrameCount = 0x801DF9D4;
+g_TestExitFlags = 0x801D095E;
+
+/* DEMO/main/menu/round_screen.c */
+g_BgmTrack = 0x801D06D0;
+
+/* DEMO/main/menu/car_select.c (UpdateCarSelectScreen's script/popup data
+ * pointers; recovered from the real demo's own lui/addiu immediate pair at
+ * each use site, since the surrounding function is already byte-exact). */
+g_CarSelectMenuScriptTimeAttack = 0x8008876C;
+g_CarSelectMenuScriptGp = 0x80088718;
+g_CarShopUnavailableScript = 0x80089624;
+g_EngineerShopUnavailableScript = 0x8008963C;
+
+/* DEMO/main/menu/title_screen.c */
+g_FrontendDrawHandlers = 0x800835C0;
+
+/* DEMO/main/race/update_lap_and_finish.c, race_scene.c (EnterRaceScene), and
+ * prologue.c. */
+g_RefSectorTime1 = 0x800A1D7C;
+g_RefSectorTime2 = 0x800A1D80;
+g_LapTimeSaturated = 0x800A1D88;
+g_UnusedLapTimingWord = 0x801D0838;
+g_RivalCueCooldown0 = 0x801D3514;
+g_RivalCueCooldown1 = 0x801D3516;
+g_RivalCueCooldown2 = 0x801D3518;
+g_MsgGame0Ok = 0x80018B58;
+g_AttractDemoSteps = 0x80084540;
+g_UnusedRaceInitHalfword = 0x801D12EC;

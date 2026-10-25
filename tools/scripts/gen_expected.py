@@ -490,7 +490,18 @@ def collect_symbols_by_object(placement):
     return symbols
 
 
-def retail_data_source(elf, placement, retail, linked_symbols):
+def main_segment_vram(config, default=0x80010000):
+    """The code segment's own vram base, which some builds (e.g. the DEMO
+    pre-release) load at a different address than the 0x80010000 every other
+    region shares. Reading it from the config instead of hardcoding it keeps
+    file-offset math correct for any such build."""
+    for segment in config.get('segments', []):
+        if isinstance(segment, dict) and segment.get('type') == 'code' and segment.get('vram') is not None:
+            return segment['vram']
+    return default
+
+
+def retail_data_source(elf, placement, retail, linked_symbols, vram_start=0x80010000):
     """Reconstruct a data object's contents from retail, using ELF annotations.
 
     Symbol boundaries and relocation locations are pairing metadata only.
@@ -509,7 +520,7 @@ def retail_data_source(elf, placement, retail, linked_symbols):
         if size != section['sh_size']:
             raise ValueError('data section size differs from linker placement')
         bss = name == '.bss'
-        offset = address if address < 0x800 else address - 0x80010000 + 0x800
+        offset = address if address < 0x800 else address - vram_start + 0x800
         if not bss and (offset < 0 or offset + size > len(retail)):
             raise ValueError('data section extends outside retail executable')
         payload = b'' if bss else retail[offset:offset + size]
@@ -656,6 +667,7 @@ def main(argv=None):
     # Reconstruct data from retail bytes, retaining only the base's symbol and
     # relocation annotations for pairing. Never copy the tree's data contents.
     retail = (ROOT / base_document['options']['target_path']).read_bytes()
+    vram_start = main_segment_vram(base_document)
     with (build_dir / (basename + '.elf')).open('rb') as handle:
         linked = ELFFile(handle)
         linked_symbols = {s.name: s['st_value'] for s in
@@ -668,7 +680,7 @@ def main(argv=None):
             continue
         source = ROOT / out_dir / relative.removesuffix('.o')
         with (ROOT / obj).open('rb') as handle:
-            text = retail_data_source(ELFFile(handle), sections, retail, linked_symbols)
+            text = retail_data_source(ELFFile(handle), sections, retail, linked_symbols, vram_start)
         source.parent.mkdir(parents=True, exist_ok=True)
         source.write_text(text)
         blobs += 1

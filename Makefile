@@ -9,6 +9,10 @@ TARGET_SHA_PAL := 2913e15648eddef40821c5f666460abc04155ee6
 TARGET_SHA_USA := 2661e8bf18d209c98fd70d33e18ab88b10abd52b
 TARGET_SHA_JAP10 := f0ca386e1c7b2c5961b8c2a53cc751a83ae0d406
 TARGET_SHA_JAP11 := bfa7a4cf466480133c10845eae632a0c4e122360
+# Demo One (Version 5) (Europe), RAGE/RAGE.EXE: a pre-release snapshot (27 Feb
+# 1997) of this same codebase, built a week before USA retail and loaded 0x8000
+# bytes higher (0x80018000 instead of 0x80010000).
+TARGET_SHA_DEMO := 6e706fd58000734707b2fe793161e5cc1ada7bed
 TARGET_SHA := $(TARGET_SHA_$(VERSION))
 
 ROOT       := $(abspath .)
@@ -70,6 +74,7 @@ stage:
 port:
 	@if [ "$(VERSION)" = PAL ]; then echo "port requires VERSION=USA, JAP10, or JAP11" >&2; exit 2; fi
 	$(PY) tools/scripts/map_version_functions.py --target-exe $(TARGET_BIN) \
+	      --target-config $(SPLAT_CFG) \
 	      --output configs/$(VERSION)/sym.main.txt \
 	      --report $(BUILD)/function-map.json
 	$(PY) tools/scripts/port_pal_text_units.py $(VERSION)

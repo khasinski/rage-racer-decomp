@@ -25,6 +25,7 @@ try:
         occurrences,
         read_functions,
     )
+    from .gen_expected import main_segment_vram
 except ImportError:  # Direct execution adds tools/scripts rather than the repo root.
     from map_version_functions import (
         HEADER_SIZE,
@@ -33,6 +34,9 @@ except ImportError:  # Direct execution adds tools/scripts rather than the repo 
         occurrences,
         read_functions,
     )
+    from gen_expected import main_segment_vram
+
+import yaml
 
 
 SEGMENT = re.compile(
@@ -90,6 +94,13 @@ def undefined_symbols(nm: str, obj: Path) -> frozenset[str]:
         fields[-1]
         for line in output.splitlines()
         if (fields := line.split())
+        # HANDWRITTEN_ASM's wrapper function (include/include_asm.h) compiles
+        # to no code at all; maspsx strips its body and leaves this name as a
+        # dangling, unreferenced symbol-table entry ("harmless in the image",
+        # per that header's comment -- confirmed here too: readelf -r shows no
+        # relocation ever targets it). Treating it as a real external to
+        # resolve per-target made every HANDWRITTEN_ASM unit unportable.
+        if not fields[-1].startswith("__maspsx_include_asm_hack_")
     )
 
 
@@ -241,6 +252,7 @@ def append_text_aliases(
     source_symbols: dict[str, int],
     selected: list[tuple[int, int, str, int, int]],
     extra_aliases: dict[str, int] | None = None,
+    target_load_address: int = LOAD_ADDRESS,
 ) -> int:
     lines = target_symbols.read_text().splitlines()
     if ALIASES_BEGIN in lines:
@@ -252,28 +264,37 @@ def append_text_aliases(
         for line in lines
         if (match := SYMBOL_ASSIGNMENT.match(line))
     }
+    # PAL sometimes carries two legitimate names for one address (a data name
+    # and a function name for the same stub table, say). splat's loader
+    # rejects two symbols both declared with a literal vram at that address,
+    # so once any name -- existing or newly aliased here -- claims an
+    # address, later names for the same address are dropped rather than
+    # emitted as a second, conflicting declaration.
+    claimed_addresses = set(existing.values())
     aliases: dict[str, int] = {}
     for target_start, _, _, pal_start, pal_end in selected:
         pal_vram = LOAD_ADDRESS + pal_start - HEADER_SIZE
         for name, source_address in source_symbols.items():
             if not pal_vram <= source_address < pal_vram + pal_end - pal_start:
                 continue
-            target_address = LOAD_ADDRESS + target_start - HEADER_SIZE + source_address - pal_vram
+            target_address = target_load_address + target_start - HEADER_SIZE + source_address - pal_vram
             if name in existing and existing[name] != target_address:
                 raise ValueError(
                     f"mapped symbol conflict for {name}: "
                     f"0x{existing[name]:08X} != 0x{target_address:08X}"
                 )
-            if name not in existing:
+            if name not in existing and target_address not in claimed_addresses:
                 aliases[name] = target_address
+                claimed_addresses.add(target_address)
     for name, target_address in (extra_aliases or {}).items():
         if name in existing and existing[name] != target_address:
             raise ValueError(
                 f"mapped symbol conflict for {name}: "
                 f"0x{existing[name]:08X} != 0x{target_address:08X}"
             )
-        if name not in existing:
+        if name not in existing and target_address not in claimed_addresses:
             aliases[name] = target_address
+            claimed_addresses.add(target_address)
     if aliases:
         while lines and not lines[-1]:
             lines.pop()
@@ -295,6 +316,7 @@ def infer_range_start(
     target_text_vram: int,
     pal_range_start: int,
     pal_range_end: int,
+    target_load_address: int = LOAD_ADDRESS,
 ) -> int | None:
     """Infer a relocated section start from address loads in matching text."""
 
@@ -303,7 +325,7 @@ def infer_range_start(
         int.from_bytes(pal_data[offset : offset + 4], "little")
         for offset in range(pal_text_start, pal_text_start + count * 4, 4)
     )
-    target_offset = HEADER_SIZE + target_text_vram - LOAD_ADDRESS
+    target_offset = HEADER_SIZE + target_text_vram - target_load_address
     target_words = tuple(
         int.from_bytes(target_data[offset : offset + 4], "little")
         for offset in range(target_offset, target_offset + count * 4, 4)
@@ -355,6 +377,7 @@ def infer_exact_address(
     pal_text_end: int,
     target_text_vram: int,
     source_address: int,
+    target_load_address: int = LOAD_ADDRESS,
 ) -> int | None:
     """Infer one external symbol from corresponding relocatable instructions."""
 
@@ -363,7 +386,7 @@ def infer_exact_address(
         int.from_bytes(pal_data[offset : offset + 4], "little")
         for offset in range(pal_text_start, pal_text_start + count * 4, 4)
     )
-    target_offset = HEADER_SIZE + target_text_vram - LOAD_ADDRESS
+    target_offset = HEADER_SIZE + target_text_vram - target_load_address
     target_words = tuple(
         int.from_bytes(target_data[offset : offset + 4], "little")
         for offset in range(target_offset, target_offset + count * 4, 4)
@@ -377,7 +400,7 @@ def infer_exact_address(
             )
             if source_target == source_address:
                 candidates.add(
-                    (LOAD_ADDRESS & 0xF0000000) | ((target_word & 0x03FFFFFF) << 2)
+                    (target_load_address & 0xF0000000) | ((target_word & 0x03FFFFFF) << 2)
                 )
 
     signed_opcodes = {
@@ -436,12 +459,12 @@ def rewrite_main_subsegments(
 
     generated: list[str] = []
 
-    def append_gap(start: int, end: int) -> None:
+    def append_gap(start: int, end: int, kind_override: str | None = None) -> None:
         if start < text_start < end:
             append_gap(start, text_start)
             append_gap(text_start, end)
             return
-        kind = "rodata" if end <= text_start else "asm"
+        kind = kind_override or ("rodata" if end <= text_start else "asm")
         generated.append(
             f"      - [0x{start:X}, {kind}, main/{start:06X}_main]"
         )
@@ -455,40 +478,123 @@ def rewrite_main_subsegments(
         generated.append(f"      - [0x{start:X}, {kind}, {path}]")
         cursor = end
     if cursor < payload_end:
-        append_gap(cursor, payload_end)
+        # Every known build (PAL/USA/JAP10/JAP11) ends its code with the same
+        # shape: the last matched function is PAL/lib/libspu/SpuSetCommonAttr,
+        # immediately followed by one contiguous `data` subsegment running to
+        # the end of the image (car/track tables, never decompiled to C in
+        # any of them). An unmatched run reaching all the way to payload_end
+        # is that same trailing table, not missing code, so it is classified
+        # as `data` rather than `asm` -- bytes are identical either way, but
+        # `asm` wrongly counts it as code still needing decompilation.
+        append_gap(cursor, payload_end, kind_override="data")
     generated.append(f"      - [0x{payload_end:X}]")
     config.write_text("\n".join(lines[: subsegments_index + 1] + generated + lines[block_end:]) + "\n")
 
 
-def validate_text_coverage(
-    segments: list[tuple[int, int, str, str]], text_start: int
-) -> tuple[int, int]:
-    """Require source units to cover the regional executable text contiguously."""
-    ordered = sorted(segments)
-    if not ordered:
-        raise ValueError("regional executable has no source-covered text units")
-    if ordered[0][0] != text_start:
-        raise ValueError(
-            f"source coverage starts at 0x{ordered[0][0]:X}, expected 0x{text_start:X}"
+def resolve_overlapping_units(
+    selected: list[tuple[int, int, str, int, int, int | None, int | None]],
+    require_full_coverage: bool,
+) -> tuple[list[tuple[int, int, str, int, int, int | None, int | None]], list[dict[str, object]]]:
+    """Drop units whose mapped text or rodata collides with an earlier one.
+
+    A regional port with a stable link order never hits this: every matched
+    unit lands at a unique, non-overlapping address. A brand new target may
+    not share that order, so the nearest-anchor disambiguation in the caller
+    can occasionally accept two units that both claim the same bytes. With
+    ``require_full_coverage`` (the finished USA/JAP10/JAP11 ports) that stays
+    fatal, since it would mean a real bug slipped through matching. Otherwise
+    the later, lower-priority unit is rejected and left to assembly.
+    """
+
+    ordered = sorted(selected, key=lambda item: item[0])
+    kept: list[tuple[int, int, str, int, int, int | None, int | None]] = []
+    rejected: list[dict[str, object]] = []
+    accepted_text: list[tuple[int, int, str]] = []
+    accepted_rodata: list[tuple[int, int, str]] = []
+    for item in ordered:
+        target_start, target_end, path, _, _, rodata_start, rodata_end = item
+        conflict = next(
+            (
+                (kind, other_path)
+                for kind, intervals, start, end in (
+                    ("text", accepted_text, target_start, target_end),
+                    (
+                        "rodata",
+                        accepted_rodata,
+                        rodata_start,
+                        rodata_end,
+                    ),
+                )
+                if start is not None
+                for other_start, other_end, other_path in intervals
+                if start < other_end and other_start < end
+            ),
+            None,
         )
+        if conflict is not None:
+            kind, other_path = conflict
+            if require_full_coverage:
+                raise ValueError(
+                    f"source coverage overlap: {path} conflicts with "
+                    f"{other_path} ({kind})"
+                )
+            rejected.append(
+                {"path": path, "reason": f"{kind} overlaps mapped unit {other_path}"}
+            )
+            continue
+        kept.append(item)
+        accepted_text.append((target_start, target_end, path))
+        if rodata_start is not None and rodata_end is not None:
+            accepted_rodata.append((rodata_start, rodata_end, path))
+    return kept, rejected
+
+
+def validate_text_coverage(
+    segments: list[tuple[int, int, str, str]],
+    text_start: int,
+    require_full_coverage: bool = True,
+) -> tuple[int, int]:
+    """Measure how much of the regional executable's text the C units cover.
+
+    With ``require_full_coverage`` (the default, used for targets whose port is
+    finished) any gap or overlap is fatal: every byte must come from a C unit.
+    A target still being built up incrementally (a brand new port, matched a
+    region at a time across many commits before this check existed for
+    USA/JAP10/JAP11 too) passes ``require_full_coverage=False``: gaps are left
+    for the regional assembly splat already emits, and only an overlap raises,
+    since two units claiming the same bytes is always a real bug rather than
+    unfinished work.
+    """
+    ordered = sorted(segments)
+    if require_full_coverage:
+        if not ordered:
+            raise ValueError("regional executable has no source-covered text units")
+        if ordered[0][0] != text_start:
+            raise ValueError(
+                f"source coverage starts at 0x{ordered[0][0]:X}, expected 0x{text_start:X}"
+            )
 
     cursor = text_start
+    covered = 0
     for start, end, _, path in ordered:
-        if start != cursor:
-            relation = "overlap" if start < cursor else "gap"
+        if start < cursor:
             raise ValueError(
-                f"source coverage {relation} before {path}: "
-                f"0x{cursor:X} -> 0x{start:X}"
+                f"source coverage overlap before {path}: 0x{cursor:X} -> 0x{start:X}"
+            )
+        if start != cursor and require_full_coverage:
+            raise ValueError(
+                f"source coverage gap before {path}: 0x{cursor:X} -> 0x{start:X}"
             )
         if end <= start:
             raise ValueError(f"empty source-covered text unit: {path}")
+        covered += end - start
         cursor = end
-    return cursor, cursor - text_start
+    return cursor, covered
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("version", choices=("USA", "JAP10", "JAP11"))
+    parser.add_argument("version", choices=("USA", "JAP10", "JAP11", "DEMO"))
     parser.add_argument("--pal-config", type=Path, default=Path("configs/PAL/main.yaml"))
     parser.add_argument("--pal-exe", type=Path, default=Path("assets/PAL/main.exe"))
     parser.add_argument("--pal-build", type=Path, default=Path("build/PAL"))
@@ -515,9 +621,36 @@ def main() -> None:
     parser.add_argument("--nm", default="mipsel-none-elf-nm")
     parser.add_argument("--size", default="mipsel-none-elf-size")
     parser.add_argument("--readelf", default="mipsel-none-elf-readelf")
+    parser.add_argument(
+        "--target-load-address",
+        type=lambda value: int(value, 0),
+        default=None,
+        help=(
+            "VRAM address the target executable's .text loads at. Defaults "
+            "to the target config's own code segment vram (e.g. the DEMO "
+            "pre-release loads 0x8000 higher than PAL/USA/JAP10/JAP11), "
+            "falling back to 0x80010000 only if that can't be read."
+        ),
+    )
+    parser.add_argument(
+        "--allow-partial-coverage",
+        action="store_true",
+        help=(
+            "Do not require every text byte to come from a C unit yet; leave "
+            "gaps as regional assembly. Used while a brand new target is "
+            "still being matched a region at a time."
+        ),
+    )
     args = parser.parse_args()
+    require_full_coverage = not args.allow_partial_coverage
 
     target_config = args.target_config or Path(f"configs/{args.version}/main.yaml")
+    if args.target_load_address is not None:
+        target_load_address = args.target_load_address
+    else:
+        target_load_address = main_segment_vram(
+            yaml.safe_load(target_config.read_text()), default=LOAD_ADDRESS
+        )
     target_exe = args.target_exe or Path(f"assets/{args.version}/main.exe")
     target_symbols = args.target_symbols or Path(f"configs/{args.version}/sym.main.txt")
     target_manual = args.target_manual or Path(
@@ -568,7 +701,7 @@ def main() -> None:
     unit_matches: dict[str, list[int]] = {}
     for unit in candidates:
         matches = occurrences(
-            target_normalized, normalize(pal_data[unit.start : unit.end])
+            target_normalized, normalize(pal_data[unit.start : unit.end]), target_load_address
         )
         if len(matches) != 1:
             pal_vram = LOAD_ADDRESS + unit.start - HEADER_SIZE
@@ -608,6 +741,7 @@ def main() -> None:
                 unit.end,
                 matches[0],
                 source_address,
+                target_load_address,
             )
             if target_address is not None:
                 inferred_externals[name] = target_address
@@ -672,7 +806,7 @@ def main() -> None:
     first_text_matches = unit_matches[first_pal_text.path]
     if len(first_text_matches) != 1:
         raise ValueError("could not locate the regional .rodata/.text boundary")
-    target_text_start = HEADER_SIZE + first_text_matches[0] - LOAD_ADDRESS
+    target_text_start = HEADER_SIZE + first_text_matches[0] - target_load_address
     selected: list[tuple[int, int, str, int, int, int | None, int | None]] = []
     selected_segments: list[tuple[int, int, str, str]] = []
 
@@ -712,6 +846,7 @@ def main() -> None:
                 unit.end,
                 matches[0],
                 source_address,
+                target_load_address,
             )
             if target_address is not None:
                 inferred_externals[name] = target_address
@@ -723,7 +858,7 @@ def main() -> None:
                 {"path": unit.path, "reason": "unmapped externals", "symbols": missing}
             )
             continue
-        target_start = HEADER_SIZE + matches[0] - LOAD_ADDRESS
+        target_start = HEADER_SIZE + matches[0] - target_load_address
         target_rodata_start: int | None = None
         target_rodata_end: int | None = None
         if unit.rodata is not None:
@@ -737,11 +872,12 @@ def main() -> None:
                 matches[0],
                 pal_rodata_start,
                 pal_rodata_end,
+                target_load_address,
             )
             if target_rodata_vram is None:
                 rejected.append({"path": unit.path, "reason": "unmapped rodata"})
                 continue
-            target_rodata_start = HEADER_SIZE + target_rodata_vram - LOAD_ADDRESS
+            target_rodata_start = HEADER_SIZE + target_rodata_vram - target_load_address
             target_rodata_end = target_rodata_start + unit.rodata[1] - unit.rodata[0]
         selected.append(
             (
@@ -763,6 +899,20 @@ def main() -> None:
             )
 
     selected.sort()
+    selected, overlap_rejections = resolve_overlapping_units(selected, require_full_coverage)
+    rejected.extend(overlap_rejections)
+    selected_segments = [
+        segment
+        for start, end, path, _, _, rodata_start, rodata_end in selected
+        for segment in (
+            [(start, end, "c", path)]
+            + (
+                [(rodata_start, rodata_end, ".rodata", path)]
+                if rodata_start is not None and rodata_end is not None
+                else []
+            )
+        )
+    ]
     selected_segments.sort()
     regional_units = read_regional_units(regional_units_path)
     regional_segments = regional_units + read_regional_rodata(regional_units_path)
@@ -779,7 +929,10 @@ def main() -> None:
     text_end, covered_text_bytes = validate_text_coverage(
         [segment for segment in selected_segments if segment[2] == "c"],
         target_text_start,
+        require_full_coverage,
     )
+    if not require_full_coverage:
+        text_end = len(target_data)
     payload_end = len(target_data)
     rewrite_main_subsegments(
         target_config,
@@ -794,6 +947,7 @@ def main() -> None:
             (start, end, path, pal_start, pal_end)
             for start, end, path, pal_start, pal_end, _, _ in selected
         ],
+        target_load_address=target_load_address,
     )
     write_linker_aliases(target_aliases, inferred_externals)
     report = {
@@ -812,7 +966,11 @@ def main() -> None:
         "source_text_bytes": covered_text_bytes,
         "text_start": f"0x{target_text_start:X}",
         "text_end": f"0x{text_end:X}",
-        "source_coverage_percent": 100.0,
+        "source_coverage_percent": (
+            100.0
+            if text_end == target_text_start
+            else 100.0 * covered_text_bytes / (text_end - target_text_start)
+        ),
         "text_aliases": aliases,
         "inferred_externals": len(inferred_externals),
         "selected": [
@@ -837,7 +995,8 @@ def main() -> None:
     print(
         f"{args.version}: reused {report['portable_units']} PAL C text units "
         f"({report['portable_text_bytes']} bytes); source coverage "
-        f"{report['source_text_bytes']}/{text_end - target_text_start} bytes (100%)"
+        f"{report['source_text_bytes']}/{text_end - target_text_start} bytes "
+        f"({report['source_coverage_percent']:.2f}%)"
     )
 
 

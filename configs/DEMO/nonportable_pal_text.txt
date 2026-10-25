@@ -1,0 +1,6 @@
+# PAL text units whose compiled body has the same instruction shape as the
+# Demo One v5 build but embeds different literal constants (confirmed by a
+# full build + byte compare against assets/DEMO/main.exe), so they must stay
+# as regional assembly instead of being reused as PAL C.
+PAL/main/race/replay_recording
+PAL/main/race/replay

@@ -1,0 +1,29 @@
+#include "common.h"
+#include "game/cd.h"
+#include "game/cd_internal.h"
+#include "psyq/cd.h"
+
+
+void SetCdMixPreset(s32 preset) {
+    g_CdMixPreset = preset;
+    SetCdVolume(g_CdVolume);
+}
+
+
+void BuildCdTrackTable(void) {
+    CdlLOC *toc;
+    s32 i;
+    s32 count;
+
+    toc = g_CdTrackLocs;
+    g_CdTocEntryCount = CdGetToc(toc);
+    if (g_CdTocEntryCount > 0) {
+        i = 1;
+        toc++;
+        do {
+            CdIntToPos(CdPosToInt_Local(toc) + 0x3C, toc);
+            count = g_CdTocEntryCount;
+            i++;
+        } while ((count >= i) ? (toc++, 1) : (toc++, 0));
+    }
+}

@@ -1,0 +1,149 @@
+[
+  {
+    "start": "0x1518C",
+    "end": "0x15378",
+    "path": "JAP10/main/menu/screen_adjust_update"
+  },
+  {
+    "start": "0x4EC6C",
+    "end": "0x4EEA0",
+    "path": "JAP10/main/save/save_header"
+  },
+  {
+    "start": "0x4FB38",
+    "end": "0x501F4",
+    "path": "JAP11/main/save/memory_card_io"
+  },
+  {
+    "start": "0xEF60",
+    "end": "0xF1B0",
+    "path": "DEMO/main/race/replay_recording"
+  },
+  {
+    "start": "0xF1B0",
+    "end": "0xFAB0",
+    "path": "DEMO/main/race/replay"
+  },
+  {
+    "start": "0x17CC8",
+    "end": "0x1A384",
+    "path": "JAP10/main/render/terrain_submission"
+  },
+  {
+    "start": "0x11108",
+    "end": "0x11320",
+    "path": "DEMO/main/save/save_defaults"
+  },
+  {
+    "start": "0x32DCC",
+    "end": "0x32E74",
+    "path": "DEMO/main/cd/set_cd_mix_preset"
+  },
+  {
+    "start": "0x1305C",
+    "end": "0x131A0",
+    "path": "DEMO/main/boot/boot_logo_update"
+  },
+  {
+    "start": "0x63A8",
+    "end": "0x676C",
+    "path": "DEMO/main/boot/main_loop"
+  },
+  {
+    "start": "0x25D2C",
+    "end": "0x26E70",
+    "path": "DEMO/main/race/race_scene"
+  },
+  {
+    "start": "0x255F0",
+    "end": "0x25D2C",
+    "path": "DEMO/main/race/update_lap_and_finish"
+  },
+  {
+    "start": "0x167A0",
+    "end": "0x16EC0",
+    "path": "DEMO/main/race/prologue"
+  },
+  {
+    "start": "0x42354",
+    "end": "0x445C0",
+    "path": "DEMO/main/menu/course_select",
+    "rodata_start": "0x1A30",
+    "rodata_end": "0x1A70",
+    "rodata_path": "DEMO/main/menu/course_select"
+  },
+  {
+    "start": "0x445C0",
+    "end": "0x458D8",
+    "path": "DEMO/main/menu/car_select",
+    "rodata_start": "0x1A78",
+    "rodata_end": "0x1AA4",
+    "rodata_path": "DEMO/main/menu/car_select"
+  },
+  {
+    "start": "0x458D8",
+    "end": "0x46474",
+    "path": "DEMO/main/menu/draw_customize_screen"
+  },
+  {
+    "start": "0xC160",
+    "end": "0xD18C",
+    "path": "DEMO/main/menu/round_screen"
+  },
+  {
+    "start": "0x2AD44",
+    "end": "0x2C148",
+    "path": "DEMO/main/car/race_car_update"
+  },
+  {
+    "start": "0x32E74",
+    "end": "0x331B4",
+    "path": "DEMO/main/cd/cd_track_requests",
+    "rodata_start": "0x1524",
+    "rodata_end": "0x1544",
+    "rodata_path": "DEMO/main/cd/cd_track_requests"
+  },
+  {
+    "start": "0x113A8",
+    "end": "0x1187C",
+    "path": "DEMO/main/race/race_end_screens"
+  },
+  {
+    "start": "0x526B8",
+    "end": "0x52720",
+    "path": "DEMO/main/boot/_start"
+  },
+  {
+    "start": "0x52720",
+    "end": "0x52728",
+    "path": "PAL/main/boot/__main"
+  },
+  {
+    "start": "0x52728",
+    "end": "0x527C8",
+    "path": "DEMO/lib/libapi/demo_bios_call_stubs"
+  },
+  {
+    "start": "0x5D2D8",
+    "end": "0x5D378",
+    "path": "DEMO/lib/libapi/demo_kernel_setup"
+  },
+  {
+    "start": "0x5D378",
+    "end": "0x5D3B8",
+    "path": "DEMO/lib/libapi/demo_kernel_stubs"
+  },
+  {
+    "start": "0x5D59C",
+    "end": "0x5D5AC",
+    "path": "DEMO/lib/libapi/change_clear_rcnt"
+  },
+  {
+    "start": "0xAF90",
+    "end": "0xBDAC",
+    "path": "DEMO/main/menu/title_screen",
+    "rodata_start": "0xADC",
+    "rodata_end": "0xAF0",
+    "rodata_path": "DEMO/main/menu/title_screen"
+  }
+]

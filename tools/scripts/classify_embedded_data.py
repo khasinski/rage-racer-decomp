@@ -12,10 +12,11 @@ import json
 from pathlib import Path
 import sys
 
+import yaml
 from elftools.elf.elffile import ELFFile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gen_expected import parse_map_placement
+from gen_expected import parse_map_placement, main_segment_vram
 
 ROOT = Path(__file__).resolve().parents[2]
 BYTE_KEYS = ('total_code', 'matched_code', 'complete_code',
@@ -104,6 +105,8 @@ def classify(version):
     manifest = json.loads((ROOT / 'configs/embedded_data.json').read_text())
     placement = parse_map_placement((build / 'main.map').read_text())
     retail = (ROOT / 'assets' / version / 'main.exe').read_bytes()
+    config = yaml.safe_load((ROOT / 'configs' / version / 'main.yaml').read_text())
+    vram_start = main_segment_vram(config)
     report = json.loads((build / 'report.raw.json').read_text())
     log = []
     for unit in report['units']:
@@ -116,7 +119,7 @@ def classify(version):
         if ranges != target_ranges:
             raise ValueError('base and target data ranges differ')
         address, size = placement['build/%s/%s.o' % (version, source)]['.text']
-        offset = address - 0x80010000 + 0x800
+        offset = address - vram_start + 0x800
         reference = retail[offset:offset + size]
         for data in ranges:
             start, length = int(data['address']), int(data['size'])

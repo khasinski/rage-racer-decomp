@@ -42,3 +42,13 @@ versions:
       compiled_target: build/JAP11/main.exe
       elf: build/JAP11/main.elf
       asm: asm/JAP11/main
+  - name: demo
+    fullname: Demo One v5 pre-release (27 Feb 1997)
+    sha1: 6e706fd58000734707b2fe793161e5cc1ada7bed
+    paths:
+      target: assets/DEMO/main.exe
+      build_dir: build/DEMO
+      map: build/DEMO/main.map
+      compiled_target: build/DEMO/main.exe
+      elf: build/DEMO/main.elf
+      asm: asm/DEMO/main
