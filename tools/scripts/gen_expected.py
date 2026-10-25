@@ -494,9 +494,14 @@ def main_segment_vram(config, default=0x80010000):
     """The code segment's own vram base, which some builds (e.g. the DEMO
     pre-release) load at a different address than the 0x80010000 every other
     region shares. Reading it from the config instead of hardcoding it keeps
-    file-offset math correct for any such build."""
+    file-offset math correct for any such build.
+
+    Matched by name rather than just type: code: JAP10 additionally declares
+    a tiny header_tail pseudo-segment as type: code (a splat workaround for
+    non-ASCII header-tail bytes, not real executable code), which a type-only
+    match picks up first and returns its unrelated vram (0x7C)."""
     for segment in config.get('segments', []):
-        if isinstance(segment, dict) and segment.get('type') == 'code' and segment.get('vram') is not None:
+        if isinstance(segment, dict) and segment.get('name') == 'main' and segment.get('vram') is not None:
             return segment['vram']
     return default
 
